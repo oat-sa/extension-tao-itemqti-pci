@@ -48,6 +48,9 @@ return array(
 	    "DIR_VIEWS" => dirname(__FILE__).DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR,
 	    
 		#BASE URL (usually the domain root)
-		'BASE_URL' => ROOT_URL.'qtiItemPci/'
+		'BASE_URL' => ROOT_URL.'qtiItemPci/',
+        
+        #BASE WWW the web resources path
+        'BASE_WWW' => ROOT_URL.'qtiItemPci/views/'
 	)
 );
