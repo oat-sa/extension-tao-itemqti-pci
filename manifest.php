@@ -33,6 +33,11 @@ return array(
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
     ),
+    'install' => array(
+        'php'	=> array(
+			dirname(__FILE__).'/scripts/install/addLocalSource.php',
+		)
+    ),
     'uninstall' => array(
     ),
     'autoload' => array (
