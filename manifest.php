@@ -35,7 +35,7 @@ return array(
     ),
     'install' => array(
         'php'	=> array(
-			dirname(__FILE__).'/scripts/install/addLocalSource.php',
+//			dirname(__FILE__).'/scripts/install/addHook.php',
 		)
     ),
     'uninstall' => array(
