@@ -26,6 +26,7 @@ use \core_kernel_classes_Class;
 use \core_kernel_classes_Property;
 use \tao_models_classes_service_FileStorage;
 use oat\taoQtiItem\helpers\QtiPackage;
+use oat\qtiItemPci\model\PciPackageParser;
 use \ZipArchive;
 
 /**
@@ -63,27 +64,36 @@ class PciCreatorRegistry
         $this->propDirectory = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory');
     }
 
-    public function add($id, $archive){
+    public function add($archive){
 
         $returnValue = null;
 
-        if($this->isValid($archive)){
+        $qtiPackageParser = new PciPackageParser($archive);
+        $qtiPackageParser->validate();
+        if($qtiPackageParser->isValid()){
+
+            //extract the package
+            $folder = $qtiPackageParser->extract();
+            if(!is_dir($folder)){
+                throw new ExtractException();
+            }
 
             $directory = $this->storage->spawnDirectory(true);
             $directoryId = $directory->getId();
 
-            //obtain the id:
-            $typeIdentifier = 'aPci';
+            //obtain the id from manifest file
+            $manifest = $qtiPackageParser->getManifest(true);
+            $typeIdentifier = $manifest['id'];
 
             //copy content in the directory:
-            $this->storage->import($directoryId, 'path');
+            $this->storage->import($directoryId, $folder);
 
             $returnValue = $this->registryClass->createInstanceWithProperties(array(
                 $this->propIdentifier->getUri() => $typeIdentifier,
                 $this->propDirectory->getUri() => $directoryId
             ));
         }else{
-            throw new \common_Exception('invalid PCI creator archive');
+            throw new \common_Exception('invalid PCI creator package format');
         }
 
         return $returnValue;
@@ -98,7 +108,7 @@ class PciCreatorRegistry
             $pciData = $this->getData($pci);
             $returnValue[$pciData['typeIdentifier']] = $pciData;
         }
-        
+
         return $returnValue;
     }
 
@@ -131,7 +141,7 @@ class PciCreatorRegistry
     }
 
     public function isValid($archive){
-        
+
         $returnValue = false;
 
         if(QtiPackage::isValidZip($archive)){
