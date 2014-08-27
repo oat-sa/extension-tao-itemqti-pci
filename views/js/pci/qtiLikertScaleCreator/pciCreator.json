@@ -1,7 +1,7 @@
 {
-    id : "likertScaleInteraction",
-    description : "A likert scale",
-    version : 0.1,
-    author : "sam",
-    email : "sam@taotesting.com"
+    "id" : "likertScaleInteraction",
+    "description" : "A likert scale",
+    "version" : 0.1,
+    "author" : "sam",
+    "email" : "sam@taotesting.com"
 }
