@@ -34,6 +34,10 @@ return array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
     ),
     'install' => array(
+        'rdf' => array(
+			dirname(__FILE__). '/install/ontology/registry.rdf',
+		    dirname(__FILE__). '/install/ontology/role.rdf'
+		),
         'php'	=> array(
 			dirname(__FILE__).'/scripts/install/addHook.php'
 		)
@@ -46,7 +50,7 @@ return array(
         )
     ),
     'routes' => array(
-        '/qtiItemPci' => 'oat\\qtiItemPci\\actions'
+        '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ),    
 	'constants' => array(
 	    # views directory

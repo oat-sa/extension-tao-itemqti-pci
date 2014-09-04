@@ -89,7 +89,7 @@ class CreatorRegistry
             //copy content in the directory:
             $this->storage->import($directoryId, $folder);
 
-            $instance = $this->registryClass->createInstanceWithProperties(array(
+            $this->registryClass->createInstanceWithProperties(array(
                 $this->propIdentifier->getUri() => $typeIdentifier,
                 $this->propDirectory->getUri() => $directoryId
             ));
