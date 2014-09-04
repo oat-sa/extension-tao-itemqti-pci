@@ -25,9 +25,7 @@ use \core_kernel_classes_Resource;
 use \core_kernel_classes_Class;
 use \core_kernel_classes_Property;
 use \tao_models_classes_service_FileStorage;
-use oat\taoQtiItem\helpers\QtiPackage;
 use oat\qtiItemPci\model\CreatorPackageParser;
-use \ZipArchive;
 
 /**
  * The hook used in the item creator
@@ -150,9 +148,13 @@ class CreatorRegistry
     }
 
     protected function getData(core_kernel_classes_Resource $hook){
+        
+        $directory = (string) $hook->getUniquePropertyValue($this->propDirectory);
+        $folder = $this->storage->getDirectoryById($directory)->getPath();
+        
         return array(
             'typeIdentifier' => (string) $hook->getUniquePropertyValue($this->propIdentifier),
-            'directory' => (string) $hook->getUniquePropertyValue($this->propDirectory)
+            'directory' => $folder
         );
     }
 

@@ -23,7 +23,7 @@ namespace oat\qtiItemPci\model;
 
 use oat\taoQtiItem\model\Hook;
 use oat\taoQtiItem\model\Config;
-use oat\qtiItemPci\model\CreatorHook;
+use oat\qtiItemPci\model\CreatorRegistry;
 
 /**
  * The hook used in the item creator
@@ -39,10 +39,19 @@ class CreatorHook implements Hook
      */
     public function init(Config $config){
         
+        $registry = CreatorRegistry::singleton();
+        
         //get list of all authorable interactions :
         $interactions = array();
         
         //get registered PCI
+        $hooks = $registry->getAll();
+        foreach($hooks as $hook){
+            //load pciCreator.js
+            $interactions[] = _url('getFile', 'pciCreator', 'qtiItemPci', array(
+                'file' => $hook.'/pciCreator'
+            ));
+        }
         
         $config->addInteraction($interactions);
         
