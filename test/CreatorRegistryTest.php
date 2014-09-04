@@ -31,17 +31,50 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
 
     /**
      * tests initialization
-     * load qti service
+     * load registry service
      */
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
+        $this->registry = CreatorRegistry::singleton();
     }
-
-    public function testAdd(){
+    
+    /**
+     * remove all created instances
+     */
+    public function tearDown(){
+        $this->registry->removeAll();
+    }
+    
+    public function testAddGetRemove(){
 
         $packageValid = dirname(__FILE__).'/samples/valid.zip';
-        $registry = CreatorRegistry::singleton();
-        $registry->add($packageValid);
+        $typeIdentifier = 'likertScaleInteraction';
+        
+        //test add
+        $hook = $this->registry->add($packageValid);
+        $this->assertEquals($hook['typeIdentifier'], $typeIdentifier);
+        
+        //test get:
+        $hook = $this->registry->get($typeIdentifier);
+        $this->assertEquals($hook['typeIdentifier'], $typeIdentifier);
+        
+        //test remove
+        $this->registry->remove($typeIdentifier);
+        $this->assertNull($this->registry->get($typeIdentifier));
+        
+    }
+    
+    public function testMultipleAdd(){
+        
+        $packageValid = dirname(__FILE__).'/samples/valid.zip';
+        $typeIdentifier = 'likertScaleInteraction';
+        
+        //test add
+        $hook = $this->registry->add($packageValid);
+        $this->assertEquals($hook['typeIdentifier'], $typeIdentifier);
+        
+        $this->setExpectedException('common_Exception');
+        $hook = $this->registry->add($packageValid);
         
     }
 

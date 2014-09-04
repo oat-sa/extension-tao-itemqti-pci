@@ -70,6 +70,15 @@ class CreatorRegistry
         $qtiPackageParser->validate();
         if($qtiPackageParser->isValid()){
 
+            //obtain the id from manifest file
+            $manifest = $qtiPackageParser->getManifest(true);
+            $typeIdentifier = $manifest['id'];
+
+            //check if such PCI creator already exists
+            if($this->get($typeIdentifier)){
+                throw new \common_Exception('The Creator Package already exists');
+            }
+
             //extract the package
             $folder = $qtiPackageParser->extract();
             if(!is_dir($folder)){
@@ -78,10 +87,6 @@ class CreatorRegistry
 
             $directory = $this->storage->spawnDirectory(true);
             $directoryId = $directory->getId();
-
-            //obtain the id from manifest file
-            $manifest = $qtiPackageParser->getManifest(true);
-            $typeIdentifier = $manifest['id'];
 
             //copy content in the directory:
             $this->storage->import($directoryId, $folder);
@@ -93,7 +98,6 @@ class CreatorRegistry
 
             $returnValue = $this->get($typeIdentifier);
 
-            var_dump($instance, $returnValue);
         }else{
             throw new \common_Exception('invalid PCI creator package format');
         }
@@ -114,28 +118,50 @@ class CreatorRegistry
         return $returnValue;
     }
 
-    public function remove($id){
-        
+    public function remove($typeIdentifier){
+
+        $hook = $this->getResource($typeIdentifier);
+        if($hook){
+            $hook->delete();
+            //@todo : remove the directory too!
+        }
     }
 
-    protected function getResource($id){
-        $resources = $this->registryClass->searchInstances(array($this->propIdentifier->getUri() => $id));
-        return reset($resources);
+    public function removeAll(){
+        
+        $all = $this->registryClass->getInstances();
+        foreach($all as $pci){
+            $pci->delete();
+        }
+    }
+
+    protected function getResource($typeIdentifier){
+        
+        $returnValue = null;
+        
+        if(!empty($typeIdentifier)){
+            $resources = $this->registryClass->searchInstances(array($this->propIdentifier->getUri() => $typeIdentifier));
+            $returnValue = reset($resources);
+        }else{
+            throw new \InvalidArgumentException('the type identifier must not be empty');
+        }
+        
+        return $returnValue;
     }
 
     protected function getData(core_kernel_classes_Resource $hook){
         return array(
-            'typeIdentifier' => $hook->getUniquePropertyValue($this->propIdentifier),
-            'directory' => $hook->getUniquePropertyValue($this->propDirectory)
+            'typeIdentifier' => (string) $hook->getUniquePropertyValue($this->propIdentifier),
+            'directory' => (string) $hook->getUniquePropertyValue($this->propDirectory)
         );
     }
 
-    public function get($id){
+    public function get($typeIdentifier){
 
         $returnValue = null;
-        $hook = $this->getResource($id);
+        $hook = $this->getResource($typeIdentifier);
 
-        if(!$hook){
+        if($hook){
             $returnValue = $this->getData($hook);
         }
 
