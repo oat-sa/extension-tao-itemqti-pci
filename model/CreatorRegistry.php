@@ -26,7 +26,7 @@ use \core_kernel_classes_Class;
 use \core_kernel_classes_Property;
 use \tao_models_classes_service_FileStorage;
 use oat\taoQtiItem\helpers\QtiPackage;
-use oat\qtiItemPci\model\PciPackageParser;
+use oat\qtiItemPci\model\CreatorPackageParser;
 use \ZipArchive;
 
 /**
@@ -34,10 +34,8 @@ use \ZipArchive;
  *
  * @package qtiItemPci
  */
-class PciCreatorRegistry
+class CreatorRegistry
 {
-
-    const REGISTRY_URI = 'http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook';
 
     /**
      * @var tao_models_classes_service_FileStorage
@@ -68,7 +66,7 @@ class PciCreatorRegistry
 
         $returnValue = null;
 
-        $qtiPackageParser = new PciPackageParser($archive);
+        $qtiPackageParser = new CreatorPackageParser($archive);
         $qtiPackageParser->validate();
         if($qtiPackageParser->isValid()){
 
@@ -88,10 +86,14 @@ class PciCreatorRegistry
             //copy content in the directory:
             $this->storage->import($directoryId, $folder);
 
-            $returnValue = $this->registryClass->createInstanceWithProperties(array(
+            $instance = $this->registryClass->createInstanceWithProperties(array(
                 $this->propIdentifier->getUri() => $typeIdentifier,
                 $this->propDirectory->getUri() => $directoryId
             ));
+
+            $returnValue = $this->get($typeIdentifier);
+
+            var_dump($instance, $returnValue);
         }else{
             throw new \common_Exception('invalid PCI creator package format');
         }

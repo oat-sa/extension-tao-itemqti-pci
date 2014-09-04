@@ -24,12 +24,6 @@ use oat\qtiItemPci\model\CreatorPackageParser;
 require_once dirname(__FILE__).'/../../tao/test/TaoPhpUnitTestRunner.php';
 include_once dirname(__FILE__).'/../includes/raw_start.php';
 
-/**
- *
- * @author Bertrand Chevrier, <taosupport@tudor.lu>
- * @package taoQTI
- 
- */
 class CreatorPackageParserTest extends TaoPhpUnitTestRunner
 {
 
