@@ -19,24 +19,30 @@
  *
  */
 
+use oat\qtiItemPci\model\CreatorHook;
+use oat\taoQtiItem\model\Config;
 use oat\qtiItemPci\model\CreatorRegistry;
 
 require_once dirname(__FILE__).'/../../tao/test/TaoPhpUnitTestRunner.php';
 include_once dirname(__FILE__).'/../includes/raw_start.php';
 
-class CreatorRegistryTest extends TaoPhpUnitTestRunner
+class CreatorHookTest extends TaoPhpUnitTestRunner
 {
 
     protected $qtiService;
-    protected $registry;
 
     /**
      * tests initialization
      * load registry service
      */
     public function setUp(){
+        
         TaoPhpUnitTestRunner::initTest();
+        
         $this->registry = CreatorRegistry::singleton();
+        
+        $packageValid = dirname(__FILE__).'/samples/valid.zip';
+        $this->registry->add($packageValid);
     }
     
     /**
@@ -46,37 +52,16 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
         $this->registry->removeAll();
     }
     
-    public function testAddGetRemove(){
-
-        $packageValid = dirname(__FILE__).'/samples/valid.zip';
-        $typeIdentifier = 'likertScaleInteraction';
+    public function testInit(){
         
-        //test add
-        $hook = $this->registry->add($packageValid);
-        $this->assertEquals($hook['typeIdentifier'], $typeIdentifier);
+        $config = new Config();
+        $hook = new CreatorHook();
         
-        //test get:
-        $hook = $this->registry->get($typeIdentifier);
-        $this->assertEquals($hook['typeIdentifier'], $typeIdentifier);
+        $hook->init($config);
         
-        //test remove
-        $this->registry->remove($typeIdentifier);
-        $this->assertNull($this->registry->get($typeIdentifier));
+        $configData = $config->toArray();
         
+        $this->assertEquals(count($configData['interactions']), 1);
     }
     
-    public function testMultipleAdd(){
-        
-        $packageValid = dirname(__FILE__).'/samples/valid.zip';
-        $typeIdentifier = 'likertScaleInteraction';
-        
-        //test add
-        $hook = $this->registry->add($packageValid);
-        $this->assertEquals($hook['typeIdentifier'], $typeIdentifier);
-        
-        $this->setExpectedException('common_Exception');
-        $hook = $this->registry->add($packageValid);
-        
-    }
-
 }

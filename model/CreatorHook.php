@@ -41,19 +41,18 @@ class CreatorHook implements Hook
         
         $registry = CreatorRegistry::singleton();
         
-        //get list of all authorable interactions :
-        $interactions = array();
-        
         //get registered PCI
         $hooks = $registry->getAll();
         foreach($hooks as $hook){
+            
+            $typeIdentifier = $hook['typeIdentifier'];
+            
             //load pciCreator.js
-            $interactions[] = _url('getFile', 'pciCreator', 'qtiItemPci', array(
-                'file' => $hook.'/pciCreator'
+            $interactionCreatorFile = _url('getFile', 'pciCreator', 'qtiItemPci', array(
+                'file' => $typeIdentifier.'/pciCreator'
             ));
+            $config->addInteraction($interactionCreatorFile);
         }
-        
-        $config->addInteraction($interactions);
         
     }
 }

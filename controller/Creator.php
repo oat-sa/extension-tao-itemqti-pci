@@ -24,7 +24,6 @@ namespace oat\qtiItemPci\controller;
 use \tao_actions_CommonModule;
 use \common_ext_ExtensionsManager;
 use \common_exception_Error;
-use \common_Logger;
 use \tao_helpers_File;
 use \tao_helpers_Http;
 use oat\qtiItemPci\model\CreatorRegistry;
