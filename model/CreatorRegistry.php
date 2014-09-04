@@ -168,26 +168,4 @@ class CreatorRegistry
         return $returnValue;
     }
 
-    public function isValid($archive){
-
-        $returnValue = false;
-
-        if(QtiPackage::isValidZip($archive)){
-
-            $zip = new ZipArchive();
-            $zip->open($archive, ZIPARCHIVE::CHECKCONS);
-            if($zip->locateName("pciCreator.json") === false){
-                throw new Exception("A PCI creator package must contains a pciCreator.json file at the root of the archive");
-            }else if($zip->locateName("pciCreator.js") === false){
-                throw new Exception("A PCI creator package must contains a pciCreator.js file at the root of the archive");
-            }else{
-                $returnValue = true;
-            }
-
-            $zip->close();
-        }
-
-        return $returnValue;
-    }
-
 }
