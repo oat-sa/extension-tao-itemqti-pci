@@ -1,17 +1,17 @@
 define([
-    'helpers',
-    'taoQtiItem/qtiCreator/editor/interactionsToolbar'
-], function(helpers, interactionsToolbar){
+    'taoQtiItem/qtiCreator/editor/interactionsToolbar',
+    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
+], function(interactionsToolbar, ciRegistry){
 
     var pciManagerContext = {
         get : function(typeIdentifier){
 
             return {
-                baseUrl : helpers._url('getFile', 'Creator', 'qtiItemPci', {file : typeIdentifier + '/'}),
+                baseUrl : ciRegistry.getPath(typeIdentifier),
                 tags : [interactionsToolbar.getCustomInteractionTag()]
             };
         }
     };
-    
+
     return pciManagerContext;
 });

@@ -3,10 +3,20 @@ define([
     'likertScaleInteraction/widget/Widget',
     'tpl!likertScaleInteraction/tpl/xml',
 ], function(context, Widget, xmlTpl){
-    
+
     var _context = context.get('likertScaleInteraction');
     
+    var _typeIdentifier = 'likertScaleInteraction';
+
     var likertScaleInteractionCreator = {
+        /**
+         * (required) Get the typeIdentifier of the custom interaction
+         * 
+         * @returns {String}
+         */
+        getTypeIdentifier : function(){
+            return _typeIdentifier;
+        },
         /**
          * (required) Get the widget prototype
          * Used in the renderer
@@ -61,14 +71,14 @@ define([
          * @returns {object}
          */
         getAuthoringData : function(){
-            
+
             _context.tags.push('mcq', 'likert');
-            
+
             return {
                 title : 'Likert Interaction', //currently no translation available 
-                icon : _context.baseUrl + 'img/icon.svg',
+                icon : _context.baseUrl + 'img/icon.svg', //use baseUrl from context
                 short : 'Likert',
-                qtiClass : 'customInteraction.likertScaleInteraction', //custom interaction is block type
+                qtiClass : 'customInteraction.' + likertScaleInteractionCreator.getTypeIdentifier(), //custom interaction is block type
                 tags : _context.tags
             };
         }
