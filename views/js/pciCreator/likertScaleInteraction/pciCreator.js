@@ -1,7 +1,7 @@
 define([
     'i18n',
-    'taoQtiItem/qtiLikertScaleCreator/widget/Widget',
-    'tpl!taoQtiItem/qtiLikertScaleCreator/tpl/xml'
+    'qtiLikertScaleCreator/widget/Widget',
+    'tpl!qtiLikertScaleCreator/tpl/xml'
 ], function(__, Widget, xmlTpl){
 
     var likertScaleInteractionCreator = {

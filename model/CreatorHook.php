@@ -54,5 +54,6 @@ class CreatorHook implements Hook
             $config->addInteraction($interactionCreatorFile);
         }
         
+        $config->addHook('qtiItemPci/pciManager/hook');
     }
 }

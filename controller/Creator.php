@@ -49,6 +49,7 @@ class Creator extends tao_actions_CommonModule
         if(is_null($pci)){
             $base = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
             $folder = $base . 'js' . DIRECTORY_SEPARATOR . 'pciCreator' . DIRECTORY_SEPARATOR . $pciTypeIdentifier . DIRECTORY_SEPARATOR;
+            echo '/*source from views/js/pciCreator*/'.PHP_EOL;
         }else{
             $folder = $pci['directory'];
         }
