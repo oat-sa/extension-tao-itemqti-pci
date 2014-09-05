@@ -1,5 +1,5 @@
 <?php
-/*  
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -24,6 +24,7 @@ namespace oat\qtiItemPci\model;
 use oat\taoQtiItem\model\Hook;
 use oat\taoQtiItem\model\Config;
 use oat\qtiItemPci\model\CreatorRegistry;
+use \common_ext_ExtensionsManager;
 
 /**
  * The hook used in the item creator
@@ -32,28 +33,53 @@ use oat\qtiItemPci\model\CreatorRegistry;
  */
 class CreatorHook implements Hook
 {
+
     /**
      * Affect the config
      * 
      * @param \oat\qtiItemPci\model\Config $config
      */
     public function init(Config $config){
-        
+
         $registry = CreatorRegistry::singleton();
-        
+
         //get registered PCI
         $hooks = $registry->getAll();
         foreach($hooks as $hook){
-            
+
             $typeIdentifier = $hook['typeIdentifier'];
-            
-            //load pciCreator.js
-            $interactionCreatorFile = _url('getFile', 'pciCreator', 'qtiItemPci', array(
-                'file' => $typeIdentifier.'/pciCreator'
+
+            $baseUrl = _url('getFile', 'pciCreator', 'qtiItemPci', array(
+                'file' => $typeIdentifier.'/'
             ));
-            $config->addInteraction($interactionCreatorFile);
+
+            $config->addInteraction(array(
+                'typeIdentifier' => $typeIdentifier,
+                'baseUrl' => $baseUrl,
+                'file' => $baseUrl.'pciCreator.js'
+            ));
+        }
+
+        //get PCI directly located in views/js/pciCreator/myCustomInteraction:
+        $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
+        $baseDir = $ext->getConstant('DIR_VIEWS');
+        $baseWWW = $ext->getConstant('BASE_WWW').'js/pciCreator/';
+
+        foreach(glob($baseDir.'js/pciCreator/*/pciCreator.js') as $file){
+            
+            $dir = str_replace('pciCreator.js', '', $file);
+            $typeIdentifier = basename($dir);
+            $baseUrl = $baseWWW.$typeIdentifier.'/';
+
+            $config->addInteraction(array(
+                'typeIdentifier' => $typeIdentifier,
+                'baseUrl' => $baseUrl,
+                'file' => $baseUrl.'pciCreator.js'
+            ));
         }
         
+        //finally add the custom interaction manager "hook"
         $config->addHook('qtiItemPci/pciManager/hook');
     }
+
 }

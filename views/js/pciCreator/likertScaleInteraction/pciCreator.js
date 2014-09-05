@@ -1,9 +1,11 @@
 define([
-    'i18n',
-    'qtiLikertScaleCreator/widget/Widget',
-    'tpl!qtiLikertScaleCreator/tpl/xml'
-], function(__, Widget, xmlTpl){
-
+    'qtiItemPci/pciManager/context',
+    'likertScaleInteraction/widget/Widget',
+    'tpl!likertScaleInteraction/tpl/xml',
+], function(context, Widget, xmlTpl){
+    
+    var _context = context.get('likertScaleInteraction');
+    
     var likertScaleInteractionCreator = {
         /**
          * (required) Get the widget prototype
@@ -34,7 +36,7 @@ define([
          * Used on new pci instance creation
          * 
          * @returns {Object}
-         */    
+         */
         afterCreate : function(pci){
             //do nothing
         },
@@ -42,7 +44,7 @@ define([
          * (required) Gives the qti pci xml template 
          * 
          * @returns {function} handlebar template
-         */  
+         */
         getXmlTemplate : function(){
             return xmlTpl;
         },
@@ -50,7 +52,7 @@ define([
          * (optional) Allows passing additional data to xml template
          * 
          * @returns {function} handlebar template
-         */ 
+         */
         getXmlData : function(pci, defaultData){
             return defaultData;
         },
@@ -59,16 +61,19 @@ define([
          * @returns {object}
          */
         getAuthoringData : function(){
+            
+            _context.tags.push('mcq', 'likert');
+            
             return {
-                title : __('Likert Interaction'),
-                icon : 'likert', //@todo : generalize here
-                short : __('Likert'),
-                qtiClass : 'customInteraction.likert',//custom interaction is block type
-                tags:['mcq']
+                title : 'Likert Interaction', //currently no translation available 
+                icon : _context.baseUrl + 'img/icon.svg',
+                short : 'Likert',
+                qtiClass : 'customInteraction.likertScaleInteraction', //custom interaction is block type
+                tags : _context.tags
             };
         }
     };
-    
+
     //since we assume we are in a tao context, there is no use to expose the a global object for lib registration
     //all libs should be declared here
     return likertScaleInteractionCreator;

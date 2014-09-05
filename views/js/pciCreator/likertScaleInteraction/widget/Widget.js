@@ -1,6 +1,6 @@
 define([
     'taoQtiItem/qtiCreator/widgets/interactions/Widget',
-    'taoQtiItem/qtiLikertScaleCreator/widget/states/states'
+    'likertScaleInteraction/widget/states/states'
 ], function(Widget, states){
 
     var LikertScaleInteractionWidget = Widget.clone();
