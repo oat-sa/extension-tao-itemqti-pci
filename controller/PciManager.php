@@ -48,6 +48,18 @@ class PciManager extends tao_actions_CommonModule
         $this->returnJson($returnValue);
     }
     
+    public function delete(){
+        
+        $typeIdentifier = $this->getRequestParameter('typeIdentifier');
+        $registry = CreatorRegistry::singleton();
+        $registry->remove($typeIdentifier);
+        $ok = true;
+        
+        $this->returnJson(array(
+            'success' => $ok
+        ));
+    }
+    
     public function getFile(){
 
         if($this->hasRequestParameter('file')){

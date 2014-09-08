@@ -12,7 +12,7 @@
         </h1>
         
         <div class="empty">
-            {{__ 'No files'}}
+            {{__ 'No Custom Interaction'}}
         </div>
 
         <ul class="files"></ul>

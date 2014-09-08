@@ -44,7 +44,7 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
      * remove all created instances
      */
     public function tearDown(){
-        $this->registry->removeAll();
+//        $this->registry->removeAll();
     }
     
     public function testAddGetRemove(){

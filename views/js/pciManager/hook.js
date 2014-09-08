@@ -6,14 +6,14 @@ define([
     'css!qtiItemPci_css/pci-manager'
 ], function(__, interactionsToolbar, PciManager, triggerTpl){
     
-    function addManagerButton($interactionBar, $modalContainer){
+    function addManagerButton($interactionSidebar, $modalContainer){
         
         //get the custom interaction section in the toolbar
         var customInteractionTag = interactionsToolbar.getCustomInteractionTag();
-        var $section = interactionsToolbar.getGroup($interactionBar, customInteractionTag);
+        var $section = interactionsToolbar.getGroup($interactionSidebar, customInteractionTag);
         if(!$section.length){
             //no custom interaction yet, add a section
-            $section = interactionsToolbar.addGroup($interactionBar, customInteractionTag);
+            $section = interactionsToolbar.addGroup($interactionSidebar, customInteractionTag);
         }
         
         //add button
@@ -22,7 +22,10 @@ define([
         }));
         $section.children('.panel').append($button);
         
-        var pciManager = new PciManager($modalContainer);
+        var pciManager = new PciManager({
+            container : $modalContainer,
+            interactionSidebar : $interactionSidebar
+        });
         $button.on('click', function(){
             pciManager.open();
         });
@@ -31,15 +34,15 @@ define([
     var pciManagerHook = {
         init : function(config){
             
-            var $interactionBar = config.dom.getInteractionToolbar(),
+            var $interactionSidebar = config.dom.getInteractionToolbar(),
                 $modalContainer = config.dom.getModalContainer();
             
-            if(interactionsToolbar.isReady($interactionBar)){
-                addManagerButton($interactionBar, $modalContainer);
+            if(interactionsToolbar.isReady($interactionSidebar)){
+                addManagerButton($interactionSidebar, $modalContainer);
             }else{
                 //wait until the interaction toolbar construciton is done:
-                $interactionBar.on('interactiontoolbarready.qti-widget', function(){
-                    addManagerButton($interactionBar, $modalContainer);
+                $interactionSidebar.on('interactiontoolbarready.qti-widget', function(){
+                    addManagerButton($interactionSidebar, $modalContainer);
                 });
             }
 
