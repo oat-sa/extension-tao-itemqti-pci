@@ -1,15 +1,12 @@
 define([
     'i18n',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
+    'qtiItemPci/pciManager/pciManager',
     'tpl!qtiItemPci/pciManager/tpl/managerTrigger',
     'css!qtiItemPci_css/pci-manager'
-], function(__, interactionsToolbar, triggerTpl){
+], function(__, interactionsToolbar, PciManager, triggerTpl){
     
-    function openManager(){
-        
-    }
-    
-    function addManagerButton($interactionBar){
+    function addManagerButton($interactionBar, $modalContainer){
         
         //get the custom interaction section in the toolbar
         var customInteractionTag = interactionsToolbar.getCustomInteractionTag();
@@ -24,22 +21,25 @@ define([
             title : __('Manage custom interactions')
         }));
         $section.children('.panel').append($button);
+        
+        var pciManager = new PciManager($modalContainer);
         $button.on('click', function(){
-            openManager();
+            pciManager.open();
         });
     }
 
     var pciManagerHook = {
         init : function(config){
-
-            var $interactionBar = config.dom.interactionToolbar;
+            
+            var $interactionBar = config.dom.getInteractionToolbar(),
+                $modalContainer = config.dom.getModalContainer();
             
             if(interactionsToolbar.isReady($interactionBar)){
-                addManagerButton($interactionBar);
+                addManagerButton($interactionBar, $modalContainer);
             }else{
                 //wait until the interaction toolbar construciton is done:
                 $interactionBar.on('interactiontoolbarready.qti-widget', function(){
-                    addManagerButton($interactionBar);
+                    addManagerButton($interactionBar, $modalContainer);
                 });
             }
 

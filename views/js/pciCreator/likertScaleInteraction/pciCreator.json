@@ -1,6 +1,7 @@
 {
     "id" : "likertScaleInteraction",
-    "description" : "A likert scale",
+    "label" : "Likert Scale",
+    "description" : "A simple implementation of likert scale",
     "version" : 0.1,
     "author" : "sam",
     "email" : "sam@taotesting.com"

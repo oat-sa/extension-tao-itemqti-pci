@@ -17,5 +17,6 @@
 .tao-scope .pci-manager-trigger:before { content: "\131"; }
 
 .tao-scope .pci-manager-trigger:before { margin-right: 5px; font-size: 10.5px; font-size: 1.05rem; font-family: 'tao'; display: inline-block; }
+.tao-scope .pcimgr .file-selector { display: block; min-height: 400px; }
 
 /*# sourceMappingURL=pci-manager.css.map */
