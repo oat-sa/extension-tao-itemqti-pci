@@ -57,7 +57,7 @@ class CreatorRegistry
 
         $this->registryClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook');
         $this->storage = tao_models_classes_service_FileStorage::singleton();
-        $this->propIdentifier = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier');
+        $this->propTypeIdentifier = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier');
         $this->propDirectory = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory');
     }
 
@@ -71,7 +71,8 @@ class CreatorRegistry
 
             //obtain the id from manifest file
             $manifest = $qtiPackageParser->getManifest(true);
-            $typeIdentifier = $manifest['id'];
+            $typeIdentifier = $manifest['typeIdentifier'];
+            $label = $manifest['label'];
 
             //check if such PCI creator already exists
             if($this->get($typeIdentifier)){
@@ -91,8 +92,9 @@ class CreatorRegistry
             $this->storage->import($directoryId, $folder);
 
             $this->registryClass->createInstanceWithProperties(array(
-                $this->propIdentifier->getUri() => $typeIdentifier,
-                $this->propDirectory->getUri() => $directoryId
+                $this->propTypeIdentifier->getUri() => $typeIdentifier,
+                $this->propDirectory->getUri() => $directoryId,
+                RDFS_LABEL => $label
             ));
 
             $returnValue = $this->get($typeIdentifier);
@@ -112,7 +114,7 @@ class CreatorRegistry
             $pciData = $this->getData($pci);
             $returnValue[$pciData['typeIdentifier']] = $pciData;
         }
-        
+
         return $returnValue;
     }
 
@@ -138,7 +140,7 @@ class CreatorRegistry
         $returnValue = null;
 
         if(!empty($typeIdentifier)){
-            $resources = $this->registryClass->searchInstances(array($this->propIdentifier->getUri() => $typeIdentifier));
+            $resources = $this->registryClass->searchInstances(array($this->propTypeIdentifier->getUri() => $typeIdentifier));
             $returnValue = reset($resources);
         }else{
             throw new \InvalidArgumentException('the type identifier must not be empty');
@@ -150,8 +152,9 @@ class CreatorRegistry
     protected function getData(core_kernel_classes_Resource $hook){
 
         $directory = (string) $hook->getUniquePropertyValue($this->propDirectory);
+        $label = $hook->getLabel();
         $folder = $this->storage->getDirectoryById($directory)->getPath();
-        $typeIdentifier = (string) $hook->getUniquePropertyValue($this->propIdentifier);
+        $typeIdentifier = (string) $hook->getUniquePropertyValue($this->propTypeIdentifier);
 
         $baseUrl = _url('getFile', 'PciManager', 'qtiItemPci', array(
             'file' => $typeIdentifier.'/'
@@ -159,6 +162,7 @@ class CreatorRegistry
 
         return array(
             'typeIdentifier' => $typeIdentifier,
+            'label' => $label,
             'directory' => $folder,
             'baseUrl' => $baseUrl,
             'file' => $baseUrl.'pciCreator.js'
@@ -176,34 +180,45 @@ class CreatorRegistry
 
         return $returnValue;
     }
-    
+
     /**
      * Get PCI Creator hook directly located in views/js/pciCreator/myCustomInteraction:
      * 
      * @return array
      */
     public function getDevelopmentInteractions(){
-        
+
         $returnValue = array();
-        
+
         $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
         $baseDir = $ext->getConstant('DIR_VIEWS');
         $baseWWW = $ext->getConstant('BASE_WWW').'js/pciCreator/';
 
         foreach(glob($baseDir.'js/pciCreator/*/pciCreator.js') as $file){
-            
-            $dir = str_replace('pciCreator.js', '', $file);
-            $typeIdentifier = basename($dir);
-            $baseUrl = $baseWWW.$typeIdentifier.'/';
 
-            $returnValue[] = array(
-                'typeIdentifier' => $typeIdentifier,
-                'directory' => $dir,
-                'baseUrl' => $baseUrl,
-                'file' => $baseUrl.'pciCreator.js'
-            );
+            $dir = str_replace('pciCreator.js', '', $file);
+            $manifestFile = $dir.'pciCreator.json';
+            
+            if(file_exists($manifestFile)){
+                
+                $typeIdentifier = basename($dir);
+                $baseUrl = $baseWWW.$typeIdentifier.'/';
+                $manifest = json_decode(file_get_contents($manifestFile), true);
+                $label = $manifest['label'];
+
+                $returnValue[] = array(
+                    'typeIdentifier' => $typeIdentifier,
+                    'label' => $label,
+                    'directory' => $dir,
+                    'baseUrl' => $baseUrl,
+                    'file' => $baseUrl.'pciCreator.js'
+                );
+            }else{
+                \common_Logger::d('missing manifest file pciCreator.json');
+            }
         }
-        
+
         return $returnValue;
     }
+
 }

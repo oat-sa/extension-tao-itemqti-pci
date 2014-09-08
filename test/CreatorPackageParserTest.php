@@ -65,8 +65,8 @@ class CreatorPackageParserTest extends TaoPhpUnitTestRunner
         $packageValid = dirname(__FILE__).'/samples/valid.zip';
         $parser = new CreatorPackageParser($packageValid);
         $manifest = $parser->getManifest();
-        $this->assertEquals(count($manifest), 5);
-        $this->assertEquals($manifest['id'], 'likertScaleInteraction');
+        $this->assertEquals(count($manifest), 6);
+        $this->assertEquals($manifest['typeIdentifier'], 'likertScaleInteraction');
         
     }
 

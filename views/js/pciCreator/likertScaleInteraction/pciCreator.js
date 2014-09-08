@@ -71,11 +71,11 @@ define([
          * @returns {object}
          */
         getAuthoringData : function(){
-
+            
             _context.tags.push('mcq', 'likert');
 
             return {
-                title : 'Likert Interaction', //currently no translation available 
+                label : 'Likert Interaction', //currently no translation available 
                 icon : _context.baseUrl + 'img/icon.svg', //use baseUrl from context
                 short : 'Likert',
                 qtiClass : 'customInteraction.' + likertScaleInteractionCreator.getTypeIdentifier(), //custom interaction is block type

@@ -63,8 +63,11 @@ class CreatorPackageParser extends PackageParser
                     
                     //check manifest format :
                     $manifest = $this->getManifest();
-                    if(!isset($manifest['id'])){
-                        throw new common_Exception('missing required attribute in the manifest pciCreator.json : "id"');
+                    if(!isset($manifest['typeIdentifier'])){
+                        throw new common_Exception('missing required attribute in the manifest pciCreator.json : "typeIdentifier"');
+                    }
+                    if(!isset($manifest['label'])){
+                        throw new common_Exception('missing required attribute in the manifest pciCreator.json : "label"');
                     }
                     $this->valid = true;
                 }

@@ -1,5 +1,5 @@
 {
-    "id" : "likertScaleInteraction",
+    "typeIdentifier" : "likertScaleInteraction",
     "label" : "Likert Scale",
     "description" : "A simple implementation of likert scale",
     "version" : 0.1,

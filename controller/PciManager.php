@@ -31,6 +31,23 @@ use oat\qtiItemPci\model\CreatorRegistry;
 class PciManager extends tao_actions_CommonModule
 {
     
+    public function getRegisteredInteractions(){
+        
+        $returnValue = array();
+        
+        $registry = CreatorRegistry::singleton();
+        $all = $registry->getRegisteredInteractions();
+        
+        foreach($all as $pci){
+            $returnValue[] = array(
+                'typeIdentifier' => $pci['typeIdentifier'],
+                'label' => $pci['label']
+            );
+        }
+        
+        $this->returnJson($returnValue);
+    }
+    
     public function getFile(){
 
         if($this->hasRequestParameter('file')){
