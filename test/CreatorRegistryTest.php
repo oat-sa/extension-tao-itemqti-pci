@@ -37,6 +37,7 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
         $this->registry = CreatorRegistry::singleton();
+        $this->registry->removeAll();
     }
     
     /**

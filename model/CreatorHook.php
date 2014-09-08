@@ -44,40 +44,17 @@ class CreatorHook implements Hook
         $registry = CreatorRegistry::singleton();
 
         //get registered PCI
-        $hooks = $registry->getAll();
+        $hooks = $registry->getRegisteredInteractions();
         foreach($hooks as $hook){
-
-            $typeIdentifier = $hook['typeIdentifier'];
-
-            $baseUrl = _url('getFile', 'pciCreator', 'qtiItemPci', array(
-                'file' => $typeIdentifier.'/'
-            ));
-
-            $config->addInteraction(array(
-                'typeIdentifier' => $typeIdentifier,
-                'baseUrl' => $baseUrl,
-                'file' => $baseUrl.'pciCreator.js'
-            ));
-        }
-
-        //get PCI directly located in views/js/pciCreator/myCustomInteraction:
-        $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
-        $baseDir = $ext->getConstant('DIR_VIEWS');
-        $baseWWW = $ext->getConstant('BASE_WWW').'js/pciCreator/';
-
-        foreach(glob($baseDir.'js/pciCreator/*/pciCreator.js') as $file){
-            
-            $dir = str_replace('pciCreator.js', '', $file);
-            $typeIdentifier = basename($dir);
-            $baseUrl = $baseWWW.$typeIdentifier.'/';
-
-            $config->addInteraction(array(
-                'typeIdentifier' => $typeIdentifier,
-                'baseUrl' => $baseUrl,
-                'file' => $baseUrl.'pciCreator.js'
-            ));
+            $config->addInteraction($hook);
         }
         
+        //get PCI directly located in views/js/pciCreator/myCustomInteraction:
+        $hooks = $registry->getDevelopmentInteractions();
+        foreach($hooks as $hook){
+            $config->addInteraction($hook);
+        }
+
         //finally add the custom interaction manager "hook"
         $config->addHook('qtiItemPci/pciManager/hook');
     }

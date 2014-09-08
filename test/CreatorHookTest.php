@@ -61,7 +61,7 @@ class CreatorHookTest extends TaoPhpUnitTestRunner
         
         $configData = $config->toArray();
         
-        $this->assertEquals(count($configData['interactions']), 1);
+        $this->assertEquals(count($configData['interactions']), 2);
     }
     
 }

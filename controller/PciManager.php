@@ -28,7 +28,7 @@ use \tao_helpers_File;
 use \tao_helpers_Http;
 use oat\qtiItemPci\model\CreatorRegistry;
 
-class Creator extends tao_actions_CommonModule
+class PciManager extends tao_actions_CommonModule
 {
     
     public function getFile(){

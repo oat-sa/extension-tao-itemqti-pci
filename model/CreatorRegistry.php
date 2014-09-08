@@ -25,6 +25,7 @@ use \core_kernel_classes_Resource;
 use \core_kernel_classes_Class;
 use \core_kernel_classes_Property;
 use \tao_models_classes_service_FileStorage;
+use \common_ext_ExtensionsManager;
 use oat\qtiItemPci\model\CreatorPackageParser;
 
 /**
@@ -95,7 +96,6 @@ class CreatorRegistry
             ));
 
             $returnValue = $this->get($typeIdentifier);
-
         }else{
             throw new \common_Exception('invalid PCI creator package format');
         }
@@ -103,7 +103,7 @@ class CreatorRegistry
         return $returnValue;
     }
 
-    public function getAll(){
+    public function getRegisteredInteractions(){
 
         $returnValue = array();
 
@@ -112,7 +112,7 @@ class CreatorRegistry
             $pciData = $this->getData($pci);
             $returnValue[$pciData['typeIdentifier']] = $pciData;
         }
-
+        
         return $returnValue;
     }
 
@@ -126,7 +126,7 @@ class CreatorRegistry
     }
 
     public function removeAll(){
-        
+
         $all = $this->registryClass->getInstances();
         foreach($all as $pci){
             $pci->delete();
@@ -134,27 +134,34 @@ class CreatorRegistry
     }
 
     protected function getResource($typeIdentifier){
-        
+
         $returnValue = null;
-        
+
         if(!empty($typeIdentifier)){
             $resources = $this->registryClass->searchInstances(array($this->propIdentifier->getUri() => $typeIdentifier));
             $returnValue = reset($resources);
         }else{
             throw new \InvalidArgumentException('the type identifier must not be empty');
         }
-        
+
         return $returnValue;
     }
 
     protected function getData(core_kernel_classes_Resource $hook){
-        
+
         $directory = (string) $hook->getUniquePropertyValue($this->propDirectory);
         $folder = $this->storage->getDirectoryById($directory)->getPath();
-        
+        $typeIdentifier = (string) $hook->getUniquePropertyValue($this->propIdentifier);
+
+        $baseUrl = _url('getFile', 'PciManager', 'qtiItemPci', array(
+            'file' => $typeIdentifier.'/'
+        ));
+
         return array(
-            'typeIdentifier' => (string) $hook->getUniquePropertyValue($this->propIdentifier),
-            'directory' => $folder
+            'typeIdentifier' => $typeIdentifier,
+            'directory' => $folder,
+            'baseUrl' => $baseUrl,
+            'file' => $baseUrl.'pciCreator.js'
         );
     }
 
@@ -169,5 +176,34 @@ class CreatorRegistry
 
         return $returnValue;
     }
+    
+    /**
+     * Get PCI Creator hook directly located in views/js/pciCreator/myCustomInteraction:
+     * 
+     * @return array
+     */
+    public function getDevelopmentInteractions(){
+        
+        $returnValue = array();
+        
+        $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
+        $baseDir = $ext->getConstant('DIR_VIEWS');
+        $baseWWW = $ext->getConstant('BASE_WWW').'js/pciCreator/';
 
+        foreach(glob($baseDir.'js/pciCreator/*/pciCreator.js') as $file){
+            
+            $dir = str_replace('pciCreator.js', '', $file);
+            $typeIdentifier = basename($dir);
+            $baseUrl = $baseWWW.$typeIdentifier.'/';
+
+            $returnValue[] = array(
+                'typeIdentifier' => $typeIdentifier,
+                'directory' => $dir,
+                'baseUrl' => $baseUrl,
+                'file' => $baseUrl.'pciCreator.js'
+            );
+        }
+        
+        return $returnValue;
+    }
 }
