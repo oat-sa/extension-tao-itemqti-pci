@@ -51,13 +51,18 @@ define([
         });
 
         this.$fileContainer.on('delete.deleter', function(e, $target){
-            var params = {};
+
+            var typeIdentifier;
             if(e.namespace === 'deleter' && $target.length){
-                params.typeIdentifier = $target.data('type-identifier');
+
+                typeIdentifier = $target.data('type-identifier');
                 $(this).one('deleted.deleter', function(){
-                    $.getJSON(_urls.delete, params, function(data){
+
+                    $.getJSON(_urls.delete, {typeIdentifier : typeIdentifier}, function(data){
                         if(data.success){
-                            interactionsToolbar.remove(config.interactionSidebar, 'customInteraction.' + params.typeIdentifier);
+                            interactionsToolbar.remove(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
+                            delete _this.listing[typeIdentifier];
+                            _this.updateListing();
                         }
                     });
                 });

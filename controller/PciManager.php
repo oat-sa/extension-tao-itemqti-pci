@@ -39,7 +39,7 @@ class PciManager extends tao_actions_CommonModule
         $all = $registry->getRegisteredInteractions();
         
         foreach($all as $pci){
-            $returnValue[] = array(
+            $returnValue[$pci['typeIdentifier']] = array(
                 'typeIdentifier' => $pci['typeIdentifier'],
                 'label' => $pci['label']
             );
