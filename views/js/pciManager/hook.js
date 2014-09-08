@@ -1,8 +1,14 @@
 define([
     'i18n',
-    'taoQtiItem/qtiCreator/editor/interactionsToolbar'
-], function(__, interactionsToolbar){
-
+    'taoQtiItem/qtiCreator/editor/interactionsToolbar',
+    'tpl!qtiItemPci/pciManager/tpl/managerTrigger',
+    'css!qtiItemPci_css/pci-manager'
+], function(__, interactionsToolbar, triggerTpl){
+    
+    function openManager(){
+        
+    }
+    
     function addManagerButton($interactionBar){
         
         //get the custom interaction section in the toolbar
@@ -14,9 +20,13 @@ define([
         }
         
         //add button
-        var $button = $('<button>', {text : __('manage ...')});
+        var $button = $(triggerTpl({
+            title : __('Manage custom interactions')
+        }));
         $section.children('.panel').append($button);
-
+        $button.on('click', function(){
+            openManager();
+        });
     }
 
     var pciManagerHook = {

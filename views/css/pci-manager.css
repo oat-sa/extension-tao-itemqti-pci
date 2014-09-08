@@ -1,0 +1,21 @@
+/* to be included into your scss files, don't forget to set the includePaths (--load-path) in your compiler  */
+/** Use icon within sass: @inclue icon('down'); */
+/* Fade animation */
+@keyframes fade { 0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; } }
+@-webkit-keyframes fade { 0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; } }
+@-moz-keyframes fade { 0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; } }
+@-o-keyframes fade { 0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; } }
+/* Repeat animation */
+.tao-scope .pci-manager-trigger:before { content: "\131"; }
+
+.tao-scope .pci-manager-trigger:before { margin-right: 5px; font-size: 10.5px; font-size: 1.05rem; font-family: 'tao'; display: inline-block; }
+
+/*# sourceMappingURL=pci-manager.css.map */

@@ -1,0 +1,10 @@
+@import "inc/bootstrap";
+.tao-scope {
+    .pci-manager-trigger{
+        &:before{
+            margin-right: 5px;
+            @include font-size(10.5);
+            @include icon('tools');
+        }
+    }
+}
