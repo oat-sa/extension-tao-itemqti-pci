@@ -8,12 +8,15 @@ define([
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'async',
     'ui/feedback',
-    'ui/modal'
+    'ui/modal',
+    'filereader'
 ], function($, __, _, helpers, layoutTpl, listingTpl, interactionsToolbar, async, feedback){
-
+    
+    var _fileFilters = [''];
     var _urls = {
         load : helpers._url('getRegisteredInteractions', 'PciManager', 'qtiItemPci'),
-        delete : helpers._url('delete', 'PciManager', 'qtiItemPci')
+        delete : helpers._url('delete', 'PciManager', 'qtiItemPci'),
+        add : helpers._url('add', 'PciManager', 'qtiItemPci')
     };
 
     function validateConfig(config){
@@ -26,7 +29,7 @@ define([
         }
     }
 
-    var PciManager = function(config){
+    function PciManager(config){
 
         validateConfig(config);
 
@@ -60,7 +63,8 @@ define([
 
         //init event listeners
         initEventListeners();
-
+//        initUploader();
+        
         /**
          * Below are all function definitions
          */
@@ -165,7 +169,7 @@ define([
             $uploader.uploader({
                 upload : true,
                 multiple : true,
-                uploadUrl : options.uploadUrl + '?' + $.param(options.params) + '&' + options.pathParam + '=' + currentPath,
+                uploadUrl : _urls.upload,
                 fileSelect : function(files, done){
 
                     var givenLength = files.length;
@@ -179,7 +183,7 @@ define([
                         var filters = options.params.filters.split(',');
                         //TODO check stars
                         files = _.filter(files, function(file){
-                            return _.contains(filters, file.type);
+                            return _.contains(_fileFilters, file.type);
                         });
 
                         if(files.length !== givenLength){

@@ -26,40 +26,95 @@ use \common_ext_ExtensionsManager;
 use \common_exception_Error;
 use \tao_helpers_File;
 use \tao_helpers_Http;
+use \FileUploadException;
 use oat\qtiItemPci\model\CreatorRegistry;
+use oat\qtiItemPci\model\CreatorPackageParser;
 
 class PciManager extends tao_actions_CommonModule
 {
-    
+
+    public function __construct(){
+        parent::__construct();
+        $this->registry = CreatorRegistry::singleton();
+    }
+
     public function getRegisteredInteractions(){
-        
+
         $returnValue = array();
-        
-        $registry = CreatorRegistry::singleton();
-        $all = $registry->getRegisteredInteractions();
-        
+
+        $all = $this->registry->getRegisteredInteractions();
+
         foreach($all as $pci){
             $returnValue[$pci['typeIdentifier']] = array(
                 'typeIdentifier' => $pci['typeIdentifier'],
                 'label' => $pci['label']
             );
         }
-        
+
         $this->returnJson($returnValue);
     }
     
+    /**
+     * Service to check if the uploaded file archive is a valid and non-existing one
+     * 
+     * @todo call this from the client side
+     */
+    public function exists(){
+        
+        $result = array(
+            'valid' => false,
+            'exists' => false
+        );
+        
+        $file = tao_helpers_Http::getUploadedFile('content');
+        $creatorPackageParser = new CreatorPackageParser($file);
+        $creatorPackageParser->validate();
+        if($creatorPackageParser->isValid()){
+            
+            $result['valid'] = true;
+            
+            $manifest = $creatorPackageParser->getManifest();
+            $interaction = $this->registry->get($manifest['typeIdentifier']);
+            if(!is_null($interaction)){
+                $result['exists'] = true;
+            }
+            
+        }else{
+            $result['package'] = $creatorPackageParser->getErrors();
+        }
+        
+        $this->returnJson($result);
+    }
+    
+    public function add(){
+
+        //as upload may be called multiple times, we remove the session lock as soon as possible
+        session_write_close();
+
+        try{
+
+            $file = tao_helpers_Http::getUploadedFile('content');
+            $newInteraction = $this->registry->add($file['name']);
+
+            $this->returnJson($newInteraction);
+            
+        }catch(FileUploadException $fe){
+
+            $this->returnJson(array('error' => $fe->getMessage()));
+        }
+    }
+    
     public function delete(){
-        
+
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
-        $registry = CreatorRegistry::singleton();
-        $registry->remove($typeIdentifier);
+        $this->registry->remove($typeIdentifier);
         $ok = true;
-        
+
         $this->returnJson(array(
             'success' => $ok
         ));
     }
-    
+
     public function getFile(){
 
         if($this->hasRequestParameter('file')){
@@ -72,17 +127,16 @@ class PciManager extends tao_actions_CommonModule
     }
 
     private function renderFile($pciTypeIdentifier, $relPath){
-        
-        $registry = CreatorRegistry::singleton();
-        $pci = $registry->get($pciTypeIdentifier);
+
+        $pci = $this->registry->get($pciTypeIdentifier);
         if(is_null($pci)){
             $base = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
-            $folder = $base . 'js' . DIRECTORY_SEPARATOR . 'pciCreator' . DIRECTORY_SEPARATOR . $pciTypeIdentifier . DIRECTORY_SEPARATOR;
+            $folder = $base.'js'.DIRECTORY_SEPARATOR.'pciCreator'.DIRECTORY_SEPARATOR.$pciTypeIdentifier.DIRECTORY_SEPARATOR;
             echo '/*source from views/js/pciCreator*/'.PHP_EOL;
         }else{
             $folder = $pci['directory'];
         }
-        
+
         if(tao_helpers_File::securityCheck($relPath, true)){
             $filename = $folder.$relPath;
             tao_helpers_Http::returnFile($filename);
@@ -91,4 +145,4 @@ class PciManager extends tao_actions_CommonModule
         }
     }
 
-}   
+}
