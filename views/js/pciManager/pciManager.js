@@ -38,11 +38,12 @@ define([
 
         //init variables:
         var listing = {},
-            $fileContainer = $container.find('.file-selector .files'),
-            $placeholder = $container.find('.file-selector .empty'),
-            $title = $container.find('.file-selector .title'),
-            $uploader = $container.find('.file-selector .file-upload-container'),
-            $switcher = $container.find('.file-selector .upload-switcher a');
+            $fileSelector = $container.find('.file-selector'),
+            $fileContainer = $fileSelector.find('.files'),
+            $placeholder = $fileSelector.find('.empty'),
+            $title = $fileSelector.find('.title'),
+            $uploader = $fileSelector.find('.file-upload-container'),
+            $switcher = $fileSelector.find('.upload-switcher a');
 
         //init modal box
         $container.modal({
