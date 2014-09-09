@@ -9,13 +9,17 @@ define([
     'async',
     'ui/feedback',
     'ui/modal',
+    'ui/uploader',
+    'ui/filesender',
     'filereader'
 ], function($, __, _, helpers, layoutTpl, listingTpl, interactionsToolbar, async, feedback){
-    
-    var _fileFilters = [''];
+
+    var _fileTypeFilters = ['application/zip'];
+
     var _urls = {
         load : helpers._url('getRegisteredInteractions', 'PciManager', 'qtiItemPci'),
         delete : helpers._url('delete', 'PciManager', 'qtiItemPci'),
+        verify : helpers._url('verify', 'PciManager', 'qtiItemPci'),
         add : helpers._url('add', 'PciManager', 'qtiItemPci')
     };
 
@@ -46,7 +50,8 @@ define([
             $placeholder = $fileSelector.find('.empty'),
             $title = $fileSelector.find('.title'),
             $uploader = $fileSelector.find('.file-upload-container'),
-            $switcher = $fileSelector.find('.upload-switcher a');
+            $switcher = $fileSelector.find('.upload-switcher a'),
+            $uploadForm;
 
         //init modal box
         $container.modal({
@@ -63,12 +68,11 @@ define([
 
         //init event listeners
         initEventListeners();
-//        initUploader();
-        
+        initUploader();
+
         /**
          * Below are all function definitions
          */
-
 
         function loadListingFromServer(callback){
 
@@ -82,6 +86,7 @@ define([
         }
 
         function initEventListeners(){
+
             $fileContainer.on('delete.deleter', function(e, $target){
 
                 var typeIdentifier;
@@ -99,6 +104,12 @@ define([
                         });
                     });
                 }
+            });
+
+            //siwtch to upload mode
+            $switcher.click(function(e){
+                e.preventDefault();
+                switchUpload();
             });
         }
 
@@ -131,14 +142,14 @@ define([
                 // Note: show() would display as inline, not inline-block!
                 $switcher.filter('.upload').css({display : 'inline-block'});
                 $switcher.filter('.listing').hide();
-                $title.text(__('Browse folders:'));
+                $title.text(__('Manage custom interactions'));
             }else{
                 $fileContainer.hide();
                 $placeholder.hide();
                 $uploader.show();
                 $switcher.filter('.upload').hide();
                 $switcher.filter('.listing').css({display : 'inline-block'});
-                $title.text(__('Upload into:'));
+                $title.text(__('Upload new custom interaction (zip package)'));
                 $uploader.uploader('reset');
             }
 
@@ -149,13 +160,17 @@ define([
             var errors = [];
 
             $uploader.on('upload.uploader', function(e, file, result){
-                $container.trigger('added.custominteraction', [result, currentPath]);
-            });
-            $uploader.on('fail.uploader', function(e, file, err){
-                errors.push(__('Unable to upload file %s : %s', file.name, err));
-            });
 
-            $uploader.on('end.uploader', function(){
+                console.log(file, result);
+                listing[result.typeIdentifier] = result;
+                updateListing();
+                $container.trigger('added.custominteraction', [result]);
+
+            }).on('fail.uploader', function(e, file, err){
+
+                errors.push(__('Unable to upload file %s : %s', file.name, err));
+
+            }).on('end.uploader', function(){
 
                 if(errors.length === 0){
                     _.delay(switchUpload, 500);
@@ -164,12 +179,17 @@ define([
                 }
                 //reset errors
                 errors = [];
+
+            }).on('create.uploader', function(){
+
+                //get ref to the uploadForm for later verification usage
+                $uploadForm = $uploader.children('form');
             });
 
             $uploader.uploader({
                 upload : true,
                 multiple : true,
-                uploadUrl : _urls.upload,
+                uploadUrl : _urls.add,
                 fileSelect : function(files, done){
 
                     var givenLength = files.length;
@@ -179,46 +199,65 @@ define([
                     });
 
                     //check the mime-type
-                    if(options.params.filters){
-                        var filters = options.params.filters.split(',');
-                        //TODO check stars
-                        files = _.filter(files, function(file){
-                            return _.contains(_fileFilters, file.type);
-                        });
+                    files = _.filter(files, function(file){
+                        return _.contains(_fileTypeFilters, file.type);
+                    });
 
-                        if(files.length !== givenLength){
-
-                            //TODO use a feedback popup
-                            feedback().error('Unauthorized files have been removed');
-                        }
+                    if(files.length !== givenLength){
+                        feedback().error('Invalid files have been removed');
                     }
 
-                    async.filter(files, function(file, cb){
-                        var result = true;
+                    async.filter(files, verify, done);
+                }
+            });
 
-                        //try to call a server side service to check whether the selected files exists or not.       
-                        if(options.fileExistsUrl){
-                            $.getJSON(options.fileExistsUrl + '?' + $.param(options.params) + '&' + options.pathParam + '=' + currentPath + '/' + file.name, function(response){
-                                if(response && response.exists === true){
-                                    result = window.confirm('Do you want to override ' + file.name + '?');
-                                }
-                                cb(result);
-                            });
-                        }else{
-                            //fallback on client side check 
-                            if(_.contains(fileNames, file.name.toLowerCase())){
-                                result = window.confirm('Do you want to override ' + file.name + '?');
-                            }
-                            cb(result);
+        }
+
+        function verify(file, cb){
+
+            var result = true,
+                $fileEntry = $uploadForm.find('li[data-file-name="' + file.name + '"]'),
+                $status = $fileEntry.find('.status');
+
+            $uploadForm.sendfile({
+                url : _urls.verify,
+                file : file,
+                loaded : function(r){
+                    
+                    console.log('vvv', r, file);
+
+                    if(r.valid){
+                        if(r.exists){
+                            result = window.confirm('Do you want to override ' + r.label + '?');
                         }
-                    }, done);
+                    }else{
+                        result = false;
+                    }
+                    
+                    $status
+                        .removeClass('sending')
+                        .removeClass('error')
+                        .addClass('success')
+                        .html(r.label+' - typeIdentifier : '+r.typeIdentifier);
+
+                    cb(result);
+                },
+                failed : function(message){
+
+                    $status
+                        .removeClass('sending')
+                        .removeClass('success')
+                        .addClass('error')
+                        .attr('title', message);
+                    
+                    cb(new Error(message));
                 }
             });
         }
 
         //expose a few functions
         this.open = open;
-    };
+    }
 
     return PciManager;
 });

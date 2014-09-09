@@ -45,47 +45,56 @@ class PciManager extends tao_actions_CommonModule
         $all = $this->registry->getRegisteredInteractions();
 
         foreach($all as $pci){
-            $returnValue[$pci['typeIdentifier']] = array(
-                'typeIdentifier' => $pci['typeIdentifier'],
-                'label' => $pci['label']
-            );
+            $returnValue[$pci['typeIdentifier']] = $this->filterInteractionData($pci);
         }
 
         $this->returnJson($returnValue);
     }
-    
+
+    protected function filterInteractionData($rawInteractionData){
+
+        return array(
+            'typeIdentifier' => $rawInteractionData['typeIdentifier'],
+            'label' => $rawInteractionData['label']
+        );
+    }
+
     /**
      * Service to check if the uploaded file archive is a valid and non-existing one
      * 
      * @todo call this from the client side
      */
-    public function exists(){
-        
+    public function verify(){
+
         $result = array(
             'valid' => false,
             'exists' => false
         );
-        
+
         $file = tao_helpers_Http::getUploadedFile('content');
-        $creatorPackageParser = new CreatorPackageParser($file);
+
+        $creatorPackageParser = new CreatorPackageParser($file['tmp_name']);
         $creatorPackageParser->validate();
         if($creatorPackageParser->isValid()){
-            
+
             $result['valid'] = true;
-            
+
             $manifest = $creatorPackageParser->getManifest();
+
+            $result['typeIdentifier'] = $manifest['typeIdentifier'];
+            $result['label'] = $manifest['label'];
             $interaction = $this->registry->get($manifest['typeIdentifier']);
+
             if(!is_null($interaction)){
                 $result['exists'] = true;
             }
-            
         }else{
             $result['package'] = $creatorPackageParser->getErrors();
         }
-        
+
         $this->returnJson($result);
     }
-    
+
     public function add(){
 
         //as upload may be called multiple times, we remove the session lock as soon as possible
@@ -94,16 +103,15 @@ class PciManager extends tao_actions_CommonModule
         try{
 
             $file = tao_helpers_Http::getUploadedFile('content');
-            $newInteraction = $this->registry->add($file['name']);
+            $newInteraction = $this->registry->add($file['tmp_name']);
 
-            $this->returnJson($newInteraction);
-            
+            $this->returnJson($this->filterInteractionData($newInteraction));
         }catch(FileUploadException $fe){
 
             $this->returnJson(array('error' => $fe->getMessage()));
         }
     }
-    
+
     public function delete(){
 
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
