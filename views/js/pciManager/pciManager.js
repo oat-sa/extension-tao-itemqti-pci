@@ -137,33 +137,37 @@ define([
         }
 
         function switchUpload(){
-
-            if($fileContainer.css('display') === 'none'){
-                showListing();
-            }else{
+            
+            if($uploader.css('display') === 'none'){
                 hideListing();
+            }else{
+                showListing();
             }
         }
 
         function hideListing(){
-
-            $fileContainer.hide();
-            $placeholder.hide();
-            $uploader.show();
+            
             $switcher.filter('.upload').hide();
             $switcher.filter('.listing').css({display : 'inline-block'});
+            
+            $fileContainer.hide();
+            $placeholder.hide();
             $title.text(__('Upload new custom interaction (zip package)'));
+            
             $uploader.uploader('reset');
+            $uploader.show();
         }
 
         function showListing(){
-
-            $uploader.hide();
-            $fileContainer.show();
+            
             // Note: show() would display as inline, not inline-block!
             $switcher.filter('.upload').css({display : 'inline-block'});
             $switcher.filter('.listing').hide();
+            
+            $uploader.hide();
             $title.text(__('Manage custom interactions'));
+            
+            updateListing();
         }
 
         function initUploader(){
@@ -174,7 +178,6 @@ define([
             $uploader.on('upload.uploader', function(e, file, result){
 
                 listing[result.typeIdentifier] = result;
-                updateListing();
                 $container.trigger('added.custominteraction', [result]);
                 
             }).on('fail.uploader', function(e, file, err){
