@@ -101,9 +101,9 @@ class PciManager extends tao_actions_CommonModule
         session_write_close();
 
         try{
-
+            $replace= true; //always set as "replaceable" and delegate decision to replace or not to the client side
             $file = tao_helpers_Http::getUploadedFile('content');
-            $newInteraction = $this->registry->add($file['tmp_name']);
+            $newInteraction = $this->registry->add($file['tmp_name'], $replace);
 
             $this->returnJson($this->filterInteractionData($newInteraction));
         }catch(FileUploadException $fe){

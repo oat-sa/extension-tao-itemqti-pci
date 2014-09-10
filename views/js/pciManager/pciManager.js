@@ -62,8 +62,9 @@ define([
 
         //load list of custom interactions from server
         loadListingFromServer(function(data){
-
-            listing = data;
+            
+            //note : init as empty object and not array otherwise _.size will fail later
+            listing = _.size(data) ? data : {};
             updateListing(data);
         });
 
@@ -116,9 +117,9 @@ define([
         }
 
         function updateListing(){
-
+            
             if(_.size(listing)){
-
+                
                 $placeholder.hide();
 
                 $fileContainer

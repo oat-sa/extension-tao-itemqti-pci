@@ -61,7 +61,7 @@ class CreatorRegistry
         $this->propDirectory = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory');
     }
 
-    public function add($archive){
+    public function add($archive, $replace = false){
 
         $returnValue = null;
 
@@ -75,8 +75,13 @@ class CreatorRegistry
             $label = $manifest['label'];
 
             //check if such PCI creator already exists
-            if($this->get($typeIdentifier)){
-                throw new \common_Exception('The Creator Package already exists');
+            $existingInteraction = $this->getResource($typeIdentifier);
+            if($existingInteraction){
+                if($replace){
+                    $this->remove($typeIdentifier);
+                }else{
+                    throw new \common_Exception('The Creator Package already exists');
+                }
             }
 
             //extract the package
@@ -98,6 +103,7 @@ class CreatorRegistry
             ));
 
             $returnValue = $this->get($typeIdentifier);
+            
         }else{
             throw new \common_Exception('invalid PCI creator package format');
         }
