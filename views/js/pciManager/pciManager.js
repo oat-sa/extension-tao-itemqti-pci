@@ -7,14 +7,17 @@ define([
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
+    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'async',
     'ui/feedback',
     'ui/modal',
     'ui/uploader',
     'ui/filesender',
     'filereader'
-], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, async, feedback){
-
+], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, feedback){
+    
+    var ns = '.pcimanager';
+    
     var _fileTypeFilters = ['application/zip'];
 
     var _urls = {
@@ -41,7 +44,7 @@ define([
         //creates the container from the layout template
         var $container = $(layoutTpl());
         config.container.append($container);
-
+        
         //init variables:
         var listing = {},
             $fileSelector = $container.find('.file-selector'),
@@ -174,10 +177,23 @@ define([
             var errors = [],
                 selectedFiles = {};
 
-            $uploader.on('upload.uploader', function(e, file, result){
-
-                listing[result.typeIdentifier] = result;
-                $container.trigger('added.custominteraction', [result]);
+            $uploader.on('upload.uploader', function(e, file, interactionHook){
+                
+                var id = interactionHook.typeIdentifier;
+                
+                listing[id] = interactionHook;
+                
+                ciRegistry.register([interactionHook]);
+                ciRegistry.loadOne(id, function(hook){
+                    var data = hook.getAuthoringData();
+                    if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
+                        interactionsToolbar.add(config.interactionSidebar, data);
+                    }else{
+                        throw 'invalid authoring data for custom interaction';
+                    }
+                });
+                
+                $container.trigger('added'+ns, [interactionHook]);
 
             }).on('fail.uploader', function(e, file, err){
 
