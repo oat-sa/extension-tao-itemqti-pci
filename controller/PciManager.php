@@ -55,7 +55,9 @@ class PciManager extends tao_actions_CommonModule
 
         return array(
             'typeIdentifier' => $rawInteractionData['typeIdentifier'],
-            'label' => $rawInteractionData['label']
+            'label' => $rawInteractionData['label'],
+            'baseUrl' => $rawInteractionData['baseUrl'],
+            'file' => $rawInteractionData['file']
         );
     }
 
@@ -106,6 +108,7 @@ class PciManager extends tao_actions_CommonModule
             $newInteraction = $this->registry->add($file['tmp_name'], $replace);
 
             $this->returnJson($this->filterInteractionData($newInteraction));
+            
         }catch(FileUploadException $fe){
 
             $this->returnJson(array('error' => $fe->getMessage()));

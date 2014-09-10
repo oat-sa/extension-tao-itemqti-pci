@@ -13,6 +13,20 @@
         .file-selector{
             display:block;
             min-height:400px;
+            .title-container{
+                margin-right:75px;
+                .title{
+                    margin-right:0;
+                }
+            }
+            .note{
+                font-weight:bold;
+                margin:0 3px;
+            }
+            .note-container{
+                position: absolute;
+                bottom : -10px;
+            }
         }
     }
     

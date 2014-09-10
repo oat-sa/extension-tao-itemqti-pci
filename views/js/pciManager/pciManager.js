@@ -39,9 +39,7 @@ define([
         validateConfig(config);
 
         //creates the container from the layout template
-        var $container = $(layoutTpl({
-            title : __('Manage Custom Interactions')
-        }));
+        var $container = $(layoutTpl());
         config.container.append($container);
 
         //init variables:
