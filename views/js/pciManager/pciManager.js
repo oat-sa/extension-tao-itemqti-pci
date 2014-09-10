@@ -223,7 +223,7 @@ define([
                 fileSelect : function(files, done){
 
                     var givenLength = files.length;
-
+                    
                     //check the mime-type
                     files = _.filter(files, function(file){
                         return _.contains(_fileTypeFilters, file.type);
@@ -249,12 +249,19 @@ define([
                     url : _urls.verify,
                     file : file,
                     loaded : function(r){
-
+                        
                         if(r.valid){
                             if(r.exists){
                                 ok = window.confirm(__('There is already one interaction with the same identifier "%s" (label : "%s"). \n\n Do you want to override the existing one ?', r.typeIdentifier, r.label, r.label));
                             }
                         }else{
+                            if(_.isArray(r.package)){
+                                _.each(r.package, function(msg){
+                                    if(msg.message){
+                                        feedback().error(msg.message);
+                                    }
+                                });
+                            }
                             ok = false;
                         }
 
