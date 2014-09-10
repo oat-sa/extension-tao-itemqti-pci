@@ -82,6 +82,7 @@ define([
         }
 
         function open(){
+            showListing();
             $container.modal('open');
         }
 
@@ -137,22 +138,31 @@ define([
         function switchUpload(){
 
             if($fileContainer.css('display') === 'none'){
-                $uploader.hide();
-                $fileContainer.show();
-                // Note: show() would display as inline, not inline-block!
-                $switcher.filter('.upload').css({display : 'inline-block'});
-                $switcher.filter('.listing').hide();
-                $title.text(__('Manage custom interactions'));
+                showListing();
             }else{
-                $fileContainer.hide();
-                $placeholder.hide();
-                $uploader.show();
-                $switcher.filter('.upload').hide();
-                $switcher.filter('.listing').css({display : 'inline-block'});
-                $title.text(__('Upload new custom interaction (zip package)'));
-                $uploader.uploader('reset');
+                hideListing();
             }
+        }
 
+        function hideListing(){
+            
+            $fileContainer.hide();
+            $placeholder.hide();
+            $uploader.show();
+            $switcher.filter('.upload').hide();
+            $switcher.filter('.listing').css({display : 'inline-block'});
+            $title.text(__('Upload new custom interaction (zip package)'));
+            $uploader.uploader('reset');
+        }
+
+        function showListing(){
+            
+            $uploader.hide();
+            $fileContainer.show();
+            // Note: show() would display as inline, not inline-block!
+            $switcher.filter('.upload').css({display : 'inline-block'});
+            $switcher.filter('.listing').hide();
+            $title.text(__('Manage custom interactions'));
         }
 
         function initUploader(){
@@ -219,11 +229,13 @@ define([
                 $fileEntry = $uploadForm.find('li[data-file-name="' + file.name + '"]'),
                 $status = $fileEntry.find('.status');
 
+            //@todo : updae the file name and label with the tpeIdentifier and label
+
             $uploadForm.sendfile({
                 url : _urls.verify,
                 file : file,
                 loaded : function(r){
-                    
+
                     console.log('vvv', r, file);
 
                     if(r.valid){
@@ -233,12 +245,12 @@ define([
                     }else{
                         result = false;
                     }
-                    
+
                     $status
                         .removeClass('sending')
                         .removeClass('error')
                         .addClass('success')
-                        .html(r.label+' - typeIdentifier : '+r.typeIdentifier);
+                        .html(r.label + ' - typeIdentifier : ' + r.typeIdentifier);
 
                     cb(result);
                 },
@@ -249,7 +261,7 @@ define([
                         .removeClass('success')
                         .addClass('error')
                         .attr('title', message);
-                    
+
                     cb(new Error(message));
                 }
             });
