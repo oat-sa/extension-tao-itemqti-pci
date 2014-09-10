@@ -5,6 +5,7 @@ define([
     'helpers',
     'tpl!qtiItemPci/pciManager/tpl/layout',
     'tpl!qtiItemPci/pciManager/tpl/listing',
+    'tpl!qtiItemPci/pciManager/tpl/packageMeta',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'async',
     'ui/feedback',
@@ -12,7 +13,7 @@ define([
     'ui/uploader',
     'ui/filesender',
     'filereader'
-], function($, __, _, helpers, layoutTpl, listingTpl, interactionsToolbar, async, feedback){
+], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, async, feedback){
 
     var _fileTypeFilters = ['application/zip'];
 
@@ -145,7 +146,7 @@ define([
         }
 
         function hideListing(){
-            
+
             $fileContainer.hide();
             $placeholder.hide();
             $uploader.show();
@@ -156,7 +157,7 @@ define([
         }
 
         function showListing(){
-            
+
             $uploader.hide();
             $fileContainer.show();
             // Note: show() would display as inline, not inline-block!
@@ -167,23 +168,23 @@ define([
 
         function initUploader(){
 
-            var errors = [];
+            var errors = [],
+                selectedFiles = {};
 
             $uploader.on('upload.uploader', function(e, file, result){
 
-                console.log(file, result);
                 listing[result.typeIdentifier] = result;
                 updateListing();
                 $container.trigger('added.custominteraction', [result]);
-
+                
             }).on('fail.uploader', function(e, file, err){
 
                 errors.push(__('Unable to upload file %s : %s', file.name, err));
 
             }).on('end.uploader', function(){
-
+                
                 if(errors.length === 0){
-                    _.delay(switchUpload, 500);
+                    _.delay(showListing, 500);
                 }else{
                     feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>");
                 }
@@ -194,6 +195,21 @@ define([
 
                 //get ref to the uploadForm for later verification usage
                 $uploadForm = $uploader.children('form');
+
+            }).on('fileselect.uploader', function(){
+
+                $uploadForm.find('li[data-file-name]').each(function(){
+                    
+                    var $li = $(this),
+                        filename = $li.data('file-name'),
+                        packageMeta = selectedFiles[filename];
+                        
+                    if(packageMeta){
+                        //update label:
+                        $li.prepend(packageMetaTpl(packageMeta));
+                    }
+                });
+
             });
 
             $uploader.uploader({
@@ -203,10 +219,6 @@ define([
                 fileSelect : function(files, done){
 
                     var givenLength = files.length;
-                    var fileNames = [];
-                    $fileContainer.find('li > .desc').each(function(){
-                        fileNames.push($(this).text().toLowerCase());
-                    });
 
                     //check the mime-type
                     files = _.filter(files, function(file){
@@ -216,55 +228,48 @@ define([
                     if(files.length !== givenLength){
                         feedback().error('Invalid files have been removed');
                     }
-
+                    
+                    //reset selectedFiles list
+                    selectedFiles = {};
+                    
+                    //verify selected files
                     async.filter(files, verify, done);
                 }
             });
 
-        }
+            function verify(file, cb){
 
-        function verify(file, cb){
+                var ok = true;
 
-            var result = true,
-                $fileEntry = $uploadForm.find('li[data-file-name="' + file.name + '"]'),
-                $status = $fileEntry.find('.status');
+                $uploadForm.sendfile({
+                    url : _urls.verify,
+                    file : file,
+                    loaded : function(r){
 
-            //@todo : updae the file name and label with the tpeIdentifier and label
-
-            $uploadForm.sendfile({
-                url : _urls.verify,
-                file : file,
-                loaded : function(r){
-
-                    console.log('vvv', r, file);
-
-                    if(r.valid){
-                        if(r.exists){
-                            result = window.confirm('Do you want to override ' + r.label + '?');
+                        if(r.valid){
+                            if(r.exists){
+                                ok = window.confirm('Do you want to override ' + r.label + '?');
+                            }
+                        }else{
+                            ok = false;
                         }
-                    }else{
-                        result = false;
+                        
+                        if(ok){
+                            selectedFiles[file.name] = {
+                                typeIdentifier : r.typeIdentifier,
+                                label : r.label
+                            };
+                        }
+                        
+                        cb(ok);
+                    },
+                    failed : function(message){
+
+
+                        cb(new Error(message));
                     }
-
-                    $status
-                        .removeClass('sending')
-                        .removeClass('error')
-                        .addClass('success')
-                        .html(r.label + ' - typeIdentifier : ' + r.typeIdentifier);
-
-                    cb(result);
-                },
-                failed : function(message){
-
-                    $status
-                        .removeClass('sending')
-                        .removeClass('success')
-                        .addClass('error')
-                        .attr('title', message);
-
-                    cb(new Error(message));
-                }
-            });
+                });
+            }
         }
 
         //expose a few functions

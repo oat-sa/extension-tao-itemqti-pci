@@ -15,4 +15,17 @@
             min-height:400px;
         }
     }
+    
+    .uploader{
+        .upload-separator{
+            margin:0 2px;
+            color: #333;
+        }
+        .upload-label{
+            font-weight : bold;
+        }
+        .upload-identifier{
+            color: #333;
+        }
+    }
 }
