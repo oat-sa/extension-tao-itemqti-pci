@@ -84,7 +84,7 @@ class PciManager extends tao_actions_CommonModule
             $result['typeIdentifier'] = $manifest['typeIdentifier'];
             $result['label'] = $manifest['label'];
             $interaction = $this->registry->get($manifest['typeIdentifier']);
-
+            
             if(!is_null($interaction)){
                 $result['exists'] = true;
             }
@@ -147,7 +147,11 @@ class PciManager extends tao_actions_CommonModule
 
         if(tao_helpers_File::securityCheck($relPath, true)){
             $filename = $folder.$relPath;
-//            var_dump($pciTypeIdentifier, $relPath, $filename);
+            //@todo : find better way to to this
+            //load amd module
+            if(!file_exists($filename) && file_exists($filename.'.js')){
+                $filename = $filename.'.js';
+            }
             tao_helpers_Http::returnFile($filename);
         }else{
             throw new common_exception_Error('invalid item preview file path');

@@ -146,7 +146,7 @@ class CreatorRegistry
         $returnValue = null;
 
         if(!empty($typeIdentifier)){
-            $resources = $this->registryClass->searchInstances(array($this->propTypeIdentifier->getUri() => $typeIdentifier));
+            $resources = $this->registryClass->searchInstances(array($this->propTypeIdentifier->getUri() => $typeIdentifier), array('like'=>false));
             $returnValue = reset($resources);
         }else{
             throw new \InvalidArgumentException('the type identifier must not be empty');
@@ -171,7 +171,7 @@ class CreatorRegistry
             'label' => $label,
             'directory' => $folder,
             'baseUrl' => $baseUrl,
-            'file' => $baseUrl.'pciCreator.js'
+            'file' => $this->getEntryPointFile($typeIdentifier)
         );
     }
 
@@ -186,7 +186,11 @@ class CreatorRegistry
 
         return $returnValue;
     }
-
+    
+    private function getEntryPointFile($baseUrl){
+        return $baseUrl.'/pciCreator';
+    }
+    
     /**
      * Get PCI Creator hook directly located in views/js/pciCreator/myCustomInteraction:
      * 
@@ -217,7 +221,7 @@ class CreatorRegistry
                     'label' => $label,
                     'directory' => $dir,
                     'baseUrl' => $baseUrl,
-                    'file' => $baseUrl.'pciCreator.js'
+                    'file' => $this->getEntryPointFile($typeIdentifier)
                 );
             }else{
                 \common_Logger::d('missing manifest file pciCreator.json');
