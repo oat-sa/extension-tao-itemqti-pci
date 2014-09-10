@@ -62,7 +62,7 @@ define([
 
         //load list of custom interactions from server
         loadListingFromServer(function(data){
-            
+
             //note : init as empty object and not array otherwise _.size will fail later
             listing = _.size(data) ? data : {};
             updateListing(data);
@@ -117,9 +117,9 @@ define([
         }
 
         function updateListing(){
-            
+
             if(_.size(listing)){
-                
+
                 $placeholder.hide();
 
                 $fileContainer
@@ -138,7 +138,7 @@ define([
         }
 
         function switchUpload(){
-            
+
             if($uploader.css('display') === 'none'){
                 hideListing();
             }else{
@@ -147,27 +147,27 @@ define([
         }
 
         function hideListing(){
-            
+
             $switcher.filter('.upload').hide();
             $switcher.filter('.listing').css({display : 'inline-block'});
-            
+
             $fileContainer.hide();
             $placeholder.hide();
             $title.text(__('Upload new custom interaction (zip package)'));
-            
+
             $uploader.uploader('reset');
             $uploader.show();
         }
 
         function showListing(){
-            
+
             // Note: show() would display as inline, not inline-block!
             $switcher.filter('.upload').css({display : 'inline-block'});
             $switcher.filter('.listing').hide();
-            
+
             $uploader.hide();
             $title.text(__('Manage custom interactions'));
-            
+
             updateListing();
         }
 
@@ -180,13 +180,13 @@ define([
 
                 listing[result.typeIdentifier] = result;
                 $container.trigger('added.custominteraction', [result]);
-                
+
             }).on('fail.uploader', function(e, file, err){
 
                 errors.push(__('Unable to upload file %s : %s', file.name, err));
 
             }).on('end.uploader', function(){
-                
+
                 if(errors.length === 0){
                     _.delay(showListing, 500);
                 }else{
@@ -203,11 +203,11 @@ define([
             }).on('fileselect.uploader', function(){
 
                 $uploadForm.find('li[data-file-name]').each(function(){
-                    
+
                     var $li = $(this),
                         filename = $li.data('file-name'),
                         packageMeta = selectedFiles[filename];
-                        
+
                     if(packageMeta){
                         //update label:
                         $li.prepend(packageMetaTpl(packageMeta));
@@ -232,10 +232,10 @@ define([
                     if(files.length !== givenLength){
                         feedback().error('Invalid files have been removed');
                     }
-                    
+
                     //reset selectedFiles list
                     selectedFiles = {};
-                    
+
                     //verify selected files
                     async.filter(files, verify, done);
                 }
@@ -252,19 +252,19 @@ define([
 
                         if(r.valid){
                             if(r.exists){
-                                ok = window.confirm('Do you want to override ' + r.label + '?');
+                                ok = window.confirm(__('There is already one interaction with the same identifier "%s" (label : "%s"). \n\n Do you want to override the existing one ?', r.typeIdentifier, r.label, r.label));
                             }
                         }else{
                             ok = false;
                         }
-                        
+
                         if(ok){
                             selectedFiles[file.name] = {
                                 typeIdentifier : r.typeIdentifier,
                                 label : r.label
                             };
                         }
-                        
+
                         cb(ok);
                     },
                     failed : function(message){

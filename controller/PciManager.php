@@ -147,6 +147,7 @@ class PciManager extends tao_actions_CommonModule
 
         if(tao_helpers_File::securityCheck($relPath, true)){
             $filename = $folder.$relPath;
+//            var_dump($pciTypeIdentifier, $relPath, $filename);
             tao_helpers_Http::returnFile($filename);
         }else{
             throw new common_exception_Error('invalid item preview file path');
