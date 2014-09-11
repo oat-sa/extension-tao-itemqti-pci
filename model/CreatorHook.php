@@ -24,7 +24,6 @@ namespace oat\qtiItemPci\model;
 use oat\taoQtiItem\model\Hook;
 use oat\taoQtiItem\model\Config;
 use oat\qtiItemPci\model\CreatorRegistry;
-use \common_ext_ExtensionsManager;
 
 /**
  * The hook used in the item creator
@@ -50,7 +49,7 @@ class CreatorHook implements Hook
         }
 
         //get PCI directly located in views/js/pciCreator/myCustomInteraction:
-        $hooks = $registry->getDevelopmentInteractions();
+        $hooks = $registry->getDevInteractions();
         foreach($hooks as $hook){
             $config->addInteraction($hook);
         }

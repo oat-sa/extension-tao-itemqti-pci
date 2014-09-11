@@ -196,7 +196,7 @@ class CreatorRegistry
      * 
      * @return array
      */
-    public function getDevelopmentInteractions(){
+    public function getDevInteractions(){
 
         $returnValue = array();
 
@@ -221,7 +221,8 @@ class CreatorRegistry
                     'label' => $label,
                     'directory' => $dir,
                     'baseUrl' => $baseUrl,
-                    'file' => $this->getEntryPointFile($typeIdentifier)
+                    'file' => $this->getEntryPointFile($typeIdentifier),
+                    'dev' => true
                 );
             }else{
                 \common_Logger::d('missing manifest file pciCreator.json');

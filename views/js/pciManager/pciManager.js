@@ -110,7 +110,7 @@ define([
                 }
             });
 
-            //siwtch to upload mode
+            //switch to upload mode
             $switcher.click(function(e){
                 e.preventDefault();
                 switchUpload();
@@ -171,7 +171,31 @@ define([
 
             updateListing();
         }
+        
+        function add(interactionHook){
+            
+            var id = interactionHook.typeIdentifier;
 
+            listing[id] = interactionHook;
+
+            ciRegistry.register([interactionHook]);
+            ciRegistry.loadOne(id, function(hook){
+                var data = hook.getAuthoringData();
+                if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
+                    if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
+                        
+                        interactionsToolbar.add(config.interactionSidebar, data);
+                        
+                        //@todo : init insertable:
+                    }
+                }else{
+                    throw 'invalid authoring data for custom interaction';
+                }
+            });
+
+            $container.trigger('added' + ns, [interactionHook]);
+        }
+        
         function initUploader(){
 
             var errors = [],
@@ -179,21 +203,7 @@ define([
 
             $uploader.on('upload.uploader', function(e, file, interactionHook){
                 
-                var id = interactionHook.typeIdentifier;
-                
-                listing[id] = interactionHook;
-                
-                ciRegistry.register([interactionHook]);
-                ciRegistry.loadOne(id, function(hook){
-                    var data = hook.getAuthoringData();
-                    if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
-                        interactionsToolbar.add(config.interactionSidebar, data);
-                    }else{
-                        throw 'invalid authoring data for custom interaction';
-                    }
-                });
-                
-                $container.trigger('added'+ns, [interactionHook]);
+                add(interactionHook);
 
             }).on('fail.uploader', function(e, file, err){
 
