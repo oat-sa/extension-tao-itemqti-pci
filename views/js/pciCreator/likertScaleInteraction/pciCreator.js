@@ -1,12 +1,25 @@
 define([
+    'lodash',
     'qtiItemPci/pciManager/context',
     'likertScaleInteraction/widget/Widget',
-    'tpl!likertScaleInteraction/tpl/xml',
-], function(context, Widget, xmlTpl){
+    'tpl!likertScaleInteraction/tpl/markup',
+    'json!likertScaleInteraction/pciCreator'
+], function(_, context, Widget, markupTpl, manifest){
 
-    var _context = context.get('likertScaleInteraction');
+    var _typeIdentifier = manifest.typeIdentifier;
+    var _context = context.get(_typeIdentifier);
     
-    var _typeIdentifier = 'likertScaleInteraction';
+    //@todo : to be moved in proper location
+    function getAuthoringDataFromManifest(manifest){
+
+        return {
+            label : manifest.label, //currently no translation available 
+            icon : _context.baseUrl + manifest.icon, //use baseUrl from context
+            short : manifest.short,
+            qtiClass : 'customInteraction.' + manifest.typeIdentifier, //custom interaction is block type
+            tags : _.union(['Custom Interactions'], manifest.tags),
+        };
+    }
 
     var likertScaleInteractionCreator = {
         /**
@@ -48,39 +61,36 @@ define([
          * @returns {Object}
          */
         afterCreate : function(pci){
-            //do nothing
+
+            pci.markup = '<div>stuff</div>';
         },
         /**
          * (required) Gives the qti pci xml template 
          * 
          * @returns {function} handlebar template
          */
-        getXmlTemplate : function(){
-            return xmlTpl;
+        getMarkupTemplate : function(){
+            return markupTpl;
         },
         /**
          * (optional) Allows passing additional data to xml template
          * 
          * @returns {function} handlebar template
          */
-        getXmlData : function(pci, defaultData){
+        getMarkupData : function(pci, defaultData){
             return defaultData;
         },
+        
         /**
          * (required) get data needed to display
+         * 
+         * @deprecated
+         * @todo no longer useful as the manifest qtiCreator.json contains all need data to build it
          * @returns {object}
          */
         getAuthoringData : function(){
             
-            _context.tags.push('mcq', 'likert');
-
-            return {
-                label : 'Likert Interaction', //currently no translation available 
-                icon : _context.baseUrl + 'img/icon.svg', //use baseUrl from context
-                short : 'Likert',
-                qtiClass : 'customInteraction.' + likertScaleInteractionCreator.getTypeIdentifier(), //custom interaction is block type
-                tags : _context.tags
-            };
+            return getAuthoringDataFromManifest(manifest);
         }
     };
 

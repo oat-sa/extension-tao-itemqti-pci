@@ -1,11 +1,10 @@
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/blockInteraction/states/Question',
+    'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'taoQtiItem/qtiCreator/widgets/interactions/helpers/formElement',
     'tpl!taoQtiItem/qtiCreator/tpl/forms/interactions/choice',
     'lodash'
-], function(stateFactory, Question, formElement, interactionFormElement, formTpl, _){
+], function(stateFactory, Question, formElement, formTpl, _){
 
     var LikertInteractionStateQuestion = stateFactory.extend(Question);
 
@@ -28,21 +27,6 @@ define([
         var callbacks = {};
         formElement.setChangeCallbacks($form, interaction, callbacks);
         
-        //modify the checkbox/radio input appearances
-        _widget.on('attributeChange', function(data){
-            
-            var $checkboxIcons = _widget.$container.find('.real-label > span');
-            
-            if(data.element.serial === interaction.serial && data.key === 'maxChoices'){
-                if(parseInt(data.value) === 1){
-                    //radio
-                    $checkboxIcons.removeClass('icon-checkbox').addClass('icon-radio');
-                }else{
-                    //checkbox
-                    $checkboxIcons.removeClass('icon-radio').addClass('icon-checkbox');
-                }
-            }
-        });
     };
 
     return LikertInteractionStateQuestion;
