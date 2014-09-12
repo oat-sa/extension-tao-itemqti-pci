@@ -5,13 +5,13 @@
     "version": 0.1,
     "author": "sam",
     "email": "sam@taotesting.com",
-    "libs": {
+    "libraries": {
         "jquery": "runtime/libs/jquery.min.js"
     },
     "css": [
         "runtime/css/likertScaleInteraction.css"
     ],
-    "entryPoint": "likertScaleInteraction.amd.js",
+    "entryPoint": "runtime/likertScaleInteraction.amd.js",
     "tags": [
         "mcq",
         "likert"

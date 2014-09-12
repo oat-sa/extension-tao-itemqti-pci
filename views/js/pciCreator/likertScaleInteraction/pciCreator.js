@@ -49,7 +49,6 @@ define([
             return {
                 literal : 0,
                 scale : 5,
-                prompt : '',
                 'label-min' : 'min',
                 'label-max' : 'max'
             };
@@ -91,6 +90,10 @@ define([
         getAuthoringData : function(){
             
             return getAuthoringDataFromManifest(manifest);
+        },
+        
+        getManifest : function(){
+            return manifest;
         }
     };
 
