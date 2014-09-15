@@ -3,7 +3,7 @@ define([
     'qtiItemPci/pciManager/context',
     'likertScaleInteraction/widget/Widget',
     'tpl!likertScaleInteraction/tpl/markup',
-    'json!likertScaleInteraction/pciCreator'
+    'json!likertScaleInteraction/pciCreator.json'
 ], function(_, context, Widget, markupTpl, manifest){
 
     var _typeIdentifier = manifest.typeIdentifier;
@@ -17,7 +17,7 @@ define([
             icon : _context.baseUrl + manifest.icon, //use baseUrl from context
             short : manifest.short,
             qtiClass : 'customInteraction.' + manifest.typeIdentifier, //custom interaction is block type
-            tags : _.union(['Custom Interactions'], manifest.tags),
+            tags : _.union(['Custom Interactions'], manifest.tags)
         };
     }
 
@@ -47,8 +47,7 @@ define([
          */
         getDefaultPciProperties : function(pci){
             return {
-                literal : 0,
-                scale : 5,
+                level : 5,
                 'label-min' : 'min',
                 'label-max' : 'max'
             };

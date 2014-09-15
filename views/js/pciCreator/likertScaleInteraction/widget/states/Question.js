@@ -2,9 +2,10 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'tpl!taoQtiItem/qtiCreator/tpl/forms/interactions/choice',
+    'qtiItemPci/pciCreator/helper/formElement',
+    'tpl!likertScaleInteraction/tpl/propertiesForm',
     'lodash'
-], function(stateFactory, Question, formElement, formTpl, _){
+], function(stateFactory, Question, formElement, pciFormElement, formTpl, _){
 
     var LikertInteractionStateQuestion = stateFactory.extend(Question);
 
@@ -12,21 +13,38 @@ define([
 
         var _widget = this.widget,
             $form = _widget.$form,
-            interaction = _widget.element;
-
+            interaction = _widget.element,
+            level = parseInt(interaction.prop('level')) || 5,
+            levels = [5, 7, 9],
+            levelData = {},
+            propCallback = pciFormElement.getPropertyChangeCallback();
+        
+        //build select option data for the template
+        _.each(levels, function(lvl){
+            levelData[lvl] = {
+                label : lvl,
+                selected : (lvl === level)
+            };
+        });
+        
+        //render the form using the form template
         $form.html(formTpl({
-            shuffle : !!interaction.attr('shuffle'),
-            maxChoices : parseInt(interaction.attr('maxChoices')),
-            minChoices : parseInt(interaction.attr('minChoices')),
-            choicesCount : _.size(_widget.element.getChoices())
+            levels : levelData,
+            'label-min' : interaction.prop('label-min'),
+            'label-max' : interaction.prop('label-max')
         }));
-
+        
+        //init form javascript
         formElement.initWidget($form);
         
         //init data change callbacks
-        var callbacks = {};
-        formElement.setChangeCallbacks($form, interaction, callbacks);
+        formElement.setChangeCallbacks($form, interaction, {
+            level : propCallback,
+            'label-min' : propCallback,
+            'label-max' : propCallback
+        });
         
+        console.log(interaction);
     };
 
     return LikertInteractionStateQuestion;
