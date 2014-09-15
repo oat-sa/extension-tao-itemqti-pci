@@ -45,8 +45,7 @@ define([
          * @returns {Object}
          */
         afterCreate : function(pci){
-
-            pci.markup = '<div>stuff</div>';
+            console.log('pci created', pci);
         },
         /**
          * (required) Gives the qti pci xml template 
@@ -62,6 +61,7 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupData : function(pci, defaultData){
+            defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
     };

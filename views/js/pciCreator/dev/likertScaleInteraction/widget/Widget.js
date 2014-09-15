@@ -1,5 +1,5 @@
 define([
-    'taoQtiItem/qtiCreator/widgets/interactions/Widget',
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
     'likertScaleInteraction/widget/states/states'
 ], function(Widget, states){
 
