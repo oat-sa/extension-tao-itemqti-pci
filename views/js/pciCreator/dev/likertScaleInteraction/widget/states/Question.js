@@ -3,11 +3,10 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
-    'qtiItemPci/pciCreator/helper/formElement',
     'tpl!likertScaleInteraction/tpl/propertiesForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, editor, pciFormElement, formTpl, _, $){
+], function(stateFactory, Question, formElement, editor, formTpl, _, $){
 
     var LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
 
@@ -22,15 +21,15 @@ define([
         editor.create($container, '.likert-label-min', function(text){
             interaction.prop('label-min', text);
         });
-        
+
         editor.create($container, '.likert-label-max', function(text){
             interaction.prop('label-max', text);
         });
 
     }, function(){
-        
+
         editor.destroy(this.widget.$container);
-        
+
     });
 
     LikertInteractionStateQuestion.prototype.initForm = function(){
@@ -40,8 +39,7 @@ define([
             interaction = _widget.element,
             level = parseInt(interaction.prop('level')) || 5,
             levels = [5, 7, 9],
-            levelData = {},
-            propCallback = pciFormElement.getPropertyChangeCallback();
+            levelData = {};
 
         //build select option data for the template
         _.each(levels, function(lvl){
@@ -53,9 +51,7 @@ define([
 
         //render the form using the form template
         $form.html(formTpl({
-            levels : levelData,
-            'label-min' : interaction.prop('label-min'),
-            'label-max' : interaction.prop('label-max')
+            levels : levelData
         }));
 
         //init form javascript
@@ -63,9 +59,14 @@ define([
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
-            level : propCallback,
-            'label-min' : propCallback,
-            'label-max' : propCallback
+            level : function(interaction, value){
+                
+                //update the pci property value:
+                interaction.prop('level', value);
+                
+                //update rendering
+                _widget.refresh();
+            }
         });
 
     };

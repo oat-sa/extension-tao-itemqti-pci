@@ -28,13 +28,10 @@ define(['jquery'], function($){
 
             var $container = $(dom),
                 $li,
-                scale = parseInt(config.scale),
+                level = parseInt(config.level) || 5,
                 $ul = $container.find('ul.likert');
 
-            //create scale:
-            scale = scale || 5;
-
-            for(var i = 1; i <= scale; i++){
+            for(var i = 1; i <= level; i++){
 
                 $li = $('<li>', {'class' : 'likert'});
                 $li.append($('<input>', {type : 'radio', name : this.id, value : i}));
