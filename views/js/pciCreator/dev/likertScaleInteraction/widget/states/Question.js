@@ -44,7 +44,6 @@ define([
             'label-max' : propCallback
         });
         
-        console.log(interaction);
     };
 
     return LikertInteractionStateQuestion;
