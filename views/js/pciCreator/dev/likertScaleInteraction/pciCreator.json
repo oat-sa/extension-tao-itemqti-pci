@@ -17,5 +17,9 @@
         "likert"
     ],
     "icon" : "img/icon.svg",
-    "short" : "Likert"
+    "short" : "Likert",
+    "response" : {
+        "baseType" : "integer",
+        "cardinality" : "single"
+    }
 }
