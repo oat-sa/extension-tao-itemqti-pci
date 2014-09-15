@@ -1,6 +1,6 @@
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/states/states',
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
     'likertScaleInteraction/widget/states/Question',
     'likertScaleInteraction/widget/states/Sleep'
 ], function(factory, states){
