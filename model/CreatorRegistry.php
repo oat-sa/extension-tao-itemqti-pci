@@ -202,9 +202,9 @@ class CreatorRegistry
 
         $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
         $baseDir = $ext->getConstant('DIR_VIEWS');
-        $baseWWW = $ext->getConstant('BASE_WWW').'js/pciCreator/';
+        $baseWWW = $ext->getConstant('BASE_WWW').'js/pciCreator/dev/';
 
-        foreach(glob($baseDir.'js/pciCreator/*/pciCreator.js') as $file){
+        foreach(glob($baseDir.'js/pciCreator/dev/*/pciCreator.js') as $file){
 
             $dir = str_replace('pciCreator.js', '', $file);
             $manifestFile = $dir.'pciCreator.json';

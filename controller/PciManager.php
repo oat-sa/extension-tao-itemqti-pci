@@ -142,8 +142,8 @@ class PciManager extends tao_actions_CommonModule
         $pci = $this->registry->get($pciTypeIdentifier);
         if(is_null($pci)){
             $base = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
-            $folder = $base.'js'.DIRECTORY_SEPARATOR.'pciCreator'.DIRECTORY_SEPARATOR.$pciTypeIdentifier.DIRECTORY_SEPARATOR;
-            echo '/*source from views/js/pciCreator*/'.PHP_EOL;
+            $folder = $base.'js'.DIRECTORY_SEPARATOR.'pciCreator'.DIRECTORY_SEPARATOR.'dev'.DIRECTORY_SEPARATOR.$pciTypeIdentifier.DIRECTORY_SEPARATOR;
+//            echo '/*source from views/js/pciCreator/dev*/'.PHP_EOL;
         }else{
             $folder = $pci['directory'];
         }
