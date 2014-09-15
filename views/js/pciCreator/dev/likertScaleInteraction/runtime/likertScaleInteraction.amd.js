@@ -43,8 +43,8 @@ define(['jquery'], function($){
             }
 
             //add labels:
-            var $labelMin = $('<label>', {'class' : 'likert-label likert-label-min'}).html(config['label-min']);
-            var $labelMax = $('<label>', {'class' : 'likert-label likert-label-max'}).html(config['label-max']);
+            var $labelMin = $('<span>', {'class' : 'likert-label likert-label-min'}).html(config['label-min']);
+            var $labelMax = $('<span>', {'class' : 'likert-label likert-label-max'}).html(config['label-max']);
 
             $ul.find('li:first').prepend($labelMin);
             $ul.find('li:last').append($labelMax);
