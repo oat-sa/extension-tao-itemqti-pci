@@ -161,7 +161,8 @@ class CreatorRegistry
         $label = $hook->getLabel();
         $folder = $this->storage->getDirectoryById($directory)->getPath();
         $typeIdentifier = (string) $hook->getUniquePropertyValue($this->propTypeIdentifier);
-
+        $manifestFile = $folder.DIRECTORY_SEPARATOR.'pciCreator.json';
+        $manifest = json_decode(file_get_contents($manifestFile), true);
         $baseUrl = _url('getFile', 'PciManager', 'qtiItemPci', array(
             'file' => $typeIdentifier.'/'
         ));
@@ -171,6 +172,7 @@ class CreatorRegistry
             'label' => $label,
             'directory' => $folder,
             'baseUrl' => $baseUrl,
+            'manifest' => $manifest,
             'file' => $this->getEntryPointFile($typeIdentifier)
         );
     }
@@ -222,6 +224,7 @@ class CreatorRegistry
                     'directory' => $dir,
                     'baseUrl' => $baseUrl,
                     'file' => $this->getEntryPointFile($typeIdentifier),
+                    'manifest' => $manifest,
                     'dev' => true
                 );
             }else{

@@ -1,25 +1,11 @@
 define([
     'lodash',
-    'qtiItemPci/pciManager/context',
+    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'likertScaleInteraction/widget/Widget',
-    'tpl!likertScaleInteraction/tpl/markup',
-    'json!likertScaleInteraction/pciCreator.json'
-], function(_, context, Widget, markupTpl, manifest){
+    'tpl!likertScaleInteraction/tpl/markup'
+], function(_, ciRegistry, Widget, markupTpl){
 
-    var _typeIdentifier = manifest.typeIdentifier;
-    var _context = context.get(_typeIdentifier);
-    
-    //@todo : to be moved in proper location
-    function getAuthoringDataFromManifest(manifest){
-
-        return {
-            label : manifest.label, //currently no translation available 
-            icon : _context.baseUrl + manifest.icon, //use baseUrl from context
-            short : manifest.short,
-            qtiClass : 'customInteraction.' + manifest.typeIdentifier, //custom interaction is block type
-            tags : _.union(['Custom Interactions'], manifest.tags)
-        };
-    }
+    var _typeIdentifier = 'likertScaleInteraction';
 
     var likertScaleInteractionCreator = {
         /**
@@ -77,22 +63,6 @@ define([
          */
         getMarkupData : function(pci, defaultData){
             return defaultData;
-        },
-        
-        /**
-         * (required) get data needed to display
-         * 
-         * @deprecated
-         * @todo no longer useful as the manifest qtiCreator.json contains all need data to build it
-         * @returns {object}
-         */
-        getAuthoringData : function(){
-            
-            return getAuthoringDataFromManifest(manifest);
-        },
-        
-        getManifest : function(){
-            return manifest;
         }
     };
 
