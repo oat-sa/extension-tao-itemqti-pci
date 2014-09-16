@@ -17,7 +17,7 @@ define([
         editor.create($container, '.prompt', function(text){
             interaction.data('prompt', text);
             interaction.updateMarkup();
-//            console.log(xmlRenderer.render(interaction.getRelatedItem()));
+            console.log(xmlRenderer.render(interaction.getRelatedItem()));
         });
 
         editor.create($container, '.likert-label-min', function(text){

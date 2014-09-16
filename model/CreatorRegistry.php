@@ -14,8 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *               
+ * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
  * 
  */
 
@@ -216,11 +215,10 @@ class CreatorRegistry
                 $typeIdentifier = basename($dir);
                 $baseUrl = $baseWWW.$typeIdentifier.'/';
                 $manifest = json_decode(file_get_contents($manifestFile), true);
-                $label = $manifest['label'];
 
                 $returnValue[] = array(
                     'typeIdentifier' => $typeIdentifier,
-                    'label' => $label,
+                    'label' => $manifest['label'],
                     'directory' => $dir,
                     'baseUrl' => $baseUrl,
                     'file' => $this->getEntryPointFile($typeIdentifier),
@@ -234,5 +232,16 @@ class CreatorRegistry
 
         return $returnValue;
     }
-
+    
+    public function getDevInteraction($typeIdentifier){
+        
+        //@todo : re-implement it to be more optimal
+        $devInteracitons = $this->getDevInteractions();
+        foreach($devInteracitons as $interaction){
+            if($interaction['typeIdentifier'] == $typeIdentifier){
+                return $interaction;
+            }
+        }
+        return null;
+    }
 }
