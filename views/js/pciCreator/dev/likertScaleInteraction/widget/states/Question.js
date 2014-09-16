@@ -5,8 +5,9 @@ define([
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'tpl!likertScaleInteraction/tpl/propertiesForm',
     'lodash',
-    'jquery'
-], function(stateFactory, Question, formElement, editor, formTpl, _, $){
+    'jquery',
+    'taoQtiItem/qtiCreator/helper/xmlRenderer'
+], function(stateFactory, Question, formElement, editor, formTpl, _, $, xmlRenderer){
 
     var LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
 
@@ -16,6 +17,7 @@ define([
         editor.create($container, '.prompt', function(text){
             interaction.data('prompt', text);
             interaction.updateMarkup();
+//            console.log(xmlRenderer.render(interaction.getRelatedItem()));
         });
 
         editor.create($container, '.likert-label-min', function(text){
