@@ -41,12 +41,7 @@ define([
         $(document).on('elementCreated.qti-widget.pci-hook', function(e, data){
             var element = data.element;
             if(element.qtiClass === 'customInteraction'){
-                return;
-                $.getJSON(_urls.addRequiredResources, {typeIdentifier : element.typeIdentifier, uri:uri}, function(data){
-                    if(data.success){
-                        console.log(data.resources);
-                    }
-                });
+                $.getJSON(_urls.addRequiredResources, {typeIdentifier : element.typeIdentifier, uri:uri});
             }
         });
     }

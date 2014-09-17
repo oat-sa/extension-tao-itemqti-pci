@@ -65,7 +65,7 @@ class Creator
                 $source = $directory.$relPath;
                 $destination = $folder.$relPath;
                 
-                if(tao_helpers_File::move($source, $destination)){
+                if(tao_helpers_File::copy($source, $destination)){
                     $returnValue[] = $relPath;
                 }else{
                     throw new common_exception_Error('the resource cannot be moved');
