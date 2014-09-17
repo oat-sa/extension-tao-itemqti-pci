@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\controller;
 
+use \core_kernel_classes_Resource;
 use \tao_actions_CommonModule;
 use \common_ext_ExtensionsManager;
 use \common_exception_Error;
@@ -28,6 +29,7 @@ use \tao_helpers_Http;
 use \FileUploadException;
 use oat\qtiItemPci\model\CreatorRegistry;
 use oat\qtiItemPci\model\CreatorPackageParser;
+use oat\qtiItemPci\helpers\Creator as CreatorHelper;
 
 class PciManager extends tao_actions_CommonModule
 {
@@ -158,6 +160,19 @@ class PciManager extends tao_actions_CommonModule
         }else{
             throw new common_exception_Error('invalid item preview file path');
         }
+    }
+    
+    public function addRequiredResources(){
+        
+        $typeIdentifier = $this->getRequestParameter('typeIdentifier');
+        $itemUri = urldecode($this->getRequestParameter('uri'));
+        $item = new core_kernel_classes_Resource($itemUri);
+        
+        $resources = CreatorHelper::addRequiredResources($typeIdentifier, $item, '');
+        $this->returnJson(array(
+            'success' => true,
+            'resources' => $resources
+        ));
     }
 
 }

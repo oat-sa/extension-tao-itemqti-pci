@@ -22,6 +22,7 @@ namespace oat\qtiItemPci\helpers;
 
 use \core_kernel_classes_Resource;
 use \tao_helpers_File;
+use \taoItems_models_classes_ItemsService;
 use \common_exception_Error;
 use oat\qtiItemPci\model\CreatorRegistry;
 
@@ -35,12 +36,14 @@ class Creator
     
     public static function addRequiredResources($typeIdentifier, core_kernel_classes_Resource $item, $lang){
         
+        $returnValue = array();
+        
         $registry = CreatorRegistry::singleton();
         $folder = taoItems_models_classes_ItemsService::singleton()->getItemFolder($item, $lang);
         $interaction = $registry->get($typeIdentifier);
         
         if(is_null($interaction)){
-            $interaction = $this->getDevInteraction($typeIdentifier);
+            $interaction = $registry->getDevInteraction($typeIdentifier);
         }
         if(is_null($interaction)){
             throw new common_exception_Error('no pci found with the type identifier '.$typeIdentifier);
@@ -58,14 +61,21 @@ class Creator
         
         foreach($required as $relPath){
             if(tao_helpers_File::securityCheck($relPath, true)){
+                
                 $source = $directory.$relPath;
                 $destination = $folder.$relPath;
-                tao_helpers_File::move($source, $destination);
+                
+                if(tao_helpers_File::move($source, $destination)){
+                    $returnValue[] = $relPath;
+                }else{
+                    throw new common_exception_Error('the resource cannot be moved');
+                }
             }else{
                 throw new common_exception_Error('invalid item preview file path');
             }
         }
         
+        return $returnValue;
     }
     
 }
