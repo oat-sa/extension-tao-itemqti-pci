@@ -82,7 +82,7 @@ define(['jquery'], function($){
         getResponse : function(){
 
             var $container = $(this.dom),
-                value = $container.find('input:checked').val() || -1;
+                value = parseInt($container.find('input:checked').val()) || 0;
 
             return {base : {integer : value}};
         },
