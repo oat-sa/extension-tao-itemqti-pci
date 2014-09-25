@@ -6,7 +6,7 @@
     "author": "sam",
     "email": "sam@taotesting.com",
     "libraries": {
-        "jquery": "runtime/libs/jquery.min.js"
+        "jquery": "runtime/libs/jquery.amd.js"
     },
     "css": [
         "runtime/css/likertScaleInteraction.css"
