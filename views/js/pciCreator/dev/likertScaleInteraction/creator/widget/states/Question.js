@@ -3,7 +3,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
-    'tpl!likertScaleInteraction/tpl/propertiesForm',
+    'tpl!likertScaleInteraction/creator/tpl/propertiesForm',
     'lodash'
 ], function(stateFactory, Question, formElement, editor, formTpl, _){
 

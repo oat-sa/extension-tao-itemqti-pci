@@ -1,8 +1,8 @@
 define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
-    'likertScaleInteraction/widget/Widget',
-    'tpl!likertScaleInteraction/tpl/markup'
+    'likertScaleInteraction/creator/widget/Widget',
+    'tpl!likertScaleInteraction/creator/tpl/markup'
 ], function(_, ciRegistry, Widget, markupTpl){
 
     var _typeIdentifier = 'likertScaleInteraction';
@@ -45,7 +45,7 @@ define([
          * @returns {Object}
          */
         afterCreate : function(pci){
-            console.log('pci created', pci);
+            //do some stuff
         },
         /**
          * (required) Gives the qti pci xml template 

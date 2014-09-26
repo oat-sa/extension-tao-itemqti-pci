@@ -16,7 +16,7 @@
         "mcq",
         "likert"
     ],
-    "icon" : "img/icon.svg",
+    "icon" : "creator/img/icon.svg",
     "short" : "Likert",
     "response" : {
         "baseType" : "integer",
