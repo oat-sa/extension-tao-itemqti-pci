@@ -53,13 +53,9 @@ class PciManager extends tao_actions_CommonModule
     }
 
     protected function filterInteractionData($rawInteractionData){
-
-        return array(
-            'typeIdentifier' => $rawInteractionData['typeIdentifier'],
-            'label' => $rawInteractionData['label'],
-            'baseUrl' => $rawInteractionData['baseUrl'],
-            'file' => $rawInteractionData['file']
-        );
+        
+        unset($rawInteractionData['directory']);
+        return $rawInteractionData;
     }
 
     /**

@@ -9,12 +9,13 @@ define([
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'async',
+    'ui/deleter',
     'ui/feedback',
     'ui/modal',
     'ui/uploader',
     'ui/filesender',
     'filereader'
-], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, feedback){
+], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, deleter, feedback){
     
     var ns = '.pcimanager';
     
@@ -90,15 +91,16 @@ define([
         }
 
         function initEventListeners(){
-
+            
+            deleter($fileContainer);
+            
             $fileContainer.on('delete.deleter', function(e, $target){
-
-                var typeIdentifier;
+                
                 if(e.namespace === 'deleter' && $target.length){
-
-                    typeIdentifier = $target.data('type-identifier');
+                    
+                    var typeIdentifier = $target.data('type-identifier');
                     $(this).one('deleted.deleter', function(){
-
+                        
                         $.getJSON(_urls.delete, {typeIdentifier : typeIdentifier}, function(data){
                             if(data.success){
                                 interactionsToolbar.remove(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
@@ -177,10 +179,10 @@ define([
             var id = interactionHook.typeIdentifier;
 
             listing[id] = interactionHook;
-
+            
             ciRegistry.register([interactionHook]);
-            ciRegistry.loadOne(id, function(hook){
-                var data = hook.getAuthoringData();
+            ciRegistry.loadOne(id, function(){
+                var data = ciRegistry.getAuthoringData(id);
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
                         
