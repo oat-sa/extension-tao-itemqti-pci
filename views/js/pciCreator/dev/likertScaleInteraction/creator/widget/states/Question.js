@@ -36,10 +36,11 @@ define([
         var _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
+            response = interaction.getResponseDeclaration(),
             level = parseInt(interaction.prop('level')) || 5,
             levels = [5, 7, 9],
             levelData = {};
-
+        
         //build select option data for the template
         _.each(levels, function(lvl){
             levelData[lvl] = {
@@ -50,7 +51,9 @@ define([
 
         //render the form using the form template
         $form.html(formTpl({
-            levels : levelData
+            serial : response.serial,
+            levels : levelData,
+            identifier : interaction.attr('responseIdentifier')
         }));
 
         //init form javascript
@@ -59,12 +62,16 @@ define([
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
             level : function(interaction, value){
-                
+
                 //update the pci property value:
                 interaction.prop('level', value);
-                
+
                 //update rendering
                 _widget.refresh();
+            },
+            identifier : function(i, value){
+                response.id(value);
+                interaction.attr('responseIdentifier', value);
             }
         });
 
