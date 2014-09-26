@@ -1,9 +1,9 @@
 {
     "typeIdentifier": "likertScaleInteraction",
     "label": "Likert Scale",
-    "description": "A simple implementation of likert scale",
+    "description": "A simple implementation of likert scale.",
     "version": 0.1,
-    "author": "sam",
+    "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "libraries": {
         "jquery": "runtime/libs/jquery.amd.js"
