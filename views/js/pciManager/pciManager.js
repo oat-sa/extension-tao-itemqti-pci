@@ -186,9 +186,16 @@ define([
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
                         
-                        interactionsToolbar.add(config.interactionSidebar, data);
+                        //add toolbar button
+                        var $insertable = interactionsToolbar.add(config.interactionSidebar, data);
                         
-                        //@todo : init insertable:
+                        //init insertable
+                        var $itemBody = $('.qti-itemBody');//current editor instance
+                        $itemBody.gridEditor('addInsertables', $insertable, {
+                            helper : function(){
+                                return $(this).find('.icon').clone().addClass('dragging');
+                            }
+                        });
                     }
                 }else{
                     throw 'invalid authoring data for custom interaction';
