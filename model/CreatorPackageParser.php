@@ -51,44 +51,90 @@ class CreatorPackageParser extends PackageParser
                 $zip = new ZipArchive();
                 $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
                 if($zip->locateName("pciCreator.json") === false){
-                    
                     throw new common_Exception("A PCI creator package must contains a pciCreator.json file at the root of the archive");
-                    
                 }else if($zip->locateName("pciCreator.js") === false){
-                    
                     throw new common_Exception("A PCI creator package must contains a pciCreator.js file at the root of the archive");
-                    
                 }else{
-                    
                     //check manifest format :
                     $manifest = $this->getManifest();
-                    if(!isset($manifest['typeIdentifier'])){
-                        throw new common_Exception('missing required attribute in the manifest pciCreator.json : "typeIdentifier"');
-                    }
-                    if(!isset($manifest['label'])){
-                        throw new common_Exception('missing required attribute in the manifest pciCreator.json : "label"');
-                    }
-                    $this->valid = true;
+                    $this->valid = $this->validateManifest($manifest);
                 }
 
                 $zip->close();
             }
+            
         }catch(common_Exception $e){
             $this->addError($e);
         }
     }
 
+    protected function validateManifest($manifest){
+
+        $returnValue = true;
+
+        $requiredEntries = array(
+            'typeIdentifier' => 'identifier',
+            'label' => 'string',
+            'short' => 'string',
+            'description' => 'string',
+            'version' => 'string',
+            'author' => 'string',
+            'email' => 'string',
+            'tags' => 'array',
+            'icon' => 'file',
+            'entryPoint' => 'file',
+            'response' => 'array'
+        );
+
+        $zip = new ZipArchive();
+        $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
+
+        foreach($requiredEntries as $entry => $type){
+            //@todo : implement more generic data validation ?
+            if(isset($manifest[$entry])){
+                $value = $manifest[$entry];
+                switch($type){
+                    case 'identifier':
+                    case 'string':
+                        if(!is_string($value)){
+                            $returnValue = false;
+                            throw new common_Exception('invalid attribute format in the manifest pciCreator.json : "'.$entry.'" (expected a string)');
+                        }
+                        break;
+                    case 'array':
+                        if(!is_array($value)){
+                            $returnValue = false;
+                            throw new common_Exception('invalid attribute format in the manifest pciCreator.json : "'.$entry.'" (expected an array)');
+                        }
+                        break;
+                    case 'file':
+                        if($zip->locateName($value) === false){
+                            $returnValue = false;
+                            throw new common_Exception('cannot locate "'.$entry.'" file : "'.$value.'"');
+                        }
+                        break;
+                }
+            }else{
+                throw new common_Exception('missing required attribute in the manifest pciCreator.json : "'.$entry.'"');
+            }
+        }
+
+        $zip->close();
+
+        return $returnValue;
+    }
+
     public function getManifest(){
-        
+
         $str = '';
         $handle = fopen('zip://'.$this->source.'#pciCreator.json', 'r');
         while(!feof($handle)){
             $str .= fread($handle, 8192);
         }
         fclose($handle);
-        
+
         $returnValue = json_decode($str, true);
-        
+
         return $returnValue;
     }
 

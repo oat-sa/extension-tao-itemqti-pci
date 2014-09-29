@@ -2,7 +2,7 @@
     "typeIdentifier": "likertScaleInteraction",
     "label": "Likert Scale",
     "description": "A simple implementation of likert scale.",
-    "version": 0.1,
+    "version": "0.1",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "libraries": {
