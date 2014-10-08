@@ -6,10 +6,10 @@
     "author": "Jérôme Bogaerts",
     "email": "jerome@taotesting.com",
     "libraries": {
-        "jquery": "runtime/libs/jquery.amd.js"
+    
     },
     "css": [
-        "runtime/css/liquidsInteraction.css"
+        
     ],
     "entryPoint": "runtime/liquidsInteraction.amd.js",
     "tags": [],

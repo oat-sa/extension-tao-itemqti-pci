@@ -1,4 +1,4 @@
-define(['jquery'], function($){
+define(['IMSGlobal/jquery_2_1_1'], function($){
 
     /**
      * The global qtiCustomInteractionContext
@@ -10,25 +10,38 @@ define(['jquery'], function($){
     var _pciContext = window.qtiCustomInteractionContext;
 
     var liquidsInteraction = {
-            
+        
+        /**
+         * Custom Interaction Hook API: id
+         */
         id : -1,
         
+        /**
+         * Custom Interaction Hook API: getTypeIdentifier
+         * 
+         * A unique identifier allowing custom interactions to be identified within an item.
+         * 
+         * @returns {String} The unique identifier of this PCI Hook implementation.
+         */
         getTypeIdentifier : function(){
             return 'liquidsInteraction';
         },
-        
-        _currentResponse: { base : null },
-        _callbacks: [],
+                
         
         /**
-         * Render the PCI : 
+         * 
+         * 
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
          */
         initialize : function(id, dom, config){
 
+            // Register the value for the 'id' attribute of this Custom Interaction Hook instance.
+            // We consider in this proposal that the 'id' attribute 
             this.id = id;
+            
+            
             this.dom = dom;
             this.config = config || {};
 
@@ -37,7 +50,10 @@ define(['jquery'], function($){
             
             this._drawLiquidContainer();
 
-            // tell the rendering engine that I am ready
+            // Tell the rendering engine that I am ready.
+            // Please note that in this proposal, we consider the 'id' attribute to be part of the
+            // Custom Interaction Hood API. The Global Context will then inspect the 'id' attribute
+            // to know which instance of the PCI hook is requesting a service to be achieved.
             _pciContext.notifyReady(this);
             
             var self = this;
@@ -75,6 +91,7 @@ define(['jquery'], function($){
             this._drawLiquidContainer(y);
             this._updateResponse(y);
         },
+        
         /**
          * Get the response in the json format described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
@@ -85,6 +102,7 @@ define(['jquery'], function($){
         getResponse : function(){
             return this._currentResponse;
         },
+        
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
@@ -96,6 +114,7 @@ define(['jquery'], function($){
             this._drawLiquidContainer();
             this._currentResponse = { base: null };
         },
+        
         /**
          * Reverse operation performed by render()
          * After this function is executed, only the inital naked markup remains 
@@ -108,6 +127,7 @@ define(['jquery'], function($){
             var $container = $(this.dom);
             $container.find('.canvas').off();
         },
+        
         /**
          * Restore the state of the interaction from the serializedState.
          * 
@@ -117,6 +137,7 @@ define(['jquery'], function($){
         setSerializedState : function(state){
 
         },
+        
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
@@ -127,6 +148,9 @@ define(['jquery'], function($){
         getSerializedState : function(){
             return {};
         },
+        
+        _currentResponse: { base : null },
+        _callbacks: [],
         
         _drawLiquidContainer : function(y) {
             
