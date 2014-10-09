@@ -1,13 +1,4 @@
-define(['jquery'], function($){
-
-    /**
-     * The global qtiCustomInteractionContext
-     * Global object qtiCustomInteractionContext cannot be passed as AMD dependency because the pci libs are loaded under a different requirejs context.
-     * This means that the dependencies of qtiCustomInteractionContext would also need to be compied into this one which is too complicated.
-     * 
-     * @type {Object} - the globally scoped qtiCustomInteractionContext
-     */
-    var _pciContext = window.qtiCustomInteractionContext;
+define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qtiCustomInteractionContext){
 
     var likertScaleInteraction = {
         id : -1,
@@ -47,16 +38,7 @@ define(['jquery'], function($){
             $ul.find('li:last').append($labelMax);
 
             //tell the rendering engine that I am ready
-            _pciContext.notifyReady(this);
-
-            /**
-             * Test response change
-             */
-            var self = this;
-            $container.change(function(){
-                var r = self.getResponse();
-                console.log(r.base.integer);
-            });
+            qtiCustomInteractionContext.notifyReady(this);
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -118,7 +100,6 @@ define(['jquery'], function($){
          */
         setSerializedState : function(state){
 
-            console.log('state set to', state)
         },
         /**
          * Get the current state of the interaction as a string.
@@ -133,5 +114,5 @@ define(['jquery'], function($){
         }
     };
 
-    _pciContext.register(likertScaleInteraction);
+    qtiCustomInteractionContext.register(likertScaleInteraction);
 });

@@ -184,9 +184,13 @@ class PciManager extends tao_actions_CommonModule
         //get the lists of all required resources
         $manifest = $interaction['manifest'];
         $required = array($manifest['entryPoint']);
-        if(isset($manifest['libraries'])){
+        
+        //include libraries remotely only, so this block is temporarily disabled
+        if(isset($manifest['libraries']) && false){
             $required = array_merge($required, array_values($manifest['libraries']));
         }
+        
+        //include custom interaction specific css in the item
         if(isset($manifest['css'])){
             $required = array_merge($required, array_values($manifest['css']));
         }

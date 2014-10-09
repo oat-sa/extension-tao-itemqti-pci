@@ -5,9 +5,9 @@
     "version": "0.1",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
-    "libraries": {
-        "jquery": "runtime/libs/jquery.amd.js"
-    },
+    "libraries": [
+        "IMSGlobal/jquery_2_1_1"
+    ],
     "css": [
         "runtime/css/likertScaleInteraction.css"
     ],
@@ -16,10 +16,10 @@
         "mcq",
         "likert"
     ],
-    "icon" : "creator/img/icon.svg",
-    "short" : "Likert",
-    "response" : {
-        "baseType" : "integer",
-        "cardinality" : "single"
+    "icon": "creator/img/icon.svg",
+    "short": "Likert",
+    "response": {
+        "baseType": "integer",
+        "cardinality": "single"
     }
 }
