@@ -29,7 +29,7 @@ use \tao_helpers_Http;
 use \FileUploadException;
 use oat\qtiItemPci\model\CreatorRegistry;
 use oat\qtiItemPci\model\CreatorPackageParser;
-use oat\qtiItemPci\helpers\Creator as CreatorHelper;
+use oat\taoQtiItem\helpers\Authoring;
 
 class PciManager extends tao_actions_CommonModule
 {
@@ -140,7 +140,6 @@ class PciManager extends tao_actions_CommonModule
         if(is_null($pci)){
             $base = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
             $folder = $base.'js'.DIRECTORY_SEPARATOR.'pciCreator'.DIRECTORY_SEPARATOR.'dev'.DIRECTORY_SEPARATOR.$pciTypeIdentifier.DIRECTORY_SEPARATOR;
-//            echo '/*source from views/js/pciCreator/dev*/'.PHP_EOL;
         }else{
             $folder = $pci['directory'];
         }
@@ -158,13 +157,43 @@ class PciManager extends tao_actions_CommonModule
         }
     }
     
+    /**
+     * Add required resources from a custom interaction (css, js) to the RDF Item
+     * 
+     * @throws common_exception_Error
+     */
     public function addRequiredResources(){
         
+        //get params
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
         $itemUri = urldecode($this->getRequestParameter('uri'));
         $item = new core_kernel_classes_Resource($itemUri);
         
-        $resources = CreatorHelper::addRequiredResources($typeIdentifier, $item, '');
+        //find the interaction in the registry
+        $interaction = $this->registry->get($typeIdentifier);
+        if(is_null($interaction)){
+            $interaction = $this->registry->getDevInteraction($typeIdentifier);
+        }
+        if(is_null($interaction)){
+            throw new common_exception_Error('no pci found with the type identifier '.$typeIdentifier);
+        }
+        
+        //get the root directory of the interaction
+        $directory = $interaction['directory'];
+        
+        //get the lists of all required resources
+        $manifest = $interaction['manifest'];
+        $required = array($manifest['entryPoint']);
+        if(isset($manifest['libraries'])){
+            $required = array_merge($required, array_values($manifest['libraries']));
+        }
+        if(isset($manifest['css'])){
+            $required = array_merge($required, array_values($manifest['css']));
+        }
+        
+        //add them to the rdf item
+        $resources = Authoring::addRequiredResources($directory, $required, $item, '');
+        
         $this->returnJson(array(
             'success' => true,
             'resources' => $resources
