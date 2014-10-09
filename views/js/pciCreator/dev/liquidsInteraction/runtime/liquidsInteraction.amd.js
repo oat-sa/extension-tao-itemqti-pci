@@ -1,13 +1,4 @@
-define(['IMSGlobal/jquery_2_1_1'], function($){
-
-    /**
-     * The global qtiCustomInteractionContext
-     * Global object qtiCustomInteractionContext cannot be passed as AMD dependency because the pci libs are loaded under a different requirejs context.
-     * This means that the dependencies of qtiCustomInteractionContext would also need to be compiled into this one which is too complicated.
-     * 
-     * @type {Object} - the globally scoped qtiCustomInteractionContext
-     */
-    var _pciContext = window.qtiCustomInteractionContext;
+define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qtiCustomInteractionContext){
 
     var liquidsInteraction = {
         
@@ -40,12 +31,9 @@ define(['IMSGlobal/jquery_2_1_1'], function($){
             // Register the value for the 'id' attribute of this Custom Interaction Hook instance.
             // We consider in this proposal that the 'id' attribute 
             this.id = id;
-            
-            
             this.dom = dom;
             this.config = config || {};
 
-            var $container = $(dom);
             var canvas = $(this.dom).find('.liquids')[0];
             
             this._drawLiquidContainer();
@@ -54,7 +42,7 @@ define(['IMSGlobal/jquery_2_1_1'], function($){
             // Please note that in this proposal, we consider the 'id' attribute to be part of the
             // Custom Interaction Hood API. The Global Context will then inspect the 'id' attribute
             // to know which instance of the PCI hook is requesting a service to be achieved.
-            _pciContext.notifyReady(this);
+            qtiCustomInteractionContext.notifyReady(this);
             
             var self = this;
             
@@ -311,5 +299,5 @@ define(['IMSGlobal/jquery_2_1_1'], function($){
         }
     };
 
-    _pciContext.register(liquidsInteraction);
+    qtiCustomInteractionContext.register(liquidsInteraction);
 });
