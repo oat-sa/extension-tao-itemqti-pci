@@ -13,8 +13,7 @@ define([
     'ui/feedback',
     'ui/modal',
     'ui/uploader',
-    'ui/filesender',
-    'filereader'
+    'ui/filesender'
 ], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, deleter, feedback){
     
     var ns = '.pcimanager';
