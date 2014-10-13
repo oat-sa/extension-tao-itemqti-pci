@@ -4,7 +4,7 @@ define([
     'qtiItemPci/pciManager/pciManager',
     'tpl!qtiItemPci/pciManager/tpl/managerTrigger',
     'helpers',
-    'css!qtiItemPci_css/pci-manager'
+    'css!qtiItemPciCss/pci-manager'
 ], function(__, interactionsToolbar, PciManager, triggerTpl, helpers){
 
     var _urls = {
