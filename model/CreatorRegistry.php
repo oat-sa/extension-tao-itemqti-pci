@@ -58,6 +58,10 @@ class CreatorRegistry
         $this->storage = tao_models_classes_service_FileStorage::singleton();
         $this->propTypeIdentifier = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier');
         $this->propDirectory = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory');
+        
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
+        $this->baseDevDir = $extension->getConstant('DIR_VIEWS').'js/pciCreator/dev/';
+        $this->baseDevUrl = $extension->getConstant('BASE_WWW').'js/pciCreator/dev/';
     }
 
     public function add($archive, $replace = false){
@@ -201,11 +205,7 @@ class CreatorRegistry
 
         $returnValue = array();
 
-        $ext = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
-        $baseDir = $ext->getConstant('DIR_VIEWS');
-        $baseWWW = $ext->getConstant('BASE_WWW').'js/pciCreator/dev/';
-
-        foreach(glob($baseDir.'js/pciCreator/dev/*/pciCreator.js') as $file){
+        foreach(glob($this->baseDevDir.'*/pciCreator.js') as $file){
 
             $dir = str_replace('pciCreator.js', '', $file);
             $manifestFile = $dir.'pciCreator.json';
@@ -213,7 +213,7 @@ class CreatorRegistry
             if(file_exists($manifestFile)){
                 
                 $typeIdentifier = basename($dir);
-                $baseUrl = $baseWWW.$typeIdentifier.'/';
+                $baseUrl = $this->baseDevUrl.$typeIdentifier.'/';
                 $manifest = json_decode(file_get_contents($manifestFile), true);
 
                 $returnValue[] = array(
