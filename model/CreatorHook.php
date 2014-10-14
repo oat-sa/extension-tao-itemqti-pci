@@ -44,12 +44,14 @@ class CreatorHook implements Hook
         //get registered PCI
         $hooks = $registry->getRegisteredInteractions();
         foreach($hooks as $hook){
+            unset($hook['directory']);
             $config->addInteraction($hook);
         }
 
         //get PCI directly located in views/js/pciCreator/myCustomInteraction:
         $hooks = $registry->getDevInteractions();
         foreach($hooks as $hook){
+            unset($hook['directory']);
             $config->addInteraction($hook);
         }
 
