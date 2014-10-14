@@ -134,12 +134,11 @@ class PciManager extends tao_actions_CommonModule
         }
     }
 
-    private function renderFile($pciTypeIdentifier, $relPath){
+    private function renderFile($typeIdentifier, $relPath){
 
-        $pci = $this->registry->get($pciTypeIdentifier);
+        $pci = $this->registry->get($typeIdentifier);
         if(is_null($pci)){
-            $base = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
-            $folder = $base.'js'.DIRECTORY_SEPARATOR.'pciCreator'.DIRECTORY_SEPARATOR.'dev'.DIRECTORY_SEPARATOR.$pciTypeIdentifier.DIRECTORY_SEPARATOR;
+            $folder = $this->registry->getDevInteractionDirectory($typeIdentifier);
         }else{
             $folder = $pci['directory'];
         }
