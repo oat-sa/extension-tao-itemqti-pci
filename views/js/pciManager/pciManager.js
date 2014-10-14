@@ -15,9 +15,9 @@ define([
     'ui/uploader',
     'ui/filesender'
 ], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, deleter, feedback){
-    
+
     var ns = '.pcimanager';
-    
+
     var _fileTypeFilters = ['application/zip'];
 
     var _urls = {
@@ -30,10 +30,13 @@ define([
     function validateConfig(config){
 
         if(!config.container || !(config.container instanceof $)){
-            throw new Error('Invalid container in config object');
+            throw new Error('Invalid container in config object : missing container');
         }
         if(!config.interactionSidebar || !(config.interactionSidebar instanceof $)){
-            throw new Error('Invalid container in config object');
+            throw new Error('Invalid container in config object : missing interaction sidebar');
+        }
+        if(!config.itemUri){
+            throw new Error('Invalid container in config object : missing itemUri');
         }
     }
 
@@ -44,7 +47,7 @@ define([
         //creates the container from the layout template
         var $container = $(layoutTpl());
         config.container.append($container);
-        
+
         //init variables:
         var listing = {},
             $fileSelector = $container.find('.file-selector'),
@@ -90,16 +93,16 @@ define([
         }
 
         function initEventListeners(){
-            
+
             deleter($fileContainer);
-            
+
             $fileContainer.on('delete.deleter', function(e, $target){
-                
+
                 if(e.namespace === 'deleter' && $target.length){
-                    
+
                     var typeIdentifier = $target.data('type-identifier');
                     $(this).one('deleted.deleter', function(){
-                        
+
                         $.getJSON(_urls.delete, {typeIdentifier : typeIdentifier}, function(data){
                             if(data.success){
                                 interactionsToolbar.remove(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
@@ -115,6 +118,19 @@ define([
             $switcher.click(function(e){
                 e.preventDefault();
                 switchUpload();
+            });
+
+            //when a pci is created add required resources :
+            $(document).off('.pci-hook').on('elementCreated.qti-widget.pci-hook', function(e, data){
+
+                var element = data.element,
+                    typeIdentifier = element.typeIdentifier,
+                    hook;
+
+                if(element.qtiClass === 'customInteraction' && typeIdentifier){
+                    hook = ciRegistry.get(typeIdentifier);
+                    $.getJSON(hook.addRequiredResources, {typeIdentifier : typeIdentifier, uri : config.itemUri});
+                }
             });
         }
 
@@ -172,22 +188,22 @@ define([
 
             updateListing();
         }
-        
+
         function add(interactionHook){
-            
+
             var id = interactionHook.typeIdentifier;
 
             listing[id] = interactionHook;
-            
+
             ciRegistry.register([interactionHook]);
             ciRegistry.loadOne(id, function(){
                 var data = ciRegistry.getAuthoringData(id);
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
-                        
+
                         //add toolbar button
                         var $insertable = interactionsToolbar.add(config.interactionSidebar, data);
-                        
+
                         //init insertable
                         var $itemBody = $('.qti-itemBody');//current editor instance
                         $itemBody.gridEditor('addInsertables', $insertable, {
@@ -203,14 +219,14 @@ define([
 
             $container.trigger('added' + ns, [interactionHook]);
         }
-        
+
         function initUploader(){
 
             var errors = [],
                 selectedFiles = {};
 
             $uploader.on('upload.uploader', function(e, file, interactionHook){
-                
+
                 add(interactionHook);
 
             }).on('fail.uploader', function(e, file, err){
@@ -255,7 +271,7 @@ define([
                 fileSelect : function(files, done){
 
                     var givenLength = files.length;
-                    
+
                     //check the mime-type
                     files = _.filter(files, function(file){
                         return _.contains(_fileTypeFilters, file.type);
@@ -281,7 +297,7 @@ define([
                     url : _urls.verify,
                     file : file,
                     loaded : function(r){
-                        
+
                         if(r.valid){
                             if(r.exists){
                                 ok = window.confirm(__('There is already one interaction with the same identifier "%s" (label : "%s"). \n\n Do you want to override the existing one ?', r.typeIdentifier, r.label, r.label));

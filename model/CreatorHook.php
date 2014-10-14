@@ -44,19 +44,23 @@ class CreatorHook implements Hook
         //get registered PCI
         $hooks = $registry->getRegisteredInteractions();
         foreach($hooks as $hook){
-            unset($hook['directory']);
-            $config->addInteraction($hook);
+            $config->addInteraction($this->formatHook($hook));
         }
 
         //get PCI directly located in views/js/pciCreator/myCustomInteraction:
         $hooks = $registry->getDevInteractions();
         foreach($hooks as $hook){
-            unset($hook['directory']);
-            $config->addInteraction($hook);
+            $config->addInteraction($this->formatHook($hook));
         }
 
         //finally add the custom interaction manager "hook"
         $config->addHook('qtiItemPci/pciManager/hook');
+    }
+
+    private function formatHook($hook){
+        unset($hook['directory']);
+        $hook['addRequiredResources'] = _url('addRequiredResources', 'PciManager', 'qtiItemPci');
+        return $hook;
     }
 
 }

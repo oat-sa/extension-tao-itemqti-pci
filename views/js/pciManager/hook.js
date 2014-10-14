@@ -1,17 +1,15 @@
 define([
+    'jquery',
     'i18n',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'qtiItemPci/pciManager/pciManager',
     'tpl!qtiItemPci/pciManager/tpl/managerTrigger',
-    'helpers',
     'css!qtiItemPciCss/pci-manager'
-], function(__, interactionsToolbar, PciManager, triggerTpl, helpers){
+], function($, __, interactionsToolbar, PciManager, triggerTpl){
 
-    var _urls = {
-        addRequiredResources : helpers._url('addRequiredResources', 'PciManager', 'qtiItemPci')
-    };
+    function addManagerButton(config){
 
-    function addManagerButton($interactionSidebar, $modalContainer){
+        var $interactionSidebar = config.dom.getInteractionToolbar();
 
         //get the custom interaction section in the toolbar
         var customInteractionTag = interactionsToolbar.getCustomInteractionTag();
@@ -28,41 +26,28 @@ define([
         $section.children('.panel').append($button);
 
         var pciManager = new PciManager({
-            container : $modalContainer,
-            interactionSidebar : $interactionSidebar
+            container : config.dom.getModalContainer(),
+            interactionSidebar : $interactionSidebar,
+            itemUri : config.uri
         });
         $button.on('click', function(){
             pciManager.open();
         });
     }
-    
-    function addNewInteractionListener(uri){
-        //listener:
-        $(document).on('elementCreated.qti-widget.pci-hook', function(e, data){
-            var element = data.element;
-            if(element.qtiClass === 'customInteraction'){
-                $.getJSON(_urls.addRequiredResources, {typeIdentifier : element.typeIdentifier, uri:uri});
-            }
-        });
-    }
-    
+
     var pciManagerHook = {
         init : function(config){
-            
-            var $interactionSidebar = config.dom.getInteractionToolbar(),
-                $modalContainer = config.dom.getModalContainer();
+
+            var $interactionSidebar = config.dom.getInteractionToolbar();
 
             if(interactionsToolbar.isReady($interactionSidebar)){
-                addManagerButton($interactionSidebar, $modalContainer);
+                addManagerButton(config);
             }else{
                 //wait until the interaction toolbar construciton is done:
                 $interactionSidebar.on('interactiontoolbarready.qti-widget', function(){
-                    addManagerButton($interactionSidebar, $modalContainer);
+                    addManagerButton(config);
                 });
             }
-            
-            addNewInteractionListener(config.uri);
-
         }
     };
 
