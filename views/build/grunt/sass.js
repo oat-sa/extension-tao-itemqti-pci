@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     sass.qtiitempci.files[root + 'css/pci-manager.css'] = root + 'scss/pci-manager.scss';
 
     watch.qtiitempcisass = {
-        files : [root + 'views/scss/home.scss'],
+        files : [root + 'views/scss/**/*.scss'],
         tasks : ['sass:qtiitempci', 'notify:qtiitempcisass'],
         options : {
             debounceDelay : 1000
