@@ -31,10 +31,8 @@ define([
          * 
          * @returns {Object}
          */
-        getDefaultPciProperties : function(pci){
-            return {
-                
-            };
+        getDefaultProperties : function(pci){
+            return {};
         },
         /**
          * (optional) Callback to execute on the 

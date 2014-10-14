@@ -31,7 +31,7 @@ define([
          * 
          * @returns {Object}
          */
-        getDefaultPciProperties : function(pci){
+        getDefaultProperties : function(pci){
             return {
                 level : 5,
                 'label-min' : 'min',
