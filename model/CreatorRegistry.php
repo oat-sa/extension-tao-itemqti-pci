@@ -52,7 +52,7 @@ class CreatorRegistry
         return self::$instance;
     }
 
-    private function __construct(){
+    protected function __construct(){
 
         $this->registryClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook');
         $this->storage = tao_models_classes_service_FileStorage::singleton();
