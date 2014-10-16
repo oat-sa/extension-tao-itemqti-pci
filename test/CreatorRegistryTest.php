@@ -79,5 +79,16 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
         $hook = $this->registry->add($packageValid);
         
     }
-
+    
+    public function testRemoveAll(){
+        
+        $packageValid = dirname(__FILE__).'/samples/valid.zip';
+        $typeIdentifier = 'likertScaleInteraction';
+        
+        $hook = $this->registry->add($packageValid);
+        $this->assertEquals($hook['typeIdentifier'], $typeIdentifier);
+        
+        $this->registry->removeAll();
+        $this->assertNull($this->registry->get($typeIdentifier));
+    }
 }

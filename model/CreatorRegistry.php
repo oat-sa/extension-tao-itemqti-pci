@@ -25,6 +25,7 @@ use \core_kernel_classes_Class;
 use \core_kernel_classes_Property;
 use \tao_models_classes_service_FileStorage;
 use \common_ext_ExtensionsManager;
+use \tao_helpers_Uri;
 use oat\qtiItemPci\model\CreatorPackageParser;
 
 /**
@@ -166,7 +167,7 @@ class CreatorRegistry
         $typeIdentifier = (string) $hook->getUniquePropertyValue($this->propTypeIdentifier);
         $manifestFile = $folder.DIRECTORY_SEPARATOR.'pciCreator.json';
         $manifest = json_decode(file_get_contents($manifestFile), true);
-        $baseUrl = _url('getFile', 'PciManager', 'qtiItemPci', array(
+        $baseUrl = tao_helpers_Uri::url('getFile', 'PciManager', 'qtiItemPci', array(
             'file' => $typeIdentifier.'/'
         ));
 
