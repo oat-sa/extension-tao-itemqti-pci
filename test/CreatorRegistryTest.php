@@ -91,4 +91,22 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
         $this->registry->removeAll();
         $this->assertNull($this->registry->get($typeIdentifier));
     }
+    
+    public function testGetDevInteractions(){
+        
+        $existingId = 'likertScaleInteraction';
+        $noExistingId = 'likertscaleinteraction';
+        
+        $devInteractions = $this->registry->getDevInteractions();
+        $this->assertEquals(2, count($devInteractions));
+        
+        $this->assertNotNull($this->registry->getDevInteraction($existingId));
+        
+        $this->assertNull($this->registry->getDevInteraction($noExistingId));
+        
+        $this->assertNotNull($this->registry->getDevInteractionDirectory($existingId));
+        
+        $this->setExpectedException('common_Exception');
+        $this->assertNull($this->registry->getDevInteractionDirectory($noExistingId));
+    }
 }

@@ -57,6 +57,16 @@ class CreatorPackageParserTest extends TaoPhpUnitTestRunner
         $parser = new CreatorPackageParser($packageMissingManifest);
         $parser->validate();
         $this->assertFalse($parser->isValid());
+        
+        $packageMissingManifest = dirname(__FILE__).'/samples/missingHook.zip';
+        $parser = new CreatorPackageParser($packageMissingManifest);
+        $parser->validate();
+        $this->assertFalse($parser->isValid());
+        
+        $packageMissingManifest = dirname(__FILE__).'/samples/invalidManifestEntries.zip';
+        $parser = new CreatorPackageParser($packageMissingManifest);
+        $parser->validate();
+        $this->assertFalse($parser->isValid());
     }
     
     public function testGetManifest(){
