@@ -226,8 +226,6 @@ class CreatorRegistry
                     'manifest' => $manifest,
                     'dev' => true
                 );
-            }else{
-                \common_Logger::d('missing manifest file pciCreator.json');
             }
         }
 

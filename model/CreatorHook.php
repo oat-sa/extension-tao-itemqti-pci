@@ -23,6 +23,7 @@ namespace oat\qtiItemPci\model;
 use oat\taoQtiItem\model\Hook;
 use oat\taoQtiItem\model\Config;
 use oat\qtiItemPci\model\CreatorRegistry;
+use \tao_helpers_Uri;
 
 /**
  * The hook used in the item creator
@@ -59,7 +60,7 @@ class CreatorHook implements Hook
 
     private function formatHook($hook){
         unset($hook['directory']);
-        $hook['addRequiredResources'] = _url('addRequiredResources', 'PciManager', 'qtiItemPci');
+        $hook['addRequiredResources'] = tao_helpers_Uri::url('addRequiredResources', 'PciManager', 'qtiItemPci');
         return $hook;
     }
 
