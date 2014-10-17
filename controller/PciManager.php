@@ -33,12 +33,18 @@ use oat\taoQtiItem\helpers\Authoring;
 
 class PciManager extends tao_actions_CommonModule
 {
-
+    
+    /**
+     * Instanciate the controller
+     */
     public function __construct(){
         parent::__construct();
         $this->registry = CreatorRegistry::singleton();
     }
 
+    /**
+     * Returns the list of registered custom interactions and their data
+     */
     public function getRegisteredInteractions(){
 
         $returnValue = array();
@@ -51,7 +57,13 @@ class PciManager extends tao_actions_CommonModule
 
         $this->returnJson($returnValue);
     }
-
+    
+    /**
+     * Remove security sensitive data to be sent to the client
+     * 
+     * @param array $rawInteractionData
+     * @return array
+     */
     protected function filterInteractionData($rawInteractionData){
         
         unset($rawInteractionData['directory']);
@@ -61,7 +73,11 @@ class PciManager extends tao_actions_CommonModule
     /**
      * Service to check if the uploaded file archive is a valid and non-existing one
      * 
-     * @todo call this from the client side
+     * JSON structure:
+     * {
+     *     "valid" : true/false (if is a valid package) 
+     *     "exists" : true/false (if the package is valid, check if the typeIdentifier is already used in the registry)
+     * }
      */
     public function verify(){
 
@@ -93,7 +109,10 @@ class PciManager extends tao_actions_CommonModule
 
         $this->returnJson($result);
     }
-
+    
+    /**
+     * Add a new custom interaction from the uploaded zip package
+     */
     public function add(){
 
         //as upload may be called multiple times, we remove the session lock as soon as possible
@@ -111,7 +130,10 @@ class PciManager extends tao_actions_CommonModule
             $this->returnJson(array('error' => $fe->getMessage()));
         }
     }
-
+    
+    /**
+     * Delete a custom interaction from the registry
+     */
     public function delete(){
 
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
@@ -122,7 +144,10 @@ class PciManager extends tao_actions_CommonModule
             'success' => $ok
         ));
     }
-
+    
+    /**
+     * Get a file of a custom interaction
+     */
     public function getFile(){
 
         if($this->hasRequestParameter('file')){
@@ -133,7 +158,14 @@ class PciManager extends tao_actions_CommonModule
             $this->renderFile($pciTypeIdentifier, $relPath);
         }
     }
-
+    
+    /**
+     * Render the file to the browser
+     * 
+     * @param string $typeIdentifier
+     * @param string $relPath
+     * @throws common_exception_Error
+     */
     private function renderFile($typeIdentifier, $relPath){
 
         $pci = $this->registry->get($typeIdentifier);
@@ -157,7 +189,7 @@ class PciManager extends tao_actions_CommonModule
     }
     
     /**
-     * Add required resources from a custom interaction (css, js) to the RDF Item
+     * Add required resources for a custom interaction (css, js) in the item directory
      * 
      * @throws common_exception_Error
      */

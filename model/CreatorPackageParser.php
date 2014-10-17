@@ -34,7 +34,7 @@ class CreatorPackageParser extends PackageParser
 {
 
     /**
-     * Validate the sample package
+     * Validate the zip package
      *
      * @access public
      * @param  string schema
@@ -67,7 +67,14 @@ class CreatorPackageParser extends PackageParser
             $this->addError($e);
         }
     }
-
+    
+    /**
+     * Validate the manifest pciCreator.json
+     * 
+     * @param array $manifest
+     * @return boolean
+     * @throws common_Exception
+     */
     protected function validateManifest($manifest){
 
         $returnValue = true;
@@ -123,7 +130,12 @@ class CreatorPackageParser extends PackageParser
 
         return $returnValue;
     }
-
+    
+    /**
+     * Get the manifest as an associative array from the source zip package
+     * 
+     * @return array
+     */
     public function getManifest(){
 
         $str = '';

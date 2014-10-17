@@ -29,7 +29,7 @@ use \tao_helpers_Uri;
 use oat\qtiItemPci\model\CreatorPackageParser;
 
 /**
- * The hook used in the item creator
+ * CreatorRegistry stores reference to 
  *
  * @package qtiItemPci
  */
@@ -37,12 +37,16 @@ class CreatorRegistry
 {
 
     /**
+     * The singleton
+     * 
      * @var tao_models_classes_service_FileStorage
      */
     private static $instance;
 
     /**
-     * @return tao_models_classes_service_FileStorage
+     * Return the singleton
+     * 
+     * @return CreatorRegistry
      */
     public static function singleton(){
 
@@ -52,7 +56,10 @@ class CreatorRegistry
 
         return self::$instance;
     }
-
+    
+    /**
+     * 
+     */
     protected function __construct(){
 
         $this->registryClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook');
@@ -64,7 +71,16 @@ class CreatorRegistry
         $this->baseDevDir = $extension->getConstant('DIR_VIEWS').'js/pciCreator/dev/';
         $this->baseDevUrl = $extension->getConstant('BASE_WWW').'js/pciCreator/dev/';
     }
-
+    
+    /**
+     * Register a custom interaction from a zip package
+     * 
+     * @param string $archive
+     * @param boolean $replace
+     * @return array
+     * @throws \common_Exception
+     * @throws ExtractException
+     */
     public function add($archive, $replace = false){
 
         $returnValue = null;
@@ -114,7 +130,12 @@ class CreatorRegistry
 
         return $returnValue;
     }
-
+    
+    /**
+     * Get the data for all registered interactions
+     * 
+     * @return array
+     */
     public function getRegisteredInteractions(){
 
         $returnValue = array();
@@ -127,7 +148,12 @@ class CreatorRegistry
 
         return $returnValue;
     }
-
+    
+    /**
+     * Remove a registered interaction from the registry
+     * 
+     * @param string $typeIdentifier
+     */
     public function remove($typeIdentifier){
 
         $hook = $this->getResource($typeIdentifier);
@@ -136,7 +162,10 @@ class CreatorRegistry
             //@todo : remove the directory too!
         }
     }
-
+    
+    /**
+     * Remove all registered interactions form the registry
+     */
     public function removeAll(){
 
         $all = $this->registryClass->getInstances();
@@ -144,7 +173,14 @@ class CreatorRegistry
             $pci->delete();
         }
     }
-
+    
+    /**
+     * Return the rdf resource of a custom interaction from its typeIdentifier
+     * 
+     * @param string $typeIdentifier
+     * @return array
+     * @throws \InvalidArgumentException
+     */
     protected function getResource($typeIdentifier){
 
         $returnValue = null;
@@ -158,7 +194,13 @@ class CreatorRegistry
 
         return $returnValue;
     }
-
+    
+    /**
+     * Get the data of a registered custom interaction from its rdf resource 
+     * 
+     * @param core_kernel_classes_Resource $hook
+     * @return array
+     */
     protected function getData(core_kernel_classes_Resource $hook){
 
         $directory = (string) $hook->getUniquePropertyValue($this->propDirectory);
@@ -180,7 +222,13 @@ class CreatorRegistry
             'file' => $this->getEntryPointFile($typeIdentifier)
         );
     }
-
+    
+    /**
+     * Return the data of a registered custom interaction from its typeIdentifier
+     * 
+     * @param string $typeIdentifier
+     * @return array
+     */
     public function get($typeIdentifier){
 
         $returnValue = null;
@@ -193,12 +241,18 @@ class CreatorRegistry
         return $returnValue;
     }
     
+    /**
+     * Get the entry point file path from the baseUrl
+     * 
+     * @param string $baseUrl
+     * @return string
+     */
     private function getEntryPointFile($baseUrl){
         return $baseUrl.'/pciCreator';
     }
     
     /**
-     * Get PCI Creator hook directly located in views/js/pciCreator/myCustomInteraction:
+     * Get PCI Creator hooks directly located at views/js/pciCreator/myCustomInteraction:
      * 
      * @return array
      */
@@ -232,6 +286,12 @@ class CreatorRegistry
         return $returnValue;
     }
     
+    /**
+     * Get PCI Creator hook located at views/js/pciCreator/$typeIdentifier
+     * 
+     * @param string $typeIdentifier
+     * @return array
+     */
     public function getDevInteraction($typeIdentifier){
         
         //@todo : re-implement it to be more optimal
@@ -244,6 +304,13 @@ class CreatorRegistry
         return null;
     }
     
+    /**
+     * Get the path to the directory of a PCI Creator located at views/js/pciCreator/
+     * 
+     * @param string $typeIdentifier
+     * @return string
+     * @throws \common_Exception
+     */
     public function getDevInteractionDirectory($typeIdentifier){
         $dir = $this->baseDevDir.$typeIdentifier;
         if(file_exists($dir)){
