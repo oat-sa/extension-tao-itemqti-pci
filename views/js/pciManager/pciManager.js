@@ -124,12 +124,10 @@ define([
             $(document).off('.pci-hook').on('elementCreated.qti-widget.pci-hook', function(e, data){
 
                 var element = data.element,
-                    typeIdentifier = element.typeIdentifier,
-                    hook;
+                    typeIdentifier = element.typeIdentifier;
 
                 if(element.qtiClass === 'customInteraction' && typeIdentifier){
-                    hook = ciRegistry.get(typeIdentifier);
-                    $.getJSON(hook.addRequiredResources, {typeIdentifier : typeIdentifier, uri : config.itemUri});
+                    ciRegistry.addRequiredResources(typeIdentifier, config.itemUri);
                 }
             });
         }
