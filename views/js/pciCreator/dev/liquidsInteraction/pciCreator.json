@@ -10,10 +10,10 @@
     ],
     "css": [
     ],
-    "entryPoint": "runtime/liquidsInteraction.amd.js",
+    "entryPoint": "./runtime/liquidsInteraction.amd.js",
     "tags": [
     ],
-    "icon": "creator/img/icon.svg",
+    "icon": "./creator/img/icon.svg",
     "short": "Liquids",
     "response": {
         "baseType": "integer",
