@@ -22,11 +22,11 @@ namespace oat\qtiItemPci\controller;
 
 use \core_kernel_classes_Resource;
 use \tao_actions_CommonModule;
-use \common_ext_ExtensionsManager;
 use \common_exception_Error;
 use \tao_helpers_File;
 use \tao_helpers_Http;
 use \FileUploadException;
+use oat\taoQtiItem\model\qti\Service;
 use oat\qtiItemPci\model\CreatorRegistry;
 use oat\qtiItemPci\model\CreatorPackageParser;
 use oat\taoQtiItem\helpers\Authoring;
@@ -199,6 +199,7 @@ class PciManager extends tao_actions_CommonModule
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
         $itemUri = urldecode($this->getRequestParameter('uri'));
         $item = new core_kernel_classes_Resource($itemUri);
+        $sharedLibRegistry = Service::singleton()->getSharedLibrariesRegistry();
         
         //find the interaction in the registry
         $interaction = $this->registry->get($typeIdentifier);
@@ -217,8 +218,13 @@ class PciManager extends tao_actions_CommonModule
         $required = array($manifest['entryPoint']);
         
         //include libraries remotely only, so this block is temporarily disabled
-        if(isset($manifest['libraries']) && false){
-            $required = array_merge($required, array_values($manifest['libraries']));
+        foreach($manifest['libraries'] as $lib){
+            if(!$sharedLibRegistry->isRegistered($lib)){
+                $lib = preg_replace('/^.\//', '', $lib);
+//                $lib = $typeIdentifier . '/' . $lib; //add interaction namespace
+                $lib .= '.js';//add js extension
+                $required[] = $lib;
+            }
         }
         
         //include custom interaction specific css in the item
@@ -232,7 +238,7 @@ class PciManager extends tao_actions_CommonModule
         }
         
         //add them to the rdf item
-        $resources = Authoring::addRequiredResources($directory, $required, $item, '');
+        $resources = Authoring::addRequiredResources($directory, $required, $typeIdentifier, $item, '');
         
         $this->returnJson(array(
             'success' => true,

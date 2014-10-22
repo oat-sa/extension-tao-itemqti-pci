@@ -1,4 +1,4 @@
-define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qtiCustomInteractionContext){
+define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/js/renderer'], function(qtiCustomInteractionContext, $, renderer){
 
     var likertScaleInteraction = {
         id : -1,
@@ -16,27 +16,9 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qt
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-
-            var $container = $(dom),
-                $li,
-                level = parseInt(config.level) || 5,
-                $ul = $container.find('ul.likert');
-
-            for(var i = 1; i <= level; i++){
-
-                $li = $('<li>', {'class' : 'likert'});
-                $li.append($('<input>', {type : 'radio', name : this.id, value : i}));
-
-                $ul.append($li);
-            }
-
-            //add labels:
-            var $labelMin = $('<span>', {'class' : 'likert-label likert-label-min'}).html(config['label-min']);
-            var $labelMax = $('<span>', {'class' : 'likert-label likert-label-max'}).html(config['label-max']);
-
-            $ul.find('li:first').prepend($labelMin);
-            $ul.find('li:last').append($labelMax);
-
+            
+            renderer.render(this.id, this.dom, config);
+            
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
         },
