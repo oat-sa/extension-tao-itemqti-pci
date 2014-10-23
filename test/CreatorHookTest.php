@@ -41,7 +41,7 @@ class CreatorHookTest extends TaoPhpUnitTestRunner
         
         TaoPhpUnitTestRunner::initTest();
         
-        $this->registry = CreatorRegistry::singleton();
+        $this->registry = new CreatorRegistry();
         
         $packageValid = dirname(__FILE__).'/samples/valid.zip';
         $this->registry->add($packageValid);

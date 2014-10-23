@@ -36,7 +36,7 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
      */
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
-        $this->registry = CreatorRegistry::singleton();
+        $this->registry = new CreatorRegistry();
         $this->registry->removeAll();
     }
     
@@ -97,16 +97,16 @@ class CreatorRegistryTest extends TaoPhpUnitTestRunner
         $existingId = 'likertScaleInteraction';
         $noExistingId = 'likertscaleinteraction';
         
-        $devInteractions = $this->registry->getDevInteractions();
+        $devInteractions = $this->registry->getDevImplementations();
         $this->assertEquals(2, count($devInteractions));
         
-        $this->assertNotNull($this->registry->getDevInteraction($existingId));
+        $this->assertNotNull($this->registry->getDevImplementation($existingId));
         
-        $this->assertNull($this->registry->getDevInteraction($noExistingId));
+        $this->assertNull($this->registry->getDevImplementation($noExistingId));
         
-        $this->assertNotNull($this->registry->getDevInteractionDirectory($existingId));
+        $this->assertNotNull($this->registry->getDevImplementationDirectory($existingId));
         
         $this->setExpectedException('common_Exception');
-        $this->assertNull($this->registry->getDevInteractionDirectory($noExistingId));
+        $this->assertNull($this->registry->getDevImplementationDirectory($noExistingId));
     }
 }

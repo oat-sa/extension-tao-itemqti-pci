@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\model;
 
+use oat\taoQtiItem\model\CreatorRegistry as ParentRegistry;
 use \core_kernel_classes_Resource;
 use \core_kernel_classes_Class;
 use \core_kernel_classes_Property;
@@ -33,43 +34,34 @@ use oat\qtiItemPci\model\CreatorPackageParser;
  *
  * @package qtiItemPci
  */
-class CreatorRegistry
+class CreatorRegistry extends ParentRegistry
 {
 
     /**
-     * The singleton
-     * 
-     * @var tao_models_classes_service_FileStorage
+     * constructor
      */
-    private static $instance;
-
-    /**
-     * Return the singleton
-     * 
-     * @return CreatorRegistry
-     */
-    public static function singleton(){
-
-        if(is_null(self::$instance)){
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-    
-    /**
-     * 
-     */
-    protected function __construct(){
-
+    public function __construct(){
+        
+        parent::__construct();
+        
         $this->registryClass = new core_kernel_classes_Class('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook');
         $this->storage = tao_models_classes_service_FileStorage::singleton();
         $this->propTypeIdentifier = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier');
         $this->propDirectory = new core_kernel_classes_Property('http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory');
-        
+    }
+    
+    protected function getBaseDevDir(){
         $extension = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
-        $this->baseDevDir = $extension->getConstant('DIR_VIEWS').'js/pciCreator/dev/';
-        $this->baseDevUrl = $extension->getConstant('BASE_WWW').'js/pciCreator/dev/';
+        return $extension->getConstant('DIR_VIEWS').'js/pciCreator/dev/'; 
+    }
+    
+    protected function getBaseDevUrl(){
+        $extension = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci');
+        return $extension->getConstant('BASE_WWW').'js/pciCreator/dev/'; 
+    }
+    
+    protected function getHookFileName(){
+        return 'pciCreator';
     }
     
     /**
@@ -136,7 +128,7 @@ class CreatorRegistry
      * 
      * @return array
      */
-    public function getRegisteredInteractions(){
+    public function getRegisteredImplementations(){
 
         $returnValue = array();
 
@@ -241,82 +233,4 @@ class CreatorRegistry
         return $returnValue;
     }
     
-    /**
-     * Get the entry point file path from the baseUrl
-     * 
-     * @param string $baseUrl
-     * @return string
-     */
-    private function getEntryPointFile($baseUrl){
-        return $baseUrl.'/pciCreator';
-    }
-    
-    /**
-     * Get PCI Creator hooks directly located at views/js/pciCreator/myCustomInteraction:
-     * 
-     * @return array
-     */
-    public function getDevInteractions(){
-
-        $returnValue = array();
-
-        foreach(glob($this->baseDevDir.'*/pciCreator.js') as $file){
-
-            $dir = str_replace('pciCreator.js', '', $file);
-            $manifestFile = $dir.'pciCreator.json';
-            
-            if(file_exists($manifestFile)){
-                
-                $typeIdentifier = basename($dir);
-                $baseUrl = $this->baseDevUrl.$typeIdentifier.'/';
-                $manifest = json_decode(file_get_contents($manifestFile), true);
-
-                $returnValue[] = array(
-                    'typeIdentifier' => $typeIdentifier,
-                    'label' => $manifest['label'],
-                    'directory' => $dir,
-                    'baseUrl' => $baseUrl,
-                    'file' => $this->getEntryPointFile($typeIdentifier),
-                    'manifest' => $manifest,
-                    'dev' => true
-                );
-            }
-        }
-
-        return $returnValue;
-    }
-    
-    /**
-     * Get PCI Creator hook located at views/js/pciCreator/$typeIdentifier
-     * 
-     * @param string $typeIdentifier
-     * @return array
-     */
-    public function getDevInteraction($typeIdentifier){
-        
-        //@todo : re-implement it to be more optimal
-        $devInteracitons = $this->getDevInteractions();
-        foreach($devInteracitons as $interaction){
-            if($interaction['typeIdentifier'] == $typeIdentifier){
-                return $interaction;
-            }
-        }
-        return null;
-    }
-    
-    /**
-     * Get the path to the directory of a PCI Creator located at views/js/pciCreator/
-     * 
-     * @param string $typeIdentifier
-     * @return string
-     * @throws \common_Exception
-     */
-    public function getDevInteractionDirectory($typeIdentifier){
-        $dir = $this->baseDevDir.$typeIdentifier;
-        if(file_exists($dir)){
-            return $dir;
-        }else{
-            throw new \common_Exception('the type identifier cannot be found');
-        }
-    }
 }

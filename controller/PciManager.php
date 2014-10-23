@@ -39,17 +39,17 @@ class PciManager extends tao_actions_CommonModule
      */
     public function __construct(){
         parent::__construct();
-        $this->registry = CreatorRegistry::singleton();
+        $this->registry = new CreatorRegistry();
     }
 
     /**
      * Returns the list of registered custom interactions and their data
      */
-    public function getRegisteredInteractions(){
+    public function getRegisteredImplementations(){
 
         $returnValue = array();
 
-        $all = $this->registry->getRegisteredInteractions();
+        $all = $this->registry->getRegisteredImplementations();
 
         foreach($all as $pci){
             $returnValue[$pci['typeIdentifier']] = $this->filterInteractionData($pci);
@@ -170,7 +170,7 @@ class PciManager extends tao_actions_CommonModule
 
         $pci = $this->registry->get($typeIdentifier);
         if(is_null($pci)){
-            $folder = $this->registry->getDevInteractionDirectory($typeIdentifier);
+            $folder = $this->registry->getDevImplementationDirectory($typeIdentifier);
         }else{
             $folder = $pci['directory'];
         }
@@ -204,7 +204,7 @@ class PciManager extends tao_actions_CommonModule
         //find the interaction in the registry
         $interaction = $this->registry->get($typeIdentifier);
         if(is_null($interaction)){
-            $interaction = $this->registry->getDevInteraction($typeIdentifier);
+            $interaction = $this->registry->getDevImplementation($typeIdentifier);
         }
         if(is_null($interaction)){
             throw new common_exception_Error('no pci found with the type identifier '.$typeIdentifier);

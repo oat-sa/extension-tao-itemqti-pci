@@ -21,7 +21,7 @@ define([
     var _fileTypeFilters = ['application/zip'];
 
     var _urls = {
-        load : helpers._url('getRegisteredInteractions', 'PciManager', 'qtiItemPci'),
+        load : helpers._url('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
         delete : helpers._url('delete', 'PciManager', 'qtiItemPci'),
         verify : helpers._url('verify', 'PciManager', 'qtiItemPci'),
         add : helpers._url('add', 'PciManager', 'qtiItemPci')
