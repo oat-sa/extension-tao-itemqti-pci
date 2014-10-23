@@ -20,28 +20,19 @@
 
 namespace oat\qtiItemPci\controller;
 
-use \core_kernel_classes_Resource;
-use \tao_actions_CommonModule;
-use \common_exception_Error;
-use \tao_helpers_File;
+use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
 use \FileUploadException;
-use oat\taoQtiItem\model\qti\Service;
 use oat\qtiItemPci\model\CreatorRegistry;
 use oat\qtiItemPci\model\CreatorPackageParser;
-use oat\taoQtiItem\helpers\Authoring;
 
-class PciManager extends tao_actions_CommonModule
+class PciManager extends AbstractPortableElementManager
 {
     
-    /**
-     * Instanciate the controller
-     */
-    public function __construct(){
-        parent::__construct();
-        $this->registry = new CreatorRegistry();
+    protected function getCreatorRegistry(){
+        return new CreatorRegistry();
     }
-
+    
     /**
      * Returns the list of registered custom interactions and their data
      */
@@ -146,104 +137,17 @@ class PciManager extends tao_actions_CommonModule
     }
     
     /**
-     * Get a file of a custom interaction
-     */
-    public function getFile(){
-
-        if($this->hasRequestParameter('file')){
-            $file = urldecode($this->getRequestParameter('file'));
-            $filePathTokens = explode('/', $file);
-            $pciTypeIdentifier = array_shift($filePathTokens);
-            $relPath = implode(DIRECTORY_SEPARATOR, $filePathTokens);
-            $this->renderFile($pciTypeIdentifier, $relPath);
-        }
-    }
-    
-    /**
-     * Render the file to the browser
+     * Get the data of the implementation by its typeIdentifier
      * 
      * @param string $typeIdentifier
-     * @param string $relPath
-     * @throws common_exception_Error
+     * @return array
      */
-    private function renderFile($typeIdentifier, $relPath){
-
-        $pci = $this->registry->get($typeIdentifier);
-        if(is_null($pci)){
-            $folder = $this->registry->getDevImplementationDirectory($typeIdentifier);
-        }else{
-            $folder = $pci['directory'];
+    protected function getImplementatioByTypeIdentifier($typeIdentifier){
+        $implementationData = $this->registry->get($typeIdentifier);
+        if(is_null($implementationData)){
+            $implementationData = $this->registry->getDevImplementation($typeIdentifier);
         }
-
-        if(tao_helpers_File::securityCheck($relPath, true)){
-            $filename = $folder.$relPath;
-            //@todo : find better way to to this
-            //load amd module
-            if(!file_exists($filename) && file_exists($filename.'.js')){
-                $filename = $filename.'.js';
-            }
-            tao_helpers_Http::returnFile($filename);
-        }else{
-            throw new common_exception_Error('invalid item preview file path');
-        }
-    }
-    
-    /**
-     * Add required resources for a custom interaction (css, js) in the item directory
-     * 
-     * @throws common_exception_Error
-     */
-    public function addRequiredResources(){
-        
-        //get params
-        $typeIdentifier = $this->getRequestParameter('typeIdentifier');
-        $itemUri = urldecode($this->getRequestParameter('uri'));
-        $item = new core_kernel_classes_Resource($itemUri);
-        $sharedLibRegistry = Service::singleton()->getSharedLibrariesRegistry();
-        
-        //find the interaction in the registry
-        $interaction = $this->registry->get($typeIdentifier);
-        if(is_null($interaction)){
-            $interaction = $this->registry->getDevImplementation($typeIdentifier);
-        }
-        if(is_null($interaction)){
-            throw new common_exception_Error('no pci found with the type identifier '.$typeIdentifier);
-        }
-        
-        //get the root directory of the interaction
-        $directory = $interaction['directory'];
-        
-        //get the lists of all required resources
-        $manifest = $interaction['manifest'];
-        $required = array($manifest['entryPoint']);
-        
-        //include libraries remotely only, so this block is temporarily disabled
-        foreach($manifest['libraries'] as $lib){
-            if(!$sharedLibRegistry->isRegistered($lib)){
-                $lib = preg_replace('/^.\//', '', $lib);
-//                $lib = $typeIdentifier . '/' . $lib; //add interaction namespace
-                $lib .= '.js';//add js extension
-                $required[] = $lib;
-            }
-        }
-        
-        //include custom interaction specific css in the item
-        if(isset($manifest['css'])){
-            $required = array_merge($required, array_values($manifest['css']));
-        }
-        
-        //include media in the item
-        if(isset($manifest['media'])){
-            $required = array_merge($required, array_values($manifest['media']));
-        }
-        
-        //add them to the rdf item
-        $resources = Authoring::addRequiredResources($directory, $required, $typeIdentifier, $item, '');
-        
-        $this->returnJson(array(
-            'success' => true,
-            'resources' => $resources
-        ));
+        return $implementationData;
     }
 
 }
