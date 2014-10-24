@@ -149,5 +149,21 @@ class PciManager extends AbstractPortableElementManager
         }
         return $implementationData;
     }
+    
+    /**
+     * Get the directory where the implementation sits
+     * 
+     * @param string $typeIdentifier
+     * @return string
+     */
+    protected function getImplementationDirectory($typeIdentifier){
+        $pci = $this->registry->get($typeIdentifier);
+        if(is_null($pci)){
+            $folder = $this->registry->getDevImplementationDirectory($typeIdentifier);
+        }else{
+            $folder = $pci['directory'];
+        }
+        return $folder;
+    }
 
 }
