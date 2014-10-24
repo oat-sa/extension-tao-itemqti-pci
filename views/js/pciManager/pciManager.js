@@ -21,7 +21,7 @@ define([
     var _fileTypeFilters = ['application/zip'];
 
     var _urls = {
-        load : helpers._url('getRegisteredInteractions', 'PciManager', 'qtiItemPci'),
+        load : helpers._url('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
         delete : helpers._url('delete', 'PciManager', 'qtiItemPci'),
         verify : helpers._url('verify', 'PciManager', 'qtiItemPci'),
         add : helpers._url('add', 'PciManager', 'qtiItemPci')
@@ -121,8 +121,22 @@ define([
             });
 
             //when a pci is created add required resources :
+            $(document).on('resourceadded.qti-creator.qti-hook-pci', function(e, typeIdentifier, resources, interaction){
+                //render new stylesheet:
+                var reqPaths = [];
+                _.each(resources, function(res){
+                    if(/\.css$/.test(res)){
+                        reqPaths.push('css!'+typeIdentifier + '/' + res);
+                    }
+                });
+                if(reqPaths.length){
+                    require(reqPaths);
+                }
+            });
+            
+            return;
             $(document).off('.pci-hook').on('elementCreated.qti-widget.pci-hook', function(e, data){
-
+                return; //deprecated
                 var element = data.element,
                     typeIdentifier = element.typeIdentifier;
 

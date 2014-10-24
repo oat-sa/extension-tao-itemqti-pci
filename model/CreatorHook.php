@@ -40,16 +40,16 @@ class CreatorHook implements Hook
      */
     public function init(Config $config){
 
-        $registry = CreatorRegistry::singleton();
+        $registry = new CreatorRegistry();
 
         //get registered PCI
-        $hooks = $registry->getRegisteredInteractions();
+        $hooks = $registry->getRegisteredImplementations();
         foreach($hooks as $hook){
             $config->addInteraction($this->formatHook($hook));
         }
 
         //get PCI directly located in views/js/pciCreator/myCustomInteraction:
-        $hooks = $registry->getDevInteractions();
+        $hooks = $registry->getDevImplementations();
         foreach($hooks as $hook){
             $config->addInteraction($this->formatHook($hook));
         }
