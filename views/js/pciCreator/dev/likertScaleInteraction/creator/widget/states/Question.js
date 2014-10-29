@@ -3,32 +3,54 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
+    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!likertScaleInteraction/creator/tpl/propertiesForm',
-    'lodash'
-], function(stateFactory, Question, formElement, editor, formTpl, _){
+    'lodash',
+    'jquery'
+], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){
+
+
+    function extractHtmlFromMarkup(markupStr, selector){
+        var $found = $('<div>').html(markupStr).find(selector);
+        var ret = [];
+        $found.each(function(){
+            ret.push($(this).html());
+        });
+        return ret;
+    }
 
     var LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
 
         var $container = this.widget.$container,
+            $prompt = $container.find('.prompt'),
             interaction = this.widget.element;
 
-        editor.create($container, '.prompt', function(text){
+        var html = extractHtmlFromMarkup(interaction.markup, '.prompt');
+        $prompt.html(html[0] || '');
+
+        containerEditor.create($prompt, function(text){
             interaction.data('prompt', text);
             interaction.updateMarkup();
+            console.log(interaction.markup)
+        }, {
+            related : interaction
         });
 
-        editor.create($container, '.likert-label-min', function(text){
+        simpleEditor.create($container, '.likert-label-min', function(text){
             interaction.prop('label-min', text);
         });
 
-        editor.create($container, '.likert-label-max', function(text){
+        simpleEditor.create($container, '.likert-label-max', function(text){
             interaction.prop('label-max', text);
         });
 
     }, function(){
 
-        editor.destroy(this.widget.$container);
+        var $container = this.widget.$container,
+            $prompt = $container.find('.prompt');
 
+        simpleEditor.destroy($container);
+        containerEditor.destroy($prompt);
     });
 
     LikertInteractionStateQuestion.prototype.initForm = function(){
@@ -40,7 +62,7 @@ define([
             level = parseInt(interaction.prop('level')) || 5,
             levels = [5, 7, 9],
             levelData = {};
-        
+
         //build select option data for the template
         _.each(levels, function(lvl){
             levelData[lvl] = {
