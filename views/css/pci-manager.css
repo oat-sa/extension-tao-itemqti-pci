@@ -1,4 +1,8 @@
-.pci-manager-trigger:before { content: "\131"; }
+                                  /* /  \ |    | --:'''':--
+THIS CODE IS GENERATED          :*_* : _:"":\___
+AUTOMAGICALLY    * *      ____.' :::     '._ *=====<<=)           \    :
+DO NOT EDIT!     * *      '-'-'\_      /'._.' \====:_ "" .'     \ :       : /   :    \ :   .      '. :  : :      : :__:-:__.;--' <*_/   <*/
+.pci-manager-trigger:before { content: "\e61c"; }
 
 .pci-manager-trigger:before { margin-right: 5px; font-size: 10.5px; font-size: 1.05rem; font-family: 'tao'; display: inline-block; }
 
