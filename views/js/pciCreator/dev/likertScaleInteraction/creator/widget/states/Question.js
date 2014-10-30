@@ -29,12 +29,11 @@ define([
         $prompt.html(html[0] || '');
 
         containerEditor.create($prompt, function(text){
-            interaction.data('prompt', text);
-            interaction.updateMarkup();
-            console.log(interaction.markup)
-        }, {
-            related : interaction
-        });
+                interaction.data('prompt', text);
+                interaction.updateMarkup();
+            }, {
+                related : interaction
+            });
 
         simpleEditor.create($container, '.likert-label-min', function(text){
             interaction.prop('label-min', text);

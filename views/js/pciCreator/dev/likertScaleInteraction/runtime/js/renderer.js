@@ -1,17 +1,15 @@
-define(['IMSGlobal/jquery_2_1_1'], function($){
+define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
     
-    return {
-        render : function(radioGroupId, container, config){
-            
-            var $container = $(container),
-                $li,
+    function renderChoices(id, $container, config){
+        
+        var $li,
                 level = parseInt(config.level) || 5,
                 $ul = $container.find('ul.likert');
 
             for(var i = 1; i <= level; i++){
 
                 $li = $('<li>', {'class' : 'likert'});
-                $li.append($('<input>', {type : 'radio', name : radioGroupId, value : i}));
+                $li.append($('<input>', {type : 'radio', name : id, value : i}));
 
                 $ul.append($li);
             }
@@ -22,6 +20,16 @@ define(['IMSGlobal/jquery_2_1_1'], function($){
 
             $ul.find('li:first').prepend($labelMin);
             $ul.find('li:last').append($labelMax);
+    }
+    
+    return {
+        render : function(id, container, config){
+            
+            var $container = $(container);
+            
+            renderChoices(id, $container, config);
+            html.render($container.find('.prompt'));
+            
         }
     };
 });
