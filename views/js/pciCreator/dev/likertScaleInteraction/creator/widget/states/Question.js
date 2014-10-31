@@ -9,31 +9,21 @@ define([
     'jquery'
 ], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){
 
-
-    function extractHtmlFromMarkup(markupStr, selector){
-        var $found = $('<div>').html(markupStr).find(selector);
-        var ret = [];
-        $found.each(function(){
-            ret.push($(this).html());
-        });
-        return ret;
-    }
-
     var LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
 
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt'),
             interaction = this.widget.element;
 
-        var html = extractHtmlFromMarkup(interaction.markup, '.prompt');
-        $prompt.html(html[0] || '');
-
-        containerEditor.create($prompt, function(text){
+        containerEditor.create($prompt, {
+            change : function(text){
                 interaction.data('prompt', text);
                 interaction.updateMarkup();
-            }, {
-                related : interaction
-            });
+            },
+            markup : interaction.markup,
+            markupSelector : '.prompt',
+            related : interaction
+        });
 
         simpleEditor.create($container, '.likert-label-min', function(text){
             interaction.prop('label-min', text);
