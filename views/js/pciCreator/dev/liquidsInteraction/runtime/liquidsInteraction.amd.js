@@ -1,4 +1,4 @@
-define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qtiCustomInteractionContext){
+define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event'], function($, qtiCustomInteractionContext, event){
 
     var liquidsInteraction = {
         
@@ -17,7 +17,6 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qt
         getTypeIdentifier : function(){
             return 'liquidsInteraction';
         },
-                
         
         /**
          * 
@@ -27,7 +26,10 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qt
          * @param {Object} config - json
          */
         initialize : function(id, dom, config){
-
+            
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
+            
             // Register the value for the 'id' attribute of this Custom Interaction Hook instance.
             // We consider in this proposal that the 'id' attribute 
             this.id = id;
@@ -58,9 +60,8 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qt
                     self._drawLiquidContainer(y);
                     self._updateResponse(y);
                     
-                    if (typeof self._callback === 'function') {
-                        self._callback(self._currentResponse);
-                    }
+                    //communicate the response change to the interaction
+                    self.trigger('responsechange', [self.getResponse()]);
                 }
             });
         },
@@ -288,14 +289,6 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext'], function($, qt
         
         _updateResponse : function(y) {
             this._currentResponse = { base: { integer: Math.abs((this._closestMultiple(y, 25) - 350) / 25) } };
-        },
-        
-        _onResponseChange : function(callback) {
-            this._callback = callback;
-        },
-        
-        _forgetResponseChange : function() {
-            this._callback = null;
         }
     };
 

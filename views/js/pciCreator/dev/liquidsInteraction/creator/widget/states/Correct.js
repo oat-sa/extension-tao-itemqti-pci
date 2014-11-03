@@ -16,7 +16,7 @@ define([
             interaction.setResponse( { base: { integer: correct[0] } });
         }
         
-        interaction.data('pci')._onResponseChange(function(response) {
+        interaction.onPci('responsechange.question', function(response){
             var correctResponse = [];
             
             if (response.base !== null) {
@@ -31,7 +31,7 @@ define([
         var interaction = widget.element;
         
         interaction.resetResponse();
-        interaction.data('pci')._forgetResponseChange();
+        interaction.offPci('.question');
     });
 
     return LiquidsInteractionStateCorrect;
