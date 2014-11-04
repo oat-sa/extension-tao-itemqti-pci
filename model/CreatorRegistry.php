@@ -233,4 +233,17 @@ class CreatorRegistry extends ParentRegistry
         return $returnValue;
     }
     
+    /**
+     * Get the data of the implementation by its typeIdentifier
+     * 
+     * @param string $typeIdentifier
+     * @return array
+     */
+    protected function getImplementatioByTypeIdentifier($typeIdentifier){
+        $implementationData = $this->get($typeIdentifier);
+        if(is_null($implementationData)){
+            $implementationData = $this->getDevImplementation($typeIdentifier);
+        }
+        return $implementationData;
+    }
 }
