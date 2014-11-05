@@ -211,7 +211,8 @@ class CreatorRegistry extends ParentRegistry
             'directory' => $folder,
             'baseUrl' => $baseUrl,
             'manifest' => $manifest,
-            'file' => $this->getEntryPointFile($typeIdentifier)
+            'file' => $this->getEntryPointFile($typeIdentifier),
+            'registry' => get_class($this)
         );
     }
     

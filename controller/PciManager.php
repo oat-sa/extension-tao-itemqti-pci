@@ -58,6 +58,7 @@ class PciManager extends AbstractPortableElementManager
     protected function filterInteractionData($rawInteractionData){
         
         unset($rawInteractionData['directory']);
+        unset($rawInteractionData['registry']);
         return $rawInteractionData;
     }
 

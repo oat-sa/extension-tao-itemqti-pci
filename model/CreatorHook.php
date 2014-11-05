@@ -23,7 +23,6 @@ namespace oat\qtiItemPci\model;
 use oat\taoQtiItem\model\Hook;
 use oat\taoQtiItem\model\Config;
 use oat\qtiItemPci\model\CreatorRegistry;
-use \tao_helpers_Uri;
 
 /**
  * The hook used in the item creator
@@ -45,23 +44,17 @@ class CreatorHook implements Hook
         //get registered PCI
         $hooks = $registry->getRegisteredImplementations();
         foreach($hooks as $hook){
-            $config->addInteraction($this->formatHook($hook));
+            $config->addInteraction($hook);
         }
 
         //get PCI directly located in views/js/pciCreator/myCustomInteraction:
         $hooks = $registry->getDevImplementations();
         foreach($hooks as $hook){
-            $config->addInteraction($this->formatHook($hook));
+            $config->addInteraction($hook);
         }
 
         //finally add the custom interaction manager "hook"
         $config->addHook('qtiItemPci/pciManager/hook');
-    }
-
-    private function formatHook($hook){
-        unset($hook['directory']);
-        $hook['addRequiredResources'] = tao_helpers_Uri::url('addRequiredResources', 'PciManager', 'qtiItemPci');
-        return $hook;
     }
 
 }
