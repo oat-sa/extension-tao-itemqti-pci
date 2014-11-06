@@ -211,7 +211,8 @@ class CreatorRegistry extends ParentRegistry
             'directory' => $folder,
             'baseUrl' => $baseUrl,
             'manifest' => $manifest,
-            'file' => $this->getEntryPointFile($typeIdentifier)
+            'file' => $this->getEntryPointFile($typeIdentifier),
+            'registry' => get_class($this)
         );
     }
     
@@ -233,4 +234,17 @@ class CreatorRegistry extends ParentRegistry
         return $returnValue;
     }
     
+    /**
+     * Get the data of the implementation by its typeIdentifier
+     * 
+     * @param string $typeIdentifier
+     * @return array
+     */
+    protected function getImplementatioByTypeIdentifier($typeIdentifier){
+        $implementationData = $this->get($typeIdentifier);
+        if(is_null($implementationData)){
+            $implementationData = $this->getDevImplementation($typeIdentifier);
+        }
+        return $implementationData;
+    }
 }

@@ -22,5 +22,6 @@
     "response": {
         "baseType": "integer",
         "cardinality": "single"
-    }
+    },
+    "debug" : false
 }

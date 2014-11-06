@@ -58,6 +58,7 @@ class PciManager extends AbstractPortableElementManager
     protected function filterInteractionData($rawInteractionData){
         
         unset($rawInteractionData['directory']);
+        unset($rawInteractionData['registry']);
         return $rawInteractionData;
     }
 
@@ -134,20 +135,6 @@ class PciManager extends AbstractPortableElementManager
         $this->returnJson(array(
             'success' => $ok
         ));
-    }
-    
-    /**
-     * Get the data of the implementation by its typeIdentifier
-     * 
-     * @param string $typeIdentifier
-     * @return array
-     */
-    protected function getImplementatioByTypeIdentifier($typeIdentifier){
-        $implementationData = $this->registry->get($typeIdentifier);
-        if(is_null($implementationData)){
-            $implementationData = $this->registry->getDevImplementation($typeIdentifier);
-        }
-        return $implementationData;
     }
     
     /**
