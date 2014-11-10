@@ -23,7 +23,7 @@ namespace oat\qtiItemPci\test;
 
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\qtiItemPci\model\CreatorHook;
-use oat\taoQtiItem\model\Config;
+use oat\taoQtiItem\model\CreatorConfig;
 use oat\qtiItemPci\model\CreatorRegistry;
 
 
