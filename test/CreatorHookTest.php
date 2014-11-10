@@ -56,7 +56,7 @@ class CreatorHookTest extends TaoPhpUnitTestRunner
     
     public function testInit(){
         
-        $config = new Config();
+        $config = new CreatorConfig();
         $hook = new CreatorHook();
         
         $hook->init($config);
