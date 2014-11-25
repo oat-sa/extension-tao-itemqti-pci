@@ -26,7 +26,7 @@ return array(
     'license' => 'GPL-2.0',
     'version' => '0.1',
 	'author' => 'Open Assessment Technologies SA',
-	'requires' => array('taoQtiItem' => '>=2.6'),
+	'requires' => array('taoQtiItem' => '>=2.7.0'),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
     ),
