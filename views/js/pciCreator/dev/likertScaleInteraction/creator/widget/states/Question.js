@@ -76,9 +76,9 @@ define([
 
                 //update the pci property value:
                 interaction.prop('level', value);
-
-                //update rendering
-                _widget.refresh();
+                
+                //trigger change event:
+                interaction.triggerPci('levelchange', [parseInt(value)]);
             },
             identifier : function(i, value){
                 response.id(value);

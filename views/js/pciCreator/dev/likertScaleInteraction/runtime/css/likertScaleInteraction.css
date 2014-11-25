@@ -2,15 +2,18 @@
 
 .likertScaleInteraction{
     width:100%;
-    padding:30px 30px 50px;
+    padding:25px 30px 30px;
     background-color:#f5f3f2;
     margin:20px 0;
 }
 
 .likertScaleInteraction ul.likert{
     list-style-type: none;
-    margin-top: 10px;
+    margin: 0 5px;
     padding: 0;
+    display:inline-block;
+    position: relative;
+    top:7px;
 }
 
 .likertScaleInteraction ul.likert li{

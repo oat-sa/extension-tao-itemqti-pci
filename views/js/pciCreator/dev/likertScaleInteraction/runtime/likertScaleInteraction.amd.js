@@ -1,4 +1,4 @@
-define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/js/renderer'], function(qtiCustomInteractionContext, $, renderer){
+define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
 
     var likertScaleInteraction = {
         id : -1,
@@ -13,14 +13,25 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
          */
         initialize : function(id, dom, config){
 
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
+
+            var _this = this;
             this.id = id;
             this.dom = dom;
             this.config = config || {};
-            
-            renderer.render(this.id, this.dom, config);
-            
+
+            renderer.render(this.id, this.dom, this.config);
+
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
+
+            //listening to dynamic configuration change
+            this.on('levelchange', function(level){
+                console.log('levelchange', level);
+                _this.config.level = level;
+                renderer.renderChoices(_this.id, _this.dom, _this.config);
+            });
         },
         /**
          * Programmatically set the response following the json schema described in
