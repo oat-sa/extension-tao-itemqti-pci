@@ -28,7 +28,6 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
 
             //listening to dynamic configuration change
             this.on('levelchange', function(level){
-                console.log('levelchange', level);
                 _this.config.level = level;
                 renderer.renderChoices(_this.id, _this.dom, _this.config);
             });
