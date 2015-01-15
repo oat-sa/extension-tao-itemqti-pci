@@ -24,7 +24,7 @@
                 
                 <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
                     <pci:libraries>
-                        <pci:lib id="likertScaleInteraction/IMSGlobal/jquery_2_1_1"></pci:lib>
+                        <pci:lib id="IMSGlobal/jquery_2_1_1"></pci:lib>
                         <pci:lib id="likertScaleInteraction/runtime/js/renderer"></pci:lib>
                     </pci:libraries>
                 </pci:resources>
@@ -58,7 +58,7 @@
                 
                 <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
                     <pci:libraries>
-                        <pci:lib id="likertScaleInteraction/IMSGlobal/jquery_2_1_1"></pci:lib>
+                        <pci:lib id="IMSGlobal/jquery_2_1_1"></pci:lib>
                         <pci:lib id="likertScaleInteraction/runtime/js/renderer"></pci:lib>
                     </pci:libraries>
                 </pci:resources>
@@ -92,7 +92,7 @@
                 
                 <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
                     <pci:libraries>
-                        <pci:lib id="likertScaleInteraction/IMSGlobal/jquery_2_1_1"></pci:lib>
+                        <pci:lib id="IMSGlobal/jquery_2_1_1"></pci:lib>
                         <pci:lib id="likertScaleInteraction/runtime/js/renderer"></pci:lib>
                     </pci:libraries>
                 </pci:resources>
