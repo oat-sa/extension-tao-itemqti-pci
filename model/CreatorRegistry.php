@@ -37,6 +37,11 @@ use oat\qtiItemPci\model\CreatorPackageParser;
 class CreatorRegistry extends ParentRegistry
 {
 
+    private $registryClass;
+    private $storage;
+    private $propTypeIdentifier;
+    private $propDirectory;
+    
     /**
      * constructor
      */
