@@ -42,7 +42,6 @@ class CreatorHookTest extends TaoPhpUnitTestRunner
         TaoPhpUnitTestRunner::initTest();
         
         $this->registry = new CreatorRegistry();
-        
         $packageValid = dirname(__FILE__).'/samples/valid.zip';
         $this->registry->add($packageValid);
     }
@@ -51,7 +50,12 @@ class CreatorHookTest extends TaoPhpUnitTestRunner
      * remove all created instances
      */
     public function tearDown(){
-        $this->registry->removeAll();
+        if($this->registry != null){
+            $this->registry->removeAll();
+        }
+        else {
+            $this->fail('registry should not be null' );
+        }
     }
     
     public function testInit(){
