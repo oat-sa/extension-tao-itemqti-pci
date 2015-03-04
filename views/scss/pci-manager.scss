@@ -4,7 +4,8 @@
     &:before{
         margin-right: 5px;
         @include font-size(10.5);
-        @include icon('tools');
+        @include tao-icon-setup;
+        @include icon-tools;
     }
 }
 
