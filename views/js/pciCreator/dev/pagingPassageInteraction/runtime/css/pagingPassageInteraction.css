@@ -1,0 +1,16 @@
+.pp-wrap {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+.pp-wrap__col {
+    display: table-cell;
+    position: relative;
+    vertical-align: top;
+}
+.pp-content {
+
+}
+.pp-answer {
+    margin-left: 20px;
+}

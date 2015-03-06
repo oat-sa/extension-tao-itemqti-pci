@@ -1,0 +1,28 @@
+{
+    "typeIdentifier": "pagingPassageInteraction",
+    "label": "Paging Passage",
+    "description": "The Paging widget combines a scrolling widget with additional paging controls.",
+    "version": "0.1",
+    "author": "Aleh Hutnikau",
+    "email": "hutnikau@1pt.com",
+    "libraries": [
+        "IMSGlobal/jquery_2_1_1",
+        "./runtime/js/libs/sly.min",
+        "./runtime/js/libs/handlebars",
+        "./runtime/js/renderer"
+    ],
+    "css": [
+        "./runtime/css/pagingPassageInteraction.css" 
+    ],
+    "entryPoint": "./runtime/pagingPassageInteraction.amd.js",
+    "tags": [
+        "passage",
+        "paging"
+    ],
+    "icon": "./creator/media/icon.svg",
+    "short": "Paging Passage",
+    "response": {
+        "baseType": "integer",
+        "cardinality": "multiple" 
+    }
+}
