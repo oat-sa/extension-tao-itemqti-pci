@@ -2,7 +2,7 @@
 define([
     './creator/widget/Widget',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
-    'tpl!./creator/tpl/markup',
+    'tpl!./creator/tpl/markup'
 ], function (Widget, registry, markupTpl) {
     'use strict';
     var _typeIdentifier = 'pagingPassageInteraction';
@@ -33,8 +33,18 @@ define([
          */
         getDefaultProperties : function (pci) {
             return {
-                choiceType: 'checkbox',
-                choices: ['choice_1']
+                choiceType: 'radio',
+                pageHeight: 200,
+                tabsPosition: 'top',
+                choices: ['choice_1'],
+                pages: [
+                    {label : 'Page 1', content : 'page 1 content', id : 0}, 
+                    {label : 'Page 2', content : 'page 2 content', id : 1}
+                ],
+                buttonLabels : {
+                    prev : 'Previous',
+                    next : 'Next'
+                }
             };
         },
         /**
@@ -44,7 +54,6 @@ define([
          * @returns {Object}
          */
         afterCreate : function (pci) {
-            //do some stuff
         },
         /**
          * (required) Gives the qti pci xml template 
@@ -61,7 +70,6 @@ define([
          */
         getMarkupData : function (pci, defaultData) {
             defaultData.prompt = pci.data('prompt');
-            defaultData.passage = pci.data('passage');
             return defaultData;
         }
     };

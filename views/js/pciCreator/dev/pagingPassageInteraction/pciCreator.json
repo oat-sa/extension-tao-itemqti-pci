@@ -7,8 +7,6 @@
     "email": "hutnikau@1pt.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
-        "./runtime/js/libs/sly.min",
-        "./runtime/js/libs/handlebars",
         "./runtime/js/renderer"
     ],
     "css": [

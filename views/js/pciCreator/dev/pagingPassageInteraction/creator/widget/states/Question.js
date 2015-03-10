@@ -11,19 +11,10 @@ define([
 ], function (stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $) {
     'use strict';
     var stateQuestion = stateFactory.extend(Question, function () {
-        var $container = this.widget.$container,
+        var that = this,
+            $container = this.widget.$container,
             interaction = this.widget.element;
-
-        containerEditor.create($container.find('.passage'), {
-            change : function (text) {
-                interaction.data('passage', text);
-                interaction.updateMarkup();
-            },
-            markup : interaction.markup,
-            markupSelector : '.passage',
-            related : interaction
-        });
-
+        
         containerEditor.create($container.find('.prompt'), {
             change : function (text) {
                 interaction.data('prompt', text);
@@ -33,20 +24,67 @@ define([
             markupSelector : '.prompt',
             related : interaction
         });
-
+        
         simpleEditor.create($container, '.js-choice-label', function () {
-
         });
-
+        
+        $container.on('selectpage.' + interaction.typeIdentifier, function (event, data) {
+            var editor = $(data.ui.panel).find('.container-editor').data('editor');
+            if (editor) {
+                editor.setReadOnly(false);
+            }
+        });
+        
+        $container.on('beforerenderpages.' + interaction.typeIdentifier, function () {
+            containerEditor.destroy($container.find('.passage'));
+        });
+        
+        $container.on('createpager.' + interaction.typeIdentifier, function () {
+            initEditors($container, interaction);
+        });
+        
+        initEditors($container, interaction);
+        
+        /**
+         * Function initialize editors on page
+         * @param {jQuery DOM element} $container
+         * @param {object} interaction 
+         * @returns {undefined}
+         */
+        function initEditors ($container, interaction) {
+            var $pages = $container.find('.ui-tabs-panel');
+            if ($pages.length) {
+                $pages.each(function () {
+                    var pageId = $(this).data('page-id'),
+                        pageIndex = $(this).data('page-num');
+                    containerEditor.create($(this).find('.passage'), {
+                        change : function (text) {
+                            var pageData = _.find(interaction.properties.pages, function (page) {
+                                return page.id == pageId;
+                            });
+                            if (pageData) {
+                                pageData.content = text;
+                            }
+                        },
+                        markup : $('[data-serial="' + interaction.serial + '"] .pp-content').html(),
+                        markupSelector :  '#pp-tabs-' + (pageIndex) + ' .passage',
+                        related : interaction
+                    });
+                });
+            }
+        }
+        
     }, function () {
         var $container = this.widget.$container,
             interaction = this.widget.element,
             choices = [];
 
+        $container.off('.' + interaction.typeIdentifier);
+        
         simpleEditor.destroy($container);
-        containerEditor.destroy($container.find('.prompt'));
-        containerEditor.destroy($container.find('.passage'));
-
+        containerEditor.destroy($container.find('.passage, .prompt'));
+        
+        //save choice labels
         $container.find('.js-choice-label').each(function () {
             var val = $.trim($(this).text());
             choices.push(val);
@@ -54,50 +92,41 @@ define([
         interaction.prop('choices', choices);
     });
 
+    
     stateQuestion.prototype.initForm = function () {
-
-        /*var _widget = this.widget,
+        var _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
-            response = interaction.getResponseDeclaration(),
-            level = parseInt(interaction.prop('level'), 10) || 5,
-            levels = [5, 7, 9],
-            levelData = {};
-
-        //build select option data for the template
-        _.each(levels, function (lvl) {
-            levelData[lvl] = {
-                label : lvl,
-                selected : (lvl === level)
-            };
-        });
-
+            response = interaction.getResponseDeclaration();
+        
         //render the form using the form template
         $form.html(formTpl({
-            serial : response.serial,
-            levels : levelData,
-            identifier : interaction.attr('responseIdentifier')
+            
         }));
-
+        
+        $('.js-choice-type-select').val(interaction.properties.choiceType);
+        
         //init form javascript
         formElement.initWidget($form);
-
+        
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
-            level : function (interaction, value) {
-
+            choiceType : function (interaction, value) {
                 //update the pci property value:
-                interaction.prop('level', value);
-                
-                //trigger change event:
-                interaction.triggerPci('levelchange', [parseInt(value)]);
+                interaction.properties.choiceType = value;
+                interaction.widgetRenderer.renderChoices(interaction.properties);
             },
-            identifier : function(i, value){
-                response.id(value);
-                interaction.attr('responseIdentifier', value);
-            }
-        });*/
-
+            tabsPosition : function (interaction, value) {
+                //update the pci property value:
+                interaction.properties.tabsPosition = value;
+                interaction.widgetRenderer.renderPages(interaction.properties);
+            },
+            pageHeight : function (interaction, value) {
+                //update the pci property value:
+                interaction.properties.pageHeight = value;
+                interaction.widgetRenderer.renderPages(interaction.properties);
+            },
+        });
     };
 
     return stateQuestion;

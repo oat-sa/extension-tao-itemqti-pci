@@ -1,3 +1,6 @@
+.pagingPassageInteraction {
+    margin-top: 10px;
+}
 .pp-wrap {
     width: 100%;
     display: table;
@@ -13,4 +16,65 @@
 }
 .pp-answer {
     margin-left: 20px;
+}
+.passage {
+    position: relative;
+}
+.pp-wrap .ui-tabs .ui-tabs-nav li a {
+    cursor: pointer;
+    float: left;
+    padding: 0.2em 0.5em;
+    text-decoration: none;
+    min-height: 27px;
+}
+.pp-wrap .ui-tabs-nav li .ui-icon-close { 
+    float: left; 
+    margin: 0.4em 0.2em 0 0; 
+    cursor: pointer; 
+}
+.pp-tabs {
+    margin-top: 5px;
+}
+.pp-nav {
+    display: table;
+    width: 100%;
+}
+.pp-nav__col {
+    display: table-cell;
+    vertical-align: top;
+}
+.pp-nav__col:first-child button {
+    float: left;
+}
+.pp-nav__col:last-child button {
+    float: right;
+}
+.pp-wrap .ui-tabs-nav .ui-state-active {
+    height: 31px;
+}
+.pp-wrap .ui-tabs-panel { 
+    padding-top: 40px;
+}
+.pp-wrap .ui-tabs-vertical .ui-tabs-panel {
+    padding-top: 14px;
+}
+.ui-tabs-vertical .ui-tabs-nav {
+    padding: .2em .1em .2em .2em; 
+    float: right; 
+    width: 80px; 
+}
+.ui-tabs-vertical .ui-tabs-nav li { 
+    clear: left; 
+    width: 100%; 
+    border-bottom-width: 1px !important; 
+    border-right-width: 0 !important; 
+    margin: 0 -1px .2em 0; 
+    }
+.ui-tabs-vertical .ui-tabs-nav li a {
+    display:block; 
+}
+.ui-tabs-vertical .ui-tabs-panel { 
+    padding: 1em; 
+    display: block; 
+    margin-right: 90px;
 }

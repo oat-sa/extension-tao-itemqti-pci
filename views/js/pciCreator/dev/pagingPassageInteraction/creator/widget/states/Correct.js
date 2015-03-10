@@ -16,8 +16,6 @@ define([
         $.each(correct, function (key, val) {
             $('.js-label-box input[value="' + val + '"]').prop('checked', true);
         });
-
-        $('.js-label-box input[type="checkbox"], .js-label-box input[type="radio"]').removeAttr('disabled');
     }, function () {
         var widget = this.widget,
             interaction = widget.element,
@@ -25,14 +23,12 @@ define([
             $controls = $('.js-label-box input[type="checkbox"], .js-label-box input[type="radio"]'),
             correct = [];
 
-
         $controls.each(function () {
             if ($(this).is(':checked')) {
                 correct.push($(this).val());
             }
         });
         responseDeclaration.setCorrect(correct);
-        $controls.attr('disabled', 'disabled');
     });
 
     return stateCorrect;

@@ -1,22 +1,28 @@
 <div class="panel">
-    <label for="level">{{__ "Level"}}</label>
+    <label for="" class="has-icon">{{__ "Choice type"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">{{__ "Scale size"}}</span>
-    <select name="level" class="select2" data-has-search="false">
-        {{#each levels}}
-        <option value="{{@key}}" {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
-        {{/each}}
+    <div class="tooltip-content">{{__ 'The type of the choices.'}}</div>
+    <select name="choiceType" class="select2 js-choice-type-select" data-has-search="false">
+        <option value="radio">{{__ "Radio button"}}</option>
+        <option value="checkbox">{{__ "Checkbox"}}</option>
     </select>
 </div>
-
 <div class="panel">
-    <label for="" class="has-icon">{{__ "Response identifier"}}</label>
+    <label for="" class="has-icon">{{__ "Tabs position"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <div class="tooltip-content">{{__ 'The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore ("_") and contain only Letters, underscores, hyphens ("-"), period (".", a.k.a. full-stop), Digits, CombiningChars and Extenders.'}}</div>
-
-    <input type="text" 
-           name="identifier" 
-           value="{{identifier}}" 
-           placeholder="e.g. RESPONSE" 
-           data-validate="$notEmpty; $qtiIdentifier; $availableIdentifier(serial={{serial}});">
+    <div class="tooltip-content">{{__ 'Tabs position.'}}</div>
+    <select name="tabsPosition" class="select2 js-choice-type-select" data-has-search="false">
+        <option value="top">{{__ "Top"}}</option>
+        <option value="right">{{__ "Right"}}</option>
+    </select>
+</div>
+<div class="panel">
+    <label for="" class="has-icon">{{__ "Page height (px)"}}</label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
+    <div class="tooltip-content">{{__ 'Page height (px).'}}</div>
+    <select name="pageHeight" class="select2 js-choice-type-select" data-has-search="false">
+        <option value="200">200</option>
+        <option value="400">400</option>
+        <option value="600">600</option>
+    </select>
 </div>
