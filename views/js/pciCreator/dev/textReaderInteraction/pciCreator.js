@@ -5,7 +5,7 @@ define([
     'tpl!./creator/tpl/markup'
 ], function (Widget, registry, markupTpl) {
     'use strict';
-    var _typeIdentifier = 'pagingPassageInteraction';
+    var _typeIdentifier = 'textReaderInteraction';
 
     return {
         /**
@@ -36,10 +36,11 @@ define([
                 choiceType: 'radio',
                 pageHeight: 200,
                 tabsPosition: 'top',
-                choices: ['choice_1'],
+                choices: ['Choice 1', 'Choice 2', 'Choice 3'],
                 pages: [
-                    {label : 'Page 1', content : 'page 1 content', id : 0}, 
-                    {label : 'Page 2', content : 'page 2 content', id : 1}
+                    {label : 'Page 1', content : 'page 1 content', id : 0, columns: 1}, 
+                    {label : 'Page 2', content : 'page 2 content', id : 1, columns: 2},
+                    {label : 'Page 3', content : 'page 3 content', id : 2, columns: 3}
                 ],
                 buttonLabels : {
                     prev : 'Previous',

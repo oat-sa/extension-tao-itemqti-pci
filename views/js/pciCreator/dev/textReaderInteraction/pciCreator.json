@@ -1,24 +1,25 @@
 {
-    "typeIdentifier": "pagingPassageInteraction",
-    "label": "Paging Passage",
+    "typeIdentifier": "textReaderInteraction",
+    "label": "Text reader",
     "description": "The Paging widget combines a scrolling widget with additional paging controls.",
     "version": "0.1",
     "author": "Aleh Hutnikau",
     "email": "hutnikau@1pt.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
-        "./runtime/js/renderer"
+        "./runtime/js/renderer",
+        "./runtime/js/tabs"
     ],
     "css": [
-        "./runtime/css/pagingPassageInteraction.css" 
+        "./runtime/css/textReaderInteraction.css" 
     ],
-    "entryPoint": "./runtime/pagingPassageInteraction.amd.js",
+    "entryPoint": "./runtime/textReaderInteraction.amd.js",
     "tags": [
-        "passage",
+        "reader",
         "paging"
     ],
     "icon": "./creator/media/icon.svg",
-    "short": "Paging Passage",
+    "short": "Text reader",
     "response": {
         "baseType": "integer",
         "cardinality": "multiple" 

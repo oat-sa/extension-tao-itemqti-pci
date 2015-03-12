@@ -1,15 +1,16 @@
-/*global define,console*/
+/*global define,$*/
 define(
     [
         'qtiCustomInteractionContext',
-        'OAT/util/event'
+        'OAT/util/event',
+        'textReaderInteraction/runtime/js/renderer'
     ],
-    function (qtiCustomInteractionContext, event) {
+    function (qtiCustomInteractionContext, event, Renderer) {
         'use strict';
         qtiCustomInteractionContext.register({
             id : -1,
             getTypeIdentifier : function () {
-                return 'pagingPassageInteraction';
+                return 'textReaderInteraction';
             },
             /**
              * Render the PCI : 
@@ -19,71 +20,78 @@ define(
              */
             initialize : function (id, dom, config) {
                 var that = this,
-                    renderer = this._taoCustomInteraction.widgetRenderer,
+                    pci = this._taoCustomInteraction,
                     properties = that._taoCustomInteraction.properties,
                     pageIds = _.pluck(properties.pages, 'id'),
                     maxPageId = Math.max.apply(null, pageIds);
-            
+
                 this.id = id;
                 this.dom = dom;
                 this.config = config || {};
                 this.$container = $(dom);
-                
+
+                if (!pci.widgetRenderer) {//delivery context
+                    pci.widgetRenderer = new Renderer({
+                        serial : pci.serial,
+                        $container : this.$container
+                    });
+                    pci.widgetRenderer.renderAll(pci.properties);
+                }
+
                 //add method on(), off() and trigger() to the current object
                 event.addEventMgr(this);
                 //tell the rendering engine that I am ready
                 qtiCustomInteractionContext.notifyReady(this);
-                
+
                 this.$container.on('click', '.js-add-choice', function () {
                     var num = properties.choices.length + 1;
                     properties.choices.push('choice_' + num);
-                    renderer.renderChoices(that._taoCustomInteraction.properties);
+                    pci.widgetRenderer.renderChoices(that._taoCustomInteraction.properties);
                 });
-                
+
                 this.$container.on('click', '.js-remove-choice', function () {
                     var num = $(this).data('choice-index');
                     properties.choices.splice(num, 1);                    
-                    renderer.renderChoices(that._taoCustomInteraction.properties);
+                    pci.widgetRenderer.renderChoices(that._taoCustomInteraction.properties);
                 });
-                
+
                 //add page event
                 this.$container.on('click', '[class*="js-add-page"]', function () {
                     var num = properties.pages.length + 1,
                         $button = $(this),
                         pageData = {
-                            label : 'Page ' + num, 
-                            content : 'page ' + num + ' content', 
+                            label : 'Page ' + num,
+                            content : 'page ' + num + ' content',
                             id : ++maxPageId
                         };
-                        
+
                     if ($button.hasClass('js-add-page-before')) {
                         properties.pages.unshift(pageData);
                     } else if ($button.hasClass('js-add-page-after')) {
                         properties.pages.push(pageData);
                     }
-                    renderer.renderPages(properties);
+                    pci.widgetRenderer.renderPages(properties);
                     that.trigger('pageschange');
                 });
-                
+
                 //remove page event
                 this.$container.on('click', '.js-remove-page', function () {
                     var $button = $(this),
                         tabNum = $button.data('page-num');
-                    properties.pages.splice((tabNum), 1);  
-                    renderer.renderPages(properties);
+                    properties.pages.splice(tabNum, 1);
+                    pci.widgetRenderer.renderPages(properties);
                     that.trigger('pageschange');
                 });
-                
+
                 //page navigation events
                 this.$container.on('click', '.js-prev-page, .js-next-page', function () {
                     var $button = $(this),
-                        direction = +$button.hasClass('js-next-page') * 2 - 1,
-                        $tabs = that.$container.find(".js-page-tabs"),
-                        currentPage = $tabs.tabs('option', 'selected'),
+                        direction = $button.hasClass('js-next-page') ? 1 : -1,
+                        currentPage = pci.widgetRenderer.tabsManager.index(),
                         index = currentPage + direction;
-                        
+
                     if (index >= 0 && properties.pages.length > index) {
-                        $tabs.tabs('select', index);
+                        pci.widgetRenderer.tabsManager.index(index);
                     }
                 });
             },
@@ -95,9 +103,10 @@ define(
              * @param {Object} response
              */
             setResponse : function (response) {
-                var value = response && response.base ? parseInt(response.base.integer) : -1;
-
-                this.$container.find('input[value="' + value + '"]').prop('checked', true);
+                var value = response && response.base ? parseInt(response.base.integer, 10) : [];
+                $.each(value, function (key, val) {
+                    this.$container.find('input[value="' + val + '"]').prop('checked', true);
+                });
             },
             /**
              * Get the response in the json format described in
@@ -107,8 +116,12 @@ define(
              * @returns {Object}
              */
             getResponse : function () {
-                var value = parseInt(this.$container.find('input:checked').val()) || 0;
-
+                var value = [];
+                this.$container.find('.js-answer-input').each(function () {
+                    if ($(this).is(':checked')) {
+                        value.push($(this).val());
+                    }
+                });
                 return {base : {integer : value}};
             },
             /**

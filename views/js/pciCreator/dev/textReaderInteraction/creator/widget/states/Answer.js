@@ -2,10 +2,10 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Answer',
     'taoQtiItem/qtiCreator/widgets/interactions/helpers/answerState',
-    'pagingPassageInteraction/runtime/js/renderer'
+    'textReaderInteraction/runtime/js/renderer'
 ], function(stateFactory, Answer, answerStateHelper, renderer){
 
-    var pagingPassageStateAnswer = stateFactory.extend(Answer, function(){
+    var textReaderStateAnswer = stateFactory.extend(Answer, function(){
         //forward to one of the available sub state, according to the response processing template
         answerStateHelper.forward(this.widget);
         
@@ -13,5 +13,5 @@ define([
         
     });
     
-    return  pagingPassageStateAnswer;
+    return  textReaderStateAnswer;
 });

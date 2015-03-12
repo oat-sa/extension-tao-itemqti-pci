@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:html5="html5" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:m="http://www.w3.org/1998/Math/MathML" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i142615600057508" title="Item title" adaptive="false" timeDependent="false" label="" xml:lang="en-US" toolName="TAO" toolVersion="3.0-RC04">
+  <responseDeclaration identifier="RESPONSE" cardinality="multiple" baseType="integer">
+    <correctResponse>
+      <value><![CDATA[3]]></value>
+      <value><![CDATA[5]]></value>
+    </correctResponse>
+  </responseDeclaration>
+  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+  <stylesheet href="textReaderInteraction/runtime/css/textReaderInteraction.css" type="text/css" media="all" title=""/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <pci:portableCustomInteraction customInteractionTypeIdentifier="textReaderInteraction" hook="textReaderInteraction/runtime/textReaderInteraction.amd.js">
+            <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+            <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+              <pci:libraries>
+                <pci:lib id="textReaderInteraction/IMSGlobal/jquery_2_1_1"/>
+                <pci:lib id="textReaderInteraction/runtime/js/renderer"/>
+                <pci:lib id="textReaderInteraction/runtime/js/tabs"/>
+              </pci:libraries>
+            </pci:resources>
+            <pci:properties>
+              <pci:entry key="choiceType">checkbox</pci:entry>
+              <pci:entry key="pageHeight">400</pci:entry>
+              <pci:entry key="tabsPosition">left</pci:entry>
+              <pci:properties key="choices">
+                <pci:entry key="0">choice_111</pci:entry>
+                <pci:entry key="1">choice_233</pci:entry>
+                <pci:entry key="2">choice_333</pci:entry>
+                <pci:entry key="3">choice_433</pci:entry>
+                <pci:entry key="4">choice_5324</pci:entry>
+              </pci:properties>
+              <pci:properties key="pages">
+                <pci:properties key="0">
+                  <pci:entry key="label">Page 1</pci:entry>
+                  <pci:entry key="content">&lt;p&gt;page 1 content&lt;/p&gt;
+
+&lt;p&gt;page 1 content&lt;/p&gt;
+
+&lt;p&gt;page 1 content&lt;/p&gt;
+</pci:entry>
+                  <pci:entry key="id">0</pci:entry>
+                  <pci:entry key="columns">1</pci:entry>
+                </pci:properties>
+                <pci:properties key="1">
+                  <pci:entry key="label">Page 2</pci:entry>
+                  <pci:entry key="content">page 2 content</pci:entry>
+                  <pci:entry key="id">1</pci:entry>
+                  <pci:entry key="columns">2</pci:entry>
+                </pci:properties>
+                <pci:properties key="2">
+                  <pci:entry key="label">Page 3</pci:entry>
+                  <pci:entry key="content">page 3 content</pci:entry>
+                  <pci:entry key="id">2</pci:entry>
+                  <pci:entry key="columns">3</pci:entry>
+                </pci:properties>
+                <pci:properties key="3">
+                  <pci:entry key="label">Page 4</pci:entry>
+                  <pci:entry key="content">&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 contentpage 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 contentpage 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 contentpage 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+
+&lt;p&gt;page 4 content&lt;/p&gt;
+</pci:entry>
+                  <pci:entry key="id">3</pci:entry>
+                </pci:properties>
+              </pci:properties>
+              <pci:properties key="buttonLabels">
+                <pci:entry key="prev">Previous</pci:entry>
+                <pci:entry key="next">Next</pci:entry>
+              </pci:properties>
+            </pci:properties>
+            <pci:markup>
+              <html5:div class="textReaderInteraction qti-interaction">
+                <html5:div class="prompt">
+                  <html5:p>nme</html5:p>
+                </html5:div>
+                <html5:div class="tr-wrap">
+                  <html5:div class="tr-wrap__col">
+                    <html5:div class="tr-content solid js-page-container">
+            </html5:div>
+                  </html5:div>
+                  <html5:div class="tr-wrap__col">
+                    <html5:div class="tr-answer js-choice-container">
+
+            </html5:div>
+                  </html5:div>
+                </html5:div>
+              </html5:div>
+              <html5:script id="text-reader-choices-tpl" type="text/x-handlebars-template"><![CDATA[
+    <html5:ol class="plain block-listing solid choice-area">
+        {{#each choices}}
+        <html5:li class="qti-choice qti-simpleChoice">
+            <html5:div class="pseudo-label-box js-label-box">
+                <html5:label class="real-label">
+                {{#ifCond ../choiceType "==" "checkbox"}}
+                    <html5:input class="js-answer-input" type="checkbox" name="{{../../serial}}_choice" value="{{inc @index}}" {{#ifCond ../../state "==" "question"}} disabled="disabled" {{/ifCond}}>
+                    <html5:span class="icon-checkbox"></html5:span>
+                {{/ifCond}}
+                {{#ifCond ../choiceType "==" "radio"}}
+                    <html5:input class="js-answer-input" type="radio" name="{{../../serial}}_choice" value="{{inc @index}}" {{#ifCond ../../state "==" "question"}} disabled="disabled" {{/ifCond}}>
+                    <html5:span class="icon-radio"></html5:span>
+                {{/ifCond}}
+                </html5:label>
+                <html5:div class="label-box">
+                    <html5:div class="label-content clear js-choice-label" data-choice-index="{{@index}}">
+                        <html5:div>{{this}}</html5:div>
+                    </html5:div>
+                </html5:div>
+            </html5:div>
+            <div class="mini-tlb" data-edit="question" data-for="" style="display: none;">
+                <html5:div class="rgt tlb-button js-remove-choice" data-choice-index="{{@index}}" title="Delete">
+                    <html5:span class="icon-bin"></html5:span>
+                </html5:div>
+            </html5:div>
+        </html5:li>
+        {{/each}}
+        {{#ifCond state "==" "question"}}
+        <html5:li class="add-option js-add-choice">
+            <html5:span class="icon-add"></html5:span>
+            Add choice
+        </html5:li>
+        {{/ifCond}}
+    </html5:ol>
+    ]]></html5:script>
+              <html5:script id="text-reader-pages-tpl" type="text/x-handlebars-template"><![CDATA[
+    {{#ifCond state "==" "question"}}
+    <html5:li class="add-option js-add-page-before">
+        <html5:span class="icon-add"></html5:span>
+        Add page
+    </html5:li>
+    {{/ifCond}}
+    <html5:div class="tr-tabs js-page-tabs tr-tabs-{{tabsPosition}} clearfix">
+        <html5:ul class="tr-tab-buttons js-tab-buttons">
+            {{#each pages}}
+            <html5:li data-page-num="{{@index}}" data-page-id="{{id}}" class="tr-tab-buttons__item">
+                <html5:button class="btn-button small">Page {{inc @index}}</html5:button>
+                {{#ifCond ../state "==" "question"}}
+                <html5:span class="js-remove-page icon icon-close"></html5:span>
+                {{/ifCond}}
+            </html5:li>
+            {{/each}}
+        </html5:ul>
+        {{#each pages}}
+        <html5:div id="tr-tabs-{{@index}}" data-page-num="{{@index}}" data-page-id="{{id}}" class="tr-page js-tab-content">
+            <div class="passage widget-blockInteraction" style="height: {{../pageHeight}}px">
+                {{{content}}}
+            </html5:div>
+        </html5:div>
+        {{/each}}
+    </html5:div>
+    {{#ifCond state "==" "question"}}
+    <html5:li class="add-option js-add-page-after">
+        <html5:span class="icon-add"></html5:span>
+        Add page
+    </html5:li>
+    {{/ifCond}}
+    {{#ifCond state "!=" "question"}}
+    <html5:div class="tr-nav">
+        <html5:div class="tr-nav__col js-prev-page">
+            <html5:button class="btn-info small">{{../buttonLabels.prev}}</html5:button>
+        </html5:div>
+        <html5:div class="tr-nav__col">
+            Page <html5:span class="js-current-page">{{../currentPage}}</html5:span> of {{../pagesNum}}
+        </html5:div>
+        <html5:div class="tr-nav__col js-next-page">
+            <html5:button class="btn-info small">{{../buttonLabels.next}}</html5:button>
+        </html5:div>
+    </html5:div>
+    {{/ifCond}}
+    ]]></html5:script>
+            </pci:markup>
+          </pci:portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>
