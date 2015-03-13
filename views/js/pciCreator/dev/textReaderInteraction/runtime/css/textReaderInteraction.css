@@ -33,13 +33,14 @@
     table-layout: fixed;
     width: 100%;
     border-collapse:separate; 
-    border-spacing: 5px;
+    border-spacing: 10px;
 }
 .tr-passage-column {
     margin: auto;
     border: 1px dashed transparent;
     display: table-cell;
     position: relative;
+    vertical-align: top;
 }
 .edit-question .tr-passage-column {
     border: 1px dashed #3E7DA7;
