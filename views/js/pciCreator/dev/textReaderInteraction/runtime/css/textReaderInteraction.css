@@ -94,6 +94,7 @@
 .tr-tabs-left .tr-tab-buttons, .tr-tabs-right .tr-tab-buttons {
     width: 90px;
     padding: 0;
+    overflow-y: auto;
 }
 .tr-tabs-top .tr-tab-buttons {
     border-bottom: 1px solid #dddddd;

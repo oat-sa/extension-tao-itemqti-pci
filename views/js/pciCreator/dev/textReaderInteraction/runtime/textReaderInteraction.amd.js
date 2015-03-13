@@ -20,8 +20,7 @@ define(
              */
             initialize : function (id, dom, config) {
                 var that = this,
-                    pci = this._taoCustomInteraction,
-                    properties = that._taoCustomInteraction.properties;
+                    pci = this._taoCustomInteraction;
 
                 this.id = id;
                 this.dom = dom;
@@ -46,7 +45,7 @@ define(
                         currentPage = pci.widgetRenderer.tabsManager.index(),
                         index = currentPage + direction;
 
-                    if (index >= 0 && properties.pages.length > index) {
+                    if (index >= 0 && pci.properties.pages.length > index) {
                         pci.widgetRenderer.tabsManager.index(index);
                     }
                 });
@@ -80,7 +79,7 @@ define(
              * @param {Object} interaction
              */
             resetResponse : function () {
-                this.$container.find('input').prop('checked', false);
+                //interaction has no response
             },
             /**
              * Reverse operation performed by render()
@@ -109,7 +108,6 @@ define(
              * @returns {Object} json format
              */
             getSerializedState : function () {
-
                 return {};
             }
         });

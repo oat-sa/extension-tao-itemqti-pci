@@ -136,6 +136,7 @@ define(
                     $prevBtn.removeAttr('disabled');
                     $nextBtn.removeAttr('disabled');
                 }
+                return this;
             };
 
             /**

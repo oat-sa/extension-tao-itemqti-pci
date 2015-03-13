@@ -28,7 +28,9 @@ define([
                     id : ++maxPageId
                 },
                 currentPage = 0;
-
+            
+            containerEditor.destroy($container.find('.tr-passage'));
+            
             if ($button.hasClass('js-add-page-before')) {
                 properties.pages.unshift(pageData);
             } else if ($button.hasClass('js-add-page-after')) {
@@ -44,7 +46,7 @@ define([
         $container.on('click.' + interaction.typeIdentifier, '.js-remove-page', function () {
             var tabNum = $(this).data('page-num');
             properties.pages.splice(tabNum, 1);
-            interaction.widgetRenderer.renderPages(properties);
+            interaction.widgetRenderer.renderAll(properties);
         });    
         
         //change page layout
@@ -56,16 +58,11 @@ define([
                 $page = $('[data-page-num="' + currentPageIndex + '"]');
 
             for (var colNum = 0; colNum < numberOfColumns; colNum++) {
-                if (currentCols[colNum]) {
-                    newCols.push(currentCols[colNum]);
-                } else {
-                    newCols.push('');
-                }
+                newCols.push(currentCols[colNum] || "");
             }
-            for (var colNum = currentCols.length; colNum > numberOfColumns; colNum--) {
-                newCols[numberOfColumns - 1] = newCols[numberOfColumns - 1] + currentCols[colNum - 1];
-            }
+            newCols[numberOfColumns - 1] += '<br>' + currentCols.slice(numberOfColumns).join('<br>');
             
+            //set editors content
             $.each(newCols, function (key, val) {
                 var editor = $page.find('[data-page-col-index="' + key + '"] .container-editor').data('editor');
                 if (editor) {
@@ -90,7 +87,6 @@ define([
                     editor.setReadOnly(currentPageIndex != pageIndex);
                 }
             });
-            
         });
 
         //Destroy page CKeditors when page rerenders
