@@ -57,6 +57,14 @@
     margin: 10px;
     overflow-y: auto;
 }
+.tr-page .icon-bin {
+    cursor: pointer;
+    float: right;
+    margin: 10px;
+}
+.tr-page .icon-bin:hover {
+    #3e7da7;
+}
 .cke_focus .tr-page-column{
     border: 1px dashed #3E7DA7;
 }

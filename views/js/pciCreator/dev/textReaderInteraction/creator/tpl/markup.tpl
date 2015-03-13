@@ -14,7 +14,7 @@
             <li data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-tab-buttons__item">
                 <span class="tr-tab-label">\{{inc @index}}</span>
                 \{{#ifCond ../state "==" "question"}}
-                <span class="js-remove-page tr-close-tab icon icon-result-nok"></span>
+                <span class="js-remove-page tr-close-tab icon icon-result-nok" data-page-num="\{{@index}}" title="{{__ "Delete"}}"></span>
                 \{{/ifCond}}
             </li>
             \{{/each}}
@@ -42,6 +42,7 @@
                         <option value="3" \{{#ifCond this.content.length "==" 3}}selected \{{/ifCond}} >3</option>
                     </select>
                 </label>
+                <span class="icon-bin js-remove-page" data-page-num="\{{@index}}" title="{{__ "Delete"}}"></span>
                 \{{/ifCond}}
                 <div class="tr-passage widget-blockInteraction">
                     \{{#each content}}

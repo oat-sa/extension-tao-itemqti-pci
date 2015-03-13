@@ -16,7 +16,7 @@ define([
             interaction = that.widget.element,
             properties = interaction.properties,
             pageIds = _.pluck(properties.pages, 'id'),
-            maxPageId = Math.max.apply(null, pageIds);;
+            maxPageId = Math.max.apply(null, pageIds);
             
         //add page event
         $container.on('click.' + interaction.typeIdentifier, '[class*="js-add-page"]', function () {
@@ -26,20 +26,23 @@ define([
                     label : 'Page ' + num,
                     content : ['page ' + num + ' content'],
                     id : ++maxPageId
-                };
+                },
+                currentPage = 0;
 
             if ($button.hasClass('js-add-page-before')) {
                 properties.pages.unshift(pageData);
             } else if ($button.hasClass('js-add-page-after')) {
                 properties.pages.push(pageData);
+                currentPage = properties.pages.length - 1;
             }
-            interaction.widgetRenderer.renderPages(properties);
+            interaction.widgetRenderer.renderAll(properties);
+            //go to new page
+            interaction.widgetRenderer.tabsManager.index(currentPage);
         });
 
         //remove page event
         $container.on('click.' + interaction.typeIdentifier, '.js-remove-page', function () {
-            var $tab = $(this).closest('li'),
-                tabNum = $tab.data('page-num');
+            var tabNum = $(this).data('page-num');
             properties.pages.splice(tabNum, 1);
             interaction.widgetRenderer.renderPages(properties);
         });    
@@ -49,7 +52,8 @@ define([
             var numberOfColumns = parseInt($(this).val(), 10),
                 currentPageIndex = interaction.widgetRenderer.tabsManager.index(),
                 currentCols = interaction.properties.pages[currentPageIndex].content,
-                newCols = [];
+                newCols = [],
+                $page = $('[data-page-num="' + currentPageIndex + '"]');
 
             for (var colNum = 0; colNum < numberOfColumns; colNum++) {
                 if (currentCols[colNum]) {
@@ -62,8 +66,16 @@ define([
                 newCols[numberOfColumns - 1] = newCols[numberOfColumns - 1] + currentCols[colNum - 1];
             }
             
+            $.each(newCols, function (key, val) {
+                var editor = $page.find('[data-page-col-index="' + key + '"] .container-editor').data('editor');
+                if (editor) {
+                    editor.setData(val);
+                }
+            });
+            
             interaction.properties.pages[currentPageIndex].content = newCols;
             interaction.widgetRenderer.renderPages(interaction.properties);
+            interaction.widgetRenderer.tabsManager.index(currentPageIndex);
         });    
             
         //Enable page CKEditor on selected tab and disable on the rest tabs.
@@ -170,7 +182,7 @@ define([
                         var pageData = _.find(interaction.properties.pages, function (page) {
                             return page.id == pageId;
                         });
-                        if (pageData && pageData.content[this.colIndex]) {
+                        if (pageData && typeof pageData.content[this.colIndex] !== 'undefined') {
                             pageData.content[this.colIndex] = text;
                         }
                     },
