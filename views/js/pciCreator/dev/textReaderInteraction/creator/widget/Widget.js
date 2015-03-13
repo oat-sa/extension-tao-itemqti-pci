@@ -22,7 +22,6 @@ define([
                 });
             }
             pci.widgetRenderer.setState(state.name);
-
             pci.widgetRenderer.renderAll(pci.properties);
         }
     });

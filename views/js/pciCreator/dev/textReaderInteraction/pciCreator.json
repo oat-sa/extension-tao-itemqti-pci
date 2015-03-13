@@ -21,7 +21,7 @@
     "icon": "./creator/media/icon.svg",
     "short": "Text reader",
     "response": {
-        "baseType": "integer",
-        "cardinality": "multiple" 
+        "baseType": "boolean",
+        "cardinality": "single" 
     }
 }

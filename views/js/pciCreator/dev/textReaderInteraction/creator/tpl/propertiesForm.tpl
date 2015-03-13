@@ -1,13 +1,4 @@
 <div class="panel">
-    <label for="" class="has-icon">{{__ "Choice type"}}</label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
-    <div class="tooltip-content">{{__ 'The type of the choices.'}}</div>
-    <select name="choiceType" class="select2 js-choice-type-select" data-has-search="false">
-        <option value="radio">{{__ "Radio button"}}</option>
-        <option value="checkbox">{{__ "Checkbox"}}</option>
-    </select>
-</div>
-<div class="panel">
     <label for="" class="has-icon">{{__ "Tabs position"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
     <div class="tooltip-content">{{__ 'Tabs position.'}}</div>
@@ -26,6 +17,16 @@
         <option value="200">200</option>
         <option value="400">400</option>
         <option value="600">600</option>
+    </select>
+</div>
+<div class="panel">
+    <label for="" class="has-icon">{{__ "Navigation"}}</label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
+    <div class="tooltip-content">{{__ 'Navigation.'}}</div>
+    <select name="navigation" class="select2 js-navigation-select" data-has-search="false">
+        <option value="tabs">{{__ 'Tab based'}}</option>
+        <option value="buttons">{{__ 'Button based'}}</option>
+        <option value="both">{{__ 'Tabs + buttons'}}</option>
     </select>
 </div>
 <hr>

@@ -33,14 +33,13 @@ define([
          */
         getDefaultProperties : function (pci) {
             return {
-                choiceType: 'radio',
                 pageHeight: 200,
                 tabsPosition: 'top',
-                choices: ['Choice 1', 'Choice 2', 'Choice 3'],
+                navigation: 'both',
                 pages: [
-                    {label : 'Page 1', content : 'page 1 content', id : 0, columns: 1}, 
-                    {label : 'Page 2', content : 'page 2 content', id : 1, columns: 2},
-                    {label : 'Page 3', content : 'page 3 content', id : 2, columns: 3}
+                    {label : 'Page 1', content : ['page 1 column 1'], id : 0}, 
+                    {label : 'Page 2', content : ['page 2 column 1', 'page 2 column 2'], id : 1},
+                    {label : 'Page 3', content : ['page 3 column 1', 'page 3 column 2', 'page 3 column 3'], id : 2}
                 ],
                 buttonLabels : {
                     prev : 'Previous',
@@ -70,7 +69,6 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupData : function (pci, defaultData) {
-            defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
     };

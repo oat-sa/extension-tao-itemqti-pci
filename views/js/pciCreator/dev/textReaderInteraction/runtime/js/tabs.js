@@ -7,11 +7,11 @@ define([], function () {
             $tabs,
             $pages,
             defaultOptions = {
-                buttonClass : 'btn-button',
-                activeButtonClass : 'btn-info',
+                buttonClass : 'tr-tab',
+                activeButtonClass : 'tr-active-tab',
                 tabsSelector : '.js-tab-buttons li',
                 pagesSelector : '.js-tab-content',
-                tabButtonSelectior : 'button',
+                tabButtonSelectior : '.tr-tab-label',
                 afterSelect : _.noop(),
                 beforeSelect : _.noop(),
                 afterCreate : _.noop(),
@@ -64,8 +64,8 @@ define([], function () {
             }
             currentTabIndex = index;
 
-            $tabs.find(options.tabButtonSelectior).removeClass(options.activeButtonClass).addClass(options.buttonClass);
-            $tabs.eq(index).find(options.tabButtonSelectior).addClass(options.activeButtonClass);
+            $tabs.removeClass(options.activeButtonClass).addClass(options.buttonClass);
+            $tabs.eq(index).addClass(options.activeButtonClass);
 
             $pages.hide();
             $pages.eq(index).show();

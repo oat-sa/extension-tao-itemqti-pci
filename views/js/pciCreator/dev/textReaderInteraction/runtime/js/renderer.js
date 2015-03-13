@@ -23,10 +23,10 @@ define(
             this.init = function () {
                 _.assign(that.options, defaultOptions, options);
 
-                var choicesTpl = $('#text-reader-choices-tpl').html().replace("<![CDATA[", "").replace("]]>", ""),
-                    pagesTpl = $('#text-reader-pages-tpl').html().replace("<![CDATA[", "").replace("]]>", "");
-                that.options.templates.choices = Handlebars.compile(choicesTpl);
+                var pagesTpl = $('.text-reader-pages-tpl').html().replace("<![CDATA[", "").replace("]]>", ""),
+                    navTpl = $('.text-reader-nav-tpl').html().replace("<![CDATA[", "").replace("]]>", "");
                 that.options.templates.pages = Handlebars.compile(pagesTpl);
+                that.options.templates.navigation = Handlebars.compile(navTpl);
             };
 
             /**
@@ -49,23 +49,9 @@ define(
                 return this;
             };
 
-            /**
-             * Function renders interaction choices.
-             * @param {object} data - interaction parameters
-             * @return {object} this
-             */
-            this.renderChoices = function (data) {
-                var templateData = _.extend({}, data, that.getTemplateData(data));
-
-                this.options.$container.find('.js-choice-container').html(
-                    that.options.templates.choices(templateData, that.getTemplateOptions())
-                );
-                this.options.$container.trigger('renderchoices.' + that.eventNs);
-                return this;
-            };
 
             /**
-             * Function renders interaction pages.
+             * Function renders interaction.
              * @param {object} data - interaction parameters
              * @return {object} this
              */
@@ -98,7 +84,38 @@ define(
                 this.options.$container.trigger('afterrenderpages.' + that.eventNs);
                 return this;
             };
+            
+            /**
+             * Function renders interaction.
+             * @param {object} data - interaction parameters
+             * @return {object} this
+             */
+            this.renderNavigation = function (data) {
+                var templateData = {};
 
+                _.assign(templateData, data, that.getTemplateData(data));
+
+                //render pages template
+                this.options.$container.find('.js-nav-container').html(
+                    that.options.templates.navigation(templateData, that.getTemplateOptions())
+                );
+                
+                this.updateNav();
+                
+                return this;
+            };
+            
+            /**
+             * Function renders whole interaction (pages and navigation)
+             * @param {object} data - interaction parameters
+             * @return {object} - this
+             */
+            this.renderAll = function (data) {
+                this.renderPages(data);
+                this.renderNavigation(data);
+                return this;
+            };
+            
             /**
              * Function updates page navigation controls (current page number and pager buttons)
              * @return {object} - this
@@ -122,17 +139,6 @@ define(
             };
 
             /**
-             * Function renders whole interaction (pages and choices)
-             * @param {object} data - interaction parameters
-             * @return {object} - this
-             */
-            this.renderAll = function (data) {
-                this.renderChoices(data);
-                this.renderPages(data);
-                return this;
-            };
-
-            /**
              * Function returns template data (current page number, interaction serial, current state etc.)
              * to pass it in handlebars template together with interaction parameters.
              * @param {object} data - interaction parameters
@@ -146,7 +152,7 @@ define(
                     pagesNum : data.pages.length
                 };
             };
-
+            
             /**
              * Function returns Handlebars template options (helpers) that will be used when rendering.
              * @returns {object} - Handlebars template options

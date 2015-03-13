@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:html5="html5" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:m="http://www.w3.org/1998/Math/MathML" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i142615600057508" title="Item title" adaptive="false" timeDependent="false" label="" xml:lang="en-US" toolName="TAO" toolVersion="3.0-RC04">
-  <responseDeclaration identifier="RESPONSE" cardinality="multiple" baseType="integer">
-    <correctResponse>
-      <value><![CDATA[3]]></value>
-      <value><![CDATA[5]]></value>
-    </correctResponse>
-  </responseDeclaration>
-  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
-  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
-  <stylesheet href="textReaderInteraction/runtime/css/textReaderInteraction.css" type="text/css" media="all" title=""/>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i142624779153671533" title="Item title" adaptive="false" timeDependent="false">
+  <responseDeclaration baseType="boolean" cardinality="single" identifier="RESPONSE"/>
+  <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
+  <stylesheet href="style/custom/tao-user-styles.css" title="" type="text/css" media="all"/>
+  <stylesheet href="textReaderInteraction/runtime/css/textReaderInteraction.css" title="" type="text/css" media="all"/>
   <itemBody>
     <div class="grid-row">
       <div class="col-12">
@@ -23,85 +18,33 @@
               </pci:libraries>
             </pci:resources>
             <pci:properties>
-              <pci:entry key="choiceType">checkbox</pci:entry>
-              <pci:entry key="pageHeight">400</pci:entry>
-              <pci:entry key="tabsPosition">left</pci:entry>
-              <pci:properties key="choices">
-                <pci:entry key="0">choice_111</pci:entry>
-                <pci:entry key="1">choice_233</pci:entry>
-                <pci:entry key="2">choice_333</pci:entry>
-                <pci:entry key="3">choice_433</pci:entry>
-                <pci:entry key="4">choice_5324</pci:entry>
-              </pci:properties>
+              <pci:entry key="pageHeight">200</pci:entry>
+              <pci:entry key="tabsPosition">top</pci:entry>
+              <pci:entry key="navigation">both</pci:entry>
               <pci:properties key="pages">
                 <pci:properties key="0">
                   <pci:entry key="label">Page 1</pci:entry>
-                  <pci:entry key="content">&lt;p&gt;page 1 content&lt;/p&gt;
-
-&lt;p&gt;page 1 content&lt;/p&gt;
-
-&lt;p&gt;page 1 content&lt;/p&gt;
-</pci:entry>
+                  <pci:properties key="content">
+                    <pci:entry key="0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</pci:entry>
+                  </pci:properties>
                   <pci:entry key="id">0</pci:entry>
-                  <pci:entry key="columns">1</pci:entry>
                 </pci:properties>
                 <pci:properties key="1">
                   <pci:entry key="label">Page 2</pci:entry>
-                  <pci:entry key="content">page 2 content</pci:entry>
+                  <pci:properties key="content">
+                    <pci:entry key="0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</pci:entry>
+                    <pci:entry key="1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</pci:entry>
+                  </pci:properties>
                   <pci:entry key="id">1</pci:entry>
-                  <pci:entry key="columns">2</pci:entry>
                 </pci:properties>
                 <pci:properties key="2">
                   <pci:entry key="label">Page 3</pci:entry>
-                  <pci:entry key="content">page 3 content</pci:entry>
+                  <pci:properties key="content">
+                    <pci:entry key="0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</pci:entry>
+                    <pci:entry key="1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</pci:entry>
+                    <pci:entry key="2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</pci:entry>
+                  </pci:properties>
                   <pci:entry key="id">2</pci:entry>
-                  <pci:entry key="columns">3</pci:entry>
-                </pci:properties>
-                <pci:properties key="3">
-                  <pci:entry key="label">Page 4</pci:entry>
-                  <pci:entry key="content">&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 contentpage 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 contentpage 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 contentpage 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-
-&lt;p&gt;page 4 content&lt;/p&gt;
-</pci:entry>
-                  <pci:entry key="id">3</pci:entry>
                 </pci:properties>
               </pci:properties>
               <pci:properties key="buttonLabels">
@@ -111,96 +54,78 @@
             </pci:properties>
             <pci:markup>
               <html5:div class="textReaderInteraction qti-interaction">
-                <html5:div class="prompt">
-                  <html5:p>nme</html5:p>
-                </html5:div>
                 <html5:div class="tr-wrap">
-                  <html5:div class="tr-wrap__col">
-                    <html5:div class="tr-content solid js-page-container">
-            </html5:div>
-                  </html5:div>
-                  <html5:div class="tr-wrap__col">
-                    <html5:div class="tr-answer js-choice-container">
-
-            </html5:div>
-                  </html5:div>
+                  <html5:div class="tr-content js-page-container">
+        </html5:div>
+                  <html5:div class="js-nav-container">
+        </html5:div>
                 </html5:div>
               </html5:div>
-              <html5:script id="text-reader-choices-tpl" type="text/x-handlebars-template"><![CDATA[
-    <html5:ol class="plain block-listing solid choice-area">
-        {{#each choices}}
-        <html5:li class="qti-choice qti-simpleChoice">
-            <html5:div class="pseudo-label-box js-label-box">
-                <html5:label class="real-label">
-                {{#ifCond ../choiceType "==" "checkbox"}}
-                    <html5:input class="js-answer-input" type="checkbox" name="{{../../serial}}_choice" value="{{inc @index}}" {{#ifCond ../../state "==" "question"}} disabled="disabled" {{/ifCond}}>
-                    <html5:span class="icon-checkbox"></html5:span>
-                {{/ifCond}}
-                {{#ifCond ../choiceType "==" "radio"}}
-                    <html5:input class="js-answer-input" type="radio" name="{{../../serial}}_choice" value="{{inc @index}}" {{#ifCond ../../state "==" "question"}} disabled="disabled" {{/ifCond}}>
-                    <html5:span class="icon-radio"></html5:span>
-                {{/ifCond}}
-                </html5:label>
-                <html5:div class="label-box">
-                    <html5:div class="label-content clear js-choice-label" data-choice-index="{{@index}}">
-                        <html5:div>{{this}}</html5:div>
-                    </html5:div>
-                </html5:div>
-            </html5:div>
-            <div class="mini-tlb" data-edit="question" data-for="" style="display: none;">
-                <html5:div class="rgt tlb-button js-remove-choice" data-choice-index="{{@index}}" title="Delete">
-                    <html5:span class="icon-bin"></html5:span>
-                </html5:div>
-            </html5:div>
-        </html5:li>
-        {{/each}}
-        {{#ifCond state "==" "question"}}
-        <html5:li class="add-option js-add-choice">
-            <html5:span class="icon-add"></html5:span>
-            Add choice
-        </html5:li>
-        {{/ifCond}}
-    </html5:ol>
-    ]]></html5:script>
-              <html5:script id="text-reader-pages-tpl" type="text/x-handlebars-template"><![CDATA[
-    {{#ifCond state "==" "question"}}
-    <html5:li class="add-option js-add-page-before">
-        <html5:span class="icon-add"></html5:span>
-        Add page
-    </html5:li>
-    {{/ifCond}}
+              <html5:script class="text-reader-pages-tpl" type="text/x-handlebars-template"><![CDATA[
     <html5:div class="tr-tabs js-page-tabs tr-tabs-{{tabsPosition}} clearfix">
-        <html5:ul class="tr-tab-buttons js-tab-buttons">
+        <html5:ul class="tr-tab-buttons js-tab-buttons {{#ifCond navigation "==" "buttons"}}hidden{{/ifCond}}">
             {{#each pages}}
             <html5:li data-page-num="{{@index}}" data-page-id="{{id}}" class="tr-tab-buttons__item">
-                <html5:button class="btn-button small">Page {{inc @index}}</html5:button>
+                <html5:span class="tr-tab-label">{{inc @index}}</html5:span>
                 {{#ifCond ../state "==" "question"}}
-                <html5:span class="js-remove-page icon icon-close"></html5:span>
+                <html5:span class="js-remove-page tr-close-tab icon icon-result-nok"></html5:span>
                 {{/ifCond}}
             </html5:li>
             {{/each}}
         </html5:ul>
-        {{#each pages}}
-        <html5:div id="tr-tabs-{{@index}}" data-page-num="{{@index}}" data-page-id="{{id}}" class="tr-page js-tab-content">
-            <div class="passage widget-blockInteraction" style="height: {{../pageHeight}}px">
-                {{{content}}}
+
+                
+        <html5:div class="tr-pages-wrap clearfix">
+                    
+            {{#ifCond state "==" "question"}}
+            <html5:li class="add-option js-add-page-before">
+                <html5:span class="icon-add"></html5:span>
+                Add page
+            </html5:li>
+            {{/ifCond}}
+                    
+                    
+            {{#each pages}}
+            <div data-page-num="{{@index}}" data-page-id="{{id}}" class="tr-page js-tab-content tr-tabs-{{@index}}" style="height: {{../pageHeight}}px">
+                {{#ifCond ../state "==" "question"}}
+                <html5:label class="tr-column-select">
+                    Columns:
+                    <html5:select class="select2 js-page-columns-select" data-has-search="false">
+                        <html5:option value="1" {{#ifCond this.content.length "==" 1}}selected {{/ifCond}} >1</html5:option>
+                        <html5:option value="2" {{#ifCond this.content.length "==" 2}}selected {{/ifCond}} >2</html5:option>
+                        <html5:option value="3" {{#ifCond this.content.length "==" 3}}selected {{/ifCond}} >3</html5:option>
+                    </html5:select>
+                </html5:label>
+                {{/ifCond}}
+                <html5:div class="tr-passage widget-blockInteraction">
+                    {{#each content}}
+                    <html5:div class="tr-passage-column js-page-column" data-page-col-index="{{@index}}">
+                        {{{this}}}
+                    </html5:div>
+                    {{/each}}
+                </html5:div>
             </html5:div>
+            {{/each}}
+                    
+            {{#ifCond state "==" "question"}}
+            <html5:li class="add-option js-add-page-after">
+                <html5:span class="icon-add"></html5:span>
+                Add page
+            </html5:li>
+            {{/ifCond}}
         </html5:div>
-        {{/each}}
+                
     </html5:div>
-    {{#ifCond state "==" "question"}}
-    <html5:li class="add-option js-add-page-after">
-        <html5:span class="icon-add"></html5:span>
-        Add page
-    </html5:li>
-    {{/ifCond}}
-    {{#ifCond state "!=" "question"}}
+</html5:script>    
+<html5:script class="text-reader-nav-tpl" type="text/x-handlebars-template">    
+    <![CDATA[
+    {{#ifCond navigation "!=" "tabs"}}
     <html5:div class="tr-nav">
         <html5:div class="tr-nav__col js-prev-page">
             <html5:button class="btn-info small">{{../buttonLabels.prev}}</html5:button>
         </html5:div>
         <html5:div class="tr-nav__col">
-            Page <html5:span class="js-current-page">{{../currentPage}}</html5:span> of {{../pagesNum}}
+            Page <html5:span class="js-current-page">{{../currentPage}}</html5:span> / {{../pagesNum}}
         </html5:div>
         <html5:div class="tr-nav__col js-next-page">
             <html5:button class="btn-info small">{{../buttonLabels.next}}</html5:button>

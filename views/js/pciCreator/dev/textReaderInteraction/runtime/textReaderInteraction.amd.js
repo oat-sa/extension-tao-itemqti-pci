@@ -21,67 +21,23 @@ define(
             initialize : function (id, dom, config) {
                 var that = this,
                     pci = this._taoCustomInteraction,
-                    properties = that._taoCustomInteraction.properties,
-                    pageIds = _.pluck(properties.pages, 'id'),
-                    maxPageId = Math.max.apply(null, pageIds);
+                    properties = that._taoCustomInteraction.properties;
 
                 this.id = id;
                 this.dom = dom;
                 this.config = config || {};
                 this.$container = $(dom);
+                
+                //add method on(), off() and trigger() to the current object
+                event.addEventMgr(this);
 
-                if (!pci.widgetRenderer) {//delivery context
+                if (!pci.widgetRenderer) {
                     pci.widgetRenderer = new Renderer({
                         serial : pci.serial,
                         $container : this.$container
                     });
                     pci.widgetRenderer.renderAll(pci.properties);
                 }
-
-                //add method on(), off() and trigger() to the current object
-                event.addEventMgr(this);
-                //tell the rendering engine that I am ready
-                qtiCustomInteractionContext.notifyReady(this);
-
-                this.$container.on('click', '.js-add-choice', function () {
-                    var num = properties.choices.length + 1;
-                    properties.choices.push('choice_' + num);
-                    pci.widgetRenderer.renderChoices(that._taoCustomInteraction.properties);
-                });
-
-                this.$container.on('click', '.js-remove-choice', function () {
-                    var num = $(this).data('choice-index');
-                    properties.choices.splice(num, 1);                    
-                    pci.widgetRenderer.renderChoices(that._taoCustomInteraction.properties);
-                });
-
-                //add page event
-                this.$container.on('click', '[class*="js-add-page"]', function () {
-                    var num = properties.pages.length + 1,
-                        $button = $(this),
-                        pageData = {
-                            label : 'Page ' + num,
-                            content : 'page ' + num + ' content',
-                            id : ++maxPageId
-                        };
-
-                    if ($button.hasClass('js-add-page-before')) {
-                        properties.pages.unshift(pageData);
-                    } else if ($button.hasClass('js-add-page-after')) {
-                        properties.pages.push(pageData);
-                    }
-                    pci.widgetRenderer.renderPages(properties);
-                    that.trigger('pageschange');
-                });
-
-                //remove page event
-                this.$container.on('click', '.js-remove-page', function () {
-                    var $button = $(this),
-                        tabNum = $button.data('page-num');
-                    properties.pages.splice(tabNum, 1);
-                    pci.widgetRenderer.renderPages(properties);
-                    that.trigger('pageschange');
-                });
 
                 //page navigation events
                 this.$container.on('click', '.js-prev-page, .js-next-page', function () {
@@ -94,6 +50,8 @@ define(
                         pci.widgetRenderer.tabsManager.index(index);
                     }
                 });
+                //tell the rendering engine that I am ready
+                qtiCustomInteractionContext.notifyReady(this);
             },
             /**
              * Programmatically set the response following the json schema described in
@@ -103,10 +61,7 @@ define(
              * @param {Object} response
              */
             setResponse : function (response) {
-                var value = response && response.base ? parseInt(response.base.integer, 10) : [];
-                $.each(value, function (key, val) {
-                    this.$container.find('input[value="' + val + '"]').prop('checked', true);
-                });
+                //interaction has no response
             },
             /**
              * Get the response in the json format described in
@@ -116,13 +71,7 @@ define(
              * @returns {Object}
              */
             getResponse : function () {
-                var value = [];
-                this.$container.find('.js-answer-input').each(function () {
-                    if ($(this).is(':checked')) {
-                        value.push($(this).val());
-                    }
-                });
-                return {base : {integer : value}};
+                return {base : {boolean : true}};
             },
             /**
              * Remove the current response set in the interaction
