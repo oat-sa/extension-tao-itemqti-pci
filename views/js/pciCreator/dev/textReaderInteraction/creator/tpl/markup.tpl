@@ -9,6 +9,7 @@
 <script class="text-reader-pages-tpl" type="text/x-handlebars-template">
     <![CDATA[
     <div class="tr-tabs js-page-tabs tr-tabs-\{{tabsPosition}} clearfix">
+        \{{#ifCond pages.length ">" 1}}
         <ul class="tr-tab-buttons js-tab-buttons \{{#ifCond navigation "==" "buttons"}}hidden\{{/ifCond}}">
             \{{#each pages}}
             <li data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-tab-buttons__item">
@@ -19,18 +20,21 @@
             </li>
             \{{/each}}
         </ul>
+        \{{/ifCond}}     
                 
         <div class="tr-pages-wrap clearfix">
             <div class="tr-pages-wrap-shadow"></div>
     
-            \{{#ifCond state "==" "question"}}
-            <div class="add-option js-add-page-before">
-                <span class="icon-add"></span>
-                Add page
-            </div>
-            \{{/ifCond}}
                     
             <div class="tr-pages" style="height: \{{pageHeight}}px">
+            
+                \{{#ifCond state "==" "question"}}
+                <div class="add-option js-add-page-before">
+                    <span class="icon-add"></span>
+                    Add page
+                </div>
+                \{{/ifCond}}
+                        
                 \{{#each pages}}
                 <div data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-page js-tab-content tr-tabs-\{{@index}}">
                     \{{#ifCond ../state "==" "question"}}
@@ -44,23 +48,25 @@
                     </label>
                     <span class="icon-bin js-remove-page" data-page-num="\{{@index}}" title="{{__ "Delete"}}"></span>
                     \{{/ifCond}}
-                    <div class="tr-passage widget-blockInteraction">
+                    <div class="tr-passage">
                         \{{#each content}}
-                        <div class="tr-passage-column js-page-column" data-page-col-index="\{{@index}}">
+                        <div class="tr-passage-column widget-blockInteraction js-page-column" data-page-col-index="\{{@index}}">
                             \{{{this}}}
                         </div>
                         \{{/each}}
                     </div>
                 </div>
                 \{{/each}}
+                        
+                \{{#ifCond state "==" "question"}}
+                <div class="add-option js-add-page-after">
+                    <span class="icon-add"></span>
+                    Add page
+                </div>
+                \{{/ifCond}}
+                        
             </div>
                     
-            \{{#ifCond state "==" "question"}}
-            <div class="add-option js-add-page-after">
-                <span class="icon-add"></span>
-                Add page
-            </div>
-            \{{/ifCond}}
         </div>
                 
     </div>
@@ -68,6 +74,7 @@
 <script class="text-reader-nav-tpl" type="text/x-handlebars-template">    
     <![CDATA[
     \{{#ifCond navigation "!=" "tabs"}}
+    \{{#ifCond pages.length ">" 1}}
     <div class="tr-nav-wrap tr-nav-\{{tabsPosition}}">
         <div class="tr-nav">
             <div class="tr-nav__col js-prev-page">
@@ -81,6 +88,7 @@
             </div>
         </div>
     </div>
+    \{{/ifCond}}
     \{{/ifCond}}
     ]]>
 </script>
