@@ -45,6 +45,8 @@ define([
         //remove page event
         $container.on('click.' + interaction.typeIdentifier, '.js-remove-page', function () {
             var tabNum = $(this).data('page-num');
+            
+            containerEditor.destroy($container.find('.tr-passage'));
             properties.pages.splice(tabNum, 1);
             interaction.widgetRenderer.renderAll(properties);
         });    
@@ -125,7 +127,10 @@ define([
         $('.js-page-height-select').val(interaction.properties.pageHeight);
         $('.js-tab-position').val(interaction.properties.tabsPosition);
         $('.js-navigation-select').val(interaction.properties.navigation);
-
+        
+        $('.js-tab-position-panel').toggle(interaction.properties.navigation !== 'buttons');
+        $('.js-button-labels-panel').toggle(interaction.properties.navigation !== 'tabs');
+        
         //init form javascript
         formElement.initWidget($form);
 
@@ -133,13 +138,18 @@ define([
         formElement.setChangeCallbacks($form, interaction, {
             tabsPosition : function (interaction, value) {
                 interaction.properties.tabsPosition = value;
-                interaction.widgetRenderer.renderPages(interaction.properties);
+                interaction.widgetRenderer.renderAll(interaction.properties);
             },
             pageHeight : function (interaction, value) {
                 interaction.properties.pageHeight = value;
                 interaction.widgetRenderer.renderPages(interaction.properties);
             },
             navigation : function (interaction, value) {
+                $('.js-tab-position-panel').toggle(value !== 'buttons');
+                $('.js-button-labels-panel').toggle(value !== 'tabs');
+                if (value == 'buttons') {
+                    interaction.properties.tabsPosition = 'top';
+                }
                 interaction.properties.navigation = value;
                 interaction.widgetRenderer.renderAll(interaction.properties);
             },
