@@ -8,12 +8,13 @@
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
         "./runtime/js/renderer",
-        "./runtime/js/tabs"
+        "./runtime/js/tabs",
+        "./runtime/js/handlebarsHelpers"
     ],
     "css": [
         "./runtime/css/textReaderInteraction.css" 
     ],
-    "entryPoint": "./runtime/textReaderInteraction.amd.js",
+    "entryPoint": "./runtime/textReaderInteraction.js",
     "tags": [
         "reader",
         "paging"

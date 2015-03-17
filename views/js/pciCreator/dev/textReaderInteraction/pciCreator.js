@@ -2,8 +2,9 @@
 define([
     './creator/widget/Widget',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
-    'tpl!./creator/tpl/markup'
-], function (Widget, registry, markupTpl) {
+    'tpl!./runtime/tpl/markup',
+    './runtime/js/handlebarsHelpers'
+], function (Widget, registry, markupTpl, handlebarsHelpers) {
     'use strict';
     var _typeIdentifier = 'textReaderInteraction';
 
@@ -55,6 +56,7 @@ define([
          * @returns {Object}
          */
         afterCreate : function (pci) {
+            
         },
         /**
          * (required) Gives the qti pci xml template 
@@ -62,7 +64,9 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupTemplate : function () {
-            return markupTpl;
+            return function (markupData) {
+                return markupTpl(markupData, handlebarsHelpers);
+            };
         },
         /**
          * (optional) Allows passing additional data to xml template

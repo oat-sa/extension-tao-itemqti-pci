@@ -3,9 +3,10 @@ define(
     [
         'IMSGlobal/jquery_2_1_1',
         'OAT/handlebars',
-        'textReaderInteraction/runtime/js/tabs'
+        'textReaderInteraction/runtime/js/tabs',
+        'textReaderInteraction/runtime/js/handlebarsHelpers'
     ],
-    function ($, Handlebars, Tabs) {
+    function ($, Handlebars, Tabs, handlebarsHelpers) {
         'use strict';
 
         return function (options) {
@@ -22,21 +23,14 @@ define(
 
             this.init = function () {
                 _.assign(that.options, defaultOptions, options);
-
                 var pagesTpl = $('.text-reader-pages-tpl').html().replace("<![CDATA[", "").replace("]]>", ""),
                     navTpl = $('.text-reader-nav-tpl').html().replace("<![CDATA[", "").replace("]]>", "");
-                that.options.templates.pages = Handlebars.compile(pagesTpl);
-                that.options.templates.navigation = Handlebars.compile(navTpl);
-            };
-
-            /**
-             * Function sets interaction container
-             * @param {jQuery dom element} $container - interaction container
-             * @return {object} this
-             */
-            this.setContainer = function ($container) {
-                this.options.$container = $container;
-                return this;
+                if (!that.options.templates.pages) {
+                    that.options.templates.pages = Handlebars.compile(pagesTpl);
+                } 
+                if (!that.options.templates.navigation) {
+                    that.options.templates.navigation = Handlebars.compile(navTpl);
+                } 
             };
 
             /**
@@ -49,7 +43,6 @@ define(
                 return this;
             };
 
-
             /**
              * Function renders interaction.
              * @param {object} data - interaction parameters
@@ -58,14 +51,16 @@ define(
             this.renderPages = function (data) {
                 var templateData = {};
 
-                _.assign(templateData, data, that.getTemplateData(data));
-
                 this.options.$container.trigger('beforerenderpages.' + that.eventNs);
 
                 //render pages template
-                this.options.$container.find('.js-page-container').html(
-                    that.options.templates.pages(templateData, that.getTemplateOptions())
-                );
+                if (that.options.templates.pages) {
+                    _.assign(templateData, data, that.getTemplateData(data));
+                    
+                    this.options.$container.find('.js-page-container').html(
+                        that.options.templates.pages(templateData, that.getTemplateOptions())
+                    );
+                }
 
                 //init tabs
                 that.tabsManager = new Tabs(this.options.$container.find('.js-page-tabs'), {
@@ -93,12 +88,14 @@ define(
             this.renderNavigation = function (data) {
                 var templateData = {};
 
-                _.assign(templateData, data, that.getTemplateData(data));
-
                 //render pages template
-                this.options.$container.find('.js-nav-container').html(
-                    that.options.templates.navigation(templateData, that.getTemplateOptions())
-                );
+                if (that.options.templates.navigation) {
+                    _.assign(templateData, data, that.getTemplateData(data));
+                    
+                    this.options.$container.find('.js-nav-container').html(
+                        that.options.templates.navigation(templateData, that.getTemplateOptions())
+                    );
+                }
                 
                 this.updateNav();
                 
@@ -159,49 +156,7 @@ define(
              * @returns {object} - Handlebars template options
              */
             this.getTemplateOptions = function () {
-                var templateOptions = {
-                    helpers : {
-                        inc : function (value) {
-                            return parseInt(value, 10) + 1;
-                        },
-                        x : function (expression, options) {
-                            var fn = function(){}, result;
-                            try {
-                                fn = Function.apply(this, ["window", "return " + expression + " ;"]);
-                            } catch (e) {
-                                console.warn("{{x " + expression + "}} has invalid javascript", e);
-                            }
-                            
-                            try {
-                                result = fn.call(this, window);
-                            } catch (e) {
-                                console.warn("{{x " + expression + "}} hit a runtime error", e);
-                            }
-                            return result;
-                        },
-                        xif : function (expression, options) {
-                            return templateOptions.helpers.x.apply(this, [expression, options]) ? options.fn(this) : options.inverse(this);
-                        },
-                        zif : function () {
-                            var options = arguments[arguments.length - 1];
-                            delete arguments[arguments.length - 1];
-                            return templateOptions.helpers.x.apply(this, [Array.prototype.slice.call(arguments, 0).join(''), options]) ? options.fn(this) : options.inverse(this);
-                        },
-                        math : function(lvalue, operator, rvalue, options) {
-                            lvalue = parseFloat(lvalue);
-                            rvalue = parseFloat(rvalue);
-
-                            return {
-                                "+": lvalue + rvalue,
-                                "-": lvalue - rvalue,
-                                "*": lvalue * rvalue,
-                                "/": lvalue / rvalue,
-                                "%": lvalue % rvalue
-                            }[operator];
-                        }
-                    }
-                };
-                return templateOptions;
+                return handlebarsHelpers;
             };
 
             this.init();

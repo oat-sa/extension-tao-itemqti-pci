@@ -7,7 +7,8 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!textReaderInteraction/creator/tpl/propertiesForm',
     'lodash',
-    'jquery'
+    'jquery',
+    'css!textReaderInteraction/creator/css/textReaderInteraction',
 ], function (stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $) {
     'use strict';
     var stateQuestion = stateFactory.extend(Question, function () {
