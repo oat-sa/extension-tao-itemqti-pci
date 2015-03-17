@@ -9,46 +9,49 @@
 <script class="text-reader-pages-tpl" type="text/x-handlebars-template">
     <![CDATA[
     <div class="tr-tabs js-page-tabs tr-tabs-\{{tabsPosition}} clearfix">
-        \{{#ifCond pages.length ">" 1}}
-        <ul class="tr-tab-buttons js-tab-buttons \{{#ifCond navigation "==" "buttons"}}hidden\{{/ifCond}}">
+        \{{#xif "this.pages.length > 1 || this.onePageNavigation"}}
+        <ul class="tr-tab-buttons js-tab-buttons \{{#xif "this.navigation == 'buttons'"}}hidden\{{/xif}}">
             \{{#each pages}}
             <li data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-tab-buttons__item">
                 <span class="tr-tab-label">\{{inc @index}}</span>
-                \{{#ifCond ../state "==" "question"}}
+                \{{#zif '"' ../this.state '" == "question"'}}
                 <span class="js-remove-page tr-close-tab icon icon-bin" data-page-num="\{{@index}}" title="{{__ "Delete"}}"></span>
-                \{{/ifCond}}
+                \{{/zif}}
             </li>
             \{{/each}}
         </ul>
-        \{{/ifCond}}     
+        \{{/xif}}     
                 
         <div class="tr-pages-wrap clearfix">
-            <div class="tr-pages-wrap-shadow"></div>
-    
-                    
-            <div class="tr-pages" style="height: \{{pageHeight}}px">
+            <div class="tr-pages" 
+                \{{#xif 'this.state == "question"'}}
+                style="height: \{{math pageHeight '+' 125 }}px"
+                \{{else}}
+                style="height: \{{math pageHeight '+' 25 }}px"
+                \{{/xif}}
+            >
             
-                \{{#ifCond state "==" "question"}}
+                \{{#xif 'this.state == "question"'}}
                 <div class="add-option js-add-page-before">
                     <span class="icon-add"></span>
                     Add page
                 </div>
-                \{{/ifCond}}
+                \{{/xif}}
                         
                 \{{#each pages}}
                 <div data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-page js-tab-content tr-tabs-\{{@index}}">
-                    \{{#ifCond ../state "==" "question"}}
+                    \{{#zif '"' ../this.state '" == "question"'}}
                     <label class="tr-column-select">
                         {{__ "Columns:"}}
                         <select class="js-page-columns-select">
-                            <option value="1" \{{#ifCond this.content.length "==" 1}}selected \{{/ifCond}} >1</option>
-                            <option value="2" \{{#ifCond this.content.length "==" 2}}selected \{{/ifCond}} >2</option>
-                            <option value="3" \{{#ifCond this.content.length "==" 3}}selected \{{/ifCond}} >3</option>
+                            <option value="1" \{{#xif 'this.content.length == 1'}}selected \{{/xif}} >1</option>
+                            <option value="2" \{{#xif 'this.content.length == 2'}}selected \{{/xif}} >2</option>
+                            <option value="3" \{{#xif 'this.content.length == 3'}}selected \{{/xif}} >3</option>
                         </select>
                     </label>
                     <span class="icon-bin js-remove-page" data-page-num="\{{@index}}" title="{{__ "Delete"}}"></span>
-                    \{{/ifCond}}
-                    <div class="tr-passage">
+                    \{{/zif}}
+                    <div class="tr-passage" style="min-height: \{{../pageHeight}}px" >
                         \{{#each content}}
                         <div class="tr-passage-column widget-blockInteraction js-page-column" data-page-col-index="\{{@index}}">
                             \{{{this}}}
@@ -58,23 +61,20 @@
                 </div>
                 \{{/each}}
                         
-                \{{#ifCond state "==" "question"}}
+                \{{#xif 'this.state == "question"'}}
                 <div class="add-option js-add-page-after">
                     <span class="icon-add"></span>
                     Add page
                 </div>
-                \{{/ifCond}}
+                \{{/xif}}
                         
             </div>
-                    
         </div>
-                
     </div>
 </script>    
 <script class="text-reader-nav-tpl" type="text/x-handlebars-template">    
     <![CDATA[
-    \{{#ifCond navigation "!=" "tabs"}}
-    \{{#ifCond pages.length ">" 1}}
+    \{{#xif "this.navigation != 'tabs' && (this.pages.length > 1 || this.onePageNavigation)"}}
     <div class="tr-nav-wrap tr-nav-\{{tabsPosition}}">
         <div class="tr-nav">
             <div class="tr-nav__col js-prev-page">
@@ -88,7 +88,6 @@
             </div>
         </div>
     </div>
-    \{{/ifCond}}
-    \{{/ifCond}}
+    \{{/xif}}
     ]]>
 </script>

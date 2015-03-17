@@ -3,7 +3,7 @@
 }
 .tr-wrap {
     width: 100%;
-    border: 1px solid #dddddd;
+    /*border: 1px solid #dddddd;*/
     border-radius: 3px;
 }
 .tr-wrap .add-option{
@@ -46,13 +46,16 @@
 }
 
 .tr-pages-wrap {
-    background-color: #f2f2f2;
     position: relative;
+    border: 1px solid #dddddd;
+    padding: 10px;
 }
 .tr-pages {
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
+    background-color: #eeeeee;
+    border: 1px solid #dddddd;
 }
 .tr-tabs-left .tr-pages-wrap {
     margin-left: 70px;
@@ -67,71 +70,11 @@
     padding-bottom: 10px;
 }
 
-
-
-.tr-pages-wrap-shadow {
-    position: absolute;
-    overflow: hidden;
-    z-index: 0;
-}
-.tr-pages-wrap-shadow:before {
-    content: '';
-    display: block;
-    position: absolute;
-    z-index: 0;
-}
-.tr-tabs-top .tr-pages-wrap-shadow{
-    top: -10px;
-    width: 100%;
-    height: 10px;
-}
-.tr-tabs-top .tr-pages-wrap-shadow:before {
-    width: 100%;
-    height: 1px;
-    bottom: 0px;
-    box-shadow: 0px 0px 10px #333;
-}
-.tr-tabs-right .tr-pages-wrap-shadow{
-    right: -10px;
-    width: 10px;
-    height: 100%;
-}
-.tr-tabs-right .tr-pages-wrap-shadow:before {
-    width: 1px;
-    height: 100%;
-    left: 0px;
-    box-shadow: 0px 0px 10px #333;
-}
-.tr-tabs-left .tr-pages-wrap-shadow{
-    left: -10px;
-    width: 10px;
-    height: 100%;
-}
-.tr-tabs-left .tr-pages-wrap-shadow:before {
-    width: 1px;
-    height: 100%;
-    right: 0px;
-    box-shadow: 0px 0px 10px #333;
-}
-.tr-tabs-bottom .tr-pages-wrap-shadow{
-    bottom: -10px;
-    width: 100%;
-    height: 10px;
-}
-.tr-tabs-bottom .tr-pages-wrap-shadow:before {
-    width: 100%;
-    height: 10px;
-    top: -10px;
-    box-shadow: 0px 0px 10px #888;
-}
-
-
-
 .tr-page {
     background-color: #FFFFFF;
     border: 1px solid #ddd;
-    -webkit-box-shadow: 1px 1px 3px 0px #999999;
-    box-shadow: 1px 1px 3px 0 #999999;
+    -webkit-box-shadow: 1px 1px 3px 0px #888888;
+    box-shadow: 1px 1px 3px 0 #888888;
     margin: 10px;
     overflow-y: auto;
 }
@@ -168,22 +111,60 @@
     list-style: none;
     position: relative;
     z-index: 10;
+    overflow: hidden;
 }
+.tr-tab-buttons:after {
+    content: '';
+    position: absolute;
+    display: block;
+    box-shadow: 0px 0px 10px #555;
+}
+.tr-tabs-top .tr-tab-buttons:after {
+    left: 0px;
+    bottom: -6px;
+    width: 100%;
+    height: 5px;
+    border-radius: 50% 50% 0 0;
+}
+.tr-tabs-right .tr-tab-buttons:after {
+    left: -10px;
+    top: 0px;
+    width: 10px;
+    border-radius: 50%;
+    height: 100%;
+}
+.tr-tabs-left .tr-tab-buttons:after {
+    right: -10px;
+    top: 0px;
+    width: 10px;
+    border-radius: 50%;
+    height: 100%;
+}
+.tr-tabs-bottom .tr-tab-buttons:after {
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 1px;
+}
+
+
+
 .tr-tabs-top .tr-tab-buttons {
     padding: 5px 10px 0 10px;
     height: 32px;
+    top: 1px;
 }
 .tr-tabs-bottom .tr-tab-buttons {
     padding: 0px 10px 5px 10px;
-    height: 32px;
+    height: 34px;
     width: 100%;
 }
 .tr-tabs-left .tr-tab-buttons, .tr-tabs-right .tr-tab-buttons {
-    width: 70px;
+    width: 71px;
     padding: 0;
 }
 .tr-tabs-top .tr-tab-buttons {
-    border-bottom: 1px solid #dddddd;
+
 }
 .tr-tabs-right .tr-tab-buttons {
     position: absolute;
@@ -191,13 +172,14 @@
     top: 0px;
     bottom: 0px;
     padding-top: 10px;
-    overflow: visible;
 }
 .tr-tabs-bottom .tr-tab-buttons {
     position: absolute;
     left: 0;
-    bottom: 0;
-    border-top: 1px solid #dddddd;
+    bottom: 0px;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
 }
 .tr-tabs-left .tr-tab-buttons {
     position: absolute;
@@ -218,6 +200,7 @@
     border-radius: 3px;
     border: 1px solid #dddddd;
     cursor: pointer;
+    background-color: #f2f2f2;
 }
 .tr-tab-buttons__item:hover {
     color: #0e5d91;
@@ -226,41 +209,39 @@
 .tr-tab-buttons__item.tr-active-tab {
     color: #0e5d91;
     font-weight: bold;
-    background-color: #f2f2f2;
+    background-color: #ffffff;
     z-index: 20;
 }
 .tr-tabs-top .tr-tab-buttons__item {
-    border-bottom-color: transparent; 
+    top: 1px;
 }
 .tr-tabs-top .tr-tab-buttons__item.tr-active-tab {
-    height: 26px;
     box-shadow: 1px -2px 3px #E8E8E8;
+    border-bottom-color: #ffffff;
 }
 .tr-tabs-right .tr-tab-buttons .tr-tab-buttons__item {
     width: 55px;
     position: relative;
-    right: 1px; 
 }
 .tr-tabs-right .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
-    border-left-color: #f2f2f2;
+    border-left-color: #ffffff;
     box-shadow: 2px 2px 3px #E8E8E8;
 }
 .tr-tabs-left .tr-tab-buttons .tr-tab-buttons__item {
     width: 55px;
     float: right;
     position: relative;
-    left: 1px; 
+    left: 0px; 
 }
 .tr-tabs-left .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
-    border-right-color: #f2f2f2;
+    border-right-color: #ffffff;
     box-shadow: -3px 2px 3px #E8E8E8;
 }
 .tr-tabs-bottom .tr-tab-buttons .tr-tab-buttons__item {
     position: relative;
-    top: -2px;
 }
 .tr-tabs-bottom .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
-    border-top-color: #f2f2f2;
+    border-top-color: #ffffff;
     box-shadow: 2px 2px 3px #E8E8E8;
 }
 
@@ -283,7 +264,8 @@
     cursor: pointer;
     width: 14px;
     height: 14px;
-    color: #266d9c
+    color: #266d9c;
+    font-size: 1.2rem;
 }
 .tr-tab-buttons__item .tr-close-tab:hover{
     color: #a4bbc5;
@@ -319,6 +301,10 @@
 
 
 /* navigation buttons */
+.tr-nav-wrap {
+    border: 1px solid #dddddd;
+    border-top: none;
+}
 .tr-nav {
     display: table;
     width: 100%;
@@ -329,7 +315,6 @@
     background: -ms-linear-gradient(top, #fff, #f2f2f2);
     background: -o-linear-gradient(top, #fff, #f2f2f2);
     table-layout: fixed;
-    border-top: 1px solid #dddddd;
     font-weight: bold;
 }
 .tr-nav__col {
@@ -346,6 +331,7 @@
 .tr-nav-right {
     margin-right: 70px;
     border-right: 1px solid #dddddd;
+    position: relative;
 }
 .tr-nav-left {
     margin-left: 70px;

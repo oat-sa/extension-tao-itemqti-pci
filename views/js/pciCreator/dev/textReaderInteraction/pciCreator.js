@@ -44,7 +44,8 @@ define([
                 buttonLabels : {
                     prev : 'Previous',
                     next : 'Next'
-                }
+                },
+                onePageNavigation : false
             };
         },
         /**
