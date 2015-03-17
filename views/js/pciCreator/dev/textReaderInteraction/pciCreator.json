@@ -8,8 +8,7 @@
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
         "./runtime/js/renderer",
-        "./runtime/js/tabs",
-        "./runtime/js/handlebarsHelpers"
+        "./runtime/js/tabs"
     ],
     "css": [
         "./runtime/css/textReaderInteraction.css" 

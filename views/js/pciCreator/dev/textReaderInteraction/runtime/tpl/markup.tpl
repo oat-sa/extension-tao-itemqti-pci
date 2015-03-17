@@ -9,17 +9,17 @@
 <script class="text-reader-pages-tpl" type="text/x-handlebars-template">
     <![CDATA[
     <div class="tr-tabs js-page-tabs tr-tabs-\{{tabsPosition}} clearfix">
-        \{{#xif "this.pages.length > 1 || this.onePageNavigation"}}
-        <ul class="tr-tab-buttons js-tab-buttons \{{#xif "this.navigation == 'buttons'"}}hidden\{{/xif}}">
+        \{{#if showTabs}}
+        <ul class="tr-tab-buttons js-tab-buttons">
             \{{#each pages}}
             <li data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-tab-buttons__item">
                 <span class="tr-tab-label">\{{inc @index}}</span>
             </li>
             \{{/each}}
         </ul>
-        \{{/xif}}     
+        \{{/if}}     
         <div class="tr-pages-wrap clearfix">
-            <div class="tr-pages" style="height: \{{math pageHeight '+' 25 }}px">
+            <div class="tr-pages" style="height: \{{pageWrapperHeight}}px">
                 \{{#each pages}}
                 <div data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-page js-tab-content tr-tabs-\{{@index}}">
                     <div class="tr-passage" style="min-height: \{{../pageHeight}}px" >
@@ -38,7 +38,7 @@
 </script>    
 <script class="text-reader-nav-tpl" type="text/x-handlebars-template">    
     <![CDATA[
-    \{{#xif "this.navigation != 'tabs' && (this.pages.length > 1 || this.onePageNavigation)"}}
+    \{{#if showNavigation}}
     <div class="tr-nav-wrap tr-nav-\{{tabsPosition}}">
         <div class="tr-nav">
             <div class="tr-nav__col js-prev-page">
@@ -52,6 +52,6 @@
             </div>
         </div>
     </div>
-    \{{/xif}}
+    \{{/if}}
     ]]>
 </script>

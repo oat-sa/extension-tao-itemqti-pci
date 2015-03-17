@@ -3,10 +3,9 @@ define(
     [
         'IMSGlobal/jquery_2_1_1',
         'OAT/handlebars',
-        'textReaderInteraction/runtime/js/tabs',
-        'textReaderInteraction/runtime/js/handlebarsHelpers'
+        'textReaderInteraction/runtime/js/tabs'
     ],
-    function ($, Handlebars, Tabs, handlebarsHelpers) {
+    function ($, Handlebars, Tabs) {
         'use strict';
 
         return function (options) {
@@ -22,15 +21,18 @@ define(
             this.options = {};
 
             this.init = function () {
+                var pagesTpl,
+                    navTpl;
                 _.assign(that.options, defaultOptions, options);
-                var pagesTpl = $('.text-reader-pages-tpl').html().replace("<![CDATA[", "").replace("]]>", ""),
-                    navTpl = $('.text-reader-nav-tpl').html().replace("<![CDATA[", "").replace("]]>", "");
+            
                 if (!that.options.templates.pages) {
+                    pagesTpl = $('.text-reader-pages-tpl').html().replace("<![CDATA[", "").replace("]]>", ""),
                     that.options.templates.pages = Handlebars.compile(pagesTpl);
-                } 
+                }
                 if (!that.options.templates.navigation) {
+                    navTpl = $('.text-reader-nav-tpl').html().replace("<![CDATA[", "").replace("]]>", "");
                     that.options.templates.navigation = Handlebars.compile(navTpl);
-                } 
+                }
             };
 
             /**
@@ -75,8 +77,13 @@ define(
                         that.options.$container.trigger('createpager.' + that.eventNs);
                     }
                 });
-
+                
+                $.each(data.pages, function (key, val) {
+                    $('[data-page-id="' + val.id + '"] .js-page-columns-select').val(val.content.length);
+                });
+                
                 this.options.$container.trigger('afterrenderpages.' + that.eventNs);
+                
                 return this;
             };
             
@@ -143,11 +150,22 @@ define(
              * @return {object} - template data
              */
             this.getTemplateData = function (data) {
+                var pageWrapperHeight;
+                if (that.options.state === 'question') {
+                    pageWrapperHeight = parseInt(data.pageHeight, 10) + 125;
+                } else {
+                    pageWrapperHeight = parseInt(data.pageHeight, 10) + 25;
+                }
+
                 return {
                     state : that.options.state,
                     serial : that.options.serial,
                     currentPage : currentPage + 1,
-                    pagesNum : data.pages.length
+                    pagesNum : data.pages.length,
+                    showTabs : (data.pages.length > 1 || data.onePageNavigation) && data.navigation != 'buttons',
+                    showNavigation : (data.pages.length > 1 || data.onePageNavigation) && data.navigation != 'tabs',
+                    authoring : that.options.state === 'question',
+                    pageWrapperHeight : pageWrapperHeight
                 };
             };
             
@@ -156,7 +174,13 @@ define(
              * @returns {object} - Handlebars template options
              */
             this.getTemplateOptions = function () {
-                return handlebarsHelpers;
+                return {
+                    helpers : {
+                        inc : function (value) {
+                            return parseInt(value, 10) + 1;
+                        }
+                    }
+                };
             };
 
             this.init();

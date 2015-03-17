@@ -132,6 +132,12 @@ define([
         $('.js-tab-position-panel').toggle(interaction.properties.navigation !== 'buttons');
         $('.js-button-labels-panel').toggle(interaction.properties.navigation !== 'tabs');
         
+        if (interaction.properties.navigation == 'both') {
+            var $positionSelect = $('.js-tab-position');
+            $('select.js-tab-position option[value="bottom"]').attr('disabled', 'disabled');
+            $positionSelect.trigger('change');
+        }
+        
         //init form javascript
         formElement.initWidget($form);
 
@@ -148,9 +154,21 @@ define([
             navigation : function (interaction, value) {
                 $('.js-tab-position-panel').toggle(value !== 'buttons');
                 $('.js-button-labels-panel').toggle(value !== 'tabs');
+                
                 if (value == 'buttons') {
                     interaction.properties.tabsPosition = 'top';
                 }
+                
+                $('select.js-tab-position option[value="bottom"]').removeAttr('disabled');
+                if (value == 'both') {
+                    var $positionSelect = $('select.js-tab-position');
+                    if ($positionSelect.val() == 'bottom') {
+                        $positionSelect.val('top');
+                    }
+                    $('select.js-tab-position option[value="bottom"]').attr('disabled', 'disabled');
+                    $positionSelect.trigger('change');
+                }
+                
                 interaction.properties.navigation = value;
                 interaction.widgetRenderer.renderAll(interaction.properties);
             },

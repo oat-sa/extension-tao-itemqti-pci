@@ -1,12 +1,12 @@
 .textReaderInteraction {
     margin-top: 10px;
 }
-.tr-wrap {
+.textReaderInteraction .tr-wrap {
     width: 100%;
     border-radius: 3px;
 }
 
-.tr-passage {
+.textReaderInteraction .tr-passage {
     position: relative;
     overflow-y: auto;
     display: table;
@@ -15,7 +15,7 @@
     border-collapse:separate; 
     border-spacing: 10px;
 }
-.tr-passage-column {
+.textReaderInteraction .tr-passage-column {
     margin: auto;
     border: 1px dashed transparent;
     display: table-cell;
@@ -23,32 +23,32 @@
     vertical-align: top;
 }
 
-.tr-pages-wrap {
+.textReaderInteraction .tr-pages-wrap {
     position: relative;
     border: 1px solid #dddddd;
     padding: 10px;
 }
-.tr-pages {
+.textReaderInteraction .tr-pages {
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: #eeeeee;
     border: 1px solid #dddddd;
 }
-.tr-tabs-left .tr-pages-wrap {
+.textReaderInteraction .tr-tabs-left .tr-pages-wrap {
     margin-left: 70px;
     border-left: 1px solid #dddddd;
 }
-.tr-tabs-right .tr-pages-wrap {
+.textReaderInteraction .tr-tabs-right .tr-pages-wrap {
     margin-right: 70px;
     border-right: 1px solid #dddddd;
 }
-.tr-tabs-bottom .tr-pages-wrap {
+.textReaderInteraction .tr-tabs-bottom .tr-pages-wrap {
     margin-bottom: 32px;
     padding-bottom: 10px;
 }
 
-.tr-page {
+.textReaderInteraction .tr-page {
     background-color: #FFFFFF;
     border: 1px solid #ddd;
     -webkit-box-shadow: 1px 1px 3px 0px #888888;
@@ -58,72 +58,72 @@
 }
 
 /* tabs */
-.tr-tabs {
+.textReaderInteraction .tr-tabs {
     position: relative;
 }
-.tr-tab-buttons {
+.textReaderInteraction .tr-tab-buttons {
     margin: 0;
     list-style: none;
     position: relative;
     z-index: 10;
     overflow: hidden;
 }
-.tr-tab-buttons:after {
+.textReaderInteraction .tr-tab-buttons:after {
     content: '';
     position: absolute;
     display: block;
     box-shadow: 0px 0px 10px #555;
 }
-.tr-tabs-top .tr-tab-buttons:after {
+.textReaderInteraction .tr-tabs-top .tr-tab-buttons:after {
     left: 0px;
     bottom: -6px;
     width: 100%;
     height: 5px;
     border-radius: 50% 50% 0 0;
 }
-.tr-tabs-right .tr-tab-buttons:after {
+.textReaderInteraction .tr-tabs-right .tr-tab-buttons:after {
     left: -10px;
     top: 0px;
     width: 10px;
     border-radius: 50%;
     height: 100%;
 }
-.tr-tabs-left .tr-tab-buttons:after {
+.textReaderInteraction .tr-tabs-left .tr-tab-buttons:after {
     right: -10px;
     top: 0px;
     width: 10px;
     border-radius: 50%;
     height: 100%;
 }
-.tr-tabs-bottom .tr-tab-buttons:after {
+.textReaderInteraction .tr-tabs-bottom .tr-tab-buttons:after {
     left: 0px;
     top: 0px;
     width: 100%;
     height: 1px;
 }
-.tr-tabs-top .tr-tab-buttons {
+.textReaderInteraction .tr-tabs-top .tr-tab-buttons {
     padding: 5px 10px 0 10px;
     height: 32px;
     top: 1px;
 }
-.tr-tabs-bottom .tr-tab-buttons {
+.textReaderInteraction .tr-tabs-bottom .tr-tab-buttons {
     padding: 0px 10px 5px 10px;
     height: 34px;
     width: 100%;
 }
-.tr-tabs-left .tr-tab-buttons, .tr-tabs-right .tr-tab-buttons {
+.textReaderInteraction .tr-tabs-left .tr-tab-buttons, .tr-tabs-right .tr-tab-buttons {
     width: 71px;
     padding: 0;
 }
 
-.tr-tabs-right .tr-tab-buttons {
+.textReaderInteraction .tr-tabs-right .tr-tab-buttons {
     position: absolute;
     right: 0px;
     top: 0px;
     bottom: 0px;
     padding-top: 10px;
 }
-.tr-tabs-bottom .tr-tab-buttons {
+.textReaderInteraction .tr-tabs-bottom .tr-tab-buttons {
     position: absolute;
     left: 0;
     bottom: 0px;
@@ -131,7 +131,7 @@
     border-right: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
 }
-.tr-tabs-left .tr-tab-buttons {
+.textReaderInteraction .tr-tabs-left .tr-tab-buttons {
     position: absolute;
     left: 0;
     top: 0px;
@@ -139,7 +139,7 @@
     padding-top: 10px;
 }
 
-.tr-tab-buttons__item {
+.textReaderInteraction .tr-tab-buttons__item {
     height: 25px;
     display: inline-block;
     padding: 0;
@@ -150,77 +150,77 @@
     cursor: pointer;
     background-color: #f2f2f2;
 }
-.tr-tab-buttons__item:hover {
+.textReaderInteraction .tr-tab-buttons__item:hover {
     color: #0e5d91;
     font-weight: bold;
 }
-.tr-tab-buttons__item.tr-active-tab {
+.textReaderInteraction .tr-tab-buttons__item.tr-active-tab {
     color: #0e5d91;
     font-weight: bold;
     background-color: #ffffff;
     z-index: 20;
 }
-.tr-tabs-top .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-top .tr-tab-buttons__item {
     top: 1px;
 }
-.tr-tabs-top .tr-tab-buttons__item.tr-active-tab {
+.textReaderInteraction .tr-tabs-top .tr-tab-buttons__item.tr-active-tab {
     box-shadow: 1px -2px 3px #E8E8E8;
     border-bottom-color: #ffffff;
 }
-.tr-tabs-right .tr-tab-buttons .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-right .tr-tab-buttons .tr-tab-buttons__item {
     width: 55px;
     position: relative;
 }
-.tr-tabs-right .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
+.textReaderInteraction .tr-tabs-right .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
     border-left-color: #ffffff;
     box-shadow: 2px 2px 3px #E8E8E8;
 }
-.tr-tabs-left .tr-tab-buttons .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-left .tr-tab-buttons .tr-tab-buttons__item {
     width: 55px;
     float: right;
     position: relative;
     left: 0px; 
 }
-.tr-tabs-left .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
+.textReaderInteraction .tr-tabs-left .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
     border-right-color: #ffffff;
     box-shadow: -3px 2px 3px #E8E8E8;
 }
-.tr-tabs-bottom .tr-tab-buttons .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-bottom .tr-tab-buttons .tr-tab-buttons__item {
     position: relative;
 }
-.tr-tabs-bottom .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
+.textReaderInteraction .tr-tabs-bottom .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
     border-top-color: #ffffff;
     box-shadow: 2px 2px 3px #E8E8E8;
 }
 
-.tr-tab-buttons__item .tr-tab-label{
+.textReaderInteraction .tr-tab-buttons__item .tr-tab-label{
     display: block;
     height: 25px;
     line-height: 25px;
     padding: 0px 20px;
 }
 
-.tr-tabs-top .tr-tab-buttons__item, .tr-tabs-bottom .tr-tab-buttons__item{
-    margin-right: 5px;
+.textReaderInteraction .tr-tabs-top .tr-tab-buttons__item, .tr-tabs-bottom .tr-tab-buttons__item{
+    margin-right: 0px;
 }
-.tr-tabs-left .tr-tab-buttons__item, .tr-tabs-right .tr-tab-buttons__item{
+.textReaderInteraction .tr-tabs-left .tr-tab-buttons__item, .tr-tabs-right .tr-tab-buttons__item{
     margin-bottom: 5px;
     width: 90px;
 }
 
-.tr-tabs-top .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-top .tr-tab-buttons__item {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-.tr-tabs-bottom .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-bottom .tr-tab-buttons__item {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-.tr-tabs-right .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-right .tr-tab-buttons__item {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
-.tr-tabs-left .tr-tab-buttons__item {
+.textReaderInteraction .tr-tabs-left .tr-tab-buttons__item {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -228,11 +228,11 @@
 
 
 /* navigation buttons */
-.tr-nav-wrap {
+.textReaderInteraction .tr-nav-wrap {
     border: 1px solid #dddddd;
     border-top: none;
 }
-.tr-nav {
+.textReaderInteraction .tr-nav {
     display: table;
     width: 100%;
     padding: 5px 10px;
@@ -244,23 +244,23 @@
     table-layout: fixed;
     font-weight: bold;
 }
-.tr-nav__col {
+.textReaderInteraction .tr-nav__col {
     display: table-cell;
     vertical-align: top;
     text-align: center;
 }
-.tr-nav__col:first-child button {
+.textReaderInteraction .tr-nav__col:first-child button {
     float: left;
 }
-.tr-nav__col:last-child button {
+.textReaderInteraction .tr-nav__col:last-child button {
     float: right;
 }
-.tr-nav-right {
+.textReaderInteraction .tr-nav-right {
     margin-right: 70px;
     border-right: 1px solid #dddddd;
     position: relative;
 }
-.tr-nav-left {
+.textReaderInteraction .tr-nav-left {
     margin-left: 70px;
     border-left: 1px solid #dddddd;
 }

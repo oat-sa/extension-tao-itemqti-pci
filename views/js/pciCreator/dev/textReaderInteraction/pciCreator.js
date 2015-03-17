@@ -2,8 +2,7 @@
 define([
     './creator/widget/Widget',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
-    'tpl!./runtime/tpl/markup',
-    './runtime/js/handlebarsHelpers'
+    'tpl!./runtime/tpl/markup'
 ], function (Widget, registry, markupTpl, handlebarsHelpers) {
     'use strict';
     var _typeIdentifier = 'textReaderInteraction';
@@ -46,7 +45,7 @@ define([
                     prev : 'Previous',
                     next : 'Next'
                 },
-                onePageNavigation : false
+                onePageNavigation : true
             };
         },
         /**
@@ -64,9 +63,7 @@ define([
          * @returns {function} handlebar template
          */
         getMarkupTemplate : function () {
-            return function (markupData) {
-                return markupTpl(markupData, handlebarsHelpers);
-            };
+            return markupTpl;
         },
         /**
          * (optional) Allows passing additional data to xml template
