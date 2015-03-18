@@ -1,4 +1,4 @@
-/*global define, $ */
+/*global define, $, _ */
 define([], function () {
     'use strict';
     return function ($container, options) {
@@ -59,6 +59,9 @@ define([], function () {
             if (index === undefined) {
                 return currentTabIndex;
             }
+
+            index = parseInt(index, 10);
+
             if (_.isFunction(options.beforeSelect)) {
                 options.beforeSelect.call(that, index);
             }

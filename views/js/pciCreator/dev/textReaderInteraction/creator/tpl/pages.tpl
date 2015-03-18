@@ -4,7 +4,7 @@
         {{#each pages}}
         <li data-page-num="{{@index}}" data-page-id="{{id}}" class="tr-tab-buttons__item">
             <span class="tr-tab-label">{{inc @index}}</span>
-            {{#if ../authoring}}
+            {{#if ../showRemovePageButton}}
             <span class="js-remove-page tr-close-tab icon icon-bin" data-page-num="{{@index}}" title="{{__ "Delete"}}"></span>
             {{/if}}
         </li>
@@ -33,7 +33,9 @@
                         <option value="3">3</option>
                     </select>
                 </label>
+                {{#if ../../showRemovePageButton}}
                 <span class="icon-bin js-remove-page" data-page-num="{{@index}}" title="{{__ "Delete"}}"></span>
+                {{/if}}
                 {{/if}}
                 <div class="tr-passage" style="min-height: {{../pageHeight}}px" >
                     {{#each content}}
@@ -51,6 +53,7 @@
                 {{__ "Add page"}}
             </div>
             {{/if}}
+            
         </div>
     </div>
 </div>

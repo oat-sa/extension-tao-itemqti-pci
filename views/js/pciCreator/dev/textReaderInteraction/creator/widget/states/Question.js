@@ -8,7 +8,7 @@ define([
     'tpl!textReaderInteraction/creator/tpl/propertiesForm',
     'lodash',
     'jquery',
-    'css!textReaderInteraction/creator/css/textReaderInteraction',
+    'css!textReaderInteraction/creator/css/textReaderInteraction'
 ], function (stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $) {
     'use strict';
     var stateQuestion = stateFactory.extend(Question, function () {
@@ -18,7 +18,7 @@ define([
             properties = interaction.properties,
             pageIds = _.pluck(properties.pages, 'id'),
             maxPageId = Math.max.apply(null, pageIds);
-            
+
         //add page event
         $container.on('click.' + interaction.typeIdentifier, '[class*="js-add-page"]', function () {
             var num = properties.pages.length + 1,
@@ -29,9 +29,9 @@ define([
                     id : ++maxPageId
                 },
                 currentPage = 0;
-            
+
             containerEditor.destroy($container.find('.tr-passage'));
-            
+
             if ($button.hasClass('js-add-page-before')) {
                 properties.pages.unshift(pageData);
             } else if ($button.hasClass('js-add-page-after')) {
@@ -46,12 +46,12 @@ define([
         //remove page event
         $container.on('click.' + interaction.typeIdentifier, '.js-remove-page', function () {
             var tabNum = $(this).data('page-num');
-            
+
             containerEditor.destroy($container.find('.tr-passage'));
             properties.pages.splice(tabNum, 1);
             interaction.widgetRenderer.renderAll(properties);
-        });    
-        
+        });
+
         //change page layout
         $container.on('change.' + interaction.typeIdentifier, '.js-page-columns-select', function () {
             var numberOfColumns = parseInt($(this).val(), 10),
@@ -84,10 +84,10 @@ define([
                 pageIndex;
                 
             $container.find('.js-page-column').each(function () {
-                pageIndex = $(this).closest('.tr-page').data('page-num');
+                pageIndex = parseInt($(this).closest('.tr-page').data('page-num'), 10);
                 editor = $(this).find('.container-editor').data('editor');
                 if (editor) {
-                    editor.setReadOnly(currentPageIndex != pageIndex);
+                    editor.setReadOnly(currentPageIndex !== pageIndex);
                 }
             });
         });
@@ -132,7 +132,7 @@ define([
         $('.js-tab-position-panel').toggle(interaction.properties.navigation !== 'buttons');
         $('.js-button-labels-panel').toggle(interaction.properties.navigation !== 'tabs');
         
-        if (interaction.properties.navigation == 'both') {
+        if (interaction.properties.navigation === 'both') {
             var $positionSelect = $('.js-tab-position');
             $('select.js-tab-position option[value="bottom"]').attr('disabled', 'disabled');
             $positionSelect.trigger('change');
@@ -155,12 +155,12 @@ define([
                 $('.js-tab-position-panel').toggle(value !== 'buttons');
                 $('.js-button-labels-panel').toggle(value !== 'tabs');
                 
-                if (value == 'buttons') {
+                if (value === 'buttons') {
                     interaction.properties.tabsPosition = 'top';
                 }
                 
                 $('select.js-tab-position option[value="bottom"]').removeAttr('disabled');
-                if (value == 'both') {
+                if (value === 'both') {
                     var $positionSelect = $('select.js-tab-position');
                     if ($positionSelect.val() == 'bottom') {
                         $positionSelect.val('top');
@@ -195,8 +195,7 @@ define([
     
         $pages.each(function () {
             var pageId = $(this).data('page-id'),
-                pageIndex = $(this).data('page-num'),
-                colIndex;
+                pageIndex = $(this).data('page-num');
             
             $(this).find('.js-page-column').each(function () {
                 var colIndex = $(this).data('page-col-index'),

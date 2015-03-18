@@ -1,4 +1,4 @@
-/*global define*/
+/*global define, _*/
 define(
     [
         'IMSGlobal/jquery_2_1_1',
@@ -24,9 +24,9 @@ define(
                 var pagesTpl,
                     navTpl;
                 _.assign(that.options, defaultOptions, options);
-            
+
                 if (!that.options.templates.pages) {
-                    pagesTpl = $('.text-reader-pages-tpl').html().replace("<![CDATA[", "").replace("]]>", ""),
+                    pagesTpl = $('.text-reader-pages-tpl').html().replace("<![CDATA[", "").replace("]]>", "");
                     that.options.templates.pages = Handlebars.compile(pagesTpl);
                 }
                 if (!that.options.templates.navigation) {
@@ -46,8 +46,8 @@ define(
             };
 
             /**
-             * Function renders interaction.
-             * @param {object} data - interaction parameters
+             * Function renders interaction pages.
+             * @param {object} data - interaction properties
              * @return {object} this
              */
             this.renderPages = function (data) {
@@ -58,7 +58,7 @@ define(
                 //render pages template
                 if (that.options.templates.pages) {
                     _.assign(templateData, data, that.getTemplateData(data));
-                    
+
                     this.options.$container.find('.js-page-container').html(
                         that.options.templates.pages(templateData, that.getTemplateOptions())
                     );
@@ -67,7 +67,7 @@ define(
                 //init tabs
                 that.tabsManager = new Tabs(this.options.$container.find('.js-page-tabs'), {
                     afterSelect : function (index) {
-                        currentPage = index;
+                        currentPage = parseInt(index, 10);
                         that.updateNav();
                         that.options.$container.trigger('selectpage.' + that.eventNs, index);
                     },
@@ -77,19 +77,19 @@ define(
                         that.options.$container.trigger('createpager.' + that.eventNs);
                     }
                 });
-                
+
                 $.each(data.pages, function (key, val) {
                     $('[data-page-id="' + val.id + '"] .js-page-columns-select').val(val.content.length);
                 });
-                
+
                 this.options.$container.trigger('afterrenderpages.' + that.eventNs);
-                
+
                 return this;
             };
-            
+
             /**
-             * Function renders interaction.
-             * @param {object} data - interaction parameters
+             * Function renders interaction navigation (<i>Prev</i> <i>Next</i> buttons, current page number).
+             * @param {object} data - interaction properties
              * @return {object} this
              */
             this.renderNavigation = function (data) {
@@ -98,20 +98,20 @@ define(
                 //render pages template
                 if (that.options.templates.navigation) {
                     _.assign(templateData, data, that.getTemplateData(data));
-                    
+
                     this.options.$container.find('.js-nav-container').html(
                         that.options.templates.navigation(templateData, that.getTemplateOptions())
                     );
                 }
-                
+
                 this.updateNav();
-                
+
                 return this;
             };
-            
+
             /**
              * Function renders whole interaction (pages and navigation)
-             * @param {object} data - interaction parameters
+             * @param {object} data - interaction properties
              * @return {object} - this
              */
             this.renderAll = function (data) {
@@ -119,7 +119,7 @@ define(
                 this.renderNavigation(data);
                 return this;
             };
-            
+
             /**
              * Function updates page navigation controls (current page number and pager buttons)
              * @return {object} - this
@@ -130,15 +130,15 @@ define(
                     $nextBtn =  this.options.$container.find('.js-next-page button');
 
                 this.options.$container.find('.js-current-page').text((currentPage + 1));
-                if (tabsNum <= currentPage + 1) {
+
+                $prevBtn.removeAttr('disabled');
+                $nextBtn.removeAttr('disabled');
+
+                if (tabsNum === currentPage + 1) {
                     $nextBtn.attr('disabled', 'disabled');
-                    $prevBtn.removeAttr('disabled');
-                } else if (currentPage == 0) {
+                }
+                if (currentPage === 0) {
                     $prevBtn.attr('disabled', 'disabled');
-                    $nextBtn.removeAttr('disabled');
-                } else {
-                    $prevBtn.removeAttr('disabled');
-                    $nextBtn.removeAttr('disabled');
                 }
                 return this;
             };
@@ -146,13 +146,13 @@ define(
             /**
              * Function returns template data (current page number, interaction serial, current state etc.)
              * to pass it in handlebars template together with interaction parameters.
-             * @param {object} data - interaction parameters
+             * @param {object} data - interaction properties
              * @return {object} - template data
              */
             this.getTemplateData = function (data) {
                 var pageWrapperHeight;
                 if (that.options.state === 'question') {
-                    pageWrapperHeight = parseInt(data.pageHeight, 10) + 125;
+                    pageWrapperHeight = parseInt(data.pageHeight, 10) + 130;
                 } else {
                     pageWrapperHeight = parseInt(data.pageHeight, 10) + 25;
                 }
@@ -162,13 +162,14 @@ define(
                     serial : that.options.serial,
                     currentPage : currentPage + 1,
                     pagesNum : data.pages.length,
-                    showTabs : (data.pages.length > 1 || data.onePageNavigation) && data.navigation != 'buttons',
-                    showNavigation : (data.pages.length > 1 || data.onePageNavigation) && data.navigation != 'tabs',
+                    showTabs : (data.pages.length > 1 || data.onePageNavigation) && data.navigation !== 'buttons',
+                    showNavigation : (data.pages.length > 1 || data.onePageNavigation) && data.navigation !== 'tabs',
                     authoring : that.options.state === 'question',
-                    pageWrapperHeight : pageWrapperHeight
+                    pageWrapperHeight : pageWrapperHeight,
+                    showRemovePageButton : data.pages.length > 1 && that.options.state === 'question'
                 };
             };
-            
+
             /**
              * Function returns Handlebars template options (helpers) that will be used when rendering.
              * @returns {object} - Handlebars template options
