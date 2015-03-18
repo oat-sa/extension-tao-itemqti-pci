@@ -37,7 +37,7 @@
                 <span class="icon-bin js-remove-page" data-page-num="{{@index}}" title="{{__ "Delete"}}"></span>
                 {{/if}}
                 {{/if}}
-                <div class="tr-passage" style="min-height: {{../pageHeight}}px" >
+                <div class="tr-passage" style="height: {{../pageHeight}}px" >
                     {{#each content}}
                     <div class="tr-passage-column widget-blockInteraction js-page-column" data-page-col-index="{{@index}}">
                         {{{this}}}

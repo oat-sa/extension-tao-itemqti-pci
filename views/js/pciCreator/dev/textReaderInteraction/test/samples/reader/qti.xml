@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1426606833954130" title="Item title" adaptive="false" timeDependent="false">
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i14266716643037139" title="Item title" adaptive="false" timeDependent="false">
   <responseDeclaration baseType="boolean" cardinality="single" identifier="RESPONSE"/>
   <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
   <stylesheet href="style/custom/tao-user-styles.css" title="" type="text/css" media="all"/>
@@ -83,7 +83,7 @@
             <div class="tr-pages" style="height: {{pageWrapperHeight}}px">
                 {{#each pages}}
                 <html5:div data-page-num="{{@index}}" data-page-id="{{id}}" class="tr-page js-tab-content tr-tabs-{{@index}}">
-                    <div class="tr-passage" style="min-height: {{../pageHeight}}px" >
+                    <div class="tr-passage" style="height: {{../pageHeight}}px" >
                         {{#each content}}
                         <html5:div class="tr-passage-column widget-blockInteraction js-page-column" data-page-col-index="{{@index}}">
                             {{{this}}}

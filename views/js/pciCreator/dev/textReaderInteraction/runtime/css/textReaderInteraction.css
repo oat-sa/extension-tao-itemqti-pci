@@ -73,6 +73,7 @@
     position: absolute;
     display: block;
     box-shadow: 0px 0px 10px #555;
+    z-index: 10;
 }
 .textReaderInteraction .tr-tabs-top .tr-tab-buttons:after {
     left: 0px;
@@ -154,14 +155,14 @@
     color: #0e5d91;
     font-weight: bold;
 }
-.textReaderInteraction .tr-tab-buttons__item.tr-active-tab {
+.textReaderInteraction .tr-tab-buttons .tr-tab-buttons__item.tr-active-tab {
     color: #0e5d91;
     font-weight: bold;
     background-color: #ffffff;
     z-index: 20;
 }
 .textReaderInteraction .tr-tabs-top .tr-tab-buttons__item {
-    top: 1px;
+    top: 2px;
 }
 .textReaderInteraction .tr-tabs-top .tr-tab-buttons__item.tr-active-tab {
     box-shadow: 1px -2px 3px #E8E8E8;
@@ -211,6 +212,7 @@
 .textReaderInteraction .tr-tabs-top .tr-tab-buttons__item {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    z-index: 0;
 }
 .textReaderInteraction .tr-tabs-bottom .tr-tab-buttons__item {
     border-top-left-radius: 0;

@@ -22,7 +22,7 @@
             <div class="tr-pages" style="height: \{{pageWrapperHeight}}px">
                 \{{#each pages}}
                 <div data-page-num="\{{@index}}" data-page-id="\{{id}}" class="tr-page js-tab-content tr-tabs-\{{@index}}">
-                    <div class="tr-passage" style="min-height: \{{../pageHeight}}px" >
+                    <div class="tr-passage" style="height: \{{../pageHeight}}px" >
                         \{{#each content}}
                         <div class="tr-passage-column widget-blockInteraction js-page-column" data-page-col-index="\{{@index}}">
                             \{{{this}}}
