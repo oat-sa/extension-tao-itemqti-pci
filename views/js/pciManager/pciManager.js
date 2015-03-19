@@ -19,7 +19,7 @@ define([
     var ns = '.pcimanager';
 
     var _fileTypeFilters = ['application/zip'],
-        _fileExtFilter = /.+\.(zip|rar)$/;
+        _fileExtFilter = /.+\.(zip)$/;
 
     var _urls = {
         load : helpers._url('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
