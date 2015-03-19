@@ -2,8 +2,9 @@
 define([
     './creator/widget/Widget',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
-    'tpl!./runtime/tpl/markup'
-], function (Widget, registry, markupTpl, handlebarsHelpers) {
+    'tpl!./runtime/tpl/markup',
+    'css!textReaderInteraction/runtime/css/textReaderInteraction'
+], function (Widget, registry, markupTpl) {
     'use strict';
     var _typeIdentifier = 'textReaderInteraction';
 
