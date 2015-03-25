@@ -5,8 +5,7 @@ define([
     'textReaderInteraction/runtime/js/renderer',
     'tpl!./runtime/tpl/markup',
     'tpl!textReaderInteraction/creator/tpl/pages',
-    'tpl!textReaderInteraction/creator/tpl/navigation',
-    'css!textReaderInteraction/runtime/css/textReaderInteraction'
+    'tpl!textReaderInteraction/creator/tpl/navigation'
 ], function (Widget, registry, Renderer, markupTpl, pagesTpl, navigationTpl) {
     'use strict';
     var _typeIdentifier = 'textReaderInteraction';
