@@ -105,6 +105,6 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
             return {};
         }
     };
-
+    
     qtiCustomInteractionContext.register(likertScaleInteraction);
 });
