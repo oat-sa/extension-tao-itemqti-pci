@@ -2,9 +2,11 @@
 define([
     './creator/widget/Widget',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
+    'textReaderInteraction/runtime/js/renderer',
     'tpl!./runtime/tpl/markup',
-    'css!textReaderInteraction/runtime/css/textReaderInteraction'
-], function (Widget, registry, markupTpl) {
+    'tpl!textReaderInteraction/creator/tpl/pages',
+    'tpl!textReaderInteraction/creator/tpl/navigation'
+], function (Widget, registry, Renderer, markupTpl, pagesTpl, navigationTpl) {
     'use strict';
     var _typeIdentifier = 'textReaderInteraction';
 
@@ -24,6 +26,22 @@ define([
          * @returns {Object} Widget
          */
         getWidget : function () {
+            Widget.beforeStateInit(function (event, pci, state) {
+                if (pci.typeIdentifier && pci.typeIdentifier === "textReaderInteraction") {
+                    if (!pci.widgetRenderer) {
+                        pci.widgetRenderer = new Renderer({
+                            serial : pci.serial,
+                            $container : state.widget.$container,
+                            templates : {
+                                pages : pagesTpl,
+                                navigation : navigationTpl
+                            }
+                        });
+                    }
+                    pci.widgetRenderer.setState(state.name);
+                    pci.widgetRenderer.renderAll(pci.properties);
+                }
+            });
             return Widget;
         },
         /**
@@ -56,7 +74,7 @@ define([
          * @returns {Object}
          */
         afterCreate : function (pci) {
-            
+            return;
         },
         /**
          * (required) Gives the qti pci xml template 
