@@ -18,7 +18,8 @@ define([
 
     var ns = '.pcimanager';
 
-    var _fileTypeFilters = ['application/zip'];
+    var _fileTypeFilters = ['application/zip'],
+        _fileExtFilter = /.+\.(zip)$/;
 
     var _urls = {
         load : helpers._url('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
@@ -286,7 +287,7 @@ define([
 
                     //check the mime-type
                     files = _.filter(files, function(file){
-                        return _.contains(_fileTypeFilters, file.type);
+                        return _.contains(_fileTypeFilters, file.type) || (file.type === '' && _fileExtFilter.test(file.name));
                     });
                     
                     if(files.length !== givenLength){
