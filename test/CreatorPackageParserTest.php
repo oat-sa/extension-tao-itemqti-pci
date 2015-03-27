@@ -43,6 +43,11 @@ class CreatorPackageParserTest extends TaoPhpUnitTestRunner
         $parser->validate();
         $this->assertTrue($parser->isValid());
         
+        $packageValid = dirname(__FILE__).'/samples/likertValid.zip';
+        $parser = new CreatorPackageParser($packageValid);
+        $parser->validate();
+        $this->assertTrue($parser->isValid());
+        
         $packageInvalidExt = dirname(__FILE__).'/samples/invalidExt.bz2';
         $parser = new CreatorPackageParser($packageInvalidExt);
         $parser->validate();

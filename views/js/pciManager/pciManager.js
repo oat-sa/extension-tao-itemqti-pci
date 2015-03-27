@@ -18,7 +18,8 @@ define([
 
     var ns = '.pcimanager';
 
-    var _fileTypeFilters = ['application/zip'];
+    var _fileTypeFilters = ['application/zip'],
+        _fileExtFilter = /.+\.(zip)$/;
 
     var _urls = {
         load : helpers._url('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
@@ -258,8 +259,8 @@ define([
             }).on('create.uploader', function(){
 
                 //get ref to the uploadForm for later verification usage
-                $uploadForm = $uploader.children('form');
-
+                $uploadForm = $uploader.parent('form');
+                
             }).on('fileselect.uploader', function(){
 
                 $uploadForm.find('li[data-file-name]').each(function(){
@@ -281,14 +282,14 @@ define([
                 multiple : true,
                 uploadUrl : _urls.add,
                 fileSelect : function(files, done){
-
+                    
                     var givenLength = files.length;
 
                     //check the mime-type
                     files = _.filter(files, function(file){
-                        return _.contains(_fileTypeFilters, file.type);
+                        return _.contains(_fileTypeFilters, file.type) || (file.type === '' && _fileExtFilter.test(file.name));
                     });
-
+                    
                     if(files.length !== givenLength){
                         feedback().error('Invalid files have been removed');
                     }

@@ -115,7 +115,7 @@ class CreatorPackageParser extends PackageParser
                         }
                         break;
                     case 'file':
-                        if($zip->locateName($value) === false){
+                        if($zip->locateName(preg_replace('/^\.\//', '', $value)) === false){
                             $returnValue = false;
                             throw new common_Exception('cannot locate "'.$entry.'" file : "'.$value.'"');
                         }
