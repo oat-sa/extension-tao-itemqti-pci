@@ -10,7 +10,7 @@
     <responseDeclaration identifier="likert3" cardinality="single" baseType="integer"/>
     
     <!--item specific stylesheets will be added by the item in the method postRender()-->
-    <stylesheet href="likertScaleInteraction/runtime/css/likertScaleInteraction.css" title="" type="text/css" media="all"></stylesheet>
+    <stylesheet href="css/likertScaleInteraction.css" title="" type="text/css" media="all"></stylesheet>
     <stylesheet href="css/likert1.css" type="text/css"/>
     
     <itemBody>
