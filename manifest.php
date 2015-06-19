@@ -24,7 +24,7 @@ return array(
 	'label' => 'QTI Portable Custom Interaction',
 	'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.1',
+    'version' => '0.1.1',
 	'author' => 'Open Assessment Technologies SA',
 	'requires' => array('taoQtiItem' => '>=2.7.0'),
     'acl' => array(
@@ -41,11 +41,8 @@ return array(
     ),
     'uninstall' => array(
     ),
-    'autoload' => array (
-        'psr-4' => array(
-            'oat\\qtiItemPci\\' => dirname(__FILE__).DIRECTORY_SEPARATOR
-        )
-    ),
+    'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
+
     'routes' => array(
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ),    
