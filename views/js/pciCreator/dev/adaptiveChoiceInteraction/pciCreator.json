@@ -1,0 +1,26 @@
+{
+    "typeIdentifier": "adaptiveChoiceInteraction",
+    "label": "Adaptive choice",
+    "description": "Adaptive choice",
+    "version": "0.1",
+    "author": "Aleh Hutnikau",
+    "email": "contact@taotesting.com",
+    "libraries": [
+        "IMSGlobal/jquery_2_1_1",
+        "./runtime/js/renderer"
+    ],
+    "css": [
+        "./runtime/css/adaptiveChoiceInteraction.css" 
+    ],
+    "entryPoint": "./runtime/adaptiveChoiceInteraction.js",
+    "tags": [
+        "adaptive",
+        "choice"
+    ],
+    "icon": "./creator/media/icon.svg",
+    "short": "Adaptive choice",
+    "response": {
+        "baseType": "integer",
+        "cardinality": "multiple"
+    }
+}

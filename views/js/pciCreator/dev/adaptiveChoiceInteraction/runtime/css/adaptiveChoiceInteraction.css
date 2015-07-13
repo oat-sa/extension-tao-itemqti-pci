@@ -1,0 +1,9 @@
+.item-editor-item .qti-customInteraction .adaptiveChoiceInteraction .simple-editable {
+    border: none;
+}
+.item-editor-item .adaptiveChoiceInteraction .prompt {
+    border: solid 1px transparent;
+}
+.item-editor-item .adaptiveChoiceInteraction .prompt[data-html-editable-container] {
+    border: none;
+}

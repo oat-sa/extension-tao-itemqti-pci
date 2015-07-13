@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i143678800589471079" title="Item 6" adaptive="false" timeDependent="false">
+  <responseDeclaration baseType="integer" cardinality="multiple" identifier="RESPONSE">
+    <correctResponse>
+      <value><![CDATA[0]]></value>
+      <value><![CDATA[1]]></value>
+    </correctResponse>
+  </responseDeclaration>
+  <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
+  <stylesheet href="//style/custom/tao-user-styles.css" title="" type="text/css" media="all"/>
+  <stylesheet href="//adaptiveChoiceInteraction/runtime/css/adaptiveChoiceInteraction.css" title="" type="text/css" media="all"/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <pci:portableCustomInteraction customInteractionTypeIdentifier="adaptiveChoiceInteraction" hook="//qtiItemPci/views/js/pciCreator/dev/adaptiveChoiceInteraction/runtime/adaptiveChoiceInteraction.js">
+            <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+            <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+              <pci:libraries>
+                <pci:lib id="IMSGlobal/jquery_2_1_1"/>
+                <pci:lib id="adaptiveChoiceInteraction/runtime/js/renderer"/>
+              </pci:libraries>
+            </pci:resources>
+            <pci:properties>
+              <pci:entry key="prompt">Testing</pci:entry>
+              <pci:entry key="choiceType">checkbox</pci:entry>
+              <pci:properties key="choices">
+                <pci:properties key="0">
+                  <pci:entry key="label">
+                            PHP
+                        </pci:entry>
+                  <pci:entry key="correct">true</pci:entry>
+                </pci:properties>
+                <pci:properties key="1">
+                  <pci:entry key="label">
+                            JavaScript
+                        </pci:entry>
+                  <pci:entry key="correct">true</pci:entry>
+                </pci:properties>
+                <pci:properties key="2">
+                  <pci:entry key="label">
+                            NodeJS
+                        </pci:entry>
+                </pci:properties>
+                <pci:properties key="3">
+                  <pci:entry key="label">
+                            .NET
+                        </pci:entry>
+                </pci:properties>
+                <pci:properties key="4">
+                  <pci:entry key="label">
+                            Java
+                        </pci:entry>
+                </pci:properties>
+              </pci:properties>
+              <pci:entry key="responseIdentifier">RESPONSE</pci:entry>
+              <pci:properties key="states">
+                <pci:entry key="answer">true</pci:entry>
+              </pci:properties>
+            </pci:properties>
+            <pci:markup>
+              <html5:div class="adaptiveChoiceInteraction">
+                <html5:div class="prompt">Testing</html5:div>
+                <html5:div class="js-choice-container">
+                  <html5:ol class="plain block-listing solid">
+                    <html5:li class="qti-choice qti-simpleChoice">
+                      <html5:div class="pseudo-label-box js-label-box">
+                        <html5:label class="real-label">
+                          <html5:input class="js-answer-input correct" type="checkbox" name="RESPONSE" value="0"/>
+                          <html5:span class="icon-checkbox"/>
+                        </html5:label>
+                        <html5:div class="label-box">
+                          <html5:div class="label-content clear js-choice-label" data-choice-index="0">
+                            <html5:div>
+                            PHP
+                        </html5:div>
+                          </html5:div>
+                        </html5:div>
+                      </html5:div>
+                    </html5:li>
+                    <html5:li class="qti-choice qti-simpleChoice">
+                      <html5:div class="pseudo-label-box js-label-box">
+                        <html5:label class="real-label">
+                          <html5:input class="js-answer-input correct" type="checkbox" name="RESPONSE" value="1"/>
+                          <html5:span class="icon-checkbox"/>
+                        </html5:label>
+                        <html5:div class="label-box">
+                          <html5:div class="label-content clear js-choice-label" data-choice-index="1">
+                            <html5:div>
+                            JavaScript
+                        </html5:div>
+                          </html5:div>
+                        </html5:div>
+                      </html5:div>
+                    </html5:li>
+                    <html5:li class="qti-choice qti-simpleChoice">
+                      <html5:div class="pseudo-label-box js-label-box">
+                        <html5:label class="real-label">
+                          <html5:input class="js-answer-input" type="checkbox" name="RESPONSE" value="2"/>
+                          <html5:span class="icon-checkbox"/>
+                        </html5:label>
+                        <html5:div class="label-box">
+                          <html5:div class="label-content clear js-choice-label" data-choice-index="2">
+                            <html5:div>
+                            NodeJS
+                        </html5:div>
+                          </html5:div>
+                        </html5:div>
+                      </html5:div>
+                    </html5:li>
+                    <html5:li class="qti-choice qti-simpleChoice">
+                      <html5:div class="pseudo-label-box js-label-box">
+                        <html5:label class="real-label">
+                          <html5:input class="js-answer-input" type="checkbox" name="RESPONSE" value="3"/>
+                          <html5:span class="icon-checkbox"/>
+                        </html5:label>
+                        <html5:div class="label-box">
+                          <html5:div class="label-content clear js-choice-label" data-choice-index="3">
+                            <html5:div>
+                            .NET
+                        </html5:div>
+                          </html5:div>
+                        </html5:div>
+                      </html5:div>
+                    </html5:li>
+                    <html5:li class="qti-choice qti-simpleChoice">
+                      <html5:div class="pseudo-label-box js-label-box">
+                        <html5:label class="real-label">
+                          <html5:input class="js-answer-input" type="checkbox" name="RESPONSE" value="4"/>
+                          <html5:span class="icon-checkbox"/>
+                        </html5:label>
+                        <html5:div class="label-box">
+                          <html5:div class="label-content clear js-choice-label" data-choice-index="4">
+                            <html5:div>
+                            Java
+                        </html5:div>
+                          </html5:div>
+                        </html5:div>
+                      </html5:div>
+                    </html5:li>
+                  </html5:ol>
+                </html5:div>
+              </html5:div>
+            </pci:markup>
+          </pci:portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>
