@@ -15,19 +15,17 @@
  * 
  * Copyright (c) 2015 (original work) Open Assessment Technologies;
  *               
- */   
+ */
 define([
+    'jquery',
     'ui/feedback',
     'i18n'
-],
-function (feedback, __) {
+], function ($, feedback, __) {
     'use strict';
-    return function (options) {
-        var that = this,
+    return function adaptiveChoiceRenderer(options) {
+        var renderer,
             defaultOptions = {};
 
-        this.options = {};
-        this.eventNs = 'adaptiveChoiceInteraction';
 
         /**
          * Function returns Handlebars template options (helpers) that will be used when rendering.
@@ -36,68 +34,75 @@ function (feedback, __) {
          */
         function getTemplateData(data) {
             data.states = {
-                'question' : that.options.state === 'question'
+                'question' : renderer.options.state === 'question'
             };
 
             return data;
         }
 
-        this.init = function () {
-            _.assign(that.options, defaultOptions, options);
-        };
-        /**
-         * Function sets interaction state.
-         * @param {string} state name (e.g. 'question' | 'answer')
-         * @return {object} this
-         */
-        this.setState = function (state) {
-            this.options.state = state;
+        renderer = {
+            options : {},
+            eventNs : 'adaptiveChoiceInteraction',
+            init : function init() {
+                _.assign(this.options, defaultOptions, options);
+            },
+            /**
+             * Function sets interaction state.
+             * @param {string} state name (e.g. 'question' | 'answer')
+             * @return {object} this
+             */
+            setState: function setState(state) {
+                this.options.state = state;
 
-            if (state === 'runtime') {
-                this.initEliminator();
-            }
-
-            return this;
-        };
-
-        /**
-         * Initialize the answer eliminator.
-         * @returns {object} this
-         */
-        this.initEliminator = function () {
-            that.options.$container.on('change', '.js-answer-input', function () {
-                var val = parseInt($(this).val(), 10);
-
-                if (!options.interaction.properties.choices[val].correct) {
-                    $(this).closest('.qti-choice').remove();
-                    feedback().info(__('This is the wrong answer. Please try again.'));
+                if (state === 'runtime') {
+                    this.initEliminator();
                 }
-            });
-            return this;
-        };
 
-        /**
-         * Render interaction
-         * @param {object} data - interaction properties
-         * @return {object} this
-         */
-        this.render = function (data) {
-            if (that.options.templates && that.options.templates.markupTpl) {
+                return this;
+            },
+            /**
+             * Initialize the answer eliminator.
+             * @returns {object} this
+             */
+            initEliminator : function initEliminator() {
+                this.options.$container
+                    .off('change.choiceEliminator.' + this.eventNs)
+                    .on('change.choiceEliminator.' + this.eventNs, '.js-answer-input', function () {
+                        var val = parseInt($(this).val(), 10);
+
+                        if (!options.interaction.properties.choices[val].correct) {
+                            $(this).closest('.qti-choice').remove();
+                            feedback().info(__('This is the wrong answer. Please try again.'));
+                        }
+                    });
+
+                return this;
+            },
+            /**
+             * Render interaction
+             * @param {object} data - interaction properties
+             * @return {object} this
+             */
+            render : function render(data) {
                 var templateData;
-                data = _.cloneDeep(data);
+                if (this.options.templates && this.options.templates.markupTpl) {
+                    data = _.cloneDeep(data);
 
-                templateData = getTemplateData(data);
-                that.options.$container
-                    .find('.qti-customInteraction')
-                    .html(that.options.templates.markupTpl(templateData));
+                    templateData = getTemplateData(data);
+                    this.options.$container
+                        .find('.qti-customInteraction')
+                        .html(this.options.templates.markupTpl(templateData));
 
-                options.interaction.updateMarkup();
-                options.interaction.triggerPci('render' + that.eventNs + that.options.state);
+                    this.options.interaction.updateMarkup();
+                    this.options.interaction.triggerPci('render' + this.eventNs + this.options.state);
+                }
+
+                return this;
             }
-
-            return that;
         };
-
-        this.init();
+        
+        renderer.init();
+        
+        return renderer;
     };
 });

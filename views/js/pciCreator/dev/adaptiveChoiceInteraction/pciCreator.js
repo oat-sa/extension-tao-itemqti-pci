@@ -19,7 +19,7 @@
 define([
     './creator/widget/Widget',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
-    'adaptiveChoiceInteraction/runtime/js/renderer',
+    './runtime/js/renderer',
     'tpl!./runtime/tpl/markup'
 ], function (Widget, registry, Renderer, markupTpl) {
     'use strict';

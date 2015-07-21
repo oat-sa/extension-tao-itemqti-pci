@@ -18,8 +18,7 @@
  */
 define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
-    'adaptiveChoiceInteraction/creator/widget/states/states',
-    'css!adaptiveChoiceInteraction/runtime/css/adaptiveChoiceInteraction'
+    './states/states'
 ], function (Widget, states) {
     'use strict';
 

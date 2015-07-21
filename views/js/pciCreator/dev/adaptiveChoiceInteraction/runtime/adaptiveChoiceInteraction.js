@@ -20,7 +20,8 @@ define([
     'lodash',
     'qtiCustomInteractionContext',
     'OAT/util/event',
-    'adaptiveChoiceInteraction/runtime/js/renderer'
+    'adaptiveChoiceInteraction/runtime/js/renderer',
+    'css!adaptiveChoiceInteraction/runtime/css/adaptiveChoiceInteraction'
 ], function (_, qtiCustomInteractionContext, event, Renderer) {
     'use strict';
     qtiCustomInteractionContext.register({
@@ -67,7 +68,6 @@ define([
          * @param {Object} response
          */
         setResponse : function (response) {
-            console.log(response);
             if (response.list && _.isArray(response.list.integer)) {
                 _.forEach(response.list.integer, function(val) {
                     this.$container.find('.js-answer-input[value="' + val + '"]').prop('checked', true);
@@ -116,7 +116,6 @@ define([
          * @param {Object} serializedState - json format
          */
         setSerializedState : function (state) {
-
         },
         /**
          * Get the current state of the interaction as a string.

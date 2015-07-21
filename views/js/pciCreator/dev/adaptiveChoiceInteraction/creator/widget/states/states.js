@@ -19,9 +19,9 @@
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
-    'adaptiveChoiceInteraction/creator/widget/states/Question',
-    'adaptiveChoiceInteraction/creator/widget/states/Answer',
-    'adaptiveChoiceInteraction/creator/widget/states/Correct'
+    './Question',
+    './Answer',
+    './Correct'
 ], function (factory, states) {
     'use strict';
     return factory.createBundle(states, arguments);
