@@ -66,24 +66,33 @@ define([
              */
             initEliminator : function initEliminator() {
                 var self = this,
-                    incorrectChoices,
-                    val;
-            
-                this.options.$container
-                    .off('change.choiceEliminator.' + this.eventNs)
-                    .on('change.choiceEliminator.' + this.eventNs, '.js-answer-input', function () {
-                        val = parseInt($(this).val(), 10);
-                        if (!options.interaction.properties.choices[val].correct) {
+                    checkedChoice,
+                    result,
+                    incorrectChoices;
+
+                //I know that this is not very good hack, but i didn't find different way to get delivery exec iframe.
+                window.parent.parent.$('[data-control="move-forward"] *').on('click', function () {
+                    checkedChoice = self.options.$container.find('.js-answer-input:checked');
+
+                    if (checkedChoice.length === 0) {
+                        feedback().info(__('Please make choice.'));
+                        result =  false;
+                    } else {
+                        if (checkedChoice.hasClass('correct')) {
+                            result = true;
+                        } else {
                             incorrectChoices = self.options.$container.find('.js-answer-input:not(.correct)');
                             if (incorrectChoices.length) {
                                 incorrectChoices[0].closest('.qti-choice').remove();
                                 feedback().info(__('This is the wrong answer. Please try again.'));
-                                $(this).prop('checked', false);
+                                checkedChoice.prop('checked', false);
                             }
+                            result =  false;
                         }
-                    });
+                    }
 
-                return this;
+                    return result;
+                });
             },
             /**
              * Render interaction
@@ -107,9 +116,9 @@ define([
                 return this;
             }
         };
-        
+
         renderer.init();
-        
+
         return renderer;
     };
 });
