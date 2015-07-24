@@ -65,14 +65,21 @@ define([
              * @returns {object} this
              */
             initEliminator : function initEliminator() {
+                var self = this,
+                    incorrectChoices,
+                    val;
+            
                 this.options.$container
                     .off('change.choiceEliminator.' + this.eventNs)
                     .on('change.choiceEliminator.' + this.eventNs, '.js-answer-input', function () {
-                        var val = parseInt($(this).val(), 10);
-
+                        val = parseInt($(this).val(), 10);
                         if (!options.interaction.properties.choices[val].correct) {
-                            $(this).closest('.qti-choice').remove();
-                            feedback().info(__('This is the wrong answer. Please try again.'));
+                            incorrectChoices = self.options.$container.find('.js-answer-input:not(.correct)');
+                            if (incorrectChoices.length) {
+                                incorrectChoices[0].closest('.qti-choice').remove();
+                                feedback().info(__('This is the wrong answer. Please try again.'));
+                                $(this).prop('checked', false);
+                            }
                         }
                     });
 
