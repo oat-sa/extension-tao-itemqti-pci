@@ -50,7 +50,8 @@ define([
                             templates : {
                                 markupTpl : markupTpl
                             },
-                            interaction : pci        
+                            interaction : pci,
+                            widget : Widget
                         });
                     }
                     pci.widgetRenderer.setState(state.name);
@@ -72,7 +73,8 @@ define([
                 choiceType : 'radio',
                 choices : [
                     {label : 'Choice 1'}, 
-                    {label : 'Choice 2'} 
+                    {label : 'Choice 2'},
+                    {label : 'Choice 3'}
                 ]
             };
         },

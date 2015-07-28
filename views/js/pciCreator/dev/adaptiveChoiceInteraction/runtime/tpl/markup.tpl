@@ -2,9 +2,9 @@
     <div id="feedback-box"></div>
     <div class="prompt">{{{prompt}}}</div>
     <div class="js-choice-container">
-        <ol class="plain block-listing solid">
+        <ol class="plain block-listing solid qti-choice-container">
             {{#each choices}}
-            <li class="qti-choice qti-simpleChoice">
+            <li class="qti-choice">
                 <div class="pseudo-label-box js-label-box">
                     <label class="real-label">
                         <input 
@@ -20,12 +20,12 @@
                     </label>
                     <div class="label-box">
                         <div class="label-content clear js-choice-label" data-choice-index="{{@index}}">
-                            <div>{{label}}</div>
+                            <div>{{{label}}}</div>
                         </div>
                     </div>
                 </div>
                 {{#if ../states.question}}
-                <div class="mini-tlb" data-edit="question" style="display:block;">
+                <div class="mini-tlb qti-choice__remove" data-edit="question" style="display:block;">
                     <div class="rgt tlb-button js-remove-choice" data-choice-index="{{@index}}" title="Delete">
                         <span class="icon-bin"></span>
                     </div>
@@ -33,7 +33,9 @@
                 {{/if}}
             </li>
             {{/each}}
-            {{#if states.question}}
+            {{#if addChoiceButton}}
+        </ol>
+        <ol class="plain block-listing solid">
             <li class="add-option js-add-choice">
                 <span class="icon-add"></span>
                 {{ __ 'Add choice'}}

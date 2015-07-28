@@ -19,13 +19,15 @@
 define([
     'jquery',
     'ui/feedback',
-    'i18n'
-], function ($, feedback, __) {
+    'i18n',
+    'util/url',
+    'taoQtiItem/qtiCreator/editor/containerEditor'
+], function ($, feedback, __, urlUtil, containerEditor) {
     'use strict';
     return function adaptiveChoiceRenderer(options) {
         var renderer,
-            defaultOptions = {};
-
+            defaultOptions = {},
+            markup;
 
         /**
          * Function returns Handlebars template options (helpers) that will be used when rendering.
@@ -34,9 +36,9 @@ define([
          */
         function getTemplateData(data) {
             data.states = {
-                'question' : renderer.options.state === 'question'
+                'question' : renderer.options.state === 'question',
             };
-
+            data.addChoiceButton = renderer.options.state === 'question' && data.choices.length < 3
             return data;
         }
 
@@ -53,7 +55,6 @@ define([
              */
             setState: function setState(state) {
                 this.options.state = state;
-
                 if (state === 'runtime') {
                     this.initEliminator();
                 }
@@ -97,23 +98,82 @@ define([
             /**
              * Render interaction
              * @param {object} data - interaction properties
+             * @param {boolean} returnMarkup - 
              * @return {object} this
              */
-            render : function render(data) {
-                var templateData;
+            render : function render(data, returnMarkup) {
+                var self = this,
+                    templateData;
+
                 if (this.options.templates && this.options.templates.markupTpl) {
                     data = _.cloneDeep(data);
 
                     templateData = getTemplateData(data);
-                    this.options.$container
-                        .find('.qti-customInteraction')
-                        .html(this.options.templates.markupTpl(templateData));
-
-                    this.options.interaction.updateMarkup();
-                    this.options.interaction.triggerPci('render' + this.eventNs + this.options.state);
+                    markup = this.options.templates.markupTpl(templateData);
+                    
+                    if (!returnMarkup) {
+                        this.options.$container
+                            .find('.qti-customInteraction')
+                            .html(markup);
+                    
+                        this.options.interaction.updateMarkup();
+                        this.options.interaction.triggerPci('render' + this.eventNs + this.options.state);
+                    }
                 }
+                
+                if (returnMarkup) {
+                    return markup;
+                } else  {
+                    return this;
+                }
+            },
+            /**
+             * Initialize prompt and cgoice labels editors.
+             * @returns {undefined}
+             */
+            initEditors : function initEditors() {
+                var self = this,
+                    $prompt = self.options.$container.find('.prompt'),
+                    //markup = $('.qti-customInteraction[data-serial="' + self.options.interaction.serial + '"]').html(),
+                    $choiceLabel;
 
-                return this;
+                containerEditor.create($prompt, {
+                    change : function (text) {
+                        self.options.interaction.properties.prompt = text;
+                        self.options.interaction.markup = self.render(self.options.interaction.properties, true);
+                    },
+                    markup : self.options.interaction.markup,
+                    markupSelector : '.prompt',
+                    related : self.options.interaction
+                });
+
+                this.options.$container.find('.js-choice-label').each(function (key, val) {
+                    $choiceLabel = self.options.$container.find('.js-choice-label[data-choice-index="' + key + '"]');
+                    containerEditor.create($choiceLabel, {
+                        change : function (text) {
+                            self.options.interaction.properties.choices[key].label = text;
+                            self.options.interaction.markup = self.render(self.options.interaction.properties, true);
+                        },
+                        markup : self.options.interaction.markup,
+                        markupSelector : '.js-choice-label[data-choice-index="' + key + '"]',
+                        related : self.options.interaction
+                    });
+                });
+            },
+
+            /**
+             * Destroy prompt and cgoice labels editors.
+             * @returns {undefined}
+             */
+            destroyEditors : function destroyEditors() {
+                var self = this,
+                    $choiceLabel;
+            
+                self.options.$container.find('.js-choice-label').each(function (key, val) {
+                    $choiceLabel = self.options.$container.find('.js-choice-label[data-choice-index="' + key + '"]');
+                    containerEditor.destroy($choiceLabel);
+                });
+                containerEditor.destroy(self.options.$container.find('.prompt'));
             }
         };
 
