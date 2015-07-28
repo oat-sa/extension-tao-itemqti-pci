@@ -1,0 +1,194 @@
+{
+    "itemData": {
+        "identifier": "i14374810233081318",
+        "serial": "item_55ae385503a91405209952",
+        "qtiClass": "assessmentItem",
+        "attributes": {
+            "identifier": "i14374810233081318",
+            "title": "Item 25",
+            "label": "",
+            "xml:lang": "en-US",
+            "adaptive": false,
+            "timeDependent": false,
+            "toolName": "TAO",
+            "toolVersion": "3.1.0-sprint03"
+        },
+        "body": {
+            "serial": "container_containeritembody_55ae385503a91618146775",
+            "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_55ae385513494176136195}}\n      <\/div>\n    <\/div>\n  ",
+            "elements": {
+                "interaction_portablecustominteraction_55ae385513494176136195": {
+                    "serial": "interaction_portablecustominteraction_55ae385513494176136195",
+                    "qtiClass": "customInteraction",
+                    "attributes": {
+                        "responseIdentifier": "RESPONSE"
+                    },
+                    "debug": {
+                        "relatedItem": "item_55ae385503a91405209952"
+                    },
+                    "choices": {},
+                    "typeIdentifier": "adaptiveChoiceInteraction",
+                    "markup": "\n              <div class=\"adaptiveChoiceInteraction\">\n                <div id=\"feedback-box\"><\/div>\n                <div class=\"prompt\">lorem ipsum<\/div>\n                <div class=\"js-choice-container\">\n                  <ol class=\"plain block-listing solid\">\n                    <li class=\"qti-choice qti-simpleChoice\">\n                      <div class=\"pseudo-label-box js-label-box\">\n                        <label class=\"real-label\">\n                          <input class=\"js-answer-input\" type=\"radio\" name=\"RESPONSE\" value=\"0\"><\/input>\n                          <span class=\"icon-radio\"><\/span>\n                        <\/label>\n                        <div class=\"label-box\">\n                          <div class=\"label-content clear js-choice-label\" data-choice-index=\"0\">\n                            <div>Choice 1<\/div>\n                          <\/div>\n                        <\/div>\n                      <\/div>\n                    <\/li>\n                    <li class=\"qti-choice qti-simpleChoice\">\n                      <div class=\"pseudo-label-box js-label-box\">\n                        <label class=\"real-label\">\n                          <input class=\"js-answer-input\" type=\"radio\" name=\"RESPONSE\" value=\"1\"><\/input>\n                          <span class=\"icon-radio\"><\/span>\n                        <\/label>\n                        <div class=\"label-box\">\n                          <div class=\"label-content clear js-choice-label\" data-choice-index=\"1\">\n                            <div>Choice 2<\/div>\n                          <\/div>\n                        <\/div>\n                      <\/div>\n                    <\/li>\n                    <li class=\"qti-choice qti-simpleChoice\">\n                      <div class=\"pseudo-label-box js-label-box\">\n                        <label class=\"real-label\">\n                          <input class=\"js-answer-input correct\" type=\"radio\" name=\"RESPONSE\" value=\"2\"><\/input>\n                          <span class=\"icon-radio\"><\/span>\n                        <\/label>\n                        <div class=\"label-box\">\n                          <div class=\"label-content clear js-choice-label\" data-choice-index=\"2\">\n                            <div>Choice 3<\/div>\n                          <\/div>\n                        <\/div>\n                      <\/div>\n                    <\/li>\n                  <\/ol>\n                <\/div>\n              <\/div>\n            ",
+                    "libraries": [],
+                    "properties": {
+                        "prompt": "lorem ipsum",
+                        "choiceType": "radio",
+                        "choices": [{
+                                "label": "Choice 1"
+                            }, {
+                                "label": "Choice 2"
+                            }, {
+                                "label": "Choice 3",
+                                "correct": "true"
+                            }],
+                        "responseIdentifier": "RESPONSE",
+                        "states": {
+                            "answer": "true"
+                        }
+                    },
+                    "entryPoint": "adaptiveChoiceInteraction\/runtime\/adaptiveChoiceInteraction.js"
+                }
+            },
+            "debug": {
+                "relatedItem": "item_55ae385503a91405209952"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_55ae385503a91405209952"
+        },
+        "namespaces": {
+            "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+            "html5": "html5",
+            "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+            "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
+            "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance",
+            "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1"
+        },
+        "stylesheets": {
+            "stylesheet_55ae38550ea5b329725927": {
+                "serial": "stylesheet_55ae38550ea5b329725927",
+                "qtiClass": "stylesheet",
+                "attributes": {
+                    "href": "style\/custom\/tao-user-styles.css",
+                    "type": "text\/css",
+                    "media": "all",
+                    "title": ""
+                },
+                "debug": {
+                    "relatedItem": "item_55ae385503a91405209952"
+                }
+            },
+            "stylesheet_55ae38550f9fb642191918": {
+                "serial": "stylesheet_55ae38550f9fb642191918",
+                "qtiClass": "stylesheet",
+                "attributes": {
+                    "href": "adaptiveChoiceInteraction\/runtime\/css\/adaptiveChoiceInteraction.css",
+                    "type": "text\/css",
+                    "media": "all",
+                    "title": ""
+                },
+                "debug": {
+                    "relatedItem": "item_55ae385503a91405209952"
+                }
+            }
+        },
+        "outcomes": {
+            "outcomedeclaration_55ae385511554777758791": {
+                "identifier": "SCORE",
+                "serial": "outcomedeclaration_55ae385511554777758791",
+                "qtiClass": "outcomeDeclaration",
+                "attributes": {
+                    "identifier": "SCORE",
+                    "cardinality": "single",
+                    "baseType": "float"
+                },
+                "debug": {
+                    "relatedItem": "item_55ae385503a91405209952"
+                },
+                "defaultValue": null
+            }
+        },
+        "responses": {
+            "responsedeclaration_55ae3855105b4300890857": {
+                "identifier": "RESPONSE",
+                "serial": "responsedeclaration_55ae3855105b4300890857",
+                "qtiClass": "responseDeclaration",
+                "attributes": {
+                    "identifier": "RESPONSE",
+                    "cardinality": "multiple",
+                    "baseType": "integer"
+                },
+                "debug": {
+                    "relatedItem": "item_55ae385503a91405209952"
+                },
+                "correctResponses": ["2"],
+                "mapping": [],
+                "areaMapping": [],
+                "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+                "mappingAttributes": {
+                    "defaultValue": 0
+                },
+                "feedbackRules": {}
+            }
+        },
+        "feedbacks": {},
+        "responseProcessing": {
+            "serial": "response_templatesdriven_55ae3855153d5614218097",
+            "qtiClass": "responseProcessing",
+            "attributes": [],
+            "debug": {
+                "relatedItem": "item_55ae385503a91405209952"
+            },
+            "processingType": "templateDriven",
+            "responseRules": [{
+                    "qtiClass": "responseCondition",
+                    "responseIf": {
+                        "qtiClass": "responseIf",
+                        "expression": {
+                            "qtiClass": "match",
+                            "expressions": [{
+                                    "qtiClass": "variable",
+                                    "attributes": {
+                                        "identifier": "RESPONSE"
+                                    }
+                                }, {
+                                    "qtiClass": "correct",
+                                    "attributes": {
+                                        "identifier": "RESPONSE"
+                                    }
+                                }]
+                        },
+                        "responseRules": [{
+                                "qtiClass": "setOutcomeValue",
+                                "attributes": {
+                                    "identifier": "SCORE"
+                                },
+                                "expression": {
+                                    "qtiClass": "baseValue",
+                                    "attributes": {
+                                        "baseType": "float"
+                                    },
+                                    "value": "1"
+                                }
+                            }]
+                    },
+                    "responseElse": {
+                        "qtiClass": "responseElse",
+                        "responseRules": [{
+                                "qtiClass": "setOutcomeValue",
+                                "attributes": {
+                                    "identifier": "SCORE"
+                                },
+                                "expression": {
+                                    "qtiClass": "baseValue",
+                                    "attributes": {
+                                        "baseType": "float"
+                                    },
+                                    "value": "0"
+                                }
+                            }]
+                    }
+                }]
+        }
+    }
+}

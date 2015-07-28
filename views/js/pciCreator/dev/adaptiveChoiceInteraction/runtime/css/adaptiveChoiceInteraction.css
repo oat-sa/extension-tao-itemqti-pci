@@ -1,0 +1,23 @@
+.item-editor-item .qti-customInteraction .adaptiveChoiceInteraction .simple-editable {
+    border: none;
+}
+.item-editor-item .adaptiveChoiceInteraction .prompt {
+    border: solid 1px transparent;
+}
+.item-editor-item .adaptiveChoiceInteraction .prompt[data-html-editable-container] {
+    border: none;
+}
+
+.adaptiveChoiceInteraction .qti-choice-container {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+.adaptiveChoiceInteraction .qti-choice-container .qti-choice {
+    display: table-cell;
+    padding-right: 35px;
+    border-right: 1px dashed #0e5d91;
+}
+.adaptiveChoiceInteraction .qti-choice-container .qti-choice .qti-choice__remove {
+    margin: 5px;
+}
