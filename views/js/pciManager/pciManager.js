@@ -18,7 +18,7 @@ define([
 
     var ns = '.pcimanager';
 
-    var _fileTypeFilters = ['application/zip'],
+    var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed'],
         _fileExtFilter = /.+\.(zip)$/;
 
     var _urls = {
