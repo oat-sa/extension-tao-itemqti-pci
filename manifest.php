@@ -24,7 +24,7 @@ return array(
 	'label' => 'QTI Portable Custom Interaction',
 	'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.1.1',
+    'version' => '0.1.2',
 	'author' => 'Open Assessment Technologies SA',
 	'requires' => array('taoQtiItem' => '>=2.7.0'),
     'acl' => array(
