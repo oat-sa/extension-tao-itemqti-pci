@@ -7,7 +7,7 @@
 >
     
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook">
-    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/TAO.rdf#TAOObject"/>
+    <rdfs:subClassOf rdf:resource="http://www.tao.lu/Ontologies/TAO.rdf#SystemObject"/>
     <rdfs:label xml:lang="en-US"><![CDATA[QTI-PCI-Creator Hooks]]></rdfs:label>
   </rdf:Description>
 
