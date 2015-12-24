@@ -22,20 +22,18 @@
 namespace oat\qtiItemPci\scripts\update;
 
 
-class Updater extends \common_ext_ExtensionUpdater 
+class Updater extends \common_ext_ExtensionUpdater
 {
-
-	/**
+    /**
      * 
      * @param string $currentVersion
      * @return string $versionUpdatedTo
      */
-    public function update($initialVersion) {
-        
-    	if($this->isLessThan('0.1.3')){
-    		$this->setVersion('0.1.3');
-    	}
-
-		return null;
-	}
+    public function update($initialVersion)
+    {
+      	if ($this->isBetween('0', '0.1.3')){
+  	    	$this->setVersion('0.1.3');
+   	    }
+       return null;
+    }
 }
