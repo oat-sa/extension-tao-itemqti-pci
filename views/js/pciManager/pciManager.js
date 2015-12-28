@@ -18,7 +18,7 @@ define([
 
     var ns = '.pcimanager';
 
-    var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed'],
+    var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
         _fileExtFilter = /.+\.(zip)$/;
 
     var _urls = {
@@ -135,16 +135,6 @@ define([
                 }
             });
             
-            return;
-            $(document).off('.pci-hook').on('elementCreated.qti-widget.pci-hook', function(e, data){
-                return; //deprecated
-                var element = data.element,
-                    typeIdentifier = element.typeIdentifier;
-
-                if(element.qtiClass === 'customInteraction' && typeIdentifier){
-                    ciRegistry.addRequiredResources(typeIdentifier, config.itemUri);
-                }
-            });
         }
 
         function updateListing(){
@@ -287,7 +277,9 @@ define([
 
                     //check the mime-type
                     files = _.filter(files, function(file){
-                        return _.contains(_fileTypeFilters, file.type) || (file.type === '' && _fileExtFilter.test(file.name));
+                        // for some weird reasons some browsers have quotes around the file type
+                        var checkType = file.type.replace(/("|')/g, '');
+                        return _.contains(_fileTypeFilters, checkType) || (checkType === '' && _fileExtFilter.test(file.name));
                     });
                     
                     if(files.length !== givenLength){
