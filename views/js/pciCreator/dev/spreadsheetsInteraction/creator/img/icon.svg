@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="190"
+        height="245"
+        id="spreadsheets"
+        version="1.1">
+
+    <!--background-->
+    <rect x="10" y="10" rx="15" width="170" height="225" fill="black"/>
+    <rect x="20" y="20" rx="5" width="150" height="205" fill="white"/>
+
+    <!--grid-->
+    <g>
+        <rect x="50" y="100" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="80" y="100" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="110" y="100" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+
+        <rect x="50" y="120" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="80" y="120" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="110" y="120" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+
+        <rect x="50" y="140" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="80" y="140" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="110" y="140" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+
+        <rect x="50" y="160" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="80" y="160" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+        <rect x="110" y="160" width="30" height="20" stroke="black" fill="white" stroke-width="4"/>
+    </g>
+
+    <!--triangle corner-->
+    <path d="M 130 60 l 0 -50 l 50 50 l -50 0" fill="black"/>
+    <path d="M 190 0 l 0 70 l -70 -70 l 70 0" fill="white"/>
+
+</svg>
