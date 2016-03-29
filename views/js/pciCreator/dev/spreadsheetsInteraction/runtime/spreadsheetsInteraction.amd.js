@@ -1,6 +1,7 @@
 define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event'], function($, qtiCustomInteractionContext, event){
+    'use strict';
 
-    var liquidsInteraction = {
+    var spreadsheetsInteraction = {
         
         /**
          * Custom Interaction Hook API: id
@@ -15,7 +16,7 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
          * @returns {String} The unique identifier of this PCI Hook implementation.
          */
         getTypeIdentifier : function(){
-            return 'liquidsInteraction';
+            return 'spreadsheetsInteraction';
         },
         
         /**
@@ -36,10 +37,6 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
             this.dom = dom;
             this.config = config || {};
 
-            var canvas = $(this.dom).find('.liquids')[0];
-            
-            this._drawLiquidContainer();
-
             // Tell the rendering engine that I am ready.
             // Please note that in this proposal, we consider the 'id' attribute to be part of the
             // Custom Interaction Hood API. The Global Context will then inspect the 'id' attribute
@@ -49,21 +46,9 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
             var self = this;
             
             // Bind events
-            $(canvas).on('click', function(e) {
-                var rect = canvas.getBoundingClientRect();
-                
-                var x = e.clientX - rect.left;
-                var y = e.clientY - rect.top;
-                
-                if (self._isCoordInLiquidContainer(x, y) === true) {
-                    self._clearCanvas();
-                    self._drawLiquidContainer(y);
-                    self._updateResponse(y);
-                    
-                    //communicate the response change to the interaction
-                    self.trigger('responsechange', [self.getResponse()]);
-                }
-            });
+            // $(canvas).on('click', function(e) {
+            //
+            // });
         },
         
         /**
@@ -76,8 +61,7 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
         setResponse : function(response){
             var y = this._yFromResponse(response);
             
-            this._clearCanvas();
-            this._drawLiquidContainer(y);
+
             this._updateResponse(y);
         },
         
@@ -99,8 +83,7 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
          * @param {Object} interaction
          */
         resetResponse : function(){
-            this._clearCanvas();
-            this._drawLiquidContainer();
+
             this._currentResponse = { base: null };
         },
         
@@ -114,7 +97,7 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
         destroy : function(){
 
             var $container = $(this.dom);
-            $container.find('.canvas').off();
+            //$container.find('.canvas').off();
         },
         
         /**
@@ -141,140 +124,6 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
         _currentResponse: { base : null },
         _callbacks: [],
         
-        _drawLiquidContainer : function(y) {
-            
-            var canvas = $(this.dom).find('.liquids')[0];
-            var ctx = canvas.getContext('2d');
-            var lineWidth = 2;
-            var font = '16px Arial';
-            var xLabel = '3 1/4 in';
-            var zLabel = '4 in'
-
-            ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = 'black';
-            ctx.fillStyle = 'white';
-
-            // Draw background rectangle
-            ctx.beginPath();
-            ctx.rect(210, 20, 160, 280);
-            ctx.stroke();
-            
-            // Draw edges
-            ctx.beginPath();
-            ctx.moveTo(210, 20);
-            ctx.lineTo(130, 70);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(210, 300);
-            ctx.lineTo(130, 350);
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(370, 300);
-            ctx.lineTo(290, 350);
-            ctx.stroke();
-            
-            // Draw liquid if needed
-            if (typeof y !== 'undefined') {
-                this._drawLiquid(ctx, y);
-            }
-            
-            // Last edge...
-            ctx.beginPath();
-            ctx.moveTo(370, 20);
-            ctx.lineTo(290, 70);
-            ctx.stroke();
-            
-            // Draw foreground rectangle
-            ctx.strokeStyle = 'black';
-            ctx.fillStyle = 'black';
-            ctx.beginPath();
-            ctx.rect(130, 70, 160, 280);
-            ctx.stroke();
-            
-            this._drawGraduations(ctx, lineWidth, font);
-            this._drawLabels(ctx, font, xLabel, zLabel);
-        },
-        
-        _drawGraduations : function(ctx, lineWidth, font) {
-            
-            ctx.lineWidth = lineWidth;
-            ctx.font = font;
-            ctx.textAlign = 'right'
-            
-            var i = 0;
-            var x = 130;
-            var y = 350;
-            var space = 25;
-            var width = 20;
-            
-            for (i; i <= 10; i++) {
-                ctx.beginPath();
-                ctx.moveTo(x - (width / 2), y);
-                ctx.lineTo(x + (width / 2), y);
-                ctx.stroke();
-                
-                ctx.fillText(i , x - width, y + 5);
-                
-                y -= space;
-            }
-        },
-        
-        _drawLabels : function(ctx, font, xLabel, zLabel) {
-            
-            ctx.font = font;
-            ctx.textAlign = 'center';
-            
-            // Draw x label
-            ctx.fillText(xLabel, 210, 370);
-            
-            // Draw z label
-            ctx.fillText(zLabel, 360, 340);
-            
-        },
-        
-        _clearCanvas : function() {
-            var canvas = $(this.dom).find('.liquids')[0];
-            var ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        },
-        
-        _isCoordInLiquidContainer : function(x, y) {
-            return (x >= 130 && x <= 290 && y >= 100 && y <= 350);
-        },
-
-        _drawLiquid : function(ctx, y) {
-            var closestY = this._closestMultiple(y, 25);
-            y = closestY;
-            
-            ctx.fillStyle = (closestY !== 350) ? '#003ADB' : 'transparent';
-            ctx.beginPath();
-            
-            // Draw liquid top
-            ctx.moveTo(130, y);
-            ctx.lineTo(290, y);
-            ctx.lineTo(370, y - 50);
-            ctx.lineTo(210, y - 50);
-            ctx.lineTo(130, y);
-            ctx.fill();
-            
-            // Draw liquid x face.
-            ctx.beginPath();
-            ctx.fillStyle = '#4B6FD1';
-            ctx.rect(130, y, 160, 350 - y);
-            ctx.fill();
-            
-            // Draw liquid z face.
-            ctx.beginPath();
-            ctx.fillStyle = '#7B96E3';
-            ctx.moveTo(290, y);
-            ctx.lineTo(369, y - 50);
-            ctx.lineTo(369, y + (300 - y));
-            ctx.lineTo(290, y + (350 - y));
-            ctx.fill();
-        },
-        
         _closestMultiple : function(numeric, multiple) {
             return multiple * Math.floor((numeric + multiple / 2) / multiple);
         },
@@ -292,5 +141,5 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
         }
     };
 
-    qtiCustomInteractionContext.register(liquidsInteraction);
+    qtiCustomInteractionContext.register(spreadsheetsInteraction);
 });

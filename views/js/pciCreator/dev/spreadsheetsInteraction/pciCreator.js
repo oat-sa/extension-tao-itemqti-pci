@@ -13,53 +13,53 @@ define([
     return {
         /**
          * (required) Get the typeIdentifier of the custom interaction
-         * 
+         *
          * @returns {String}
          */
-        getTypeIdentifier : function(){
+        getTypeIdentifier: function () {
             return _typeIdentifier;
         },
         /**
          * (required) Get the widget prototype
          * Used in the renderer
-         * 
+         *
          * @returns {Object} Widget
          */
-        getWidget : function(){
+        getWidget: function () {
             return Widget;
         },
         /**
          * (optional) Get the default properties values of the pci.
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
-        getDefaultProperties : function(pci){
+        getDefaultProperties: function (pci) {
             return {};
         },
         /**
-         * (optional) Callback to execute on the 
+         * (optional) Callback to execute on the
          * Used on new pci instance creation
-         * 
+         *
          * @returns {Object}
          */
-        afterCreate : function(pci){
+        afterCreate: function (pci) {
             //do some stuff
         },
         /**
-         * (required) Gives the qti pci xml template 
-         * 
+         * (required) Gives the qti pci xml template
+         *
          * @returns {function} handlebar template
          */
-        getMarkupTemplate : function(){
+        getMarkupTemplate: function () {
             return markupTpl;
         },
         /**
          * (optional) Allows passing additional data to xml template
-         * 
+         *
          * @returns {function} handlebar template
          */
-        getMarkupData : function(pci, defaultData){
+        getMarkupData: function (pci, defaultData) {
             defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
