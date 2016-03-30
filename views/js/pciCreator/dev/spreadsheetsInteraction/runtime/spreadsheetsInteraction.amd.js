@@ -1,4 +1,9 @@
-define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event'], function($, qtiCustomInteractionContext, event){
+define([
+    'IMSGlobal/jquery_2_1_1',
+    'qtiCustomInteractionContext',
+    'OAT/util/event',
+    '../lib/handsontable/handsontable'
+], function($, qtiCustomInteractionContext, event, Handsontable) {
     'use strict';
 
     var spreadsheetsInteraction = {
@@ -44,6 +49,22 @@ define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event
             qtiCustomInteractionContext.notifyReady(this);
             
             var self = this;
+
+            var data = [
+                ["", "Ford", "Volvo", "Toyota", "Honda"],
+                ["2016", 10, 11, 12, 13],
+                ["2017", 20, 11, 14, 13],
+                ["2018", 30, 15, 12, 13]
+            ];
+
+            var $container = $(this.dom);
+            var spreadsheet = $container.find('.spreadsheet');
+
+            var hot = new Handsontable(spreadsheet.get(0), {
+                data: data,
+                rowHeaders: true,
+                colHeaders: true
+            });
             
             // Bind events
             // $(canvas).on('click', function(e) {

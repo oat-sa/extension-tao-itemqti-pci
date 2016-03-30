@@ -6,12 +6,18 @@
     "author": "Ivan Klimchuk",
     "email": "klimchuk@1pt.com",
     "libraries": [
-        "IMSGlobal/jquery_2_1_1"
+        "IMSGlobal/jquery_2_1_1",
+        "./lib/handsontable/handsontable"
     ],
     "css": [
+        "./lib/handsontable/handsontable.css"
     ],
     "entryPoint": "./runtime/spreadsheetsInteraction.amd.js",
     "tags": [
+        "spreadsheet",
+        "chart",
+        "table",
+        "cell"
     ],
     "icon": "./creator/img/icon.svg",
     "short": "Spreadsheets",
