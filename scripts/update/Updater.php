@@ -31,8 +31,8 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($initialVersion)
     {
-      	if ($this->isBetween('0', '0.1.3')){
-  	    	$this->setVersion('0.1.3');
+      	if ($this->isBetween('0', '0.1.4')){
+  	    	$this->setVersion('0.1.4');
    	    }
        return null;
     }
