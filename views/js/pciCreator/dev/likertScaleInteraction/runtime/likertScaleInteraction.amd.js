@@ -11,17 +11,18 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
          * @param {Node} dom
          * @param {Object} config - json
          */
-        initialize : function(id, dom, config){
+        initialize : function(id, dom, config, assetManager){
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
             var _this = this;
+//            var assetManager = qtiCustomInteractionContext.getAssetResolver(this.getTypeIdentifier());//that would introduce dependency between the asset manager and global pci runtime context
             this.id = id;
             this.dom = dom;
             this.config = config || {};
 
-            renderer.render(this.id, this.dom, this.config);
+            renderer.render(this.id, this.dom, this.config, assetManager);
 
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
