@@ -70,17 +70,17 @@ class PciRegistry extends ConfigurableService
     }
 
 
-    protected function registerFile($id, $files)
+    protected function registerFile($id, $version, $files)
     {
         $fs = $this->getFileSystem();
         foreach ($files as $relPath => $content) {
-            $fs->writeStream($this->getPrefix($id).$relPath, $content);
+            $fs->writeStream($this->getPrefix($id, $version).$relPath, $content);
         }
     }
 
-    protected function getFileUrl($id, $file)
+    protected function getFileUrl($id, $version, $file)
     {
-        $this->getAccessProvider()->getAccessUrl($this->getPrefix($id).$file);
+        $this->getAccessProvider()->getAccessUrl($this->getPrefix($id, $version).$file);
     }
     
     protected function getFileContent(){
