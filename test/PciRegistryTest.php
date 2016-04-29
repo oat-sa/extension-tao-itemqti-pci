@@ -37,7 +37,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
 //        \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
-        $this->registry = new PciRegistry();
+        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     
     /**
@@ -45,7 +45,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
      */
     public function tearDown(){
         if($this->registry != null){
-            $this->registry->unregisterAll();
+//            $this->registry->unregisterAll();
         }
         else {
             $this->fail('registry should not be null' );
@@ -67,6 +67,9 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
             'likertScaleInteraction/runtime/assets/ThumbDown.png' => $pciTmpDir.'runtime/css/likertScaleInteraction.css'
         ]);
         
+        var_dump($this->registry->getRuntimeLocation('superPciX', '0.1.0'));
+        var_dump($this->registry->getRuntimeLocation('superPciX', '0.1.1'));
+        return;
         $this->registry->register('superPciX', '0.1.1', [
             'likertScaleInteraction/runtime/likertScaleInteraction.amd.js' =>  $pciTmpDir.'runtime/likertScaleInteraction.amd.js'
         ]);

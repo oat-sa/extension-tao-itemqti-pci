@@ -48,7 +48,7 @@ class PciRegistry extends ConfigurableService
 
     const OPTION_WEBSOURCE = 'websource';
     
-    const CONFIG_ID = 'pciRegistry';
+    const CONFIG_ID = 'pciRegistryEntries';
 
     /**
      * @return Filesystem
@@ -73,7 +73,7 @@ class PciRegistry extends ConfigurableService
     }
 
 
-    protected function registerFile($id, $version, $files)
+    protected function registerFiles($id, $version, $files)
     {
         $fs = $this->getFileSystem();
         foreach ($files as $relPath => $content) {
@@ -99,7 +99,6 @@ class PciRegistry extends ConfigurableService
     }
     
     protected function setMap($map){
-        var_dump($map);
         \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->setConfig(self::CONFIG_ID, $map);
     }
     
@@ -143,14 +142,14 @@ class PciRegistry extends ConfigurableService
             'mediaFiles' => $mediaFiles
         ];
         
-//        $files = array_merge($hook, $libs, $stylesheets, $mediaFiles);
-//        $this->registerFile($typeIdentifier, $targetVersion, $files);
+        $files = array_merge($hook, $libs, $stylesheets, $mediaFiles);
+        $this->registerFiles($typeIdentifier, $targetVersion, $files);
         
         $this->setMap($pcis);
     }
     
     public function getRuntimeLocation($typeIdentifier, $targetVersion = ''){
-        $baseUrl = $pciRegistry->getPciUrl($typeIdentifier, $targetVersion, '');
+        return $this->getFileUrl($typeIdentifier, $targetVersion, '');
     }
     
     public function unregister($typeIdentifier, $targetVersion){

@@ -5,4 +5,4 @@
  * Register 
  */
 
-return null;
+return array();
