@@ -45,14 +45,31 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
      */
     public function tearDown(){
         if($this->registry != null){
-            $this->registry->removeAll();
+            $this->registry->unregisterAll();
         }
         else {
             $this->fail('registry should not be null' );
         }
     }
     
-    public function testInit(){
+    public function testRegister(){
+        
+        $pciTmpDir = '/tmp/pci12345679/';
+        
+        $this->registry->register('superPciX', '0.1.0', [
+            'likertScaleInteraction/runtime/likertScaleInteraction.amd.js' =>  $pciTmpDir.'runtime/likertScaleInteraction.amd.js'
+        ], [
+            'likertScaleInteraction/runtime/js/renderer.js' => $pciTmpDir.'runtime/js/renderer.js'
+        ], [
+            'likertScaleInteraction/runtime/css/likertScaleInteraction.css' => $pciTmpDir.'runtime/css/likertScaleInteraction.css'
+        ], [
+            'likertScaleInteraction/runtime/assets/ThumbUp.png' => $pciTmpDir.'runtime/css/likertScaleInteraction.css',
+            'likertScaleInteraction/runtime/assets/ThumbDown.png' => $pciTmpDir.'runtime/css/likertScaleInteraction.css'
+        ]);
+        
+        $this->registry->register('superPciX', '0.1.1', [
+            'likertScaleInteraction/runtime/likertScaleInteraction.amd.js' =>  $pciTmpDir.'runtime/likertScaleInteraction.amd.js'
+        ]);
         
     }
     

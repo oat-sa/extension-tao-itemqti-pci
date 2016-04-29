@@ -83,48 +83,74 @@ class PciRegistry extends ConfigurableService
         $this->getAccessProvider()->getAccessUrl($this->getPrefix($id, $version).$file);
     }
     
-    protected function getFileContent(){
+    protected function getFileContent($id, $version, $file){
+        
+    }
+    
+    protected function removeFile($id, $version, $file){
         
     }
     
     protected function getMap(){
-        return $this->getExtension()->getConfig(self::CONFIG_ID);
+        return \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(self::CONFIG_ID);
     }
     
     protected function setMap($map){
-        $this->getExtension()->setConfig(self::CONFIG_ID, $map);
+        var_dump($map);
+        \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->setConfig(self::CONFIG_ID, $map);
     }
-
-
+    
+    public function getLatestVersion($typeIdentifier){
+        $pcis = $this->getMap();
+        if(isset($pcis[$typeIdentifier])){
+            $pci = $pcis[$typeIdentifier];
+            end($pci);
+            return key($pci);
+        }
+        return null;
+    }
+    
+    public function exists($typeIdentifier, $version = null){
+        $pcis = $this->getMap();
+        if(isset($pcis[$typeIdentifier])){
+            return (isset($pcis[$typeIdentifier][$version]));
+        }else{
+            throw new \common_Exception('the pci does not exist '.$typeIdentifier);
+        }
+    }
+    
     public function register($typeIdentifier, $targetVersion, $hook = [], $libs = [], $stylesheets = [], $mediaFiles = []){
         
         $pcis = $this->getMap();
         
-        if(isset($config[$typeIdentifier])){
+        if(isset($pcis[$typeIdentifier])){
             //check version:
+            $latest = $this->getLatestVersion($typeIdentifier);
+            if(version_compare($targetVersion, $latest, '<')){
+                throw new \common_Exception('A newer version of the code already exists '.$latest);
+            }
         }else{
-            $config[$typeIdentifier] = [];
+            $pcis[$typeIdentifier] = [];
         }
         
-        $config[$typeIdentifier][$targetVersion] = [
+        $pcis[$typeIdentifier][$targetVersion] = [
             'hook' => $hook,
             'libs' => $libs,
             'stylesheets' => $stylesheets,
             'mediaFiles' => $mediaFiles
         ];
         
+//        $files = array_merge($hook, $libs, $stylesheets, $mediaFiles);
+//        $this->registerFile($typeIdentifier, $targetVersion, $files);
+        
         $this->setMap($pcis);
     }
     
-    public function update($typeIdentifier, $sourceVersion, $targetVersion, $hook = '', $libs = [], $stylesheets = [], $mediaFiles = []){
-        
+    public function getRuntimeLocation($typeIdentifier, $targetVersion = ''){
+        $baseUrl = $pciRegistry->getPciUrl($typeIdentifier, $targetVersion, '');
     }
     
-    public function getRuntimeLocation($typeIdentifier, $targetVersion){
-        
-    }
-    
-    public function remove($typeIdentifier, $targetVersion){
+    public function unregister($typeIdentifier, $targetVersion){
         
     }
     
@@ -136,21 +162,7 @@ class PciRegistry extends ConfigurableService
         
     }
     
-    public function removeAll(){
+    public function unregisterAll(){
         $this->setMap([]);
     }
 }
-
-
-
-$files = array(
-    'a.js' => './tmp/mycontent',
-    'img/a.img' => './tmp/stuff'
-);
-
-$pciRegistry = new PciRegistry();
-$pciRegistry->registerPci('superPci', $files);
-
-
-
-$baseUrl = $pciRegistry->getPciUrl('superPci', '');
