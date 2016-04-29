@@ -32,6 +32,8 @@ use oat\qtiItemPci\model\CreatorPackageParser;
 use oat\oatbox\service\ConfigurableService;
 use oat\tao\model\websource\Websource;
 use League\Flysystem\Filesystem;
+use oat\oatbox\filesystem\FileSystemService;
+use oat\tao\model\websource\WebsourceManager;
 
 /**
  * CreatorRegistry stores reference to
@@ -40,9 +42,9 @@ use League\Flysystem\Filesystem;
  */
 class PciRegistry extends ConfigurableService
 {
-    const SERVICE_ID = 'qtiItemPci\pciRegistry';
+    const SERVICE_ID = 'qtiItemPci/pciRegistry';
 
-    const OPTION_FILESYSTEM = 'filesystem';
+    const OPTION_FS = 'filesystem';
 
     const OPTION_WEBSOURCE = 'websource';
     
@@ -53,7 +55,8 @@ class PciRegistry extends ConfigurableService
      */
     protected function getFileSystem()
     {
-
+        $fss = $this->getServiceLocator()->get(FileSystemService::SERVICE_ID);
+        return $fss->getFileSystem($this->getOption(self::OPTION_FS));
     }
 
     /**
@@ -61,7 +64,7 @@ class PciRegistry extends ConfigurableService
      */
     protected function getAccessProvider()
     {
-
+        return WebsourceManager::singleton()->getWebsource($this->getOption(self::OPTION_WEBSOURCE));
     }
 
     protected function getPrefix($id, $version)
