@@ -34,7 +34,7 @@ use oat\tao\model\websource\Websource;
 use League\Flysystem\Filesystem;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\tao\model\websource\WebsourceManager;
-
+use common_Logger;
 /**
  * CreatorRegistry stores reference to
  *
@@ -73,25 +73,48 @@ class PciRegistry extends ConfigurableService
     }
 
 
-    protected function registerFiles($id, $version, $files)
+    protected function registerFiles($typeIdentifier, $version, $files)
     {
+        $registered = false;
         $fs = $this->getFileSystem();
-        foreach ($files as $relPath => $content) {
-            $fs->writeStream($this->getPrefix($id, $version).$relPath, $content);
+        foreach ($files as $relPath => $file) {
+            if(file_exists($file)){
+                $fileId = $this->getPrefix($typeIdentifier, $version).$relPath;
+                $resource = fopen($file, 'r');
+                if($fs->has($fileId)){
+                    common_Logger::w('updated stream '.$typeIdentifier . ' '. $version.' '.$relPath);
+                    $registered &= $fs->updateStream($fileId, $resource);
+                }else{
+                    $registered &= $fs->writeStream($fileId, $resource);
+                }
+            }else{
+                throw new \common_Exception('file cannot be opened : ' . $file);
+            }
         }
+        return $registered;
     }
 
-    protected function getFileUrl($id, $version, $file)
+    protected function getFileUrl($typeIdentifier, $version, $relPath)
     {
-        $this->getAccessProvider()->getAccessUrl($this->getPrefix($id, $version).$file);
+        return $this->getAccessProvider()->getAccessUrl($this->getPrefix($typeIdentifier, $version).$relPath);
     }
     
     protected function getFileContent($id, $version, $file){
         
     }
     
-    protected function removeFile($id, $version, $file){
-        
+    protected function unregisterFiles($id, $version, $files){
+        $deleted = false;
+        $fs = $this->getFileSystem();
+        foreach ($files as $relPath) {
+            $fileId = $this->getPrefix($id, $version).$relPath;
+            if($fs->has($fileId)){
+                $deleted &= $fs->delete($fileId);
+            }else{
+                throw new \common_Exception('File does not exists in the filesystem : ' . $relPath);
+            }
+        }
+        return $deleted;
     }
     
     protected function getMap(){
@@ -112,10 +135,15 @@ class PciRegistry extends ConfigurableService
         return null;
     }
     
-    public function exists($typeIdentifier, $version = null){
+    public function exists($typeIdentifier, $version = ''){
         $pcis = $this->getMap();
         if(isset($pcis[$typeIdentifier])){
-            return (isset($pcis[$typeIdentifier][$version]));
+            if(empty($version)){
+                $version = $this->getLatestVersion($typeIdentifier);
+            }
+            if(!empty($version)){
+                return (isset($pcis[$typeIdentifier][$version]));
+            }
         }else{
             throw new \common_Exception('the pci does not exist '.$typeIdentifier);
         }
@@ -148,23 +176,63 @@ class PciRegistry extends ConfigurableService
         $this->setMap($pcis);
     }
     
-    public function getRuntimeLocation($typeIdentifier, $targetVersion = ''){
-        return $this->getFileUrl($typeIdentifier, $targetVersion, '');
+    public function getRuntimeLocation($typeIdentifier, $version = ''){
+        if($this->exists($typeIdentifier, $version)){
+            return $this->getFileUrl($typeIdentifier, $version, '');
+        }
+        return false;
     }
     
-    public function unregister($typeIdentifier, $targetVersion){
+    public function unregister($typeIdentifier, $version){
         
     }
     
-    public function export($typeIdentifier, $targetVersion){
+    public function export($typeIdentifier, $version){
         
+    }
+    
+    public function get($typeIdentifier, $version = ''){
+        $pcis = $this->getMap();
+        if(isset($pcis[$typeIdentifier])){
+            if(empty($version)){
+                $version = $this->getLatestVersion($typeIdentifier);
+            }
+            if($pcis[$typeIdentifier][$version]){
+                $pci =  $pcis[$typeIdentifier][$version];
+                $pci['runtimeLocation'] = $this->getRuntimeLocation($typeIdentifier, $version);
+                foreach($pci['hook'] as $relPath => $file){
+                    $pci['hook'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
+                }
+                foreach($pci['libs'] as $relPath => $file){
+                    $pci['libs'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
+                }
+                foreach($pci['stylesheets'] as $relPath => $file){
+                    $pci['stylesheets'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
+                }
+                foreach($pci['mediaFiles'] as $relPath => $file){
+                    $pci['mediaFiles'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
+                }
+                return $pci;
+            }else{
+                throw new \common_Exception('The pci does not exist in the requested version : '.$typeIdentifier.' '.$version);
+            }
+        }else{
+            throw new \common_Exception('The pci does not exist : '.$typeIdentifier);
+        }
     }
     
     public function getAll(){
-        
+        return $this->getMap();
     }
     
     public function unregisterAll(){
+        $pcis = $this->getMap();
+        foreach($pcis as $typeIdentifier => $versions){
+            foreach($versions as $version => $files){
+                $allFiles = array_merge($files['hook'], $files['libs'], $files['stylesheets'], $files['mediaFiles']);
+                $this->unregisterFiles($typeIdentifier, $version, array_keys($allFiles));
+            }
+        }
         $this->setMap([]);
     }
 }

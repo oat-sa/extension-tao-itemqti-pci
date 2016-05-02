@@ -54,26 +54,23 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
     
     public function testRegister(){
         
-        $pciTmpDir = '/tmp/pci12345679/';
+        $pciTmpDir = dirname(__FILE__).'/../views/js/pciCreator/dev/likertScaleInteraction/';
         
         $this->registry->register('superPciX', '0.1.0', [
-            'likertScaleInteraction/runtime/likertScaleInteraction.amd.js' =>  $pciTmpDir.'runtime/likertScaleInteraction.amd.js'
+            'runtime/likertScaleInteraction.amd.js' =>  $pciTmpDir.'runtime/likertScaleInteraction.amd.js'
         ], [
-            'likertScaleInteraction/runtime/js/renderer.js' => $pciTmpDir.'runtime/js/renderer.js'
+            'runtime/js/renderer.js' => $pciTmpDir.'runtime/js/renderer.js'
         ], [
-            'likertScaleInteraction/runtime/css/likertScaleInteraction.css' => $pciTmpDir.'runtime/css/likertScaleInteraction.css'
+            'runtime/css/likertScaleInteraction.css' => $pciTmpDir.'runtime/css/likertScaleInteraction.css'
         ], [
-            'likertScaleInteraction/runtime/assets/ThumbUp.png' => $pciTmpDir.'runtime/css/likertScaleInteraction.css',
-            'likertScaleInteraction/runtime/assets/ThumbDown.png' => $pciTmpDir.'runtime/css/likertScaleInteraction.css'
+            'runtime/assets/ThumbDown.png' => $pciTmpDir.'runtime/assets/ThumbDown.png',
+            'runtime/assets/ThumbUp.png' => $pciTmpDir.'runtime/assets/ThumbUp.png'
         ]);
         
-        var_dump($this->registry->getRuntimeLocation('superPciX', '0.1.0'));
-        var_dump($this->registry->getRuntimeLocation('superPciX', '0.1.1'));
-        return;
-        $this->registry->register('superPciX', '0.1.1', [
-            'likertScaleInteraction/runtime/likertScaleInteraction.amd.js' =>  $pciTmpDir.'runtime/likertScaleInteraction.amd.js'
-        ]);
+        $this->assertTrue(strlen($this->registry->getRuntimeLocation('superPciX', '0.1.0')) > 0);
+        $this->assertFalse($this->registry->getRuntimeLocation('superPciX', '0.1.1'));
         
+        $pci = $this->registry->get('superPciX', '0.1.0');
     }
     
 }
