@@ -56,21 +56,25 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         
         $pciTmpDir = dirname(__FILE__).'/../views/js/pciCreator/dev/likertScaleInteraction/';
         
-        $this->registry->register('superPciX', '0.1.0', [
+        $this->registry->register('likertScaleInteraction', '0.1.0', [
             'runtime/likertScaleInteraction.amd.js' =>  $pciTmpDir.'runtime/likertScaleInteraction.amd.js'
         ], [
             'runtime/js/renderer.js' => $pciTmpDir.'runtime/js/renderer.js'
         ], [
-            'runtime/css/likertScaleInteraction.css' => $pciTmpDir.'runtime/css/likertScaleInteraction.css'
+            'runtime/css/likertScaleInteraction.css' => $pciTmpDir.'runtime/css/likertScaleInteraction.css',
+            'runtime/css/base.css' => $pciTmpDir.'runtime/css/base.css'
         ], [
             'runtime/assets/ThumbDown.png' => $pciTmpDir.'runtime/assets/ThumbDown.png',
-            'runtime/assets/ThumbUp.png' => $pciTmpDir.'runtime/assets/ThumbUp.png'
+            'runtime/assets/ThumbUp.png' => $pciTmpDir.'runtime/assets/ThumbUp.png',
+            'runtime/css/img/bg.png' => $pciTmpDir.'runtime/css/img/bg.png'
         ]);
         
-        $this->assertTrue(strlen($this->registry->getRuntimeLocation('superPciX', '0.1.0')) > 0);
-        $this->assertFalse($this->registry->getRuntimeLocation('superPciX', '0.1.1'));
+        $this->assertTrue(strlen($this->registry->getRuntimeLocation('likertScaleInteraction', '0.1.0')) > 0);
+        $this->assertFalse($this->registry->getRuntimeLocation('likertScaleInteraction', '0.1.1'));
         
-        $pci = $this->registry->get('superPciX', '0.1.0');
+        $pci = $this->registry->get('likertScaleInteraction', '0.1.0');
+        $pcis = $this->registry->getAllLatest();
+        var_dump($pci, $pcis);
     }
     
 }

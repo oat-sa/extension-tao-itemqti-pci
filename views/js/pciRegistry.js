@@ -16,10 +16,14 @@
  * Copyright (c) 201 (original work) Open Assessment Technlogies SA;
  *
  */
-define(['lodash'], function (_){
+define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
     'use strict';
-
-    var registry = {
+    
+    var _serverUrl = helpers._url('load', 'PciLoader', 'qtiItemPci');
+    var _loaded = false;
+    var _registry = {};
+    
+    var _registry0 = {
         likertScaleInteraction : {
             '0.1.0' : {
                 runtimeLocation : 'http://tao.localdomain/qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction',
@@ -40,13 +44,13 @@ define(['lodash'], function (_){
 
     function getRuntime(typeIdentifier, version){
         
-        if(registry[typeIdentifier]){
+        if(_registry[typeIdentifier]){
             //check version
             if(version){
-                return registry[typeIdentifier][version] || null;
+                return _registry[typeIdentifier][version] || null;
             }else{
                 //latest
-                return _.values(registry[typeIdentifier])[0];
+                return _.values(_registry[typeIdentifier])[0];
             }
         }
     }
@@ -59,8 +63,25 @@ define(['lodash'], function (_){
         return '';
     }
     
+    function load(cb){
+        if(_loaded){
+            cb();
+        }else{
+            $.ajax({
+                url: _serverUrl,
+                dataType : 'json',
+                type: 'GET'
+            }).done(function(pcis) {
+                _registry = pcis;
+                _loaded = true;
+                cb();
+            });
+        }
+    }
+    
     return {
         getRuntime : getRuntime,
-        getRuntimeLocation : getRuntimeLocation
+        getRuntimeLocation : getRuntimeLocation,
+        load : load
     };
 });

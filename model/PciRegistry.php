@@ -199,6 +199,7 @@ class PciRegistry extends ConfigurableService
             }
             if($pcis[$typeIdentifier][$version]){
                 $pci =  $pcis[$typeIdentifier][$version];
+                $pci['version'] = $version;
                 $pci['runtimeLocation'] = $this->getRuntimeLocation($typeIdentifier, $version);
                 foreach($pci['hook'] as $relPath => $file){
                     $pci['hook'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
@@ -221,8 +222,15 @@ class PciRegistry extends ConfigurableService
         }
     }
     
-    public function getAll(){
-        return $this->getMap();
+    public function getAllLatest(){
+        $all = [];
+        $pcis = $this->getMap();
+        foreach($pcis as $typeIdentifier => $versions){
+            $version = $this->getLatestVersion($typeIdentifier);
+            $pci = $this->get($typeIdentifier, $version);
+            $all[$typeIdentifier] = [$version => $pci];
+        }
+        return $all;
     }
     
     public function unregisterAll(){
