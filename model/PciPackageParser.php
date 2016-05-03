@@ -14,7 +14,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  * 
  */
 
@@ -26,12 +26,12 @@ use common_Exception;
 use \ZipArchive;
 
 /**
- * Parser of a QTI PCI Creator package
- * 
- * @deprecated replaced by oat\qtiItemPci\model\PciPackageParser
+ * Parser of a QTI PCI package
+ * A PCI package must contain a manifest pciCreator.json in the root as well as a pciCreator.js creator file
+ *
  * @package qtiItemPci
  */
-class CreatorPackageParser extends PackageParser
+class PciPackageParser extends PackageParser
 {
 
     /**
@@ -89,9 +89,9 @@ class CreatorPackageParser extends PackageParser
             'author' => 'string',
             'email' => 'string',
             'tags' => 'array',
-            'icon' => 'file',
-            'entryPoint' => 'file',
-            'response' => 'array'
+            'response' => 'array',
+            'runtime' => 'array',
+            'creator' => 'array'
         );
 
         $zip = new ZipArchive();

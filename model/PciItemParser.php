@@ -23,11 +23,11 @@ namespace oat\qtiItemPci\model;
 use oat\taoQtiItem\model\qti\Parser;
 
 /**
- * The hook used in the item creator
+ * Enable parsing QTI Item containing PCI interactions and provide way to extract the information
  *
  * @package qtiItemPci
  */
-class PciParser extends Parser
+class PciItemParser extends Parser
 {
 
     public function getPciResources(){
@@ -38,13 +38,15 @@ class PciParser extends Parser
             $pcis = $item->getComposingElements('oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction');
 
             foreach($pcis as $pci){
-
                 $data[] = [
                     'typeIdentifier' => $pci->getTypeIdentifier(),
-                    'libraries' => $pci->getEntryPoint(),
-                    'libs' => $pci->getLibraries(),
-                    'stylesheets' => $pci->getStylesheets(),
-                    'mediaFiles' => $pci->getMediaFiles()
+                    'version' => $pci->getVersion(),
+                    'runtime' => [
+                        'hook' => $pci->getEntryPoint(),
+                        'libraries' => $pci->getLibraries(),
+                        'stylesheets' => $pci->getStylesheets(),
+                        'mediaFiles' => $pci->getMediaFiles()
+                    ]
                 ];
             }
         }else{
@@ -53,9 +55,4 @@ class PciParser extends Parser
         return $data;
     }
     
-    public function registerPci($typeIdentifier, $targetVersion, $hook = [], $libs = [], $stylesheets = [], $media = []){
-        
-        
-        return true;
-    }
 }

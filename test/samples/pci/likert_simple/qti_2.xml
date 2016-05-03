@@ -13,14 +13,6 @@
     
     <itemBody>
         
-        <p>
-            1.parse xml
-            2.register libs and assets by version (default 0.1.0)
-            3.remove resources, "hook"
-            4.load the model
-            5.load xml
-        </p>
-        
         <customInteraction responseIdentifier="likert1">
             <pci:portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteraction" hook="likertScaleInteraction/runtime/likertScaleInteraction.amd.js">
 

@@ -38,7 +38,8 @@ class CreatorHook implements Hook
      * @param \oat\qtiItemPci\model\Config $config
      */
     public function init(Config $config){
-
+        
+        //@todo remove the deprecated usage for CreatorRegistry and use the oat\qtiItemPci\model\PciRegistry instead
         $registry = new CreatorRegistry();
 
         //get registered PCI

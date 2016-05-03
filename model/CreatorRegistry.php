@@ -32,6 +32,7 @@ use oat\qtiItemPci\model\CreatorPackageParser;
 /**
  * CreatorRegistry stores reference to 
  *
+ * @deprecated replaced by oat\qtiItemPci\model\PciRegistry
  * @package qtiItemPci
  */
 class CreatorRegistry extends ParentRegistry

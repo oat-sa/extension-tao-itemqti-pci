@@ -22,13 +22,11 @@
 namespace oat\qtiItemPci\test;
 
 use oat\tao\test\TaoPhpUnitTestRunner;
-use oat\qtiItemPci\model\PciParser;
+use oat\qtiItemPci\model\PciItemParser;
 
 
-class PciParserTest extends TaoPhpUnitTestRunner
+class PciItemParserTest extends TaoPhpUnitTestRunner
 {
-
-    protected $registry;
 
     /**
      * tests initialization
@@ -39,25 +37,11 @@ class PciParserTest extends TaoPhpUnitTestRunner
         \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
     }
     
-    /**
-     * remove all created instances
-     */
-    public function tearDown(){
-        return;
-        if($this->registry != null){
-            $this->registry->removeAll();
-        }
-        else {
-            $this->fail('registry should not be null' );
-        }
-    }
-    
     public function testInit(){
         
         $qtiXmlFile = dirname(__FILE__).'/samples/pci/likert_simple/qti_2.xml';
-        $parser = new PciParser($qtiXmlFile);
+        $parser = new PciItemParser($qtiXmlFile);
         
         print_r($parser->getPciResources());
     }
-    
 }

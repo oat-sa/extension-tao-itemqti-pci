@@ -72,6 +72,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                 dataType : 'json',
                 type: 'GET'
             }).done(function(pcis) {
+                console.log('load');
                 _registry = pcis;
                 _loaded = true;
                 cb();
