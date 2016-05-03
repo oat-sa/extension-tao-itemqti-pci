@@ -55,7 +55,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         }
     }
     
-    function getRuntimeLocation(typeIdentifier, version){
+    function getBaseUrl(typeIdentifier, version){
         var runtime = getRuntime(typeIdentifier, version);
         if(runtime){
             return runtime.runtimeLocation;
@@ -82,7 +82,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
     
     return {
         getRuntime : getRuntime,
-        getRuntimeLocation : getRuntimeLocation,
+        getBaseUrl : getBaseUrl,
         load : load
     };
 });

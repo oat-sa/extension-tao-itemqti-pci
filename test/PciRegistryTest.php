@@ -69,11 +69,11 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
             'runtime/css/img/bg.png' => $pciTmpDir.'runtime/css/img/bg.png'
         ]);
         
-        $this->assertTrue(strlen($this->registry->getRuntimeLocation('likertScaleInteraction', '0.1.0')) > 0);
-        $this->assertFalse($this->registry->getRuntimeLocation('likertScaleInteraction', '0.1.1'));
+        $this->assertTrue(strlen($this->registry->getBaseUrl('likertScaleInteraction', '0.1.0')) > 0);
+        $this->assertFalse($this->registry->getBaseUrl('likertScaleInteraction', '0.1.1'));
         
-        $pci = $this->registry->get('likertScaleInteraction', '0.1.0');
-        $pcis = $this->registry->getAllLatest();
+        $pci = $this->registry->getRuntime('likertScaleInteraction', '0.1.0');
+        $pcis = $this->registry->getLatestRuntime();
         var_dump($pci, $pcis);
     }
     

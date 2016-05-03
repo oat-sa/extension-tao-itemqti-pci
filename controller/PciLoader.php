@@ -30,7 +30,7 @@ class PciLoader extends tao_actions_CommonModule
     }
     
     public function load(){
-        $pcis = $this->registry->getAllLatest();
+        $pcis = $this->registry->getLatestRuntime();
         foreach($pcis as $typeIdentifier => &$versions){
             foreach($versions as &$files){
                 $hook = reset(array_keys($files['hook']));
