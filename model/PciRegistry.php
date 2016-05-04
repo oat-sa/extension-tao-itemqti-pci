@@ -21,14 +21,7 @@
 
 namespace oat\qtiItemPci\model;
 
-use oat\taoQtiItem\model\CreatorRegistry as ParentRegistry;
-use \core_kernel_classes_Resource;
-use \core_kernel_classes_Class;
-use \core_kernel_classes_Property;
-use \tao_models_classes_service_FileStorage;
 use \common_ext_ExtensionsManager;
-use \tao_helpers_Uri;
-use oat\qtiItemPci\model\CreatorPackageParser;
 use oat\oatbox\service\ConfigurableService;
 use oat\tao\model\websource\Websource;
 use League\Flysystem\Filesystem;
@@ -50,13 +43,20 @@ class PciRegistry extends ConfigurableService
     
     const CONFIG_ID = 'pciRegistryEntries';
 
+    protected $storage;
+
     /**
      * @return Filesystem
      */
     protected function getFileSystem()
     {
-        $fss = $this->getServiceLocator()->get(FileSystemService::SERVICE_ID);
-        return $fss->getFileSystem($this->getOption(self::OPTION_FS));
+        if (!$this->storage) {
+            $this->storage = $this
+                ->getServiceLocator()
+                ->get(FileSystemService::SERVICE_ID)
+                ->getFileSystem($this->getOption(self::OPTION_FS));
+        }
+        return $this->storage;
     }
 
     /**
@@ -77,7 +77,7 @@ class PciRegistry extends ConfigurableService
     {
         $registered = false;
         $fs = $this->getFileSystem();
-        var_dump($files);
+        //var_dump($files);
         foreach ($files as $relPath => $file) {
             
             if(file_exists($file)){
@@ -109,8 +109,9 @@ class PciRegistry extends ConfigurableService
      * @param string $version
      * @param string $file - file path
      */
-    protected function getFileContent($typeIdentifier, $version, $file){
-        
+    protected function getFileContent($typeIdentifier, $version, $file)
+    {
+
     }
     
     protected function unregisterFiles($id, $version, $files){
@@ -144,18 +145,27 @@ class PciRegistry extends ConfigurableService
         }
         return null;
     }
-    
-    public function exists($typeIdentifier, $version = ''){
+
+    /**
+     * Check if file exists
+     * @param $typeIdentifier
+     * @param string $version
+     * @return bool
+     */
+    public function exists($typeIdentifier, $version = '')
+    {
         $pcis = $this->getMap();
-        if(isset($pcis[$typeIdentifier])){
-            if(empty($version)){
-                $version = $this->getLatestVersion($typeIdentifier);
-            }
-            if(!empty($version)){
-                return (isset($pcis[$typeIdentifier][$version]));
-            }
-        }else{
-            throw new \common_Exception('the pci does not exist '.$typeIdentifier);
+
+        if (!isset($pcis[$typeIdentifier])) {
+            return false;
+        }
+
+        if(empty($version)){
+            $version = $this->getLatestVersion($typeIdentifier);
+        }
+
+        if(!empty($version)){
+            return (isset($pcis[$typeIdentifier][$version]));
         }
     }
     
@@ -254,13 +264,13 @@ class PciRegistry extends ConfigurableService
     }
     
     /**
-     * Unregsiter an single pci. 
+     * Unregsiter a single pci.
      * If the version is '*', all pci version will be unregistered
      * 
      * @todo
      */
     public function unregister($typeIdentifier, $version = '*'){
-        
+
     }
     
     /**
@@ -330,5 +340,19 @@ class PciRegistry extends ConfigurableService
             }
         }
         $this->setMap([]);
+    }
+
+    /**
+     * Remove a registered interaction from the registry
+     *
+     * @param string $typeIdentifier
+     */
+    public function remove($typeIdentifier){
+
+        $hook = $this->getResource($typeIdentifier);
+        if($hook){
+            $hook->delete();
+            //@todo : remove the directory too!
+        }
     }
 }

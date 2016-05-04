@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\controller;
 
+use oat\qtiItemPci\model\PciParserItemRegistry;
 use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
 use \FileUploadException;
@@ -105,19 +106,41 @@ class PciManager extends AbstractPortableElementManager
     /**
      * Add a new custom interaction from the uploaded zip package
      */
-    public function add(){
+    public function add_old(){
 
         //as upload may be called multiple times, we remove the session lock as soon as possible
         session_write_close();
 
         try{
             $replace= true; //always set as "replaceable" and delegate decision to replace or not to the client side
+            $parser = new PciParserItemRegistry();
             $file = tao_helpers_Http::getUploadedFile('content');
             $newInteraction = $this->registry->add($file['tmp_name'], $replace);
 
             $this->returnJson($this->filterInteractionData($newInteraction));
             
         }catch(FileUploadException $fe){
+
+            $this->returnJson(array('error' => $fe->getMessage()));
+        }
+    }
+
+    /**
+     * Add a new custom interaction from the uploaded zip package
+     */
+    public function add(){
+
+        //as upload may be called multiple times, we remove the session lock as soon as possible
+        session_write_close();
+
+        try{
+            $file = tao_helpers_Http::getUploadedFile('content');
+            $parser = new PciParserItemRegistry($file['tmp_name']);
+            $newInteraction = $parser->import(true);
+
+            $this->returnJson($this->filterInteractionData($newInteraction));
+
+        } catch(FileUploadException $fe) {
 
             $this->returnJson(array('error' => $fe->getMessage()));
         }
