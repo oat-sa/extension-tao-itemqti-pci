@@ -19,51 +19,78 @@
 define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
     'use strict';
     
+    var _requirejs = window.require;
     var _serverUrl = helpers._url('load', 'PciLoader', 'qtiItemPci');
     var _loaded = false;
     var _registry = {};
     
     var _registry0 = {
-        likertScaleInteraction : {
-            '0.1.0' : {
-                runtimeLocation : 'http://tao.localdomain/qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction',
-                hook : 'likertScaleInteraction/runtime/likertScaleInteraction.amd.js',
-                libs : [
-                    'likertScaleInteraction/runtime/js/renderer'
-                ],
-                stylesheets : [
-                    'likertScaleInteraction/runtime/css/likertScaleInteraction.css'
-                ],
-                mediaFiles : [
-                    'likertScaleInteraction/runtime/assets/ThumbUp.png',
-                    'likertScaleInteraction/runtime/assets/ThumbDown.png'
-                ]
+        likertScaleInteraction : [
+            {
+                version : '0.1.0',
+                baseUrl : 'http://tao.localdomain/qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction',
+                runtime : {
+                    hook : 'likertScaleInteraction/runtime/likertScaleInteraction.amd.js',
+                    libs : [
+                        'likertScaleInteraction/runtime/js/renderer'
+                    ],
+                    stylesheets : [
+                        'likertScaleInteraction/runtime/css/likertScaleInteraction.css'
+                    ],
+                    mediaFiles : [
+                        'likertScaleInteraction/runtime/assets/ThumbUp.png',
+                        'likertScaleInteraction/runtime/assets/ThumbDown.png'
+                    ]
+                },
+                creator:{
+                    hook : 'likertScaleInteraction/pciCreator.js',
+                    manifest : {},
+                    creator : null
+                }
             }
-        }
+        ]
     };
 
-    function getRuntime(typeIdentifier, version){
+    function get(typeIdentifier, version){
         
         if(_registry[typeIdentifier]){
             //check version
             if(version){
-                return _registry[typeIdentifier][version] || null;
+                return _.find(_registry[typeIdentifier], version);
             }else{
                 //latest
-                return _.values(_registry[typeIdentifier])[0];
+                return _.last(_registry[typeIdentifier]);
             }
         }
     }
     
+    function getRuntime(typeIdentifier, version){
+        var pci = get(typeIdentifier, version);
+        if(pci){
+            return _.assign(pci.runtime, {baseUrl : pci.baseUrl});
+        }else{
+            throw 'no pci found';
+        }
+    }
+    
+    function getCreator(typeIdentifier, version){
+        var pci = get(typeIdentifier, version);
+        if(pci){
+            return _.assign(pci.creator, {baseUrl : pci.baseUrl});
+        }else{
+            throw 'no pci found';
+        }
+    }
+    
     function getBaseUrl(typeIdentifier, version){
-        var runtime = getRuntime(typeIdentifier, version);
+        var runtime = get(typeIdentifier, version);
         if(runtime){
-            return runtime.runtimeLocation;
+            return runtime.baseUrl;
         }
         return '';
     }
     
-    function load(cb){
+    function loadRuntimes(cb){
         if(_loaded){
             cb();
         }else{
@@ -72,17 +99,54 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                 dataType : 'json',
                 type: 'GET'
             }).done(function(pcis) {
-                console.log('load');
+                console.log('load loadRuntimes');
+                
+                //test...
+                pcis = _registry0;
+                
                 _registry = pcis;
+                
+                //preconfiguring the pci's code baseUrl
+                var requireConfigAliases = {};
+                _.forIn(pcis, function(versions, typeIdentifier){
+                    //currently use latest runtime path
+                    requireConfigAliases[typeIdentifier] = getBaseUrl(typeIdentifier);
+                });
+                _requirejs.config({paths : requireConfigAliases});
+                
                 _loaded = true;
                 cb();
             });
         }
     }
     
+    function loadCreators(cb){
+        loadRuntimes(function(){
+            var required = [];
+            var versions = [];
+            //currently use the latest version only
+            _.forIn(_registry, function(versions, typeIdentifier){
+                required.push(getCreator(typeIdentifier).hook);
+            });
+            _requirejs(required, function(){
+                var creators = {};
+                _.each(arguments, function(creator){
+                    var id = creator.getTypeIdentifier();
+                    creators[id] = creator;
+                    _registry[id].creator = creator;
+                    //load manifest....
+                });
+                callback(creators);
+            });
+        });
+    }
+    
     return {
+        get : get,
         getRuntime : getRuntime,
+        getCreator : getCreator,
         getBaseUrl : getBaseUrl,
-        load : load
+        load : loadRuntimes,
+        loadCreators : loadCreators
     };
 });

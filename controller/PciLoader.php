@@ -30,23 +30,7 @@ class PciLoader extends tao_actions_CommonModule
     }
     
     public function load(){
-        $pcis = $this->registry->getLatestRuntime();
-        foreach($pcis as $typeIdentifier => &$versions){
-            foreach($versions as &$files){
-                $hook = reset(array_keys($files['hook']));
-                $files['hook'] = $typeIdentifier.'/'.$hook;
-                $files['libs'] = array_map(function($v) use ($typeIdentifier) {
-                    return $typeIdentifier.'/'.$v;
-                }, array_keys($files['libs']));
-                $files['stylesheets'] = array_map(function($v) use ($typeIdentifier) {
-                    return $typeIdentifier.'/'.$v;
-                }, array_keys($files['stylesheets']));
-                $files['mediaFiles'] = array_map(function($v) use ($typeIdentifier) {
-                    return $typeIdentifier.'/'.$v;
-                }, array_keys($files['mediaFiles']));
-            }
-        }
-        $this->returnJson($pcis);
+        $this->returnJson($this->registry->getLatestRuntime());
     }
     
 }

@@ -77,7 +77,9 @@ class PciRegistry extends ConfigurableService
     {
         $registered = false;
         $fs = $this->getFileSystem();
+        var_dump($files);
         foreach ($files as $relPath => $file) {
+            
             if(file_exists($file)){
                 $fileId = $this->getPrefix($typeIdentifier, $version).$relPath;
                 $resource = fopen($file, 'r');
@@ -93,13 +95,21 @@ class PciRegistry extends ConfigurableService
         }
         return $registered;
     }
-
+    
     protected function getFileUrl($typeIdentifier, $version, $relPath)
     {
         return $this->getAccessProvider()->getAccessUrl($this->getPrefix($typeIdentifier, $version).$relPath);
     }
     
-    protected function getFileContent($id, $version, $file){
+    /**
+     * Get the registered file for a pci in a specific version
+     * 
+     * @todo
+     * @param string $typeIdentifier
+     * @param string $version
+     * @param string $file - file path
+     */
+    protected function getFileContent($typeIdentifier, $version, $file){
         
     }
     
@@ -149,7 +159,16 @@ class PciRegistry extends ConfigurableService
         }
     }
     
-    public function register($typeIdentifier, $targetVersion, $hook = [], $libs = [], $stylesheets = [], $mediaFiles = [], $creator = []){
+    /**
+     * Register a PCI in a specific version
+     * 
+     * @param string $typeIdentifier
+     * @param string $targetVersion
+     * @param array $runtime
+     * @param array $creator
+     * @throws \common_Exception
+     */
+    public function register($typeIdentifier, $targetVersion, $runtime, $creator = []){
         
         $pcis = $this->getMap();
         
@@ -163,18 +182,68 @@ class PciRegistry extends ConfigurableService
             $pcis[$typeIdentifier] = [];
         }
         
-        $pcis[$typeIdentifier][$targetVersion] = [
-            'hook' => $hook,
-            'libs' => $libs,
-            'stylesheets' => $stylesheets,
-            'mediaFiles' => $mediaFiles,
-            'creator' => $creator
+        //@todo improve validation
+        if(!isset($runtime['hook'])){
+            throw new \common_Exception('missing runtime hook file');
+        }
+        
+        $files = array_merge($runtime['hook'], $runtime['libraries'], $runtime['stylesheets'], $runtime['mediaFiles']);
+        
+        $pci = [
+            'runtime' => [
+                'hook' => array_keys($runtime['hook'])[0],
+                'libraries' => isset($runtime['libraries']) ? array_keys($runtime['libraries']) : [],
+                'stylesheets' => isset($runtime['stylesheets']) ? array_keys($runtime['stylesheets']) : [],
+                'mediaFiles' => isset($runtime['mediaFiles']) ? array_keys($runtime['mediaFiles']) : [],
+            ]
         ];
         
-        $files = array_merge($hook, $libs, $stylesheets, $mediaFiles);
+        if(!empty($creator)){
+            //a creator hook is being registered
+            
+            //@todo improve validation
+            if(!isset($creator['icon'])){
+                throw new \common_Exception('missing icon file');
+            }
+            if(!isset($creator['hook'])){
+                throw new \common_Exception('missing creator hook file');
+            }
+            if(!isset($creator['manifest'])){
+                throw new \common_Exception('missing manifest file');
+            }
+            if(!isset($creator['libraries'])){
+                throw new \common_Exception('missing libraries');
+            }
+            $pci['creator'] = [
+                'icon' => array_keys($creator['icon'])[0],
+                'manifest' => array_keys($creator['manifest'])[0],
+                'hook' => array_keys($creator['hook'])[0],
+                'libraries' => array_keys($creator['libraries']),
+                'stylesheets' => isset($creator['stylesheets']) ? array_keys($creator['stylesheets']) : [],
+                'mediaFiles' => isset($creator['mediaFiles']) ? array_keys($creator['mediaFiles']) : [],
+            ];
+            
+            $files = array_merge($files, $creator['icon'], $creator['hook'], $creator['manifest'], $creator['libraries']);
+        }
+        
+        $pcis[$typeIdentifier][$targetVersion] = $pci;
+        
         $this->registerFiles($typeIdentifier, $targetVersion, $files);
         
         $this->setMap($pcis);
+    }
+    
+    /**
+     * 
+     * @todo
+     * @param string $typeIdentifier
+     * @param string $sourceVersion
+     * @param string $targetVersion
+     * @param array $runtime
+     * @param array $creator
+     */
+    public function update($typeIdentifier, $sourceVersion, $targetVersion, $runtime = [], $creator = []){
+        
     }
     
     public function getBaseUrl($typeIdentifier, $version = ''){
@@ -184,10 +253,24 @@ class PciRegistry extends ConfigurableService
         return false;
     }
     
-    public function unregister($typeIdentifier, $version){
+    /**
+     * Unregsiter an single pci. 
+     * If the version is '*', all pci version will be unregistered
+     * 
+     * @todo
+     */
+    public function unregister($typeIdentifier, $version = '*'){
         
     }
     
+    /**
+     * Return all file contents, following the same array format as the method getRuntime()
+     * This method is useful to export registered PCI into standard QTI item packages
+     * 
+     * @todo
+     * @param type $typeIdentifier
+     * @param type $version
+     */
     public function export($typeIdentifier, $version){
         
     }
@@ -199,21 +282,9 @@ class PciRegistry extends ConfigurableService
                 $version = $this->getLatestVersion($typeIdentifier);
             }
             if($pcis[$typeIdentifier][$version]){
-                $pci =  $pcis[$typeIdentifier][$version];
+                $pci = $this->addPathPrefix($typeIdentifier, $pcis[$typeIdentifier][$version]);
                 $pci['version'] = $version;
-                $pci['runtimeLocation'] = $this->getBaseUrl($typeIdentifier, $version);
-                foreach($pci['hook'] as $relPath => $file){
-                    $pci['hook'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
-                }
-                foreach($pci['libs'] as $relPath => $file){
-                    $pci['libs'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
-                }
-                foreach($pci['stylesheets'] as $relPath => $file){
-                    $pci['stylesheets'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
-                }
-                foreach($pci['mediaFiles'] as $relPath => $file){
-                    $pci['mediaFiles'][$relPath] = $this->getFileUrl($typeIdentifier, $version, $relPath);
-                }
+                $pci['baseUrl'] = $this->getBaseUrl($typeIdentifier, $version);
                 return $pci;
             }else{
                 throw new \common_Exception('The pci does not exist in the requested version : '.$typeIdentifier.' '.$version);
@@ -223,26 +294,16 @@ class PciRegistry extends ConfigurableService
         }
     }
     
-    public function getCreator($typeIdentifier, $version = ''){
-        $pcis = $this->getMap();
-        if(isset($pcis[$typeIdentifier])){
-            if(empty($version)){
-                $version = $this->getLatestVersion($typeIdentifier);
+    protected function addPathPrefix($typeIdentifier, $var){
+        if(is_string($var)){
+            return $typeIdentifier.'/'.$var;
+        }else if(is_array($var)){
+            foreach($var as $k => $v){
+                $var[$k] = $this->addPathPrefix($typeIdentifier, $v);
             }
-            if($pcis[$typeIdentifier][$version]){
-                $pci =  $pcis[$typeIdentifier][$version];
-                $pci['version'] = $version;
-                $pci['typeIdentifier'] = $typeIdentifier;
-                $pci['baseUrl'] = $this->getBaseUrl($typeIdentifier, $version);
-                $pci['label'] = $this->getBaseUrl($typeIdentifier, $version);
-                $pci['manifest'] = $this->getBaseUrl($typeIdentifier, $version);
-                $pci['file'] = $this->getFileUrl($typeIdentifier, $version, 'pciCreator.js');
-                return $pci;
-            }else{
-                throw new \common_Exception('The pci does not exist in the requested version : '.$typeIdentifier.' '.$version);
-            }
+            return $var;
         }else{
-            throw new \common_Exception('The pci does not exist : '.$typeIdentifier);
+            throw new \InvalidArgumentException('$var must be a string or an array');
         }
     }
     
@@ -252,11 +313,14 @@ class PciRegistry extends ConfigurableService
         foreach($pcis as $typeIdentifier => $versions){
             $version = $this->getLatestVersion($typeIdentifier);
             $pci = $this->getRuntime($typeIdentifier, $version);
-            $all[$typeIdentifier] = [$version => $pci];
+            $all[$typeIdentifier] = [$pci];
         }
         return $all;
     }
     
+    /**
+     * Unregsiter all previously registered pci, in all version
+     */
     public function unregisterAll(){
         $pcis = $this->getMap();
         foreach($pcis as $typeIdentifier => $versions){
