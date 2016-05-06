@@ -23,9 +23,13 @@ namespace oat\qtiItemPci\model;
 use oat\oatbox\service\ServiceManager;
 use oat\taoQtiItem\model\qti\exception\ExtractException;
 use oat\taoQtiItem\model\qti\Parser;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class PciParserItemRegistry extends PciPackageParser
+class PciParserItemRegistry extends PciPackageParser implements ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+
     /**
      * @var PciRegistry
      */
@@ -34,7 +38,7 @@ class PciParserItemRegistry extends PciPackageParser
     protected function getRegistry()
     {
         if (!$this->registry) {
-            $this->registry = ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
+            $this->registry = $this->getServiceLocator()->get(PciRegistry::SERVICE_ID);
         }
         return $this->registry;
     }
@@ -43,7 +47,7 @@ class PciParserItemRegistry extends PciPackageParser
     {
         $this->validate();
         if (!$this->isValid()) {
-            throw new \common_Exception('invalid PCI creator package format');
+            throw new \common_Exception('Invalid PCI creator package format');
         }
 
         //obtain the id from manifest file
@@ -65,7 +69,11 @@ class PciParserItemRegistry extends PciPackageParser
             throw new ExtractException();
         }
 
-        $this->registry->import($temp);
+        $version = $manifest['version'];
+        $runtime = $manifest['runtime'];
+        $creator = $manifest['creator'];
+
+        $this->registry->register($typeIdentifier, $version, $runtime, $creator);
 
         return $this->registry->get($typeIdentifier);
     }

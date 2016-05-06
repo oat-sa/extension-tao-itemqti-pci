@@ -136,8 +136,8 @@ class PciManager extends AbstractPortableElementManager
         try{
             $file = tao_helpers_Http::getUploadedFile('content');
             $parser = new PciParserItemRegistry($file['tmp_name']);
+            $parser->setServiceLocator($this->getServiceManager());
             $newInteraction = $parser->import(true);
-
             $this->returnJson($this->filterInteractionData($newInteraction));
 
         } catch(FileUploadException $fe) {
