@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\controller;
 
+use oat\qtiItemPci\model\PciPackageParser;
 use oat\qtiItemPci\model\PciParserItemRegistry;
 use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
@@ -128,21 +129,21 @@ class PciManager extends AbstractPortableElementManager
     /**
      * Add a new custom interaction from the uploaded zip package
      */
-    public function add(){
+    public function add()
+    {
 
         //as upload may be called multiple times, we remove the session lock as soon as possible
         session_write_close();
 
         try{
             $file = tao_helpers_Http::getUploadedFile('content');
-            $parser = new PciParserItemRegistry($file['tmp_name']);
+            $parser = new PciPackageParser($file['tmp_name']);
             $parser->setServiceLocator($this->getServiceManager());
             $newInteraction = $parser->import(true);
             $this->returnJson($this->filterInteractionData($newInteraction));
 
-        } catch(FileUploadException $fe) {
-
-            $this->returnJson(array('error' => $fe->getMessage()));
+        } catch(\common_Exception $e) {
+            $this->returnJson(array('error' => $e->getMessage()));
         }
     }
     

@@ -46,6 +46,8 @@ class PciRegistry extends ConfigurableService
 
     protected $storage;
 
+    protected $temporaryLocation;
+
     /**
      * Return all PCI from self::CONFIG_ID mapping
      *
@@ -117,6 +119,21 @@ class PciRegistry extends ConfigurableService
     }
 
     /**
+     * Set the temporary temp dir where extracted zip is located
+     * @param $tmp
+     * @return $this
+     * @throws \common_Exception
+     */
+    public function setTempDirectory($tmp)
+    {
+        if (!is_dir($tmp)) {
+            throw new \common_Exception('Unable to locate temp directory');
+        }
+        $this->temporaryLocation = DIRECTORY_SEPARATOR . trim($tmp, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this;
+    }
+
+    /**
      * Register files associated to a PCI track by $typeIdentifier
      *
      * @todo If first is not ok, second is, return will be true
@@ -131,13 +148,26 @@ class PciRegistry extends ConfigurableService
         $registered = false;
         $fileSystem = $this->getFileSystem();
 
-        foreach ($files as $relPath => $file) {
-            if (!file_exists($file) || ($resource = fopen($file, 'r'))===false) {
-                throw new \common_Exception('File cannot be opened : ' . $file);
+        $temp = $this->temporaryLocation;
+        if (!$temp) {
+            throw new \common_Exception('Temp directory is not correctly set.');
+        }
+
+        foreach ($files as $file) {
+            if (substr($file, 0, 2)!='./') {
+                // File is not relative, it's a shared libraries
+                // Ignore this file, front have fallBack
+                continue;
             }
-            $fileId = $this->getPrefix($typeIdentifier, $version) . $relPath;
+
+            $filePath = $temp . $file;
+            if (!file_exists($filePath) || ($resource = fopen($filePath, 'r'))===false) {
+                throw new \common_Exception('File cannot be opened : ' . $filePath);
+            }
+
+            $fileId = $this->getPrefix($typeIdentifier, $version) . $file;
             if ($fileSystem->has($fileId)) {
-                common_Logger::w('updated stream '.$typeIdentifier . ' '. $version.' '.$relPath);
+                common_Logger::w('updated stream '.$typeIdentifier . ' '. $version.' '.$filePath);
                 $registered = $fileSystem->updateStream($fileId, $resource);
             } else {
                 $registered = $fileSystem->writeStream($fileId, $resource);
@@ -177,7 +207,7 @@ class PciRegistry extends ConfigurableService
      * @param $typeIdentifier
      * @return mixed|null
      */
-    public function getLatestVersion($typeIdentifier)
+    protected function getLatestVersion($typeIdentifier)
     {
         $pcis = $this->getMap();
         if(isset($pcis[$typeIdentifier])){
@@ -229,7 +259,6 @@ class PciRegistry extends ConfigurableService
         $pcis = $this->getMap();
         
         if (isset($pcis[$typeIdentifier])) {
-            //check version:
             $latest = $this->getLatestVersion($typeIdentifier);
             if(version_compare($targetVersion, $latest, '<')){
                 throw new \common_Exception('A newer version of the code already exists '.$latest);
@@ -237,20 +266,27 @@ class PciRegistry extends ConfigurableService
         } else {
             $pcis[$typeIdentifier] = [];
         }
-        
+
+        $files = [];
+
         //@todo improve validation
         if (!isset($runtime['hook'])) {
             throw new \common_Exception('missing runtime hook file');
         }
-        
-        $files = array_merge($runtime['hook'], $runtime['libraries'], $runtime['stylesheets'], $runtime['mediaFiles']);
+
+        $libraries   = (isset($runtime['libraries']) && is_array($runtime['libraries'])) ? $runtime['libraries'] : [];
+        $stylesheets = (isset($runtime['stylesheets']) && is_array($runtime['stylesheets'])) ? $runtime['stylesheets'] : [];
+        $mediaFiles  = (isset($runtime['mediaFiles']) && is_array($runtime['mediaFiles'])) ? $runtime['mediaFiles'] : [];
+
+        array_push($files, $runtime['hook']);
+        $files = array_merge($files, $libraries, $stylesheets, $mediaFiles);
         
         $pci = [
             'runtime' => [
-                'hook' => array_keys($runtime['hook'])[0],
-                'libraries' => isset($runtime['libraries']) ? array_keys($runtime['libraries']) : [],
-                'stylesheets' => isset($runtime['stylesheets']) ? array_keys($runtime['stylesheets']) : [],
-                'mediaFiles' => isset($runtime['mediaFiles']) ? array_keys($runtime['mediaFiles']) : [],
+                'hook' => $runtime['hook'],
+                'libraries'   => $libraries,
+                'stylesheets' => $stylesheets,
+                'mediaFiles'  => $mediaFiles
             ]
         ];
         
@@ -270,22 +306,29 @@ class PciRegistry extends ConfigurableService
             if(!isset($creator['libraries'])){
                 throw new \common_Exception('Missing libraries');
             }
+
+            $creator_libs        = (isset($creator['libs']) && is_array($creator['libs'])) ? $creator['libs'] : [];
+            $creator_stylesheets = (isset($creator['stylesheets']) && is_array($creator['stylesheets'])) ? $creator['stylesheets'] : [];
+            $creator_mediaFiles  = (isset($creator['mediaFiles']) && is_array($creator['mediaFiles'])) ? $creator['mediaFiles'] : [];
+
+            $files['icon']     = $creator['icon'];
+            $files['hook']     = $creator['hook'];
+            $files['manifest'] = $creator['manifest'];
+
+            $files = array_merge($files, $creator_libs, $creator_stylesheets, $creator_mediaFiles);
+
             $pci['creator'] = [
-                'icon' => array_keys($creator['icon'])[0],
-                'manifest' => array_keys($creator['manifest'])[0],
-                'hook' => array_keys($creator['hook'])[0],
-                'libraries' => array_keys($creator['libraries']),
-                'stylesheets' => isset($creator['stylesheets']) ? array_keys($creator['stylesheets']) : [],
-                'mediaFiles' => isset($creator['mediaFiles']) ? array_keys($creator['mediaFiles']) : [],
+                'icon'        => $creator['icon'],
+                'manifest'    => $creator['manifest'],
+                'hook'        => $creator['hook'],
+                'libraries'   => $creator_libs,
+                'stylesheets' => $creator_stylesheets,
+                'mediaFiles'  => $creator_mediaFiles
             ];
-            
-            $files = array_merge($files, $creator['icon'], $creator['hook'], $creator['manifest'], $creator['libraries']);
         }
         
         $pcis[$typeIdentifier][$targetVersion] = $pci;
-        
         $this->registerFiles($typeIdentifier, $targetVersion, $files);
-        
         $this->setMap($pcis);
     }
     
@@ -309,7 +352,7 @@ class PciRegistry extends ConfigurableService
      * @param string $version
      * @return bool|string
      */
-    public function getBaseUrl($typeIdentifier, $version = '')
+    protected function getBaseUrl($typeIdentifier, $version = '')
     {
         if ($this->exists($typeIdentifier, $version)) {
             return $this->getFileUrl($typeIdentifier, $version, '');
@@ -355,7 +398,7 @@ class PciRegistry extends ConfigurableService
         
     }
     
-    public function getRuntime($typeIdentifier, $version = '')
+    protected function getRuntime($typeIdentifier, $version = '')
     {
         $pcis = $this->getMap();
         if (isset($pcis[$typeIdentifier])) {
@@ -377,6 +420,7 @@ class PciRegistry extends ConfigurableService
 
     protected function addPathPrefix($typeIdentifier, $var)
     {
+        common_Logger::e($var);
         if (is_string($var)) {
             return $typeIdentifier.'/'.$var;
         } elseif (is_array($var)) {
@@ -385,7 +429,7 @@ class PciRegistry extends ConfigurableService
             }
             return $var;
         } else {
-            throw new \InvalidArgumentException('$var must be a string or an array');
+            throw new \InvalidArgumentException("$var must be a string or an array");
         }
     }
 
@@ -433,7 +477,13 @@ class PciRegistry extends ConfigurableService
     {
         foreach ($versions as $version => $files) {
             if (!$targetedVersion || $version==$targetedVersion) {
-                $allFiles = array_merge($files['hook'], $files['libs'], $files['stylesheets'], $files['mediaFiles']);
+
+                $hook        = (isset($files['hook']) && is_array($files['hook'])) ? $files['hook'] : [];
+                $libs        = (isset($files['libs']) && is_array($files['libs'])) ? $files['libs'] : [];
+                $stylesheets = (isset($files['stylesheets']) && is_array($files['stylesheets'])) ? $files['stylesheets'] : [];
+                $mediaFiles  = (isset($files['mediaFiles']) && is_array($files['mediaFiles'])) ? $files['mediaFiles'] : [];
+
+                $allFiles = array_merge($hook, $libs, $stylesheets, $mediaFiles);
                 if (!$this->unregisterFiles($identifier, $version, array_keys($allFiles))) {
                     throw new \common_Exception('Unable to delete asset files for PCI "' . $identifier
                         . '" at version "' . $version . '"');

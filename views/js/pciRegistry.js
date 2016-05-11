@@ -102,7 +102,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                 console.log('load loadRuntimes');
                 
                 //test...
-                pcis = _registry0;
+                //pcis = _registry0;
                 
                 _registry = pcis;
                 
