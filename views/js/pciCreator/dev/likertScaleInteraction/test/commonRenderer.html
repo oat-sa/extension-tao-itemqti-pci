@@ -15,7 +15,7 @@
         <script  type="text/javascript">
             QUnit.config.autostart = false;
             require(['/tao/ClientConfig/config'], function(){
-                require(['taoQtiItem/qtiCommonRenderer/test/runner'], function(runner){
+                require(['taoQtiItem/qtiCommonRenderer/test/runner', 'qtiItemPci/pciRegistry'], function(runner, pciRegistry){
                     QUnit.start();
 
                     runner.run({
@@ -28,7 +28,10 @@
                             responses : []
                         }
                     });
-
+                    
+                    pciRegistry.loadCreators(function(creators){
+                        console.log(creators);
+                    });
                 });
             });
         </script>
