@@ -28,6 +28,9 @@ use oat\qtiItemPci\model\PciRegistry;
 class PciRegistryTest extends TaoPhpUnitTestRunner
 {
 
+    /**
+     * @var PciRegistry
+     */
     protected $registry;
 
     /**
@@ -90,7 +93,18 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         
         $pci = $this->registry->getRuntime('likertScaleInteraction', '0.1.0');
         $pcis = $this->registry->getLatestRuntime();
-        var_dump($pcis);
+
+        $isOnRuntime = false;
+        foreach ($pcis as $name => $runtime) {
+            foreach ($runtime as $key => $runtime_pci) {
+                if ($pci==$runtime_pci) {
+                    $isOnRuntime = true;
+                    break;
+                }
+            }
+        }
+        $this->assertTrue($isOnRuntime);
     }
-    
+
+
 }

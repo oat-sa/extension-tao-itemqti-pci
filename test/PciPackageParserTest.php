@@ -20,6 +20,7 @@
  */
 namespace oat\qtiItemPci\test;
 
+use oat\oatbox\service\ServiceManager;
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\qtiItemPci\model\PciPackageParser;
 
@@ -35,6 +36,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
     }
+
 
     public function testValidate(){
 
@@ -52,7 +54,13 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
         $manifest = $parser->getManifest();
         $this->assertTrue(!!count($manifest));
         $this->assertEquals($manifest['typeIdentifier'], 'likertScaleInteraction');
-        
     }
 
+    public function testImport()
+    {
+        $packageValid = dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip';
+        $parser = new PciPackageParser($packageValid);
+        $parser->setServiceLocator(ServiceManager::getServiceManager());
+        $parser->import();
+    }
 }
