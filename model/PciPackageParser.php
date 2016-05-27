@@ -77,14 +77,17 @@ class PciPackageParser extends PackageParser implements ServiceLocatorAwareInter
                 $zip = new ZipArchive();
                 $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
                 if ($zip->locateName(self::PCI_MANIFEST) === false) {
-                    echo '1';
                     throw new common_Exception('A PCI creator package must contains a ' . self::PCI_MANIFEST . ' file at the root of the archive');
                 } elseif($zip->locateName(self::PCI_ENGINE) === false) {
                     throw new common_Exception('A PCI creator package must contains a ' . self::PCI_ENGINE . ' file at the root of the archive');
                 } else {
                     //check manifest format :
                     $manifest = $this->getManifest();
-                    $this->valid = $this->validateManifest($manifest);
+
+                    $pciModel = new PciModel();
+                    $pciModel->exchangeArray($manifest);
+
+                    $this->valid = PciValidator::validate($pciModel);
                 }
 
                 $zip->close();
@@ -93,6 +96,8 @@ class PciPackageParser extends PackageParser implements ServiceLocatorAwareInter
         }catch(common_Exception $e){
             $this->addError($e);
         }
+
+        return $this->valid;
     }
     
     /**
@@ -102,62 +107,65 @@ class PciPackageParser extends PackageParser implements ServiceLocatorAwareInter
      * @return boolean
      * @throws common_Exception
      */
-    protected function validateManifest($manifest){
+    protected function validateManifest($manifest)
+    {
+        $pciModel = new PciModel();
+        $pciModel->exchangeArray($manifest);
 
-        $isValid = true;
+        PciValidator::validate($pciModel);
+        $isValid = PciValidator::validate($pciModel);
+//        $requiredEntries = array(
+//            'typeIdentifier' => 'identifier',
+//            'label' => 'string',
+//            'short' => 'string',
+//            'description' => 'string',
+//            'version' => 'string',
+//            'author' => 'string',
+//            'email' => 'string',
+//            'tags' => 'array',
+//            'response' => 'array',
+//            'runtime' => 'array',
+//            'creator' => 'array'
+//        );
 
-        $requiredEntries = array(
-            'typeIdentifier' => 'identifier',
-            'label' => 'string',
-            'short' => 'string',
-            'description' => 'string',
-            'version' => 'string',
-            'author' => 'string',
-            'email' => 'string',
-            'tags' => 'array',
-            'response' => 'array',
-            'runtime' => 'array',
-            'creator' => 'array'
-        );
+//        $zip = new ZipArchive();
+//        $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
 
-        $zip = new ZipArchive();
-        $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
-
-        foreach ($requiredEntries as $entry => $type) {
-            //@todo : implement more generic data validation ?
-            try {
-                if (!isset($manifest[$entry])) {
-                    throw new common_Exception('Missing required attribute in the manifest ' . self::PCI_MANIFEST . ' : "'.$entry.'"');
-                }
-
-                $value = $manifest[$entry];
-                switch ($type) {
-                    case 'identifier':
-                    case 'string':
-                        if (!is_string($value)) {
-                            throw new common_Exception('Invalid attribute format in the manifest ' . self::PCI_MANIFEST . ' : ' .
-                                '"'.$entry.'" (expected a string)');
-                        }
-                        break;
-                    case 'array':
-                        if (!is_array($value)) {
-                            throw new common_Exception('Invalid attribute format in the manifest ' . self::PCI_MANIFEST . ' : ' .
-                                '"'.$entry.'" (expected an array)');
-                        }
-                        break;
-                    case 'file':
-                        if ($zip->locateName(preg_replace('/^\.\//', '', $value)) === false) {
-                            throw new common_Exception('cannot locate "'.$entry.'" file : "'.$value.'"');
-                        }
-                        break;
-                }
-            } catch (common_Exception $e) {
-                \common_Logger::e('Invalid PCI manifest: ' . $e->getMessage());
-                $isValid = false;
-                break;
-            }
-        }
-        $zip->close();
+//        foreach ($requiredEntries as $entry => $type) {
+//            //@todo : implement more generic data validation ?
+//            try {
+//                if (!isset($manifest[$entry])) {
+//                    throw new common_Exception('Missing required attribute in the manifest ' . self::PCI_MANIFEST . ' : "'.$entry.'"');
+//                }
+//
+//                $value = $manifest[$entry];
+//                switch ($type) {
+//                    case 'identifier':
+//                    case 'string':
+//                        if (!is_string($value)) {
+//                            throw new common_Exception('Invalid attribute format in the manifest ' . self::PCI_MANIFEST . ' : ' .
+//                                '"'.$entry.'" (expected a string)');
+//                        }
+//                        break;
+//                    case 'array':
+//                        if (!is_array($value)) {
+//                            throw new common_Exception('Invalid attribute format in the manifest ' . self::PCI_MANIFEST . ' : ' .
+//                                '"'.$entry.'" (expected an array)');
+//                        }
+//                        break;
+////                    case 'file':
+////                        if ($zip->locateName(preg_replace('/^\.\//', '', $value)) === false) {
+////                            throw new common_Exception('cannot locate "'.$entry.'" file : "'.$value.'"');
+////                        }
+////                        break;
+//                }
+//            } catch (common_Exception $e) {
+//                \common_Logger::e('Invalid PCI manifest: ' . $e->getMessage());
+//                $isValid = false;
+//                break;
+//            }
+//        }
+//        $zip->close();
         return $isValid;
     }
 
@@ -179,9 +187,7 @@ class PciPackageParser extends PackageParser implements ServiceLocatorAwareInter
         }
         fclose($handle);
 
-        $returnValue = json_decode($str, true);
-
-        return $returnValue;
+        return json_decode($str, true);
     }
 
     /**

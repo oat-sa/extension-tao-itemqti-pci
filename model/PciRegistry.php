@@ -54,7 +54,8 @@ class PciRegistry extends ConfigurableService
      * @return array
      * @throws \common_ext_ExtensionException
      */
-    protected function getMap(){
+    protected function getMap()
+    {
         return \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(self::CONFIG_ID);
     }
 
@@ -64,7 +65,8 @@ class PciRegistry extends ConfigurableService
      * @param $map
      * @throws \common_ext_ExtensionException
      */
-    protected function setMap($map){
+    protected function setMap($map)
+    {
         \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->setConfig(self::CONFIG_ID, $map);
     }
 
@@ -127,7 +129,7 @@ class PciRegistry extends ConfigurableService
     public function setTempDirectory($tmp)
     {
         if (!is_dir($tmp)) {
-            throw new \common_Exception('Unable to locate temp directory');
+            throw new \common_Exception('Unable to locate temp directory.');
         }
         $this->temporaryLocation = DIRECTORY_SEPARATOR . trim($tmp, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
@@ -189,7 +191,7 @@ class PciRegistry extends ConfigurableService
      */
     protected function unregisterFiles($id, $version, $files)
     {
-        $deleted = false;
+        $deleted = true;
         $filesystem = $this->getFileSystem();
         foreach ($files as $relPath) {
             $fileId = $this->getPrefix($id, $version) . $relPath;
@@ -379,10 +381,12 @@ class PciRegistry extends ConfigurableService
 
         //Remove all asset files
         $this->removeAssets($typeIdentifier, $pcis[$typeIdentifier], $version);
+
         //Remove PCI itself
         unset($pcis[$typeIdentifier]);
 
         $this->setMap($pcis);
+
         return true;
     }
     
@@ -420,7 +424,6 @@ class PciRegistry extends ConfigurableService
 
     protected function addPathPrefix($typeIdentifier, $var)
     {
-        common_Logger::e($var);
         if (is_string($var)) {
             return $typeIdentifier.'/'.$var;
         } elseif (is_array($var)) {
@@ -484,6 +487,9 @@ class PciRegistry extends ConfigurableService
                 $mediaFiles  = (isset($files['mediaFiles']) && is_array($files['mediaFiles'])) ? $files['mediaFiles'] : [];
 
                 $allFiles = array_merge($hook, $libs, $stylesheets, $mediaFiles);
+                if (empty($allFiles)) {
+                    continue;
+                }
                 if (!$this->unregisterFiles($identifier, $version, array_keys($allFiles))) {
                     throw new \common_Exception('Unable to delete asset files for PCI "' . $identifier
                         . '" at version "' . $version . '"');
