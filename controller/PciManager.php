@@ -21,7 +21,9 @@
 namespace oat\qtiItemPci\controller;
 
 use oat\qtiItemPci\model\PciPackageParser;
+use oat\qtiItemPci\model\PciPackageService;
 use oat\qtiItemPci\model\PciParserItemRegistry;
+use oat\qtiItemPci\model\PciService;
 use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
 use \FileUploadException;
@@ -136,11 +138,13 @@ class PciManager extends AbstractPortableElementManager
         session_write_close();
 
         try{
+
             $file = tao_helpers_Http::getUploadedFile('content');
-            $parser = new PciPackageParser($file['tmp_name']);
-            $parser->setServiceLocator($this->getServiceManager());
-            $newInteraction = $parser->import(true);
-            $this->returnJson($this->filterInteractionData($newInteraction));
+            $pciService = new PciService();
+            $pciService->setServiceLocator($this->getServiceManager());
+            $data = $pciService->import($file['tmp_name']);
+
+            $this->returnJson($this->filterInteractionData($data));
 
         } catch(\common_Exception $e) {
             $this->returnJson(array('error' => $e->getMessage()));

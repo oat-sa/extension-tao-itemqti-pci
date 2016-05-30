@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -23,8 +23,6 @@ namespace oat\qtiItemPci\model;
 use oat\taoQtiItem\model\qti\exception\ExtractException;
 use oat\taoQtiItem\model\qti\PackageParser;
 use oat\taoQtiItem\helpers\QtiPackage;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use common_Exception;
 use \ZipArchive;
 
@@ -34,212 +32,73 @@ use \ZipArchive;
  *
  * @package qtiItemPci
  */
-class PciPackageParser extends PackageParser implements ServiceLocatorAwareInterface
+class PciPackageParser extends PackageParser
 {
-    use ServiceLocatorAwareTrait;
-
     const PCI_MANIFEST = 'pciCreator.json';
-
-    const PCI_ENGINE = 'pciCreator.js';
-
-    /**
-     * @var PciRegistry
-     */
-    protected $registry;
-
-    /**
-     * Singleton of registry service
-     * @return PciRegistry
-     */
-    protected function getRegistry()
-    {
-        if (!$this->registry) {
-            $this->registry = $this->getServiceLocator()->get(PciRegistry::SERVICE_ID);
-        }
-        return $this->registry;
-    }
+    const PCI_ENGINE   = 'pciCreator.js';
 
     /**
      * Validate the zip package
      *
-     * @access public
-     * @param  string schema
-     * @return boolean
+     * @param string $schema
+     * @return bool
+     * @throws common_Exception
      */
-    public function validate($schema = ''){
-
-        $this->valid = false;
-
-        try{
-
-            if(QtiPackage::isValidZip($this->source)){
-
-                $zip = new ZipArchive();
-                $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
-                if ($zip->locateName(self::PCI_MANIFEST) === false) {
-                    throw new common_Exception('A PCI creator package must contains a ' . self::PCI_MANIFEST . ' file at the root of the archive');
-                } elseif($zip->locateName(self::PCI_ENGINE) === false) {
-                    throw new common_Exception('A PCI creator package must contains a ' . self::PCI_ENGINE . ' file at the root of the archive');
-                } else {
-                    //check manifest format :
-                    $manifest = $this->getManifest();
-
-                    $pciModel = new PciModel();
-                    $pciModel->exchangeArray($manifest);
-
-                    $this->valid = PciValidator::validate($pciModel);
-                }
-
-                $zip->close();
-            }
-            
-        }catch(common_Exception $e){
-            $this->addError($e);
+    public function validate($schema = '')
+    {
+        if (!QtiPackage::isValidZip($this->source)) {
+            throw new common_Exception('Source package is not a valiad zip.');
         }
 
-        return $this->valid;
-    }
-    
-    /**
-     * Validate the manifest pciCreator.json
-     * 
-     * @param array $manifest
-     * @return boolean
-     * @throws common_Exception
-     */
-    protected function validateManifest($manifest)
-    {
-        $pciModel = new PciModel();
-        $pciModel->exchangeArray($manifest);
+        $zip = new ZipArchive();
+        $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
 
-        PciValidator::validate($pciModel);
-        $isValid = PciValidator::validate($pciModel);
-//        $requiredEntries = array(
-//            'typeIdentifier' => 'identifier',
-//            'label' => 'string',
-//            'short' => 'string',
-//            'description' => 'string',
-//            'version' => 'string',
-//            'author' => 'string',
-//            'email' => 'string',
-//            'tags' => 'array',
-//            'response' => 'array',
-//            'runtime' => 'array',
-//            'creator' => 'array'
-//        );
+        if ($zip->locateName(self::PCI_MANIFEST) === false) {
+            throw new common_Exception('A PCI creator package must contains a ' . self::PCI_MANIFEST . ' file at the root of the archive');
+        }
 
-//        $zip = new ZipArchive();
-//        $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
+        if($zip->locateName(self::PCI_ENGINE) === false) {
+            throw new common_Exception('A PCI creator package must contains a ' . self::PCI_ENGINE . ' file at the root of the archive');
+        }
 
-//        foreach ($requiredEntries as $entry => $type) {
-//            //@todo : implement more generic data validation ?
-//            try {
-//                if (!isset($manifest[$entry])) {
-//                    throw new common_Exception('Missing required attribute in the manifest ' . self::PCI_MANIFEST . ' : "'.$entry.'"');
-//                }
-//
-//                $value = $manifest[$entry];
-//                switch ($type) {
-//                    case 'identifier':
-//                    case 'string':
-//                        if (!is_string($value)) {
-//                            throw new common_Exception('Invalid attribute format in the manifest ' . self::PCI_MANIFEST . ' : ' .
-//                                '"'.$entry.'" (expected a string)');
-//                        }
-//                        break;
-//                    case 'array':
-//                        if (!is_array($value)) {
-//                            throw new common_Exception('Invalid attribute format in the manifest ' . self::PCI_MANIFEST . ' : ' .
-//                                '"'.$entry.'" (expected an array)');
-//                        }
-//                        break;
-////                    case 'file':
-////                        if ($zip->locateName(preg_replace('/^\.\//', '', $value)) === false) {
-////                            throw new common_Exception('cannot locate "'.$entry.'" file : "'.$value.'"');
-////                        }
-////                        break;
-//                }
-//            } catch (common_Exception $e) {
-//                \common_Logger::e('Invalid PCI manifest: ' . $e->getMessage());
-//                $isValid = false;
-//                break;
-//            }
-//        }
-//        $zip->close();
-        return $isValid;
+        return true;
     }
 
     /**
-     * Get the manifest as an associative array from the source zip package
+     * Get the manifest as Pci Model from the source zip package
      *
-     * @return mixed
+     * @return PciModel
      * @throws common_Exception
      */
-    public function getManifest()
+    public function getPciModel()
     {
         if (($handle = fopen('zip://' . $this->source . '#' . self::PCI_MANIFEST, 'r')) === false) {
-            throw new common_Exception('Unable to open the ZIP file located at: '. $this->source);
+            throw new common_Exception('Unable to open the ZIP file located at: ' . $this->source);
         }
 
-        $str = '';
+        $content = '';
         while(!feof($handle)){
-            $str .= fread($handle, 8192);
+            $content .= fread($handle, 8192);
         }
         fclose($handle);
 
-        return json_decode($str, true);
+        $pciModel = new PciModel();
+        return $pciModel->exchangeArray(json_decode($content, true));
     }
 
     /**
-     * Import a PCI package from temp to registry
-     * If override is true, remove old PCI if exists
+     * Extract zip package into temp directory
      *
-     * @param bool $override
-     * @return mixed
+     * @return string Name of source directory
      * @throws ExtractException
      * @throws \common_exception_Error
-     * @throws common_Exception
      */
-    public function import($override=false)
+    public function extract()
     {
-        $this->validate();
-        if (!$this->isValid()) {
-            throw new common_Exception('Invalid PCI creator package format');
+        $source = parent::extract();
+        if(!is_dir($source)){
+            throw new ExtractException('Unable to find a valid directory of extracted package.');
         }
-
-        $registry = $this->getRegistry();
-
-        //obtain the id from manifest file
-        $manifest = $this->getManifest();
-        $typeIdentifier = $manifest['typeIdentifier'];
-        $version = $manifest['version'];
-
-        //check if such PCI creator already exists
-        if ($registry->exists($typeIdentifier, $version)) {
-            if ($override) {
-                $registry->unregister($typeIdentifier, $version);
-            } else {
-                throw new common_Exception('The Creator Package already exists');
-            }
-        }
-
-        //extract the package
-        $temp = $this->extract();
-        if(!is_dir($temp)){
-            throw new ExtractException();
-        }
-        $this->registry->setTempDirectory($temp);
-
-        $runtime = $manifest['runtime'];
-        $creator = $manifest['creator'];
-        if (!isset($creator['manifest'])) {
-            $creator['manifest'] = '.' . DIRECTORY_SEPARATOR . self::PCI_MANIFEST;
-        }
-
-        $registry->register($typeIdentifier, $version, $runtime, $creator);
-
-        \tao_helpers_File::delTree($temp);
-
-        return $registry->get($typeIdentifier);
+        return $source;
     }
 }

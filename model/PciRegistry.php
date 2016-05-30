@@ -46,7 +46,7 @@ class PciRegistry extends ConfigurableService
 
     protected $storage;
 
-    protected $temporaryLocation;
+    protected $source;
 
     /**
      * Return all PCI from self::CONFIG_ID mapping
@@ -126,13 +126,18 @@ class PciRegistry extends ConfigurableService
      * @return $this
      * @throws \common_Exception
      */
-    public function setTempDirectory($tmp)
+    public function setSource($source)
     {
-        if (!is_dir($tmp)) {
+        if (!is_dir($source)) {
             throw new \common_Exception('Unable to locate temp directory.');
         }
-        $this->temporaryLocation = DIRECTORY_SEPARATOR . trim($tmp, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->source = DIRECTORY_SEPARATOR . trim($source, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
+    }
+
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**
@@ -150,7 +155,7 @@ class PciRegistry extends ConfigurableService
         $registered = false;
         $fileSystem = $this->getFileSystem();
 
-        $temp = $this->temporaryLocation;
+        $temp = $this->source;
         if (!$temp) {
             throw new \common_Exception('Temp directory is not correctly set.');
         }
@@ -211,13 +216,7 @@ class PciRegistry extends ConfigurableService
      */
     protected function getLatestVersion($typeIdentifier)
     {
-        $pcis = $this->getMap();
-        if(isset($pcis[$typeIdentifier])){
-            $pci = $pcis[$typeIdentifier];
-            end($pci);
-            return key($pci);
-        }
-        return null;
+        return $this->get($typeIdentifier);
     }
 
     /**
@@ -232,7 +231,7 @@ class PciRegistry extends ConfigurableService
     {
         $pcis = $this->getMap();
 
-        if (!isset($pcis[$typeIdentifier])) {
+        if (empty($pcis) || empty($pcis[$typeIdentifier])) {
             return false;
         }
 
@@ -246,7 +245,33 @@ class PciRegistry extends ConfigurableService
 
         return false;
     }
-    
+
+    public function get($identifier, $version=null, $versionStrict=false)
+    {
+        $pcis = $this->getMap();
+        if (!isset($pcis[$identifier])) {
+            return null;
+        }
+
+        $pciModel = new PciModel();
+        $pci = $pcis[$identifier];
+        if (isset($pci[$version])) {
+            return $pciModel->exchangeArray($pci[$version]);
+        }
+        if ($versionStrict) {
+            return null;
+        }
+
+        krsort($pci);
+        reset($pci);
+        return $pciModel->exchangeArray(key($pci));
+    }
+
+    public function retrieve(PciModel $pciModel)
+    {
+        return $this->get($pciModel->getTypeIdentifier(), $pciModel->getVersion(), true);
+    }
+
     /**
      * Register a PCI in a specific version
      *
@@ -256,43 +281,35 @@ class PciRegistry extends ConfigurableService
      * @param array $creator
      * @throws \common_Exception
      */
-    public function register($typeIdentifier, $targetVersion, $runtime, $creator = [])
+    public function register(PciModel $pciModel)
     {
-        $pcis = $this->getMap();
-        
-        if (isset($pcis[$typeIdentifier])) {
-            $latest = $this->getLatestVersion($typeIdentifier);
-            if(version_compare($targetVersion, $latest, '<')){
-                throw new \common_Exception('A newer version of the code already exists '.$latest);
+        $latestVersion = $this->getLatestVersion($pciModel->getTypeIdentifier());
+        if ($latestVersion) {
+            if(version_compare($pciModel->getVersion(), $latestVersion->getVersion(), '<')){
+                throw new \common_Exception('A newer version of the code already exists ' . $latestVersion->getVersion());
             }
         } else {
-            $pcis[$typeIdentifier] = [];
+            $pcis[$pciModel->getTypeIdentifier()] = [];
         }
+
+
+
 
         $files = [];
 
         //@todo improve validation
+        $runtime = $pciModel->getRuntime();
         if (!isset($runtime['hook'])) {
             throw new \common_Exception('missing runtime hook file');
         }
 
-        $libraries   = (isset($runtime['libraries']) && is_array($runtime['libraries'])) ? $runtime['libraries'] : [];
-        $stylesheets = (isset($runtime['stylesheets']) && is_array($runtime['stylesheets'])) ? $runtime['stylesheets'] : [];
-        $mediaFiles  = (isset($runtime['mediaFiles']) && is_array($runtime['mediaFiles'])) ? $runtime['mediaFiles'] : [];
-
         array_push($files, $runtime['hook']);
-        $files = array_merge($files, $libraries, $stylesheets, $mediaFiles);
-        
-        $pci = [
-            'runtime' => [
-                'hook' => $runtime['hook'],
-                'libraries'   => $libraries,
-                'stylesheets' => $stylesheets,
-                'mediaFiles'  => $mediaFiles
-            ]
-        ];
-        
-        if (!empty($creator)) {
+        $files = array_merge($files, $pciModel->getRuntimeFiles());
+
+        $pci = ['runtime' => $pciModel->getRuntimeFiles()];
+
+        if (!empty($pciModel->getCreator())) {
+            $creator = $pciModel->getCreator();
             //a creator hook is being registered
             
             //@todo improve validation
@@ -328,7 +345,8 @@ class PciRegistry extends ConfigurableService
                 'mediaFiles'  => $creator_mediaFiles
             ];
         }
-        
+
+        $pcis = $this->getMap();
         $pcis[$typeIdentifier][$targetVersion] = $pci;
         $this->registerFiles($typeIdentifier, $targetVersion, $files);
         $this->setMap($pcis);
@@ -509,18 +527,18 @@ class PciRegistry extends ConfigurableService
      * @return mixed
      * @throws \common_Exception
      */
-    public function get($typeIdentifier, $version=null)
-    {
-        if ($version===null) {
-            $version = $this->getLatestVersion($typeIdentifier);
-        }
-
-        if (!$this->exists($typeIdentifier, $version)) {
-            throw new \common_Exception('Unable to find PCI identifier "' . $typeIdentifier .
-                '" at version "' . $version. '"');
-        }
-
-        $pcis = $this->getMap();
-        return $pcis[$typeIdentifier][$version];
-    }
+//    public function get($typeIdentifier, $version=null)
+//    {
+//        if ($version===null) {
+//            $version = $this->getLatestVersion($typeIdentifier);
+//        }
+//
+//        if (!$this->exists($typeIdentifier, $version)) {
+//            throw new \common_Exception('Unable to find PCI identifier "' . $typeIdentifier .
+//                '" at version "' . $version. '"');
+//        }
+//
+//        $pcis = $this->getMap();
+//        return $pcis[$typeIdentifier][$version];
+//    }
 }
