@@ -47,7 +47,7 @@ class PciPackageParser extends PackageParser
     public function validate($schema = '')
     {
         if (!QtiPackage::isValidZip($this->source)) {
-            throw new common_Exception('Source package is not a valiad zip.');
+            throw new common_Exception('Source package is not a valid zip.');
         }
 
         $zip = new ZipArchive();
@@ -60,6 +60,8 @@ class PciPackageParser extends PackageParser
         if($zip->locateName(self::PCI_ENGINE) === false) {
             throw new common_Exception('A PCI creator package must contains a ' . self::PCI_ENGINE . ' file at the root of the archive');
         }
+
+        $zip->close();
 
         return true;
     }

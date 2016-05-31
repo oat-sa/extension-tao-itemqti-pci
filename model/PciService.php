@@ -20,6 +20,8 @@
 
 namespace oat\qtiItemPci\model;
 
+use oat\qtiItemPci\model\validation\PciModelValidator;
+use oat\qtiItemPci\model\validation\PciValidator;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -39,6 +41,7 @@ class PciService implements ServiceLocatorAwareInterface
 
     /**
      * Singleton of registry service
+     *
      * @return PciRegistry
      */
     protected function getRegistry()
@@ -51,6 +54,7 @@ class PciService implements ServiceLocatorAwareInterface
 
     /**
      * Singleton of parser service
+     *
      * @return PciPackageParser
      */
     protected function getPackageParser($filename)
@@ -61,6 +65,13 @@ class PciService implements ServiceLocatorAwareInterface
         return $this->parsers[$filename];
     }
 
+    /**
+     * Get parser already used for the same filename
+     *
+     * @param $filename
+     * @return mixed
+     * @throws \common_Exception
+     */
     protected function getParser($filename)
     {
         if (!$this->parsers[$filename]) {
@@ -69,6 +80,13 @@ class PciService implements ServiceLocatorAwareInterface
         return $this->parsers[$filename];
     }
 
+    /**
+     * Extract zip file and return PciModel representation
+     *
+     * @param $filename
+     * @return PciModel
+     * @throws \common_Exception
+     */
     public function getPciModelFromZipSource($filename)
     {
         try {
@@ -80,22 +98,55 @@ class PciService implements ServiceLocatorAwareInterface
         }
     }
 
+    /**
+     * Validate a PCI model using PciModelValidator
+     *
+     * @param PciModel $pciModel
+     * @param $source
+     * @throws \common_Exception
+     */
+    public function validatePciModel(PciModel $pciModel, $source)
+    {
+        $pciValidator = new PciModelValidator();
+        $pciValidator->setModel($pciModel);
+        if (!PciValidator::validate($pciValidator)) {
+            throw new \common_Exception('Invalid PCI creator package format.');
+        }
+        $pciValidator->validateAssets($source);
+    }
+
+    /**
+     * Import a PCI from an uploaded zip file
+     * 1°) Extract zip
+     * 2°) Check if exists
+     * 3°) Extract data
+     * 4°) Validate PciModel
+     * 5°) Register into PCI registry
+     *
+     * @param $file
+     * @return PciModel
+     * @throws \common_Exception
+     */
     public function import($file)
     {
         // Get Pci Model from zip package
         $pciModel = $this->getPciModelFromZipSource($file);
-
-        // Validate Pci Model
-        if (!PciValidator::validate($pciModel)) {
-            throw new \common_Exception('Invalid PCI creator package format.');
-        }
 
         // Check if Pci exists
         if ($this->getRegistry()->exists($pciModel)) {
             throw new \common_Exception('The Creator Package already exists.');
         }
 
+        // Extract zip file
         $source = $this->getParser($file)->extract();
+
+        if (!$pciModel->hasCreatorKey('manifest')) {
+            $pciModel->setCreatorKey('manifest', './' . PciPackageParser::PCI_MANIFEST);
+        }
+
+        // Validate Pci Model
+        $this->validatePciModel($pciModel, $source);
+
         $this->getRegistry()->setSource($source);
         $this->getRegistry()->register($pciModel);
 

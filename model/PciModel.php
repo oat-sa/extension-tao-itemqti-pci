@@ -21,8 +21,6 @@
 
 namespace oat\qtiItemPci\model;
 
-use oat\qtiItemPci\model\PciValidator as Validator;
-
 class PciModel
 {
     /** @var string */
@@ -34,7 +32,7 @@ class PciModel
     /** @var string */
     protected $description;
     /** @var string */
-    protected $version;
+    protected $version = null;
     /** @var string */
     protected $author;
     /** @var string */
@@ -45,14 +43,28 @@ class PciModel
     /** @var array */
     protected $response = array();
     /** @var array */
-    protected $runtime = array(
-        'libraries' => [],
-        'stylesheets' => [],
-        'mediaFiles' => [],
-    );
+    protected $runtime = array();
     /** @var array */
     protected $creator = array();
 
+    /**
+     * PciModel constructor with identifier & optional version
+     *
+     * @param $typeIdentifier
+     * @param $version
+     */
+    public function __construct($typeIdentifier=null, $version=null)
+    {
+        $this->typeIdentifier = $typeIdentifier;
+        $this->version = $version;
+    }
+
+    /**
+     * Populate $this object from array
+     *
+     * @param array $data
+     * @return $this
+     */
     public function exchangeArray(array $data)
     {
         $attributes = array_keys($this->toArray());
@@ -64,25 +76,15 @@ class PciModel
         return $this;
     }
 
+    /**
+     * Return an array
+     * representation of $this object
+     *
+     * @return array
+     */
     public function toArray()
     {
         return get_object_vars($this);
-    }
-
-    public function getConstraints()
-    {
-        return [
-            'typeIdentifier' => [Validator::AlphaNum, Validator::NotEmpty],
-            'short'          => [Validator::isString, Validator::NotEmpty],
-            'description'    => [Validator::isString, Validator::NotEmpty],
-            'version'        => [Validator::isVersion, Validator::NotEmpty],
-            'author'         => [Validator::isString, Validator::NotEmpty],
-            'email'          => [Validator::Email, Validator::NotEmpty],
-            'tags'           => [Validator::isArray, Validator::NotEmpty],
-            'response'       => [Validator::isArray, Validator::NotEmpty],
-            'runtime'        => [Validator::isArray, Validator::NotEmpty],
-            'creator'        => [Validator::isArray, Validator::NotEmpty]
-        ];
     }
     
     /**
@@ -173,6 +175,14 @@ class PciModel
     {
         $this->version = $version;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasVersion()
+    {
+        return ($this->version!=null);
     }
 
     /**
@@ -269,15 +279,41 @@ class PciModel
         return $this;
     }
 
-    public function getRuntimeFiles()
+    /**
+     * Check if given runtime key exists
+     *
+     * @param $key
+     * @return bool
+     */
+    public function hasRuntimeKey($key)
     {
-        $files = [];
-        foreach ($this->runtime as $key => $value) {
-            if (is_array($value)) {
-                array_merge($files, $value);
-            }
+        return (isset($this->runtime[$key]));
+    }
+
+    /**
+     * Get runtime value associated to the given key
+     *
+     * @param $key
+     * @return null
+     */
+    public function getRuntimeKey($key)
+    {
+        if ($this->hasRuntimeKey($key)) {
+            return $this->runtime[$key];
         }
-        return $files;
+        return null;
+    }
+
+    /**
+     * Set runtime value associated to the given key
+     *
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
+    public function setRuntimeKey($key, $value)
+    {
+        return $this->runtime[$key] = $value;
     }
 
     /**
@@ -294,7 +330,48 @@ class PciModel
      */
     public function setCreator($creator)
     {
-        $this->creator = $creator;
+        foreach ($creator as $key => $value) {
+            if (is_array($value)) {
+                $this->creator[$key] = $value;
+            }
+        }
         return $this;
+    }
+
+    /**
+     * Check if given creator key exists
+     *
+     * @param $key
+     * @return bool
+     */
+    public function hasCreatorKey($key)
+    {
+        return (isset($this->creator[$key]));
+    }
+
+    /**
+     * Get creator value associated to the given key
+     *
+     * @param $key
+     * @return null
+     */
+    public function getCreatorKey($key)
+    {
+        if ($this->hasCreatorKey($key)) {
+            return $this->creator[$key];
+        }
+        return null;
+    }
+
+    /**
+     * Set creator value associated to the given key
+     *
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
+    public function setCreatorKey($key, $value)
+    {
+        return $this->creator[$key] = $value;
     }
 }

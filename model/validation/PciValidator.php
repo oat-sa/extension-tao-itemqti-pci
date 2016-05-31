@@ -19,7 +19,7 @@
  *
  */
 
-namespace oat\qtiItemPci\model;
+namespace oat\qtiItemPci\model\validation;
 
 class PciValidator
 {
@@ -51,9 +51,9 @@ class PciValidator
      */
 
     protected static $customValidators = [
-        self::isArray   => 'isValidArray',
-        self::isString  => 'isValidString',
-        self::isVersion => 'isValidVersion'
+        self::isArray        => 'isValidArray',
+        self::isString       => 'isValidString',
+        self::isVersion      => 'isValidVersion'
     ];
 
     protected static function getValidConstraints(array $requirements)
@@ -80,7 +80,7 @@ class PciValidator
         return $validConstraints;
     }
 
-    public static function validate($validatable)
+    public static function validate(Validatable $validatable)
     {
         $messages = [];
         $constraints = self::getValidConstraints($validatable->getConstraints());
@@ -88,10 +88,11 @@ class PciValidator
         foreach ($constraints as $field => $constraint) {
             foreach ($constraint as $validator) {
                 $getter = 'get' . ucfirst($field);
-                if (!method_exists($validatable, $getter)) {
+                if (!method_exists($validatable->getModel(), $getter)) {
+                    // throw error?
                     continue;
                 }
-                $value = $validatable->$getter();
+                $value = $validatable->getModel()->$getter();
 
                 if ($validator instanceof \tao_helpers_form_Validator) {
                     if (!$validator->evaluate($value)) {
@@ -122,7 +123,7 @@ class PciValidator
         return true;
     }
 
-    static function isValidString($value)
+    public static function isValidString($value)
     {
         if (!is_string($value)) {
             throw new \common_Exception('Unable to validate the given value as valid string.');
@@ -130,7 +131,7 @@ class PciValidator
         return true;
     }
 
-    static function isValidArray($value)
+    public static function isValidArray($value)
     {
         if (!is_array($value)) {
             throw new \common_Exception('Unable to validate the given value as valid array.');
@@ -138,7 +139,7 @@ class PciValidator
         return true;
     }
 
-    static function isValidVersion($value)
+    public static function isValidVersion($value)
     {
         $validator = \tao_helpers_form_FormFactory::getValidator(self::Regex, array('format' => '/\d+(?:\.\d+)+/'));
         if (!$validator->evaluate($value)) {
