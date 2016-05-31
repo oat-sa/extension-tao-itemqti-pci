@@ -29,11 +29,18 @@ class Updater extends \common_ext_ExtensionUpdater
      * @param string $currentVersion
      * @return string $versionUpdatedTo
      */
-    public function update($initialVersion)
+    public function update($currentVersion)
     {
+        
       	if ($this->isBetween('0', '0.1.3')){
   	    	$this->setVersion('0.1.3');
    	    }
-       return null;
+        
+        if($this->isVersion('0.1.3')){
+            $testTakerRole = new \core_kernel_classes_Resource(INSTANCE_ROLE_DELIVERY);
+            $accessService = \funcAcl_models_classes_AccessService::singleton();
+            $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
+            $this->setVersion('0.2.0');
+        }
     }
 }
