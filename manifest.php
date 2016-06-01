@@ -25,7 +25,7 @@ return array(
 	'label' => 'QTI Portable Custom Interaction',
 	'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.1.4',
+    'version' => '0.2.0',
 	'author' => 'Open Assessment Technologies SA',
 	'requires' => array('taoQtiItem' => '>=2.7.0'),
     'acl' => array(
@@ -44,7 +44,9 @@ return array(
     'uninstall' => array(
     ),
     'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
-
+    'acl' => array(
+        array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+    ),  
     'routes' => array(
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ),    

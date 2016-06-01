@@ -25,10 +25,8 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
         var $labelMin = $('<span>', {'class' : 'likert-label likert-label-min'}).html(config['label-min']);
         var $labelMax = $('<span>', {'class' : 'likert-label likert-label-max'}).html(config['label-max']);
         
-//        $labelMin.append($('<img>', {src: 'http://tao.localdomain/qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction/runtime/assets/ThumbUp.png'}).css({top: 2, marginLeft:12}));
-//        $labelMax.prepend($('<img>', {src: 'http://tao.localdomain/qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction/runtime/assets/ThumbDown.png'}).css({top: 6, marginRight:12}));
-        $labelMin.append($('<img>', {src: assetManager.resolve('likertScaleInteraction/runtime/assets/ThumbUp.png')}).css({top: 2, marginLeft:12}));
-        $labelMax.prepend($('<img>', {src: assetManager.resolve('likertScaleInteraction/runtime/assets/ThumbDown.png')}).css({top: 6, marginRight:12}));
+        $labelMin.append($('<img>', {src: assetManager.resolve('likertScaleInteraction/runtime/assets/ThumbDown.png')}).css({top: 6, marginLeft:12}));
+        $labelMax.prepend($('<img>', {src: assetManager.resolve('likertScaleInteraction/runtime/assets/ThumbUp.png')}).css({top: 2, marginRight:12}));
         
         $ul.before($labelMin);
         $ul.after($labelMax);
