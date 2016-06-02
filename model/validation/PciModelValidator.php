@@ -81,7 +81,6 @@ class PciModelValidator implements Validatable
             'creator' => [
                 'icon',
                 'hook',
-                'manifest',
                 'libraries',
                 'stylesheets',
                 'mediaFiles',

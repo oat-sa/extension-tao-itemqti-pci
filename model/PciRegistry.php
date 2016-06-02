@@ -130,7 +130,7 @@ class PciRegistry extends ConfigurableService
     public function setSource($source)
     {
         if (!is_dir($source)) {
-            throw new \common_Exception('Unable to locate temp directory.');
+            throw new \common_Exception('Unable to locate source directory.');
         }
         $this->source = DIRECTORY_SEPARATOR . trim($source, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
@@ -234,7 +234,7 @@ class PciRegistry extends ConfigurableService
         }
 
         $version = $pciModel->getVersion();
-        if ($pciModel->getVersion()===null) {
+        if (!$pciModel->hasVersion()) {
             $version = $this->getLatestVersion($pciModel->getTypeIdentifier());
         }
 
@@ -385,7 +385,7 @@ class PciRegistry extends ConfigurableService
     }
 
     /**
-     * Return the path prefix associated to an identifier
+     * Return the path prefix associated to couple of $identifier/$var
      *
      * @param $typeIdentifier
      * @param $var

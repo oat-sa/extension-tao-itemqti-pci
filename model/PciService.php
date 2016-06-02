@@ -140,10 +140,6 @@ class PciService implements ServiceLocatorAwareInterface
         // Extract zip file
         $source = $this->getParser($file)->extract();
 
-        if (!$pciModel->hasCreatorKey('manifest')) {
-            $pciModel->setCreatorKey('manifest', './' . PciPackageParser::PCI_MANIFEST);
-        }
-
         // Validate Pci Model
         $this->validatePciModel($pciModel, $source);
 
