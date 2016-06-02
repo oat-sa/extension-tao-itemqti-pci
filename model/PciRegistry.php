@@ -247,7 +247,6 @@ class PciRegistry extends ConfigurableService
 
     /**
      * Get a PCI from identifier/version
-     * $versionStrict to search exactly the given $version
      *
      * @param $identifier
      * @param null $version
