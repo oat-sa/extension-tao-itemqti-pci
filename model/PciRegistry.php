@@ -130,7 +130,7 @@ class PciRegistry extends ConfigurableService
     public function setSource($source)
     {
         if (!is_dir($source)) {
-            throw new \common_Exception('Unable to locate source directory.');
+            throw new \common_Exception('Unable to locate the source directory.');
         }
         $this->source = DIRECTORY_SEPARATOR . trim($source, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
@@ -160,7 +160,7 @@ class PciRegistry extends ConfigurableService
         $fileSystem = $this->getFileSystem();
 
         if (!$this->getSource()) {
-            throw new \common_Exception('Temp directory is not correctly set.');
+            throw new \common_Exception('The source directory is not correctly set.');
         }
 
         foreach ($files as $file) {
@@ -251,10 +251,9 @@ class PciRegistry extends ConfigurableService
      *
      * @param $identifier
      * @param null $version
-     * @param bool $versionStrict
      * @return $this|null
      */
-    public function get($identifier, $version=null, $versionStrict=false)
+    public function get($identifier, $version=null)
     {
         $pcis = $this->getMap();
         if (!isset($pcis[$identifier])) {
@@ -263,16 +262,17 @@ class PciRegistry extends ConfigurableService
 
         $pciModel = new PciModel();
         $pci = $pcis[$identifier];
-        if (isset($pci[$version])) {
-            return $pciModel->exchangeArray($pci[$version]);
+        if(is_null($version)){
+            //return the latest version
+            krsort($pci);
+            return $pciModel->exchangeArray(reset($pci));
+        }else{
+            if (isset($pci[$version])) {
+                return $pciModel->exchangeArray($pci[$version]);
+            }else{
+                return null;
+            }
         }
-        if ($versionStrict) {
-            return null;
-        }
-
-        krsort($pci);
-        reset($pci);
-        return $pciModel->exchangeArray(key($pci));
     }
 
     /**
@@ -283,7 +283,7 @@ class PciRegistry extends ConfigurableService
      */
     public function retrieve(PciModel $pciModel)
     {
-        return $this->get($pciModel->getTypeIdentifier(), $pciModel->getVersion(), true);
+        return $this->get($pciModel->getTypeIdentifier(), $pciModel->getVersion());
     }
 
     /**
@@ -350,7 +350,7 @@ class PciRegistry extends ConfigurableService
         if (!$this->exists($pciModel)) {
             throw new \InvalidArgumentException('Identifier "' . $pciModel->getTypeIdentifier() . '" to remove is not found in PCI map');
         }
-
+        
         $this->removeAssets($pciModel);
         $this->removeMapPci($pciModel);
         return true;
@@ -369,7 +369,7 @@ class PciRegistry extends ConfigurableService
         $pcis = $this->getMap();
         if (isset($pcis[$typeIdentifier])) {
             if (empty($version)) {
-                $version = $this->getLatestVersion($typeIdentifier);
+                $version = $this->getLatestVersion($typeIdentifier)->getVersion();
             }
             if  ($pcis[$typeIdentifier][$version]) {
                 $pci = $this->addPathPrefix($typeIdentifier, $pcis[$typeIdentifier][$version]);
@@ -383,7 +383,7 @@ class PciRegistry extends ConfigurableService
             throw new \common_Exception('The pci does not exist : '.$typeIdentifier);
         }
     }
-
+    
     /**
      * Return the path prefix associated to couple of $identifier/$var
      *
@@ -394,7 +394,7 @@ class PciRegistry extends ConfigurableService
     protected function addPathPrefix($typeIdentifier, $var)
     {
         if (is_string($var)) {
-            return $typeIdentifier.'/'.$var;
+            return preg_replace('/^(.\/)(.*)/', $typeIdentifier."/$2", $var);
         } elseif (is_array($var)) {
             foreach ($var as $k => $v) {
                 $var[$k] = $this->addPathPrefix($typeIdentifier, $v);
@@ -416,8 +416,8 @@ class PciRegistry extends ConfigurableService
         $all = [];
         $pcis = $this->getMap();
         foreach ($pcis as $typeIdentifier => $versions) {
-            $version = $this->getLatestVersion($typeIdentifier);
-            $pci = $this->getRuntime($typeIdentifier, $version);
+            $pciModel = $this->getLatestVersion($typeIdentifier);
+            $pci = $this->getRuntime($typeIdentifier, $pciModel->getVersion());
             $all[$typeIdentifier] = [$pci];
         }
         return $all;
