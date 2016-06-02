@@ -132,17 +132,8 @@ class PciService implements ServiceLocatorAwareInterface
         // Get Pci Model from zip package
         $pciModel = $this->getPciModelFromZipSource($file);
 
-        // Check if Pci exists
-        if ($this->getRegistry()->exists($pciModel)) {
-            throw new \common_Exception('The Creator Package already exists.');
-        }
-
         // Extract zip file
         $source = $this->getParser($file)->extract();
-
-        if (!$pciModel->hasCreatorKey('manifest')) {
-            $pciModel->setCreatorKey('manifest', './' . PciPackageParser::PCI_MANIFEST);
-        }
 
         // Validate Pci Model
         $this->validatePciModel($pciModel, $source);

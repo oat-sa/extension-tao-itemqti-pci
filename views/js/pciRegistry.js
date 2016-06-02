@@ -83,7 +83,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
 
     function getCreator(typeIdentifier, version){
         var pci = _get(typeIdentifier, version);
-        if(pci){
+        if(pci && pci.creator){
             return _.assign(pci.creator, {
                 baseUrl : pci.baseUrl
             });
@@ -109,9 +109,9 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                 dataType : 'json',
                 type : 'GET'
             }).done(function (pcis){
-
+                
                 //test...
-                pcis = _registry0;
+//                pcis = _registry0;
 
                 _registry = pcis;
 
@@ -130,58 +130,43 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
     }
 
     function loadCreators(callback){
+        
         loadRuntimes(function (){
             var requiredCreators = [];
-            var requiredManifests = [];
-            //currently use the latest version only
+            
             _.forIn(_registry, function (versions, typeIdentifier){
-                var creator = getCreator(typeIdentifier);
-                requiredCreators.push(creator.hook.replace(/\.js$/, ''));
-                requiredManifests.push('json!' + creator.manifest.replace(/\.json$/, ''));
+                var pciModel = _get(typeIdentifier);//currently use the latest version only
+                requiredCreators.push(pciModel.creator.hook.replace(/\.js$/, ''));
             });
-
+            
             _requirejs(requiredCreators, function (){
                 var creators = {};
                 _.each(arguments, function (creatorHook){
                     var id = creatorHook.getTypeIdentifier();
-                    creators[id] = creatorHook;
+                    var pciModel = _get(id);
+                    var i = _.findIndex(_registry[id], {version : pciModel.version});
+                    if(i < 0){
+                        throw 'no creator found for id/version ' + id + '/' + pciModel.version;
+                    }else{
+                        _registry[id][i].creator.model = creatorHook;
+                        creators[id] = creatorHook;
+                    }
                 });
-                _requirejs(requiredManifests, function (){
-                    _.each(arguments, function (manifest){
-                        var id = manifest.typeIdentifier;
-                        var i;
-                        if(creators[id]){
-                            creators[id].manifest = manifest;
-
-                            //load the creator model into the registry
-                            i = _.findIndex(_registry[id], {version : manifest.version});
-                            if(i < 0){
-                                throw 'no creator found for id/version ' + id + '/' + manifest.version;
-                            }else{
-                                _registry[id][i].creator.model = creators[id];
-                            }
-                        }else{
-                            throw 'no creator found for id ' + id;
-                        }
-                    });
-                    callback(creators);
-                });
+                callback(creators);
             });
         });
     }
 
     function getAuthoringData(typeIdentifier, version){
-        var creator = getCreator(typeIdentifier, version);
-        var manifest;
-        if(creator.model && creator.model.manifest){
-            manifest = creator.model.manifest;
+        var pciModel = _get(typeIdentifier, version);
+        if(pciModel && pciModel.creator){
             return {
-                label : manifest.label, //currently no translation available 
-                icon : creator.baseUrl + manifest.creator.icon.replace(/^./, ''),
-                short : manifest.short,
-                description : manifest.description,
-                qtiClass : 'customInteraction.' + manifest.typeIdentifier, //custom interaction is block type
-                tags : _.union(['Custom Interactions'], manifest.tags)
+                label : pciModel.label, //currently no translation available 
+                icon : pciModel.creator.icon.replace(new RegExp('^'+typeIdentifier+'\/'), pciModel.baseUrl),
+                short : pciModel.short,
+                description : pciModel.description,
+                qtiClass : 'customInteraction.' + pciModel.typeIdentifier, //custom interaction is block type
+                tags : _.union(['Custom Interactions'], pciModel.tags)
             };
         }
     }
