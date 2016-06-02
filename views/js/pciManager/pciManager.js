@@ -7,7 +7,7 @@ define([
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
+    'qtiItemPci/pciRegistry',
     'async',
     'ui/deleter',
     'ui/feedback',
@@ -199,11 +199,7 @@ define([
             
             $container.trigger('added' + ns, [interactionHook]);
             
-            return;
-            
-            //old registry code
-            ciRegistry.register([interactionHook]);
-            ciRegistry.loadOne(id, function(){
+            ciRegistry.loadCreators(function(){
                 var data = ciRegistry.getAuthoringData(id);
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
@@ -222,9 +218,7 @@ define([
                 }else{
                     throw 'invalid authoring data for custom interaction';
                 }
-            });
-
-            
+            }, true);
         }
 
         function initUploader(){

@@ -101,8 +101,8 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         return '';
     }
 
-    function loadRuntimes(callback){
-        if(_loaded){
+    function loadRuntimes(callback, reload){
+        if(_loaded && !reload){
             callback();
         }else{
             $.ajax({
@@ -130,7 +130,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         }
     }
 
-    function loadCreators(callback){
+    function loadCreators(callback, reload){
         
         loadRuntimes(function (){
             var requiredCreators = [];
@@ -140,6 +140,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                 requiredCreators.push(pciModel.creator.hook.replace(/\.js$/, ''));
             });
             
+            //@todo support caching
             _requirejs(requiredCreators, function (){
                 var creators = {};
                 _.each(arguments, function (creatorHook){
@@ -155,7 +156,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                 });
                 callback(creators);
             });
-        });
+        }, reload);
     }
 
     function getAuthoringData(typeIdentifier, version){
