@@ -33,6 +33,6 @@ class PciLoader extends tao_actions_CommonModule
     }
     
     public function load(){
-        $this->returnJson($this->registry->getLatestRuntime());
+        $this->returnJson($this->registry->getLatestRuntimes());
     }
 }

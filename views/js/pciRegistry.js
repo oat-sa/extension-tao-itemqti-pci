@@ -85,7 +85,8 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         var pci = _get(typeIdentifier, version);
         if(pci && pci.creator){
             return _.assign(pci.creator, {
-                baseUrl : pci.baseUrl
+                baseUrl : pci.baseUrl,
+                response : pci.response
             });
         }else{
             throw 'no pci found';
@@ -148,7 +149,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                     if(i < 0){
                         throw 'no creator found for id/version ' + id + '/' + pciModel.version;
                     }else{
-                        _registry[id][i].creator.model = creatorHook;
+                        _registry[id][i].creator.module = creatorHook;
                         creators[id] = creatorHook;
                     }
                 });

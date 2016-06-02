@@ -92,7 +92,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $this->assertFalse($this->registry->getBaseUrl('likertScaleInteraction', '0.1.1'));
         
         $pci = $this->registry->getRuntime('likertScaleInteraction', '0.1.0');
-        $pcis = $this->registry->getLatestRuntime();
+        $pcis = $this->registry->getLatestRuntimes();
 
         $isOnRuntime = false;
         foreach ($pcis as $name => $runtime) {

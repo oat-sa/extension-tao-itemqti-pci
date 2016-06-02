@@ -410,14 +410,27 @@ class PciRegistry extends ConfigurableService
      * @return array
      * @throws \common_Exception
      */
-    public function getLatestRuntime()
+    public function getLatestRuntimes()
     {
         $all = [];
-        $pcis = $this->getMap();
-        foreach ($pcis as $typeIdentifier => $versions) {
+        $pcis = array_keys($this->getMap());
+        foreach ($pcis as $typeIdentifier) {
             $pciModel = $this->getLatestVersion($typeIdentifier);
             $pci = $this->getRuntime($typeIdentifier, $pciModel->getVersion());
             $all[$typeIdentifier] = [$pci];
+        }
+        return $all;
+    }
+    
+    public function getLatestCreators()
+    {
+        $all = [];
+        $pcis = array_keys($this->getMap());
+        foreach ($pcis as $typeIdentifier) {
+            $pciModel = $this->getLatestVersion($typeIdentifier);
+            if(!empty($pciModel->getCreator())){
+                $all[$typeIdentifier] = $pciModel;
+            }
         }
         return $all;
     }

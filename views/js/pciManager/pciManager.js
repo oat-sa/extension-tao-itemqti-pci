@@ -67,7 +67,6 @@ define([
 
         //load list of custom interactions from server
         loadListingFromServer(function(data){
-
             //note : init as empty object and not array otherwise _.size will fail later
             listing = _.size(data) ? data : {};
             updateListing(data);
@@ -197,7 +196,12 @@ define([
             var id = interactionHook.typeIdentifier;
 
             listing[id] = interactionHook;
-
+            
+            $container.trigger('added' + ns, [interactionHook]);
+            
+            return;
+            
+            //old registry code
             ciRegistry.register([interactionHook]);
             ciRegistry.loadOne(id, function(){
                 var data = ciRegistry.getAuthoringData(id);
@@ -220,7 +224,7 @@ define([
                 }
             });
 
-            $container.trigger('added' + ns, [interactionHook]);
+            
         }
 
         function initUploader(){
@@ -321,7 +325,8 @@ define([
                         if(ok){
                             selectedFiles[file.name] = {
                                 typeIdentifier : r.typeIdentifier,
-                                label : r.label
+                                label : r.label,
+                                version : r.version
                             };
                         }
 

@@ -110,9 +110,9 @@ class PciService implements ServiceLocatorAwareInterface
         $pciValidator = new PciModelValidator();
         $pciValidator->setModel($pciModel);
         if (!PciValidator::validate($pciValidator)) {
-            throw new \common_Exception('Invalid PCI creator package format.');
+            return false;
         }
-        $pciValidator->validateAssets($source);
+        return $pciValidator->validateAssets($source);
     }
 
     /**
@@ -144,5 +144,21 @@ class PciService implements ServiceLocatorAwareInterface
         \tao_helpers_File::delTree($source);
 
         return $pciModel;
+    }
+    
+    public function getValidPciModelFromZipSource($file){
+        
+        // Get Pci Model from zip package
+        $pciModel = $this->getPciModelFromZipSource($file);
+
+        // Extract zip file
+        $source = $this->getParser($file)->extract();
+
+        // Validate Pci Model
+        if($this->validatePciModel($pciModel, $source)){
+            return $pciModel;
+        }else{
+            return null;
+        }
     }
 }
