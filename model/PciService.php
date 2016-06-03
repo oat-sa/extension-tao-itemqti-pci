@@ -131,7 +131,6 @@ class PciService implements ServiceLocatorAwareInterface
         // Extract zip file
         $source = $this->getParser($file)->extract();
 
-
         $pciModel = $this->getValidPciModelFromZipSource($file);
         if (is_null($pciModel)) {
             throw new \common_Exception('Pci zip package is invalid.');

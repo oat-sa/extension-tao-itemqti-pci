@@ -140,7 +140,6 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
             preg_replace('/\s+/', '', file_get_contents($source . DIRECTORY_SEPARATOR . PciModel::PCI_MANIFEST))
         );
         $this->assertTrue(empty($this->array_diff_assoc_recursive($original, $exported)));
-
         $registry->unregister($pciModel);
         \tao_helpers_File::delTree($source);
     }
