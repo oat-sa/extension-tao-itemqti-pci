@@ -20,17 +20,19 @@
 
 namespace oat\qtiItemPci\controller;
 
-use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
-use \FileUploadException;
-use oat\qtiItemPci\model\CreatorRegistry;
-use oat\qtiItemPci\model\CreatorPackageParser;
+use \tao_actions_CommonModule;
+use oat\qtiItemPci\model\PciService;
+use oat\qtiItemPci\model\PciRegistry;
 
-class PciManager extends AbstractPortableElementManager
+class PciManager extends tao_actions_CommonModule
 {
-    
-    protected function getCreatorRegistry(){
-        return new CreatorRegistry();
+    /**
+    * Instanciate the controller
+    */
+    public function __construct(){
+        parent::__construct();
+        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     
     /**
@@ -40,10 +42,9 @@ class PciManager extends AbstractPortableElementManager
 
         $returnValue = array();
 
-        $all = $this->registry->getRegisteredImplementations();
-
+        $all = $this->registry->getLatestCreators();
         foreach($all as $pci){
-            $returnValue[$pci['typeIdentifier']] = $this->filterInteractionData($pci);
+            $returnValue[$pci->getTypeIdentifier()] = $this->getListingData($pci);
         }
 
         $this->returnJson($returnValue);
@@ -52,14 +53,17 @@ class PciManager extends AbstractPortableElementManager
     /**
      * Remove security sensitive data to be sent to the client
      * 
-     * @param array $rawInteractionData
+     * @param $pciModel
      * @return array
      */
-    protected function filterInteractionData($rawInteractionData){
+    protected function getListingData($pciModel){
         
-        unset($rawInteractionData['directory']);
-        unset($rawInteractionData['registry']);
-        return $rawInteractionData;
+        $data = $pciModel->toArray();
+        return [
+            'typeIdentifier' => $data['typeIdentifier'],
+            'label' => $data['label'],
+            'version' => $data['version']
+        ];
     }
 
     /**
@@ -79,78 +83,88 @@ class PciManager extends AbstractPortableElementManager
         );
 
         $file = tao_helpers_Http::getUploadedFile('content');
-
-        $creatorPackageParser = new CreatorPackageParser($file['tmp_name']);
-        $creatorPackageParser->validate();
-        if($creatorPackageParser->isValid()){
-
-            $result['valid'] = true;
-
-            $manifest = $creatorPackageParser->getManifest();
-
-            $result['typeIdentifier'] = $manifest['typeIdentifier'];
-            $result['label'] = $manifest['label'];
-            $interaction = $this->registry->get($manifest['typeIdentifier']);
-            
-            if(!is_null($interaction)){
-                $result['exists'] = true;
-            }
+        
+        $pciService = new PciService();
+        $pciModel = $pciService->getValidPciModelFromZipSource($file['tmp_name']);
+        if(is_null($pciModel)){
+            $result['package'] = [['message'=>__('invalid qti package')]];//@todo provides specific reason why it fails
         }else{
-            $result['package'] = $creatorPackageParser->getErrors();
+            $id = $pciModel->getTypeIdentifier();
+            $targetVersion = $pciModel->getVersion();
+            $result['valid'] = true;
+            $result['typeIdentifier'] = $id;
+            $result['label'] = $pciModel->getLabel();
+            $result['version'] = $targetVersion;
+            $result['exists'] = $this->registry->exists($pciModel);
+            $all = $this->registry->getLatestCreators();
+            if(isset($all[$id])){
+                $currentVersion = $all[$id]->getVersion();
+                if(version_compare($targetVersion, $currentVersion, '<')){
+                    $result['package'] = [['message'=>__('a newer version of the pci "%s" already exists (current version: %s, target version: %s)', $id, $currentVersion, $targetVersion)]];
+                    $result['valid'] = false;
+                }
+            }
         }
 
         $this->returnJson($result);
     }
-    
+
     /**
      * Add a new custom interaction from the uploaded zip package
      */
-    public function add(){
+    public function add()
+    {
 
         //as upload may be called multiple times, we remove the session lock as soon as possible
         session_write_close();
 
         try{
-            $replace= true; //always set as "replaceable" and delegate decision to replace or not to the client side
+
             $file = tao_helpers_Http::getUploadedFile('content');
-            $newInteraction = $this->registry->add($file['tmp_name'], $replace);
+            $pciService = new PciService();
+            $pciService->setServiceLocator($this->getServiceManager());
+            $pciModel = $pciService->import($file['tmp_name']);
 
-            $this->returnJson($this->filterInteractionData($newInteraction));
-            
-        }catch(FileUploadException $fe){
+            $this->returnJson($this->getListingData($pciModel));
 
-            $this->returnJson(array('error' => $fe->getMessage()));
+        } catch(\common_Exception $e) {
+            $this->returnJson(array('error' => $e->getMessage()));
         }
     }
-    
+
+    /**
+     * Export PCI zip package with all runtime, creator & manifest files
+     */
+    public function export()
+    {
+        //as upload may be called multiple times, we remove the session lock as soon as possible
+        session_write_close();
+
+        try{
+            if (!$this->hasRequestParameter('typeIdentifier')) {
+                throw new \common_Exception('Type identifier parameter missing.');
+            }
+
+            $pciService = new PciService();
+            $pciService->setServiceLocator($this->getServiceManager());
+            $data = $pciService->export($this->getRequestParameter('typeIdentifier'));
+
+            $this->returnJson($this->filterInteractionData($data));
+
+        } catch(\common_Exception $e) {
+            $this->returnJson(array('error' => $e->getMessage()));
+        }
+    }
+
     /**
      * Delete a custom interaction from the registry
      */
     public function delete(){
 
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
-        $this->registry->remove($typeIdentifier);
-        $ok = true;
-
-        $this->returnJson(array(
-            'success' => $ok
-        ));
-    }
-    
-    /**
-     * Get the directory where the implementation sits
-     * 
-     * @param string $typeIdentifier
-     * @return string
-     */
-    protected function getImplementationDirectory($typeIdentifier){
-        $pci = $this->registry->get($typeIdentifier);
-        if(is_null($pci)){
-            $folder = $this->registry->getDevImplementationDirectory($typeIdentifier);
-        }else{
-            $folder = $pci['directory'];
-        }
-        return $folder;
+        $this->returnJson([
+            'success' => $this->registry->unregisterInteraction($typeIdentifier)
+        ]);
     }
 
 }

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\model;
 
+use oat\taoQtiItem\model\qti\exception\ExtractException;
 use oat\taoQtiItem\model\qti\PackageParser;
 use oat\taoQtiItem\helpers\QtiPackage;
 use common_Exception;
@@ -33,122 +34,74 @@ use \ZipArchive;
  */
 class PciPackageParser extends PackageParser
 {
-
     /**
      * Validate the zip package
      *
-     * @access public
-     * @param  string schema
-     * @return boolean
-     */
-    public function validate($schema = ''){
-
-        $this->valid = false;
-
-        try{
-
-            if(QtiPackage::isValidZip($this->source)){
-
-                $zip = new ZipArchive();
-                $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
-                if($zip->locateName("pciCreator.json") === false){
-                    throw new common_Exception("A PCI creator package must contains a pciCreator.json file at the root of the archive");
-                }else if($zip->locateName("pciCreator.js") === false){
-                    throw new common_Exception("A PCI creator package must contains a pciCreator.js file at the root of the archive");
-                }else{
-                    //check manifest format :
-                    $manifest = $this->getManifest();
-                    $this->valid = $this->validateManifest($manifest);
-                }
-
-                $zip->close();
-            }
-            
-        }catch(common_Exception $e){
-            $this->addError($e);
-        }
-    }
-    
-    /**
-     * Validate the manifest pciCreator.json
-     * 
-     * @param array $manifest
-     * @return boolean
+     * @param string $schema
+     * @return bool
      * @throws common_Exception
      */
-    protected function validateManifest($manifest){
-
-        $returnValue = true;
-
-        $requiredEntries = array(
-            'typeIdentifier' => 'identifier',
-            'label' => 'string',
-            'short' => 'string',
-            'description' => 'string',
-            'version' => 'string',
-            'author' => 'string',
-            'email' => 'string',
-            'tags' => 'array',
-            'response' => 'array',
-            'runtime' => 'array',
-            'creator' => 'array'
-        );
+    public function validate($schema = '')
+    {
+        if (!QtiPackage::isValidZip($this->source)) {
+            throw new common_Exception('Source package is not a valid zip.');
+        }
 
         $zip = new ZipArchive();
         $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
 
-        foreach($requiredEntries as $entry => $type){
-            //@todo : implement more generic data validation ?
-            if(isset($manifest[$entry])){
-                $value = $manifest[$entry];
-                switch($type){
-                    case 'identifier':
-                    case 'string':
-                        if(!is_string($value)){
-                            $returnValue = false;
-                            throw new common_Exception('invalid attribute format in the manifest pciCreator.json : "'.$entry.'" (expected a string)');
-                        }
-                        break;
-                    case 'array':
-                        if(!is_array($value)){
-                            $returnValue = false;
-                            throw new common_Exception('invalid attribute format in the manifest pciCreator.json : "'.$entry.'" (expected an array)');
-                        }
-                        break;
-                    case 'file':
-                        if($zip->locateName(preg_replace('/^\.\//', '', $value)) === false){
-                            $returnValue = false;
-                            throw new common_Exception('cannot locate "'.$entry.'" file : "'.$value.'"');
-                        }
-                        break;
-                }
-            }else{
-                throw new common_Exception('missing required attribute in the manifest pciCreator.json : "'.$entry.'"');
-            }
+        if ($zip->locateName(PciModel::PCI_MANIFEST) === false) {
+            throw new common_Exception('A PCI creator package must contains a ' . PciModel::PCI_MANIFEST . ' file at the root of the archive');
+        }
+
+        if($zip->locateName(PciModel::PCI_ENGINE) === false) {
+            throw new common_Exception('A PCI creator package must contains a ' . PciModel::PCI_ENGINE . ' file at the root of the archive');
         }
 
         $zip->close();
 
-        return $returnValue;
+        return true;
     }
-    
-    /**
-     * Get the manifest as an associative array from the source zip package
-     * 
-     * @return array
-     */
-    public function getManifest(){
 
-        $str = '';
-        $handle = fopen('zip://'.$this->source.'#pciCreator.json', 'r');
+    /**
+     * Get the manifest as Pci Model from the source zip package
+     *
+     * @return PciModel
+     * @throws common_Exception
+     */
+    public function getPciModel()
+    {
+        if (($handle = fopen('zip://' . $this->source . '#' . PciModel::PCI_MANIFEST, 'r')) === false) {
+            throw new common_Exception('Unable to open the ZIP file located at: ' . $this->source);
+        }
+
+        $content = '';
         while(!feof($handle)){
-            $str .= fread($handle, 8192);
+            $content .= fread($handle, 8192);
         }
         fclose($handle);
 
-        $returnValue = json_decode($str, true);
-
-        return $returnValue;
+        $content = json_decode($content, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $pciModel = new PciModel();
+            return $pciModel->exchangeArray($content);
+        }
+        throw new common_Exception('Pci manifest but it\'s not a valid json file.');
     }
 
+    /**
+     * Extract zip package into temp directory
+     *
+     * @return string Name of source directory
+     * @throws ExtractException
+     * @throws \common_exception_Error
+     */
+    public function extract()
+    {
+        $source = parent::extract();
+        if(!is_dir($source)){
+            throw new ExtractException('Unable to find a valid directory of extracted package.');
+        }
+        return $source;
+    }
 }

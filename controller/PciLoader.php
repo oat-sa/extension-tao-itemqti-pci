@@ -25,12 +25,14 @@ use \tao_actions_CommonModule;
 
 class PciLoader extends tao_actions_CommonModule
 {
+    /** @var PciRegistry */
+    protected $registry;
+
     public function __construct(){
         $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     
     public function load(){
-        $this->returnJson($this->registry->getLatestRuntime());
+        $this->returnJson($this->registry->getLatestRuntimes());
     }
-    
 }

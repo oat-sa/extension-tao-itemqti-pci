@@ -204,6 +204,7 @@ class CreatorRegistry extends ParentRegistry
         $directory = (string) $hook->getUniquePropertyValue($this->propDirectory);
         $label = $hook->getLabel();
         $folder = $this->storage->getDirectoryById($directory)->getPath();
+        $folder = $this->storage->getDirectoryById($directory)->getPath();
         $typeIdentifier = (string) $hook->getUniquePropertyValue($this->propTypeIdentifier);
         $manifestFile = $folder.DIRECTORY_SEPARATOR.'pciCreator.json';
         $manifest = json_decode(file_get_contents($manifestFile), true);

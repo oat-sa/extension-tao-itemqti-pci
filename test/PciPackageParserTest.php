@@ -20,6 +20,10 @@
  */
 namespace oat\qtiItemPci\test;
 
+use oat\oatbox\service\ServiceManager;
+use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\PciRegistry;
+use oat\qtiItemPci\model\PciService;
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\qtiItemPci\model\PciPackageParser;
 
@@ -36,23 +40,38 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
         TaoPhpUnitTestRunner::initTest();
     }
 
+
     public function testValidate(){
 
         $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
         $parser = new PciPackageParser($packageValid);
-        $parser->validate();
-        $this->assertTrue($parser->isValid());
-        
-    }
-    
-    public function testGetManifest(){
-        
-        $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
-        $parser = new PciPackageParser($packageValid);
-        $manifest = $parser->getManifest();
-        $this->assertTrue(!!count($manifest));
-        $this->assertEquals($manifest['typeIdentifier'], 'likertScaleInteraction');
+        $this->assertTrue($parser->validate());
         
     }
 
+    public function testGetPciModelFromManifest(){
+
+        $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
+
+        $parser = new PciPackageParser($packageValid);
+        $pciModel = $parser->getPciModel();
+        $this->assertInstanceOf(PciModel::class, $pciModel);
+        $this->assertEquals('likertScaleInteraction', $pciModel->getTypeIdentifier());
+    }
+
+    public function testValidImport()
+    {
+        $packageValid = dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip';
+        $pciName = 'likertScaleInteraction';
+        $pciVersion = '1.0.0';
+
+        $service = new PciService();
+        $service->setServiceLocator(ServiceManager::getServiceManager());
+
+        $result = $service->import($packageValid);
+        $pcis = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(PciRegistry::CONFIG_ID);
+        $this->assertEquals(ksort($result->toArray()), ksort($pcis[$pciName][$pciVersion]));
+        $pciRegistry = new PciRegistry();
+        $this->assertTrue($pciRegistry->unregister($result));
+    }
 }
