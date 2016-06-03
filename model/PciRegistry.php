@@ -261,14 +261,14 @@ class PciRegistry extends ConfigurableService
 
         $pciModel = new PciModel();
         $pci = $pcis[$identifier];
-        if(is_null($version) && !empty($pci)){
+        if (is_null($version) && !empty($pci)) {
             //return the latest version
             krsort($pci);
             return $pciModel->exchangeArray(reset($pci));
-        }else{
+        } else {
             if (isset($pci[$version])) {
                 return $pciModel->exchangeArray($pci[$version]);
-            }else{
+            } else {
                 return null;
             }
         }
