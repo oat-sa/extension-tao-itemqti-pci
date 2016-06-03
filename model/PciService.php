@@ -40,6 +40,11 @@ class PciService implements ServiceLocatorAwareInterface
     protected $parsers;
 
     /**
+     * @var PciPackageExporter
+     */
+    protected $exporter;
+
+    /**
      * Singleton of registry service
      *
      * @return PciRegistry
@@ -61,21 +66,6 @@ class PciService implements ServiceLocatorAwareInterface
     {
         if (!$this->parsers[$filename]) {
             $this->parsers[$filename] = new PciPackageParser($filename);
-        }
-        return $this->parsers[$filename];
-    }
-
-    /**
-     * Get parser already used for the same filename
-     *
-     * @param $filename
-     * @return mixed
-     * @throws \common_Exception
-     */
-    protected function getParser($filename)
-    {
-        if (!$this->parsers[$filename]) {
-            throw new \common_Exception('Unable to find a loaded parser for file ' . $filename);
         }
         return $this->parsers[$filename];
     }
@@ -105,14 +95,16 @@ class PciService implements ServiceLocatorAwareInterface
      * @param $source
      * @throws \common_Exception
      */
-    public function validatePciModel(PciModel $pciModel, $source)
+    public function validatePciModel(PciModel $pciModel, $source=null)
     {
         $pciValidator = new PciModelValidator();
         $pciValidator->setModel($pciModel);
         if (!PciValidator::validate($pciValidator)) {
             throw new \common_Exception('Invalid PCI creator package format.');
         }
-        $pciValidator->validateAssets($source);
+        if ($source) {
+            $pciValidator->validateAssets($source);
+        }
     }
 
     /**
@@ -133,7 +125,7 @@ class PciService implements ServiceLocatorAwareInterface
         $pciModel = $this->getPciModelFromZipSource($file);
 
         // Extract zip file
-        $source = $this->getParser($file)->extract();
+        $source = $this->getPackageParser($file)->extract();
 
         // Validate Pci Model
         $this->validatePciModel($pciModel, $source);
@@ -144,5 +136,15 @@ class PciService implements ServiceLocatorAwareInterface
         \tao_helpers_File::delTree($source);
 
         return $pciModel;
+    }
+
+    public function export($identifier, $version=null)
+    {
+        $pciModel = $this->getRegistry()->get($identifier, $version);
+        if (is_null($pciModel)) {
+            throw new \common_Exception('Unable to find a PCI associated to identifier: ' . $pciModel->getTypeIndentifier());
+        }
+        $this->validatePciModel($pciModel);
+        return $this->getRegistry()->export($pciModel);
     }
 }

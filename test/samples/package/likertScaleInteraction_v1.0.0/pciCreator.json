@@ -40,5 +40,5 @@
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js"
         ]
-    },
+    }
 }
