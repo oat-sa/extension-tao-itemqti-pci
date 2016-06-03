@@ -9,12 +9,13 @@ define([
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'qtiItemPci/pciRegistry',
     'async',
+    'ui/dialog/confirm',
     'ui/deleter',
     'ui/feedback',
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, deleter, feedback){
+], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, confirmBox, deleter, feedback){
 
     var ns = '.pcimanager';
 
@@ -294,16 +295,34 @@ define([
 
             function verify(file, cb){
 
-                var ok = true;
-
                 $uploadForm.sendfile({
                     url : _urls.verify,
                     file : file,
                     loaded : function(r){
-
+                        
+                        function done(ok){
+                            if(ok){
+                                selectedFiles[file.name] = {
+                                    typeIdentifier : r.typeIdentifier,
+                                    label : r.label,
+                                    version : r.version
+                                };
+                            }
+                            cb(ok);
+                        }
+                
                         if(r.valid){
                             if(r.exists){
-                                ok = window.confirm(__('There is already one interaction with the same identifier "%s" (label : "%s"). \n\n Do you want to override the existing one ?', r.typeIdentifier, r.label, r.label));
+                                confirmBox(
+                                    __('There is already one interaction with the same identifier "%s" (label : "%s"). Do you want to override the existing one ?', r.typeIdentifier, r.label, r.label),
+                                    function(){
+                                        done(true);
+                                    },function(){
+                                        done(false);
+                                    });
+                            }else{
+                                //@todo if version higher, notify user that the existing version will be updated by a new one
+                                done(true);
                             }
                         }else{
                             if(_.isArray(r.package)){
@@ -313,22 +332,10 @@ define([
                                     }
                                 });
                             }
-                            ok = false;
+                            done(false);
                         }
-
-                        if(ok){
-                            selectedFiles[file.name] = {
-                                typeIdentifier : r.typeIdentifier,
-                                label : r.label,
-                                version : r.version
-                            };
-                        }
-
-                        cb(ok);
                     },
                     failed : function(message){
-
-
                         cb(new Error(message));
                     }
                 });

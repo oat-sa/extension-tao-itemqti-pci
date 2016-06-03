@@ -35,7 +35,7 @@ class PciManager extends AbstractPortableElementManager
 {
     
     protected function getCreatorRegistry(){
-        return new CreatorRegistry();
+        return \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     
     /**
@@ -45,8 +45,7 @@ class PciManager extends AbstractPortableElementManager
 
         $returnValue = array();
 
-        $pciRegistry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
-        $all = $pciRegistry->getLatestCreators();
+        $all = $this->registry->getLatestCreators();
         foreach($all as $pci){
             $returnValue[$pci->getTypeIdentifier()] = $this->getListingData($pci);
         }
@@ -97,9 +96,7 @@ class PciManager extends AbstractPortableElementManager
             $result['typeIdentifier'] = $pciModel->getTypeIdentifier();
             $result['label'] = $pciModel->getLabel();
             $result['version'] = $pciModel->getVersion();
-            
-            $pciRegistry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
-            $result['exists'] = $pciRegistry->exists($pciModel);
+            $result['exists'] = $this->registry->exists($pciModel);
         }
 
         $this->returnJson($result);
@@ -134,17 +131,15 @@ class PciManager extends AbstractPortableElementManager
     public function delete(){
 
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
-        $this->registry->remove($typeIdentifier);
-        $ok = true;
-
-        $this->returnJson(array(
-            'success' => $ok
-        ));
+        $this->returnJson([
+            'success' => $this->registry->unregisterInteraction($typeIdentifier)
+        ]);
     }
     
     /**
      * Get the directory where the implementation sits
      * 
+     * @deprecated
      * @param string $typeIdentifier
      * @return string
      */

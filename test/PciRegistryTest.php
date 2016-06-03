@@ -39,7 +39,6 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
      */
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
-//        \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
         $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     

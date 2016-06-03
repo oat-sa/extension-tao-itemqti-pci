@@ -150,7 +150,10 @@ class PciService implements ServiceLocatorAwareInterface
         
         // Get Pci Model from zip package
         $pciModel = $this->getPciModelFromZipSource($file);
-
+        if(is_null($pciModel)){
+            return null;
+        }
+        
         // Extract zip file
         $source = $this->getParser($file)->extract();
 

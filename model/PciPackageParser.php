@@ -85,7 +85,11 @@ class PciPackageParser extends PackageParser
         fclose($handle);
 
         $pciModel = new PciModel();
-        return $pciModel->exchangeArray(json_decode($content, true));
+        $pciData = json_decode($content, true);
+        if(is_null($pciData)){
+            throw new common_Exception('Malformed pci manifest json: ' . self::PCI_MANIFEST);
+        }
+        return $pciModel->exchangeArray($pciData);
     }
 
     /**

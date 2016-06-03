@@ -95,6 +95,10 @@ class PciModelValidator implements Validatable
     public function isOptionalConstraint($key, $constraint)
     {
         $optional =  [
+            'runtime' => [
+                'stylesheets',
+                'mediaFiles',
+            ],
             'creator' => [
                 'stylesheets',
                 'mediaFiles',

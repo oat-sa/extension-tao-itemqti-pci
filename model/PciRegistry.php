@@ -261,7 +261,7 @@ class PciRegistry extends ConfigurableService
 
         $pciModel = new PciModel();
         $pci = $pcis[$identifier];
-        if(is_null($version)){
+        if(is_null($version) && !empty($pci)){
             //return the latest version
             krsort($pci);
             return $pciModel->exchangeArray(reset($pci));
@@ -446,6 +446,22 @@ class PciRegistry extends ConfigurableService
             $this->removeAssets(new PciModel($typeIdentifier));
         }
         $this->setMap([]);
+        return true;
+    }
+    
+    /**
+     * Unregister a previously registered pci, in all version
+     */
+    public function unregisterInteraction($typeIdentifier)
+    {
+        $unregistered = true;
+        $pcis = $this->getMap();
+        if(isset($pcis[$typeIdentifier])){
+            foreach(array_keys($pcis[$typeIdentifier]) as $version){
+                $unregistered &= $this->unregister(new PciModel($typeIdentifier, $version));
+            }
+        }
+        return $unregistered;
     }
 
     /**
