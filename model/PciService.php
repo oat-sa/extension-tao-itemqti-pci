@@ -93,18 +93,19 @@ class PciService implements ServiceLocatorAwareInterface
      *
      * @param PciModel $pciModel
      * @param $source
-     * @throws \common_Exception
+     * @return bool
      */
     public function validatePciModel(PciModel $pciModel, $source=null)
     {
         $pciValidator = new PciModelValidator();
         $pciValidator->setModel($pciModel);
         if (!PciValidator::validate($pciValidator)) {
-            throw new \common_Exception('Invalid PCI creator package format.');
+            return false;
         }
         if ($source) {
-            $pciValidator->validateAssets($source);
+            return $pciValidator->validateAssets($source);
         }
+        return true;
     }
 
     /**
@@ -123,12 +124,18 @@ class PciService implements ServiceLocatorAwareInterface
     {
         // Get Pci Model from zip package
         $pciModel = $this->getPciModelFromZipSource($file);
+        if(is_null($pciModel)){
+            return null;
+        }
 
         // Extract zip file
-        $source = $this->getPackageParser($file)->extract();
+        $source = $this->getParser($file)->extract();
 
-        // Validate Pci Model
-        $this->validatePciModel($pciModel, $source);
+
+        $pciModel = $this->getValidPciModelFromZipSource($file);
+        if (is_null($pciModel)) {
+            throw new \common_Exception('Pci zip package is invalid.');
+        }
 
         $this->getRegistry()->setSource($source);
         $this->getRegistry()->register($pciModel);
@@ -146,5 +153,24 @@ class PciService implements ServiceLocatorAwareInterface
         }
         $this->validatePciModel($pciModel);
         return $this->getRegistry()->export($pciModel);
+    }
+
+    public function getValidPciModelFromZipSource($file){
+
+        // Get Pci Model from zip package
+        $pciModel = $this->getPciModelFromZipSource($file);
+        if(is_null($pciModel)){
+            return null;
+        }
+
+        // Extract zip file
+        $source = $this->getParser($file)->extract();
+
+        // Validate Pci Model
+        if ($this->validatePciModel($pciModel, $source)) {
+            return $pciModel;
+        } else {
+            return null;
+        }
     }
 }

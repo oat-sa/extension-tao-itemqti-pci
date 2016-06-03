@@ -86,7 +86,7 @@ class PciPackageParser extends PackageParser
             $pciModel = new PciModel();
             return $pciModel->exchangeArray($content);
         }
-        throw new common_Exception('Pci manifest but it\'s not a liad json file.');
+        throw new common_Exception('Pci manifest but it\'s not a valid json file.');
     }
 
     /**

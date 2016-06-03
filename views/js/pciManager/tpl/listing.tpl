@@ -1,6 +1,6 @@
 {{#each files}}
 <li data-type-identifier="{{typeIdentifier}}">
-    <span class="desc truncate">{{label}}</span>
+    <span class="desc truncate">{{label}} - {{version}}</span>
     <div class="actions">
         <div class="tlb rgt">
             <div class="tlb-top">

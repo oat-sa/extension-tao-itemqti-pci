@@ -261,7 +261,7 @@ class PciRegistry extends ConfigurableService
 
         $pciModel = new PciModel();
         $pci = $pcis[$identifier];
-        if(is_null($version)){
+        if(is_null($version) && !empty($pci)){
             //return the latest version
             krsort($pci);
             return $pciModel->exchangeArray(reset($pci));
@@ -410,14 +410,27 @@ class PciRegistry extends ConfigurableService
      * @return array
      * @throws \common_Exception
      */
-    public function getLatestRuntime()
+    public function getLatestRuntimes()
     {
         $all = [];
-        $pcis = $this->getMap();
-        foreach ($pcis as $typeIdentifier => $versions) {
+        $pcis = array_keys($this->getMap());
+        foreach ($pcis as $typeIdentifier) {
             $pciModel = $this->getLatestVersion($typeIdentifier);
             $pci = $this->getRuntime($typeIdentifier, $pciModel->getVersion());
             $all[$typeIdentifier] = [$pci];
+        }
+        return $all;
+    }
+    
+    public function getLatestCreators()
+    {
+        $all = [];
+        $pcis = array_keys($this->getMap());
+        foreach ($pcis as $typeIdentifier) {
+            $pciModel = $this->getLatestVersion($typeIdentifier);
+            if(!empty($pciModel->getCreator())){
+                $all[$typeIdentifier] = $pciModel;
+            }
         }
         return $all;
     }
@@ -433,6 +446,22 @@ class PciRegistry extends ConfigurableService
             $this->removeAssets(new PciModel($typeIdentifier));
         }
         $this->setMap([]);
+        return true;
+    }
+    
+    /**
+     * Unregister a previously registered pci, in all version
+     */
+    public function unregisterInteraction($typeIdentifier)
+    {
+        $unregistered = true;
+        $pcis = $this->getMap();
+        if(isset($pcis[$typeIdentifier])){
+            foreach(array_keys($pcis[$typeIdentifier]) as $version){
+                $unregistered &= $this->unregister(new PciModel($typeIdentifier, $version));
+            }
+        }
+        return $unregistered;
     }
 
     /**

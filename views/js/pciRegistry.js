@@ -85,7 +85,8 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         var pci = _get(typeIdentifier, version);
         if(pci && pci.creator){
             return _.assign(pci.creator, {
-                baseUrl : pci.baseUrl
+                baseUrl : pci.baseUrl,
+                response : pci.response
             });
         }else{
             throw 'no pci found';
@@ -100,8 +101,8 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         return '';
     }
 
-    function loadRuntimes(callback){
-        if(_loaded){
+    function loadRuntimes(callback, reload){
+        if(_loaded && !reload){
             callback();
         }else{
             $.ajax({
@@ -129,7 +130,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         }
     }
 
-    function loadCreators(callback){
+    function loadCreators(callback, reload){
         
         loadRuntimes(function (){
             var requiredCreators = [];
@@ -139,6 +140,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                 requiredCreators.push(pciModel.creator.hook.replace(/\.js$/, ''));
             });
             
+            //@todo support caching
             _requirejs(requiredCreators, function (){
                 var creators = {};
                 _.each(arguments, function (creatorHook){
@@ -148,13 +150,13 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
                     if(i < 0){
                         throw 'no creator found for id/version ' + id + '/' + pciModel.version;
                     }else{
-                        _registry[id][i].creator.model = creatorHook;
+                        _registry[id][i].creator.module = creatorHook;
                         creators[id] = creatorHook;
                     }
                 });
                 callback(creators);
             });
-        });
+        }, reload);
     }
 
     function getAuthoringData(typeIdentifier, version){

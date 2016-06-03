@@ -1,9 +1,5 @@
 /*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
-.qti-customInteraction .likertScaleInteraction{
-    width:100%;
-    padding:10px 20px 16px;
-    margin-bottom:20px;
-}
+@import url("base.css");
 
 .qti-customInteraction .likertScaleInteraction ul.likert{
     list-style-type: none;
@@ -27,3 +23,4 @@
 .qti-customInteraction .likertScaleInteraction .likert-label {min-width:90px; color: #444;}
 .qti-customInteraction .likertScaleInteraction .likert-label-min {text-align: right;}
 .qti-customInteraction .likertScaleInteraction .likert-label-max {text-align: left;}
+.qti-customInteraction .likertScaleInteraction .likert-label img {position:relative; width:16px;}

@@ -43,7 +43,6 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
      */
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
-//        \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
         $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     
@@ -96,7 +95,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $this->assertFalse($this->registry->getBaseUrl('likertScaleInteraction', '0.1.1'));
         
         $pci = $this->registry->getRuntime('likertScaleInteraction', '0.1.0');
-        $pcis = $this->registry->getLatestRuntime();
+        $pcis = $this->registry->getLatestRuntimes();
 
         $isOnRuntime = false;
         foreach ($pcis as $name => $runtime) {
