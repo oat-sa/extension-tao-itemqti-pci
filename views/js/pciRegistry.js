@@ -13,52 +13,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 201 (original work) Open Assessment Technlogies SA;
+ * Copyright (c) 2016 (original work) Open Assessment Technlogies SA;
  *
  */
-define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
+define(['jquery', 'lodash', 'core/promise'], function ($, _, Promise){
     'use strict';
 
     var _requirejs = window.require;
-    var _serverUrl = helpers._url('load', 'PciLoader', 'qtiItemPci');
     var _loaded = false;
+    var _providers = [];
     var _registry = {};
 
-    var _registry0 = {
-        likertScaleInteraction : [
-            {
-                version : '1.0.0',
-                baseUrl : 'http://tao.localdomain/qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction',
-                runtime : {
-                    hook : 'likertScaleInteraction/runtime/likertScaleInteraction.amd.js',
-                    libs : [
-                        'likertScaleInteraction/runtime/js/renderer'
-                    ],
-                    stylesheets : [
-                        'likertScaleInteraction/runtime/css/likertScaleInteraction.css'
-                    ],
-                    mediaFiles : [
-                        'likertScaleInteraction/runtime/assets/ThumbUp.png',
-                        'likertScaleInteraction/runtime/assets/ThumbDown.png'
-                    ]
-                },
-                creator : {
-                    hook : 'likertScaleInteraction/pciCreator.js',
-                    manifest : 'likertScaleInteraction/pciCreator.json',
-                    model : null
-                }
-            }
-        ]
-    };
-    
     function getAllVersions(){
         var all = {};
-        _.forIn(_registry, function(versions, id){
+        _.forIn(_registry, function (versions, id){
             all[id] = _.map(versions, 'version');
         });
         return all;
     }
-    
+
     function _get(typeIdentifier, version){
 
         if(_registry[typeIdentifier]){
@@ -100,46 +73,63 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         }
         return '';
     }
-
+    
+    function addProvider(provider){
+        if(provider && _.isFunction(provider.load)){
+            _providers.push(provider);
+        }
+        return this;
+    }
+    
     function loadRuntimes(callback, reload){
+        
+        var loadStack = [];
+        
         if(_loaded && !reload){
             callback();
         }else{
-            $.ajax({
-                url : _serverUrl,
-                dataType : 'json',
-                type : 'GET'
-            }).done(function (pcis){
+            
+            _.each(_providers, function(provider){
+                loadStack.push(provider.load());
+            });
+            
+            //performs the loadings in parrallel
+            Promise.all(loadStack).then(function(results){
                 
-                //test...
-//                pcis = _registry0;
-
-                _registry = pcis;
+                var requireConfigAliases = {};
+                
+                //update registry
+                _registry = _.reduce(results, function(acc, _pcis){
+                    return _.merge(acc, _pcis);
+                }, {});
 
                 //preconfiguring the pci's code baseUrl
-                var requireConfigAliases = {};
-                _.forIn(pcis, function (versions, typeIdentifier){
+                _.forIn(_registry, function (versions, typeIdentifier){
                     //currently use latest runtime path
                     requireConfigAliases[typeIdentifier] = getBaseUrl(typeIdentifier);
                 });
                 _requirejs.config({paths : requireConfigAliases});
 
                 _loaded = true;
+                
+                //@todo eventify it and fires event
                 callback();
+            }).catch(function(err){
+//                self.trigger('error', err);
             });
         }
     }
-
+    
     function loadCreators(callback, reload){
-        
+
         loadRuntimes(function (){
             var requiredCreators = [];
-            
+
             _.forIn(_registry, function (versions, typeIdentifier){
                 var pciModel = _get(typeIdentifier);//currently use the latest version only
                 requiredCreators.push(pciModel.creator.hook.replace(/\.js$/, ''));
             });
-            
+
             //@todo support caching
             _requirejs(requiredCreators, function (){
                 var creators = {};
@@ -164,7 +154,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
         if(pciModel && pciModel.creator){
             return {
                 label : pciModel.label, //currently no translation available 
-                icon : pciModel.creator.icon.replace(new RegExp('^'+typeIdentifier+'\/'), pciModel.baseUrl),
+                icon : pciModel.creator.icon.replace(new RegExp('^' + typeIdentifier + '\/'), pciModel.baseUrl),
                 short : pciModel.short,
                 description : pciModel.description,
                 qtiClass : 'customInteraction.' + pciModel.typeIdentifier, //custom interaction is block type
@@ -174,6 +164,7 @@ define(['jquery', 'lodash', 'helpers'], function ($, _, helpers){
     }
 
     return {
+        addProvider : addProvider,
         getAllVersions : getAllVersions,
         getRuntime : getRuntime,
         getCreator : getCreator,
