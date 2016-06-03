@@ -20,17 +20,19 @@
 
 namespace oat\qtiItemPci\controller;
 
-use oat\qtiItemPci\model\PciService;
-use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
-use \FileUploadException;
+use \tao_actions_CommonModule;
+use oat\qtiItemPci\model\PciService;
 use oat\qtiItemPci\model\PciRegistry;
 
-class PciManager extends AbstractPortableElementManager
+class PciManager extends tao_actions_CommonModule
 {
-    
-    protected function getCreatorRegistry(){
-        return \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
+    /**
+    * Instanciate the controller
+    */
+    public function __construct(){
+        parent::__construct();
+        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     
     /**
@@ -98,7 +100,7 @@ class PciManager extends AbstractPortableElementManager
             if(isset($all[$id])){
                 $currentVersion = $all[$id]->getVersion();
                 if(version_compare($targetVersion, $currentVersion, '<')){
-                    $result['package'] = [['message'=>__('a newer version of the pci already exists v %s', $current->getVersion())]];
+                    $result['package'] = [['message'=>__('a newer version of the pci "%s" already exists (current version: %s, target version: %s)', $id, $currentVersion, $targetVersion)]];
                     $result['valid'] = false;
                 }
             }
@@ -139,23 +141,6 @@ class PciManager extends AbstractPortableElementManager
         $this->returnJson([
             'success' => $this->registry->unregisterInteraction($typeIdentifier)
         ]);
-    }
-    
-    /**
-     * Get the directory where the implementation sits
-     * 
-     * @deprecated
-     * @param string $typeIdentifier
-     * @return string
-     */
-    protected function getImplementationDirectory($typeIdentifier){
-        $pci = $this->registry->get($typeIdentifier);
-        if(is_null($pci)){
-            $folder = $this->registry->getDevImplementationDirectory($typeIdentifier);
-        }else{
-            $folder = $pci['directory'];
-        }
-        return $folder;
     }
 
 }
