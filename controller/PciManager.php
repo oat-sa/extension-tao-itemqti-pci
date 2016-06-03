@@ -131,7 +131,31 @@ class PciManager extends tao_actions_CommonModule
             $this->returnJson(array('error' => $e->getMessage()));
         }
     }
-    
+
+    /**
+     * Export PCI zip package with all runtime, creator & manifest files
+     */
+    public function export()
+    {
+        //as upload may be called multiple times, we remove the session lock as soon as possible
+        session_write_close();
+
+        try{
+            if (!$this->hasRequestParameter('typeIdentifier')) {
+                throw new \common_Exception('Type identifier parameter missing.');
+            }
+
+            $pciService = new PciService();
+            $pciService->setServiceLocator($this->getServiceManager());
+            $data = $pciService->export($this->getRequestParameter('typeIdentifier'));
+
+            $this->returnJson($this->filterInteractionData($data));
+
+        } catch(\common_Exception $e) {
+            $this->returnJson(array('error' => $e->getMessage()));
+        }
+    }
+
     /**
      * Delete a custom interaction from the registry
      */

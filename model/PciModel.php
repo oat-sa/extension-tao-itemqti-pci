@@ -23,6 +23,9 @@ namespace oat\qtiItemPci\model;
 
 class PciModel
 {
+    const PCI_MANIFEST = 'pciCreator.json';
+    const PCI_ENGINE   = 'pciCreator.js';
+
     /** @var string */
     protected $typeIdentifier;
     /** @var string */

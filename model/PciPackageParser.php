@@ -34,9 +34,6 @@ use \ZipArchive;
  */
 class PciPackageParser extends PackageParser
 {
-    const PCI_MANIFEST = 'pciCreator.json';
-    const PCI_ENGINE   = 'pciCreator.js';
-
     /**
      * Validate the zip package
      *
@@ -53,12 +50,12 @@ class PciPackageParser extends PackageParser
         $zip = new ZipArchive();
         $zip->open($this->source, ZIPARCHIVE::CHECKCONS);
 
-        if ($zip->locateName(self::PCI_MANIFEST) === false) {
-            throw new common_Exception('A PCI creator package must contains a ' . self::PCI_MANIFEST . ' file at the root of the archive');
+        if ($zip->locateName(PciModel::PCI_MANIFEST) === false) {
+            throw new common_Exception('A PCI creator package must contains a ' . PciModel::PCI_MANIFEST . ' file at the root of the archive');
         }
 
-        if($zip->locateName(self::PCI_ENGINE) === false) {
-            throw new common_Exception('A PCI creator package must contains a ' . self::PCI_ENGINE . ' file at the root of the archive');
+        if($zip->locateName(PciModel::PCI_ENGINE) === false) {
+            throw new common_Exception('A PCI creator package must contains a ' . PciModel::PCI_ENGINE . ' file at the root of the archive');
         }
 
         $zip->close();
@@ -74,7 +71,7 @@ class PciPackageParser extends PackageParser
      */
     public function getPciModel()
     {
-        if (($handle = fopen('zip://' . $this->source . '#' . self::PCI_MANIFEST, 'r')) === false) {
+        if (($handle = fopen('zip://' . $this->source . '#' . PciModel::PCI_MANIFEST, 'r')) === false) {
             throw new common_Exception('Unable to open the ZIP file located at: ' . $this->source);
         }
 
@@ -84,12 +81,12 @@ class PciPackageParser extends PackageParser
         }
         fclose($handle);
 
-        $pciModel = new PciModel();
-        $pciData = json_decode($content, true);
-        if(is_null($pciData)){
-            throw new common_Exception('Malformed pci manifest json: ' . self::PCI_MANIFEST);
+        $content = json_decode($content, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $pciModel = new PciModel();
+            return $pciModel->exchangeArray($content);
         }
-        return $pciModel->exchangeArray($pciData);
+        throw new common_Exception('Pci manifest but it\'s not a valid json file.');
     }
 
     /**

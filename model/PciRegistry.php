@@ -250,7 +250,7 @@ class PciRegistry extends ConfigurableService
      *
      * @param $identifier
      * @param null $version
-     * @return $this|null
+     * @return $pciModel|null
      */
     public function get($identifier, $version=null)
     {
@@ -261,14 +261,14 @@ class PciRegistry extends ConfigurableService
 
         $pciModel = new PciModel();
         $pci = $pcis[$identifier];
-        if(is_null($version) && !empty($pci)){
+        if (is_null($version) && !empty($pci)) {
             //return the latest version
             krsort($pci);
             return $pciModel->exchangeArray(reset($pci));
-        }else{
+        } else {
             if (isset($pci[$version])) {
                 return $pciModel->exchangeArray($pci[$version]);
-            }else{
+            } else {
                 return null;
             }
         }
@@ -535,6 +535,74 @@ class PciRegistry extends ConfigurableService
     }
 
     /**
+     * Create an temp export tree and return path
+     *
+     * @param PciModel $pciModel
+     * @return string
+     */
+    protected function getZipLocation(PciModel $pciModel)
+    {
+        return \tao_helpers_Export::getExportPath() . DIRECTORY_SEPARATOR . 'pciPackage_' . $pciModel->getTypeIdentifier() . '.zip';
+    }
+
+    /**
+     * Get list of files following Pci Model
+     *
+     * @param PciModel $pciModel
+     * @return array
+     * @throws \common_Exception
+     */
+    protected function getFilesFromModel(PciModel $pciModel)
+    {
+        $validator = new PciModelValidator($pciModel);
+        return $validator->getRequiredAssets();
+    }
+
+    /**
+     * Get manifest representation of Pci Model
+     *
+     * @param PciModel $pciModel
+     * @return string
+     */
+    protected function getManifest(PciModel $pciModel)
+    {
+        return json_encode($pciModel->toArray(), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * Export a pci to a zip package
+     *
+     * @param PciModel $pciModel
+     * @return string
+     * @throws \common_Exception
+     */
+    public function export(PciModel $pciModel)
+    {
+        $zip = new \ZipArchive();
+        $path = $this->getZipLocation($pciModel);
+
+        if ($zip->open($path, \ZipArchive::CREATE) !== TRUE) {
+            throw new \common_Exception('Unable to create zipfile ' . $path);
+        }
+
+        $manifest = $this->getManifest($pciModel);
+        $zip->addFromString(PciModel::PCI_MANIFEST, $manifest);
+
+        $files = $this->getFilesFromModel($pciModel);
+        foreach ($files as $file)
+        {
+            $filePath = $this->getPrefix($pciModel) . $file;
+            if ($this->getFileSystem()->has($filePath)) {
+                $fileContent = $this->getFileSystem()->read($filePath);
+                $zip->addFromString($file, $fileContent);
+            }
+        }
+
+        $zip->close();
+        return $path;
+    }
+
+    /**
      *
      * @todo
      * @param string $typeIdentifier
@@ -544,17 +612,6 @@ class PciRegistry extends ConfigurableService
      * @param array $creator
      */
     public function update($typeIdentifier, $sourceVersion, $targetVersion, $runtime = [], $creator = []){
-
-    }
-
-    /**
-     * Return all file contents, following the same array format as the method getRuntime()
-     * This method is useful to export registered PCI into standard QTI item packages
-     *
-     * @param $typeIdentifier
-     * @param $version
-     */
-    public function export($typeIdentifier, $version){
 
     }
 }

@@ -40,6 +40,11 @@ class PciService implements ServiceLocatorAwareInterface
     protected $parsers;
 
     /**
+     * @var PciPackageExporter
+     */
+    protected $exporter;
+
+    /**
      * Singleton of registry service
      *
      * @return PciRegistry
@@ -61,21 +66,6 @@ class PciService implements ServiceLocatorAwareInterface
     {
         if (!$this->parsers[$filename]) {
             $this->parsers[$filename] = new PciPackageParser($filename);
-        }
-        return $this->parsers[$filename];
-    }
-
-    /**
-     * Get parser already used for the same filename
-     *
-     * @param $filename
-     * @return mixed
-     * @throws \common_Exception
-     */
-    protected function getParser($filename)
-    {
-        if (!$this->parsers[$filename]) {
-            throw new \common_Exception('Unable to find a loaded parser for file ' . $filename);
         }
         return $this->parsers[$filename];
     }
@@ -103,16 +93,19 @@ class PciService implements ServiceLocatorAwareInterface
      *
      * @param PciModel $pciModel
      * @param $source
-     * @throws \common_Exception
+     * @return bool
      */
-    public function validatePciModel(PciModel $pciModel, $source)
+    public function validatePciModel(PciModel $pciModel, $source=null)
     {
         $pciValidator = new PciModelValidator();
         $pciValidator->setModel($pciModel);
         if (!PciValidator::validate($pciValidator)) {
             return false;
         }
-        return $pciValidator->validateAssets($source);
+        if ($source) {
+            return $pciValidator->validateAssets($source);
+        }
+        return true;
     }
 
     /**
@@ -131,12 +124,17 @@ class PciService implements ServiceLocatorAwareInterface
     {
         // Get Pci Model from zip package
         $pciModel = $this->getPciModelFromZipSource($file);
+        if(is_null($pciModel)){
+            return null;
+        }
 
         // Extract zip file
         $source = $this->getParser($file)->extract();
 
-        // Validate Pci Model
-        $this->validatePciModel($pciModel, $source);
+        $pciModel = $this->getValidPciModelFromZipSource($file);
+        if (is_null($pciModel)) {
+            throw new \common_Exception('Pci zip package is invalid.');
+        }
 
         $this->getRegistry()->setSource($source);
         $this->getRegistry()->register($pciModel);
@@ -145,22 +143,32 @@ class PciService implements ServiceLocatorAwareInterface
 
         return $pciModel;
     }
-    
+
+    public function export($identifier, $version=null)
+    {
+        $pciModel = $this->getRegistry()->get($identifier, $version);
+        if (is_null($pciModel)) {
+            throw new \common_Exception('Unable to find a PCI associated to identifier: ' . $pciModel->getTypeIndentifier());
+        }
+        $this->validatePciModel($pciModel);
+        return $this->getRegistry()->export($pciModel);
+    }
+
     public function getValidPciModelFromZipSource($file){
-        
+
         // Get Pci Model from zip package
         $pciModel = $this->getPciModelFromZipSource($file);
         if(is_null($pciModel)){
             return null;
         }
-        
+
         // Extract zip file
         $source = $this->getParser($file)->extract();
 
         // Validate Pci Model
-        if($this->validatePciModel($pciModel, $source)){
+        if ($this->validatePciModel($pciModel, $source)) {
             return $pciModel;
-        }else{
+        } else {
             return null;
         }
     }
