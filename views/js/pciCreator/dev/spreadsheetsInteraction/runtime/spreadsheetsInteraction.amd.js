@@ -2,7 +2,7 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'qtiCustomInteractionContext',
     'OAT/util/event',
-    '../lib/handsontable/handsontable'
+    'spreadsheetsInteraction/lib/handsontable/handsontable'
 ], function($, qtiCustomInteractionContext, event, Handsontable) {
     'use strict';
 
@@ -61,22 +61,22 @@ define([
             var spreadsheet = $container.find('.spreadsheet');
 
             var hot = new Handsontable(spreadsheet.get(0), {
-                data: data,
+                //data: data,
+                data: Handsontable.helper.createSpreadsheetData(10, 100),
+                width: '100%',
+                colWidths: 47,
+                rowHeights: 23,
                 rowHeaders: true,
-                colHeaders: true
+                colHeaders: true,
+                stretchH: 'all',
+                contextMenu: true
             });
-            
-            // Bind events
-            // $(canvas).on('click', function(e) {
-            //
-            // });
         },
         
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
-         * @param {Object} interaction
+         *
          * @param {Object} response
          */
         setResponse : function(response){
