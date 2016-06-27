@@ -56,7 +56,11 @@ class PciRegistry extends ConfigurableService
      */
     protected function getMap()
     {
-        return \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(self::CONFIG_ID);
+        $map = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(self::CONFIG_ID);
+        if(empty($map)){
+            $map = [];
+        }
+        return $map;
     }
 
     /**
