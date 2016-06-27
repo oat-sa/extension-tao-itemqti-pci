@@ -13,16 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technlogies SA;
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(function (){
+define(['context'], function (context){
     'use strict';
 
     var _registry0 = {
         likertScaleInteraction : [
             {
-                'baseUrl' : 'http://tao.localdomain/qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction',
+                'baseUrl' : context.root_url+'qtiItemPci/views/js/pciCreator/dev/likertScaleInteraction',
                 'typeIdentifier' : 'likertScaleInteraction',
                 'label' : 'Likert Scale',
                 'short' : 'Likert',
