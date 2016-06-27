@@ -20,22 +20,19 @@
 
 namespace oat\qtiItemPci\controller;
 
-use oat\qtiItemPci\model\PciPackageParser;
-use oat\qtiItemPci\model\PciPackageService;
-use oat\qtiItemPci\model\PciParserItemRegistry;
-use oat\qtiItemPci\model\PciService;
-use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
-use \FileUploadException;
-use oat\qtiItemPci\model\CreatorRegistry;
-use oat\qtiItemPci\model\CreatorPackageParser;
+use \tao_actions_CommonModule;
+use oat\qtiItemPci\model\PciService;
 use oat\qtiItemPci\model\PciRegistry;
 
-class PciManager extends AbstractPortableElementManager
+class PciManager extends tao_actions_CommonModule
 {
-    
-    protected function getCreatorRegistry(){
-        return \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
+    /**
+    * Instanciate the controller
+    */
+    public function __construct(){
+        parent::__construct();
+        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
     }
     
     /**
@@ -92,11 +89,21 @@ class PciManager extends AbstractPortableElementManager
         if(is_null($pciModel)){
             $result['package'] = [['message'=>__('invalid qti package')]];//@todo provides specific reason why it fails
         }else{
+            $id = $pciModel->getTypeIdentifier();
+            $targetVersion = $pciModel->getVersion();
             $result['valid'] = true;
-            $result['typeIdentifier'] = $pciModel->getTypeIdentifier();
+            $result['typeIdentifier'] = $id;
             $result['label'] = $pciModel->getLabel();
-            $result['version'] = $pciModel->getVersion();
+            $result['version'] = $targetVersion;
             $result['exists'] = $this->registry->exists($pciModel);
+            $all = $this->registry->getLatestCreators();
+            if(isset($all[$id])){
+                $currentVersion = $all[$id]->getVersion();
+                if(version_compare($targetVersion, $currentVersion, '<')){
+                    $result['package'] = [['message'=>__('a newer version of the pci "%s" already exists (current version: %s, target version: %s)', $id, $currentVersion, $targetVersion)]];
+                    $result['valid'] = false;
+                }
+            }
         }
 
         $this->returnJson($result);
@@ -158,23 +165,6 @@ class PciManager extends AbstractPortableElementManager
         $this->returnJson([
             'success' => $this->registry->unregisterInteraction($typeIdentifier)
         ]);
-    }
-    
-    /**
-     * Get the directory where the implementation sits
-     * 
-     * @deprecated
-     * @param string $typeIdentifier
-     * @return string
-     */
-    protected function getImplementationDirectory($typeIdentifier){
-        $pci = $this->registry->get($typeIdentifier);
-        if(is_null($pci)){
-            $folder = $this->registry->getDevImplementationDirectory($typeIdentifier);
-        }else{
-            $folder = $pci['directory'];
-        }
-        return $folder;
     }
 
 }

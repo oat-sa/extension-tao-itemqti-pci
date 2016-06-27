@@ -314,7 +314,7 @@ define([
                         if(r.valid){
                             if(r.exists){
                                 confirmBox(
-                                    __('There is already one interaction with the same identifier "%s" (label : "%s"). Do you want to override the existing one ?', r.typeIdentifier, r.label, r.label),
+                                    __('There is already one interaction with the same identifier "%s" (label : "%s") and same version : %s. Do you want to override the existing one ?', r.typeIdentifier, r.label, r.version),
                                     function(){
                                         done(true);
                                     },function(){

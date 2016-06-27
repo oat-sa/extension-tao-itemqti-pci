@@ -129,7 +129,7 @@ class PciService implements ServiceLocatorAwareInterface
         }
 
         // Extract zip file
-        $source = $this->getParser($file)->extract();
+        $source = $this->getPackageParser($file)->extract();
 
         $pciModel = $this->getValidPciModelFromZipSource($file);
         if (is_null($pciModel)) {
@@ -163,7 +163,7 @@ class PciService implements ServiceLocatorAwareInterface
         }
 
         // Extract zip file
-        $source = $this->getParser($file)->extract();
+        $source = $this->getPackageParser($file)->extract();
 
         // Validate Pci Model
         if ($this->validatePciModel($pciModel, $source)) {
