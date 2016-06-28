@@ -13,20 +13,17 @@
     "runtime" : {
         "hook" : "./runtime/cm-ruler.js",
         "libraries" : [
-            "IMSGlobal/jquery_2_1_1",
-            "./runtime/js/renderer.js",
+            "IMSGlobal/jquery_2_1_1"
         ],
         "stylesheets" : [
-            "./runtime/css/cm-ruler.css",
+            "./runtime/css/cm-ruler.css"
         ],
         "mediaFiles": [
             "./runtime/media/cm-ruler-widget.png",
-            "./runtime/media/cm-ruler-icon.svg",
+            "./runtime/media/cm-ruler-icon.svg"
         ]
     },
     "creator" : {
         "icon" : "./creator/media/cm-ruler-icon.svg"
     }
-
-
 }
