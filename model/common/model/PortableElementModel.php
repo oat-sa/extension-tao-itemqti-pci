@@ -19,13 +19,10 @@
  *
  */
 
-namespace oat\qtiItemPci\model;
+namespace oat\qtiItemPci\model\common\model;
 
-class PciModel
+abstract class PortableElementModel
 {
-    const PCI_MANIFEST = 'pciCreator.json';
-    const PCI_ENGINE   = 'pciCreator.js';
-
     /** @var string */
     protected $typeIdentifier;
     /** @var string */
@@ -40,7 +37,6 @@ class PciModel
     protected $author;
     /** @var string */
     protected $email;
-
     /** @var array */
     protected $tags = array();
     /** @var array */
@@ -50,8 +46,11 @@ class PciModel
     /** @var array */
     protected $creator = array();
 
+    abstract public function getDefinitionFiles();
+    abstract public function getManifestName();
+
     /**
-     * PciModel constructor with identifier & optional version
+     * PortableElementModel constructor with identifier & optional version
      *
      * @param $typeIdentifier
      * @param $version
@@ -80,16 +79,21 @@ class PciModel
     }
 
     /**
-     * Return an array
-     * representation of $this object
+     * Return an array representation of $this object
+     * Should be filtered by $selectionGroup
      *
+     * @param bool $selectionGroup
      * @return array
      */
-    public function toArray()
+    public function toArray($selectionGroup=false)
     {
-        return get_object_vars($this);
+        $array = get_object_vars($this);
+        if (is_array($selectionGroup)) {
+            return array_intersect_key($array, array_flip($selectionGroup));
+        }
+        return $array;
     }
-    
+
     /**
      * @return string
      */

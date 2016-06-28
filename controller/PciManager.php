@@ -24,6 +24,9 @@ use oat\qtiItemPci\model\PciPackageParser;
 use oat\qtiItemPci\model\PciPackageService;
 use oat\qtiItemPci\model\PciParserItemRegistry;
 use oat\qtiItemPci\model\PciService;
+use oat\qtiItemPci\model\PortableElementModel;
+use oat\qtiItemPci\model\PortableElementRegistry;
+use oat\qtiItemPci\model\PortableElementService;
 use oat\taoQtiItem\controller\AbstractPortableElementManager;
 use \tao_helpers_Http;
 use \FileUploadException;
@@ -33,9 +36,14 @@ use oat\qtiItemPci\model\PciRegistry;
 
 class PciManager extends AbstractPortableElementManager
 {
-    
-    protected function getCreatorRegistry(){
-        return \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
+    /**
+     * @var PortableElementRegistry
+     */
+    protected $registry;
+
+    protected function getCreatorRegistry()
+    {
+        return \oat\oatbox\service\ServiceManager::getServiceManager()->get(PortableElementRegistry::SERVICE_ID);
     }
     
     /**
@@ -52,16 +60,16 @@ class PciManager extends AbstractPortableElementManager
 
         $this->returnJson($returnValue);
     }
-    
+
     /**
      * Remove security sensitive data to be sent to the client
-     * 
-     * @param $pciModel
+     *
+     * @param PortableElementModel $portableElement
      * @return array
      */
-    protected function getListingData($pciModel){
+    protected function getListingData(PortableElementModel $portableElement){
         
-        $data = $pciModel->toArray();
+        $data = $portableElement->toArray(array('typeIdentifier', 'label', 'version'));
         return [
             'typeIdentifier' => $data['typeIdentifier'],
             'label' => $data['label'],
@@ -87,16 +95,16 @@ class PciManager extends AbstractPortableElementManager
 
         $file = tao_helpers_Http::getUploadedFile('content');
         
-        $pciService = new PciService();
-        $pciModel = $pciService->getValidPciModelFromZipSource($file['tmp_name']);
-        if(is_null($pciModel)){
+        $service = new PortableElementService();
+        $model = $service->extractFromZipSource($file['tmp_name']);
+        if(is_null($model)){
             $result['package'] = [['message'=>__('invalid qti package')]];//@todo provides specific reason why it fails
         }else{
             $result['valid'] = true;
-            $result['typeIdentifier'] = $pciModel->getTypeIdentifier();
-            $result['label'] = $pciModel->getLabel();
-            $result['version'] = $pciModel->getVersion();
-            $result['exists'] = $this->registry->exists($pciModel);
+            $result['typeIdentifier'] = $model->getTypeIdentifier();
+            $result['label'] = $model->getLabel();
+            $result['version'] = $model->getVersion();
+            $result['exists'] = $this->registry->exists($model);
         }
 
         $this->returnJson($result);
@@ -114,11 +122,11 @@ class PciManager extends AbstractPortableElementManager
         try{
 
             $file = tao_helpers_Http::getUploadedFile('content');
-            $pciService = new PciService();
-            $pciService->setServiceLocator($this->getServiceManager());
-            $pciModel = $pciService->import($file['tmp_name']);
+            $service = new PortableElementService();
+            $service->setServiceLocator($this->getServiceManager());
+            $portableElement = $service->import($file['tmp_name']);
 
-            $this->returnJson($this->getListingData($pciModel));
+            $this->returnJson($this->getListingData($portableElement));
 
         } catch(\common_Exception $e) {
             $this->returnJson(array('error' => $e->getMessage()));
@@ -138,9 +146,9 @@ class PciManager extends AbstractPortableElementManager
                 throw new \common_Exception('Type identifier parameter missing.');
             }
 
-            $pciService = new PciService();
-            $pciService->setServiceLocator($this->getServiceManager());
-            $data = $pciService->export($this->getRequestParameter('typeIdentifier'));
+            $service = new PortableElementService();
+            $service->setServiceLocator($this->getServiceManager());
+            $data = $service->export($this->getRequestParameter('typeIdentifier'));
 
             $this->returnJson($this->filterInteractionData($data));
 
@@ -156,7 +164,7 @@ class PciManager extends AbstractPortableElementManager
 
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
         $this->returnJson([
-            'success' => $this->registry->unregisterInteraction($typeIdentifier)
+            'success' => $this->registry->unregisterPortableElement($typeIdentifier)
         ]);
     }
     

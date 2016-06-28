@@ -21,11 +21,14 @@
 namespace oat\qtiItemPci\test;
 
 use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\model\PciRegistry;
-use oat\qtiItemPci\model\PciService;
-use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\qtiItemPci\model\common\model\PortableElementModel;
+use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
+use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\qtiItemPci\model\PciPackageParser;
+use oat\qtiItemPci\model\PortableElementFactory;
+use oat\qtiItemPci\model\PortableElementRegistry;
+use oat\qtiItemPci\model\PortableElementService;
+use oat\tao\test\TaoPhpUnitTestRunner;
 
 class PciPackageParserTest extends TaoPhpUnitTestRunner
 {
@@ -36,42 +39,35 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
      * tests initialization
      * load qti service
      */
-    public function setUp(){
+    public function setUp()
+    {
         TaoPhpUnitTestRunner::initTest();
     }
 
 
-    public function testValidate(){
+    public function testValidate()
+    {
 
         $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
-        $parser = new PciPackageParser($packageValid);
+        $parser = new PortableElementPackageParser($packageValid);
+        $parser->setModel(new PciModel());
         $this->assertTrue($parser->validate());
         
     }
 
-    public function testGetPciModelFromManifest(){
+    public function testExtractFromManifest()
+    {
 
         $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
 
-        $parser = new PciPackageParser($packageValid);
-        $pciModel = $parser->getPciModel();
-        $this->assertInstanceOf(PciModel::class, $pciModel);
-        $this->assertEquals('likertScaleInteraction', $pciModel->getTypeIdentifier());
+        $parser = new PortableElementPackageParser($packageValid);
+        $parser->setModel(new PciModel());
+        $parser->validate();
+        $model = $parser->getModel();
+
+        $this->assertInstanceOf(PciModel::class, $model);
+        $this->assertEquals('likertScaleInteraction', $model->getTypeIdentifier());
     }
 
-    public function testValidImport()
-    {
-        $packageValid = dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip';
-        $pciName = 'likertScaleInteraction';
-        $pciVersion = '1.0.0';
 
-        $service = new PciService();
-        $service->setServiceLocator(ServiceManager::getServiceManager());
-
-        $result = $service->import($packageValid);
-        $pcis = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(PciRegistry::CONFIG_ID);
-        $this->assertEquals(ksort($result->toArray()), ksort($pcis[$pciName][$pciVersion]));
-        $pciRegistry = new PciRegistry();
-        $this->assertTrue($pciRegistry->unregister($result));
-    }
 }
