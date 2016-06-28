@@ -51,11 +51,15 @@ class Validator
         self::isVersion      => 'isValidVersion'
     ];
 
-    protected static function getValidConstraints(array $requirements)
+    protected static function getValidConstraints(array $requirements, $validationGroup=array())
     {
         $validConstraints = [];
 
         foreach ($requirements as $field => $constraints) {
+
+            if (!empty($validationGroup) && !in_array($field, $validationGroup)) {
+                continue;
+            }
 
             if (is_array($constraints)) {
                 $validators = $constraints;
@@ -75,10 +79,10 @@ class Validator
         return $validConstraints;
     }
 
-    public static function validate(Validatable $validatable)
+    public static function validate(Validatable $validatable, $validationGroup=array())
     {
         $messages = [];
-        $constraints = self::getValidConstraints($validatable->getConstraints());
+        $constraints = self::getValidConstraints($validatable->getConstraints(), $validationGroup);
 
         foreach ($constraints as $field => $constraint) {
             foreach ($constraint as $validator) {

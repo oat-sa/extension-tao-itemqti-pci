@@ -15,9 +15,12 @@
         <script  type="text/javascript">
             QUnit.config.autostart = false;
             require(['/tao/ClientConfig/config'], function (){
-                require(['taoQtiItem/qtiCommonRenderer/test/runner', 'qtiItemPci/pciRegistry'], function (runner, pciRegistry){
+                require(['taoQtiItem/qtiCommonRenderer/test/runner', 'qtiItemPci/pciRegistry', 'qtiItemPci/pciProvider', 'qtiItemPci/test/pciRegistry/testProvider'], function (runner, pciRegistry, pciProvider, testProvider){
                     QUnit.start();
-
+                    
+//                    pciRegistry.addProvider(pciProvider);
+                    pciRegistry.addProvider(testProvider);
+                    
                     runner.run({
                         relBaseUrl : 'qtiItemPci/pciCreator/dev/likertScaleInteraction/test/samples/likert_triple/',
                         runtimeLocations : {
@@ -27,11 +30,6 @@
                             interactionCount : 3,
                             responses : []
                         }
-                    });
-
-                    pciRegistry.loadCreators(function (creators){
-                        var authoringData = pciRegistry.getAuthoringData('likertScaleInteraction');
-                        console.log('creators', creators, authoringData);
                     });
                 });
             });

@@ -30,6 +30,9 @@ return array(
 	'requires' => array('taoQtiItem' => '>=2.7.0'),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
     ),
     'install' => array(
         'rdf' => array(
@@ -44,9 +47,6 @@ return array(
     'uninstall' => array(
     ),
     'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
-    'acl' => array(
-        array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
-    ),  
     'routes' => array(
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ),    

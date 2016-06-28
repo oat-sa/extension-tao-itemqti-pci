@@ -37,8 +37,12 @@ class Updater extends \common_ext_ExtensionUpdater
    	    }
         
         if($this->isVersion('0.1.3')){
+            $testManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
+            $QTIManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
             $testTakerRole = new \core_kernel_classes_Resource(INSTANCE_ROLE_DELIVERY);
             $accessService = \funcAcl_models_classes_AccessService::singleton();
+            $accessService->grantModuleAccess($testManagerRole, 'qtiItemPci', 'PciLoader');
+            $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
             $this->setVersion('0.2.0');
         }

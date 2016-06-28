@@ -21,6 +21,8 @@
 
 namespace oat\qtiItemPci\model;
 
+use oat\oatbox\service\ServiceManager;
+use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\taoQtiItem\model\qti\Item;
 
 class PciItemSource
@@ -29,6 +31,23 @@ class PciItemSource
      * @var Item
      */
     protected $qtiModel;
+
+    protected $importingFiles = [];
+    protected $requiredFiles = [];
+    protected $pciModels = [];
+    protected $picModels = [];
+
+    protected $source;
+    protected $service;
+
+    public function getService()
+    {
+        if (!$this->service) {
+            $this->service = new PortableElementService();
+            $this->service->setServiceLocator(ServiceManager::getServiceManager());
+        }
+        return $this->service;
+    }
 
     /**
      * Handle pci import process for a file
@@ -39,54 +58,45 @@ class PciItemSource
      * @param $relativePath
      * @return array
      */
-    public function importPciFile($absolutePath, $relativePath)
+    public function importPortableElementFile($absolutePath, $relativePath)
     {
-        $pciXml = $this->getPciElements($this->getQtiModel());
-        $assetFileInPackage = $relativePath;
+        if ($this->isPortableElementAsset($relativePath)) {
+
+            //marked the file as being ok to be imported in the end
+            $this->importingFiles[] = $relativePath;
+
+            return $this->getFileInfo($absolutePath, $relativePath);
+        } else {
+            throw new \common_Exception('trying to import an asset that is not part of the portable element asset list');
+        }
 
         // Convert $pciXml to pci model
         // import into registry
         // Alter qti xml to pci xinclude // Asked by Joël
         // Be warning to remove qti file only used by PCI
 
-        return $this->getFileInfo($absolutePath, $relativePath);
+
     }
 
     /**
-     * Check if Item is a PCI
+     * Check if Item contains portable element
      *
-     * @param Item $item
      * @return bool
      */
-    public function isPci(Item $item)
+    public function hasPortableElement()
     {
-        return ($this->getPciElements($item) > 0);
+        return (count($this->requiredFiles) > 0);
     }
 
     /**
-     * Extract PCI from $item
+     * Check if file is required by a portable element
      *
-     * @param Item $item
-     * @return \DOMNodeList|string
-     * @throws \oat\taoQtiItem\model\qti\exception\QtiModelException
+     * @param $fileRelativePath
+     * @return bool
      */
-    public function getPciElements(Item $item)
+    public function isPortableElementAsset($fileRelativePath)
     {
-        /**
-         * Warning foreach file, xml will be parsed, performance issues is coming
-         * Sam do u have method like getComposingElementFromCache? Otherwise, a singleton should be good
-         */
-        return $item->getComposingElements('oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction');
-    }
-
-    /**
-     * Check if file is required by PCI
-     *
-     * @todo
-     */
-    public function isPciAsset($file)
-    {
-        return false;
+        return isset($this->requiredFiles[$fileRelativePath]);
     }
 
     /**
@@ -123,8 +133,85 @@ class PciItemSource
     /**
      * @param Item $qtiModel
      */
-    public function setQtiModel($qtiModel)
+    public function setQtiModel(Item $item)
     {
-        $this->qtiModel = $qtiModel;
+        $this->qtiModel = $item;
+        $this->feedRequiredFiles($item);
+        return $this;
     }
+
+    protected function feedRequiredFiles(Item $item)
+    {
+
+        $this->requiredFiles = [];
+        $this->pciModels = [];
+        $this->picModels = [];
+
+        //same for the PICs
+        $pcis = $item->getComposingElements('oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction');
+
+        foreach($pcis as $pci) {
+//            $version = $pci->getVersion();
+//            $stylesheets = $pci->getStylesheets();
+//            $mediaFiles = $pci->getMediaFiles();
+            $version = '1.0';
+            $stylesheets = [];
+            $mediaFiles = [];
+            $typeId = $pci->getTypeIdentifier();
+            $runtime = [
+                'hook' => $pci->getEntryPoint(),
+                'libraries' => $pci->getLibraries(),
+                'stylesheets' => $stylesheets,
+                'mediaFiles' => $mediaFiles
+            ];
+            $pciModel = new PciModel($typeId, $version);
+            $pciModel->exchangeArray([
+                'label' => $typeId,
+                'short' => $typeId,
+                'runtime' => $runtime
+            ]);
+
+            $lastVersionModel = $this->getService()->getLatestPciByIdentifier($pciModel->getTypeIdentifier());
+            if (!is_null($lastVersionModel)
+                && (intval($lastVersionModel->getVersion()) != intVal($pciModel->getVersion()))
+            ) {
+                throw new \common_Exception('Unable to import pci asset because pci is not compatible.'
+                    . 'Current version is ' . $lastVersionModel->getVersion() . ' and imported is ' . $pciModel->getVersion());
+            }
+
+            $this->pciModels[$typeId] = $pciModel;
+
+            $requiredLibs = [];
+            foreach($runtime['libraries'] as $lib){
+                if(preg_match('/^'.$typeId.'/', $lib)){//filter shared stimulus
+                    $requiredLibs[] = $lib.'.js';//amd modules
+                }
+            }
+
+            $files = array_merge([$runtime['hook']], $requiredLibs, $runtime['stylesheets'], $runtime['mediaFiles']);
+            $this->requiredFiles = array_merge($this->requiredFiles, array_fill_keys($files, $typeId));
+        }
+    }
+
+    public function setSource($source)
+    {
+        $this->source = $source;
+        return $this;
+    }
+    /**
+     * Do the import of portable elements
+     * @todo
+     */
+    public function importPortableElements()
+    {
+        if (count($this->importingFiles) != count($this->requiredFiles)) {
+            throw new \common_Exception();
+        }
+
+        foreach ($this->pciModels as $model) {
+            $this->getService()->registerModel($model, $this->source);
+        }
+        return true;
+    }
+
 }

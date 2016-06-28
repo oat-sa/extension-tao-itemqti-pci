@@ -60,10 +60,10 @@ class PortableElementService implements ServiceLocatorAwareInterface
      * @param $source
      * @return bool
      */
-    public function validate(PortableElementModel $model, $source=null)
+    public function validate(PortableElementModel $model, $source=null, $validationGroup=array())
     {
         $validator = PortableElementFactory::getValidator($model);
-        if (!Validator::validate($validator)) {
+        if (!Validator::validate($validator, $validationGroup)) {
             return false;
         }
         if ($source) {
@@ -90,16 +90,28 @@ class PortableElementService implements ServiceLocatorAwareInterface
         $source = $parser->extract();
         $model = $parser->getModel();
 
+        $this->registerModel($model, $source);
+
+        \tao_helpers_File::delTree($source);
+
+        return $model;
+    }
+
+    public function registerModel(PortableElementModel $model, $source)
+    {
         if (is_null($model)) {
             throw new \common_Exception('Zip package is invalid for portable element.');
+        }
+
+        $validationGroup = array('typeIdentifier', 'version', 'runtime');
+        if (!$this->validate($model, $source, $validationGroup)) {
+            throw new \common_Exception('Portable element is invalid.');
         }
 
         $this->getRegistry()->setSource($source);
         $this->getRegistry()->register($model);
 
-        \tao_helpers_File::delTree($source);
-
-        return $model;
+        return true;
     }
 
     public function export($identifier, $version=null)
@@ -124,5 +136,10 @@ class PortableElementService implements ServiceLocatorAwareInterface
         }
 
         return $model;
+    }
+
+    public function getLatestPciByIdentifier($identifier)
+    {
+        return $this->getRegistry()->getLatestVersion($identifier);
     }
 }

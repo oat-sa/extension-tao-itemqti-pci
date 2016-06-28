@@ -57,8 +57,6 @@ abstract class PortableElementAssetValidator implements Validatable
                     if ($this->isOptionalConstraint($key, $constraint)) {
                         continue;
                     }
-                    echo $key;
-                    echo $constraint;
                     throw new \common_Exception('Missing asset file for ' . $key . ':' . $constraint);
                 }
                 if (is_array($asset[$constraint])) {
@@ -78,7 +76,7 @@ abstract class PortableElementAssetValidator implements Validatable
         }
 
         $filePath = $source . $file;
-        if (file_exists($filePath)) {
+        if (file_exists($filePath) || file_exists($filePath . '.js')) {
             return true;
         }
 

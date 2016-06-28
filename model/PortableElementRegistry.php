@@ -58,7 +58,11 @@ class PortableElementRegistry extends ConfigurableService
      */
     protected function getMap()
     {
-        return \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(self::CONFIG_ID);
+        $map = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(self::CONFIG_ID);
+        if(empty($map)){
+            $map = [];
+        }
+        return $map;
     }
 
     /**
@@ -216,7 +220,7 @@ class PortableElementRegistry extends ConfigurableService
      * @param $typeIdentifier
      * @return mixed|null
      */
-    protected function getLatestVersion($typeIdentifier)
+    public function getLatestVersion($typeIdentifier)
     {
         return $this->get($typeIdentifier);
     }
@@ -423,7 +427,8 @@ class PortableElementRegistry extends ConfigurableService
         }
         return $all;
     }
-    
+
+
     public function getLatestCreators()
     {
         $all = [];
