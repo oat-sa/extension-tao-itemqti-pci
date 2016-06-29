@@ -140,6 +140,12 @@ class PciItemSource
         return $this;
     }
 
+    /**
+     * Feed the instance with portable related data extracted from the item
+     *
+     * @param Item $item
+     * @throws \common_Exception
+     */
     protected function feedRequiredFiles(Item $item)
     {
 
@@ -175,7 +181,8 @@ class PciItemSource
             if (!is_null($lastVersionModel)
                 && (intval($lastVersionModel->getVersion()) != intVal($pciModel->getVersion()))
             ) {
-                throw new \common_Exception('Unable to import pci asset because pci is not compatible.'
+                //@todo return a user exception to inform user of incompaible pci version found and that an item update is required
+                throw new \common_Exception('Unable to import pci asset because pci is not compatible. '
                     . 'Current version is ' . $lastVersionModel->getVersion() . ' and imported is ' . $pciModel->getVersion());
             }
 
@@ -200,7 +207,6 @@ class PciItemSource
     }
     /**
      * Do the import of portable elements
-     * @todo
      */
     public function importPortableElements()
     {
@@ -209,7 +215,11 @@ class PciItemSource
         }
 
         foreach ($this->pciModels as $model) {
-            $this->getService()->registerModel($model, $this->source);
+            $lastVersionModel = $this->getService()->getLatestPciByIdentifier($model->getTypeIdentifier());
+            //only register a pci that has not been register yet, subsequent update must be done through pci package import
+            if(is_null($lastVersionModel)){
+                $this->getService()->registerModel($model, $this->source);
+            }
         }
         return true;
     }
