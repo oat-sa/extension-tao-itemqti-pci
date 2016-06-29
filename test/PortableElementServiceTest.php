@@ -12,9 +12,8 @@ namespace oat\qtiItemPci\test;
 use oat\oatbox\Configurable;
 use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\common\model\PortableElementModel;
-use oat\qtiItemPci\model\common\registry\PortableElementRegistryFactory;
+use oat\qtiItemPci\model\common\PortableElementFactory;
 use oat\qtiItemPci\model\pci\model\PciModel;
-use oat\qtiItemPci\model\pci\registry\PciRegistry;
 use oat\qtiItemPci\model\pic\model\PicModel;
 use oat\qtiItemPci\model\PortableElementRegistry;
 use oat\qtiItemPci\model\PortableElementService;
@@ -38,7 +37,7 @@ class PortableElementServiceTest extends TaoPhpUnitTestRunner
         $this->instance = null;
     }
 
-    protected function getPortableElement(PortableElementModel $model)
+    protected function getPortableElements(PortableElementModel $model)
     {
         $reflectionClass = new \ReflectionClass(Configurable::class);
         $reflectionMethod = $reflectionClass->getMethod('getOption');
@@ -51,7 +50,7 @@ class PortableElementServiceTest extends TaoPhpUnitTestRunner
     protected function getRegistry(PortableElementModel $model)
     {
         return ServiceManager::getServiceManager()
-            ->get(PortableElementRegistryFactory::SERVICE_ID)
+            ->get(PortableElementFactory::SERVICE_ID)
             ->getRegistry($model);
     }
 
@@ -61,8 +60,8 @@ class PortableElementServiceTest extends TaoPhpUnitTestRunner
     public function testValidImport($model, $name, $version, $package)
     {
         $result = $this->instance->import($package);
-        $portableElement = $this->getPortableElement($model);
-        $this->assertEquals(ksort($result->toArray()), ksort($portableElement[$name][$version]));
+        $portableElements = $this->getPortableElements($model);
+        $this->assertEquals(ksort($result->toArray()), ksort($portableElements[$name][$version]));
         $pciRegistry = $this->getRegistry($model);
 //        $this->assertTrue($pciRegistry->unregister($result));
     }

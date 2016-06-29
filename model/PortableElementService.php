@@ -21,7 +21,7 @@
 namespace oat\qtiItemPci\model;
 
 use oat\qtiItemPci\model\common\model\PortableElementModel;
-use oat\qtiItemPci\model\common\registry\PortableElementRegistryFactory;
+use oat\qtiItemPci\model\common\PortableElementFactory;
 use oat\qtiItemPci\model\common\validator\Validator;
 use oat\qtiItemPci\model\pci\model\PciModel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -50,7 +50,7 @@ class PortableElementService implements ServiceLocatorAwareInterface
     {
         if (!$this->registry) {
             $this->registry = $this->getServiceLocator()
-                ->get(PortableElementRegistryFactory::SERVICE_ID)
+                ->get(PortableElementFactory::SERVICE_ID)
                 ->getRegistry($model);
         }
         return $this->registry;

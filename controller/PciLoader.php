@@ -20,7 +20,7 @@
 
 namespace oat\qtiItemPci\controller;
 
-use oat\qtiItemPci\model\common\registry\PortableElementRegistryFactory;
+use oat\qtiItemPci\model\common\PortableFactory;
 use oat\qtiItemPci\model\pci\model\PciModel;
 use \tao_actions_CommonModule;
 
@@ -31,7 +31,7 @@ class PciLoader extends tao_actions_CommonModule
 
     public function __construct(){
         $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()
-            ->get(PortableElementRegistryFactory::SERVICE_ID)
+            ->get(PortableFactory::SERVICE_ID)
             ->getRegistry(new PciModel());
     }
     

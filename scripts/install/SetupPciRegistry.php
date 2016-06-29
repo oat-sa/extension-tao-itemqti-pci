@@ -19,7 +19,7 @@
  */
 namespace oat\qtiItemPci\scripts\install;
 
-use oat\qtiItemPci\model\common\registry\PortableElementRegistryFactory;
+use oat\qtiItemPci\model\common\PortableElementFactory;
 use oat\qtiItemPci\model\PortableElementRegistry;
 use oat\tao\model\websource\TokenWebSource;
 use oat\oatbox\filesystem\FileSystemService;
@@ -44,14 +44,14 @@ class SetupPciRegistry extends \common_ext_action_InstallAction
         $pciWebsource = $websource = TokenWebSource::spawnWebsource($pciPublicFs);
         $picWebsource = $websource = TokenWebSource::spawnWebsource($picPublicFs);
 
-        $portableElementRegistries = new PortableElementRegistryFactory(array(
-            PortableElementRegistryFactory::PCI_IMPLEMENTATION => new PortableElementRegistry(array(
+        $portableElementRegistries = new PortableElementFactory(array(
+            PortableElementFactory::PCI_IMPLEMENTATION => new PortableElementRegistry(array(
                 PortableElementRegistry::OPTION_FS => $pciPublicFs->getUri(),
-                PortableElementRegistry::OPTION_WEBSOURCE => $pciWebsource -> getId(),
+                PortableElementRegistry::OPTION_WEBSOURCE => $pciWebsource->getId(),
                 PortableElementRegistry::OPTION_STORAGE => 'qtiItemPci/pciRegistry',
                 PortableElementRegistry::OPTION_REGISTRY => 'pciRegistryEntries'
             )),
-            PortableElementRegistryFactory::PIC_IMPLEMENTATION => new PortableElementRegistry(array(
+            PortableElementFactory::PIC_IMPLEMENTATION => new PortableElementRegistry(array(
                 PortableElementRegistry::OPTION_FS => $picPublicFs->getUri(),
                 PortableElementRegistry::OPTION_WEBSOURCE => $picWebsource->getId(),
                 PortableElementRegistry::OPTION_STORAGE => 'qtiItemPci/picRegistry',
@@ -59,7 +59,7 @@ class SetupPciRegistry extends \common_ext_action_InstallAction
             ))
         ));
 
-        $this->getServiceManager()->register(PortableElementRegistryFactory::SERVICE_ID, $portableElementRegistries);
+        $this->getServiceManager()->register(PortableElementFactory::SERVICE_ID, $portableElementRegistries);
     }
     
     protected function setupFs()

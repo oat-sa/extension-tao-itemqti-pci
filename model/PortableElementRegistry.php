@@ -24,6 +24,7 @@ namespace oat\qtiItemPci\model;
 use \common_ext_ExtensionsManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\qtiItemPci\model\common\model\PortableElementModel;
+use oat\qtiItemPci\model\common\PortableElementFactory;
 use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\tao\model\websource\Websource;
 use League\Flysystem\Filesystem;
