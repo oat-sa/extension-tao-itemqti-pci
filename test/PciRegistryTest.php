@@ -22,10 +22,10 @@
 namespace oat\qtiItemPci\test;
 
 use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
+use oat\qtiItemPci\model\common\PortableElementFactory;
+use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\qtiItemPci\model\PortableElementService;
-use oat\qtiItemPci\model\PortableElementRegistry;
 use oat\tao\test\TaoPhpUnitTestRunner;
 
 
@@ -43,7 +43,9 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
      */
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
-        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PortableElementRegistry::SERVICE_ID);
+        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()
+            ->get(PortableElementFactory::SERVICE_ID)
+            ->getRegistry(new PciModel());
     }
     
     /**
@@ -122,7 +124,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $reflectionClass = new \ReflectionClass(PortableElementService::class);
         $reflectionMethod = $reflectionClass->getMethod('getRegistry');
         $reflectionMethod->setAccessible(true);
-        $registry = $reflectionMethod->invoke($service);
+        $registry = $reflectionMethod->invoke($service, new PciModel());
 
         $registry->setSource($packageValid);
         $registry->register($pciModel);
@@ -130,6 +132,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $exportDirectory = $registry->export($pciModel);
 
         $parser = new PortableElementPackageParser($exportDirectory);
+        $parser->setModel(new PciModel());
         $source = $parser->extract();
 
         $original = $this->fillArrayWithFileNodes(new \DirectoryIterator($packageValid));

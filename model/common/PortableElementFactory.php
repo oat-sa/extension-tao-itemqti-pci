@@ -1,23 +1,55 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: siwane
- * Date: 27/06/2016
- * Time: 10:30
- */
 
-namespace oat\qtiItemPci\model;
+namespace oat\qtiItemPci\model\common;
 
+use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\common\model\PortableElementModel;
 use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
 use oat\qtiItemPci\model\common\validator\PortableElementModelValidator;
+use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\qtiItemPci\model\pci\validator\PciValidator;
 use oat\qtiItemPci\model\pic\model\PicModel;
-use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\qtiItemPci\model\pic\validator\PicValidator;
 
-class PortableElementFactory
+class PortableElementFactory extends ConfigurableService
 {
+    const SERVICE_ID = 'qtiItemPci/portableElementRegistry';
+
+    const PCI_IMPLEMENTATION = 'pciRegistry';
+    const PIC_IMPLEMENTATION = 'picRegistry';
+
+    public function getRegistry(PortableElementModel $model)
+    {
+        switch (get_class($model)) {
+            case PciModel::class :
+                $registry = $this->getOption(self::PCI_IMPLEMENTATION);
+                break;
+            case PicModel::class :
+                $registry = $this->getOption(self::PIC_IMPLEMENTATION);
+                break;
+            default:
+                throw new \common_Exception('Unable to load registry implementation for model ' . get_class($model));
+                break;
+        }
+        $registry->setServiceLocator($this->getServiceManager());
+        return $registry;
+    }
+
+    public function getPciRegistry()
+    {
+        $registry = $this->getOption(self::PCI_IMPLEMENTATION);
+        $registry->setServiceLocator($this->getServiceManager());
+        return $registry;
+    }
+
+    public function getPicRegistry()
+    {
+        $registry = $this->getOption(self::PIC_IMPLEMENTATION);
+        $registry->setServiceLocator($this->getServiceManager());
+        return $registry;
+    }
+
     static protected function getAvailableModels()
     {
         return [

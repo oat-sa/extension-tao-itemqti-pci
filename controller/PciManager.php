@@ -22,6 +22,8 @@ namespace oat\qtiItemPci\controller;
 
 
 use oat\qtiItemPci\model\common\model\PortableElementModel;
+use oat\qtiItemPci\model\common\registry\PortableElementRegistryFactory;
+use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\qtiItemPci\model\PortableElementRegistry;
 use oat\qtiItemPci\model\PortableElementService;
 use \tao_helpers_Http;
@@ -36,7 +38,9 @@ class PciManager extends tao_actions_CommonModule
 
     protected function getCreatorRegistry()
     {
-        return \oat\oatbox\service\ServiceManager::getServiceManager()->get(PortableElementRegistry::SERVICE_ID);
+        return \oat\oatbox\service\ServiceManager::getServiceManager()
+            ->get(PortableElementRegistryFactory::SERVICE_ID)
+            ->getRegistry(new PciModel());
     }
     
     /**

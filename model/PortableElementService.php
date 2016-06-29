@@ -21,6 +21,7 @@
 namespace oat\qtiItemPci\model;
 
 use oat\qtiItemPci\model\common\model\PortableElementModel;
+use oat\qtiItemPci\model\common\PortableElementFactory;
 use oat\qtiItemPci\model\common\validator\Validator;
 use oat\qtiItemPci\model\pci\model\PciModel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -31,26 +32,23 @@ class PortableElementService implements ServiceLocatorAwareInterface
     use ServiceLocatorAwareTrait;
 
     /**
-     * @var PortableElementRegistry
+     * @var array of PortableElementRegistry
      */
     protected $registry;
-
-    /**
-     * @var PciPackageExporter
-     */
-    protected $exporter;
 
     /**
      * Singleton of registry service
      *
      * @return PortableElementRegistry
      */
-    protected function getRegistry()
+    protected function getRegistry(PortableElementModel $model)
     {
-        if (!$this->registry) {
-            $this->registry = $this->getServiceLocator()->get(PortableElementRegistry::SERVICE_ID);
+        if (!$this->registry[get_class($model)]) {
+            $this->registry[get_class($model)] = $this->getServiceLocator()
+                ->get(PortableElementFactory::SERVICE_ID)
+                ->getRegistry($model);
         }
-        return $this->registry;
+        return $this->registry[get_class($model)];
     }
 
     /**
@@ -108,20 +106,20 @@ class PortableElementService implements ServiceLocatorAwareInterface
             throw new \common_Exception('Portable element is invalid.');
         }
 
-        $this->getRegistry()->setSource($source);
-        $this->getRegistry()->register($model);
+        $this->getRegistry($model)->setSource($source);
+        $this->getRegistry($model)->register($model);
 
         return true;
     }
 
     public function export($identifier, $version=null)
     {
-        $model = $this->getRegistry()->get($identifier, $version);
+        $model = $this->getRegistry(new PciModel())->get($identifier, $version);
         if (is_null($model)) {
             throw new \common_Exception('Unable to find a PCI associated to identifier: ' . $model->getTypeIndentifier());
         }
         $this->validate($model);
-        return $this->getRegistry()->export($model);
+        return $this->getRegistry(new PciModel())->export($model);
     }
 
     public function getValidPortableElementFromZipSource($zipFile)
@@ -138,8 +136,8 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return $model;
     }
 
-    public function getLatestPciByIdentifier($identifier)
+    public function getPciByIdentifier($identifier, $version=null)
     {
-        return $this->getRegistry()->getLatestVersion($identifier);
+        return $this->getRegistry(new PciModel())->get($identifier, $version);
     }
 }
