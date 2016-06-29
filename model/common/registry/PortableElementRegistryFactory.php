@@ -31,4 +31,18 @@ class PortableElementRegistryFactory extends ConfigurableService
         $registry->setServiceLocator(ServiceManager::getServiceManager());
         return $registry;
     }
+
+    public function getPciRegistry()
+    {
+        $registry = $this->getOption(self::PCI_IMPLEMENTATION);
+        $registry->setServiceLocator(ServiceManager::getServiceManager());
+        return $registry;
+    }
+
+    public function getPicRegistry()
+    {
+        $registry = $this->getOption(self::PIC_IMPLEMENTATION);
+        $registry->setServiceLocator(ServiceManager::getServiceManager());
+        return $registry;
+    }
 }
