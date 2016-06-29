@@ -19,6 +19,7 @@
  * 
  */               
 use oat\qtiItemPci\scripts\install\SetupPciRegistry;
+use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 
 return array(
     'name' => 'qtiItemPci',
@@ -41,7 +42,8 @@ return array(
 		),
         'php'	=> array(
 			dirname(__FILE__).'/scripts/install/addHook.php',
-            SetupPciRegistry::class
+            SetupPciRegistry::class,
+			SetQtiCreatorConfig::class
 		)
     ),
     'uninstall' => array(

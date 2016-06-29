@@ -22,10 +22,11 @@ namespace oat\qtiItemPci\controller;
 
 
 use oat\qtiItemPci\model\common\model\PortableElementModel;
-use oat\qtiItemPci\model\common\registry\PortableElementRegistryFactory;
+use oat\qtiItemPci\model\common\PortableElementFactory;
 use oat\qtiItemPci\model\pci\model\PciModel;
 use oat\qtiItemPci\model\PortableElementRegistry;
 use oat\qtiItemPci\model\PortableElementService;
+use oat\oatbox\service\ServiceManager;
 use \tao_helpers_Http;
 use \tao_actions_CommonModule;
 
@@ -34,13 +35,16 @@ class PciManager extends tao_actions_CommonModule
     /**
      * @var PortableElementRegistry
      */
-    protected $registry;
+    protected $registry = null;
 
-    protected function getCreatorRegistry()
+    protected function getRegistry()
     {
-        return \oat\oatbox\service\ServiceManager::getServiceManager()
-            ->get(PortableElementRegistryFactory::SERVICE_ID)
-            ->getRegistry(new PciModel());
+        if(is_null($this->registry)){
+            $this->registry = ServiceManager::getServiceManager()
+                ->get(PortableElementFactory::SERVICE_ID)
+                ->getRegistry(new PciModel());
+        }
+        return $this->registry;
     }
     
     /**
@@ -50,7 +54,7 @@ class PciManager extends tao_actions_CommonModule
 
         $returnValue = array();
 
-        $all = $this->registry->getLatestCreators();
+        $all = $this->getRegistry()->getLatestCreators();
         foreach($all as $pci){
             $returnValue[$pci->getTypeIdentifier()] = $this->getListingData($pci);
         }
@@ -102,9 +106,9 @@ class PciManager extends tao_actions_CommonModule
             $result['typeIdentifier'] = $model->getTypeIdentifier();
             $result['label'] = $model->getLabel();
             $result['version'] = $model->getVersion();
-            $result['exists'] = $this->registry->exists($model);
+            $result['exists'] = $this->getRegistry()->exists($model);
 
-            $all = $this->registry->getLatestCreators();
+            $all = $this->getRegistry()->getLatestCreators();
             if(isset($all[$model->getTypeIdentifier()])){
                 $currentVersion = $all[$model->getTypeIdentifier()]->getVersion();
                 if(version_compare($model->getVersion(), $currentVersion, '<')){
@@ -171,7 +175,7 @@ class PciManager extends tao_actions_CommonModule
 
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
         $this->returnJson([
-            'success' => $this->registry->unregisterPortableElement($typeIdentifier)
+            'success' => $this->getRegistry()->unregisterPortableElement($typeIdentifier)
         ]);
     }
 
