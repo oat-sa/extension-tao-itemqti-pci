@@ -32,14 +32,9 @@ class PortableElementService implements ServiceLocatorAwareInterface
     use ServiceLocatorAwareTrait;
 
     /**
-     * @var PortableElementRegistry
+     * @var array of PortableElementRegistry
      */
     protected $registry;
-
-    /**
-     * @var PciPackageExporter
-     */
-    protected $exporter;
 
     /**
      * Singleton of registry service
@@ -48,12 +43,12 @@ class PortableElementService implements ServiceLocatorAwareInterface
      */
     protected function getRegistry(PortableElementModel $model)
     {
-        if (!$this->registry) {
-            $this->registry = $this->getServiceLocator()
+        if (!$this->registry[get_class($model)]) {
+            $this->registry[get_class($model)] = $this->getServiceLocator()
                 ->get(PortableElementFactory::SERVICE_ID)
                 ->getRegistry($model);
         }
-        return $this->registry;
+        return $this->registry[get_class($model)];
     }
 
     /**
@@ -141,8 +136,8 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return $model;
     }
 
-    public function getLatestPciByIdentifier($identifier)
+    public function getPciByIdentifier($identifier, $version=null)
     {
-        return $this->getRegistry(new PciModel())->getLatestVersion($identifier);
+        return $this->getRegistry(new PciModel())->get($identifier, $version);
     }
 }
