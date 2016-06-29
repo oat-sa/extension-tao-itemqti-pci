@@ -405,6 +405,8 @@ class PortableElementRegistry extends ConfigurableService
                 $var[$k] = $this->addPathPrefix($typeIdentifier, $v);
             }
             return $var;
+        } else if (is_null($var)) {
+            return '';
         } else {
             throw new \InvalidArgumentException("$var must be a string or an array");
         }
