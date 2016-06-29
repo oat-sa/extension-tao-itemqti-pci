@@ -177,7 +177,7 @@ class PciItemSource
                 'runtime' => $runtime
             ]);
 
-            $lastVersionModel = $this->getService()->getLatestPciByIdentifier($pciModel->getTypeIdentifier());
+            $lastVersionModel = $this->getService()->getPciByIdentifier($pciModel->getTypeIdentifier());
             if (!is_null($lastVersionModel)
                 && (intval($lastVersionModel->getVersion()) != intVal($pciModel->getVersion()))
             ) {
@@ -215,7 +215,7 @@ class PciItemSource
         }
 
         foreach ($this->pciModels as $model) {
-            $lastVersionModel = $this->getService()->getLatestPciByIdentifier($model->getTypeIdentifier());
+            $lastVersionModel = $this->getService()->getPciByIdentifier($model->getTypeIdentifier());
             //only register a pci that has not been register yet, subsequent update must be done through pci package import
             if(is_null($lastVersionModel)){
                 $this->getService()->registerModel($model, $this->source);
