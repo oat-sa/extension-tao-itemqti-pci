@@ -25,7 +25,6 @@ use \common_ext_ExtensionsManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\qtiItemPci\model\common\model\PortableElementModel;
 use oat\qtiItemPci\model\pci\model\PciModel;
-//use oat\qtiItemPci\model\valida\PciModelValidator;
 use oat\tao\model\websource\Websource;
 use League\Flysystem\Filesystem;
 use oat\oatbox\filesystem\FileSystemService;
@@ -38,16 +37,12 @@ use oat\tao\model\websource\WebsourceManager;
  */
 class PortableElementRegistry extends ConfigurableService
 {
-    const SERVICE_ID = 'qtiItemPci/pciRegistry';
-
     const OPTION_FS = 'filesystem';
-
     const OPTION_WEBSOURCE = 'websource';
-    
-    const CONFIG_ID = 'pciRegistryEntries';
+    const OPTION_REGISTRY = 'registry';
+    const OPTION_STORAGE = 'storage';
 
     protected $storage;
-
     protected $source;
 
     /**
@@ -58,7 +53,9 @@ class PortableElementRegistry extends ConfigurableService
      */
     protected function getMap()
     {
-        $map = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(self::CONFIG_ID);
+        $map = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConfig(
+            $this->getOption(self::OPTION_REGISTRY)
+        );
         if(empty($map)){
             $map = [];
         }
@@ -73,7 +70,9 @@ class PortableElementRegistry extends ConfigurableService
      */
     protected function setMap($map)
     {
-        \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->setConfig(self::CONFIG_ID, $map);
+        \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->setConfig(
+            $this->getOption(self::OPTION_REGISTRY), $map
+        );
     }
 
     /**
@@ -561,8 +560,8 @@ class PortableElementRegistry extends ConfigurableService
      */
     protected function getFilesFromModel(PortableElementModel $model)
     {
-//        $validator = new PciModelValidator($model);
-//        return $validator->getRequiredAssets();
+        $validator = PortableElementFactory::getValidator($model);
+        return $validator->getRequiredAssets();
     }
 
     /**

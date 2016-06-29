@@ -22,11 +22,11 @@
 namespace oat\qtiItemPci\test;
 
 use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\model\PciPackageParser;
-use oat\qtiItemPci\model\PciService;
+use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
+use oat\qtiItemPci\model\common\registry\PortableElementRegistryFactory;
+use oat\qtiItemPci\model\pci\model\PciModel;
+use oat\qtiItemPci\model\PortableElementService;
 use oat\tao\test\TaoPhpUnitTestRunner;
-use oat\qtiItemPci\model\PciRegistry;
 
 
 class PciRegistryTest extends TaoPhpUnitTestRunner
@@ -43,7 +43,9 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
      */
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
-        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()->get(PciRegistry::SERVICE_ID);
+        $this->registry = \oat\oatbox\service\ServiceManager::getServiceManager()
+            ->get(PortableElementRegistryFactory::SERVICE_ID)
+            ->getRegistry(new PciModel());
     }
     
     /**
@@ -116,20 +118,21 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $pciModel = new PciModel('likertScaleInteraction', '1.0.0');
         $pciModel->exchangeArray(json_decode(file_get_contents($packageValid . DIRECTORY_SEPARATOR . PciModel::PCI_MANIFEST), true));
 
-        $service = new PciService();
+        $service = new PortableElementService();
         $service->setServiceLocator(ServiceManager::getServiceManager());
 
-        $reflectionClass = new \ReflectionClass(PciService::class);
+        $reflectionClass = new \ReflectionClass(PortableElementService::class);
         $reflectionMethod = $reflectionClass->getMethod('getRegistry');
         $reflectionMethod->setAccessible(true);
-        $registry = $reflectionMethod->invoke($service);
+        $registry = $reflectionMethod->invoke($service, new PciModel());
 
         $registry->setSource($packageValid);
         $registry->register($pciModel);
 
         $exportDirectory = $registry->export($pciModel);
 
-        $parser = new PciPackageParser($exportDirectory);
+        $parser = new PortableElementPackageParser($exportDirectory);
+        $parser->setModel(new PciModel());
         $source = $parser->extract();
 
         $original = $this->fillArrayWithFileNodes(new \DirectoryIterator($packageValid));
