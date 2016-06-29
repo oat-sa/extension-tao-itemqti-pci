@@ -25,7 +25,7 @@ use \common_ext_ExtensionsManager;
 use oat\oatbox\service\ConfigurableService;
 use oat\qtiItemPci\model\common\model\PortableElementModel;
 use oat\qtiItemPci\model\pci\model\PciModel;
-//use oat\qtiItemPci\model\valida\PciModelValidator;
+use oat\qtiItemPci\model\pci\validator\PciValidator;
 use oat\tao\model\websource\Websource;
 use League\Flysystem\Filesystem;
 use oat\oatbox\filesystem\FileSystemService;
@@ -405,6 +405,8 @@ class PortableElementRegistry extends ConfigurableService
                 $var[$k] = $this->addPathPrefix($typeIdentifier, $v);
             }
             return $var;
+        } else if (is_null($var)) {
+            return '';
         } else {
             throw new \InvalidArgumentException("$var must be a string or an array");
         }
@@ -561,8 +563,9 @@ class PortableElementRegistry extends ConfigurableService
      */
     protected function getFilesFromModel(PortableElementModel $model)
     {
-//        $validator = new PciModelValidator($model);
-//        return $validator->getRequiredAssets();
+        //@todo make this compatible with pic model
+        $validator = new PciValidator($model);
+        return $validator->getRequiredAssets();
     }
 
     /**

@@ -16,7 +16,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technlogies SA;
  *
  */
-define(['lodash', 'core/promise', 'core/eventifier'], function (_, Promise, eventifier){
+define(['lodash', 'core/promise', 'core/eventifier', 'taoQtiItem/qtiCreator/helper/qtiElements'], function (_, Promise, eventifier, qtiElements){
     'use strict';
 
     function pciRegistryFactory(){
@@ -74,7 +74,7 @@ define(['lodash', 'core/promise', 'core/eventifier'], function (_, Promise, even
             },
             getAuthoringData : function getAuthoringData(typeIdentifier, version){
                 var pciModel = _get(typeIdentifier, version);
-                if(pciModel && pciModel.creator){
+                if(pciModel && pciModel.creator && pciModel.creator.hook && pciModel.creator.icon){
                     return {
                         label : pciModel.label, //currently no translation available 
                         icon : pciModel.creator.icon.replace(new RegExp('^' + typeIdentifier + '\/'), pciModel.baseUrl),
@@ -106,7 +106,7 @@ define(['lodash', 'core/promise', 'core/eventifier'], function (_, Promise, even
                         loadStack.push(provider.load());
                     });
 
-                    //performs the loadings in parrallel
+                    //performs the loadings in parallel
                     Promise.all(loadStack).then(function (results){
 
                         var requireConfigAliases = {};
@@ -142,26 +142,38 @@ define(['lodash', 'core/promise', 'core/eventifier'], function (_, Promise, even
 
                     _.forIn(_registry, function (versions, typeIdentifier){
                         var pciModel = _get(typeIdentifier);//currently use the latest version only
-                        requiredCreators.push(pciModel.creator.hook.replace(/\.js$/, ''));
+                        if(pciModel.creator && pciModel.creator.hook){
+                            requiredCreators.push(pciModel.creator.hook.replace(/\.js$/, ''));
+                        }
                     });
 
-                    //@todo support caching
-                    _requirejs(requiredCreators, function (){
-                        var creators = {};
-                        _.each(arguments, function (creatorHook){
-                            var id = creatorHook.getTypeIdentifier();
-                            var pciModel = _get(id);
-                            var i = _.findIndex(_registry[id], {version : pciModel.version});
-                            if(i < 0){
-                                throw 'no creator found for id/version ' + id + '/' + pciModel.version;
-                            }else{
-                                _registry[id][i].creator.module = creatorHook;
-                                creators[id] = creatorHook;
-                            }
+                    if(requiredCreators.length){
+                        //@todo support caching
+                        _requirejs(requiredCreators, function (){
+                            var creators = {};
+                            _.each(arguments, function (creatorHook){
+                                var id = creatorHook.getTypeIdentifier();
+                                var pciModel = _get(id);
+                                var i = _.findIndex(_registry[id], {version : pciModel.version});
+                                if(i < 0){
+                                    throw 'no creator found for id/version ' + id + '/' + pciModel.version;
+                                }else{
+                                    _registry[id][i].creator.module = creatorHook;
+                                    creators[id] = creatorHook;
+                                    if(true){//if pci
+                                        //register into the qtiElements list
+                                        qtiElements.classes['customInteraction.' + id] = {parents : ['customInteraction'], qti : true};
+                                    }
+                                }
+                            });
+                            callback(creators);
+                            self.trigger('creatorsloaded');
                         });
-                        callback(creators);
-                        self.trigger('runtimesloaded');
-                    });
+                    }else{
+                        callback({});
+                        self.trigger('creatorsloaded');
+                    }
+
                 }, reload);
                 
             }
