@@ -19,13 +19,17 @@
  *
  */
 
-namespace oat\qtiItemPci\model;
+namespace oat\qtiItemPci\model\common\parser;
 
 use oat\oatbox\service\ServiceManager;
+use oat\qtiItemPci\model\common\model\PortableElementModel;
 use oat\qtiItemPci\model\pci\model\PciModel;
+use oat\qtiItemPci\model\pic\model\PicModel;
+use oat\qtiItemPci\model\PortableElementService;
 use oat\taoQtiItem\model\qti\Item;
+use oat\taoQtiItem\model\qti\Element;
 
-class PciItemSource
+class PortableElementItemParser
 {
     /**
      * @var Item
@@ -34,7 +38,7 @@ class PciItemSource
 
     protected $importingFiles = [];
     protected $requiredFiles = [];
-    protected $pciModels = [];
+    protected $portableModels = [];
     protected $picModels = [];
 
     protected $source;
@@ -52,11 +56,11 @@ class PciItemSource
     /**
      * Handle pci import process for a file
      *
-     * @todo
-     *
      * @param $absolutePath
      * @param $relativePath
      * @return array
+     * @throws \common_Exception
+     * @throws \tao_models_classes_FileNotFoundException
      */
     public function importPortableElementFile($absolutePath, $relativePath)
     {
@@ -65,17 +69,12 @@ class PciItemSource
             //marked the file as being ok to be imported in the end
             $this->importingFiles[] = $relativePath;
 
+            //@todo remove qti file used by PCI
+
             return $this->getFileInfo($absolutePath, $relativePath);
         } else {
             throw new \common_Exception('trying to import an asset that is not part of the portable element asset list');
         }
-
-        // Convert $pciXml to pci model
-        // import into registry
-        // Alter qti xml to pci xinclude // Asked by Joël
-        // Be warning to remove qti file only used by PCI
-
-
     }
 
     /**
@@ -131,7 +130,9 @@ class PciItemSource
     }
 
     /**
-     * @param Item $qtiModel
+     *
+     * @param Item $item
+     * @return $this
      */
     public function setQtiModel(Item $item)
     {
@@ -148,56 +149,67 @@ class PciItemSource
      */
     protected function feedRequiredFiles(Item $item)
     {
-
         $this->requiredFiles = [];
-        $this->pciModels = [];
+        $this->portableModels = [];
         $this->picModels = [];
 
-        //same for the PICs
         $pcis = $item->getComposingElements('oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction');
-
         foreach($pcis as $pci) {
-//            $version = $pci->getVersion();
-//            $stylesheets = $pci->getStylesheets();
-//            $mediaFiles = $pci->getMediaFiles();
-            $version = '1.0';
-            $stylesheets = [];
-            $mediaFiles = [];
-            $typeId = $pci->getTypeIdentifier();
-            $runtime = [
-                'hook' => $pci->getEntryPoint(),
-                'libraries' => $pci->getLibraries(),
-                'stylesheets' => $stylesheets,
-                'mediaFiles' => $mediaFiles
-            ];
-            $pciModel = new PciModel($typeId, $version);
-            $pciModel->exchangeArray([
-                'label' => $typeId,
-                'short' => $typeId,
-                'runtime' => $runtime
-            ]);
-
-            $lastVersionModel = $this->getService()->getPciByIdentifier($pciModel->getTypeIdentifier());
-            if (!is_null($lastVersionModel)
-                && (intval($lastVersionModel->getVersion()) != intVal($pciModel->getVersion()))
-            ) {
-                //@todo return a user exception to inform user of incompaible pci version found and that an item update is required
-                throw new \common_Exception('Unable to import pci asset because pci is not compatible. '
-                    . 'Current version is ' . $lastVersionModel->getVersion() . ' and imported is ' . $pciModel->getVersion());
-            }
-
-            $this->pciModels[$typeId] = $pciModel;
-
-            $requiredLibs = [];
-            foreach($runtime['libraries'] as $lib){
-                if(preg_match('/^'.$typeId.'/', $lib)){//filter shared stimulus
-                    $requiredLibs[] = $lib.'.js';//amd modules
-                }
-            }
-
-            $files = array_merge([$runtime['hook']], $requiredLibs, $runtime['stylesheets'], $runtime['mediaFiles']);
-            $this->requiredFiles = array_merge($this->requiredFiles, array_fill_keys($files, $typeId));
+            $this->parsePortableElement(new PciModel(), $pci);
         }
+
+        $pics = $item->getComposingElements('oat\taoQtiItem\model\qti\PortableInfoControl');
+        foreach($pics as $pic) {
+            $this->parsePortableElement(new PicModel(), $pic);
+        }
+    }
+
+    /**
+     * Parse individual portable element into the given portable model
+     *
+     * @param PortableElementModel $portableModel
+     * @param Element $portableElement
+     * @throws \common_Exception
+     */
+    protected function parsePortableElement(PortableElementModel $portableModel, Element $portableElement){
+
+        $typeId = $portableElement->getTypeIdentifier();
+
+        $runtime = [
+            'hook' => $portableElement->getEntryPoint(),
+            'libraries' => $portableElement->getLibraries(),
+            'stylesheets' => $portableElement->getStylesheets(),
+            'mediaFiles' => $portableElement->getMediaFiles()
+        ];
+
+        $portableModel->exchangeArray([
+            'typeIdentifier' => $typeId,
+            'version' => $portableElement->getVersion(),
+            'label' => $typeId,
+            'short' => $typeId,
+            'runtime' => $runtime
+        ]);
+
+        $lastVersionModel = $this->getService()->getPciByIdentifier($portableModel->getTypeIdentifier());
+        if (!is_null($lastVersionModel)
+            && (intval($lastVersionModel->getVersion()) != intVal($portableModel->getVersion()))
+        ) {
+            //@todo return a user exception to inform user of incompaible pci version found and that an item update is required
+            throw new \common_Exception('Unable to import pci asset because pci is not compatible. '
+                . 'Current version is ' . $lastVersionModel->getVersion() . ' and imported is ' . $portableModel->getVersion());
+        }
+
+        $this->portableModels[$typeId] = $portableModel;
+
+        $requiredLibs = [];
+        foreach($runtime['libraries'] as $lib){
+            if(preg_match('/^'.$typeId.'/', $lib)){//filter shared stimulus
+                $requiredLibs[] = $lib.'.js';//amd modules
+            }
+        }
+
+        $files = array_merge([$runtime['hook']], $requiredLibs, $runtime['stylesheets'], $runtime['mediaFiles']);
+        $this->requiredFiles = array_merge($this->requiredFiles, array_fill_keys($files, $typeId));
     }
 
     public function setSource($source)
@@ -205,6 +217,7 @@ class PciItemSource
         $this->source = $source;
         return $this;
     }
+
     /**
      * Do the import of portable elements
      */
@@ -214,7 +227,7 @@ class PciItemSource
             throw new \common_Exception();
         }
 
-        foreach ($this->pciModels as $model) {
+        foreach ($this->portableModels as $model) {
             $lastVersionModel = $this->getService()->getPciByIdentifier($model->getTypeIdentifier());
             //only register a pci that has not been register yet, subsequent update must be done through pci package import
             if(is_null($lastVersionModel)){
