@@ -150,16 +150,28 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return $model;
     }
 
+    /**
+     *
+     * @param $identifier
+     * @param null $version
+     * @return PciModel
+     */
     public function getPciByIdentifier($identifier, $version=null)
     {
         return $this->getRegistry(new PciModel())->get($identifier, $version);
     }
 
-    public function registerFromDirectorySource($directory){
+    public function registerFromDirectorySource($directory)
+    {
         $model = $this->getValidPortableElementFromDirectorySource($directory);
-        if(is_null($model)){
+        if (is_null($model)) {
             throw new \common_Exception('no valid portable element model found in the directory');
         }
         return $this->registerModel($model, $directory);
+    }
+
+    public function getPortableElementBaseUrl(PortableElementModel $model)
+    {
+        return $this->getRegistry($model)->getBaseUrl($model->getTypeIdentifier());
     }
 }

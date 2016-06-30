@@ -224,7 +224,11 @@ class PortableElementItemParser
     public function importPortableElements()
     {
         if (count($this->importingFiles) != count($this->requiredFiles)) {
-            throw new \common_Exception();
+            \common_Logger::i(' ** ');
+            \common_Logger::i(print_r($this->importingFiles,true));
+            \common_Logger::i(print_r($this->requiredFiles,true));
+            \common_Logger::i(' ** ');
+            throw new \common_Exception('Needed files are missing during Portable Element asset files');
         }
 
         foreach ($this->portableModels as $model) {

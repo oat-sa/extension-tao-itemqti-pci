@@ -95,6 +95,10 @@ class PortableElementFactory extends ConfigurableService
         throw new \common_Exception('This directory source is not compatible neither with PCI or PIC model. Manifest and/or engine file are missing.');
     }
 
+    /**
+     * @param PortableElementModel $model
+     * @return PortableElementModelValidator|PciValidator|PicValidator
+     */
     static public function getValidator(PortableElementModel $model)
     {
         switch (get_class($model)) {
@@ -108,6 +112,7 @@ class PortableElementFactory extends ConfigurableService
                 $validator = new PortableElementModelValidator();
                 break;
         }
-        return $validator->setModel($model);
+        $validator->setModel($model);
+        return $validator;
     }
 }

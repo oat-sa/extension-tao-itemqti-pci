@@ -26,6 +26,5 @@ trait PortableElementModelTrait
     public function setModel(PortableElementModel $model)
     {
         $this->model = $model;
-        return $this;
     }
 }

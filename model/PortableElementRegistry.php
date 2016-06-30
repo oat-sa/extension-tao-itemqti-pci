@@ -239,13 +239,12 @@ class PortableElementRegistry extends ConfigurableService
             return false;
         }
 
-        $version = $model->getVersion();
         if (!$model->hasVersion()) {
-            $version = $this->getLatestVersion($model->getTypeIdentifier());
+            $model = $this->getLatestVersion($model->getTypeIdentifier());
         }
 
-        if ($version!==null) {
-            return (isset($pcis[$model->getTypeIdentifier()][$version]));
+        if ($model !== null) {
+            return (isset($pcis[$model->getTypeIdentifier()][$model->getVersion()]));
         }
 
         return false;
@@ -333,7 +332,7 @@ class PortableElementRegistry extends ConfigurableService
      * @param string $version
      * @return bool|string
      */
-    protected function getBaseUrl($typeIdentifier, $version = null)
+    public function getBaseUrl($typeIdentifier, $version = null)
     {
         $model = new PciModel($typeIdentifier, $version);
         if ($this->exists($model)) {
