@@ -5,6 +5,7 @@ namespace oat\qtiItemPci\model\common;
 use oat\oatbox\service\ConfigurableService;
 use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\common\model\PortableElementModel;
+use oat\qtiItemPci\model\common\parser\PortableElementDirectoryParser;
 use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
 use oat\qtiItemPci\model\common\validator\PortableElementModelValidator;
 use oat\qtiItemPci\model\pci\model\PciModel;
@@ -32,7 +33,7 @@ class PortableElementFactory extends ConfigurableService
                 throw new \common_Exception('Unable to load registry implementation for model ' . get_class($model));
                 break;
         }
-        $registry->setServiceLocator($this->getServiceManager());
+        $registry->setServiceLocator(ServiceManager::getServiceManager());
         return $registry;
     }
 
@@ -74,6 +75,24 @@ class PortableElementFactory extends ConfigurableService
         }
 
         throw new \common_Exception('This zip source is not compatible neither with PCI or PIC model. Manifest and/or engine file are missing.');
+    }
+
+    static public function getDirectoryParser($source, PortableElementModel $forceModel=null)
+    {
+        $parser = new PortableElementDirectoryParser($source);
+        $models = self::getAvailableModels();
+
+        if ($forceModel) {
+            return $parser->hasValidModel($forceModel);
+        }
+
+        foreach ($models as $model) {
+            if ($parser->hasValidModel($model)) {
+                return $parser;
+            }
+        }
+
+        throw new \common_Exception('This directory source is not compatible neither with PCI or PIC model. Manifest and/or engine file are missing.');
     }
 
     static public function getValidator(PortableElementModel $model)

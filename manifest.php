@@ -20,6 +20,7 @@
  */               
 use oat\qtiItemPci\scripts\install\SetupPciRegistry;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
+use oat\qtiItemPci\scripts\install\RegisterPci;
 
 return array(
     'name' => 'qtiItemPci',
@@ -41,9 +42,9 @@ return array(
 		    dirname(__FILE__). '/install/ontology/role.rdf'
 		),
         'php'	=> array(
-			dirname(__FILE__).'/scripts/install/addHook.php',
             SetupPciRegistry::class,
-			SetQtiCreatorConfig::class
+			SetQtiCreatorConfig::class,
+			RegisterPci::class
 		)
     ),
     'uninstall' => array(

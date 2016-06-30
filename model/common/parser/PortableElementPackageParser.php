@@ -83,7 +83,7 @@ class PortableElementPackageParser extends PackageParser
         if (json_last_error() === JSON_ERROR_NONE) {
             return $content;
         }
-        throw new common_Exception('Pci manifest but it\'s not a valid json file.');
+        throw new common_Exception('Portable element manifest is not a valid json file.');
     }
 
     public function hasValidModel(PortableElementModel $model)

@@ -18,14 +18,16 @@
         "hook" : "./runtime/likertScaleInteraction.amd.js",
         "libraries" : [
             "IMSGlobal/jquery_2_1_1",
-            "./runtime/js/renderer"
+            "./runtime/js/renderer.js"
         ],
         "stylesheets" : [
+            "./runtime/css/base.css",
             "./runtime/css/likertScaleInteraction.css"
         ],
         "mediaFiles" : [
             "./runtime/assets/ThumbDown.png",
-            "./runtime/assets/ThumbUp.png"
+            "./runtime/assets/ThumbUp.png",
+            "./runtime/css/img/bg.png"
         ]
     },
     "creator" : {
@@ -38,6 +40,5 @@
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js"
         ]
-    },
-    "debug" : false
+    }
 }

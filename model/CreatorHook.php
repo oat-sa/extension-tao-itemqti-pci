@@ -39,8 +39,8 @@ class CreatorHook implements Hook
      */
     public function init(Config $config){
 
-        //finally add the custom interaction manager "hook"
-        $config->addHook('qtiItemPci/pciManager/hook');
+        //add the custom interaction manager "hook"
+        //$config->addHook('qtiItemPci/pciManager/hook');
     }
 
 }

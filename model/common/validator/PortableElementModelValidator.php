@@ -48,7 +48,7 @@ class PortableElementModelValidator extends PortableElementAssetValidator
             'version'        => [ Validator::isVersion, Validator::NotEmpty ],
             'author'         => [ Validator::isString, Validator::NotEmpty ],
             'email'          => [ Validator::Email, Validator::NotEmpty ],
-            'tags'           => [ Validator::isArray, Validator::NotEmpty ],
+            'tags'           => [ Validator::isArray],
             'runtime'        => [ Validator::NotEmpty, Validator::isArray ],
         ];
     }

@@ -21,7 +21,7 @@
 
 namespace oat\qtiItemPci\scripts\update;
 
-
+use oat\qtiItemPci\scripts\install\RegisterPci;
 class Updater extends \common_ext_ExtensionUpdater
 {
     /**
@@ -44,6 +44,10 @@ class Updater extends \common_ext_ExtensionUpdater
             $accessService->grantModuleAccess($testManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
+
+            $registerPci = new RegisterPci();
+            $registerPci([]);
+
             $this->setVersion('0.2.0');
         }
     }

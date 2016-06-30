@@ -117,6 +117,7 @@ class Validator
         }
 
         if (!empty($messages)) {
+            throw new \common_Exception('invalid '. print_r($messages , true));
             return false;
         }
         return true;
