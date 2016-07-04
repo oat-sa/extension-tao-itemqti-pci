@@ -44,6 +44,9 @@ class PortableElementItemParser
     protected $source;
     protected $service;
 
+    /**
+     * @return PortableElementService
+     */
     public function getService()
     {
         if (!$this->service) {

@@ -30,6 +30,7 @@ use oat\tao\model\websource\Websource;
 use League\Flysystem\Filesystem;
 use oat\oatbox\filesystem\FileSystemService;
 use oat\tao\model\websource\WebsourceManager;
+use Slim\Http\Stream;
 
 /**
  * CreatorRegistry stores reference to
@@ -81,7 +82,7 @@ class PortableElementRegistry extends ConfigurableService
      *
      * @return Filesystem
      */
-    protected function getFileSystem()
+    public function getFileSystem()
     {
         if (!$this->storage) {
             $this->storage = $this
@@ -188,6 +189,7 @@ class PortableElementRegistry extends ConfigurableService
                 $registered = $fileSystem->writeStream($fileId, $resource);
             }
             fclose($resource);
+            \common_Logger::i('Portable element asset file "' . $fileId . '" copied.');
         }
         return $registered;
     }
@@ -339,6 +341,21 @@ class PortableElementRegistry extends ConfigurableService
             return $this->getFileUrl($typeIdentifier, $version, '');
         }
         return false;
+    }
+
+    /**
+     * @param PortableElementModel $model
+     * @param $file
+     * @return bool|false|resource
+     * @throws \common_Exception
+     */
+    public function getFileStream(PortableElementModel $model, $file)
+    {
+        $filePath = $this->getPrefix($model) . $file;
+        if ($this->getFileSystem()->has($filePath)) {
+            return new Stream($this->getFileSystem()->readStream($filePath));
+        }
+        throw new \tao_models_classes_FileNotFoundException($filePath);
     }
 
     /**
@@ -572,7 +589,7 @@ class PortableElementRegistry extends ConfigurableService
      * @param PciModel $pciModel
      * @return string
      */
-    protected function getManifest(PortableElementModel $model)
+    public function getManifest(PortableElementModel $model)
     {
         return json_encode($model->toArray(), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
     }

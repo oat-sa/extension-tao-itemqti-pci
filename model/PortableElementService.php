@@ -32,13 +32,14 @@ class PortableElementService implements ServiceLocatorAwareInterface
     use ServiceLocatorAwareTrait;
 
     /**
-     * @var array of PortableElementRegistry
+     * @var PortableElementRegistry[]
      */
     protected $registry;
 
     /**
-     * Singleton of registry service
+     * Singletons of registry service associated with $model
      *
+     * @param PortableElementModel $model
      * @return PortableElementRegistry
      */
     protected function getRegistry(PortableElementModel $model)
@@ -52,11 +53,13 @@ class PortableElementService implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Validate a PCI model using PciModelValidator
+     * Validate a model using associated validator
      *
      * @param PortableElementModel $model
-     * @param $source
+     * @param null $source Directory of portable element, if not null it will be checked
+     * @param array $validationGroup Fields to be checked, empty=$validator->getConstraints()
      * @return bool
+     * @throws \common_Exception
      */
     public function validate(PortableElementModel $model, $source=null, $validationGroup=array())
     {
@@ -71,16 +74,12 @@ class PortableElementService implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Import a PCI from an uploaded zip file
-     * 1°) Extract zip
-     * 2°) Check if exists
-     * 3°) Extract data
-     * 4°) Validate PciModel
-     * 5°) Register into PCI registry
+     * Import a Portable element from an uploaded zip file
      *
-     * @param $file
-     * @return PciModel
+     * @param $zipFile
+     * @return PortableElementModel
      * @throws \common_Exception
+     * @throws \oat\taoQtiItem\model\qti\exception\ExtractException
      */
     public function import($zipFile)
     {
@@ -95,6 +94,14 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return $model;
     }
 
+    /**
+     * Register a $model with $source into registryEntries & filesystem
+     *
+     * @param PortableElementModel $model
+     * @param $source
+     * @return bool
+     * @throws \common_Exception
+     */
     public function registerModel(PortableElementModel $model, $source)
     {
         if (is_null($model)) {
@@ -112,6 +119,14 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return true;
     }
 
+    /**
+     * Export a model with files into a ZIP
+     *
+     * @param $identifier ID of model
+     * @param null $version If null, latest will be taken
+     * @return string Path of zip
+     * @throws \common_Exception
+     */
     public function export($identifier, $version=null)
     {
         $model = $this->getRegistry(new PciModel())->get($identifier, $version);
@@ -122,6 +137,14 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return $this->getRegistry(new PciModel())->export($model);
     }
 
+    /**
+     * Extract a valid model from a zip
+     *
+     * @param $zipFile
+     * @return null|PortableElementModel
+     * @throws \common_Exception
+     * @throws \oat\taoQtiItem\model\qti\exception\ExtractException
+     */
     public function getValidPortableElementFromZipSource($zipFile)
     {
         $parser = PortableElementFactory::getPackageParser($zipFile);
@@ -136,6 +159,11 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return $model;
     }
 
+    /**
+     * @param $directory
+     * @return null|PortableElementModel
+     * @throws \common_Exception
+     */
     public function getValidPortableElementFromDirectorySource($directory)
     {
         $parser = PortableElementFactory::getDirectoryParser($directory);
@@ -151,16 +179,24 @@ class PortableElementService implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Get model from identifier & version
      *
      * @param $identifier
      * @param null $version
-     * @return PciModel
+     * @return $this|null
      */
     public function getPciByIdentifier($identifier, $version=null)
     {
         return $this->getRegistry(new PciModel())->get($identifier, $version);
     }
 
+    /**
+     * Register a model from a directory based on manifest.json
+     *
+     * @param $directory
+     * @return bool
+     * @throws \common_Exception
+     */
     public function registerFromDirectorySource($directory)
     {
         $model = $this->getValidPortableElementFromDirectorySource($directory);
@@ -170,8 +206,27 @@ class PortableElementService implements ServiceLocatorAwareInterface
         return $this->registerModel($model, $directory);
     }
 
-    public function getPortableElementBaseUrl(PortableElementModel $model)
+    /**
+     * Fill all values of a model based on $model->getTypeIdentifier, $model->getVersion
+     *
+     * @param PortableElementModel $model
+     * @return $this|null|PciRegistry
+     */
+    public function hydrateModel(PortableElementModel $model)
     {
-        return $this->getRegistry($model)->getBaseUrl($model->getTypeIdentifier());
+        return $this->getRegistry($model)->retrieve($model);
+    }
+
+    /**
+     * Return the stream of a file model
+     *
+     * @param PortableElementModel $model
+     * @param $file
+     * @return bool|false|resource
+     * @throws \tao_models_classes_FileNotFoundException
+     */
+    public function getFileStream(PortableElementModel $model, $file)
+    {
+        return $this->getRegistry($model)->getFileStream($model, $file);
     }
 }
