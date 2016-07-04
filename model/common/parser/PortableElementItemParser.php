@@ -177,20 +177,30 @@ class PortableElementItemParser
     protected function parsePortableElement(PortableElementModel $portableModel, Element $portableElement){
 
         $typeId = $portableElement->getTypeIdentifier();
+        $libs = [];
+        $requiredLibFiles = [];
 
-        $runtime = [
-            'hook' => $portableElement->getEntryPoint(),
-            'libraries' => $portableElement->getLibraries(),
-            'stylesheets' => $portableElement->getStylesheets(),
-            'mediaFiles' => $portableElement->getMediaFiles()
-        ];
+        //Adjust file resource entries where {QTI_NS}/xxx/yyy is equivalent to {QTI_NS}/xxx/yyy.js
+        foreach($portableElement->getLibraries() as $lib){
+            if(preg_match('/^'.$typeId.'/', $lib)){//filter shared stimulus
+                $requiredLibFiles[] = $lib.'.js';//amd modules
+                $libs[] = $lib.'.js';
+            }else{
+                $libs[] = $lib;
+            }
+        }
 
         $portableModel->exchangeArray([
             'typeIdentifier' => $typeId,
             'version' => $portableElement->getVersion(),
             'label' => $typeId,
             'short' => $typeId,
-            'runtime' => $runtime
+            'runtime' => [
+                'hook' => $portableElement->getEntryPoint(),
+                'libraries' => $libs,
+                'stylesheets' => $portableElement->getStylesheets(),
+                'mediaFiles' => $portableElement->getMediaFiles(),
+            ]
         ]);
 
         $lastVersionModel = $this->getService()->getPciByIdentifier($portableModel->getTypeIdentifier());
@@ -204,14 +214,7 @@ class PortableElementItemParser
 
         $this->portableModels[$typeId] = $portableModel;
 
-        $requiredLibs = [];
-        foreach($runtime['libraries'] as $lib){
-            if(preg_match('/^'.$typeId.'/', $lib)){//filter shared stimulus
-                $requiredLibs[] = $lib.'.js';//amd modules
-            }
-        }
-
-        $files = array_merge([$runtime['hook']], $requiredLibs, $runtime['stylesheets'], $runtime['mediaFiles']);
+        $files = array_merge([$portableModel->getRuntimeKey('hook')], $requiredLibFiles, $portableModel->getRuntimeKey('stylesheets'), $portableModel->getRuntimeKey('mediaFiles'));
         $this->requiredFiles = array_merge($this->requiredFiles, array_fill_keys($files, $typeId));
     }
 
@@ -242,6 +245,32 @@ class PortableElementItemParser
             }
         }
         return true;
+    }
+
+    /**
+     * Replace the libs aliases with their relative url before saving into the registry
+     * This format is consistent with the format of TAO portable package manifest
+     *
+     * @param PortableElementModel $model
+     * @return PortableElementModel
+     */
+    private function replaceLibAliases(PortableElementModel $model){
+
+        $libs = $model->getRuntimeKey('libraries');
+        $registeredLibs = [];
+        foreach($libs as $lib){
+            $count = 0;
+            $href = preg_replace('/^'.$model->getTypeIdentifier().'/', '.', $lib, -1, $count);
+            if($count){
+                //implementation specific lib
+                $registeredLibs[] = $href.'.js';//amd modules
+            }else{
+                //share libs
+                $registeredLibs[] = $lib;
+            }
+        }
+        $model->setRuntimeKey('libraries', $registeredLibs);
+        return $model;
     }
 
 }

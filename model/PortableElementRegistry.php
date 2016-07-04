@@ -171,7 +171,7 @@ class PortableElementRegistry extends ConfigurableService
         }
 
         foreach ($files as $file) {
-            if (substr($file, 0, 2)!='./') {
+            if (substr($file, 0, 2)!='./' && !preg_match('/^'.$model->getTypeIdentifier().'/', $file)) {
                 // File is not relative, it's a shared libraries
                 // Ignore this file, front have fallBack
                 continue;
@@ -182,7 +182,8 @@ class PortableElementRegistry extends ConfigurableService
                 throw new \common_Exception('File cannot be opened : ' . $filePath);
             }
 
-            $fileId = $this->getPrefix($model) . $file;
+            $fileId = $this->getPrefix($model) . preg_replace('/^'.$model->getTypeIdentifier().'/', '.', $file);
+            //Adjust file resource entries where {QTI_NS}/xxx/yyy.js is equivalent to ./xxx/yyy.js
             if ($fileSystem->has($fileId)) {
                 $registered = $fileSystem->updateStream($fileId, $resource);
             } else {
@@ -307,12 +308,40 @@ class PortableElementRegistry extends ConfigurableService
             }
         }
 
+        $files = $this->getFilesFromPortableElement($model);
+        $this->registerFiles($model, $files);
+
+        //saveModel must be executed last because it may affects the model itself
+        $this->replaceAliases($model, 'hook');
+        $this->replaceAliases($model, 'libraries');
+        $this->replaceAliases($model, 'stylesheets');
+        $this->replaceAliases($model, 'mediaFiles');
+
+        $this->saveModel($model);
+    }
+
+    /**
+     * Save the portable model to persistence
+     *
+     * @param PortableElementModel $model
+     */
+    private function saveModel(PortableElementModel $model){
         $pcis = $this->getMap();
         $pcis[$model->getTypeIdentifier()][$model->getVersion()] = $model->toArray();
         $this->setMap($pcis);
+    }
 
-        $files = $this->getFilesFromPortableElement($model);
-        $this->registerFiles($model, $files);
+    /**
+     * Adjust file resource entries where {QTI_NS}/xxx/yyy.js is equivalent to ./xxx/yyy.js
+     *
+     * @param PortableElementModel $model
+     * @param string $keyName
+     */
+    private function replaceAliases(PortableElementModel $model, $keyName){
+        $model->setRuntimeKey($keyName, preg_replace('/^'.$model->getTypeIdentifier().'/', '.', $model->getRuntimeKey($keyName)));
+        if($model->hasCreatorKey($keyName)){
+            $model->setCreatorKey($keyName, preg_replace('/^'.$model->getTypeIdentifier().'/', '.', $model->getCreatorKey($keyName)));
+        }
     }
 
     /**
