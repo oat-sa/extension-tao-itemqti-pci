@@ -32,6 +32,12 @@ use oat\qtiItemPci\model\pci\validator\PciValidator;
 use oat\qtiItemPci\model\pic\model\PicModel;
 use oat\qtiItemPci\model\pic\validator\PicValidator;
 
+/**
+ * Factory to create components implementation based on PortableElementModel
+ *
+ * Class PortableElementFactory
+ * @package oat\qtiItemPci\model\common
+ */
 class PortableElementFactory extends ConfigurableService
 {
     const SERVICE_ID = 'qtiItemPci/portableElementRegistry';
@@ -39,6 +45,25 @@ class PortableElementFactory extends ConfigurableService
     const PCI_IMPLEMENTATION = 'pciRegistry';
     const PIC_IMPLEMENTATION = 'picRegistry';
 
+    /**
+     * Get a list of available $model implementation
+     * @return array
+     */
+    static protected function getAvailableModels()
+    {
+        return [
+            new PciModel(),
+            new PicModel()
+        ];
+    }
+
+    /**
+     * Get the registry associated to $model, from config
+     *
+     * @param PortableElementModel $model
+     * @return mixed
+     * @throws \common_Exception
+     */
     public function getRegistry(PortableElementModel $model)
     {
         switch (get_class($model)) {
@@ -56,46 +81,43 @@ class PortableElementFactory extends ConfigurableService
         return $registry;
     }
 
-    public function getPciRegistry()
-    {
-        $registry = $this->getOption(self::PCI_IMPLEMENTATION);
-        $registry->setServiceLocator($this->getServiceManager());
-        return $registry;
-    }
-
-    public function getPicRegistry()
-    {
-        $registry = $this->getOption(self::PIC_IMPLEMENTATION);
-        $registry->setServiceLocator($this->getServiceManager());
-        return $registry;
-    }
-
-    static protected function getAvailableModels()
-    {
-        return [
-            new PciModel(),
-            new PicModel()
-        ];
-    }
-
+    /**
+     * Get packageParser related to $source e.q. zipfile
+     * $forceModel try only to apply a given PortableElementModel
+     *
+     * @param $source
+     * @param PortableElementModel|null $forceModel
+     * @return bool|PortableElementPackageParser
+     * @throws \common_Exception
+     */
     static public function getPackageParser($source, PortableElementModel $forceModel=null)
     {
         $parser = new PortableElementPackageParser($source);
-        $models = self::getAvailableModels();
 
         if ($forceModel) {
-            return $parser->hasValidModel($forceModel);
-        }
-
-        foreach ($models as $model) {
-            if ($parser->hasValidModel($model)) {
+            if ($parser->hasValidModel($forceModel)) {
                 return $parser;
+            }
+        } else {
+            $models = self::getAvailableModels();
+            foreach ($models as $model) {
+                if ($parser->hasValidModel($model)) {
+                    return $parser;
+                }
             }
         }
 
         throw new \common_Exception('This zip source is not compatible neither with PCI or PIC model. Manifest and/or engine file are missing.');
     }
 
+    /**
+     * Get directoryParser related to $source e.q. directory
+     *
+     * @param $source
+     * @param PortableElementModel|null $forceModel
+     * @return bool|PortableElementDirectoryParser
+     * @throws \common_Exception
+     */
     static public function getDirectoryParser($source, PortableElementModel $forceModel=null)
     {
         $parser = new PortableElementDirectoryParser($source);
@@ -115,6 +137,8 @@ class PortableElementFactory extends ConfigurableService
     }
 
     /**
+     * Get validator component associated to a model
+     * 
      * @param PortableElementModel $model
      * @return PortableElementModelValidator|PciValidator|PicValidator
      */

@@ -109,20 +109,6 @@ class PortableElementFactoryTest extends TaoPhpUnitTestRunner
         $this->assertInstanceOf($this->getRegistryFixtureName($model), $registry);
     }
 
-    public function testGetPciRegistry()
-    {
-        $model = new PciModel();
-        $factory = $this->getFactoryMock($model);
-        $this->assertInstanceOf($this->getRegistryFixtureName($model), $factory->getPciRegistry());
-    }
-
-    public function testGetPicRegistry()
-    {
-        $model = new PicModel();
-        $factory = $this->getFactoryMock($model);
-        $this->assertInstanceOf($this->getRegistryFixtureName($model), $factory->getPicRegistry());
-    }
-
     public function getRegistryProvider()
     {
         return [
