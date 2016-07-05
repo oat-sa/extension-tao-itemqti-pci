@@ -50,6 +50,9 @@ trait PortableElementModelTrait
         $this->model = $model;
     }
 
+    /**
+     * @return bool
+     */
     public function hasModel()
     {
         return !empty($this->model);
