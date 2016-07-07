@@ -21,7 +21,9 @@
 
 namespace oat\qtiItemPci\scripts\update;
 
+use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterPci;
+
 class Updater extends \common_ext_ExtensionUpdater
 {
     /**
@@ -47,6 +49,9 @@ class Updater extends \common_ext_ExtensionUpdater
 
             $registerPci = new RegisterPci();
             $registerPci([]);
+
+            $registerProvider = new RegisterClientProvider();
+            $registerProvider([]);
 
             $this->setVersion('0.2.0');
         }
