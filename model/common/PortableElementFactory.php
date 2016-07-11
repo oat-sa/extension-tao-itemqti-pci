@@ -138,7 +138,7 @@ class PortableElementFactory extends ConfigurableService
 
     /**
      * Get validator component associated to a model
-     * 
+     *
      * @param PortableElementModel $model
      * @return PortableElementModelValidator|PciValidator|PicValidator
      */

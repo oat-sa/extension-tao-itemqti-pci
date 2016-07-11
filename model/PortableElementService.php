@@ -31,6 +31,8 @@ class PortableElementService implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
+    const SERVICE_ID = 'qtiItemPci/service';
+
     /**
      * @var PortableElementRegistry[]
      */
