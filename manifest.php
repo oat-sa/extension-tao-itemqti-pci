@@ -21,6 +21,7 @@
 use oat\qtiItemPci\scripts\install\SetupPciRegistry;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 
 return array(
     'name' => 'qtiItemPci',
@@ -44,6 +45,7 @@ return array(
         'php'	=> array(
             SetupPciRegistry::class,
 			SetQtiCreatorConfig::class,
+			RegisterClientProvider::class,
 			RegisterPci::class
 		)
     ),
