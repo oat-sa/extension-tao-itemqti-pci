@@ -21,15 +21,14 @@
 
 namespace oat\qtiItemPci\test\model\common;
 
-use oat\qtiItemPci\model\common\model\PortableElementModel;
-use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
-use oat\qtiItemPci\model\common\PortableElementFactory;
-use oat\qtiItemPci\model\common\validator\PortableElementModelValidator;
-use oat\qtiItemPci\model\pci\model\PciModel;
-use oat\qtiItemPci\model\pci\validator\PciValidator;
-use oat\qtiItemPci\model\pic\model\PicModel;
-use oat\qtiItemPci\model\pic\validator\PicValidator;
 use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
+use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
+use oat\taoQtiItem\model\portableElement\common\validator\PortableElementModelValidator;
+use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
+use oat\taoQtiItem\model\portableElement\pci\validator\PciValidator;
+use oat\taoQtiItem\model\portableElement\pic\model\PicModel;
+use oat\taoQtiItem\model\portableElement\pic\validator\PicValidator;
 
 class PortableElementFactoryTest extends TaoPhpUnitTestRunner
 {

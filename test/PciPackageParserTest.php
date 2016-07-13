@@ -20,15 +20,9 @@
  */
 namespace oat\qtiItemPci\test;
 
-use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\common\model\PortableElementModel;
-use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
-use oat\qtiItemPci\model\pci\model\PciModel;
-use oat\qtiItemPci\model\PciPackageParser;
-use oat\qtiItemPci\model\PortableElementFactory;
-use oat\qtiItemPci\model\PortableElementRegistry;
-use oat\qtiItemPci\model\PortableElementService;
 use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\taoQtiItem\model\portableElement\common\parser\PortableElementPackageParser;
+use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
 
 class PciPackageParserTest extends TaoPhpUnitTestRunner
 {

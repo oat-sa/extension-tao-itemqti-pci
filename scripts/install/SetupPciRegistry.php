@@ -19,10 +19,9 @@
  */
 namespace oat\qtiItemPci\scripts\install;
 
-use oat\qtiItemPci\model\common\PortableElementFactory;
-use oat\qtiItemPci\model\PortableElementRegistry;
 use oat\tao\model\websource\TokenWebSource;
-use oat\oatbox\filesystem\FileSystemService;
+use oat\taoQtiItem\model\portableElement\PortableElementFileStorage;
+
 /*
  * This post-installation script creates a new local file source for file uploaded
  * by end-users through the TAO GUI.
@@ -31,42 +30,20 @@ class SetupPciRegistry extends \common_ext_action_InstallAction
 {
     public function __invoke($params)
     {
-        $pciPublicFs = \tao_models_classes_FileSourceService::singleton()->addLocalSource(
-            'pci storage',
-            FILES_PATH.'qtiItemPci'.DIRECTORY_SEPARATOR.'pciRegistry'.DIRECTORY_SEPARATOR
+        $fileStorage = \tao_models_classes_FileSourceService::singleton()->addLocalSource(
+            'portable element storage',
+            FILES_PATH.'qtiItemPci'.DIRECTORY_SEPARATOR.'portableElementRegistry'.DIRECTORY_SEPARATOR
         );
 
-        $picPublicFs = \tao_models_classes_FileSourceService::singleton()->addLocalSource(
-            'pic storage',
-            FILES_PATH.'qtiItemPci'.DIRECTORY_SEPARATOR.'picRegistry'.DIRECTORY_SEPARATOR
-        );
+        $websource = TokenWebSource::spawnWebsource($fileStorage);
 
-        $pciWebsource = $websource = TokenWebSource::spawnWebsource($pciPublicFs);
-        $picWebsource = $websource = TokenWebSource::spawnWebsource($picPublicFs);
-
-        $portableElementRegistries = new PortableElementFactory(array(
-            PortableElementFactory::PCI_IMPLEMENTATION => new PortableElementRegistry(array(
-                PortableElementRegistry::OPTION_FS => $pciPublicFs->getUri(),
-                PortableElementRegistry::OPTION_WEBSOURCE => $pciWebsource->getId(),
-                PortableElementRegistry::OPTION_STORAGE => 'qtiItemPci/pciRegistry',
-                PortableElementRegistry::OPTION_REGISTRY => 'pciRegistryEntries'
-            )),
-            PortableElementFactory::PIC_IMPLEMENTATION => new PortableElementRegistry(array(
-                PortableElementRegistry::OPTION_FS => $picPublicFs->getUri(),
-                PortableElementRegistry::OPTION_WEBSOURCE => $picWebsource->getId(),
-                PortableElementRegistry::OPTION_STORAGE => 'qtiItemPci/picRegistry',
-                PortableElementRegistry::OPTION_REGISTRY => 'picRegistryEntries'
-            ))
+        $portableElementStorage = new PortableElementFileStorage(array(
+            PortableElementFileStorage::OPTION_FILESYSTEM => $fileStorage->getUri(),
+            PortableElementFileStorage::OPTION_WEBSOURCE => $websource->getId()
         ));
 
-        $this->getServiceManager()->register(PortableElementFactory::SERVICE_ID, $portableElementRegistries);
+        $this->getServiceManager()->register(PortableElementFileStorage::SERVICE_ID, $portableElementStorage);
+
+        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Portable file storage registered.');
     }
-    
-    protected function setupFs()
-    {
-        $fsm = $this->getServiceManager()->get(FileSystemService::SERVICE_ID);
-        $fsm->registerLocalFileSystem('pciRegistry', FILES_PATH.'qtiItemPci'.DIRECTORY_SEPARATOR.'pciRegistry'.DIRECTORY_SEPARATOR);
-        $this->getServiceManager()->register(FileSystemService::SERVICE_ID, $fsm);
-    }
-    
 }

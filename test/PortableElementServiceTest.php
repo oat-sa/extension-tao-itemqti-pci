@@ -8,16 +8,16 @@
 
 namespace oat\qtiItemPci\test;
 
-
 use oat\oatbox\Configurable;
 use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\common\model\PortableElementModel;
-use oat\qtiItemPci\model\common\PortableElementFactory;
-use oat\qtiItemPci\model\pci\model\PciModel;
-use oat\qtiItemPci\model\pic\model\PicModel;
-use oat\qtiItemPci\model\PortableElementRegistry;
-use oat\qtiItemPci\model\PortableElementService;
+
 use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
+use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
+use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
+use oat\taoQtiItem\model\portableElement\pic\model\PicModel;
+use oat\taoQtiItem\model\portableElement\PortableElementRegistry;
+use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 class PortableElementServiceTest extends TaoPhpUnitTestRunner
 {
@@ -49,9 +49,7 @@ class PortableElementServiceTest extends TaoPhpUnitTestRunner
 
     protected function getRegistry(PortableElementModel $model)
     {
-        return ServiceManager::getServiceManager()
-            ->get(PortableElementFactory::SERVICE_ID)
-            ->getRegistry($model);
+        return new PortableElementRegistry($model);
     }
 
     /**

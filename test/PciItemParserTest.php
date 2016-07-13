@@ -22,8 +22,6 @@
 namespace oat\qtiItemPci\test;
 
 use oat\tao\test\TaoPhpUnitTestRunner;
-use oat\qtiItemPci\model\PciItemParser;
-
 
 class PciItemParserTest extends TaoPhpUnitTestRunner
 {
@@ -35,13 +33,5 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     public function setUp(){
         TaoPhpUnitTestRunner::initTest();
         \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
-    }
-    
-    public function testInit(){
-        
-        $qtiXmlFile = dirname(__FILE__).'/samples/pci/likert_simple/qti_2.xml';
-        $parser = new PciItemParser($qtiXmlFile);
-        
-        print_r($parser->getPciResources());
     }
 }

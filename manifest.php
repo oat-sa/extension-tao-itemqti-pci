@@ -46,7 +46,7 @@ return array(
             SetupPciRegistry::class,
 			SetQtiCreatorConfig::class,
 			RegisterClientProvider::class,
-			RegisterPci::class
+//			RegisterPci::class
 		)
     ),
     'uninstall' => array(

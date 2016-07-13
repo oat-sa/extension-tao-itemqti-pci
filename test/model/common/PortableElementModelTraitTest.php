@@ -21,9 +21,9 @@
 
 namespace oat\qtiItemPci\test\model\common;
 
-use oat\qtiItemPci\model\common\model\PortableElementModel;
-use oat\qtiItemPci\model\common\PortableElementModelTrait;
 use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
+use oat\taoQtiItem\model\portableElement\common\PortableElementModelTrait;
 
 class PortableElementModelTraitTest extends TaoPhpUnitTestRunner
 {

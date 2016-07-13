@@ -22,11 +22,11 @@
 namespace oat\qtiItemPci\test;
 
 use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\common\parser\PortableElementPackageParser;
-use oat\qtiItemPci\model\common\PortableElementFactory;
-use oat\qtiItemPci\model\pci\model\PciModel;
-use oat\qtiItemPci\model\PortableElementService;
 use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\taoQtiItem\model\portableElement\common\parser\PortableElementPackageParser;
+use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
+use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
+use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 
 class PciRegistryTest extends TaoPhpUnitTestRunner

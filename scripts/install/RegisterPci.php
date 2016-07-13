@@ -22,13 +22,12 @@ namespace oat\qtiItemPci\scripts\install;
 
 use common_ext_action_InstallAction;
 use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\PortableElementService;
+use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 class RegisterPci extends common_ext_action_InstallAction
 {
     public function __invoke($params)
     {
-
         $service = new PortableElementService();
         $service->setServiceLocator(ServiceManager::getServiceManager());
 
