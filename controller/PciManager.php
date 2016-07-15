@@ -20,9 +20,14 @@
 
 namespace oat\qtiItemPci\controller;
 
+use oat\taoQtiItem\model\portableElement\common\exception\PortableElementException;
+use oat\taoQtiItem\model\portableElement\common\exception\PortableElementInvalidModelException;
+use oat\taoQtiItem\model\portableElement\common\exception\PortableElementNotFoundException;
+use oat\taoQtiItem\model\portableElement\common\exception\PortableElementParserException;
 use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
 use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
 use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
+use oat\taoQtiItem\model\portableElement\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use \tao_helpers_Http;
 use \tao_actions_CommonModule;
@@ -34,10 +39,26 @@ class PciManager extends tao_actions_CommonModule
      */
     protected $registry = null;
 
+    public function __call($method, $arguments)
+    {
+        try {
+            $this->$method($arguments);
+        } catch (PortableElementNotFoundException $e) {
+            $this->returnJson($e->getMessage(), 404);
+        } catch (PortableElementException $e) {
+            $this->returnJson($e->getMessage(), 500);
+        }
+    }
+
+    protected function getDefaultModel()
+    {
+        return new PciModel();
+    }
+
     protected function getRegistry()
     {
         if(is_null($this->registry)){
-            $this->registry = PortableElementFactory::getRegistry(new PciModel());
+            $this->registry = PortableElementFactory::getRegistry($this->getDefaultModel());
         }
         return $this->registry;
     }
@@ -50,27 +71,11 @@ class PciManager extends tao_actions_CommonModule
         $returnValue = array();
 
         $all = $this->getRegistry()->getLatestCreators();
-        foreach($all as $pci){
-            $returnValue[$pci->getTypeIdentifier()] = $this->getListingData($pci);
+        foreach($all as $portableElement){
+            $returnValue[$portableElement->getTypeIdentifier()] = $this->getMinifiedModel($portableElement);
         }
 
         $this->returnJson($returnValue);
-    }
-
-    /**
-     * Remove security sensitive data to be sent to the client
-     *
-     * @param PortableElementModel $portableElement
-     * @return array
-     */
-    protected function getListingData(PortableElementModel $portableElement){
-        
-        $data = $portableElement->toArray(array('typeIdentifier', 'label', 'version'));
-        return [
-            'typeIdentifier' => $data['typeIdentifier'],
-            'label' => $data['label'],
-            'version' => $data['version']
-        ];
     }
 
     /**
@@ -81,39 +86,51 @@ class PciManager extends tao_actions_CommonModule
      *     "valid" : true/false (if is a valid package) 
      *     "exists" : true/false (if the package is valid, check if the typeIdentifier is already used in the registry)
      * }
+     *
+     * @throws PortableElementParserException
+     * @throws \oat\taoQtiItem\model\portableElement\common\exception\PortableElementInvalidModelException
      */
-    public function verify(){
-
+    public function verify()
+    {
         $result = array(
             'valid' => false,
             'exists' => false
         );
 
-        $file = tao_helpers_Http::getUploadedFile('content');
-        
-        $service = new PortableElementService();
-        $model = $service->getValidPortableElementFromZipSource($file['tmp_name']);
-        if(is_null($model)){
-            $result['package'] = [['message'=>__('invalid qti package')]];//@todo provides specific reason why it fails
-        }else{
+        try {
+            $file = tao_helpers_Http::getUploadedFile('content');
+        } catch (\common_exception_Error $e) {
+            throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
+        }
 
-            $result['valid'] = true;
-            $result['typeIdentifier'] = $model->getTypeIdentifier();
-            $result['label'] = $model->getLabel();
-            $result['version'] = $model->getVersion();
-            $result['exists'] = $this->getRegistry()->exists($model);
+        $service = PortableElementFactory::getService($this->getDefaultModel());
 
-            $all = $this->getRegistry()->getLatestCreators();
-            if(isset($all[$model->getTypeIdentifier()])){
-                $currentVersion = $all[$model->getTypeIdentifier()]->getVersion();
-                if(version_compare($model->getVersion(), $currentVersion, '<')){
-                    $result['package'] = [['message'=>__('a newer version of the pci "%s" already exists (current version: %s, target version: %s)', $id, $currentVersion, $targetVersion)]];
-                    $result['valid'] = false;
-                }
+        try {
+            $model = $service->getValidPortableElementFromZipSource($file['tmp_name']);
+        }  catch (PortableElementInvalidModelException $e) {
+            $result['package'] = [['message'=>__($e->getMessage())]];
+            $this->returnJson($result);
+            exit();
+        }
+
+        $result['exists'] = $this->getRegistry()->has($model);
+
+        $all = $this->getRegistry()->getLatestCreators();
+        if(isset($all[$model->getTypeIdentifier()])){
+            $currentVersion = $all[$model->getTypeIdentifier()]->getVersion();
+            if(version_compare($model->getVersion(), $currentVersion, '<')){
+                $result['package'] = [['message'=>__('A newer version of the pci "%s" already exists (current version: %s, target version: %s)', $id, $currentVersion, $targetVersion)]];
+                $result['valid'] = false;
+                $this->returnJson($result);
+                exit();
             }
         }
 
+        $result['valid'] = true;
+        array_merge($result, $model->toArray(array('typeIdentifier', 'label', 'version')));
+
         $this->returnJson($result);
+        exit();
     }
 
     /**
@@ -125,18 +142,15 @@ class PciManager extends tao_actions_CommonModule
         //as upload may be called multiple times, we remove the session lock as soon as possible
         session_write_close();
 
-        try{
-
+        try {
             $file = tao_helpers_Http::getUploadedFile('content');
-            $service = new PortableElementService();
-            $service->setServiceLocator($this->getServiceManager());
-            $portableElement = $service->import($file['tmp_name']);
-
-            $this->returnJson($this->getListingData($portableElement));
-
-        } catch(\common_Exception $e) {
-            $this->returnJson(array('error' => $e->getMessage()));
+        } catch(\common_exception_Error $e) {
+            throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
         }
+        $service = PortableElementFactory::getService($this->getDefaultModel());
+        $portableElement = $service->import($file['tmp_name']);
+
+        $this->returnJson($this->getMinifiedModel($portableElement));
     }
 
     /**
@@ -149,14 +163,13 @@ class PciManager extends tao_actions_CommonModule
 
         try{
             if (!$this->hasRequestParameter('typeIdentifier')) {
-                throw new \common_Exception('Type identifier parameter missing.');
+                throw new PortableElementException('Type identifier parameter missing.');
             }
 
-            $service = new PortableElementService();
-            $service->setServiceLocator($this->getServiceManager());
+            $service = PortableElementFactory::getService($this->getDefaultModel());
             $data = $service->export($this->getRequestParameter('typeIdentifier'));
 
-            $this->returnJson($this->filterInteractionData($data));
+            $this->returnJson($this->getMinifiedModel($data));
 
         } catch(\common_Exception $e) {
             $this->returnJson(array('error' => $e->getMessage()));
@@ -166,12 +179,20 @@ class PciManager extends tao_actions_CommonModule
     /**
      * Delete a custom interaction from the registry
      */
-    public function delete(){
-
+    public function delete()
+    {
+        if (!$this->hasRequestParameter('typeIdentifier')) {
+            throw new PortableElementException('Type identifier parameter missing.');
+        }
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
         $this->returnJson([
-            'success' => $this->getRegistry()->unregisterPortableElement($typeIdentifier)
+            'success' => $this->getRegistry()->unregister($typeIdentifier)
         ]);
+    }
+
+    protected function getMinifiedModel(PortableElementModel $model)
+    {
+        return $model->toArray(array('typeIdentifier', 'label', 'version'));
     }
 
 }

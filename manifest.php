@@ -18,10 +18,10 @@
  *               
  * 
  */               
-use oat\qtiItemPci\scripts\install\SetupPciRegistry;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
-use oat\qtiItemPci\scripts\install\RegisterPci;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
+use oat\qtiItemPci\scripts\install\SetupPortableElementRegistry;
+use oat\qtiItemPci\scripts\install\RegisterPortableElement;
 
 return array(
     'name' => 'qtiItemPci',
@@ -43,10 +43,10 @@ return array(
 		    dirname(__FILE__). '/install/ontology/role.rdf'
 		),
         'php'	=> array(
-            SetupPciRegistry::class,
+			SetupPortableElementRegistry::class,
 			SetQtiCreatorConfig::class,
 			RegisterClientProvider::class,
-//			RegisterPci::class
+			RegisterPortableElement::class
 		)
     ),
     'uninstall' => array(

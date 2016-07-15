@@ -26,7 +26,7 @@ use oat\taoQtiItem\model\portableElement\PortableElementFileStorage;
  * This post-installation script creates a new local file source for file uploaded
  * by end-users through the TAO GUI.
  */
-class SetupPciRegistry extends \common_ext_action_InstallAction
+class SetupPortableElementRegistry extends \common_ext_action_InstallAction
 {
     public function __invoke($params)
     {
