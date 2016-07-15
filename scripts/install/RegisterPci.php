@@ -38,6 +38,6 @@ class RegisterPci extends common_ext_action_InstallAction
         $service->registerFromDirectorySource($sourceLikertScale);
         $service->registerFromDirectorySource($sourceLiquid);
 
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Portable Element Plugins for Qti Creator added to Tao Qti Item extension');
+        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'PCI registered');
     }
 }

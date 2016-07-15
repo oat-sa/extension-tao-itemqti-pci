@@ -1,9 +1,8 @@
 define([
     'lodash',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'likertScaleInteraction/creator/widget/Widget',
     'tpl!likertScaleInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+], function(_, Widget, markupTpl){
 
     var _typeIdentifier = 'likertScaleInteraction';
 

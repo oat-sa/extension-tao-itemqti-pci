@@ -7,7 +7,7 @@ define([
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
-    'qtiItemPci/pciRegistry',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
     'async',
     'ui/dialog/confirm',
     'ui/deleter',
