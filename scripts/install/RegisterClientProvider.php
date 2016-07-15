@@ -21,13 +21,13 @@
 namespace oat\qtiItemPci\scripts\install;
 
 use common_ext_action_InstallAction;
-use oat\taoQtiItem\model\CiRegistryClientConfigRegistry;
+use oat\taoQtiItem\model\portableElement\clientConfigRegistry\CustomInteractionRegistry;
 
 class RegisterClientProvider extends common_ext_action_InstallAction
 {
     public function __invoke($params)
     {
-        CiRegistryClientConfigRegistry::getRegistry()->registerProvider('pciRegistry', 'qtiItemPci/pciProvider');
+        CustomInteractionRegistry::getRegistry()->registerProvider('pciRegistry', 'qtiItemPci/pciProvider');
         return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, '"qtiItemPci/pciProvider" PCI provider added');
     }
 }
