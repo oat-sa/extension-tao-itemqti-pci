@@ -21,8 +21,10 @@
 
 namespace oat\qtiItemPci\scripts\update;
 
+use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
-use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\SetupPortableElementRegistry;
+use oat\qtiItemPci\scripts\install\RegisterPortableElement;
 
 class Updater extends \common_ext_ExtensionUpdater
 {
@@ -47,11 +49,14 @@ class Updater extends \common_ext_ExtensionUpdater
             $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
 
-            $registerPci = new RegisterPci();
-            $registerPci([]);
-
-            $registerProvider = new RegisterClientProvider();
-            $registerProvider([]);
+            $setQtiCreatorConfig = new SetQtiCreatorConfig();
+            $setQtiCreatorConfig([]);
+            $registerClientProvider = new RegisterClientProvider();
+            $registerClientProvider([]);
+            $setupPortableElementRegistry = new SetupPortableElementRegistry();
+            $setupPortableElementRegistry([]);
+            $registerPortableElement = new RegisterPortableElement();
+            $registerPortableElement([]);
 
             $this->setVersion('0.2.0');
         }
