@@ -3,7 +3,7 @@
     "label": "Liquids",
     "short": "Liquids",
     "description": "A simple implementation of SBAC liquids.",
-    "version": "0.1",
+    "version": "0.2.0",
     "author": "Jérôme Bogaerts",
     "email": "jerome@taotesting.com",
     "tags": [
