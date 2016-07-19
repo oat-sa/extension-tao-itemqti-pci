@@ -15,7 +15,7 @@ define([
     var strategies = [{
             name : 'portableElementLocation',
             handle : function handlePortableElementLocation(url){
-                if(/likertScaleInteraction/.test(url.toString())){
+                if(/audioRecordingInteraction/.test(url.toString())){
                     return '../../../qtiItemPci/views/js/pciCreator/dev/' + url.toString();
                 }
             }
@@ -49,7 +49,7 @@ define([
                 assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
                 assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
                 assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
-                assert.equal($container.find('.qti-customInteraction .likertScaleInteraction').length, 1, 'the container contains a Point Line Graph interaction');
+                assert.equal($container.find('.qti-customInteraction .audioRecordingInteraction').length, 1, 'the container contains a Point Line Graph interaction');
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
 
                 QUnit.start();

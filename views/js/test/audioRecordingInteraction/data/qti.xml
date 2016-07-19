@@ -2,17 +2,17 @@
 <assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1468933495292658" title="audio pci 1" adaptive="false" timeDependent="false">
   <responseDeclaration cardinality="single" identifier="RESPONSE" baseType="integer"/>
   <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
-  <stylesheet href="likertScaleInteraction/runtime/css/likertScaleInteraction.css" title="" type="text/css" media="all"/>
+  <stylesheet href="audioRecordingInteraction/runtime/css/audioRecordingInteraction.css" title="" type="text/css" media="all"/>
   <itemBody>
     <div class="grid-row">
       <div class="col-12">
         <customInteraction responseIdentifier="RESPONSE">
-          <pci:portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteraction" hook="likertScaleInteraction/runtime/likertScaleInteraction.amd.js">
+          <pci:portableCustomInteraction customInteractionTypeIdentifier="audioRecordingInteraction" hook="audioRecordingInteraction/runtime/audioRecordingInteraction.amd.js">
             <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
             <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
               <pci:libraries>
                 <pci:lib id="IMSGlobal/jquery_2_1_1"/>
-                <pci:lib id="likertScaleInteraction/runtime/js/renderer"/>
+                <pci:lib id="audioRecordingInteraction/runtime/js/renderer"/>
               </pci:libraries>
             </pci:resources>
             <pci:properties>
@@ -21,7 +21,7 @@
               <pci:entry key="label-max">max</pci:entry>
             </pci:properties>
             <pci:markup>
-              <html5:div class="likertScaleInteraction">
+              <html5:div class="audioRecordingInteraction">
                 <html5:div class="prompt">
                   <html5:p>This is a sample likert scale interaction</html5:p>
                 </html5:div>

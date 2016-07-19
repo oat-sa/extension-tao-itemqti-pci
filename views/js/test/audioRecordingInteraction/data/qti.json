@@ -26,18 +26,18 @@
                     "relatedItem": "item_578e2959bfff3022885300"
                 },
                 "choices": {},
-                "typeIdentifier": "likertScaleInteraction",
-                "markup": "\n              <div class=\"likertScaleInteraction\">\n                <div class=\"prompt\">\n                  <p>This is a sample likert scale interaction<\/p>\n                <\/div>\n                <ul class=\"likert\"><\/ul>\n              <\/div>\n            ",
+                "typeIdentifier": "audioRecordingInteraction",
+                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\">\n                  <p>This is a sample likert scale interaction<\/p>\n                <\/div>\n                <ul class=\"likert\"><\/ul>\n              <\/div>\n            ",
                 "libraries": [
                     "IMSGlobal\/jquery_2_1_1",
-                    "likertScaleInteraction\/runtime\/js\/renderer"
+                    "audioRecordingInteraction\/runtime\/js\/renderer"
                 ],
                 "properties": {
                     "level": "5",
                     "label-min": "min",
                     "label-max": "max"
                 },
-                "entryPoint": "likertScaleInteraction\/runtime\/likertScaleInteraction.amd.js"
+                "entryPoint": "audioRecordingInteraction\/runtime\/audioRecordingInteraction.amd.js"
             }
         },
         "debug": {
@@ -63,7 +63,7 @@
             "serial": "stylesheet_578e2959c1299924961594",
             "qtiClass": "stylesheet",
             "attributes": {
-                "href": "likertScaleInteraction\/runtime\/css\/likertScaleInteraction.css",
+                "href": "audioRecordingInteraction\/runtime\/css\/audioRecordingInteraction.css",
                 "type": "text\/css",
                 "media": "all",
                 "title": ""

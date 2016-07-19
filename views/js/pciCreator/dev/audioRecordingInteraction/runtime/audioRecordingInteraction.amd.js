@@ -1,12 +1,12 @@
-define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
+define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'audioRecordingInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
 
-    var likertScaleInteraction = {
+    var audioRecordingInteraction = {
         id : -1,
         getTypeIdentifier : function(){
-            return 'likertScaleInteraction';
+            return 'audioRecordingInteraction';
         },
         /**
-         * Render the PCI : 
+         * Render the PCI :
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
@@ -35,7 +35,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} response
          */
@@ -49,7 +49,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         /**
          * Get the response in the json format described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object}
          */
@@ -63,7 +63,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
-         * 
+         *
          * @param {Object} interaction
          */
         resetResponse : function(){
@@ -74,9 +74,9 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         },
         /**
          * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains 
+         * After this function is executed, only the inital naked markup remains
          * Event listeners are removed and the state and the response are reset
-         * 
+         *
          * @param {Object} interaction
          */
         destroy : function(){
@@ -86,7 +86,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         },
         /**
          * Restore the state of the interaction from the serializedState.
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
@@ -96,7 +96,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object} json format
          */
@@ -106,5 +106,5 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         }
     };
 
-    qtiCustomInteractionContext.register(likertScaleInteraction);
+    qtiCustomInteractionContext.register(audioRecordingInteraction);
 });

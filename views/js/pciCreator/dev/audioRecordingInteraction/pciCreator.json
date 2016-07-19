@@ -1,27 +1,26 @@
 {
-    "typeIdentifier": "likertScaleInteraction",
-    "label": "Likert Scale",
-    "description": "A simple implementation of likert scale.",
+    "typeIdentifier": "audioRecordingInteraction",
+    "label": "Audio recording",
+    "description": "Allow test taker to record audio",
     "version": "0.1",
-    "author": "Sam Sipasseuth",
-    "email": "sam@taotesting.com",
+    "author": "Christophe Noël",
+    "email": "christophe@taotesting.com",
     "libraries": [
         "IMSGlobal/jquery_2_1_1",
         "./runtime/js/renderer"
     ],
     "css": [
-        "./runtime/css/likertScaleInteraction.css"
+        "./runtime/css/audioRecordingInteraction.css"
     ],
-    "entryPoint": "./runtime/likertScaleInteraction.amd.js",
+    "entryPoint": "./runtime/audioRecordingInteraction.amd.js",
     "tags": [
-        "mcq",
-        "likert"
+        "audio"
     ],
     "icon": "./creator/img/icon.svg",
-    "short": "Likert",
+    "short": "AudioRecording",
     "response": {
-        "baseType": "integer",
-        "cardinality": "single"
+        "baseType": "file",
+        "cardinality": "order"
     },
     "debug" : false
 }

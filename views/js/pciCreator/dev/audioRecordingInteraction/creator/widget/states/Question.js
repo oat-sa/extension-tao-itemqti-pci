@@ -4,12 +4,12 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
-    'tpl!likertScaleInteraction/creator/tpl/propertiesForm',
+    'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
 ], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){
 
-    var LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
+    var AudioRecordingInteractionStateQuestion = stateFactory.extend(Question, function(){
 
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt'),
@@ -42,7 +42,7 @@ define([
         containerEditor.destroy($prompt);
     });
 
-    LikertInteractionStateQuestion.prototype.initForm = function(){
+    AudioRecordingInteractionStateQuestion.prototype.initForm = function(){
 
         var _widget = this.widget,
             $form = _widget.$form,
@@ -76,7 +76,7 @@ define([
 
                 //update the pci property value:
                 interaction.prop('level', value);
-                
+
                 //trigger change event:
                 interaction.triggerPci('levelchange', [parseInt(value)]);
             },
@@ -88,5 +88,5 @@ define([
 
     };
 
-    return LikertInteractionStateQuestion;
+    return AudioRecordingInteractionStateQuestion;
 });
