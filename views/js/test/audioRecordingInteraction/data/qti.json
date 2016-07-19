@@ -1,9 +1,9 @@
 {
-    "identifier": "i1468933495292658",
-    "serial": "item_578e2959bfff3022885300",
+    "identifier": "i1468937518617364",
+    "serial": "item_578e354cdeb65851256864",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i1468933495292658",
+        "identifier": "i1468937518617364",
         "title": "audio pci 1",
         "label": "",
         "adaptive": false,
@@ -13,21 +13,21 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_578e2959bffd1277128484",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_578e2959c36a1476491189}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_578e354cdeb49244472541",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_578e354ce030f634274503}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_578e2959c36a1476491189": {
-                "serial": "interaction_portablecustominteraction_578e2959c36a1476491189",
+            "interaction_portablecustominteraction_578e354ce030f634274503": {
+                "serial": "interaction_portablecustominteraction_578e354ce030f634274503",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_578e2959bfff3022885300"
+                    "relatedItem": "item_578e354cdeb65851256864"
                 },
                 "choices": {},
                 "typeIdentifier": "audioRecordingInteraction",
-                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\">\n                  <p>This is a sample likert scale interaction<\/p>\n                <\/div>\n                <ul class=\"likert\"><\/ul>\n              <\/div>\n            ",
+                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <ul class=\"likert\"><\/ul>\n              <\/div>\n            ",
                 "libraries": [
                     "IMSGlobal\/jquery_2_1_1",
                     "audioRecordingInteraction\/runtime\/js\/renderer"
@@ -41,11 +41,11 @@
             }
         },
         "debug": {
-            "relatedItem": "item_578e2959bfff3022885300"
+            "relatedItem": "item_578e354cdeb65851256864"
         }
     },
     "debug": {
-        "relatedItem": "item_578e2959bfff3022885300"
+        "relatedItem": "item_578e354cdeb65851256864"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
@@ -59,8 +59,8 @@
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
     },
     "stylesheets": {
-        "stylesheet_578e2959c1299924961594": {
-            "serial": "stylesheet_578e2959c1299924961594",
+        "stylesheet_578e354cdf3bb031668640": {
+            "serial": "stylesheet_578e354cdf3bb031668640",
             "qtiClass": "stylesheet",
             "attributes": {
                 "href": "audioRecordingInteraction\/runtime\/css\/audioRecordingInteraction.css",
@@ -69,14 +69,14 @@
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_578e2959bfff3022885300"
+                "relatedItem": "item_578e354cdeb65851256864"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_578e2959c261a585130838": {
+        "outcomedeclaration_578e354cdfb95072284673": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_578e2959c261a585130838",
+            "serial": "outcomedeclaration_578e354cdfb95072284673",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -84,23 +84,23 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_578e2959bfff3022885300"
+                "relatedItem": "item_578e354cdeb65851256864"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_578e2959c1eaf044914093": {
+        "responsedeclaration_578e354cdf8e4032263218": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_578e2959c1eaf044914093",
+            "serial": "responsedeclaration_578e354cdf8e4032263218",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
-                "cardinality": "single",
-                "baseType": "integer"
+                "cardinality": "ordered",
+                "baseType": "file"
             },
             "debug": {
-                "relatedItem": "item_578e2959bfff3022885300"
+                "relatedItem": "item_578e354cdeb65851256864"
             },
             "mapping": [],
             "areaMapping": [],
@@ -114,11 +114,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_578e2959c4b1e708326443",
+        "serial": "response_templatesdriven_578e354ce0c8e025728187",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {
-            "relatedItem": "item_578e2959bfff3022885300"
+            "relatedItem": "item_578e354cdeb65851256864"
         },
         "processingType": "templateDriven",
         "responseRules": [

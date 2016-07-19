@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1468933495292658" title="audio pci 1" adaptive="false" timeDependent="false">
-  <responseDeclaration cardinality="single" identifier="RESPONSE" baseType="integer"/>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1468937518617364" title="audio pci 1" adaptive="false" timeDependent="false">
+  <responseDeclaration cardinality="ordered" identifier="RESPONSE" baseType="file"/>
   <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
   <stylesheet href="audioRecordingInteraction/runtime/css/audioRecordingInteraction.css" title="" type="text/css" media="all"/>
   <itemBody>
@@ -22,9 +22,7 @@
             </pci:properties>
             <pci:markup>
               <html5:div class="audioRecordingInteraction">
-                <html5:div class="prompt">
-                  <html5:p>This is a sample likert scale interaction</html5:p>
-                </html5:div>
+                <html5:div class="prompt"/>
                 <html5:ul class="likert"/>
               </html5:div>
             </pci:markup>

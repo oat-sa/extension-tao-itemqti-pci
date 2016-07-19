@@ -17,10 +17,10 @@
         "audio"
     ],
     "icon": "./creator/img/icon.svg",
-    "short": "AudioRecording",
+    "short": "Audio",
     "response": {
         "baseType": "file",
-        "cardinality": "order"
+        "cardinality": "ordered"
     },
     "debug" : false
 }
