@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1468937518617364" title="audio pci 1" adaptive="false" timeDependent="false">
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1469017297762182" title="audio pci 1" adaptive="false" timeDependent="false">
   <responseDeclaration cardinality="ordered" identifier="RESPONSE" baseType="file"/>
   <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
+  <stylesheet href="style/custom/tao-user-styles.css" title="" type="text/css" media="all"/>
   <stylesheet href="audioRecordingInteraction/runtime/css/audioRecordingInteraction.css" title="" type="text/css" media="all"/>
   <itemBody>
     <div class="grid-row">
@@ -23,7 +24,16 @@
             <pci:markup>
               <html5:div class="audioRecordingInteraction">
                 <html5:div class="prompt"/>
-                <html5:ul class="likert"/>
+                <html5:div class="audioRec">
+                  <html5:div class="recorder"/>
+                  <html5:div class="player"/>
+                  <html5:div class="video">
+                    <html5:video controls="controls"/>
+                  </html5:div>
+                  <html5:div class="audio">
+                    <html5:audio controls="controls"/>
+                  </html5:div>
+                </html5:div>
               </html5:div>
             </pci:markup>
           </pci:portableCustomInteraction>

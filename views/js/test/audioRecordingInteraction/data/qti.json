@@ -1,9 +1,9 @@
 {
-    "identifier": "i1468937518617364",
-    "serial": "item_578e354cdeb65851256864",
+    "identifier": "i1469017297762182",
+    "serial": "item_578f6d48bba4f381362389",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i1468937518617364",
+        "identifier": "i1469017297762182",
         "title": "audio pci 1",
         "label": "",
         "adaptive": false,
@@ -13,21 +13,21 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_578e354cdeb49244472541",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_578e354ce030f634274503}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_578f6d48bba32464326508",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_578f6d48c092e616520536}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_578e354ce030f634274503": {
-                "serial": "interaction_portablecustominteraction_578e354ce030f634274503",
+            "interaction_portablecustominteraction_578f6d48c092e616520536": {
+                "serial": "interaction_portablecustominteraction_578f6d48c092e616520536",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_578e354cdeb65851256864"
+                    "relatedItem": "item_578f6d48bba4f381362389"
                 },
                 "choices": {},
                 "typeIdentifier": "audioRecordingInteraction",
-                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <ul class=\"likert\"><\/ul>\n              <\/div>\n            ",
+                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audioRec\">\n                  <div class=\"recorder\"><\/div>\n                  <div class=\"player\"><\/div>\n                  <div class=\"video\">\n                    <video controls=\"controls\"><\/video>\n                  <\/div>\n                  <div class=\"audio\">\n                    <audio controls=\"controls\"><\/audio>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
                 "libraries": [
                     "IMSGlobal\/jquery_2_1_1",
                     "audioRecordingInteraction\/runtime\/js\/renderer"
@@ -41,11 +41,11 @@
             }
         },
         "debug": {
-            "relatedItem": "item_578e354cdeb65851256864"
+            "relatedItem": "item_578f6d48bba4f381362389"
         }
     },
     "debug": {
-        "relatedItem": "item_578e354cdeb65851256864"
+        "relatedItem": "item_578f6d48bba4f381362389"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
@@ -59,8 +59,21 @@
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
     },
     "stylesheets": {
-        "stylesheet_578e354cdf3bb031668640": {
-            "serial": "stylesheet_578e354cdf3bb031668640",
+        "stylesheet_578f6d48bd584279233965": {
+            "serial": "stylesheet_578f6d48bd584279233965",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "style\/custom\/tao-user-styles.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_578f6d48bba4f381362389"
+            }
+        },
+        "stylesheet_578f6d48bdf95442966169": {
+            "serial": "stylesheet_578f6d48bdf95442966169",
             "qtiClass": "stylesheet",
             "attributes": {
                 "href": "audioRecordingInteraction\/runtime\/css\/audioRecordingInteraction.css",
@@ -69,14 +82,14 @@
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_578e354cdeb65851256864"
+                "relatedItem": "item_578f6d48bba4f381362389"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_578e354cdfb95072284673": {
+        "outcomedeclaration_578f6d48bf253625289948": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_578e354cdfb95072284673",
+            "serial": "outcomedeclaration_578f6d48bf253625289948",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -84,15 +97,15 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_578e354cdeb65851256864"
+                "relatedItem": "item_578f6d48bba4f381362389"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_578e354cdf8e4032263218": {
+        "responsedeclaration_578f6d48be651744509511": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_578e354cdf8e4032263218",
+            "serial": "responsedeclaration_578f6d48be651744509511",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -100,7 +113,7 @@
                 "baseType": "file"
             },
             "debug": {
-                "relatedItem": "item_578e354cdeb65851256864"
+                "relatedItem": "item_578f6d48bba4f381362389"
             },
             "mapping": [],
             "areaMapping": [],
@@ -114,11 +127,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_578e354ce0c8e025728187",
+        "serial": "response_templatesdriven_578f6d48c244b907274753",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {
-            "relatedItem": "item_578e354cdeb65851256864"
+            "relatedItem": "item_578f6d48bba4f381362389"
         },
         "processingType": "templateDriven",
         "responseRules": [
