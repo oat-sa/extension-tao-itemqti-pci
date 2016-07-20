@@ -1,4 +1,10 @@
-define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'audioRecordingInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
+define([
+    'qtiCustomInteractionContext',
+    'IMSGlobal/jquery_2_1_1',
+    'audioRecordingInteraction/runtime/js/renderer',
+    'OAT/util/event'
+], function(qtiCustomInteractionContext, $, renderer, event){
+    'use strict';
 
     var audioRecordingInteraction = {
         id : -1,
