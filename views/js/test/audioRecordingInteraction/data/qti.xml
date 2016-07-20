@@ -27,9 +27,6 @@
                 <html5:div class="audioRec">
                   <html5:div class="recorder"/>
                   <html5:div class="player"/>
-                  <html5:div class="video">
-                    <html5:video controls="controls"/>
-                  </html5:div>
                   <html5:div class="audio">
                     <html5:audio controls="controls"/>
                   </html5:div>

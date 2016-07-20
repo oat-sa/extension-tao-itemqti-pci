@@ -73,27 +73,25 @@ define([
 // define other variables
 
             var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            var video = document.querySelector('video');
+            var audio = document.querySelector('audio');
 
 // getUserMedia block - grab stream
 // put it into a MediaStreamAudioSourceNode
-// also output the visuals into a video element
 
             if (navigator.getUserMedia) {
                 console.log('getUserMedia supported.');
                 navigator.getUserMedia (
                     // constraints: audio and video for this app
                     {
-                        audio: true,
-                        video: true
+                        audio: true
                     },
 
                     // Success callback
                     function(stream) {
-                        video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
-                        video.onloadedmetadata = function(e) {
-                            video.play();
-                            video.muted = 'true';
+                        audio.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+                        audio.onloadedmetadata = function(e) {
+                            audio.play();
+                            audio.muted = 'true';
                         };
 
                         // Create a MediaStreamAudioSourceNode
