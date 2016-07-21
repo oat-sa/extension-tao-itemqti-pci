@@ -34,7 +34,7 @@ define([
         }
     });
 
-    /* */
+    /* * /
 
     QUnit.asyncTest('renders correctly', function (assert){
 
