@@ -80,10 +80,10 @@ define([
                     var browser = 'FF';
                     var encoder = 'MSR';
 
-                    var profile = { id: 'OGG-OPUS-32',  mimeType: 'audio/ogg; codecs=opus', bitrate: 32000 };
+                    // var profile = { id: 'OGG-OPUS-32',  mimeType: 'audio/ogg; codecs=opus', bitrate: 32000 };
                     // var profile = { id: 'OGG-32',       mimeType: 'audio/ogg',              bitrate: 32000 };
                     // var profile = { id: 'WEBM-32',      mimeType: 'audio/webm',             bitrate: 32000 };
-                    // var profile = { id: 'WAV-32',      mimeType: 'audio/wav',             bitrate: 32000 };
+                    var profile = { id: 'WAV-32',      mimeType: 'audio/wav',             bitrate: 32000 };
 
 
                     // audio.onloadedmetadata = function(e) {
@@ -94,7 +94,7 @@ define([
                     // Standard mediaRecorder way:
                     // ===========================
 
-                    /* */
+                    /* * /
                     var options = {
                         audioBitsPerSecond : profile.bitrate,
                         mimeType : profile.mimeType
@@ -113,15 +113,13 @@ define([
 
 
 
-                    /* * /
+                    /* */
                     // mediaRecorder kind-of-polyfill way:
                     // ====================================
 
                     var mediaRecorder = new MediaStreamRecorder(stream);
-                    mediaRecorder.mimeType = mimeType;
+                    mediaRecorder.mimeType = profile.mimeType;
                     mediaRecorder.ondataavailable = function (blob) {
-                        console.log("on data available");
-                        // POST/PUT "Blob" using FormData/XHR2
                         stopRecord(blob);
                     };
                     /* */
