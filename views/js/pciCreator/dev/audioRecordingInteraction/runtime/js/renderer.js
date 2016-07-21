@@ -1,6 +1,7 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/util/html',
+    // todo: conditionnally get this for Edge?
     'audioRecordingInteraction/runtime/js/MediaStreamRecorder'
     //todo: check if Promise polyfill is needed ?
 ], function($, html, MediaStreamRecorder){
@@ -76,6 +77,14 @@ define([
             // put it into a MediaStreamAudioSourceNode
             navigator.mediaDevices.getUserMedia ({ audio: true })
                 .then(function(stream) {
+                    var browser = 'FF';
+                    var encoder = 'MSR';
+
+                    var profile = { id: 'OGG-OPUS-32',  mimeType: 'audio/ogg; codecs=opus', bitrate: 32000 };
+                    // var profile = { id: 'OGG-32',       mimeType: 'audio/ogg',              bitrate: 32000 };
+                    // var profile = { id: 'WEBM-32',      mimeType: 'audio/webm',             bitrate: 32000 };
+                    // var profile = { id: 'WAV-32',      mimeType: 'audio/wav',             bitrate: 32000 };
+
 
                     // audio.onloadedmetadata = function(e) {
                     //     audio.play();
@@ -85,33 +94,37 @@ define([
                     // Standard mediaRecorder way:
                     // ===========================
 
-                    /*
-                    var mediaRecorder = new MediaRecorder(stream);
+                    /* */
+                    var options = {
+                        audioBitsPerSecond : profile.bitrate,
+                        mimeType : profile.mimeType
+                    };
+                    var mediaRecorder = new MediaRecorder(stream, options);
 
                     // console.dir(MediaRecorder);
                     // console.dir(MediaRecorder.canRecordMimeType('audio/ogg'));
 
                     // mediaRecorder.mimeType = 'audio/wav';
                     mediaRecorder.ondataavailable = function (blob) {
-                        // POST/PUT "Blob" using FormData/XHR2
-                        var blobURL = URL.createObjectURL(blob.data);
-                        // audio.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
-                        audio.src = blobURL;
+                    //todo: how do we set mimeType here ?
+                        stopRecord(blob.data);
                     };
-                    */
+                    /* */
 
+
+
+                    /* * /
                     // mediaRecorder kind-of-polyfill way:
                     // ====================================
 
                     var mediaRecorder = new MediaStreamRecorder(stream);
-                    mediaRecorder.mimeType = 'audio/webm';
+                    mediaRecorder.mimeType = mimeType;
                     mediaRecorder.ondataavailable = function (blob) {
+                        console.log("on data available");
                         // POST/PUT "Blob" using FormData/XHR2
-                        var blobURL = URL.createObjectURL(blob);
-                        // audio.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
-                        audio.src = blobURL;
+                        stopRecord(blob);
                     };
-
+                    /* */
 
                     // handlers
                     // ==========
@@ -121,17 +134,51 @@ define([
                         // This parameter takes a value of milliseconds, and represents the length of media capture to return in each Blob.
                         // If it is not specified, all media captured will be returned in a single Blob,
                         // unless one or more calls are made to MediaRecorder.requestData.
-                        // mediaRecorder.start(3000);
-                        mediaRecorder.start(15000);
+                        var timeSlice = 10000;
+                        mediaRecorder.start(timeSlice);
+                        // mediaRecorder.start();
                     });
 
-                    $stopButton.on('click', function stopRecord() {
+                    $stopButton.on('click', function stopRecording() {
+                        stopRecord();
+                    });
+
+                    function stopRecord(blob) {
                         mediaRecorder.stop();
-                    });
+                        if (blob) {
+                            var blobURL = URL.createObjectURL(blob);
+                            audio.src = blobURL;
+                            // mediaRecorder.save();
 
+                            var downloadLink = document.createElement('a');
+                            document.body.appendChild(downloadLink);
+                            downloadLink.text =
+                                'download ' + profile.id + ' - ' + blob.type + ' : ' + Math.round((blob.size / 1000)) + 'KB';
+                            downloadLink.download =
+                                browser + ' - ' +
+                                encoder + ' - ' +
+                                profile.id + ' - ' + Date.now() +
+                                '.' + blob.type.split('/')[1];
+                            downloadLink.href = blobURL;
+                        }
+                    }
 
+                    /* * /
+                    (function checkSupportedMimeTypes(mediaRecorder) {
+                        var mimeTypes = [
+                            'audio/wav',
+                            'audio/webm',
+                            'audio/ogg'
+                        ];
 
-
+                        mimeTypes.forEach(function(type) {
+                            var $p = $('p', {
+                                text: type + ' = ' + mediaRecorder.canRecordMimeType(type)
+                            });
+                            $playerContainer.append($p);
+                        });
+                    }(mediaRecorder));
+                    /* */
 
 
                     // Web audio API
