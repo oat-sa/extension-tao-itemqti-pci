@@ -2,9 +2,10 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/util/html',
     // todo: conditionnally get this for Edge?
-    'audioRecordingInteraction/runtime/js/MediaStreamRecorder'
+    'audioRecordingInteraction/runtime/js/MediaStreamRecorder',
+    'audioRecordingInteraction/runtime/js/war/WebAudioRecorder'
     //todo: check if Promise polyfill is needed ?
-], function($, html, MediaStreamRecorder){
+], function($, html, MediaStreamRecorder, WebAudioRecorder){
     'use strict';
 
     // from https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/blob/master/mediaDevices-getUserMedia-polyfill.js
@@ -68,9 +69,10 @@ define([
             $recorderContainer.append($startButton);
             $recorderContainer.append($stopButton);
 
-            var browser = 'EDGE';
-            var encoder = 'MR';
+            var browser = 'FF'; // FF, CHROME, EDGE
+            var encoder = 'WAR'; // MR, MSR, WAR
 
+            // Media Recorder Profiles
             // var profile = { id: 'WEBM-OPUS-32',   mimeType: 'audio/webm;codecs=opus',   bitrate: 32000 };
             // var profile = { id: 'WEBM-VORBIS-32', mimeType: 'audio/webm;codecs=vorbis', bitrate: 32000 };
             var profile = { id: 'WEBM-32',        mimeType: 'audio/webm',               bitrate: 32000 };
@@ -134,99 +136,107 @@ define([
                     }
                     /* */
 
-                    // handlers
-                    // ==========
-                    $startButton.on('click', function record() {
 
-                        // timeslice Optional
-                        // This parameter takes a value of milliseconds, and represents the length of media capture to return in each Blob.
-                        // If it is not specified, all media captured will be returned in a single Blob,
-                        // unless one or more calls are made to MediaRecorder.requestData.
-                        var timeSlice = 10000;
-                        mediaRecorder.start(timeSlice);
-                        // mediaRecorder.start();
-                    });
 
-                    $stopButton.on('click', function stopRecording() {
-                        stopRecord();
-                    });
+                    if (typeof mediaRecorder !== "undefined") {
 
-                    function stopRecord(blob) {
-                        mediaRecorder.stop();
-                        if (blob) {
-                            var blobURL = URL.createObjectURL(blob);
-                            audio.src = blobURL;
-                            // mediaRecorder.save();
+                        // handlers
+                        // ==========
+                        $startButton.on('click', function record() {
 
-                            var downloadLink = document.createElement('a');
-                            document.body.appendChild(downloadLink);
-                            downloadLink.text =
-                                'download ' + profile.id + ' - ' + blob.type + ' : ' + Math.round((blob.size / 1000)) + 'KB';
-                            downloadLink.download =
-                                browser + ' - ' +
-                                encoder + ' - ' +
-                                profile.id + ' - ' + Date.now() +
-                                '.' + blob.type.split('/')[1];
-                            downloadLink.href = blobURL;
+                            // timeslice Optional
+                            // This parameter takes a value of milliseconds, and represents the length of media capture to return in each Blob.
+                            // If it is not specified, all media captured will be returned in a single Blob,
+                            // unless one or more calls are made to MediaRecorder.requestData.
+                            var timeSlice = 10000;
+                            mediaRecorder.start(timeSlice);
+                            // mediaRecorder.start();
+                        });
+
+                        $stopButton.on('click', function stopRecording() {
+                            stopRecord();
+                        });
+
+                        function stopRecord(blob) {
+                            mediaRecorder.stop();
+                            if (blob) {
+                                var blobURL = URL.createObjectURL(blob);
+                                audio.src = blobURL;
+                                // mediaRecorder.save();
+
+                                var downloadLink = document.createElement('a');
+                                document.body.appendChild(downloadLink);
+                                downloadLink.text =
+                                    'download ' + profile.id + ' - ' + blob.type + ' : ' + Math.round((blob.size / 1000)) + 'KB';
+                                downloadLink.download =
+                                    browser + ' - ' +
+                                    encoder + ' - ' +
+                                    profile.id + ' - ' + Date.now() +
+                                    '.' + blob.type.split('/')[1];
+                                downloadLink.href = blobURL;
+                            }
                         }
-                    }
 
-                    var isTypeSupported = 'false';
-                    if (typeof MediaRecorder !== "undefined" && typeof MediaRecorder.isTypeSupported === "function") {
-                        isTypeSupported = 'true';
-                    }
-                    $('<p>', {
-                        text: 'isTypeSupported = ' + isTypeSupported
-                    }).appendTo($playerContainer);
+                        var isTypeSupported = 'false';
+                        if (typeof MediaRecorder !== "undefined" && typeof MediaRecorder.isTypeSupported === "function") {
+                            isTypeSupported = 'true';
+                        }
+                        $('<p>', {
+                            text: 'isTypeSupported = ' + isTypeSupported
+                        }).appendTo($playerContainer);
 
-                    var canRecordMimeType = 'false';
-                    if (typeof MediaRecorder !== "undefined"  && typeof MediaRecorder.canRecordMimeType === "function") {
-                        canRecordMimeType = 'true';
-                    }
-                    $('<p>', {
-                        text: 'canRecordMimeType = ' + canRecordMimeType
-                    }).appendTo($playerContainer);
+                        var canRecordMimeType = 'false';
+                        if (typeof MediaRecorder !== "undefined" && typeof MediaRecorder.canRecordMimeType === "function") {
+                            canRecordMimeType = 'true';
+                        }
+                        $('<p>', {
+                            text: 'canRecordMimeType = ' + canRecordMimeType
+                        }).appendTo($playerContainer);
 
 
-                    /* */
-                    if (isTypeSupported === 'true') {
-                        (function checkSupportedMimeTypes() {
-                            var mimeTypes = [
-                                'audio/webm;codecs=opus',
-                                'audio/webm;codecs=vorbis',
-                                'audio/webm',
-                                'audio/ogg;codecs=opus',
-                                'audio/ogg',
-                                'audio/wav'
-                            ];
+                        /* */
+                        if (isTypeSupported === 'true') {
+                            (function checkSupportedMimeTypes() {
+                                var mimeTypes = [
+                                    'audio/webm;codecs=opus',
+                                    'audio/webm;codecs=vorbis',
+                                    'audio/webm',
+                                    'audio/ogg;codecs=opus',
+                                    'audio/ogg',
+                                    'audio/wav'
+                                ];
 
-                            mimeTypes.forEach(function(type) {
-                                var $p = $('<p>', {
-                                    text: type + ' = ' + MediaRecorder.isTypeSupported(type)
+                                mimeTypes.forEach(function (type) {
+                                    var $p = $('<p>', {
+                                        text: type + ' = ' + MediaRecorder.isTypeSupported(type)
+                                    });
+                                    $('body').append($p);
                                 });
-                                $('body').append($p);
-                            });
-                        }());
+                            }());
+                        }
+                        /* */
                     }
-                    /* */
 
+                    if (encoder === 'WAR') {
+                        console.dir(WebAudioRecorder);
 
-                    // Web audio API
-                    // ===========================
+                        // Web audio API
+                        // ===========================
 
-                    // Create a MediaStreamAudioSourceNode
-                    // Feed the HTMLMediaElement into it
-                    // var source = audioCtx.createMediaStreamSource(stream);
+                        // Create a MediaStreamAudioSourceNode
+                        // Feed the HTMLMediaElement into it
+                        // var source = audioCtx.createMediaStreamSource(stream);
 
-                    // todo: read this from parameters
-                    // var recorder = audioCtx.createScriptProcessor(4096, 1, 1);
-                    //
-                    // recorder.onaudioprocess = function(e) {
-                    // };
+                        // todo: read this from parameters
+                        // var recorder = audioCtx.createScriptProcessor(4096, 1, 1);
+                        //
+                        // recorder.onaudioprocess = function(e) {
+                        // };
 
-                    // connect the AudioBufferSourceNode to the destination
-                    // source.connect(recorder);
-                    // recorder.connect(audioCtx.destination);
+                        // connect the AudioBufferSourceNode to the destination
+                        // source.connect(recorder);
+                        // recorder.connect(audioCtx.destination);
+                    }
 
                 })
                 .catch(function(err) {
