@@ -75,10 +75,13 @@ define([
             // Media Recorder Profiles
             // var profile = { id: 'WEBM-OPUS-32',   mimeType: 'audio/webm;codecs=opus',   bitrate: 32000 };
             // var profile = { id: 'WEBM-VORBIS-32', mimeType: 'audio/webm;codecs=vorbis', bitrate: 32000 };
-            var profile = { id: 'WEBM-32',        mimeType: 'audio/webm',               bitrate: 32000 };
+            // var profile = { id: 'WEBM-32',        mimeType: 'audio/webm',               bitrate: 32000 };
             // var profile = { id: 'OGG-OPUS-32',    mimeType: 'audio/ogg;codecs=opus',    bitrate: 32000 };
             // var profile = { id: 'OGG-32',         mimeType: 'audio/ogg',                bitrate: 32000 };
             // var profile = { id: 'WAV-32',         mimeType: 'audio/wav',                bitrate: 32000 };
+
+            // Web Audio Recorder Profiles
+            var profile = { id: 'WAV-DEFAULT',    mimeType: 'audio/wav',                bitrate: 32000 };
 
             $('<p>', {
                 text: browser + ' - ' + encoder + ' - ' + profile.id
@@ -86,7 +89,6 @@ define([
 
             // example
 
-            // var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             var audio = document.querySelector('audio');
 
             // getUserMedia block - grab stream
@@ -117,8 +119,8 @@ define([
 
                         // mediaRecorder.mimeType = 'audio/wav';
                         mediaRecorder.ondataavailable = function (blob) {
-                        //todo: how do we set mimeType here ?
-                            stopRecord(blob.data);
+                            mediaRecorder.stop();
+                            endRecording(blob);
                         };
                     }
                     /* */
@@ -131,7 +133,8 @@ define([
                         mediaRecorder = new MediaStreamRecorder(stream);
                         mediaRecorder.mimeType = profile.mimeType;
                         mediaRecorder.ondataavailable = function (blob) {
-                            stopRecord(blob);
+                            mediaRecorder.stop();
+                            endRecording(blob);
                         };
                     }
                     /* */
@@ -154,28 +157,8 @@ define([
                         });
 
                         $stopButton.on('click', function stopRecording() {
-                            stopRecord();
-                        });
-
-                        function stopRecord(blob) {
                             mediaRecorder.stop();
-                            if (blob) {
-                                var blobURL = URL.createObjectURL(blob);
-                                audio.src = blobURL;
-                                // mediaRecorder.save();
-
-                                var downloadLink = document.createElement('a');
-                                document.body.appendChild(downloadLink);
-                                downloadLink.text =
-                                    'download ' + profile.id + ' - ' + blob.type + ' : ' + Math.round((blob.size / 1000)) + 'KB';
-                                downloadLink.download =
-                                    browser + ' - ' +
-                                    encoder + ' - ' +
-                                    profile.id + ' - ' + Date.now() +
-                                    '.' + blob.type.split('/')[1];
-                                downloadLink.href = blobURL;
-                            }
-                        }
+                        });
 
                         var isTypeSupported = 'false';
                         if (typeof MediaRecorder !== "undefined" && typeof MediaRecorder.isTypeSupported === "function") {
@@ -218,14 +201,13 @@ define([
                     }
 
                     if (encoder === 'WAR') {
-                        console.dir(WebAudioRecorder);
-
                         // Web audio API
                         // ===========================
 
                         // Create a MediaStreamAudioSourceNode
                         // Feed the HTMLMediaElement into it
-                        // var source = audioCtx.createMediaStreamSource(stream);
+                        var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        var audioSource = audioCtx.createMediaStreamSource(stream);
 
                         // todo: read this from parameters
                         // var recorder = audioCtx.createScriptProcessor(4096, 1, 1);
@@ -236,6 +218,45 @@ define([
                         // connect the AudioBufferSourceNode to the destination
                         // source.connect(recorder);
                         // recorder.connect(audioCtx.destination);
+                        var warConfig = {
+                            workerDir: '/qtiItemPci/views/js/pciCreator/dev/audioRecordingInteraction/runtime/js/war/',
+                            numChannels: 2,
+                            encoding: 'wav',
+                            options: {
+                                timeLimit: 10
+                            }
+                        };
+                        var recorder = new WebAudioRecorder(audioSource, warConfig);
+                        // handlers
+                        // ==========
+                        $startButton.on('click', function record() {
+
+                            recorder.startRecording();
+                        });
+
+                        $stopButton.on('click', function stopRecording() {
+                            recorder.finishRecording();
+                        });
+
+                        recorder.onComplete = function(recorder, blob) {
+                            endRecording(blob);
+                        };
+                    }
+
+                    function endRecording(blob) {
+                        var blobURL = URL.createObjectURL(blob);
+                        audio.src = blobURL;
+
+                        var downloadLink = document.createElement('a');
+                        document.body.appendChild(downloadLink);
+                        downloadLink.text =
+                            'download ' + profile.id + ' - ' + blob.type + ' : ' + Math.round((blob.size / 1000)) + 'KB';
+                        downloadLink.download =
+                            browser + ' - ' +
+                            encoder + ' - ' +
+                            profile.id + ' - ' + Date.now() +
+                            '.' + blob.type.split('/')[1];
+                        downloadLink.href = blobURL;
                     }
 
                 })
@@ -243,6 +264,7 @@ define([
                     console.log('The following gUM error occured: ');
                     console.dir(err);
                 });
+
 
 
 
