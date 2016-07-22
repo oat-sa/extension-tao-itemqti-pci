@@ -68,6 +68,20 @@ define([
             $recorderContainer.append($startButton);
             $recorderContainer.append($stopButton);
 
+            var browser = 'EDGE';
+            var encoder = 'MR';
+
+            // var profile = { id: 'WEBM-OPUS-32',   mimeType: 'audio/webm;codecs=opus',   bitrate: 32000 };
+            // var profile = { id: 'WEBM-VORBIS-32', mimeType: 'audio/webm;codecs=vorbis', bitrate: 32000 };
+            var profile = { id: 'WEBM-32',        mimeType: 'audio/webm',               bitrate: 32000 };
+            // var profile = { id: 'OGG-OPUS-32',    mimeType: 'audio/ogg;codecs=opus',    bitrate: 32000 };
+            // var profile = { id: 'OGG-32',         mimeType: 'audio/ogg',                bitrate: 32000 };
+            // var profile = { id: 'WAV-32',         mimeType: 'audio/wav',                bitrate: 32000 };
+
+            $('<p>', {
+                text: browser + ' - ' + encoder + ' - ' + profile.id
+            }).appendTo($playerContainer);
+
             // example
 
             // var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -77,14 +91,8 @@ define([
             // put it into a MediaStreamAudioSourceNode
             navigator.mediaDevices.getUserMedia ({ audio: true })
                 .then(function(stream) {
-                    var browser = 'FF';
-                    var encoder = 'MSR';
 
-                    // var profile = { id: 'OGG-OPUS-32',  mimeType: 'audio/ogg; codecs=opus', bitrate: 32000 };
-                    // var profile = { id: 'OGG-32',       mimeType: 'audio/ogg',              bitrate: 32000 };
-                    // var profile = { id: 'WEBM-32',      mimeType: 'audio/webm',             bitrate: 32000 };
-                    var profile = { id: 'WAV-32',      mimeType: 'audio/wav',             bitrate: 32000 };
-
+                    var mediaRecorder;
 
                     // audio.onloadedmetadata = function(e) {
                     //     audio.play();
@@ -94,34 +102,36 @@ define([
                     // Standard mediaRecorder way:
                     // ===========================
 
-                    /* * /
-                    var options = {
-                        audioBitsPerSecond : profile.bitrate,
-                        mimeType : profile.mimeType
-                    };
-                    var mediaRecorder = new MediaRecorder(stream, options);
+                    /* */
+                    if (encoder === 'MR') {
+                        var options = {
+                            audioBitsPerSecond : profile.bitrate,
+                            mimeType : profile.mimeType
+                        };
+                        mediaRecorder = new MediaRecorder(stream, options);
 
-                    // console.dir(MediaRecorder);
-                    // console.dir(MediaRecorder.canRecordMimeType('audio/ogg'));
+                        // console.dir(MediaRecorder);
+                        // console.dir(MediaRecorder.canRecordMimeType('audio/ogg'));
 
-                    // mediaRecorder.mimeType = 'audio/wav';
-                    mediaRecorder.ondataavailable = function (blob) {
-                    //todo: how do we set mimeType here ?
-                        stopRecord(blob.data);
-                    };
+                        // mediaRecorder.mimeType = 'audio/wav';
+                        mediaRecorder.ondataavailable = function (blob) {
+                        //todo: how do we set mimeType here ?
+                            stopRecord(blob.data);
+                        };
+                    }
                     /* */
 
-
-
                     /* */
-                    // mediaRecorder kind-of-polyfill way:
-                    // ====================================
+                    if (encoder === 'MSR') {
+                        // mediaRecorder kind-of-polyfill way:
+                        // ====================================
 
-                    var mediaRecorder = new MediaStreamRecorder(stream);
-                    mediaRecorder.mimeType = profile.mimeType;
-                    mediaRecorder.ondataavailable = function (blob) {
-                        stopRecord(blob);
-                    };
+                        mediaRecorder = new MediaStreamRecorder(stream);
+                        mediaRecorder.mimeType = profile.mimeType;
+                        mediaRecorder.ondataavailable = function (blob) {
+                            stopRecord(blob);
+                        };
+                    }
                     /* */
 
                     // handlers
@@ -161,21 +171,43 @@ define([
                         }
                     }
 
-                    /* * /
-                    (function checkSupportedMimeTypes(mediaRecorder) {
-                        var mimeTypes = [
-                            'audio/wav',
-                            'audio/webm',
-                            'audio/ogg'
-                        ];
+                    var isTypeSupported = 'false';
+                    if (typeof MediaRecorder !== "undefined" && typeof MediaRecorder.isTypeSupported === "function") {
+                        isTypeSupported = 'true';
+                    }
+                    $('<p>', {
+                        text: 'isTypeSupported = ' + isTypeSupported
+                    }).appendTo($playerContainer);
 
-                        mimeTypes.forEach(function(type) {
-                            var $p = $('p', {
-                                text: type + ' = ' + mediaRecorder.canRecordMimeType(type)
+                    var canRecordMimeType = 'false';
+                    if (typeof MediaRecorder !== "undefined"  && typeof MediaRecorder.canRecordMimeType === "function") {
+                        canRecordMimeType = 'true';
+                    }
+                    $('<p>', {
+                        text: 'canRecordMimeType = ' + canRecordMimeType
+                    }).appendTo($playerContainer);
+
+
+                    /* */
+                    if (isTypeSupported === 'true') {
+                        (function checkSupportedMimeTypes() {
+                            var mimeTypes = [
+                                'audio/webm;codecs=opus',
+                                'audio/webm;codecs=vorbis',
+                                'audio/webm',
+                                'audio/ogg;codecs=opus',
+                                'audio/ogg',
+                                'audio/wav'
+                            ];
+
+                            mimeTypes.forEach(function(type) {
+                                var $p = $('<p>', {
+                                    text: type + ' = ' + MediaRecorder.isTypeSupported(type)
+                                });
+                                $('body').append($p);
                             });
-                            $playerContainer.append($p);
-                        });
-                    }(mediaRecorder));
+                        }());
+                    }
                     /* */
 
 
