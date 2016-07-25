@@ -20,7 +20,7 @@
     "short": "Audio",
     "response": {
         "baseType": "file",
-        "cardinality": "ordered"
+        "cardinality": "single"
     },
     "debug" : false
 }

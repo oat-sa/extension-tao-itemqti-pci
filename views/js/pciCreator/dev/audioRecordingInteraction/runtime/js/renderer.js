@@ -1,59 +1,23 @@
 define([
     'IMSGlobal/jquery_2_1_1',
-    'OAT/util/html',
-    // todo: conditionnally get this for Edge?
-    'audioRecordingInteraction/runtime/js/MediaStreamRecorder',
-    'audioRecordingInteraction/runtime/js/war/WebAudioRecorder'
-    //todo: check if Promise polyfill is needed ?
-], function($, html, MediaStreamRecorder, WebAudioRecorder){
+    'OAT/util/html'
+    // todo: remove related files
+    // 'audioRecordingInteraction/runtime/js/MediaStreamRecorder',
+    // 'audioRecordingInteraction/runtime/js/war/WebAudioRecorder'
+
+], function($, html) {
     'use strict';
 
+    var _response = {};
 
-
-
-    // from https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/blob/master/mediaDevices-getUserMedia-polyfill.js
-    (function() {
-
-        var promisifiedOldGUM = function(constraints, successCallback, errorCallback) {
-
-            // First get ahold of getUserMedia, if present
-            var getUserMedia = (navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia ||
-            navigator.msGetUserMedia);
-
-            // Some browsers just don't implement it - return a rejected promise with an error
-            // to keep a consistent interface
-            if(!getUserMedia) {
-                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-            }
-
-            // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-            return new Promise(function(successCallback, errorCallback) {
-                getUserMedia.call(navigator, constraints, successCallback, errorCallback);
-            });
-
-        }
-
-        // Older browsers might not implement mediaDevices at all, so we set an empty object first
-        if(navigator.mediaDevices === undefined) {
-            navigator.mediaDevices = {};
-        }
-
-        // Some browsers partially implement mediaDevices. We can't just assign an object
-        // with getUserMedia as it would overwrite existing properties.
-        // Here, we will just add the getUserMedia property if it's missing.
-        if(navigator.mediaDevices.getUserMedia === undefined) {
-            navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
-        }
-
-    }());
-
-
-
+    setGetUserMedia();
 
 
     return {
+        getResponse : function getResponse() {
+            return _response;
+        },
+
         render : function(id, container, config){
 
             var $container = $(container);
@@ -83,20 +47,20 @@ define([
             }
 
             var browser = getBrowser();
-            var encoder = 'WAR'; // MR, MSR, WAR
+            var encoder = 'MR'; // MR, MSR, WAR
 
             // Media Recorder Profiles
             // var profile = { id: 'WEBM-OPUS-32',   mimeType: 'audio/webm;codecs=opus',   bitrate: 32000 };
             // var profile = { id: 'WEBM-VORBIS-32', mimeType: 'audio/webm;codecs=vorbis', bitrate: 32000 };
             // var profile = { id: 'WEBM-32',        mimeType: 'audio/webm',               bitrate: 32000 };
-            // var profile = { id: 'OGG-OPUS-32',    mimeType: 'audio/ogg;codecs=opus',    bitrate: 32000 };
+            var profile = { id: 'OGG-OPUS-32',    mimeType: 'audio/ogg;codecs=opus',    bitrate: 32000 };
             // var profile = { id: 'OGG-32',         mimeType: 'audio/ogg',                bitrate: 32000 };
             // var profile = { id: 'WAV-32',         mimeType: 'audio/wav',                bitrate: 32000 };
 
             // Web Audio Recorder Profiles
             // var profile = { id: 'WAV-DEFAULT', channels: 2, codec: 'wav', bitrate: 0 };
             // var profile = { id: 'MP3-32-STEREO', channels: 2, codec: 'mp3', bitrate: 32 };
-            var profile = { id: 'OGG-32-MONO', channels: 1, codec: 'ogg', bitrate: -0.1 };
+            // var profile = { id: 'OGG-32-MONO', channels: 1, codec: 'ogg', bitrate: -0.1 };
             // var profile = { id: 'OGG-160-STEREO', channels: 1, codec: 'ogg', bitrate: 5 };
 
             $('<p>', {
@@ -113,6 +77,7 @@ define([
                 .then(function(stream) {
 
                     var mediaRecorder;
+                    console.log('here');
 
                     // audio.onloadedmetadata = function(e) {
                     //     audio.play();
@@ -135,8 +100,9 @@ define([
 
                         // mediaRecorder.mimeType = 'audio/wav';
                         mediaRecorder.ondataavailable = function (blob) {
-                            mediaRecorder.stop();
-                            endRecording(blob);
+                            // mediaRecorder.stop();
+                            setStateFinished();
+                            endRecording(blob.data);
                         };
                     }
                     /* */
@@ -150,6 +116,7 @@ define([
                         mediaRecorder.mimeType = profile.mimeType;
                         mediaRecorder.ondataavailable = function (blob) {
                             mediaRecorder.stop();
+                            setStateFinished();
                             endRecording(blob);
                         };
                     }
@@ -157,7 +124,7 @@ define([
 
 
 
-                    if (typeof mediaRecorder !== "undefined") {
+                    // if (typeof mediaRecorder !== "undefined") {
 
                         // handlers
                         // ==========
@@ -168,12 +135,15 @@ define([
                             // If it is not specified, all media captured will be returned in a single Blob,
                             // unless one or more calls are made to MediaRecorder.requestData.
                             var timeSlice = 10000;
+                            // console.dir(mediaRecorder);
                             mediaRecorder.start(timeSlice);
+                            setStateRecording();
                             // mediaRecorder.start();
                         });
 
                         $stopButton.on('click', function stopRecording() {
                             mediaRecorder.stop();
+                            setStateFinished();
                         });
 
                         var isTypeSupported = 'false';
@@ -214,7 +184,7 @@ define([
                             }());
                         }
                         /* */
-                    }
+                    // }
 
                     if (encoder === 'WAR') {
                         // Web audio API
@@ -284,6 +254,39 @@ define([
                             profile.id + ' - ' + Date.now() +
                             '.' + blob.type.split('/')[1];
                         downloadLink.href = blobURL;
+
+                        var reader = new FileReader();
+                        reader.readAsDataURL(blob);
+
+                        reader.onloadend = function onLoadEnd(e) {
+                            var filename = 'audioRecording' + Date.now() +
+                                '.' + blob.type.split('/')[1];
+
+                            var base64Data = e.target.result;
+                            var commaPosition = base64Data.indexOf(',');
+                            var base64Raw = base64Data.substring(commaPosition + 1);
+
+                            // Store the base64 encoded data for later use.
+
+                            _response = {"base": {"file": {"data": base64Raw, "mime": blob.type, "name": filename}}};
+
+                            console.dir(_response);
+                        };
+                        // var base64Raw = base64Data;
+                        //
+                        // var commaPosition = base64Data.indexOf(',');
+                        // var base64Raw = base64Data.substring(commaPosition + 1);
+                        // _response = {"base": {"file": {"data": base64Raw, "mime": blob.type, "name": filename}}};
+
+                        // from file upload interaction
+                        /*
+                        var base64Data = e.target.result;
+                        var commaPosition = base64Data.indexOf(',');
+
+                        // Store the base64 encoded data for later use.
+
+                        _response = {"base": {"file": {"data": base64Raw, "mime": filetype, "name": filename}}};
+                        */
                     }
 
                     var $recordingState = $('<p>', {
@@ -329,4 +332,46 @@ define([
         //     renderChoices(id, $(container), config);
         // }
     };
+
+
+    //todo: check licence or rewrite
+    // MediaDevices.getUserMedia polyfill
+    // https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
+    // Mozilla Public License, version 2.0
+    function setGetUserMedia() {
+
+        var promisifiedOldGUM = function(constraints, successCallback, errorCallback) {
+
+            // First get ahold of getUserMedia, if present
+            var getUserMedia = (navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia);
+
+            // Some browsers just don't implement it - return a rejected promise with an error
+            // to keep a consistent interface
+            if(!getUserMedia) {
+                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+            }
+
+            // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+            return new Promise(function(successCallback, errorCallback) {
+                getUserMedia.call(navigator, constraints, successCallback, errorCallback);
+            });
+
+        };
+
+        // Older browsers might not implement mediaDevices at all, so we set an empty object first
+        if(navigator.mediaDevices === undefined) {
+            navigator.mediaDevices = {};
+        }
+
+        // Some browsers partially implement mediaDevices. We can't just assign an object
+        // with getUserMedia as it would overwrite existing properties.
+        // Here, we will just add the getUserMedia property if it's missing.
+        if(navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
+        }
+    }
+
 });

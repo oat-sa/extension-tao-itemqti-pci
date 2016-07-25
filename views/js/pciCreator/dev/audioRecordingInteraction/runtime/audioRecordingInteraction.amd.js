@@ -33,10 +33,10 @@ define([
             qtiCustomInteractionContext.notifyReady(this);
 
             //listening to dynamic configuration change
-            this.on('levelchange', function(level){
-                _this.config.level = level;
-                renderer.renderChoices(_this.id, _this.dom, _this.config);
-            });
+            // this.on('levelchange', function(level){
+            //     _this.config.level = level;
+            //     renderer.renderChoices(_this.id, _this.dom, _this.config);
+            // });
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -46,7 +46,7 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-
+            //todo: implement this
             var $container = $(this.dom),
                 value = response && response.base ? parseInt(response.base.integer) : -1;
 
@@ -61,10 +61,8 @@ define([
          */
         getResponse : function(){
 
-            var $container = $(this.dom),
-                value = parseInt($container.find('input:checked').val()) || 0;
-
-            return {base : {integer : value}};
+            //todo: implement this properly ;-)
+            return renderer.getResponse();
         },
         /**
          * Remove the current response set in the interaction
@@ -73,7 +71,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse : function(){
-
+            //todo: implement this
             var $container = $(this.dom);
 
             $container.find('input').prop('checked', false);
