@@ -27,3 +27,49 @@
 .qti-customInteraction .audioRecordingInteraction .likert-label {min-width:90px; color: #444;}
 .qti-customInteraction .audioRecordingInteraction .likert-label-min {text-align: right;}
 .qti-customInteraction .audioRecordingInteraction .likert-label-max {text-align: left;}
+
+/* NEW */
+
+.qti-customInteraction .audioRecordingInteraction .audiorec-control {
+    margin: 10px 10px 10px 0;
+    border-radius: 3px;
+    font-size: 14px !important;
+    cursor: pointer;
+    text-decoration: none !important;
+    vertical-align: middle;
+    outline: 0;
+    overflow: visible;
+    border: none;
+    display: inline-block;
+    line-height: 2.5;
+    padding: 0 15px;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+    height: 35px;
+}
+
+.qti-customInteraction .audioRecordingInteraction .audiorec-control.disabled {
+    background-color: #afb4bb;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.8) !important;
+    cursor: not-allowed !important;
+    opacity: .55 !important;
+    color: #000 !important;
+}
+
+.qti-customInteraction .audioRecordingInteraction .audiorec-control.enabled {
+    background-color: #266d9c;
+    color: #fff;
+    text-shadow: 1px 1px 0 #0b4a74;
+    cursor: pointer !important;
+}
+.qti-customInteraction .audioRecordingInteraction .audiorec-control.enabled:hover {
+    opacity: 0.85;
+}
+
+.qti-customInteraction .audioRecordingInteraction .audiorec-control {
+    background-color: #202142;
+    color: #fff;
+    text-shadow: 1px 1px 0 #15152b;
+    cursor: not-allowed !important;
+}

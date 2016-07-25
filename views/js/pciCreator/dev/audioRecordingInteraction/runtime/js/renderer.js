@@ -1,26 +1,33 @@
 define([
     'IMSGlobal/jquery_2_1_1',
-    'OAT/util/html'
+    'OAT/util/html',
+    'tpl!audioRecordingInteraction/runtime/tpl/control'
+
     // todo: remove related files
     // 'audioRecordingInteraction/runtime/js/MediaStreamRecorder',
     // 'audioRecordingInteraction/runtime/js/war/WebAudioRecorder'
 
-], function($, html) {
+], function($, html, controlTpl) {
     'use strict';
 
     var _response = {};
 
     setGetUserMedia();
 
-
     return {
         getResponse : function getResponse() {
             return _response;
         },
 
-        render : function(id, container, config){
+        render : function(id, container, config) {
 
             var $container = $(container);
+
+            var controls = {},
+                $controlsContainer = $container.find('.audioRec > .controls');
+
+
+            initializeControls();
 
             var $recorderContainer = $container.find('.audioRec > .recorder');
             var $playerContainer = $container.find('.audioRec > .player');
@@ -77,7 +84,6 @@ define([
                 .then(function(stream) {
 
                     var mediaRecorder;
-                    console.log('here');
 
                     // audio.onloadedmetadata = function(e) {
                     //     audio.play();
@@ -318,12 +324,94 @@ define([
 
 
 
+            function initializeControls() {
+                controls.record = newControl({
+                    defaultState: 'enabled',
+                    label: 'record',
+                    // icon: 'radio-bg',
+                    display: true,
+                    container: $controlsContainer,
+                    onclick: function onclick() {
+                        // startRecording();
+                    }
+                });
+
+                controls.stop = newControl({
+                    defaultState: 'disabled',
+                    label: 'stop',
+                    // icon: 'stop',
+                    display: true,
+                    container: $controlsContainer,
+                    onclick: function onclick() {
+                        // stopRecording();
+                    }
+                });
+
+                controls.play = newControl({
+                    defaultState: 'active',
+                    label: 'play',
+                    // icon: 'play',
+                    display: true,
+                    container: $controlsContainer,
+                    onclick: function onclick() {
+                        // playRecording();
+                    }
+                });
+
+                controls.stop = newControl({
+                    defaultState: 'disabled',
+                    label: 'reset',
+                    // icon: 'loop',
+                    display: true,
+                    container: $controlsContainer,
+                    onclick: function onclick() {
+                        // resetRecording();
+                    }
+                });
+
+            }
+
+            /**
+             * //todo: add jsdoc
+             * @param options
+             * @returns {{enable: enable, disable: disable, activate: activate}}
+             */
+            function newControl(options) {
+                var state;
+                var $control = $(controlTpl({
+                    label: options.label
+                }));
+                $control.on('click', function onRecord() {
+                    if (state === 'enabled') {
+                        options.onclick();
+                    }
+                });
+                if (options.display === true) {
+                    $control.appendTo(options.container);
+                }
+                setState(options.defaultState || 'enabled');
+
+                function setState(newState) {
+                    state = newState;
+                    $control.removeClass('disabled', 'enabled', 'active');
+                    $control.addClass(newState);
+                }
+
+                return {
+                    enable: function() {
+                        setState('enabled');
+                    },
+                    disable: function() {
+                        setState('disabled');
+                    },
+                    activate: function() {
+                        setState('active');
+                    }
+                };
+            }
 
 
-
-
-
-                //render rich text content in prompt
+            //render rich text content in prompt
             html.render($container.find('.prompt'));
 
         }
