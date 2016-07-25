@@ -8,6 +8,9 @@ define([
 ], function($, html, MediaStreamRecorder, WebAudioRecorder){
     'use strict';
 
+
+
+
     // from https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/blob/master/mediaDevices-getUserMedia-polyfill.js
     (function() {
 
@@ -69,7 +72,17 @@ define([
             $recorderContainer.append($startButton);
             $recorderContainer.append($stopButton);
 
-            var browser = 'FF'; // FF, CHROME, EDGE
+            function getBrowser() {
+                if (navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveBlob || !!navigator.msSaveOrOpenBlob)) {
+                    return 'EDGE';
+                }
+                if (!!navigator.webkitGetUserMedia) {
+                    return 'CHROME';
+                }
+                return 'FF';
+            }
+
+            var browser = getBrowser();
             var encoder = 'WAR'; // MR, MSR, WAR
 
             // Media Recorder Profiles
@@ -81,7 +94,10 @@ define([
             // var profile = { id: 'WAV-32',         mimeType: 'audio/wav',                bitrate: 32000 };
 
             // Web Audio Recorder Profiles
-            var profile = { id: 'WAV-DEFAULT',    mimeType: 'audio/wav',                bitrate: 32000 };
+            // var profile = { id: 'WAV-DEFAULT', channels: 2, codec: 'wav', bitrate: 0 };
+            // var profile = { id: 'MP3-32-STEREO', channels: 2, codec: 'mp3', bitrate: 32 };
+            var profile = { id: 'OGG-32-MONO', channels: 1, codec: 'ogg', bitrate: -0.1 };
+            // var profile = { id: 'OGG-160-STEREO', channels: 1, codec: 'ogg', bitrate: 5 };
 
             $('<p>', {
                 text: browser + ' - ' + encoder + ' - ' + profile.id
@@ -209,7 +225,6 @@ define([
                         var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                         var audioSource = audioCtx.createMediaStreamSource(stream);
 
-                        // todo: read this from parameters
                         // var recorder = audioCtx.createScriptProcessor(4096, 1, 1);
                         //
                         // recorder.onaudioprocess = function(e) {
@@ -220,25 +235,37 @@ define([
                         // recorder.connect(audioCtx.destination);
                         var warConfig = {
                             workerDir: '/qtiItemPci/views/js/pciCreator/dev/audioRecordingInteraction/runtime/js/war/',
-                            numChannels: 2,
-                            encoding: 'wav',
+                            numChannels: profile.channels,
+                            encoding: profile.codec,
+                            encodeAfterRecord: true,
                             options: {
-                                timeLimit: 10
+                                timeLimit: 10,
+                                mp3: {
+                                    quality: profile.bitrate,
+                                    mimeType: 'audio/mpeg'
+                                },
+                                ogg: {
+                                    bitrate: profile.bitrate,
+                                    mimeType: 'audio/ogg'
+                                }
                             }
                         };
                         var recorder = new WebAudioRecorder(audioSource, warConfig);
                         // handlers
                         // ==========
                         $startButton.on('click', function record() {
-
+                            setStateRecording();
                             recorder.startRecording();
+
                         });
 
                         $stopButton.on('click', function stopRecording() {
+                            setStateFinished();
                             recorder.finishRecording();
                         });
 
                         recorder.onComplete = function(recorder, blob) {
+                            setStateFinished();
                             endRecording(blob);
                         };
                     }
@@ -257,6 +284,19 @@ define([
                             profile.id + ' - ' + Date.now() +
                             '.' + blob.type.split('/')[1];
                         downloadLink.href = blobURL;
+                    }
+
+                    var $recordingState = $('<p>', {
+                        text: 'idle'
+                    });
+                    $playerContainer.after($recordingState);
+
+                    function setStateRecording() {
+                        $recordingState.text('recording...');
+                    }
+
+                    function setStateFinished() {
+                        $recordingState.text('stopped');
                     }
 
                 })
