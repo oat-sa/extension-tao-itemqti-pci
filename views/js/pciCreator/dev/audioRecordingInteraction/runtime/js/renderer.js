@@ -95,6 +95,11 @@ define([
                     stop: function() {
                         audioEl.pause();
                         audioEl.currentTime = 0;
+                    },
+
+                    unload: function() {
+                        audioEl = undefined;
+                        this.state = playerStates.INACTIVE;
                     }
                 };
             }
@@ -120,13 +125,8 @@ define([
                         player.load(blobUrl);
                     };
 
-                    player.onready = function() {
-                        updateControls();
-                    };
-
-                    player.onplaying = function() {
-                        updateControls();
-                    };
+                    player.onready = updateControls;
+                    player.onplaying = updateControls;
 
                     function startRecording() {
                         recorder.start();
@@ -148,6 +148,10 @@ define([
                         updateControls();
                     }
 
+                    function resetRecording() {
+                        player.unload();
+                        updateControls();
+                    }
 
 
 
@@ -249,7 +253,7 @@ define([
                             display: true,
                             container: $controlsContainer,
                             onclick: function onclick() {
-                                // resetRecording();
+                                resetRecording();
                             },
                             updateState: function updateState() {
                                 if (player.state === playerStates.READY) {
