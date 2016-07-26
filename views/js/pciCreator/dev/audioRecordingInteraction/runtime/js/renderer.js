@@ -10,11 +10,12 @@ define([
 ], function($, html, controlTpl) {
     'use strict';
 
-    var _response = {};
+    // recording as Blob
+    var _recording;
 
     return {
-        getResponse : function getResponse() {
-            return _response;
+        getRecording: function() {
+            return _recording;
         },
 
         /**
@@ -53,76 +54,21 @@ define([
                 PAUSED: 'paused'
             };
 
-            function playerFactory() {
-                var audioEl;
-
-                return {
-                    state: playerStates.INACTIVE,
-
-                    load: function(url) {
-                        var self = this;
-
-                        audioEl = new Audio(url);
-
-                        // this handle both the 'ready to play' state, and the user pressing the stop button
-                        audioEl.oncanplay = function() {
-                            self.state = playerStates.READY;
-                            if (self.onready) {
-                                self.onready();
-                            }
-                        };
-
-                        audioEl.onplaying = function() {
-                            self.state = playerStates.PLAYING;
-                            if (self.onplaying) {
-                                self.onplaying();
-                            }
-                        };
-
-                        // this handle the case when playbacks end without user pressing the stop button
-                        audioEl.onended = function() {
-                            self.state = playerStates.READY;
-                            if (self.onready) {
-                                self.onready();
-                            }
-                        };
-                    },
-
-                    play: function() {
-                        audioEl.play();
-                    },
-
-                    stop: function() {
-                        audioEl.pause();
-                        audioEl.currentTime = 0;
-                    },
-
-                    unload: function() {
-                        audioEl = undefined;
-                        this.state = playerStates.INACTIVE;
-                    }
-                };
-            }
-
-
-
             setGetUserMedia();
             navigator.mediaDevices.getUserMedia ({ audio: true })
                 .then(function(stream) {
                     return recorderFactory(stream, options);
                 })
                 .then(function(recorder) {
-
                     var player = playerFactory();
-
-                    initializeControls();
 
                     recorder.ondataavailable = function(e) {
                         // todo: add checks on createObjectURL ?
-                        var blob = e.data;
-                        var blobUrl = URL.createObjectURL(blob);
+                        var recording = e.data,
+                            recordingUrl = URL.createObjectURL(_recording);
 
-                        player.load(blobUrl);
+                        player.load(recordingUrl);
+                        setRecording(recording);
                     };
 
                     player.onready = updateControls;
@@ -150,41 +96,41 @@ define([
 
                     function resetRecording() {
                         player.unload();
+                        setRecording();
                         updateControls();
                     }
 
 
-
-/*
-                    function endRecording(blob) {
-                        var blobURL = URL.createObjectURL(blob);
-
-                        var downloadLink = document.createElement('a');
-                        document.body.appendChild(downloadLink);
-                        downloadLink.text =
-                            'download '  + ' - ' + blob.type + ' : ' + Math.round((blob.size / 1000)) + 'KB';
-                        downloadLink.download =
-                            ' filename ' + Date.now() +
-                            '.' + blob.type.split('/')[1];
-                        downloadLink.href = blobURL;
-
+                    function setRecording(blob) {
+                        if (! blob) {
+                            _recording = undefined;
+                            return;
+                        }
+                        //todo: implement a spinner or something to feedback that work is in progress while this is happening
                         var reader = new FileReader();
                         reader.readAsDataURL(blob);
 
                         reader.onloadend = function onLoadEnd(e) {
+                            //fixme: this doesn't seem to work always well, along with mimeType.
+                            // Set this at the pci level during media recoder init?
                             var filename = 'audioRecording' + Date.now() +
                                 '.' + blob.type.split('/')[1];
 
-                            var base64Data = e.target.result;
-                            var commaPosition = base64Data.indexOf(',');
-                            var base64Raw = base64Data.substring(commaPosition + 1);
-
-                            // Store the base64 encoded data for later use.
-
-                            _response = {"base": {"file": {"data": base64Raw, "mime": blob.type, "name": filename}}};
+                            _recording = {
+                                data: e.target.result,
+                                mime: blob.type,
+                                name: filename
+                            };
                         };
                     }
-*/
+
+                    function createDownloadLink(url) {
+                        var downloadLink = document.createElement('a');
+                        document.body.appendChild(downloadLink);
+                        downloadLink.text = 'download ';
+                        downloadLink.download = ' filename ' + Date.now();
+                        downloadLink.href = url;
+                    }
 
                     function initializeControls() {
                         controls.record = controlFactory({
@@ -317,24 +263,72 @@ define([
                     }
 
 
+                    // interaction initialisation
+                    initializeControls();
+
+
                 })
                 .catch(function(err) {
                     throw err;
                 });
 
-
-
             //render rich text content in prompt
             html.render($container.find('.prompt'));
-
         }
-        // ,
-        // renderChoices : function(id, container, config){
-        //     renderChoices(id, $(container), config);
-        // }
     };
 
 
+
+    function playerFactory() {
+        var audioEl;
+
+        return {
+            state: playerStates.INACTIVE,
+
+            load: function(url) {
+                var self = this;
+
+                audioEl = new Audio(url);
+
+                // this handle both the 'ready to play' state, and the user pressing the stop button
+                audioEl.oncanplay = function() {
+                    self.state = playerStates.READY;
+                    if (self.onready) {
+                        self.onready();
+                    }
+                };
+
+                audioEl.onplaying = function() {
+                    self.state = playerStates.PLAYING;
+                    if (self.onplaying) {
+                        self.onplaying();
+                    }
+                };
+
+                // this handle the case when playbacks end without user pressing the stop button
+                audioEl.onended = function() {
+                    self.state = playerStates.READY;
+                    if (self.onready) {
+                        self.onready();
+                    }
+                };
+            },
+
+            play: function() {
+                audioEl.play();
+            },
+
+            stop: function() {
+                audioEl.pause();
+                audioEl.currentTime = 0;
+            },
+
+            unload: function() {
+                audioEl = undefined;
+                this.state = playerStates.INACTIVE;
+            }
+        };
+    }
 
 
     /**
