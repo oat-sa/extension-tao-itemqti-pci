@@ -31,7 +31,8 @@ define([
             var controls = {},
                 $controlsContainer = $container.find('.audioRec > .controls');
 
-            config = _.defaults(config, {
+            //todo: lodash shouldn't be there !
+            var options = _.defaults(config, {
                 audioBitrate: 20000,
                 allowPlayback: true,
                 autostart: false,
@@ -63,16 +64,27 @@ define([
 
                         audioEl = new Audio(url);
 
-                        audioEl.onloadend = function() {
+                        // this handle both the 'ready to play' state, and the user pressing the stop button
+                        audioEl.oncanplay = function() {
                             self.state = playerStates.READY;
+                            if (self.onready) {
+                                self.onready();
+                            }
                         };
 
-                        audioEl.onplay = function() {
+                        audioEl.onplaying = function() {
                             self.state = playerStates.PLAYING;
+                            if (self.onplaying) {
+                                self.onplaying();
+                            }
                         };
 
-                        audioEl.onend = function() {
+                        // this handle the case when playbacks end without user pressing the stop button
+                        audioEl.onended = function() {
                             self.state = playerStates.READY;
+                            if (self.onready) {
+                                self.onready();
+                            }
                         };
                     },
 
@@ -92,7 +104,7 @@ define([
             setGetUserMedia();
             navigator.mediaDevices.getUserMedia ({ audio: true })
                 .then(function(stream) {
-                    return recorderFactory(stream, config);
+                    return recorderFactory(stream, options);
                 })
                 .then(function(recorder) {
 
@@ -105,55 +117,41 @@ define([
                         var blob = e.data;
                         var blobUrl = URL.createObjectURL(blob);
 
-                        controls.record.disable();
-                        controls.stop.disable();
-                        controls.play.enable();
-                        controls.reset.enable();
-
-                        endRecording(e.data);
                         player.load(blobUrl);
                     };
 
-                    function startRecording() {
-                        controls.record.activate();
-                        controls.stop.enable();
-                        controls.play.disable();
-                        controls.reset.disable();
+                    player.onready = function() {
+                        updateControls();
+                    };
 
+                    player.onplaying = function() {
+                        updateControls();
+                    };
+
+                    function startRecording() {
                         recorder.start();
+                        updateControls();
                     }
 
                     function stopRecordingOrPlayback() {
-
                         if (recorder.state === recorderStates.RECORDING) {
-                            controls.record.disable();
-                            controls.stop.disable();
-                            controls.play.disable();
-                            controls.reset.disable();
-
                             recorder.stop();
 
                         } else if (player.state === playerStates.PLAYING) {
-                            controls.record.disable();
-                            controls.stop.disable();
-                            controls.play.enable();
-                            controls.reset.enable();
-
                             player.stop();
                         }
+                        updateControls();
                     }
 
                     function playRecording() {
-                        controls.record.disable();
-                        controls.stop.enable();
-                        controls.play.activate();
-                        controls.reset.disable();
-
                         player.play();
+                        updateControls();
                     }
 
 
 
+
+/*
                     function endRecording(blob) {
                         var blobURL = URL.createObjectURL(blob);
 
@@ -182,10 +180,10 @@ define([
                             _response = {"base": {"file": {"data": base64Raw, "mime": blob.type, "name": filename}}};
                         };
                     }
-
+*/
 
                     function initializeControls() {
-                        controls.record = newControl({
+                        controls.record = controlFactory({
                             defaultState: 'enabled',
                             label: 'record',
                             // icon: 'radio-bg',
@@ -193,10 +191,21 @@ define([
                             container: $controlsContainer,
                             onclick: function onclick() {
                                 startRecording();
+                            },
+                            updateState: function updateState() {
+                                if (player.state === playerStates.INACTIVE) {
+                                    switch(recorder.state) {
+                                        case recorderStates.INACTIVE: this.enable(); break;
+                                        case recorderStates.RECORDING: this.activate(); break;
+                                        default: this.disable(); break;
+                                    }
+                                } else {
+                                    this.disable();
+                                }
                             }
                         });
 
-                        controls.stop = newControl({
+                        controls.stop = controlFactory({
                             defaultState: 'disabled',
                             label: 'stop',
                             // icon: 'stop',
@@ -204,10 +213,18 @@ define([
                             container: $controlsContainer,
                             onclick: function onclick() {
                                 stopRecordingOrPlayback();
+                            },
+                            updateState: function updateState() {
+                                if (player.state === playerStates.PLAYING ||
+                                    recorder.state === recorderStates.RECORDING) {
+                                    this.enable();
+                                } else {
+                                    this.disable();
+                                }
                             }
                         });
 
-                        controls.play = newControl({
+                        controls.play = controlFactory({
                             defaultState: 'disabled',
                             label: 'play',
                             // icon: 'play',
@@ -215,10 +232,17 @@ define([
                             container: $controlsContainer,
                             onclick: function onclick() {
                                 playRecording();
+                            },
+                            updateState: function updateState() {
+                                switch (player.state) {
+                                    case playerStates.READY: this.enable(); break;
+                                    case playerStates.PLAYING: this.activate(); break;
+                                    default: this.disable(); break;
+                                }
                             }
                         });
 
-                        controls.reset = newControl({
+                        controls.reset = controlFactory({
                             defaultState: 'disabled',
                             label: 'reset',
                             // icon: 'loop',
@@ -226,9 +250,24 @@ define([
                             container: $controlsContainer,
                             onclick: function onclick() {
                                 // resetRecording();
+                            },
+                            updateState: function updateState() {
+                                if (player.state === playerStates.READY) {
+                                    this.enable();
+                                } else {
+                                    this.disable();
+                                }
                             }
                         });
+                    }
 
+                    function updateControls() {
+                        var control;
+                        for (control in controls) {
+                            if (controls.hasOwnProperty(control)) {
+                                controls[control].updateState();
+                            }
+                        }
                     }
 
                     /**
@@ -236,20 +275,20 @@ define([
                      * @param options
                      * @returns {{enable: enable, disable: disable, activate: activate}}
                      */
-                    function newControl(options) {
+                    function controlFactory(config) {
                         var state;
                         var $control = $(controlTpl({
-                            label: options.label
+                            label: config.label
                         }));
                         $control.on('click', function() {
                             if (state === 'enabled') {
-                                options.onclick();
+                                config.onclick();
                             }
                         });
-                        if (options.display === true) {
-                            $control.appendTo(options.container);
+                        if (config.display === true) {
+                            $control.appendTo(config.container);
                         }
-                        setState(options.defaultState || 'enabled');
+                        setState(config.defaultState || 'enabled');
 
                         function setState(newState) {
                             state = newState;
@@ -266,6 +305,9 @@ define([
                             },
                             activate: function() {
                                 setState('active');
+                            },
+                            updateState: function() {
+                                config.updateState.call(this);
                             }
                         };
                     }
