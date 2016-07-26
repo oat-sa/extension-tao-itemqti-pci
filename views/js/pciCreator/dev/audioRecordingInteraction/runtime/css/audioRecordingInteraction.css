@@ -68,8 +68,8 @@
 }
 
 .qti-customInteraction .audioRecordingInteraction .audiorec-control {
-    background-color: #202142;
+    background-color: #BA122B;
     color: #fff;
-    text-shadow: 1px 1px 0 #15152b;
+    text-shadow: 1px 1px 0 #640a17;
     cursor: not-allowed !important;
 }
