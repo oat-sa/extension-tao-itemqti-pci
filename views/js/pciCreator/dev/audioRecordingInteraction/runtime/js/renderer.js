@@ -103,6 +103,7 @@ define([
                 // this handle the case when playbacks end without user pressing the stop button
                 audioEl.onended = function() {
                     self.state = playerStates.INACTIVE;
+                    // fixme: onready() is not relevant anymore: oninactive ?
                     if (self.onready) {
                         self.onready();
                     }
@@ -134,8 +135,8 @@ define([
      */
 
     function recorderFactory(config) {
-        /*global MediaRecorder*/
-        var mediaRecorder,
+        var MediaRecorder = window.MediaRecorder,
+            mediaRecorder,
             recorderOptions = {
                 audioBitsPerSecond: config.audioBitrate
             };
