@@ -34,7 +34,7 @@ define([
         }
     });
 
-    /* * /
+    /* */
 
     QUnit.asyncTest('renders correctly', function (assert){
 
@@ -53,9 +53,6 @@ define([
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
 
                 QUnit.start();
-            })
-            .on('responsechange', function (response){
-                $('#response-display').html(JSON.stringify(response, null, 2));
             })
             .assets(strategies)
             .init()
@@ -210,15 +207,17 @@ define([
             .render($container);
     });
 
-    QUnit.asyncTest('destroys', function(assert){
-        QUnit.expect(4);
+    /* */
 
+    QUnit.asyncTest('destroys', function(assert){
         var $container = $('#' + fixtureContainerId);
+
+        // QUnit.expect(4);
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
-        runner = qtiItemRunner('qti', orderData)
+        runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
                 var self = this;
 
@@ -226,19 +225,28 @@ define([
                 var interaction = this._item.getInteractions()[0];
                 interaction.renderer.destroy(interaction);
 
-                var $prehistory = $('.qti-choice[data-identifier="Prehistory"]', $container);
-                assert.equal($prehistory.length, 1, 'the Prehistory choice exists');
+                var onerrorBackup = window.onerror;
 
-                interactUtils.tapOn($prehistory, function(){
-
-                    assert.deepEqual(self.getState(), {'RESPONSE': { response : { list : { identifier : [] } } } }, 'Click does not trigger response once destroyed');
-
+                window.onerror = function() {
+                    assert.ok(true, 'recorder has been destroyed');
+                    window.onerror = onerrorBackup;
                     QUnit.start();
-                }, 100);
+                };
+
+                var $record = $('.audiorec-control[data-identifier="record"]', $container);
+                $record.addClass('enabled');
+                $record.trigger('click');
+            })
+            .on('error', function (error){
+                $('#error-display').html(error);
+                console.log(error);
+
             })
             .init()
             .render($container);
     });
+
+    /* * /
 
     QUnit.asyncTest('resets the response', function(assert){
         QUnit.expect(11);
@@ -383,10 +391,11 @@ define([
                 QUnit.start();
             })
             .on('responsechange', function (response){
+                // todo: implement this ?
                 $('#response-display').html(JSON.stringify(response, null, 2));
             })
             .on('error', function (error){
-                $('#response-display').html(error);
+                $('#error-display').html(error);
             })
             .assets(strategies)
             .init()

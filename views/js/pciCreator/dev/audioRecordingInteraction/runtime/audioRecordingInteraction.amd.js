@@ -1,8 +1,7 @@
 define([
     'qtiCustomInteractionContext',
     'IMSGlobal/jquery_2_1_1',
-    //'audioRecordingInteraction/runtime/js/renderer',
-    'renderer',
+    'audioRecordingInteraction/runtime/js/renderer',
     'OAT/util/event'
 ], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
@@ -91,7 +90,7 @@ define([
          * @param {Object} interaction
          */
         destroy : function(){
-            //todo: implement this
+            _renderer.destroy();
         },
         /**
          * Restore the state of the interaction from the serializedState.

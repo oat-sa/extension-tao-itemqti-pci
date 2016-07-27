@@ -1,11 +1,11 @@
 define([
     'IMSGlobal/jquery_2_1_1',
+    'OAT/lodash',
     'OAT/util/html',
-    // 'tpl!audioRecordingInteraction/runtime/tpl/control'
-    'tpl!control'
+    'tpl!audioRecordingInteraction/runtime/tpl/control'
 
 
-], function($, html, controlTpl) {
+], function($, _, html, controlTpl) {
     'use strict';
 
     /**
@@ -15,7 +15,7 @@ define([
      */
     var playerStates = {
         CREATED:    'created',
-        INACTIVE:   'inactive',
+        INACTIVE:   'inactive', // todo: rename IDLE
         PLAYING:    'playing'
     };
 
@@ -208,6 +208,7 @@ define([
     function controlFactory(config) {
         var state;
         var $control = $(controlTpl({
+            id: config.id,
             label: config.label
         }));
         $control.on('click', function() {
@@ -255,7 +256,7 @@ define([
 
     return function(id, container, config) {
 
-        // recording as Blob
+        // recording as file { mime, data, name }
         var _recording = null;
         // mime type
         // filename
@@ -292,6 +293,7 @@ define([
         player.onplaying = updateControls.bind(null, controls);
 
         function startRecording() {
+            console.log('clicked on record');
             function effectiveStart() {
                 recorder.start();
                 updateControls(controls);
@@ -306,6 +308,7 @@ define([
         }
 
         function stopRecordingOrPlayback() {
+            console.log('i am about to stop');
             if (recorder.state === recorderStates.RECORDING) {
                 recorder.stop();
 
@@ -327,10 +330,6 @@ define([
         }
 
         function setRecording(blob) {
-            if (! blob) {
-                _recording = undefined;
-                return;
-            }
             //todo: implement a spinner or something to feedback that work is in progress while this is happening
             var reader = new FileReader();
             reader.readAsDataURL(blob);
@@ -365,9 +364,9 @@ define([
 
         function createControls() {
             controls.record = controlFactory({
+                id: 'record',
+                label: 'Record',
                 defaultState: 'enabled',
-                label: 'record',
-                // icon: 'radio-bg',
                 display: true,
                 container: $controlsContainer,
                 onclick: function onclick() {
@@ -387,9 +386,9 @@ define([
             });
 
             controls.stop = controlFactory({
+                id: 'stop',
+                label: 'Stop',
                 defaultState: 'disabled',
-                label: 'stop',
-                // icon: 'stop',
                 display: true,
                 container: $controlsContainer,
                 onclick: function onclick() {
@@ -406,9 +405,9 @@ define([
             });
 
             controls.play = controlFactory({
+                id: 'play',
+                label: 'Play',
                 defaultState: 'disabled',
-                label: 'play',
-                // icon: 'play',
                 display: true,
                 container: $controlsContainer,
                 onclick: function onclick() {
@@ -424,9 +423,9 @@ define([
             });
 
             controls.reset = controlFactory({
+                id: 'reset',
+                label: 'Reset',
                 defaultState: 'disabled',
-                label: 'reset',
-                // icon: 'loop',
                 display: true,
                 container: $controlsContainer,
                 onclick: function onclick() {
