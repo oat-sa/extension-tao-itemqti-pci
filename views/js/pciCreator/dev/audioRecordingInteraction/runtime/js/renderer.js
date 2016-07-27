@@ -4,9 +4,6 @@ define([
     // 'tpl!audioRecordingInteraction/runtime/tpl/control'
     'tpl!control'
 
-    // todo: remove related files
-    // 'audioRecordingInteraction/runtime/js/MediaStreamRecorder',
-    // 'audioRecordingInteraction/runtime/js/war/WebAudioRecorder'
 
 ], function($, html, controlTpl) {
     'use strict';
