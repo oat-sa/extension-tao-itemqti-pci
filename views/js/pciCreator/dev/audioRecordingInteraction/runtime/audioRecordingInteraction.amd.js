@@ -27,16 +27,13 @@ define([
             this.dom = dom;
             this.config = config || {};
 
-            renderer.render(this.id, this.dom, this.config);
+            // todo: make this async ?
+            var _renderer = renderer(this.id, this.dom, this.config);
+            _renderer.render();
 
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
 
-            //listening to dynamic configuration change
-            // this.on('levelchange', function(level){
-            //     _this.config.level = level;
-            //     renderer.renderChoices(_this.id, _this.dom, _this.config);
-            // });
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -60,9 +57,19 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
+            var recording = renderer.getRecording();
 
-            //todo: implement this properly ;-)
-            return renderer.getResponse();
+            if (! recording) {
+                return {
+                    base: null
+                };
+            } else {
+                return {
+                    base: {
+                        file: recording
+                    }
+                };
+            }
         },
         /**
          * Remove the current response set in the interaction
