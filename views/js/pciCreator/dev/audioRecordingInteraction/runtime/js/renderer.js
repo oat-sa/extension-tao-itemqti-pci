@@ -1,7 +1,8 @@
 define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/util/html',
-    'tpl!audioRecordingInteraction/runtime/tpl/control'
+    // 'tpl!audioRecordingInteraction/runtime/tpl/control'
+    'tpl!control'
 
     // todo: remove related files
     // 'audioRecordingInteraction/runtime/js/MediaStreamRecorder',
@@ -86,8 +87,8 @@ define([
 
                 // this handle both the 'ready to play' state, and the user pressing the stop button
                 audioEl.oncanplay = function() {
-                    console.log('canplay');
                     self.state = playerStates.INACTIVE;
+                    // fixme: onready() is not relevant anymore: oninactive ?
                     if (self.onready) {
                         self.onready();
                     }
@@ -133,7 +134,6 @@ define([
      * for incompatible browsers
      * @param config
      */
-
     function recorderFactory(config) {
         var MediaRecorder = window.MediaRecorder,
             mediaRecorder,
@@ -164,11 +164,15 @@ define([
 
             init: function() {
                 var self = this;
-                navigator.mediaDevices.getUserMedia({ audio: true })
+                return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
                         mediaRecorder = new MediaRecorder(stream, recorderOptions);
                         if (mediaRecorder.state === 'inactive') {
                             self.state = recorderStates.INACTIVE;
+
+                            if (self.oninactive) {
+                                self.oninactive();
+                            }
 
                             mediaRecorder.ondataavailable = function (e) {
                                 //todo: check what is the best way to handle this: little chunks or a big chunk at once
@@ -255,7 +259,7 @@ define([
     return function(id, container, config) {
 
         // recording as Blob
-        var _recording;
+        var _recording = null;
         // mime type
         // filename
 
@@ -281,18 +285,27 @@ define([
             // todo: add checks on createObjectURL ?
             var recording = e.data,
                 recordingUrl = URL.createObjectURL(recording);
-            console.log('ondataavailable');
 
             player.load(recordingUrl);
             setRecording(recording);
         };
+        recorder.oninactive = updateControls.bind(null, controls); //fixme: hmmmmm?
 
         player.onready = updateControls.bind(null, controls); //fixme: hmmmmm?
         player.onplaying = updateControls.bind(null, controls);
 
         function startRecording() {
-            recorder.start();
-            updateControls(controls);
+            function effectiveStart() {
+                recorder.start();
+                updateControls(controls);
+            }
+            if (recorder.state === recorderStates.CREATED) {
+                recorder.init().then(function() {
+                    effectiveStart();
+                });
+            } else {
+                effectiveStart();
+            }
         }
 
         function stopRecordingOrPlayback() {
@@ -312,7 +325,7 @@ define([
 
         function resetRecording() {
             player.unload();
-            setRecording();
+            _recording = null;
             updateControls(controls);
         }
 
@@ -331,10 +344,16 @@ define([
                 var filename = 'audioRecording' + Date.now() +
                     '.' + blob.type.split('/')[1];
 
+                var base64Raw = e.target.result;
+                var commaPosition = base64Raw.indexOf(',');
+
+                // Store the base64 encoded data for later use.
+                var base64Data = base64Raw.substring(commaPosition + 1);
+
                 _recording = {
-                    data: e.target.result,
                     mime: blob.type,
-                    name: filename
+                    name: filename,
+                    data: base64Data
                 };
             };
         }
@@ -359,10 +378,10 @@ define([
                 },
                 updateState: function updateState() {
                     if (player.state === playerStates.CREATED) {
-                        switch(recorder.state) {
-                            case recorderStates.INACTIVE: this.enable(); break;
-                            case recorderStates.RECORDING: this.activate(); break;
-                            default: this.disable(); break;
+                        if (recorder.state === recorderStates.RECORDING) {
+                            this.activate();
+                        } else {
+                            this.enable();
                         }
                     } else {
                         this.disable();
@@ -400,9 +419,9 @@ define([
                 },
                 updateState: function updateState() {
                     switch (player.state) {
-                        case playerStates.INACTIVE: this.enable(); break;
-                        case playerStates.PLAYING: this.activate(); break;
-                        default: this.disable(); break;
+                    case playerStates.INACTIVE: this.enable(); break;
+                    case playerStates.PLAYING: this.activate(); break;
+                    default: this.disable(); break;
                     }
                 }
             });
@@ -433,24 +452,31 @@ define([
             },
 
             setRecording: function(recording) {
-               _recording = recording;
-                //todo: convert from base64 to blob
-                //todo: if valid load player with this and reflect state in UI
+                var base64Prefix;
+                _recording = recording;
+                if (_recording) {
+                    base64Prefix = 'data:' + recording.mime + ';base64,';
+                    player.load(base64Prefix + recording.data);
+                }
+            },
+
+            reset: function() {
+                resetRecording();
+            },
+
+            destroy: function() {
+                player = null;
+                recorder = null;
             },
 
             /**
              *
-             * @param id
-             * @param container
-             * @param config
-             * config.
              */
             render: function() {
                 // render rich text content in prompt
                 html.render($container.find('.prompt'));
 
                 // render interaction
-                recorder.init();
                 createControls();
             }
         };

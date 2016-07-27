@@ -1,10 +1,13 @@
 define([
     'qtiCustomInteractionContext',
     'IMSGlobal/jquery_2_1_1',
-    'audioRecordingInteraction/runtime/js/renderer',
+    //'audioRecordingInteraction/runtime/js/renderer',
+    'renderer',
     'OAT/util/event'
 ], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
+
+    var _renderer;
 
     var audioRecordingInteraction = {
         id : -1,
@@ -22,13 +25,12 @@ define([
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
 
-            var _this = this;
             this.id = id;
             this.dom = dom;
             this.config = config || {};
 
             // todo: make this async ?
-            var _renderer = renderer(this.id, this.dom, this.config);
+            _renderer = renderer(this.id, this.dom, this.config);
             _renderer.render();
 
             //tell the rendering engine that I am ready
@@ -43,11 +45,11 @@ define([
          * @param {Object} response
          */
         setResponse : function(response){
-            //todo: implement this
-            var $container = $(this.dom),
-                value = response && response.base ? parseInt(response.base.integer) : -1;
-
-            $container.find('input[value="' + value + '"]').prop('checked', true);
+            if (response.base && response.base.file) {
+                _renderer.setRecording(response.base.file);
+            } else {
+                _renderer.setRecording();
+            }
         },
         /**
          * Get the response in the json format described in
@@ -57,19 +59,20 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-            var recording = renderer.getRecording();
-
+            var recording = _renderer.getRecording();
+            var response;
             if (! recording) {
-                return {
+                response = {
                     base: null
                 };
             } else {
-                return {
+                response = {
                     base: {
                         file: recording
                     }
                 };
             }
+            return response;
         },
         /**
          * Remove the current response set in the interaction
@@ -79,9 +82,6 @@ define([
          */
         resetResponse : function(){
             //todo: implement this
-            var $container = $(this.dom);
-
-            $container.find('input').prop('checked', false);
         },
         /**
          * Reverse operation performed by render()
@@ -91,19 +91,18 @@ define([
          * @param {Object} interaction
          */
         destroy : function(){
-
-            var $container = $(this.dom);
-            $container.off().empty();
+            //todo: implement this
         },
         /**
          * Restore the state of the interaction from the serializedState.
          *
          * @param {Object} interaction
-         * @param {Object} serializedState - json format
+         * @param {Object} state - json format
          */
         setSerializedState : function(state){
-
+            this.setResponse(state);
         },
+
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
@@ -112,8 +111,7 @@ define([
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            return this.getResponse();
         }
     };
 
