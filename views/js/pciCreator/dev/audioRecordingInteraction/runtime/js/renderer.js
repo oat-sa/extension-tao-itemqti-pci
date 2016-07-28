@@ -9,6 +9,7 @@ define([
 ], function($, _, html, event, controlTpl) {
     'use strict';
 
+    // todo: rename states: inactive => idle for examaple, created => unloaded / unplugged ?
     /**
      * @property {String} CREATED   - player instance created, but no media loaded
      * @property {String} INACTIVE  - media loaded and playable
@@ -16,7 +17,7 @@ define([
      */
     var playerStates = {
         CREATED:    'created',
-        INACTIVE:   'inactive', // todo: rename IDLE
+        INACTIVE:   'inactive',
         PLAYING:    'playing'
     };
 
@@ -32,6 +33,7 @@ define([
     };
 
     //todo: check licence or rewrite
+    //fixme: doesn't work on chrome?
     // MediaDevices.getUserMedia polyfill
     // https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
     // Mozilla Public License, version 2.0
@@ -231,9 +233,9 @@ define([
         setState(config.defaultState || 'enabled');
 
         function setState(newState) {
+            $control.removeClass(state);
             state = newState;
-            $control.removeClass('disabled enabled active');
-            $control.addClass(newState);
+            $control.addClass(state);
         }
 
         return {
@@ -252,6 +254,7 @@ define([
         };
     }
 
+    // todo: shouldn't this be under the returned function scope to avoid explicitely passing controls ? or bind it
     function updateControls(controls) {
         var control;
         for (control in controls) {
@@ -275,7 +278,6 @@ define([
         var controls = {},
             $controlsContainer = $container.find('.audioRec > .controls');
 
-        //fixme: lodash shouldn't be there !
         var options = _.defaults(config, {
             audioBitrate: 20000,
             allowPlayback: true,
