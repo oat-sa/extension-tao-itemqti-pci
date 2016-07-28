@@ -2,10 +2,11 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/lodash',
     'OAT/util/html',
+    'OAT/util/event',
     'tpl!audioRecordingInteraction/runtime/tpl/control'
 
 
-], function($, _, html, controlTpl) {
+], function($, _, html, event, controlTpl) {
     'use strict';
 
     /**
@@ -72,10 +73,20 @@ define([
 
 
     function playerFactory() {
-        var audioEl;
+        var audioEl,
+            player,
+            state = playerStates.CREATED;
 
-        return {
-            state: playerStates.CREATED,
+        player = {
+            _setState: function(newState) {
+                state = newState;
+                this.trigger('statechange');
+                this.trigger(newState);
+            },
+
+            getState: function() {
+                return state;
+            },
 
             load: function(url) {
                 var self = this;
@@ -84,27 +95,16 @@ define([
 
                 // this handle both the 'ready to play' state, and the user pressing the stop button
                 audioEl.oncanplay = function() {
-                    self.state = playerStates.INACTIVE;
-                    // fixme: onready() is not relevant anymore: oninactive ?
-                    if (self.onready) {
-                        self.onready();
-                    }
+                    self._setState(playerStates.INACTIVE);
                 };
 
                 audioEl.onplaying = function() {
-                    self.state = playerStates.PLAYING;
-                    if (self.onplaying) {
-                        self.onplaying();
-                    }
+                    self._setState(playerStates.PLAYING);
                 };
 
                 // this handle the case when playbacks end without user pressing the stop button
                 audioEl.onended = function() {
-                    self.state = playerStates.INACTIVE;
-                    // fixme: onready() is not relevant anymore: oninactive ?
-                    if (self.onready) {
-                        self.onready();
-                    }
+                    self._setState(playerStates.INACTIVE);
                 };
             },
 
@@ -119,9 +119,12 @@ define([
 
             unload: function() {
                 audioEl = null;
-                this.state = playerStates.CREATED;
+                this._setState(playerStates.CREATED);
             }
         };
+        event.addEventMgr(player);
+
+        return player;
     }
 
 
@@ -289,8 +292,9 @@ define([
         };
         recorder.oninactive = updateControls.bind(null, controls); //fixme: hmmmmm?
 
-        player.onready = updateControls.bind(null, controls); //fixme: hmmmmm?
-        player.onplaying = updateControls.bind(null, controls);
+        player.on('statechange', function() {
+            updateControls(controls);
+        });
 
         function startRecording() {
             console.log('clicked on record');
@@ -312,7 +316,7 @@ define([
             if (recorder.state === recorderStates.RECORDING) {
                 recorder.stop();
 
-            } else if (player.state === playerStates.PLAYING) {
+            } else if (player.getState() === playerStates.PLAYING) {
                 player.stop();
             }
             updateControls(controls);
@@ -373,7 +377,7 @@ define([
                     startRecording();
                 },
                 updateState: function updateState() {
-                    if (player.state === playerStates.CREATED) {
+                    if (player.getState() === playerStates.CREATED) {
                         if (recorder.state === recorderStates.RECORDING) {
                             this.activate();
                         } else {
@@ -395,7 +399,7 @@ define([
                     stopRecordingOrPlayback();
                 },
                 updateState: function updateState() {
-                    if (player.state === playerStates.PLAYING ||
+                    if (player.getState() === playerStates.PLAYING ||
                         recorder.state === recorderStates.RECORDING) {
                         this.enable();
                     } else {
@@ -414,7 +418,7 @@ define([
                     playRecording();
                 },
                 updateState: function updateState() {
-                    switch (player.state) {
+                    switch (player.getState()) {
                     case playerStates.INACTIVE: this.enable(); break;
                     case playerStates.PLAYING: this.activate(); break;
                     default: this.disable(); break;
@@ -432,7 +436,7 @@ define([
                     resetRecording();
                 },
                 updateState: function updateState() {
-                    if (player.state === playerStates.INACTIVE) {
+                    if (player.getState() === playerStates.INACTIVE) {
                         this.enable();
                     } else {
                         this.disable();
