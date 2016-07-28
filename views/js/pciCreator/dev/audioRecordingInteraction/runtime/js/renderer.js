@@ -297,7 +297,7 @@ define([
                 recordingUrl = URL.createObjectURL(recording);
 
             player.load(recordingUrl);
-            setRecording(recording);
+            createRecordJSON(recording);
         });
 
         recorder.on('statechange', function() {
@@ -341,11 +341,11 @@ define([
 
         function resetRecording() {
             player.unload();
-            _recording = null;
+            setRecording(null);
             updateControls(controls);
         }
 
-        function setRecording(blob) {
+        function createRecordJSON(blob) {
             //todo: implement a spinner or something to feedback that work is in progress while this is happening
             var reader = new FileReader();
             reader.readAsDataURL(blob);
@@ -362,12 +362,16 @@ define([
                 // Store the base64 encoded data for later use.
                 var base64Data = base64Raw.substring(commaPosition + 1);
 
-                _recording = {
+                setRecording({
                     mime: blob.type,
                     name: filename,
                     data: base64Data
-                };
+                });
             };
+        }
+
+        function setRecording(recording) {
+            _recording = recording;
         }
 
         function createDownloadLink(url) {
@@ -465,7 +469,7 @@ define([
 
             setRecording: function(recording) {
                 var base64Prefix;
-                _recording = recording;
+                setRecording(recording);
                 if (_recording) {
                     base64Prefix = 'data:' + recording.mime + ';base64,';
                     player.load(base64Prefix + recording.data);

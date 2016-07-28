@@ -3,10 +3,15 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'audioRecordingInteraction/runtime/js/renderer',
     'OAT/util/event'
-], function(qtiCustomInteractionContext, $, renderer, event){
+], function(
+    qtiCustomInteractionContext,
+    $,
+    createRenderer,
+    event
+){
     'use strict';
 
-    var _renderer;
+    var renderer;
 
     var audioRecordingInteraction = {
         id : -1,
@@ -20,6 +25,7 @@ define([
          * @param {Object} config - json
          */
         initialize : function(id, dom, config){
+            var self = this;
 
             //add method on(), off() and trigger() to the current object
             event.addEventMgr(this);
@@ -29,8 +35,15 @@ define([
             this.config = config || {};
 
             // todo: make this async ?
-            _renderer = renderer(this.id, this.dom, this.config);
-            _renderer.render();
+            renderer = createRenderer(this.id, this.dom, this.config);
+
+            // this doesn't work yet
+            event.addEventMgr(renderer);
+            renderer.on('responsechange', function() {
+                self.trigger('responsechange');
+            });
+
+            renderer.render();
 
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
@@ -45,9 +58,9 @@ define([
          */
         setResponse : function(response){
             if (response.base && response.base.file) {
-                _renderer.setRecording(response.base.file);
+                renderer.setRecording(response.base.file);
             } else {
-                _renderer.setRecording();
+                renderer.setRecording();
             }
         },
         /**
@@ -58,7 +71,7 @@ define([
          * @returns {Object}
          */
         getResponse : function(){
-            var recording = _renderer.getRecording();
+            var recording = renderer.getRecording();
             var response;
             if (! recording) {
                 response = {
@@ -90,7 +103,7 @@ define([
          * @param {Object} interaction
          */
         destroy : function(){
-            _renderer.destroy();
+            renderer.destroy();
         },
         /**
          * Restore the state of the interaction from the serializedState.
