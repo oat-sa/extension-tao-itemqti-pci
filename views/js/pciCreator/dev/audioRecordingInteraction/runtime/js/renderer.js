@@ -4,33 +4,14 @@ define([
     'OAT/util/html',
     'OAT/util/event',
     'tpl!audioRecordingInteraction/runtime/tpl/control'
-
-
-], function($, _, html, event, controlTpl) {
+], function(
+    $,
+    _,
+    html,
+    event,
+    controlTpl
+) {
     'use strict';
-
-    // todo: rename states: inactive => idle for examaple, created => unloaded / unplugged ?
-    /**
-     * @property {String} CREATED   - player instance created, but no media loaded
-     * @property {String} INACTIVE  - media loaded and playable
-     * @property {String} PLAYING   - media is playing
-     */
-    var playerStates = {
-        CREATED:    'created',
-        INACTIVE:   'inactive',
-        PLAYING:    'playing'
-    };
-
-    /**
-     * @property {String} CREATED   - recorder instance created, but not not initialized
-     * @property {String} INACTIVE  - ready to record
-     * @property {String} RECORDING - record in progress
-     */
-    var recorderStates = {
-        CREATED:    'created',
-        INACTIVE:   'inactive',
-        RECORDING:  'recording'
-    };
 
     //todo: check licence or rewrite
     //fixme: doesn't work on chrome?
@@ -74,6 +55,20 @@ define([
     }());
 
 
+    /**
+     * @property {String} CREATED   - player instance created, but no media loaded
+     * @property {String} IDLE      - media loaded and playable
+     * @property {String} PLAYING   - media is playing
+     */
+    var playerStates = {
+        CREATED:    'created',
+        IDLE:       'idle',
+        PLAYING:    'playing'
+    };
+
+    /**
+     * todo: jsdoc
+     */
     function playerFactory() {
         var audioEl,
             player,
@@ -95,28 +90,26 @@ define([
 
                 audioEl = new Audio(url);
 
-                // this handle both the 'ready to play' state, and the user pressing the stop button
+                // when playback is stopped by user or when the media is loaded:
                 audioEl.oncanplay = function() {
-                    self._setState(playerStates.INACTIVE);
+                    self._setState(playerStates.IDLE);
                 };
 
-                audioEl.onplaying = function() {
-                    self._setState(playerStates.PLAYING);
-                };
-
-                // this handle the case when playbacks end without user pressing the stop button
+                // when playbacks ends on its own:
                 audioEl.onended = function() {
-                    self._setState(playerStates.INACTIVE);
+                    self._setState(playerStates.IDLE);
                 };
             },
 
             play: function() {
                 audioEl.play();
+                this._setState(playerStates.PLAYING);
             },
 
             stop: function() {
                 audioEl.pause();
                 audioEl.currentTime = 0;
+                // state change is triggered by the oncanplay listener
             },
 
             unload: function() {
@@ -131,10 +124,18 @@ define([
 
 
     /**
+     * @property {String} CREATED   - recorder instance created, but not not initialized
+     * @property {String} IDLE      - ready to record
+     * @property {String} RECORDING - record is in progress
+     */
+    var recorderStates = {
+        CREATED:    'created',
+        IDLE:       'idle',
+        RECORDING:  'recording'
+    };
+
+    /**
      * todo: jsdoc
-     * Minimal MediaRecorder wrapper in case an alternate recorder implementation is needed someday
-     * for incompatible browsers
-     * @param config
      */
     function recorderFactory(config) {
         var MediaRecorder = window.MediaRecorder,
@@ -180,12 +181,11 @@ define([
                     .then(function(stream) {
                         mediaRecorder = new MediaRecorder(stream, recorderOptions);
                         if (mediaRecorder.state === 'inactive') {
-                            self._setState(recorderStates.INACTIVE);
+                            self._setState(recorderStates.IDLE);
 
                             mediaRecorder.ondataavailable = function (e) {
                                 //todo: check what is the best way to handle this: little chunks or a big chunk at once
-                                //todo: rename this event
-                                self.trigger('dataavailable', [e]);
+                                self.trigger('recordingavailable', [e]);
                             };
                         } else {
                             return new Error('cannot initialize MediaRecorder');
@@ -203,7 +203,7 @@ define([
 
             stop: function() {
                 mediaRecorder.stop();
-                this._setState(recorderStates.INACTIVE);
+                this._setState(recorderStates.IDLE);
             }
         };
         event.addEventMgr(recorder);
@@ -213,25 +213,29 @@ define([
 
 
     /**
-     * //todo: add jsdoc
-     * @param options
-     * @returns {{enable: enable, disable: disable, activate: activate}}
+     * todo: jsdoc
      */
     function controlFactory(config) {
-        var state;
-        var $control = $(controlTpl({
-            id: config.id,
-            label: config.label
-        }));
+        var state,
+            $control = $(controlTpl({
+                id: config.id,
+                label: config.label
+            })),
+            controlStates = {
+                DISABLED: 'disabled',
+                ENABLED: 'enabled',
+                ACTIVE: 'active'
+            };
+
         $control.on('click', function() {
-            if (state === 'enabled') {
+            if (state === controlStates.ENABLED) {
                 config.onclick();
             }
         });
         if (config.display === true) {
             $control.appendTo(config.container);
         }
-        setState(config.defaultState || 'enabled');
+        setState(config.defaultState || controlStates.DISABLED);
 
         function setState(newState) {
             $control.removeClass(state);
@@ -241,13 +245,13 @@ define([
 
         return {
             enable: function() {
-                setState('enabled');
+                setState(controlStates.ENABLED);
             },
             disable: function() {
-                setState('disabled');
+                setState(controlStates.DISABLED);
             },
             activate: function() {
-                setState('active');
+                setState(controlStates.ACTIVE);
             },
             updateState: function() {
                 config.updateState.call(this);
@@ -255,7 +259,6 @@ define([
         };
     }
 
-    // todo: shouldn't this be under the returned function scope to avoid explicitely passing controls ? or bind it
     function updateControlsState(controls) {
         var control;
         for (control in controls) {
@@ -266,13 +269,14 @@ define([
     }
 
 
-
+    /**
+     * todo: jsdoc
+     */
     return function(id, container, config) {
 
         // recording as file { mime, data, name }
         var _recording = null;
-        // mime type
-        // filename
+        var filePrefix = 'audioRecording';
 
         var $container = $(container);
 
@@ -292,14 +296,12 @@ define([
         var player = playerFactory();
         var recorder = recorderFactory(options);
 
-        recorder.on('dataavailable', function(e) {
-            // todo: add checks on createObjectURL ?
-            // console.dir(e);
+        recorder.on('recordingavailable', function(e) {
             var recording = e.data,
-                recordingUrl = URL.createObjectURL(recording);
+                recordingUrl = window.URL.createObjectURL(recording);
 
             player.load(recordingUrl);
-            createRecordJSON(recording);
+            createBase64Recoding(recording);
         });
 
         recorder.on('statechange', function() {
@@ -311,7 +313,6 @@ define([
         });
 
         function startRecording() {
-            console.log('clicked on record');
             function effectiveStart() {
                 recorder.start();
                 updateControls();
@@ -326,7 +327,6 @@ define([
         }
 
         function stopRecordingOrPlayback() {
-            console.log('i am about to stop');
             if (recorder.getState() === recorderStates.RECORDING) {
                 recorder.stop();
 
@@ -347,21 +347,19 @@ define([
             updateControls();
         }
 
-        function createRecordJSON(blob) {
+        function createBase64Recoding(blob) {
             //todo: implement a spinner or something to feedback that work is in progress while this is happening
             var reader = new FileReader();
             reader.readAsDataURL(blob);
 
             reader.onloadend = function onLoadEnd(e) {
-                //fixme: this doesn't seem to work always well, along with mimeType.
-                // Set this at the pci level during media recoder init?
-                var filename = 'audioRecording' + Date.now() +
-                    '.' + blob.type.split('/')[1];
+                var filename =
+                    filePrefix + '_' +
+                    window.Date.now() + '.' +
+                    blob.type.split('/')[1];
 
                 var base64Raw = e.target.result;
                 var commaPosition = base64Raw.indexOf(',');
-
-                // Store the base64 encoded data for later use.
                 var base64Data = base64Raw.substring(commaPosition + 1);
 
                 setRecording({
@@ -437,7 +435,7 @@ define([
                 },
                 updateState: function updateState() {
                     switch (player.getState()) {
-                    case playerStates.INACTIVE: this.enable(); break;
+                    case playerStates.IDLE: this.enable(); break;
                     case playerStates.PLAYING: this.activate(); break;
                     default: this.disable(); break;
                     }
@@ -454,7 +452,7 @@ define([
                     resetRecording();
                 },
                 updateState: function updateState() {
-                    if (player.getState() === playerStates.INACTIVE) {
+                    if (player.getState() === playerStates.IDLE) {
                         this.enable();
                     } else {
                         this.disable();
@@ -487,9 +485,6 @@ define([
                 recorder = null;
             },
 
-            /**
-             *
-             */
             render: function() {
                 // render rich text content in prompt
                 html.render($container.find('.prompt'));
@@ -501,5 +496,4 @@ define([
 
         return renderer;
     };
-
 });
