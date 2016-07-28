@@ -99,11 +99,14 @@ define([
                 audioEl.onended = function() {
                     self._setState(playerStates.IDLE);
                 };
+
+                audioEl.onplaying = function() {
+                    self._setState(playerStates.PLAYING);
+                };
             },
 
             play: function() {
                 audioEl.play();
-                this._setState(playerStates.PLAYING);
             },
 
             stop: function() {
@@ -273,11 +276,16 @@ define([
      */
     return function(id, container, config) {
 
+        // interaction state
         // todo: jsdoc for recording
         var _recording = null;
+        var _recordsAttempts = 0;
+
         var filePrefix = 'audioRecording';
 
         var $container = $(container);
+
+        var $instructionsContainer = $container.find('.audioRec > .instructions');
 
         var controls = {},
             $controlsContainer = $container.find('.audioRec > .controls'),
@@ -285,10 +293,10 @@ define([
 
         var options = _.defaults(config, {
             audioBitrate: 20000,
-            allowPlayback: false,
+            allowPlayback: true,
             allowStop: true, // todo
-            autoStart: true,
-            maxRecords: -1, // todo
+            autoStart: false,
+            maxRecords: 3, // todo : 1 = no records / x = x records / 0 = unlimited
             maxRecordingTime: 10, // todo
             displayDownloadLink: true // todo for debugging purposes only
         });
@@ -302,6 +310,9 @@ define([
 
             player.load(recordingUrl);
             createBase64Recoding(recording);
+
+            _recordsAttempts++;
+            displayRemainingAttempts();
         });
 
         recorder.on('statechange', function() {
@@ -372,6 +383,20 @@ define([
 
         function setRecording(recording) {
             _recording = recording;
+        }
+
+        function displayRemainingAttempts() {
+            var remaining = options.maxRecords - _recordsAttempts,
+                message;
+
+            if (options.maxRecords > 1) {
+                if (remaining === 0) {
+                    message = 'You have no more attempts left';
+                } else {
+                    message = 'Remaining attempts: ' + remaining;
+                }
+                $instructionsContainer.html(message);
+            }
         }
 
         function createDownloadLink(url) {
@@ -447,22 +472,26 @@ define([
                 });
             }
 
-            controls.reset = controlFactory({
-                id: 'reset',
-                label: 'Reset',
-                defaultState: 'disabled',
-                container: $controlsContainer,
-                onclick: function onclick() {
-                    resetRecording();
-                },
-                updateState: function updateState() {
-                    if (player.getState() === playerStates.IDLE) {
-                        this.enable();
-                    } else {
-                        this.disable();
+            if (options.maxRecords !== 1) {
+                controls.reset = controlFactory({
+                    id: 'reset',
+                    label: 'Try again',
+                    defaultState: 'disabled',
+                    container: $controlsContainer,
+                    onclick: function onclick() {
+                        resetRecording();
+                    },
+                    updateState: function updateState() {
+                        if (config.maxRecords > 1 && config.maxRecords === _recordsAttempts) {
+                            this.disable();
+                        } else if (player.getState() === playerStates.IDLE) {
+                            this.enable();
+                        } else {
+                            this.disable();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
 
@@ -495,6 +524,7 @@ define([
 
                 // render interaction
                 createControls();
+                displayRemainingAttempts();
 
                 if (options.autoStart === true) {
                     startRecording();

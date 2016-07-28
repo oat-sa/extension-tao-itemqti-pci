@@ -1,6 +1,6 @@
 {
     "identifier": "i1469017297762182",
-    "serial": "item_5796175aa35ca316865072",
+    "serial": "item_579a024e35920718776523",
     "qtiClass": "assessmentItem",
     "attributes": {
         "identifier": "i1469017297762182",
@@ -13,21 +13,21 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_5796175aa34f2480989877",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_5796175aa92a0166261649}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_579a024e358fe519517059",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_579a024e3b07d263511170}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_5796175aa92a0166261649": {
-                "serial": "interaction_portablecustominteraction_5796175aa92a0166261649",
+            "interaction_portablecustominteraction_579a024e3b07d263511170": {
+                "serial": "interaction_portablecustominteraction_579a024e3b07d263511170",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_5796175aa35ca316865072"
+                    "relatedItem": "item_579a024e35920718776523"
                 },
                 "choices": {},
                 "typeIdentifier": "audioRecordingInteraction",
-                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audioRec\">\n                  <div class=\"instructions\"><\/div>\n                  <div class=\"recording\"><\/div>\n                  <div class=\"progress\"><\/div>\n                  <div class=\"controls\"><\/div>\n                  <\/div>\n            ",
+                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audioRec\">\n                  <div class=\"recording\"><\/div>\n                  <div class=\"progress\"><\/div>\n                  <div class=\"controls\"><\/div>\n                  <div class=\"instructions\"><\/div>\n                <\/div>\n              <\/div>\n            ",
                 "libraries": [
                     "IMSGlobal\/jquery_2_1_1",
                     "audioRecordingInteraction\/runtime\/js\/renderer"
@@ -41,11 +41,11 @@
             }
         },
         "debug": {
-            "relatedItem": "item_5796175aa35ca316865072"
+            "relatedItem": "item_579a024e35920718776523"
         }
     },
     "debug": {
-        "relatedItem": "item_5796175aa35ca316865072"
+        "relatedItem": "item_579a024e35920718776523"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
@@ -59,8 +59,8 @@
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
     },
     "stylesheets": {
-        "stylesheet_5796175aa6451244984232": {
-            "serial": "stylesheet_5796175aa6451244984232",
+        "stylesheet_579a024e37b23106009877": {
+            "serial": "stylesheet_579a024e37b23106009877",
             "qtiClass": "stylesheet",
             "attributes": {
                 "href": "audioRecordingInteraction\/runtime\/css\/audioRecordingInteraction.css",
@@ -69,14 +69,14 @@
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_5796175aa35ca316865072"
+                "relatedItem": "item_579a024e35920718776523"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_5796175aa7806735458705": {
+        "outcomedeclaration_579a024e395b8303814162": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_5796175aa7806735458705",
+            "serial": "outcomedeclaration_579a024e395b8303814162",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -84,15 +84,15 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_5796175aa35ca316865072"
+                "relatedItem": "item_579a024e35920718776523"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_5796175aa6bf8909026896": {
+        "responsedeclaration_579a024e38bc9059307265": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_5796175aa6bf8909026896",
+            "serial": "responsedeclaration_579a024e38bc9059307265",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
@@ -100,7 +100,7 @@
                 "baseType": "file"
             },
             "debug": {
-                "relatedItem": "item_5796175aa35ca316865072"
+                "relatedItem": "item_579a024e35920718776523"
             },
             "mapping": [],
             "areaMapping": [],
@@ -114,11 +114,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_5796175aab59c208516300",
+        "serial": "response_templatesdriven_579a024e3d2aa554000812",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {
-            "relatedItem": "item_5796175aa35ca316865072"
+            "relatedItem": "item_579a024e35920718776523"
         },
         "processingType": "templateDriven",
         "responseRules": [
