@@ -137,9 +137,11 @@ define([
     function recorderFactory(config) {
         var MediaRecorder = window.MediaRecorder,
             mediaRecorder,
+            recorder,
             recorderOptions = {
                 audioBitsPerSecond: config.audioBitrate
-            };
+            },
+            state = recorderStates.CREATED;
 
         if (typeof MediaRecorder === 'undefined') {
             throw new Error('MediaRecorder API not supported. Please use a compatible browser');
@@ -159,8 +161,16 @@ define([
             }
         }
 
-        return {
-            state: recorderStates.CREATED,
+        recorder = {
+            _setState: function(newState) {
+                state = newState;
+                this.trigger('statechange');
+                this.trigger(newState);
+            },
+
+            getState: function() {
+                return state;
+            },
 
             init: function() {
                 var self = this;
@@ -168,17 +178,11 @@ define([
                     .then(function(stream) {
                         mediaRecorder = new MediaRecorder(stream, recorderOptions);
                         if (mediaRecorder.state === 'inactive') {
-                            self.state = recorderStates.INACTIVE;
-
-                            if (self.oninactive) {
-                                self.oninactive();
-                            }
+                            self._setState(recorderStates.INACTIVE);
 
                             mediaRecorder.ondataavailable = function (e) {
                                 //todo: check what is the best way to handle this: little chunks or a big chunk at once
-                                if (self.ondataavailable) {
-                                    self.ondataavailable(e);
-                                }
+                                self.trigger('dataavailable', [e]);
                             };
                         } else {
                             return new Error('cannot initialize MediaRecorder');
@@ -191,15 +195,17 @@ define([
 
             start: function() {
                 mediaRecorder.start();
-                this.state = recorderStates.RECORDING;
+                this._setState(recorderStates.RECORDING);
             },
 
             stop: function() {
                 mediaRecorder.stop();
-                this.state = recorderStates.INACTIVE;
+                this._setState(recorderStates.INACTIVE);
             }
         };
+        event.addEventMgr(recorder);
 
+        return recorder;
     }
 
 
@@ -282,15 +288,19 @@ define([
         var player = playerFactory();
         var recorder = recorderFactory(options);
 
-        recorder.ondataavailable = function(e) {
+        recorder.on('dataavailable', function(e) {
             // todo: add checks on createObjectURL ?
+            // console.dir(e);
             var recording = e.data,
                 recordingUrl = URL.createObjectURL(recording);
 
             player.load(recordingUrl);
             setRecording(recording);
-        };
-        recorder.oninactive = updateControls.bind(null, controls); //fixme: hmmmmm?
+        });
+
+        recorder.on('statechange', function() {
+            updateControls(controls);
+        });
 
         player.on('statechange', function() {
             updateControls(controls);
@@ -302,7 +312,7 @@ define([
                 recorder.start();
                 updateControls(controls);
             }
-            if (recorder.state === recorderStates.CREATED) {
+            if (recorder.getState() === recorderStates.CREATED) {
                 recorder.init().then(function() {
                     effectiveStart();
                 });
@@ -313,7 +323,7 @@ define([
 
         function stopRecordingOrPlayback() {
             console.log('i am about to stop');
-            if (recorder.state === recorderStates.RECORDING) {
+            if (recorder.getState() === recorderStates.RECORDING) {
                 recorder.stop();
 
             } else if (player.getState() === playerStates.PLAYING) {
@@ -378,7 +388,7 @@ define([
                 },
                 updateState: function updateState() {
                     if (player.getState() === playerStates.CREATED) {
-                        if (recorder.state === recorderStates.RECORDING) {
+                        if (recorder.getState() === recorderStates.RECORDING) {
                             this.activate();
                         } else {
                             this.enable();
@@ -400,7 +410,7 @@ define([
                 },
                 updateState: function updateState() {
                     if (player.getState() === playerStates.PLAYING ||
-                        recorder.state === recorderStates.RECORDING) {
+                        recorder.getState() === recorderStates.RECORDING) {
                         this.enable();
                     } else {
                         this.disable();
