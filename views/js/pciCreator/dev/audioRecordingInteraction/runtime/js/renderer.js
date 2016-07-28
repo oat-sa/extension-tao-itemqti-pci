@@ -184,6 +184,7 @@ define([
 
                             mediaRecorder.ondataavailable = function (e) {
                                 //todo: check what is the best way to handle this: little chunks or a big chunk at once
+                                //todo: rename this event
                                 self.trigger('dataavailable', [e]);
                             };
                         } else {
@@ -255,7 +256,7 @@ define([
     }
 
     // todo: shouldn't this be under the returned function scope to avoid explicitely passing controls ? or bind it
-    function updateControls(controls) {
+    function updateControlsState(controls) {
         var control;
         for (control in controls) {
             if (controls.hasOwnProperty(control)) {
@@ -276,7 +277,8 @@ define([
         var $container = $(container);
 
         var controls = {},
-            $controlsContainer = $container.find('.audioRec > .controls');
+            $controlsContainer = $container.find('.audioRec > .controls'),
+            updateControls = updateControlsState.bind(null, controls);
 
         var options = _.defaults(config, {
             audioBitrate: 20000,
@@ -301,18 +303,18 @@ define([
         });
 
         recorder.on('statechange', function() {
-            updateControls(controls);
+            updateControls();
         });
 
         player.on('statechange', function() {
-            updateControls(controls);
+            updateControls();
         });
 
         function startRecording() {
             console.log('clicked on record');
             function effectiveStart() {
                 recorder.start();
-                updateControls(controls);
+                updateControls();
             }
             if (recorder.getState() === recorderStates.CREATED) {
                 recorder.init().then(function() {
@@ -331,18 +333,18 @@ define([
             } else if (player.getState() === playerStates.PLAYING) {
                 player.stop();
             }
-            updateControls(controls);
+            updateControls();
         }
 
         function playRecording() {
             player.play();
-            updateControls(controls);
+            updateControls();
         }
 
         function resetRecording() {
             player.unload();
             setRecording(null);
-            updateControls(controls);
+            updateControls();
         }
 
         function createRecordJSON(blob) {
