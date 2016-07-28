@@ -232,9 +232,8 @@ define([
                 config.onclick();
             }
         });
-        if (config.display === true) {
-            $control.appendTo(config.container);
-        }
+        $control.appendTo(config.container);
+
         setState(config.defaultState || controlStates.DISABLED);
 
         function setState(newState) {
@@ -274,7 +273,7 @@ define([
      */
     return function(id, container, config) {
 
-        // recording as file { mime, data, name }
+        // todo: jsdoc for recording
         var _recording = null;
         var filePrefix = 'audioRecording';
 
@@ -286,11 +285,12 @@ define([
 
         var options = _.defaults(config, {
             audioBitrate: 20000,
-            allowPlayback: true,
-            autostart: false,
-            maxRecords: -1,
-            maxRecordingTime: 10,
-            displayDownloadLink: true // for debugging purposes only
+            allowPlayback: false,
+            allowStop: true, // todo
+            autoStart: true,
+            maxRecords: -1, // todo
+            maxRecordingTime: 10, // todo
+            displayDownloadLink: true // todo for debugging purposes only
         });
 
         var player = playerFactory();
@@ -387,7 +387,6 @@ define([
                 id: 'record',
                 label: 'Record',
                 defaultState: 'enabled',
-                display: true,
                 container: $controlsContainer,
                 onclick: function onclick() {
                     startRecording();
@@ -409,7 +408,6 @@ define([
                 id: 'stop',
                 label: 'Stop',
                 defaultState: 'disabled',
-                display: true,
                 container: $controlsContainer,
                 onclick: function onclick() {
                     stopRecordingOrPlayback();
@@ -424,29 +422,35 @@ define([
                 }
             });
 
-            controls.play = controlFactory({
-                id: 'play',
-                label: 'Play',
-                defaultState: 'disabled',
-                display: true,
-                container: $controlsContainer,
-                onclick: function onclick() {
-                    playRecording();
-                },
-                updateState: function updateState() {
-                    switch (player.getState()) {
-                    case playerStates.IDLE: this.enable(); break;
-                    case playerStates.PLAYING: this.activate(); break;
-                    default: this.disable(); break;
+            if (options.allowPlayback === true) {
+                controls.play = controlFactory({
+                    id: 'play',
+                    label: 'Play',
+                    defaultState: 'disabled',
+                    container: $controlsContainer,
+                    onclick: function onclick() {
+                        playRecording();
+                    },
+                    updateState: function updateState() {
+                        switch (player.getState()) {
+                            case playerStates.IDLE:
+                                this.enable();
+                                break;
+                            case playerStates.PLAYING:
+                                this.activate();
+                                break;
+                            default:
+                                this.disable();
+                                break;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             controls.reset = controlFactory({
                 id: 'reset',
                 label: 'Reset',
                 defaultState: 'disabled',
-                display: true,
                 container: $controlsContainer,
                 onclick: function onclick() {
                     resetRecording();
@@ -491,6 +495,10 @@ define([
 
                 // render interaction
                 createControls();
+
+                if (options.autoStart === true) {
+                    startRecording();
+                }
             }
         };
 
