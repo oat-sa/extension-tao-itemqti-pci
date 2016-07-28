@@ -5,5 +5,6 @@
         <div class="progress"></div>
         <div class="controls"></div>
         <div class="instructions"></div>
+        <div class="download"></div>
     </div>
 </div>

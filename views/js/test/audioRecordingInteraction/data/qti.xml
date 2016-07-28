@@ -28,6 +28,7 @@
                   <html5:div class="progress"/>
                   <html5:div class="controls"/>
                   <html5:div class="instructions"/>
+                  <html5:div class="download"/>
                 </html5:div>
               </html5:div>
             </pci:markup>

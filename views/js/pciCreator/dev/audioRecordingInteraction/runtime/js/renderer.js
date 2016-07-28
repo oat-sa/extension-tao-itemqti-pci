@@ -107,6 +107,7 @@ define([
 
             play: function() {
                 audioEl.play();
+                // state change has to be triggered by the onplaying listener
             },
 
             stop: function() {
@@ -285,20 +286,21 @@ define([
 
         var $container = $(container);
 
-        var $instructionsContainer = $container.find('.audioRec > .instructions');
+        var $instructionsContainer = $container.find('.audioRec > .instructions'),
+            $downloadContainer = $container.find('.audioRec > .download');
 
         var controls = {},
             $controlsContainer = $container.find('.audioRec > .controls'),
             updateControls = updateControlsState.bind(null, controls);
 
         var options = _.defaults(config, {
-            audioBitrate: 20000,
             allowPlayback: true,
-            allowStop: true, // todo
+            allowStop: true, // todo?
+            audioBitrate: 20000,
             autoStart: false,
-            maxRecords: 3, // todo : 1 = no records / x = x records / 0 = unlimited
-            maxRecordingTime: 10, // todo
-            displayDownloadLink: true // todo for debugging purposes only
+            displayDownloadLink: false, // for testing purposes
+            maxRecords: 3, // 1 = no records / x = x records / 0 = unlimited
+            maxRecordingTime: 10 // todo
         });
 
         var player = playerFactory();
@@ -306,13 +308,22 @@ define([
 
         recorder.on('recordingavailable', function(e) {
             var recording = e.data,
-                recordingUrl = window.URL.createObjectURL(recording);
+                recordingUrl = window.URL.createObjectURL(recording),
+                filename =
+                    filePrefix + '_' +
+                    window.Date.now() + '.' +
+                    recording.type.split('/')[1],
+                filesize = recording.size;
 
             player.load(recordingUrl);
-            createBase64Recoding(recording);
+            createBase64Recoding(recording, filename);
 
             _recordsAttempts++;
             displayRemainingAttempts();
+
+            if (options.displayDownloadLink === true) {
+                displayDownloadLink(recordingUrl, filename, filesize);
+            }
         });
 
         recorder.on('statechange', function() {
@@ -356,6 +367,7 @@ define([
             player.unload();
             setRecording(null);
             updateControls();
+            removeDownloadLink();
         }
 
         function createBase64Recoding(blob) {
@@ -399,12 +411,17 @@ define([
             }
         }
 
-        function createDownloadLink(url) {
+        function displayDownloadLink(url, filename, filesize) {
             var downloadLink = document.createElement('a');
-            document.body.appendChild(downloadLink);
-            downloadLink.text = 'download ';
+            downloadLink.text = 'download - ' + Math.round(filesize / 1000) + 'KB';
             downloadLink.download = ' filename ' + Date.now();
             downloadLink.href = url;
+
+            $downloadContainer.append($(downloadLink));
+        }
+
+        function removeDownloadLink() {
+            $downloadContainer.empty();
         }
 
         function createControls() {
@@ -458,15 +475,15 @@ define([
                     },
                     updateState: function updateState() {
                         switch (player.getState()) {
-                            case playerStates.IDLE:
-                                this.enable();
-                                break;
-                            case playerStates.PLAYING:
-                                this.activate();
-                                break;
-                            default:
-                                this.disable();
-                                break;
+                        case playerStates.IDLE:
+                            this.enable();
+                            break;
+                        case playerStates.PLAYING:
+                            this.activate();
+                            break;
+                        default:
+                            this.disable();
+                            break;
                         }
                     }
                 });
