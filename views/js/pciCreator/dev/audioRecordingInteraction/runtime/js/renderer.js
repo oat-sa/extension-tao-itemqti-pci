@@ -331,8 +331,8 @@ define([
             minRecordingTime: 5
         });
 
-        var player = playerFactory();
-        var recorder = recorderFactory(options);
+        var player = playerFactory(),
+            recorder = recorderFactory(options);
 
         recorder.on('recordingavailable', function(blob, duration) {
             var recordingUrl = window.URL.createObjectURL(blob),
@@ -347,11 +347,9 @@ define([
             createBase64Recoding(blob, filename);
 
             _recordsAttempts++;
-            displayRemainingAttempts();
 
-            if (options.displayDownloadLink === true) {
-                displayDownloadLink(recordingUrl, filename, filesize, duration);
-            }
+            displayRemainingAttempts();
+            displayDownloadLink(recordingUrl, filename, filesize, duration);
         });
 
         recorder.on('statechange', function() {
@@ -398,8 +396,8 @@ define([
         }
 
         function createBase64Recoding(blob, filename) {
-            //todo: implement a spinner or something to feedback that work is in progress while this is happening
-            //todo: as user shouldn't leave the item in the meantime as the response is not ready
+            //todo: implement a spinner or something to feedback that work is in progress while this is happening:
+            //todo: as the response is not ready, the user shouldn't leave the item in the meantime
             var reader = new FileReader();
             reader.readAsDataURL(blob);
 
@@ -435,17 +433,19 @@ define([
         }
 
         function displayDownloadLink(url, filename, filesize, duration) {
-            var downloadLink = document.createElement('a');
-            // fixme: append the link in a better place
-            // container.appendChild(downloadLink); // doesn't work in FF...
-            document.body.appendChild(downloadLink); // but this works !!!
-            document.body.appendChild(document.createElement('br'));
-            downloadLink.text =
-                'download ' + _recordsAttempts + ' - ' +
-                Math.round(filesize / 1000) + 'KB - ' +
-                Math.round(duration / 1000) + 's';
-            downloadLink.download = filename;
-            downloadLink.href = url;
+            if (options.displayDownloadLink === true) {
+                var downloadLink = document.createElement('a');
+                // fixme: append the link in a better place
+                // container.appendChild(downloadLink); // doesn't work in FF...
+                document.body.appendChild(downloadLink); // but this works !!!
+                document.body.appendChild(document.createElement('br'));
+                downloadLink.text =
+                    'download ' + _recordsAttempts + ' - ' +
+                    Math.round(filesize / 1000) + 'KB - ' +
+                    Math.round(duration / 1000) + 's';
+                downloadLink.download = filename;
+                downloadLink.href = url;
+            }
         }
 
         function createControls() {
