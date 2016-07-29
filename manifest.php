@@ -20,7 +20,7 @@
  */               
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
-use oat\qtiItemPci\scripts\install\SetupPortableElementRegistry;
+use oat\qtiItemPci\scripts\install\SetupPciRegistry;
 use oat\qtiItemPci\scripts\install\RegisterPortableElement;
 
 return array(
@@ -43,7 +43,7 @@ return array(
 		    dirname(__FILE__). '/install/ontology/role.rdf'
 		),
         'php'	=> array(
-			SetupPortableElementRegistry::class,
+			SetupPciRegistry::class,
 			SetQtiCreatorConfig::class,
 			RegisterClientProvider::class,
 			RegisterPortableElement::class

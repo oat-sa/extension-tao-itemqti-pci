@@ -23,7 +23,7 @@ namespace oat\qtiItemPci\scripts\update;
 
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
-use oat\qtiItemPci\scripts\install\SetupPortableElementRegistry;
+use oat\qtiItemPci\scripts\install\SetupPciRegistry;
 use oat\qtiItemPci\scripts\install\RegisterPortableElement;
 
 class Updater extends \common_ext_ExtensionUpdater
@@ -36,11 +36,11 @@ class Updater extends \common_ext_ExtensionUpdater
     public function update($currentVersion)
     {
         
-      	if ($this->isBetween('0', '0.1.3')){
+      	if ($this->isBetween('0', '0.1.3')) {
   	    	$this->setVersion('0.1.3');
    	    }
         
-        if($this->isVersion('0.1.3')){
+        if ($this->isVersion('0.1.3')) {
             $testManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
             $QTIManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
             $testTakerRole = new \core_kernel_classes_Resource(INSTANCE_ROLE_DELIVERY);
@@ -53,12 +53,15 @@ class Updater extends \common_ext_ExtensionUpdater
             $setQtiCreatorConfig([]);
             $registerClientProvider = new RegisterClientProvider();
             $registerClientProvider([]);
-            $setupPortableElementRegistry = new SetupPortableElementRegistry();
-            $setupPortableElementRegistry([]);
+
+            $setupPciRegistry = new SetupPciRegistry();
+            $setupPciRegistry->setServiceLocator($this->getServiceManager());
+            $setupPciRegistry->updateTo1_0_0();
+
             $registerPortableElement = new RegisterPortableElement();
             $registerPortableElement([]);
 
-            $this->setVersion('0.2.0');
+            $this->setVersion('1.0.0');
         }
     }
 }

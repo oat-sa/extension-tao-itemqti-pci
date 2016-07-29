@@ -1,7 +1,7 @@
 {{#each files}}
 <li data-type-identifier="{{typeIdentifier}}">
     <span class="desc truncate">{{label}} - {{version}}</span>
-    <div class="actions">
+    <!-- <div class="actions">
         <div class="tlb rgt">
             <div class="tlb-top">
                 <span class="tlb-box">
@@ -11,10 +11,10 @@
                             <a href="#" class="tlb-button-off" title="{{__ 'Remove this custom interaction'}}" data-delete=":parent li" data-delete-undo=false><span class="icon-bin"></span></a>
                         </span>
                         <span class="tlb-end"></span>
-                    </span>  
-                </span>   
+                    </span>
+                </span>
             </div>
         </div>
-    </div>
+    </div> -->
 </li>
 {{/each}}

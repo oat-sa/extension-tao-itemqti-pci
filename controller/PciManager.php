@@ -71,10 +71,9 @@ class PciManager extends tao_actions_CommonModule
         $returnValue = array();
 
         $all = $this->getRegistry()->getLatestCreators();
-        foreach($all as $portableElement){
+        foreach ($all as $portableElement) {
             $returnValue[$portableElement->getTypeIdentifier()] = $this->getMinifiedModel($portableElement);
         }
-
         $this->returnJson($returnValue);
     }
 
@@ -186,7 +185,7 @@ class PciManager extends tao_actions_CommonModule
         }
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
         $this->returnJson([
-            'success' => $this->getRegistry()->unregister($typeIdentifier)
+            'success' => $this->getRegistry()->unregister(new PciModel($typeIdentifier))
         ]);
     }
 
