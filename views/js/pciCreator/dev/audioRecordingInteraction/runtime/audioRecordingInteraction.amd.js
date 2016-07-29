@@ -15,48 +15,6 @@ define([
 ){
     'use strict';
 
-
-    //todo: check licence or rewrite
-    // MediaDevices.getUserMedia polyfill
-    // https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
-    // Mozilla Public License, version 2.0
-    (function setGetUserMedia() {
-
-        var promisifiedOldGUM = function(constraints) {
-
-            // First get ahold of getUserMedia, if present
-            var getUserMedia = (navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia ||
-            navigator.msGetUserMedia);
-
-            // Some browsers just don't implement it - return a rejected promise with an error
-            // to keep a consistent interface
-            if(!getUserMedia) {
-                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-            }
-
-            // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-            return new Promise(function(successCallback, errorCallback) {
-                getUserMedia.call(navigator, constraints, successCallback, errorCallback);
-            });
-
-        };
-
-        // Older browsers might not implement mediaDevices at all, so we set an empty object first
-        if(typeof navigator.mediaDevices === 'undefined') {
-            navigator.mediaDevices = {};
-        }
-
-        // Some browsers partially implement mediaDevices. We can't just assign an object
-        // with getUserMedia as it would overwrite existing properties.
-        // Here, we will just add the getUserMedia property if it's missing.
-        if(typeof navigator.mediaDevices.getUserMedia === 'undefined') {
-            navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
-        }
-    }());
-
-
     /**
      * @property {String} CREATED   - player instance created, but no media loaded
      * @property {String} IDLE      - media loaded and playable
@@ -69,7 +27,18 @@ define([
     };
 
     /**
-     * todo: jsdoc
+     * @property {String} CREATED   - recorder instance created, but not not initialized
+     * @property {String} IDLE      - ready to record
+     * @property {String} RECORDING - record is in progress
+     */
+    var recorderStates = {
+        CREATED:    'created',
+        IDLE:       'idle',
+        RECORDING:  'recording'
+    };
+
+    /**
+     * @returns {Object} - wrapper for an HTMLAudioElement
      */
     function playerFactory() {
         var audioEl,
@@ -128,20 +97,52 @@ define([
         return player;
     }
 
-
     /**
-     * @property {String} CREATED   - recorder instance created, but not not initialized
-     * @property {String} IDLE      - ready to record
-     * @property {String} RECORDING - record is in progress
+     * MediaDevices.getUserMedia polyfill - https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
+     * Mozilla Public License, version 2.0 - https://www.mozilla.org/en-US/MPL/
      */
-    var recorderStates = {
-        CREATED:    'created',
-        IDLE:       'idle',
-        RECORDING:  'recording'
-    };
+    function setGetUserMedia() {
+        var promisifiedOldGUM = function(constraints) {
+
+            // First get ahold of getUserMedia, if present
+            var getUserMedia = (navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia);
+
+            // Some browsers just don't implement it - return a rejected promise with an error
+            // to keep a consistent interface
+            if(!getUserMedia) {
+                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+            }
+
+            // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+            return new Promise(function(successCallback, errorCallback) {
+                getUserMedia.call(navigator, constraints, successCallback, errorCallback);
+            });
+
+        };
+
+        // Older browsers might not implement mediaDevices at all, so we set an empty object first
+        if(typeof navigator.mediaDevices === 'undefined') {
+            navigator.mediaDevices = {};
+        }
+
+        // Some browsers partially implement mediaDevices. We can't just assign an object
+        // with getUserMedia as it would overwrite existing properties.
+        // Here, we will just add the getUserMedia property if it's missing.
+        if(typeof navigator.mediaDevices.getUserMedia === 'undefined') {
+            navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
+        }
+    }
+
 
     /**
-     * todo: jsdoc
+     * @param {Object}  config
+     * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
+     * @param {Number}  config.maxRecordingTime - in seconds
+     * @returns {Object} - wrapper for getUserMedia / MediaRecorder
+     * @throws {Error} - if getUserMedia or MediaRecorder is not available in current browser
      */
     function recorderFactory(config) {
         var MediaRecorder = window.MediaRecorder,
@@ -156,6 +157,8 @@ define([
             chunkSize = 1000,
             startTime,
             timerId;
+
+        setGetUserMedia();
 
         if (typeof MediaRecorder === 'undefined') {
             throw new Error('MediaRecorder API not supported. Please use a compatible browser');
@@ -245,10 +248,16 @@ define([
 
 
     /**
-     * todo: jsdoc
+     * Creates a button for recording/playback control
+     * @param {Object}  config
+     * @param {Number}  config.id - control id
+     * @param {String}  config.label - text displayed inside the button
+     * @param {String}  config.defaultState - state in which the button will be created
+     * @param {$}       config.container - jQuery Dom element that the button will be appended to
      */
     function controlFactory(config) {
         var state,
+            control,
             $control = $(controlTpl({
                 id: config.id,
                 label: config.label
@@ -259,11 +268,6 @@ define([
                 ACTIVE: 'active'
             };
 
-        $control.on('click', function() {
-            if (state === controlStates.ENABLED) {
-                config.onclick();
-            }
-        });
         $control.appendTo(config.container);
 
         setState(config.defaultState || controlStates.DISABLED);
@@ -274,7 +278,7 @@ define([
             $control.addClass(state);
         }
 
-        return {
+        control = {
             enable: function() {
                 setState(controlStates.ENABLED);
             },
@@ -285,9 +289,16 @@ define([
                 setState(controlStates.ACTIVE);
             },
             updateState: function() {
-                config.updateState.call(this);
+                this.trigger('updatestate');
             }
         };
+        event.addEventMgr(control);
+
+        $control.on('click', function() {
+            control.trigger('click');
+        });
+
+        return control;
     }
 
     function updateControlsState(controls) {
@@ -321,6 +332,16 @@ define([
         var _recording = null,
             _recordsAttempts = 0;
 
+        /**
+         * @param {HTMLElement} dom - html node containing the interaction
+         * @param {Object}  config
+         * @param {Boolean} config.allowPlayback - display the play button
+         * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
+         * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+         * @param {Boolean} config.displayDownloadLink - for testing purposes: allow to download the recorded file
+         * @param {Number}  config.maxRecords - allowed number of recording attempts
+         * @param {Number}  config.maxRecordingTime - in seconds
+         */
         function init(dom, config) {
             $container = $(dom);
             $instructionsContainer = $container.find('.audioRec > .instructions');
@@ -384,7 +405,8 @@ define([
                 recorder.init().then(function() {
                     startForReal();
                 });
-            } else {
+            } else if (recorder.getState() === recorderStates.IDLE &&
+                player.getState() === playerStates.CREATED) {
                 startForReal();
             }
         }
@@ -400,14 +422,18 @@ define([
         }
 
         function playRecording() {
-            player.play();
-            updateControls();
+            if (player.getState() === playerStates.IDLE) {
+                player.play();
+                updateControls();
+            }
         }
 
         function resetRecording() {
-            player.unload();
-            setRecording(null);
-            updateControls();
+            if (player.getState() === playerStates.IDLE) {
+                player.unload();
+                setRecording(null);
+                updateControls();
+            }
         }
 
         function createBase64Recoding(blob, filename) {
@@ -466,89 +492,105 @@ define([
         }
 
         function createControls() {
-            controls.record = controlFactory({
+            var record,
+                stop,
+                play,
+                reset;
+
+            // Record button
+            record = controlFactory({
                 id: 'record',
                 label: 'Record',
                 defaultState: 'enabled',
-                container: $controlsContainer,
-                onclick: function onclick() {
-                    startRecording();
-                },
-                updateState: function updateState() {
-                    if (player.getState() === playerStates.CREATED) {
-                        if (recorder.getState() === recorderStates.RECORDING) {
-                            this.activate();
-                        } else {
-                            this.enable();
-                        }
+                container: $controlsContainer
+            });
+            record.on('click', function() {
+                startRecording();
+            });
+            record.on('updatestate', function() {
+                if (player.getState() === playerStates.CREATED) {
+                    if (recorder.getState() === recorderStates.RECORDING) {
+                        record.activate();
                     } else {
-                        this.disable();
+                        record.enable();
                     }
+                } else {
+                    record.disable();
                 }
             });
+            controls.record = record;
 
-            controls.stop = controlFactory({
+
+            // Stop button
+            stop = controlFactory({
                 id: 'stop',
                 label: 'Stop',
                 defaultState: 'disabled',
-                container: $controlsContainer,
-                onclick: function onclick() {
-                    stopRecordingOrPlayback();
-                },
-                updateState: function updateState() {
-                    if (player.getState() === playerStates.PLAYING ||
-                        recorder.getState() === recorderStates.RECORDING) {
-                        this.enable();
-                    } else {
-                        this.disable();
-                    }
+                container: $controlsContainer
+            });
+            stop.on('click', function() {
+                stopRecordingOrPlayback();
+            });
+            stop.on('updatestate', function() {
+                if (player.getState() === playerStates.PLAYING ||
+                    recorder.getState() === recorderStates.RECORDING) {
+                    stop.enable();
+                } else {
+                    stop.disable();
                 }
             });
+            controls.stop = stop;
 
+
+            // Play button
             if (options.allowPlayback === true) {
-                controls.play = controlFactory({
+                play = controlFactory({
                     id: 'play',
                     label: 'Play',
                     defaultState: 'disabled',
-                    container: $controlsContainer,
-                    onclick: function onclick() {
-                        playRecording();
-                    },
-                    updateState: function updateState() {
-                        switch (player.getState()) {
-                        case playerStates.IDLE:
-                            this.enable();
-                            break;
-                        case playerStates.PLAYING:
-                            this.activate();
-                            break;
-                        default:
-                            this.disable();
-                            break;
-                        }
+                    container: $controlsContainer
+                });
+                play.on('click', function() {
+                    playRecording();
+                });
+                play.on('updatestate', function() {
+                    switch (player.getState()) {
+                    case playerStates.IDLE:
+                        play.enable();
+                        break;
+                    case playerStates.PLAYING:
+                        play.activate();
+                        break;
+                    default:
+                        play.disable();
+                        break;
                     }
                 });
+                controls.play = play;
             }
 
+
+            // Reset button
             if (options.maxRecords !== 1) {
-                controls.reset = controlFactory({
+                reset = controlFactory({
                     id: 'reset',
                     label: 'Try again',
                     defaultState: 'disabled',
-                    container: $controlsContainer,
-                    onclick: function onclick() {
-                        resetRecording();
-                    },
-                    updateState: function updateState() {
-                        if (options.maxRecords > 1 && options.maxRecords === _recordsAttempts) {
-                            this.disable();
-                        } else if (player.getState() === playerStates.IDLE) {
-                            this.enable();
-                        } else {
-                            this.disable();
-                        }
+                    container: $controlsContainer
+                });
+                reset.on('click', function() {
+                    resetRecording();
+                });
+                reset.on('updatestate', function() {
+                    if (options.maxRecords > 1 && options.maxRecords === _recordsAttempts) {
+                        reset.disable();
+                    } else if (player.getState() === playerStates.IDLE) {
+                        reset.enable();
+                    } else {
+                        reset.disable();
                     }
                 });
+                controls.reset = reset;
             }
         }
 
