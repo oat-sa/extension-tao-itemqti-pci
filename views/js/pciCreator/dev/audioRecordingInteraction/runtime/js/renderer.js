@@ -14,7 +14,6 @@ define([
     'use strict';
 
     //todo: check licence or rewrite
-    //fixme: doesn't work on chrome?
     // MediaDevices.getUserMedia polyfill
     // https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
     // Mozilla Public License, version 2.0
@@ -42,14 +41,14 @@ define([
         };
 
         // Older browsers might not implement mediaDevices at all, so we set an empty object first
-        if(navigator.mediaDevices === 'undefined') {
+        if(typeof navigator.mediaDevices === 'undefined') {
             navigator.mediaDevices = {};
         }
 
         // Some browsers partially implement mediaDevices. We can't just assign an object
         // with getUserMedia as it would overwrite existing properties.
         // Here, we will just add the getUserMedia property if it's missing.
-        if(navigator.mediaDevices.getUserMedia === 'undefined') {
+        if(typeof navigator.mediaDevices.getUserMedia === 'undefined') {
             navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
         }
     }());
@@ -148,7 +147,12 @@ define([
             recorderOptions = {
                 audioBitsPerSecond: config.audioBitrate
             },
-            state = recorderStates.CREATED;
+            state = recorderStates.CREATED,
+            mimeType,
+            chunks = [],
+            chunkSize = 1000,
+            startTime,
+            timerId;
 
         if (typeof MediaRecorder === 'undefined') {
             throw new Error('MediaRecorder API not supported. Please use a compatible browser');
@@ -184,16 +188,25 @@ define([
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
                         mediaRecorder = new MediaRecorder(stream, recorderOptions);
-                        if (mediaRecorder.state === 'inactive') {
+                        mimeType = mediaRecorder.mimeType;
+
+                        self._setState(recorderStates.IDLE);
+
+                        mediaRecorder.ondataavailable = function(e) {
+                            chunks.push(e.data);
+                        };
+
+                        mediaRecorder.onstop = function() {
+                            var blob = new Blob(chunks, { type: mimeType });
+                            var duration = new window.Date().getTime() - startTime;
+
+                            clearTimeout(timerId);
+
+                            self.trigger('recordingavailable', [blob, duration]);
                             self._setState(recorderStates.IDLE);
 
-                            mediaRecorder.ondataavailable = function (e) {
-                                //todo: check what is the best way to handle this: little chunks or a big chunk at once
-                                self.trigger('recordingavailable', [e]);
-                            };
-                        } else {
-                            return new Error('cannot initialize MediaRecorder');
-                        }
+                            chunks = [];
+                        };
                     })
                     .catch(function(err) {
                         throw err;
@@ -201,13 +214,25 @@ define([
             },
 
             start: function() {
-                mediaRecorder.start();
+                var self = this;
+
+                mediaRecorder.start(chunkSize);
+                startTime = new window.Date().getTime();
+
                 this._setState(recorderStates.RECORDING);
+
+                if (config.maxRecordingTime > 0) {
+                    timerId = _.delay(function() {
+                        if (mediaRecorder.state === 'recording') {
+                            self.stop();
+                        }
+                    }, config.maxRecordingTime * 1000);
+                }
             },
 
             stop: function() {
                 mediaRecorder.stop();
-                this._setState(recorderStates.IDLE);
+                // state change is triggered by onstop handler
             }
         };
         event.addEventMgr(recorder);
@@ -286,43 +311,46 @@ define([
 
         var $container = $(container);
 
-        var $instructionsContainer = $container.find('.audioRec > .instructions'),
-            $downloadContainer = $container.find('.audioRec > .download');
-
         var controls = {},
             $controlsContainer = $container.find('.audioRec > .controls'),
             updateControls = updateControlsState.bind(null, controls);
 
+        var $instructionsContainer = $container.find('.audioRec > .instructions');
+
         var options = _.defaults(config, {
             allowPlayback: true,
-            allowStop: true, // todo?
             audioBitrate: 20000,
             autoStart: false,
-            displayDownloadLink: false, // for testing purposes
+            displayDownloadLink: true, // this is for testing purposes only
             maxRecords: 3, // 1 = no records / x = x records / 0 = unlimited
-            maxRecordingTime: 10 // todo
+            maxRecordingTime: 10,
+
+            // todo: consider this
+            allowStopRecord: true,
+            allowStopPlayback: true,
+            minRecordingTime: 5
         });
 
         var player = playerFactory();
         var recorder = recorderFactory(options);
 
-        recorder.on('recordingavailable', function(e) {
-            var recording = e.data,
-                recordingUrl = window.URL.createObjectURL(recording),
+        recorder.on('recordingavailable', function(blob, duration) {
+            var recordingUrl = window.URL.createObjectURL(blob),
                 filename =
                     filePrefix + '_' +
                     window.Date.now() + '.' +
-                    recording.type.split('/')[1],
-                filesize = recording.size;
+                    // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
+                    blob.type.split(';')[0].split('/')[1],
+                filesize = blob.size;
 
             player.load(recordingUrl);
-            createBase64Recoding(recording, filename);
+            createBase64Recoding(blob, filename);
 
             _recordsAttempts++;
             displayRemainingAttempts();
 
             if (options.displayDownloadLink === true) {
-                displayDownloadLink(recordingUrl, filename, filesize);
+                displayDownloadLink(recordingUrl, filename, filesize, duration);
             }
         });
 
@@ -335,16 +363,16 @@ define([
         });
 
         function startRecording() {
-            function effectiveStart() {
+            function startForReal() {
                 recorder.start();
                 updateControls();
             }
             if (recorder.getState() === recorderStates.CREATED) {
                 recorder.init().then(function() {
-                    effectiveStart();
+                    startForReal();
                 });
             } else {
-                effectiveStart();
+                startForReal();
             }
         }
 
@@ -367,20 +395,15 @@ define([
             player.unload();
             setRecording(null);
             updateControls();
-            removeDownloadLink();
         }
 
-        function createBase64Recoding(blob) {
+        function createBase64Recoding(blob, filename) {
             //todo: implement a spinner or something to feedback that work is in progress while this is happening
+            //todo: as user shouldn't leave the item in the meantime as the response is not ready
             var reader = new FileReader();
             reader.readAsDataURL(blob);
 
             reader.onloadend = function onLoadEnd(e) {
-                var filename =
-                    filePrefix + '_' +
-                    window.Date.now() + '.' +
-                    blob.type.split('/')[1];
-
                 var base64Raw = e.target.result;
                 var commaPosition = base64Raw.indexOf(',');
                 var base64Data = base64Raw.substring(commaPosition + 1);
@@ -411,17 +434,18 @@ define([
             }
         }
 
-        function displayDownloadLink(url, filename, filesize) {
+        function displayDownloadLink(url, filename, filesize, duration) {
             var downloadLink = document.createElement('a');
-            downloadLink.text = 'download - ' + Math.round(filesize / 1000) + 'KB';
-            downloadLink.download = ' filename ' + Date.now();
+            // fixme: append the link in a better place
+            // container.appendChild(downloadLink); // doesn't work in FF...
+            document.body.appendChild(downloadLink); // but this works !!!
+            document.body.appendChild(document.createElement('br'));
+            downloadLink.text =
+                'download ' + _recordsAttempts + ' - ' +
+                Math.round(filesize / 1000) + 'KB - ' +
+                Math.round(duration / 1000) + 's';
+            downloadLink.download = filename;
             downloadLink.href = url;
-
-            $downloadContainer.append($(downloadLink));
-        }
-
-        function removeDownloadLink() {
-            $downloadContainer.empty();
         }
 
         function createControls() {
