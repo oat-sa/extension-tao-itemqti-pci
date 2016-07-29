@@ -405,35 +405,30 @@ define([
                 recorder.init().then(function() {
                     startForReal();
                 });
-            } else if (recorder.getState() === recorderStates.IDLE &&
-                player.getState() === playerStates.CREATED) {
+            } else {
                 startForReal();
             }
         }
 
-        function stopRecordingOrPlayback() {
-            if (recorder.getState() === recorderStates.RECORDING) {
-                recorder.stop();
+        function stopRecording() {
+            recorder.stop();
+            updateControls();
+        }
 
-            } else if (player.getState() === playerStates.PLAYING) {
-                player.stop();
-            }
+        function stopPlayback() {
+            player.stop();
             updateControls();
         }
 
         function playRecording() {
-            if (player.getState() === playerStates.IDLE) {
-                player.play();
-                updateControls();
-            }
+            player.play();
+            updateControls();
         }
 
         function resetRecording() {
-            if (player.getState() === playerStates.IDLE) {
-                player.unload();
-                setRecording(null);
-                updateControls();
-            }
+            player.unload();
+            setRecording(null);
+            updateControls();
         }
 
         function createBase64Recoding(blob, filename) {
@@ -505,7 +500,10 @@ define([
                 container: $controlsContainer
             });
             record.on('click', function() {
-                startRecording();
+                if ((recorder.getState() === recorderStates.IDLE || recorder.getState() === recorderStates.CREATED) &&
+                    player.getState() === playerStates.CREATED) {
+                    startRecording();
+                }
             });
             record.on('updatestate', function() {
                 if (player.getState() === playerStates.CREATED) {
@@ -529,7 +527,12 @@ define([
                 container: $controlsContainer
             });
             stop.on('click', function() {
-                stopRecordingOrPlayback();
+                if (recorder.getState() === recorderStates.RECORDING) {
+                    stopRecording();
+
+                } else if (player.getState() === playerStates.PLAYING) {
+                    stopPlayback();
+                }
             });
             stop.on('updatestate', function() {
                 if (player.getState() === playerStates.PLAYING ||
@@ -551,7 +554,9 @@ define([
                     container: $controlsContainer
                 });
                 play.on('click', function() {
-                    playRecording();
+                    if (player.getState() === playerStates.IDLE) {
+                        playRecording();
+                    }
                 });
                 play.on('updatestate', function() {
                     switch (player.getState()) {
@@ -579,7 +584,9 @@ define([
                     container: $controlsContainer
                 });
                 reset.on('click', function() {
-                    resetRecording();
+                    if (player.getState() === playerStates.IDLE) {
+                        resetRecording();
+                    }
                 });
                 reset.on('updatestate', function() {
                     if (options.maxRecords > 1 && options.maxRecords === _recordsAttempts) {
