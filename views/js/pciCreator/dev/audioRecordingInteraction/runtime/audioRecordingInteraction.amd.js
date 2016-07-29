@@ -27,7 +27,7 @@ define([
     };
 
     /**
-     * @property {String} CREATED   - recorder instance created, but not not initialized
+     * @property {String} CREATED   - recorder instance created, but microphone access not granted
      * @property {String} IDLE      - ready to record
      * @property {String} RECORDING - record is in progress
      */
@@ -315,6 +315,8 @@ define([
      * @returns {Object} - implements the PCI interface and will be passed to qtiCustomInteractionContext.register()
      */
     function audioRecordingInteraction() {
+        var pciInterface;
+
         var options = {};
 
         var $container,
@@ -333,7 +335,7 @@ define([
             _recordsAttempts = 0;
 
         /**
-         * @param {HTMLElement} dom - html node containing the interaction
+         * @param {HTMLElement} dom - html node to render the interaction to
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
@@ -397,16 +399,16 @@ define([
         }
 
         function startRecording() {
-            function startForReal() {
-                recorder.start();
-                updateControls();
-            }
             if (recorder.getState() === recorderStates.CREATED) {
                 recorder.init().then(function() {
                     startForReal();
                 });
             } else {
                 startForReal();
+            }
+            function startForReal() {
+                recorder.start();
+                updateControls();
             }
         }
 
@@ -452,6 +454,7 @@ define([
 
         function setRecording(recording) {
             _recording = recording;
+            pciInterface.trigger('responseChange');
         }
 
         function displayRemainingAttempts() {
@@ -605,7 +608,7 @@ define([
         /**
          * PCI interface implementation
          */
-        return {
+        pciInterface = {
             id: -1,
             getTypeIdentifier: function () {
                 return 'audioRecordingInteraction';
@@ -624,8 +627,6 @@ define([
                 this.id = id;
                 this.dom = dom;
                 this.config = options;
-
-                event.addEventMgr(this);
 
                 // render rich text content in prompt
                 html.render($container.find('.prompt'));
@@ -724,6 +725,9 @@ define([
                 return this.getResponse();
             }
         };
+        event.addEventMgr(pciInterface);
+
+        return pciInterface;
     }
 
     qtiCustomInteractionContext.register(audioRecordingInteraction());

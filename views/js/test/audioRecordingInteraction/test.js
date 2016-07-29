@@ -8,23 +8,22 @@ define([
     'use strict';
 
     var runner;
-    // var fixtureContainerId = 'item-container';
-    var fixtureContainerId = 'outside-container'; // <= use this to display result on screen
+    var fixtureContainerId = 'item-container';
 
     //override asset loading in order to resolve it from the runtime location
     var strategies = [{
-            name : 'portableElementLocation',
-            handle : function handlePortableElementLocation(url){
-                if(/audioRecordingInteraction/.test(url.toString())){
-                    return '../../../qtiItemPci/views/js/pciCreator/dev/' + url.toString();
-                }
+        name : 'portableElementLocation',
+        handle : function handlePortableElementLocation(url){
+            if(/audioRecordingInteraction/.test(url.toString())){
+                return '../../../qtiItemPci/views/js/pciCreator/dev/' + url.toString();
             }
-        }, {
-            name : 'default',
-            handle : function defaultStrategy(url){
-                return url.toString();
-            }
-        }];
+        }
+    }, {
+        name : 'default',
+        handle : function defaultStrategy(url){
+            return url.toString();
+        }
+    }];
 
     module('Audio Recording Interaction', {
         teardown : function(){
@@ -63,6 +62,7 @@ define([
 
     QUnit.asyncTest('destroys', function(assert){
         var $container = $('#' + fixtureContainerId);
+        var onerrorBackup = window.onerror;
 
         QUnit.expect(3);
 
@@ -76,8 +76,6 @@ define([
                 //call destroy manually
                 var interaction = this._item.getInteractions()[0];
                 interaction.renderer.destroy(interaction);
-
-                var onerrorBackup = window.onerror;
 
                 window.onerror = function() {
                     assert.ok(true, 'recorder has been destroyed');
@@ -96,36 +94,65 @@ define([
             .render($container);
     });
 
-    /* * /
-
+    /* */
 
     QUnit.asyncTest('resets the response', function(assert){
-        var $container = $('#' + fixtureContainerId);
-
-        QUnit.expect(11);
-
-        assert.equal($container.length, 1, 'the item container exists');
-        assert.equal($container.children().length, 0, 'the container has no children');
-
-        runner = qtiItemRunner('qti', orderData)
-            .on('render', function(){
-
-            })
-            .on('error', function (error){
-                $('#error-display').html(error);
-            })
-            .init()
-            .render($container);
-    });
-
-
-    QUnit.asyncTest('response', function (assert){
-
+        var changeCounter = 0;
         var response = {
             base : {
                 file: {
                     name: 'myFile',
-                    mime: 'mime/type',
+                    mime: 'audio/wav',
+                    data: 'base64encodedData'
+                }
+            }
+        };
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        runner = qtiItemRunner('qti', itemData)
+            .on('render', function (){
+                var interaction,
+                    interactions = this._item.getInteractions();
+
+                assert.equal(_.size(interactions), 1, 'one interaction');
+                interaction = interactions[0];
+
+                // first we set the response
+                interaction.setResponse(response);
+            })
+            .on('responsechange', function (res){
+                var interactions = this._item.getInteractions(),
+                    interaction = interactions[0];
+                changeCounter++;
+
+                if (changeCounter === 2) {
+                    interaction.resetResponse();
+                } else if (changeCounter === 4) {
+                    assert.ok(_.isPlainObject(res), 'response changed');
+                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                    assert.ok(_.isNull(res.RESPONSE.base), 'response has been reseted');
+                    QUnit.start();
+                }
+            })
+            .on('error', function (error){
+                $('#error-display').html(error);
+            })
+            .assets(strategies)
+            .init()
+            .render($container);
+    });
+
+    /* */
+
+    QUnit.asyncTest('set and get response', function (assert){
+        var changeCounter = 0;
+        var response = {
+            base : {
+                file: {
+                    name: 'myFile',
+                    mime: 'audio/wav',
                     data: 'base64encodedData'
                 }
             }
@@ -146,11 +173,13 @@ define([
                 interaction.setResponse(response);
             })
             .on('responsechange', function (res){
-                QUnit.start();
-
-                assert.ok(_.isPlainObject(res), 'response changed');
-                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+                changeCounter++;
+                if (changeCounter === 2) {
+                    assert.ok(_.isPlainObject(res), 'response changed');
+                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                    assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+                    QUnit.start();
+                }
             })
             .on('error', function (error){
                 $('#error-display').html(error);
@@ -160,18 +189,17 @@ define([
             .render($container);
     });
 
-    /* * /
+    /* */
 
-    QUnit.asyncTest('state', function (assert){
-
+    QUnit.asyncTest('set and get state', function (assert){
+        var changeCounter = 0;
         var response = {
-            list : {
-                string : [
-                    "0.5 45",
-                    "2.5 75",
-                    "4 10",
-                    "5.5 50"
-                ]
+            base : {
+                file: {
+                    name: 'myOtherFile',
+                    mime: 'audio/wav',
+                    data: 'base64encodedDataAgain'
+                }
             }
         };
         var state = {RESPONSE : response};
@@ -186,18 +214,18 @@ define([
                 assert.deepEqual(this.getState(), state, 'state set/get ok');
             })
             .on('responsechange', function (res){
+                changeCounter++;
+                if (changeCounter === 2) {
+                    assert.ok(_.isPlainObject(res), 'response changed');
+                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                    assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
 
-                QUnit.start();
-
-                //if the state has been set, the response should have changed
-                assert.ok(_.isPlainObject(res), 'response changed');
-                assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+                    QUnit.start();
+                }
             })
             .assets(strategies)
             .init()
             .render($container);
-
     });
 
     /* */
@@ -206,7 +234,7 @@ define([
 
     QUnit.asyncTest('display and play', function (assert){
 
-        var $container = $('#' + fixtureContainerId);
+        var $container = $('#outside-container');
         assert.equal($container.length, 1, 'the item container exists');
 
         runner = qtiItemRunner('qti', itemData)
