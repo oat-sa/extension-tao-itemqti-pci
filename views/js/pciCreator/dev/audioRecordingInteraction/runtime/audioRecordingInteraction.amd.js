@@ -1,7 +1,6 @@
 define([
     'qtiCustomInteractionContext',
     'IMSGlobal/jquery_2_1_1',
-    // 'audioRecordingInteraction/runtime/js/renderer',
     'OAT/lodash',
     'OAT/util/event',
     'OAT/util/html',
@@ -10,7 +9,6 @@ define([
     qtiCustomInteractionContext,
     $,
     _,
-    // createRenderer,
     event,
     html,
     controlTpl
