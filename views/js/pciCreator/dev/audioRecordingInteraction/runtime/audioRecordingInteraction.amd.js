@@ -340,8 +340,8 @@ define([
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
-         * @param {Boolean} config.displayDownloadLink - for testing purposes: allow to download the recorded file
-         * @param {Number}  config.maxRecords - allowed number of recording attempts
+         * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
+         * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
          */
         function init(dom, config) {
@@ -353,8 +353,8 @@ define([
                 allowPlayback: true,
                 audioBitrate: 20000,
                 autoStart: false,
-                displayDownloadLink: true, // this is for testing purposes only
-                maxRecords: 3, // 1 = no records / x = x records / 0 = unlimited
+                displayDownloadLink: true,
+                maxRecords: 3,
                 maxRecordingTime: 10,
 
                 // todo: consider this
