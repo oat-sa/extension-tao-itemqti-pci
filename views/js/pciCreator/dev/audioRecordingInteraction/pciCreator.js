@@ -31,11 +31,14 @@ define([
          *
          * @returns {Object}
          */
-        getDefaultProperties : function(pci){
+        getDefaultProperties : function(){
             return {
-                level : 5,
-                'label-min' : 'min',
-                'label-max' : 'max'
+                allowPlayback: true,
+                audioBitrate: 20000,
+                autoStart: false,
+                displayDownloadLink: true,
+                maxRecords: 0,
+                maxRecordingTime: 10
             };
         },
         /**

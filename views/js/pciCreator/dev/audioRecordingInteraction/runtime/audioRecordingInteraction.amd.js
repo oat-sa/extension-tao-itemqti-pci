@@ -367,7 +367,7 @@ define([
                 maxRecords: 3,
                 maxRecordingTime: 10,
 
-                // todo: consider this
+                // todo: not implemented. To consider?
                 allowStopRecord: true,
                 allowStopPlayback: true,
                 minRecordingTime: 5
@@ -579,15 +579,15 @@ define([
                 }.bind(play));
                 play.on('updatestate', function() {
                     switch (player.getState()) {
-                    case playerStates.IDLE:
-                        this.enable();
-                        break;
-                    case playerStates.PLAYING:
-                        this.activate();
-                        break;
-                    default:
-                        this.disable();
-                        break;
+                        case playerStates.IDLE:
+                            this.enable();
+                            break;
+                        case playerStates.PLAYING:
+                            this.activate();
+                            break;
+                        default:
+                            this.disable();
+                            break;
                     }
                 }.bind(play));
                 controls.play = play;
@@ -672,18 +672,18 @@ define([
                 if (response.record && _.isArray(response.record)) {
                     response.record.forEach(function (record) {
                         switch(record.name) {
-                        case 'recording':
-                            recording = record.base.file;
-                            setRecording(recording);
-                            if (recording) {
-                                base64Prefix = 'data:' + recording.mime + ';base64,';
-                                player.load(base64Prefix + recording.data);
-                            }
-                            break;
-                        case 'recordsAttempts':
-                            _recordsAttempts = record.base.integer;
-                            displayRemainingAttempts();
-                            break;
+                            case 'recording':
+                                recording = record.base.file;
+                                setRecording(recording);
+                                if (recording) {
+                                    base64Prefix = 'data:' + recording.mime + ';base64,';
+                                    player.load(base64Prefix + recording.data);
+                                }
+                                break;
+                            case 'recordsAttempts':
+                                _recordsAttempts = record.base.integer;
+                                displayRemainingAttempts();
+                                break;
                         }
                     });
                 }

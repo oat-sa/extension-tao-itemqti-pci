@@ -1,34 +1,24 @@
 /*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
 
-.qti-customInteraction .audioRecordingInteraction{
-    width:100%;
-    padding:10px 20px 16px;
+/*.qti-customInteraction .audioRecordingInteraction ul.likert li input{margin: 0 3px; cursor: pointer;}*/
+
+/*.qti-customInteraction .audioRecordingInteraction .prompt {position:relative;}*/
+
+/* NEW */,
+/*.item-editor-sidebar .tool-group .panel.creator-audioRecordingInteraction-spinner {*/
+    /*display: flex;*/
+    /*width: 100%;*/
+    /*background: yellow;*/
+/*}*/
+/*.item-editor-sidebar .tool-group .panel.creator-audioRecordingInteraction-spinner label {*/
+    /*flex: 3;*/
+/*}*/
+.item-editor-sidebar .tool-group .panel.creator-audioRecordingInteraction-spinner {
+    background: yellow !important;
 }
-
-.qti-customInteraction .audioRecordingInteraction ul.likert{
-    list-style-type: none;
-    margin: 0 5px;
-    padding: 0;
-    display:inline-block;
-    position: relative;
-    top:7px;
+.item-editor-sidebar .tool-group .panel.creator-audioRecordingInteraction-spinner .incrementer-ctrl-wrapper {
+    width: 100%;
 }
-
-.qti-customInteraction .audioRecordingInteraction ul.likert li{
-    float: left;
-    text-align: left;
-    list-style-type: none;
-}
-
-.qti-customInteraction .audioRecordingInteraction ul.likert li input{margin: 0 3px; cursor: pointer;}
-
-.qti-customInteraction .audioRecordingInteraction .prompt {position:relative;}
-
-.qti-customInteraction .audioRecordingInteraction .likert-label {min-width:90px; color: #444;}
-.qti-customInteraction .audioRecordingInteraction .likert-label-min {text-align: right;}
-.qti-customInteraction .audioRecordingInteraction .likert-label-max {text-align: left;}
-
-/* NEW */
 
 .qti-customInteraction .audioRecordingInteraction .audiorec-control {
     margin: 10px 10px 10px 0;

@@ -20,5 +20,5 @@
     "response": {
         "cardinality": "record"
     },
-    "debug" : false
+    "debug" : true
 }

@@ -25,13 +25,7 @@ define([
             related : interaction
         });
 
-        simpleEditor.create($container, '.likert-label-min', function(text){
-            interaction.prop('label-min', text);
-        });
 
-        simpleEditor.create($container, '.likert-label-max', function(text){
-            interaction.prop('label-max', text);
-        });
 
     }, function(){
 
@@ -47,6 +41,8 @@ define([
         var _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
+
+
             response = interaction.getResponseDeclaration(),
             level = parseInt(interaction.prop('level')) || 5,
             levels = [5, 7, 9],
