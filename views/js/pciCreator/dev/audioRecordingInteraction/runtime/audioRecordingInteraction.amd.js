@@ -37,6 +37,19 @@ define([
         RECORDING:  'recording'
     };
 
+
+    /**
+     * @property {String} DISABLED  - not clickable
+     * @property {String} ENABLED   - clickable
+     * @property {String} ACTIVE    - clicked, triggered action is ongoing
+     */
+    var controlStates = {
+        DISABLED: 'disabled',
+        ENABLED: 'enabled',
+        ACTIVE: 'active'
+    };
+
+
     /**
      * @returns {Object} - wrapper for an HTMLAudioElement
      */
@@ -246,7 +259,6 @@ define([
         return recorder;
     }
 
-
     /**
      * Creates a button for recording/playback control
      * @param {Object}  config
@@ -261,12 +273,7 @@ define([
             $control = $(controlTpl({
                 id: config.id,
                 label: config.label
-            })),
-            controlStates = {
-                DISABLED: 'disabled',
-                ENABLED: 'enabled',
-                ACTIVE: 'active'
-            };
+            }));
 
         $control.appendTo(config.container);
 
@@ -279,6 +286,9 @@ define([
         }
 
         control = {
+            getState: function() {
+                return state;
+            },
             enable: function() {
                 setState(controlStates.ENABLED);
             },
@@ -503,22 +513,21 @@ define([
                 container: $controlsContainer
             });
             record.on('click', function() {
-                if ((recorder.getState() === recorderStates.IDLE || recorder.getState() === recorderStates.CREATED) &&
-                    player.getState() === playerStates.CREATED) {
+                if (this.getState() === controlStates.ENABLED) {
                     startRecording();
                 }
-            });
+            }.bind(record));
             record.on('updatestate', function() {
                 if (player.getState() === playerStates.CREATED) {
                     if (recorder.getState() === recorderStates.RECORDING) {
-                        record.activate();
+                        this.activate();
                     } else {
-                        record.enable();
+                        this.enable();
                     }
                 } else {
-                    record.disable();
+                    this.disable();
                 }
-            });
+            }.bind(record));
             controls.record = record;
 
 
@@ -530,21 +539,23 @@ define([
                 container: $controlsContainer
             });
             stop.on('click', function() {
-                if (recorder.getState() === recorderStates.RECORDING) {
-                    stopRecording();
+                if (this.getState() === controlStates.ENABLED) {
+                    if (recorder.getState() === recorderStates.RECORDING) {
+                        stopRecording();
 
-                } else if (player.getState() === playerStates.PLAYING) {
-                    stopPlayback();
+                    } else if (player.getState() === playerStates.PLAYING) {
+                        stopPlayback();
+                    }
                 }
-            });
+            }.bind(stop));
             stop.on('updatestate', function() {
                 if (player.getState() === playerStates.PLAYING ||
                     recorder.getState() === recorderStates.RECORDING) {
-                    stop.enable();
+                    this.enable();
                 } else {
-                    stop.disable();
+                    this.disable();
                 }
-            });
+            }.bind(stop));
             controls.stop = stop;
 
 
@@ -557,23 +568,23 @@ define([
                     container: $controlsContainer
                 });
                 play.on('click', function() {
-                    if (player.getState() === playerStates.IDLE) {
+                    if (this.getState() === controlStates.ENABLED) {
                         playRecording();
                     }
-                });
+                }.bind(play));
                 play.on('updatestate', function() {
                     switch (player.getState()) {
                     case playerStates.IDLE:
-                        play.enable();
+                        this.enable();
                         break;
                     case playerStates.PLAYING:
-                        play.activate();
+                        this.activate();
                         break;
                     default:
-                        play.disable();
+                        this.disable();
                         break;
                     }
-                });
+                }.bind(play));
                 controls.play = play;
             }
 
@@ -587,19 +598,19 @@ define([
                     container: $controlsContainer
                 });
                 reset.on('click', function() {
-                    if (player.getState() === playerStates.IDLE) {
+                    if (this.getState() === controlStates.ENABLED) {
                         resetRecording();
                     }
-                });
+                }.bind(reset));
                 reset.on('updatestate', function() {
                     if (options.maxRecords > 1 && options.maxRecords === _recordsAttempts) {
-                        reset.disable();
+                        this.disable();
                     } else if (player.getState() === playerStates.IDLE) {
-                        reset.enable();
+                        this.enable();
                     } else {
-                        reset.disable();
+                        this.disable();
                     }
-                });
+                }.bind(reset));
                 controls.reset = reset;
             }
         }
