@@ -6,8 +6,7 @@
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "libraries": [
-        "IMSGlobal/jquery_2_1_1",
-        "./runtime/js/renderer"
+        "IMSGlobal/jquery_2_1_1"
     ],
     "css": [
         "./runtime/css/audioRecordingInteraction.css"
@@ -19,8 +18,7 @@
     "icon": "./creator/img/icon.svg",
     "short": "Audio",
     "response": {
-        "baseType": "file",
-        "cardinality": "single"
+        "cardinality": "record"
     },
     "debug" : false
 }

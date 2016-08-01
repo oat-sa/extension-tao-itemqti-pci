@@ -99,13 +99,24 @@ define([
     QUnit.asyncTest('resets the response', function(assert){
         var changeCounter = 0;
         var response = {
-            base : {
-                file: {
-                    name: 'myFile',
-                    mime: 'audio/wav',
-                    data: 'base64encodedData'
+            record: [
+                {
+                    name: 'recording',
+                    base : {
+                        file: {
+                            name: 'myFileToBeReseted',
+                            mime: 'audio/wav',
+                            data: 'base64encodedData'
+                        }
+                    }
+                },
+                {
+                    name: 'recordsAttempts',
+                    base : {
+                        integer: 2
+                    }
                 }
-            }
+            ]
         };
         var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
@@ -127,12 +138,13 @@ define([
                     interaction = interactions[0];
                 changeCounter++;
 
-                if (changeCounter === 2) {
+                if (changeCounter === 3) {
                     interaction.resetResponse();
-                } else if (changeCounter === 4) {
+                } else if (changeCounter === 5) {
                     assert.ok(_.isPlainObject(res), 'response changed');
                     assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                    assert.ok(_.isNull(res.RESPONSE.base), 'response has been reseted');
+                    assert.ok(_.isArray(res.RESPONSE.record), 'response record is an array');
+                    assert.ok(res.RESPONSE.record.length, 0, 'response record is empty');
                     QUnit.start();
                 }
             })
@@ -149,13 +161,24 @@ define([
     QUnit.asyncTest('set and get response', function (assert){
         var changeCounter = 0;
         var response = {
-            base : {
-                file: {
-                    name: 'myFile',
-                    mime: 'audio/wav',
-                    data: 'base64encodedData'
+            record: [
+                {
+                    name: 'recording',
+                    base : {
+                        file: {
+                            name: 'myFile',
+                            mime: 'audio/wav',
+                            data: 'base64encodedData'
+                        }
+                    }
+                },
+                {
+                    name: 'recordsAttempts',
+                    base : {
+                        integer: 2
+                    }
                 }
-            }
+            ]
         };
         var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
@@ -193,16 +216,28 @@ define([
 
     QUnit.asyncTest('set and get state', function (assert){
         var changeCounter = 0;
-        var response = {
-            base : {
-                file: {
-                    name: 'myOtherFile',
-                    mime: 'audio/wav',
-                    data: 'base64encodedDataAgain'
-                }
+        var state = {
+            RESPONSE: {
+                record: [
+                    {
+                        name: 'recording',
+                        base : {
+                            file: {
+                                name: 'myOtherFile',
+                                mime: 'audio/wav',
+                                data: 'base64encodedDataAgain'
+                            }
+                        }
+                    },
+                    {
+                        name: 'recordsAttempts',
+                        base : {
+                            integer: 2
+                        }
+                    }
+                ]
             }
         };
-        var state = {RESPONSE : response};
         var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
@@ -215,10 +250,10 @@ define([
             })
             .on('responsechange', function (res){
                 changeCounter++;
-                if (changeCounter === 2) {
+                if (changeCounter === 1) { // so it runs only once
                     assert.ok(_.isPlainObject(res), 'response changed');
                     assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                    assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+                    assert.deepEqual(res, state, 'response set/get ok');
 
                     QUnit.start();
                 }

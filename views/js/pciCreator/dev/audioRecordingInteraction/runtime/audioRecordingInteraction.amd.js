@@ -389,7 +389,7 @@ define([
                 player.load(recordingUrl);
                 createBase64Recoding(blob, filename);
 
-                _recordsAttempts++;
+                increaseRecordsAttempts();
 
                 displayRemainingAttempts();
                 displayDownloadLink(recordingUrl, filename, filesize, duration);
@@ -464,6 +464,11 @@ define([
 
         function setRecording(recording) {
             _recording = recording;
+            pciInterface.trigger('responseChange');
+        }
+
+        function increaseRecordsAttempts() {
+            _recordsAttempts++;
             pciInterface.trigger('responseChange');
         }
 
@@ -664,13 +669,23 @@ define([
                 var recording,
                     base64Prefix;
 
-                if (response.base && response.base.file) {
-                    recording = response.base.file;
-                }
-                setRecording(recording);
-                if (_recording) {
-                    base64Prefix = 'data:' + recording.mime + ';base64,';
-                    player.load(base64Prefix + recording.data);
+                if (response.record && _.isArray(response.record)) {
+                    response.record.forEach(function (record) {
+                        switch(record.name) {
+                        case 'recording':
+                            recording = record.base.file;
+                            setRecording(recording);
+                            if (recording) {
+                                base64Prefix = 'data:' + recording.mime + ';base64,';
+                                player.load(base64Prefix + recording.data);
+                            }
+                            break;
+                        case 'recordsAttempts':
+                            _recordsAttempts = record.base.integer;
+                            displayRemainingAttempts();
+                            break;
+                        }
+                    });
                 }
             },
             /**
@@ -680,19 +695,25 @@ define([
              * @param {Object} interaction
              * @returns {Object}
              */
-            getResponse: function () {
-                var response;
-                if (!_recording) {
-                    response = {
-                        base: null
-                    };
-                } else {
-                    response = {
+            getResponse: function() {
+                var recordingResponse = {
+                        name: 'recording',
                         base: {
                             file: _recording
                         }
+                    },
+                    recordAttemptsResponse = {
+                        name: 'recordsAttempts',
+                        base: {
+                            integer: _recordsAttempts
+                        }
+                    },
+                    response = {
+                        record: [
+                            recordingResponse,
+                            recordAttemptsResponse
+                        ]
                     };
-                }
                 return response;
             },
             /**
