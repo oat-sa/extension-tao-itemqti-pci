@@ -359,19 +359,30 @@ define([
             $instructionsContainer = $container.find('.audioRec > .instructions');
             $controlsContainer = $container.find('.audioRec > .controls');
 
-            options = _.defaults(options, config, {
-                allowPlayback: true,
-                audioBitrate: 20000,
-                autoStart: false,
-                displayDownloadLink: true,
-                maxRecords: 3,
-                maxRecordingTime: 10,
+            function toBoolean(value, defaultValue) {
+                if (typeof(value) === "undefined") {
+                    return defaultValue;
+                } else {
+                    return (value === true || value === "true");
+                }
+            }
+            function toInteger(value, defaultValue) {
+                return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
+            }
 
-                // todo: not implemented. To consider?
-                allowStopRecord: true,
-                allowStopPlayback: true,
-                minRecordingTime: 5
-            });
+            options.allowPlayback        = toBoolean(config.allowPlayback, true);
+            options.audioBitrate         = toInteger(config.audioBitrate, 20000);
+            options.autoStart            = toBoolean(config.autoStart, false);
+            options.displayDownloadLink  = toBoolean(config.displayDownloadLink, false);
+            options.maxRecords           = toInteger(config.maxRecords, 3);
+            options.maxRecordingTime     = toInteger(config.maxRecordingTime, 120);
+
+            /*
+            // todo: not implemented. To consider?
+            allowStopRecord
+            allowStopPlayback
+            minRecordingTime
+            */
         }
 
         function initRecorder() {
@@ -483,6 +494,8 @@ define([
                     message = 'Remaining attempts: ' + remaining;
                 }
                 $instructionsContainer.html(message);
+            } else {
+                $instructionsContainer.empty();
             }
         }
 
@@ -492,7 +505,7 @@ define([
             if (options.displayDownloadLink === true) {
                 downloadLink = document.createElement('a');
                 // fixme: append the link in a better place
-                // container.appendChild(downloadLink); // doesn't work in FF...
+                // container.appendChild(downloadLink); // doesn't work in FF... (nothing happens when link is clicked)
                 document.body.appendChild(downloadLink); // but this works !!!
                 document.body.appendChild(document.createElement('br'));
                 downloadLink.text =
@@ -620,6 +633,24 @@ define([
             }
         }
 
+        function clearControls() {
+            $controlsContainer.empty();
+        }
+
+        function render(dom, config) {
+            init(dom, config);
+            initRecorder();
+            initPlayer();
+
+            // render rich text content in prompt
+            html.render($container.find('.prompt'));
+
+            // render interaction
+            clearControls();
+            createControls();
+            displayRemainingAttempts();
+        }
+
 
         /**
          * PCI interface implementation
@@ -636,23 +667,18 @@ define([
              * @param {Object} config - json
              */
             initialize: function (id, dom, config) {
-                init(dom, config);
-                initRecorder();
-                initPlayer();
+                render(dom, config);
 
                 this.id = id;
                 this.dom = dom;
                 this.config = options;
 
-                // render rich text content in prompt
-                html.render($container.find('.prompt'));
-
-                // render interaction
-                createControls();
-                displayRemainingAttempts();
-
                 //tell the rendering engine that I am ready
                 qtiCustomInteractionContext.notifyReady(this);
+
+                this.on('configChange', function (newConfig) {
+                    render(dom, newConfig);
+                });
 
                 if (options.autoStart === true) {
                     startRecording();

@@ -5,9 +5,9 @@ define([
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
-    'lodash',
-    'jquery'
-], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){
+    'lodash'
+], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _){
+    'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(Question, function(){
 
@@ -25,10 +25,7 @@ define([
             related : interaction
         });
 
-
-
     }, function(){
-
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt');
 
@@ -41,45 +38,50 @@ define([
         var _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
+            response = interaction.getResponseDeclaration();
 
-
-            response = interaction.getResponseDeclaration(),
-            level = parseInt(interaction.prop('level')) || 5,
-            levels = [5, 7, 9],
-            levelData = {};
-
-        //build select option data for the template
-        _.each(levels, function(lvl){
-            levelData[lvl] = {
-                label : lvl,
-                selected : (lvl === level)
-            };
-        });
+        function toBoolean(value, defaultValue) {
+            if (typeof(value) === "undefined") {
+                return defaultValue;
+            } else {
+                return (value === true || value === "true");
+            }
+        }
 
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
-            levels : levelData,
-            identifier : interaction.attr('responseIdentifier')
+            identifier : interaction.attr('responseIdentifier'),
+
+            allowPlayback: toBoolean(interaction.prop('allowPlayback'), true),
+            audioBitrate: interaction.prop('audioBitrate'),
+            autoStart: toBoolean(interaction.prop('autoStart'), false),
+            displayDownloadLink: toBoolean(interaction.prop('displayDownloadLink'), false),
+            maxRecords: interaction.prop('maxRecords'),
+            maxRecordingTime: interaction.prop('maxRecordingTime')
         }));
 
         //init form javascript
         formElement.initWidget($form);
 
+        function configChangeCallBack(i, value, name) {
+            i.prop(name, value);
+            interaction.triggerPci('configChange', [i.getProperties()]);
+        }
+
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
-            level : function(interaction, value){
-
-                //update the pci property value:
-                interaction.prop('level', value);
-
-                //trigger change event:
-                interaction.triggerPci('levelchange', [parseInt(value)]);
-            },
             identifier : function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
-            }
+            },
+
+            allowPlayback: configChangeCallBack,
+            audioBitrate: configChangeCallBack,
+            autoStart: configChangeCallBack,
+            displayDownloadLink: configChangeCallBack,
+            maxRecords: configChangeCallBack,
+            maxRecordingTime: configChangeCallBack
         });
 
     };

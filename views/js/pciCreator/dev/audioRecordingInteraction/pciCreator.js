@@ -36,9 +36,9 @@ define([
                 allowPlayback: true,
                 audioBitrate: 20000,
                 autoStart: false,
-                displayDownloadLink: true,
+                displayDownloadLink: false,
                 maxRecords: 0,
-                maxRecordingTime: 10
+                maxRecordingTime: 120
             };
         },
         /**

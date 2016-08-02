@@ -28,7 +28,7 @@
     </div>
     <div class="panel creator-audioRecordingInteraction-spinner">
         <label for="maxRecords" class="spinner">{{__ "Number of allowed recording attemps (0 = unlimited)"}}</label>
-        <input name="maxRecords" value="{{maxRecords}}" data-increment="1" data-min="1" type="text" /><br />
+        <input name="maxRecords" value="{{maxRecords}}" data-increment="1" data-min="0" type="text" /><br />
     </div>
     <div class="panel creator-audioRecordingInteraction-spinner">
         <label for="maxRecordingTime" class="spinner">{{__ "Max recording time (in seconds)"}}</label>
