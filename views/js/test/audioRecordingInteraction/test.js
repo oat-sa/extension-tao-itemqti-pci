@@ -138,9 +138,9 @@ define([
                     interaction = interactions[0];
                 changeCounter++;
 
-                if (changeCounter === 3) {
+                if (changeCounter === 1) {
                     interaction.resetResponse();
-                } else if (changeCounter === 5) {
+                } else if (changeCounter === 2) {
                     assert.ok(_.isPlainObject(res), 'response changed');
                     assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                     assert.ok(_.isArray(res.RESPONSE.record), 'response record is an array');

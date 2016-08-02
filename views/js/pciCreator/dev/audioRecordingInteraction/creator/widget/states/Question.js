@@ -34,6 +34,11 @@ define([
         containerEditor.destroy($prompt);
     });
 
+    function configChangeCallBack(interaction, value, name) {
+        interaction.prop(name, value);
+        interaction.triggerPci('configChange', [interaction.getProperties()]);
+    }
+
     AudioRecordingInteractionStateQuestion.prototype.initForm = function(){
 
         var _widget = this.widget,
@@ -64,11 +69,6 @@ define([
 
         //init form javascript
         formElement.initWidget($form);
-
-        function configChangeCallBack(i, value, name) {
-            i.prop(name, value);
-            interaction.triggerPci('configChange', [i.getProperties()]);
-        }
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {

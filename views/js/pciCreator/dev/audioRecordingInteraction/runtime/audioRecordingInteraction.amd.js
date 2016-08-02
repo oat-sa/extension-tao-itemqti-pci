@@ -13,6 +13,8 @@ define([
 ){
     'use strict';
 
+    var audioRecordingInteraction;
+
     /**
      * @property {String} CREATED   - player instance created, but no media loaded
      * @property {String} IDLE      - media loaded and playable
@@ -310,41 +312,31 @@ define([
         return control;
     }
 
-    function updateControlsState(controls) {
-        var control;
-        for (control in controls) {
-            if (controls.hasOwnProperty(control)) {
-                controls[control].updateState();
-            }
-        }
-    }
+
 
     /**
      * Main interaction code
-     * @returns {Object} - implements the PCI interface and will be passed to qtiCustomInteractionContext.register()
      */
-    function audioRecordingInteraction() {
-        var pciInterface;
 
-        var options = {};
+    audioRecordingInteraction = {
 
-        var $container,
-            $instructionsContainer,
-            $controlsContainer;
+        _filePrefix: 'audioRecording',
+        _recording: null,
+        _recordsAttempts: 0,
 
-        var filePrefix = 'audioRecording';
+        render: function render(config) {
+            // initialization
+            this.initConfig(config);
+            this.initRecorder();
+            this.initPlayer();
 
-        var player,
-            recorder,
-            controls = {},
-            updateControls = updateControlsState.bind(null, controls);
-
-        // interaction state
-        var _recording = null,
-            _recordsAttempts = 0;
+            // ui rendering
+            this.clearControls();
+            this.createControls();
+            this.displayRemainingAttempts();
+        },
 
         /**
-         * @param {HTMLElement} dom - html node to render the interaction to
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
@@ -353,11 +345,7 @@ define([
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
          */
-        function init(dom, config) {
-            $container = $(dom);
-            $instructionsContainer = $container.find('.audioRec > .instructions');
-            $controlsContainer = $container.find('.audioRec > .controls');
-
+        initConfig: function init(config) {
             function toBoolean(value, defaultValue) {
                 if (typeof(value) === "undefined") {
                     return defaultValue;
@@ -369,89 +357,91 @@ define([
                 return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
             }
 
-            options.allowPlayback        = toBoolean(config.allowPlayback, true);
-            options.audioBitrate         = toInteger(config.audioBitrate, 20000);
-            options.autoStart            = toBoolean(config.autoStart, false);
-            options.displayDownloadLink  = toBoolean(config.displayDownloadLink, false);
-            options.maxRecords           = toInteger(config.maxRecords, 3);
-            options.maxRecordingTime     = toInteger(config.maxRecordingTime, 120);
+            this.config = {
+                allowPlayback:          toBoolean(config.allowPlayback, true),
+                audioBitrate:           toInteger(config.audioBitrate, 20000),
+                autoStart:              toBoolean(config.autoStart, false),
+                displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
+                maxRecords:             toInteger(config.maxRecords, 3),
+                maxRecordingTime:       toInteger(config.maxRecordingTime, 120)
+            };
+        },
 
-            /*
-            todo: consider this?
-            allowStopRecord
-            allowStopPlayback
-            minRecordingTime
-            */
-        }
+        initRecorder: function initRecorder() {
+            var self = this;
 
-        function initRecorder() {
-            recorder = recorderFactory(options);
+            this.recorder = recorderFactory(this.config);
 
-            recorder.on('recordingavailable', function(blob, duration) {
+            this.recorder.on('recordingavailable', function(blob, duration) {
                 var recordingUrl = window.URL.createObjectURL(blob),
                     filename =
-                        filePrefix + '_' +
+                        self._filePrefix + '_' +
                         window.Date.now() + '.' +
                         // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
                         blob.type.split(';')[0].split('/')[1],
                     filesize = blob.size;
 
-                player.load(recordingUrl);
-                createBase64Recoding(blob, filename);
+                self.player.load(recordingUrl);
+                self.createBase64Recoding(blob, filename);
 
-                displayRemainingAttempts();
-                displayDownloadLink(recordingUrl, filename, filesize, duration);
+                self.displayDownloadLink(recordingUrl, filename, filesize, duration);
             });
 
-            recorder.on('statechange', function() {
-                updateControls();
+            this.recorder.on('statechange', function() {
+                self.updateControls();
             });
-        }
+        },
 
-        function initPlayer() {
-            player = playerFactory();
+        initPlayer: function initPlayer() {
+            var self = this;
 
-            player.on('statechange', function() {
-                updateControls();
+            this.player = playerFactory();
+
+            this.player.on('statechange', function() {
+                self.updateControls();
             });
-        }
+        },
 
-        function startRecording() {
-            if (recorder.getState() === recorderStates.CREATED) {
-                recorder.init().then(function() {
+        startRecording: function startRecording() {
+            var self = this;
+
+            if (this.recorder.getState() === recorderStates.CREATED) {
+                this.recorder.init().then(function() {
                     startForReal();
                 });
             } else {
                 startForReal();
             }
             function startForReal() {
-                recorder.start();
-                updateControls();
+                self.recorder.start();
+                self.updateControls();
             }
-        }
+        },
 
-        function stopRecording() {
-            recorder.stop();
-            updateControls();
-        }
+        stopRecording: function stopRecording() {
+            this.recorder.stop();
+            this.updateControls();
+        },
 
-        function stopPlayback() {
-            player.stop();
-            updateControls();
-        }
+        stopPlayback: function stopPlayback() {
+            this.player.stop();
+            this.updateControls();
+        },
 
-        function playRecording() {
-            player.play();
-            updateControls();
-        }
+        playRecording: function playRecording() {
+            this.player.play();
+            this.updateControls();
+        },
 
-        function resetRecording() {
-            player.unload();
-            updateResponse(null, _recordsAttempts);
-            updateControls();
-        }
+        resetRecording: function resetRecording() {
+            this.player.unload();
+            this.updateResponse(null, this._recordsAttempts);
+            this.updateControls();
+        },
 
-        function createBase64Recoding(blob, filename) {
+        createBase64Recoding: function createBase64Recoding(blob, filename) {
+            var self = this;
+
             //todo: implement a spinner or something to feedback that work is in progress while this is happening:
             //todo: as the response is not yet ready, the user shouldn't leave the item in the meantime
             var reader = new FileReader();
@@ -466,52 +456,57 @@ define([
                         name: filename,
                         data: base64Data
                     };
-                updateResponse(recording, _recordsAttempts + 1);
+                self.updateResponse(recording, self._recordsAttempts + 1);
+                self.displayRemainingAttempts();
             };
-        }
+        },
 
-        function updateResponse(recording, recordsAttempts) {
-            _recording = recording;
-            _recordsAttempts = recordsAttempts;
-            pciInterface.trigger('responseChange');
-        }
+        updateResponse: function updateResponse(recording, recordsAttempts) {
+            this._recording = recording;
+            this._recordsAttempts = recordsAttempts;
+            if (typeof this.trigger === 'function') {
+                this.trigger('responseChange');
+            }
+        },
 
-        function displayRemainingAttempts() {
-            var remaining = options.maxRecords - _recordsAttempts,
+        displayRemainingAttempts: function displayRemainingAttempts() {
+            var remaining = this.config.maxRecords - this._recordsAttempts,
                 message;
 
-            if (options.maxRecords > 1) {
+            if (this.config.maxRecords > 1) {
                 if (remaining === 0) {
                     message = 'You have no more attempts left';
                 } else {
                     message = 'Remaining attempts: ' + remaining;
                 }
-                $instructionsContainer.html(message);
+                this.$instructionsContainer.html(message);
             } else {
-                $instructionsContainer.empty();
+                this.$instructionsContainer.empty();
             }
-        }
+        },
 
-        function displayDownloadLink(url, filename, filesize, duration) {
+        displayDownloadLink: function displayDownloadLink(url, filename, filesize, duration) {
             var downloadLink;
 
-            if (options.displayDownloadLink === true) {
+            if (this.config.displayDownloadLink === true) {
                 downloadLink = document.createElement('a');
                 // fixme: append the link in a better place
                 // container.appendChild(downloadLink); // doesn't work in FF... (nothing happens when link is clicked)
                 document.body.appendChild(downloadLink); // but this works !!!
                 document.body.appendChild(document.createElement('br'));
                 downloadLink.text =
-                    'download ' + _recordsAttempts + ' - ' +
+                    'download ' + this._recordsAttempts + ' - ' +
                     Math.round(filesize / 1000) + 'KB - ' +
                     Math.round(duration / 1000) + 's';
                 downloadLink.download = filename;
                 downloadLink.href = url;
             }
-        }
+        },
 
-        function createControls() {
-            var record,
+        createControls: function createControls() {
+            var self = this,
+
+                record,
                 stop,
                 play,
                 reset;
@@ -521,16 +516,16 @@ define([
                 id: 'record',
                 label: 'Record',
                 defaultState: 'enabled',
-                container: $controlsContainer
+                container: this.$controlsContainer
             });
             record.on('click', function() {
                 if (this.getState() === controlStates.ENABLED) {
-                    startRecording();
+                    self.startRecording();
                 }
             }.bind(record));
             record.on('updatestate', function() {
-                if (player.getState() === playerStates.CREATED) {
-                    if (recorder.getState() === recorderStates.RECORDING) {
+                if (self.player.getState() === playerStates.CREATED) {
+                    if (self.recorder.getState() === recorderStates.RECORDING) {
                         this.activate();
                     } else {
                         this.enable();
@@ -539,7 +534,7 @@ define([
                     this.disable();
                 }
             }.bind(record));
-            controls.record = record;
+            this.controls.record = record;
 
 
             // Stop button
@@ -547,44 +542,44 @@ define([
                 id: 'stop',
                 label: 'Stop',
                 defaultState: 'disabled',
-                container: $controlsContainer
+                container: this.$controlsContainer
             });
             stop.on('click', function() {
                 if (this.getState() === controlStates.ENABLED) {
-                    if (recorder.getState() === recorderStates.RECORDING) {
-                        stopRecording();
+                    if (self.recorder.getState() === recorderStates.RECORDING) {
+                        self.stopRecording();
 
-                    } else if (player.getState() === playerStates.PLAYING) {
-                        stopPlayback();
+                    } else if (self.player.getState() === playerStates.PLAYING) {
+                        self.stopPlayback();
                     }
                 }
             }.bind(stop));
             stop.on('updatestate', function() {
-                if (player.getState() === playerStates.PLAYING ||
-                    recorder.getState() === recorderStates.RECORDING) {
+                if (self.player.getState() === playerStates.PLAYING ||
+                    self.recorder.getState() === recorderStates.RECORDING) {
                     this.enable();
                 } else {
                     this.disable();
                 }
             }.bind(stop));
-            controls.stop = stop;
+            this.controls.stop = stop;
 
 
             // Play button
-            if (options.allowPlayback === true) {
+            if (this.config.allowPlayback === true) {
                 play = controlFactory({
                     id: 'play',
                     label: 'Play',
                     defaultState: 'disabled',
-                    container: $controlsContainer
+                    container: this.$controlsContainer
                 });
                 play.on('click', function() {
                     if (this.getState() === controlStates.ENABLED) {
-                        playRecording();
+                        self.playRecording();
                     }
                 }.bind(play));
                 play.on('updatestate', function() {
-                    switch (player.getState()) {
+                    switch (self.player.getState()) {
                         case playerStates.IDLE:
                             this.enable();
                             break;
@@ -596,200 +591,205 @@ define([
                             break;
                     }
                 }.bind(play));
-                controls.play = play;
+                this.controls.play = play;
             }
 
 
             // Reset button
-            if (options.maxRecords !== 1) {
+            if (this.config.maxRecords !== 1) {
                 reset = controlFactory({
                     id: 'reset',
                     label: 'Try again',
                     defaultState: 'disabled',
-                    container: $controlsContainer
+                    container: this.$controlsContainer
                 });
                 reset.on('click', function() {
                     if (this.getState() === controlStates.ENABLED) {
-                        resetRecording();
+                        self.resetRecording();
                     }
                 }.bind(reset));
                 reset.on('updatestate', function() {
-                    if (options.maxRecords > 1 && options.maxRecords === _recordsAttempts) {
+                    if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
                         this.disable();
-                    } else if (player.getState() === playerStates.IDLE) {
+                    } else if (self.player.getState() === playerStates.IDLE) {
                         this.enable();
                     } else {
                         this.disable();
                     }
                 }.bind(reset));
-                controls.reset = reset;
+                this.controls.reset = reset;
             }
-        }
+        },
 
-        function clearControls() {
-            $controlsContainer.empty();
-        }
+        updateControls: function updateControls() {
+            var control;
+            for (control in this.controls) {
+                if (this.controls.hasOwnProperty(control)) {
+                    this.controls[control].updateState();
+                }
+            }
+        },
 
-        function render(dom, config) {
-            init(dom, config);
-            initRecorder();
-            initPlayer();
+        clearControls: function clearControls() {
+            this.$controlsContainer.empty();
+        },
 
-            // render rich text content in prompt
-            html.render($container.find('.prompt'));
 
-            // render interaction
-            clearControls();
-            createControls();
-            displayRemainingAttempts();
-        }
 
 
         /**
-         * PCI interface implementation
+         * PCI public interface
          */
-        pciInterface = {
-            id: -1,
-            getTypeIdentifier: function () {
-                return 'audioRecordingInteraction';
-            },
-            /**
-             * Render the PCI :
-             * @param {String} id
-             * @param {Node} dom
-             * @param {Object} config - json
-             */
-            initialize: function (id, dom, config) {
-                render(dom, config);
 
-                this.id = id;
-                this.dom = dom;
-                this.config = options;
+        id: -1,
 
-                //tell the rendering engine that I am ready
-                qtiCustomInteractionContext.notifyReady(this);
+        getTypeIdentifier: function () {
+            return 'audioRecordingInteraction';
+        },
+        /**
+         * Render the PCI :
+         * @param {String} id
+         * @param {Node} dom
+         * @param {Object} config - json
+         */
+        initialize: function (id, dom, config) {
+            var self = this;
 
-                this.on('configChange', function (newConfig) {
-                    render(dom, newConfig);
-                });
+            event.addEventMgr(this);
 
-                if (options.autoStart === true) {
-                    startRecording();
-                }
-            },
-            /**
-             * Programmatically set the response following the json schema described in
-             * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-             *
-             * @param {Object} interaction
-             * @param {Object} response
-             */
-            setResponse: function (response) {
-                var recording,
-                    recordsAttempts,
-                    base64Prefix;
+            this.id = id;
+            this.dom = dom;
+            this.controls = {};
 
-                if (response.record && _.isArray(response.record)) {
-                    response.record.forEach(function (record) {
-                        switch(record.name) {
-                            case 'recording':
-                                recording = record.base.file;
-                                break;
-                            case 'recordsAttempts':
-                                recordsAttempts = record.base.integer;
-                                break;
-                        }
-                    });
-                    if (recording && recordsAttempts) {
-                        updateResponse(recording, recordsAttempts);
+            this.$container = $(dom);
+            this.$instructionsContainer = this.$container.find('.audioRec > .instructions');
+            this.$controlsContainer = this.$container.find('.audioRec > .controls');
 
-                        // restore interaction state
-                        base64Prefix = 'data:' + recording.mime + ';base64,';
-                        player.load(base64Prefix + recording.data);
+            this.render(config);
 
-                        displayRemainingAttempts();
-                    }
-                }
-            },
-            /**
-             * Get the response in the json format described in
-             * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-             *
-             * @param {Object} interaction
-             * @returns {Object}
-             */
-            getResponse: function() {
-                var recordingResponse = {
-                        name: 'recording',
-                        base: {
-                            file: _recording
-                        }
-                    },
-                    recordAttemptsResponse = {
-                        name: 'recordsAttempts',
-                        base: {
-                            integer: _recordsAttempts
-                        }
-                    },
-                    response = {
-                        record: [
-                            recordingResponse,
-                            recordAttemptsResponse
-                        ]
-                    };
-                return response;
-            },
-            /**
-             * Remove the current response set in the interaction
-             * The state may not be restored at this point.
-             *
-             * @param {Object} interaction
-             */
-            resetResponse: function () {
-                updateResponse(null, 0);
-            },
-            /**
-             * Reverse operation performed by render()
-             * After this function is executed, only the inital naked markup remains
-             * Event listeners are removed and the state and the response are reset
-             *
-             * @param {Object} interaction
-             */
-            destroy: function () {
-                $container.off('.qtiCommonRenderer');
-                if (player) {
-                    this.resetResponse();
-                    player = null;
-                }
-                if (recorder) {
-                    recorder = null;
-                }
-            },
-            /**
-             * Restore the state of the interaction from the serializedState.
-             *
-             * @param {Object} interaction
-             * @param {Object} state - json format
-             */
-            setSerializedState: function (state) {
-                this.setResponse(state);
-            },
+            //tell the rendering engine that I am ready
+            qtiCustomInteractionContext.notifyReady(this);
 
-            /**
-             * Get the current state of the interaction as a string.
-             * It enables saving the state for later usage.
-             *
-             * @param {Object} interaction
-             * @returns {Object} json format
-             */
-            getSerializedState: function () {
-                return this.getResponse();
+            this.on('configChange', function (newConfig) {
+                self.render(newConfig);
+            });
+
+            // render rich text content in prompt
+            html.render(this.$container.find('.prompt'));
+
+            if (this.config.autoStart === true) {
+                self.startRecording();
             }
-        };
-        event.addEventMgr(pciInterface);
+        },
+        /**
+         * Programmatically set the response following the json schema described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} interaction
+         * @param {Object} response
+         */
+        setResponse: function (response) {
+            var recording,
+                recordsAttempts,
+                base64Prefix;
 
-        return pciInterface;
-    }
+            if (response.record && _.isArray(response.record)) {
+                response.record.forEach(function (record) {
+                    switch(record.name) {
+                        case 'recording':
+                            recording = record.base.file;
+                            break;
+                        case 'recordsAttempts':
+                            recordsAttempts = record.base.integer;
+                            break;
+                    }
+                });
+                if (recording && recordsAttempts) {
+                    this.updateResponse(recording, recordsAttempts);
 
-    qtiCustomInteractionContext.register(audioRecordingInteraction());
+                    // restore interaction state
+                    base64Prefix = 'data:' + recording.mime + ';base64,';
+                    this.player.load(base64Prefix + recording.data);
+
+                    this.displayRemainingAttempts();
+                }
+            }
+        },
+        /**
+         * Get the response in the json format described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} interaction
+         * @returns {Object}
+         */
+        getResponse: function() {
+            var recordingResponse = {
+                    name: 'recording',
+                    base: {
+                        file: this._recording
+                    }
+                },
+                recordAttemptsResponse = {
+                    name: 'recordsAttempts',
+                    base: {
+                        integer: this._recordsAttempts
+                    }
+                },
+                response = {
+                    record: [
+                        recordingResponse,
+                        recordAttemptsResponse
+                    ]
+                };
+            return response;
+        },
+        /**
+         * Remove the current response set in the interaction
+         * The state may not be restored at this point.
+         *
+         * @param {Object} interaction
+         */
+        resetResponse: function () {
+            this.updateResponse(null, 0);
+        },
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         *
+         * @param {Object} interaction
+         */
+        destroy: function () {
+            this.$container.off('.qtiCommonRenderer');
+            if (this.player) {
+                this.resetResponse();
+                this.player = null;
+            }
+            if (this.recorder) {
+                this.recorder = null;
+            }
+        },
+        /**
+         * Restore the state of the interaction from the serializedState.
+         *
+         * @param {Object} interaction
+         * @param {Object} state - json format
+         */
+        setSerializedState: function (state) {
+            this.setResponse(state);
+        },
+
+        /**
+         * Get the current state of the interaction as a string.
+         * It enables saving the state for later usage.
+         *
+         * @param {Object} interaction
+         * @returns {Object} json format
+         */
+        getSerializedState: function () {
+            return this.getResponse();
+        }
+    };
+
+    qtiCustomInteractionContext.register(audioRecordingInteraction);
 });
