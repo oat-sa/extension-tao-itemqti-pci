@@ -197,7 +197,7 @@ define([
             })
             .on('responsechange', function (res){
                 changeCounter++;
-                if (changeCounter === 2) {
+                if (changeCounter === 1) { // so it runs only once
                     assert.ok(_.isPlainObject(res), 'response changed');
                     assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                     assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
@@ -277,7 +277,6 @@ define([
                 QUnit.start();
             })
             .on('responsechange', function (response){
-                // todo: implement this ?
                 $('#response-display').html(JSON.stringify(response, null, 2));
             })
             .on('error', function (error){

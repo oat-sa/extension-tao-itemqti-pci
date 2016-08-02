@@ -399,8 +399,6 @@ define([
                 player.load(recordingUrl);
                 createBase64Recoding(blob, filename);
 
-                increaseRecordsAttempts();
-
                 displayRemainingAttempts();
                 displayDownloadLink(recordingUrl, filename, filesize, duration);
             });
@@ -449,7 +447,7 @@ define([
 
         function resetRecording() {
             player.unload();
-            setRecording(null);
+            updateResponse(null, _recordsAttempts);
             updateControls();
         }
 
@@ -460,25 +458,21 @@ define([
             reader.readAsDataURL(blob);
 
             reader.onloadend = function onLoadEnd(e) {
-                var base64Raw = e.target.result;
-                var commaPosition = base64Raw.indexOf(',');
-                var base64Data = base64Raw.substring(commaPosition + 1);
-
-                setRecording({
-                    mime: blob.type,
-                    name: filename,
-                    data: base64Data
-                });
+                var base64Raw = e.target.result,
+                    commaPosition = base64Raw.indexOf(','),
+                    base64Data = base64Raw.substring(commaPosition + 1),
+                    recording = {
+                        mime: blob.type,
+                        name: filename,
+                        data: base64Data
+                    };
+                updateResponse(recording, _recordsAttempts + 1);
             };
         }
 
-        function setRecording(recording) {
+        function updateResponse(recording, recordsAttempts) {
             _recording = recording;
-            pciInterface.trigger('responseChange');
-        }
-
-        function increaseRecordsAttempts() {
-            _recordsAttempts++;
+            _recordsAttempts = recordsAttempts;
             pciInterface.trigger('responseChange');
         }
 
@@ -692,6 +686,7 @@ define([
              */
             setResponse: function (response) {
                 var recording,
+                    recordsAttempts,
                     base64Prefix;
 
                 if (response.record && _.isArray(response.record)) {
@@ -699,18 +694,21 @@ define([
                         switch(record.name) {
                             case 'recording':
                                 recording = record.base.file;
-                                setRecording(recording);
-                                if (recording) {
-                                    base64Prefix = 'data:' + recording.mime + ';base64,';
-                                    player.load(base64Prefix + recording.data);
-                                }
                                 break;
                             case 'recordsAttempts':
-                                _recordsAttempts = record.base.integer;
-                                displayRemainingAttempts();
+                                recordsAttempts = record.base.integer;
                                 break;
                         }
                     });
+                    if (recording && recordsAttempts) {
+                        updateResponse(recording, recordsAttempts);
+
+                        // restore interaction state
+                        base64Prefix = 'data:' + recording.mime + ';base64,';
+                        player.load(base64Prefix + recording.data);
+
+                        displayRemainingAttempts();
+                    }
                 }
             },
             /**
@@ -748,7 +746,7 @@ define([
              * @param {Object} interaction
              */
             resetResponse: function () {
-                resetRecording();
+                updateResponse(null, 0);
             },
             /**
              * Reverse operation performed by render()
