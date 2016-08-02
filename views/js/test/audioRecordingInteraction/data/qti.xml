@@ -20,7 +20,7 @@
               <pci:entry key="audioBitrate">20000</pci:entry>
               <pci:entry key="autoStart"/>
               <pci:entry key="displayDownloadLink"/>
-              <pci:entry key="maxRecords">1</pci:entry>
+              <pci:entry key="maxRecords">3</pci:entry>
               <pci:entry key="maxRecordingTime">10</pci:entry>
             </pci:properties>
             <pci:markup>

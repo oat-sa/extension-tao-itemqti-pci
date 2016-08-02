@@ -666,7 +666,6 @@ define([
              * @param {Object} config - json
              */
             initialize: function (id, dom, config) {
-                console.dir(dom);
                 render(dom, config);
 
                 this.id = id;
