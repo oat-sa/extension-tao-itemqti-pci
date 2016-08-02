@@ -28,7 +28,6 @@ use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
 use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
 use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
 use oat\taoQtiItem\model\portableElement\PortableElementRegistry;
-use oat\taoQtiItem\model\portableElement\PortableElementService;
 use \tao_helpers_Http;
 use \tao_actions_CommonModule;
 
@@ -107,7 +106,7 @@ class PciManager extends tao_actions_CommonModule
         try {
             $model = $service->getValidPortableElementFromZipSource($file['tmp_name']);
         }  catch (PortableElementInvalidModelException $e) {
-            $result['package'] = [['message'=>__($e->getMessage())]];
+            $result['package'] = [['message'=>__($e->getLastMessage())]];
             $this->returnJson($result);
             exit();
         }
@@ -118,7 +117,10 @@ class PciManager extends tao_actions_CommonModule
         if(isset($all[$model->getTypeIdentifier()])){
             $currentVersion = $all[$model->getTypeIdentifier()]->getVersion();
             if(version_compare($model->getVersion(), $currentVersion, '<')){
-                $result['package'] = [['message'=>__('A newer version of the pci "%s" already exists (current version: %s, target version: %s)', $id, $currentVersion, $targetVersion)]];
+                $result['package'] = [['message' =>
+                    __('A newer version of the pci "%s" already exists (current version: %s, target version: %s)'),
+                        $model->getTypeIdentifier(), $currentVersion, $model->getVersion()
+                ]];
                 $result['valid'] = false;
                 $this->returnJson($result);
                 exit();
@@ -126,9 +128,8 @@ class PciManager extends tao_actions_CommonModule
         }
 
         $result['valid'] = true;
-        array_merge($result, $model->toArray(array('typeIdentifier', 'label', 'version')));
 
-        $this->returnJson($result);
+        $this->returnJson(array_merge($result, $this->getMinifiedModel($model)));
         exit();
     }
 
