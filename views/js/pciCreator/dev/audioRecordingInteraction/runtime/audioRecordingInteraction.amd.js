@@ -3,15 +3,13 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/lodash',
     'OAT/util/event',
-    'OAT/util/html',
-    'tpl!audioRecordingInteraction/runtime/tpl/control'
+    'OAT/util/html'
 ], function(
     qtiCustomInteractionContext,
     $,
     _,
     event,
-    html,
-    controlTpl
+    html
 ){
     'use strict';
 
@@ -270,10 +268,11 @@ define([
     function controlFactory(config) {
         var state,
             control,
-            $control = $(controlTpl({
-                id: config.id,
-                label: config.label
-            }));
+            $control = $('<div>', {
+                'class': 'audiorec-control',
+                'data-identifier': config.id,
+                text: config.label
+            });
 
         $control.appendTo(config.container);
 
