@@ -303,7 +303,7 @@ define([
         };
         event.addEventMgr(control);
 
-        $control.on('click', function() {
+        $control.on('click.qtiCommonRenderer', function() {
             control.trigger('click');
         });
 
@@ -377,7 +377,7 @@ define([
             options.maxRecordingTime     = toInteger(config.maxRecordingTime, 120);
 
             /*
-            // todo: not implemented. To consider?
+            todo: consider this?
             allowStopRecord
             allowStopPlayback
             minRecordingTime
@@ -666,6 +666,7 @@ define([
              * @param {Object} config - json
              */
             initialize: function (id, dom, config) {
+                console.dir(dom);
                 render(dom, config);
 
                 this.id = id;
@@ -758,8 +759,14 @@ define([
              * @param {Object} interaction
              */
             destroy: function () {
-                player = null;
-                recorder = null;
+                $container.off('.qtiCommonRenderer');
+                if (player) {
+                    this.resetResponse();
+                    player = null;
+                }
+                if (recorder) {
+                    recorder = null;
+                }
             },
             /**
              * Restore the state of the interaction from the serializedState.

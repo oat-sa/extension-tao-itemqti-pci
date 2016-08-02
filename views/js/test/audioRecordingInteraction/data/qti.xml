@@ -16,9 +16,12 @@
               </pci:libraries>
             </pci:resources>
             <pci:properties>
-              <pci:entry key="level">5</pci:entry>
-              <pci:entry key="label-min">min</pci:entry>
-              <pci:entry key="label-max">max</pci:entry>
+              <pci:entry key="allowPlayback">true</pci:entry>
+              <pci:entry key="audioBitrate">20000</pci:entry>
+              <pci:entry key="autoStart"/>
+              <pci:entry key="displayDownloadLink"/>
+              <pci:entry key="maxRecords">1</pci:entry>
+              <pci:entry key="maxRecordingTime">10</pci:entry>
             </pci:properties>
             <pci:markup>
               <html5:div class="audioRecordingInteraction">

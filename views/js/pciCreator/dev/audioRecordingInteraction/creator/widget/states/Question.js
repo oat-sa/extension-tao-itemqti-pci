@@ -5,8 +5,9 @@ define([
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
-    'lodash'
-], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _){
+    'lodash',
+    'jquery'
+], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){
     'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(Question, function(){
