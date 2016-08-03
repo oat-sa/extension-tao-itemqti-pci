@@ -41,6 +41,19 @@ class Updater extends \common_ext_ExtensionUpdater
    	    }
         
         if ($this->isVersion('0.1.3')) {
+            $setupPciRegistry = new SetupPciRegistry();
+            $setupPciRegistry->setServiceLocator($this->getServiceManager());
+            $setupPciRegistry->updateTo1_0_0();
+
+            $setQtiCreatorConfig = new SetQtiCreatorConfig();
+            $setQtiCreatorConfig([]);
+
+            $registerClientProvider = new RegisterClientProvider();
+            $registerClientProvider([]);
+
+            $registerPortableElement = new RegisterPortableElement();
+            $registerPortableElement([]);
+
             $testManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
             $QTIManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
             $testTakerRole = new \core_kernel_classes_Resource(INSTANCE_ROLE_DELIVERY);
@@ -48,18 +61,6 @@ class Updater extends \common_ext_ExtensionUpdater
             $accessService->grantModuleAccess($testManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
-
-            $setQtiCreatorConfig = new SetQtiCreatorConfig();
-            $setQtiCreatorConfig([]);
-            $registerClientProvider = new RegisterClientProvider();
-            $registerClientProvider([]);
-
-            $setupPciRegistry = new SetupPciRegistry();
-            $setupPciRegistry->setServiceLocator($this->getServiceManager());
-            $setupPciRegistry->updateTo1_0_0();
-
-            $registerPortableElement = new RegisterPortableElement();
-            $registerPortableElement([]);
 
             $this->setVersion('1.0.0');
         }
