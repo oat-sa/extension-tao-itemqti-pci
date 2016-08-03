@@ -82,10 +82,16 @@ define([
                 // when playbacks ends on its own:
                 audioEl.onended = function() {
                     self._setState(playerStates.IDLE);
+                    audioEl.currentTime = 0;
+                    self.trigger('timeupdate', [0]);
                 };
 
                 audioEl.onplaying = function() {
                     self._setState(playerStates.PLAYING);
+                };
+
+                audioEl.ontimeupdate = function() {
+                    self.trigger('timeupdate', [audioEl.currentTime]);
                 };
             },
 
@@ -103,6 +109,12 @@ define([
             unload: function() {
                 audioEl = null;
                 this._setState(playerStates.CREATED);
+            },
+
+            getDuration: function() {
+                if (audioEl && audioEl.duration) {
+                    return audioEl.duration;
+                }
             }
         };
         event.addEventMgr(player);
@@ -313,6 +325,28 @@ define([
     }
 
 
+    function progressBarFactory(config) {
+        var progressBar,
+            $progressBar = $('<progress>',{
+                value: '0'
+            });
+
+        progressBar = {
+            display: function() {
+                config.$container.append($progressBar);
+            },
+
+            setMax: function setMax(max) {
+                $progressBar.attr('max', max);
+            },
+
+            setValue: function setValue(value) {
+                $progressBar.attr('value', value);
+                $progressBar.text(value);
+            }
+        };
+        return progressBar;
+    }
 
     /**
      * Main interaction code
@@ -329,6 +363,7 @@ define([
             this.initConfig(config);
             this.initRecorder();
             this.initPlayer();
+            this.initProgressBar();
 
             // ui rendering
             this.clearControls();
@@ -400,6 +435,18 @@ define([
             this.player.on('statechange', function() {
                 self.updateControls();
             });
+
+            this.player.on('timeupdate', function(currentTime) {
+                self.progressBar.setValue(currentTime.toFixed(1));
+            });
+        },
+
+        initProgressBar: function initProgressBar() {
+            this.progressBar = progressBarFactory({
+                $container: this.$progressContainer
+            });
+
+            this.progressBar.display();
         },
 
         startRecording: function startRecording() {
@@ -430,6 +477,7 @@ define([
 
         playRecording: function playRecording() {
             this.player.play();
+            this.progressBar.setMax(this.player.getDuration().toFixed(1));
             this.updateControls();
         },
 
@@ -632,9 +680,8 @@ define([
 
         clearControls: function clearControls() {
             this.$controlsContainer.empty();
+            this.controls = {};
         },
-
-
 
 
         /**
@@ -664,6 +711,7 @@ define([
             this.$container = $(dom);
             this.$instructionsContainer = this.$container.find('.audioRec > .instructions');
             this.$controlsContainer = this.$container.find('.audioRec > .controls');
+            this.$progressContainer = this.$container.find('.audioRec > .progress');
 
             this.render(config);
 
