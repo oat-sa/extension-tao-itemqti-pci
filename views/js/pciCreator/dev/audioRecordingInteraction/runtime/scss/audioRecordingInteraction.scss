@@ -1,4 +1,7 @@
+// =============
 // TAO specific
+// =============
+
 @import "inc/bootstrap";
 
 .item-editor-sidebar .tool-group {
@@ -14,9 +17,25 @@
   }
 }
 
+// Color mapping
+
+$disabledBg: whiten($websiteBorder, .3);
+$disabledTxt: black;
+$disabledTxtShadow: white(.8);
+
+$enabledBg: whiten($info, .1);
+$enabledTxt: white;
+$enabledTxtShadow: blacken($info, .2);
+
+$activeBg: whiten($activeInteraction, .1);
+$activeTxt: white;
+$activeTxtShadow: blacken($activeInteraction, .2);
 
 
+
+// =============
 // Interaction
+// =============
 
 .qti-customInteraction {
   .audioRecordingInteraction {
@@ -44,17 +63,17 @@
       height: 35px;
 
       &.disabled {
-        background-color: #afb4bb;
-        text-shadow: 1px 1px 0 rgba(255,255,255,0.8) !important;
+        background-color: $disabledBg;
+        text-shadow: 1px 1px 0 $disabledTxtShadow !important;
         cursor: not-allowed !important;
         opacity: .55 !important;
-        color: #000 !important;
+        color: $disabledTxt !important;
       }
 
       &.enabled {
-        background-color: #266d9c;
-        color: #fff;
-        text-shadow: 1px 1px 0 #0b4a74;
+        background-color: $enabledBg;
+        color: $enabledTxt;
+        text-shadow: 1px 1px 0 $enabledTxtShadow;
         cursor: pointer !important;
 
         &:hover {
@@ -63,9 +82,9 @@
       }
 
       &.active {
-        background-color: #BA122B;
-        color: #fff;
-        text-shadow: 1px 1px 0 #640a17;
+        background-color: $activeBg;
+        color: $activeTxt;
+        text-shadow: 1px 1px 0 $activeTxtShadow;
         cursor: not-allowed !important;
       }
 
@@ -74,18 +93,15 @@
     // Progress bar
 
     progress::-webkit-progress-bar {
-      /* style rules */
-      background-color: #BA122B;
+      background-color: $activeBg;
     }
 
     progress::-webkit-progress-value {
-      /* style rules */
-      background-color: #BA122B;
+      background-color: $activeBg;
     }
 
     progress::-moz-progress-bar {
-      /* style rules */
-      background-color: #BA122B;
+      background-color: $activeBg;
     }
   }
 }
