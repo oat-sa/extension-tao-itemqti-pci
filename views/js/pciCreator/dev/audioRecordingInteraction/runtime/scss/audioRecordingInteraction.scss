@@ -3,12 +3,12 @@
 
 .item-editor-sidebar .tool-group {
   .panel.creator-audioRecordingInteraction-spinner {
-    background: blue !important;
-
     .incrementer-ctrl-wrapper {
+      display: block;
+      width: 100%;
 
       input {
-        width: 100%;
+        width: 100% !important;
       }
     }
   }
