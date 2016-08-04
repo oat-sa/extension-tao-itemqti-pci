@@ -31,6 +31,8 @@ $activeBg: whiten($activeInteraction, .1);
 $activeTxt: white;
 $activeTxtShadow: blacken($activeInteraction, .2);
 
+$record: $activeInteraction;
+$playback: $success;
 
 
 // =============
@@ -92,17 +94,46 @@ $activeTxtShadow: blacken($activeInteraction, .2);
 
     // Progress bar
 
-    progress::-webkit-progress-bar {
-      background-color: $activeBg;
+    progress {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+
+      width: 50%;
+      height: 10px;
+      border-radius: 5px;
+      border: darken($disabledBg, .2) 2px solid;
+
+      // background color
+      color: $disabledBg; // FF
+      &::-webkit-progress-bar {
+        background-color: whiten($disabledBg, .5); // Chrome
+      }
+
+      // progress bar color
+
+      &.record {
+        border-color: $record;
+
+        &::-webkit-progress-value {
+          background-color: $record;
+        }
+        &::-moz-progress-bar {
+          background-color: $record;
+        }
+      }
+
+      &.playback {
+        border-color: $playback;
+
+        &::-webkit-progress-value {
+          background-color: $playback;
+        }
+        &::-moz-progress-bar {
+          background-color: $playback;
+        }
+      }
     }
 
-    progress::-webkit-progress-value {
-      background-color: $activeBg;
-    }
-
-    progress::-moz-progress-bar {
-      background-color: $activeBg;
-    }
   }
 }
 

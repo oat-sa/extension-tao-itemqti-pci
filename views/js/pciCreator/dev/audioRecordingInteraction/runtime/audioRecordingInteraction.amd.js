@@ -109,12 +109,6 @@ define([
             unload: function() {
                 audioEl = null;
                 this._setState(playerStates.CREATED);
-            },
-
-            getDuration: function() {
-                if (audioEl && audioEl.duration) {
-                    return audioEl.duration;
-                }
             }
         };
         event.addEventMgr(player);
@@ -337,7 +331,8 @@ define([
         var progressBar,
             $progressBar = $('<progress>',{
                 value: '0'
-            });
+            }),
+            currentClass;
 
         progressBar = {
             display: function() {
@@ -351,6 +346,12 @@ define([
             setValue: function setValue(value) {
                 $progressBar.attr('value', value);
                 $progressBar.text(value);
+            },
+
+            setStyle: function setStyle(className) {
+                $progressBar.removeClass(currentClass);
+                currentClass = className;
+                $progressBar.addClass(currentClass);
             }
         };
         return progressBar;
@@ -429,6 +430,8 @@ define([
 
                 self.displayDownloadLink(recordingUrl, filename, filesize, duration);
                 self.progressBar.setValue(0);
+                self.progressBar.setMax((duration / 1000).toFixed(1));
+                self.progressBar.setStyle('');
             });
 
             this.recorder.on('statechange', function() {
@@ -447,6 +450,10 @@ define([
 
             this.player.on('statechange', function() {
                 self.updateControls();
+            });
+
+            this.player.on('idle', function() {
+                self.progressBar.setStyle('');
             });
 
             this.player.on('timeupdate', function(currentTime) {
@@ -475,6 +482,7 @@ define([
             function startForReal() {
                 self.recorder.start();
                 if (self.config.maxRecordingTime) {
+                    self.progressBar.setStyle('record');
                     self.progressBar.setMax(self.config.maxRecordingTime);
                 }
                 self.updateControls();
@@ -493,7 +501,7 @@ define([
 
         playRecording: function playRecording() {
             this.player.play();
-            this.progressBar.setMax(this.player.getDuration().toFixed(1));
+            this.progressBar.setStyle('playback');
             this.updateControls();
         },
 
