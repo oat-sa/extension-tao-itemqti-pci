@@ -335,6 +335,10 @@ define([
             currentClass;
 
         progressBar = {
+            clear: function() {
+                config.$container.empty();
+            },
+
             display: function() {
                 config.$container.append($progressBar);
             },
@@ -378,6 +382,8 @@ define([
             this.clearControls();
             this.createControls();
             this.displayRemainingAttempts();
+            this.progressBar.clear();
+            this.progressBar.display();
         },
 
         /**
@@ -465,8 +471,6 @@ define([
             this.progressBar = progressBarFactory({
                 $container: this.$progressContainer
             });
-
-            this.progressBar.display();
         },
 
         startRecording: function startRecording() {
