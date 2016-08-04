@@ -40,7 +40,7 @@
                     "maxRecords": "3",
                     "maxRecordingTime": "10"
                 },
-                "entryPoint": "audioRecordingInteraction\/runtime\/audioRecordingInteraction.amd.js"
+                "entryPoint": "audioRecordingInteraction\/runtime\/audioRecordingInteraction.js"
             }
         },
         "debug": {

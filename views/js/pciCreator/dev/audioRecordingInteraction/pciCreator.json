@@ -11,7 +11,7 @@
     "css": [
         "./runtime/css/audioRecordingInteraction.css"
     ],
-    "entryPoint": "./runtime/audioRecordingInteraction.amd.js",
+    "entryPoint": "./runtime/audioRecordingInteraction.js",
     "tags": [
         "audio"
     ],
