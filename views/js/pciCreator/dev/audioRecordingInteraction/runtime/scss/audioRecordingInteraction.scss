@@ -32,7 +32,7 @@ $activeTxt: white;
 $activeTxtShadow: blacken($activeInteraction, .2);
 
 $record: $activeInteraction;
-$playback: $success;
+$playback: whiten($info, .3);
 
 
 // =============
