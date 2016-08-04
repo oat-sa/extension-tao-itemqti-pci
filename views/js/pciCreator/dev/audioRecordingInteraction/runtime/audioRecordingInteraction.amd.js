@@ -179,9 +179,10 @@ define([
             state = recorderStates.CREATED,
             mimeType,
             chunks = [],
-            chunkSize = 1000,
+            chunkSizeMs = 1000,
             startTime,
-            timerId;
+            timerId,
+            timeOutPrecisionMs = 100;
 
         setGetUserMedia();
 
@@ -231,7 +232,7 @@ define([
                             var blob = new Blob(chunks, { type: mimeType });
                             var duration = new window.Date().getTime() - startTime;
 
-                            clearTimeout(timerId);
+                            clearInterval(timerId);
 
                             self.trigger('recordingavailable', [blob, duration]);
                             self._setState(recorderStates.IDLE);
@@ -245,19 +246,26 @@ define([
             },
 
             start: function() {
-                var self = this;
+                var self = this,
+                    currentTime = 0;
 
-                mediaRecorder.start(chunkSize);
+                mediaRecorder.start(chunkSizeMs);
                 startTime = new window.Date().getTime();
 
                 this._setState(recorderStates.RECORDING);
 
                 if (config.maxRecordingTime > 0) {
-                    timerId = _.delay(function() {
-                        if (mediaRecorder.state === 'recording') {
+                    timerId = window.setInterval(function() {
+                        var now = new window.Date().getTime();
+                        currentTime = (now - startTime) / 1000;
+
+                        self.trigger('timeupdate', [currentTime]);
+
+                        if (currentTime >= config.maxRecordingTime) { // && mediaRecorder.state === 'recording') {
                             self.stop();
+                            clearInterval(timerId);
                         }
-                    }, config.maxRecordingTime * 1000);
+                    }, timeOutPrecisionMs);
                 }
             },
 
@@ -420,10 +428,15 @@ define([
                 self.createBase64Recoding(blob, filename);
 
                 self.displayDownloadLink(recordingUrl, filename, filesize, duration);
+                self.progressBar.setValue(0);
             });
 
             this.recorder.on('statechange', function() {
                 self.updateControls();
+            });
+
+            this.recorder.on('timeupdate', function(currentTime) {
+                self.progressBar.setValue(currentTime.toFixed(1));
             });
         },
 
@@ -461,6 +474,9 @@ define([
             }
             function startForReal() {
                 self.recorder.start();
+                if (self.config.maxRecordingTime) {
+                    self.progressBar.setMax(self.config.maxRecordingTime);
+                }
                 self.updateControls();
             }
         },
