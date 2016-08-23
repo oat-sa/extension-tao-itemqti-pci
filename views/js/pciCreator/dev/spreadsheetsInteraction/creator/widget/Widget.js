@@ -7,10 +7,11 @@ define([
     var SpreadsheetsInteractionWidget = Widget.clone();
 
     SpreadsheetsInteractionWidget.initCreator = function initCreator() {
-
+        var self = this;
         this.registerStates(states);
-
         Widget.initCreator.call(this);
+
+        //
 
     };
 

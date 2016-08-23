@@ -2,8 +2,9 @@ define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'spreadsheetsInteraction/creator/widget/Widget',
+    'spreadsheetsInteraction/runtime/js/renderer',
     'tpl!spreadsheetsInteraction/creator/tpl/markup'
-], function (_, ciRegistry, Widget, markupTpl) {
+], function (_, ciRegistry, Widget, Renderer, markupTpl) {
     'use strict';
 
     var _typeIdentifier = 'spreadsheetsInteraction';
@@ -26,6 +27,22 @@ define([
          * @returns {Object} Widget
          */
         getWidget: function () {
+            var self = this;
+
+            Widget.offEvents(_typeIdentifier);
+            Widget.beforeStateInit(function (event, pci, state) {
+                if (pci.typeIdentifier && pci.typeIdentifier === "spreadsheetsInteraction") {
+                    if (!pci.widgetRenderer) {
+                        pci.widgetRenderer = new Renderer({
+                            serial : pci.serial,
+                            $container : state.widget.$container,
+                            interaction : pci,
+                            markup : self.getMarkupTemplate()
+                        });
+                    }
+                }
+            }, _typeIdentifier);
+
             return Widget;
         },
         /**
@@ -45,22 +62,27 @@ define([
          */
         afterCreate: function (pci) {
             //do some stuff
+
+            //var response = pci.getResponseDeclaration();
+
+
         },
+
         /**
          * (required) Gives the qti pci xml template
-         *
          * @returns {function} handlebar template
          */
-        getMarkupTemplate: function () {
+        getMarkupTemplate: function getMarkupTemplate() {
             return markupTpl;
         },
+
         /**
          * (optional) Allows passing additional data to xml template
-         *
-         * @returns {function} handlebar template
+         * @params {object} pci - interaction instance
+         * @params {object} defaultData - default interaction properties {@see this.getDefaultProperties()}
+         * @returns {object} handlebar template context.
          */
-        getMarkupData: function (pci, defaultData) {
-            defaultData.prompt = pci.data('prompt');
+        getMarkupData: function getMarkupData(pci, defaultData) {
             return defaultData;
         }
     };

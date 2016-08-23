@@ -50,26 +50,30 @@ define([
             
             var self = this;
 
-            var data = [
-                ["", "Ford", "Volvo", "Toyota", "Honda"],
-                ["2016", 10, 11, 12, 13],
-                ["2017", 20, 11, 14, 13],
-                ["2018", 30, 15, 12, 13]
-            ];
+            // var data = [
+            //     ["", "Ford", "Volvo", "Toyota", "Honda"],
+            //     ["2016", 10, 11, 12, 13],
+            //     ["2017", 20, 11, 14, 13],
+            //     ["2018", 30, 15, 12, 13]
+            // ];
 
             var $container = $(this.dom);
             var spreadsheet = $container.find('.spreadsheet');
 
             var hot = new Handsontable(spreadsheet.get(0), {
                 //data: data,
-                data: Handsontable.helper.createSpreadsheetData(10, 100),
-                width: '100%',
-                colWidths: 47,
-                rowHeights: 23,
+                data: Handsontable.helper.createSpreadsheetData(25, 20),
+                // width: '100%',
                 rowHeaders: true,
                 colHeaders: true,
-                stretchH: 'all',
-                contextMenu: true
+
+                contextMenu: true,
+
+                manualColumnResize: true,
+                manualRowResize: true,
+
+                manualColumnMove: true,
+                manualRowMove: true
             });
         },
         
