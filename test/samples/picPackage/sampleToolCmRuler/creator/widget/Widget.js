@@ -1,6 +1,6 @@
 define([
     'taoQtiItem/qtiCreator/widgets/static/Widget',
-    'parccCmRuler/creator/widget/states/states'
+    'sampleToolCmRuler/creator/widget/states/states'
 ], function(Widget, states){
 
     var CmRulerWidget = Widget.clone();

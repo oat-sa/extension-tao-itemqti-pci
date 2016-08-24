@@ -1,8 +1,8 @@
 define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/infoControlRegistry',
-    'parccCmRuler/creator/widget/Widget',
-    'tpl!parccCmRuler/creator/tpl/cm-ruler'
+    'sampleToolCmRuler/creator/widget/Widget',
+    'tpl!sampleToolCmRuler/creator/tpl/cm-ruler'
 ], 
 function(_, registry, Widget, markupTpl){
 
@@ -10,7 +10,7 @@ function(_, registry, Widget, markupTpl){
     /**
      * Retrieve data from manifest
      */
-    var manifest = registry.get('parccCmRuler').manifest;
+    var manifest = registry.get('sampleToolCmRuler').manifest;
 
     /**
      * Configuration of the container

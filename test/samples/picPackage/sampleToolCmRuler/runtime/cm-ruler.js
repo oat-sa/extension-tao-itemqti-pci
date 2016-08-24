@@ -5,10 +5,10 @@ define([
 ],
     function($, common, qtiInfoControlContext){
 
-        var parccCmRuler = {
+        var sampleToolCmRuler = {
             id : -1,
             getTypeIdentifier : function(){
-                return 'parccCmRuler';
+                return 'sampleToolCmRuler';
             },
             /**
              * Initialize the PIC
@@ -62,5 +62,5 @@ define([
             }
         };
 
-        qtiInfoControlContext.register(parccCmRuler);
+        qtiInfoControlContext.register(sampleToolCmRuler);
     });

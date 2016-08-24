@@ -68,7 +68,7 @@ class PortableElementServiceTest extends TaoPhpUnitTestRunner
     {
         return  [
             [new PciModel(), 'likertScaleInteraction', '1.0.0', dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip'],
-            [new PicModel(), 'parccCmRuler', '0.1', dirname(__FILE__) . '/samples/picPackage/parccCmRuler.zip'],
+            [new PicModel(), 'sampleToolCmRuler', '0.1', dirname(__FILE__) . '/samples/picPackage/sampleToolCmRuler.zip'],
         ];
     }
 }

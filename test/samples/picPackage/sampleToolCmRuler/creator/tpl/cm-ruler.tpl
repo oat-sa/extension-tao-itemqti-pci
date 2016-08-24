@@ -12,7 +12,7 @@
         <div class="sts-workspace">
             <div class="sts-content">
                 <!-- The template for PARCC/Cm Ruler goes here -->
-                <img src="parccCmRuler/runtime/media/cm-ruler-widget.png"/>
+                <img src="sampleToolCmRuler/runtime/media/cm-ruler-widget.png"/>
             </div>
             {{#if is.transmutable}}
             <div class="sts-container-controls">
