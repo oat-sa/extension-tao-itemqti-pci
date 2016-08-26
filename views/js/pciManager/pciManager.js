@@ -218,7 +218,7 @@ define([
             
             $container.trigger('added' + ns, [interactionHook]);
             
-            ciRegistry.loadCreators(function(){
+            ciRegistry.loadCreators(true).then(function(){
                 var data = ciRegistry.getAuthoringData(id);
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
@@ -237,7 +237,7 @@ define([
                 }else{
                     throw 'invalid authoring data for custom interaction';
                 }
-            }, true);
+            });
         }
 
         function initUploader(){
