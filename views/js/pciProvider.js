@@ -28,9 +28,7 @@ define(['jquery', 'helpers', 'core/promise'], function($, helpers, Promise){
                     url : _serverUrl,
                     dataType : 'json',
                     type : 'GET'
-                }).done(function (pcis){
-                    resolve(pcis);
-                }).fail(reject);
+                }).done(resolve).fail(reject);
             });
         }
     };
