@@ -106,7 +106,9 @@ class PciManager extends tao_actions_CommonModule
         try {
             $model = $service->getValidPortableElementFromZipSource($file['tmp_name']);
         }  catch (PortableElementInvalidModelException $e) {
-            $result['package'] = [['message'=>__($e->getLastMessage())]];
+            $result['package'] = [
+                ['messages' => $e->getReportMessages()]
+            ];
             $this->returnJson($result);
             exit();
         }
