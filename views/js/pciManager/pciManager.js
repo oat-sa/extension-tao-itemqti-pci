@@ -34,6 +34,7 @@ define([
     'ui/uploader',
     'ui/filesender'
 ], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, confirmBox, deleter, feedback){
+    'use strict';
 
     var ns = '.pcimanager';
 

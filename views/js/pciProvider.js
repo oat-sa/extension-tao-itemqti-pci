@@ -23,14 +23,14 @@ define(['jquery', 'helpers', 'core/promise'], function($, helpers, Promise){
     
     return {
         load: function load(){
-            return new Promise(function(resolve){
+            return new Promise(function(resolve, reject){
                 $.ajax({
                     url : _serverUrl,
                     dataType : 'json',
                     type : 'GET'
                 }).done(function (pcis){
                     resolve(pcis);
-                });
+                }).fail(reject);
             });
         }
     };
