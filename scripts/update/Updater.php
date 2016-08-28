@@ -25,6 +25,7 @@ use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\SetupPciRegistry;
 use oat\qtiItemPci\scripts\install\RegisterPortableElement;
+use oat\taoQtiItem\model\HookRegistry;
 
 class Updater extends \common_ext_ExtensionUpdater
 {
@@ -61,6 +62,8 @@ class Updater extends \common_ext_ExtensionUpdater
             $accessService->grantModuleAccess($testManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
+
+            HookRegistry::getRegistry()->remove('pciCreator');
 
             $this->setVersion('1.0.0');
         }
