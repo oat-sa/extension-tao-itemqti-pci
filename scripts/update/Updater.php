@@ -37,11 +37,11 @@ class Updater extends \common_ext_ExtensionUpdater
     public function update($currentVersion)
     {
         
-      	if ($this->isBetween('0', '0.1.3')) {
-  	    	$this->setVersion('0.1.3');
+      	if ($this->isBetween('0', '0.1.4')) {
+  	    	$this->setVersion('0.1.4');
    	    }
         
-        if ($this->isVersion('0.1.3')) {
+        if ($this->isVersion('0.1.4')) {
             $setupPciRegistry = new SetupPciRegistry();
             $setupPciRegistry->setServiceLocator($this->getServiceManager());
             $setupPciRegistry->updateTo1_0_0();
