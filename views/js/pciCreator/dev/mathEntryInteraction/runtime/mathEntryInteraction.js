@@ -1,15 +1,19 @@
 define([
     'qtiCustomInteractionContext',
-    'IMSGlobal/jquery_2_1_1',
+    // fixme: embed jQuery 1.4.3+ or update PCI jQuery version - remove jQuery shared lib dependency
+    'jquery',
     'OAT/lodash',
     'OAT/util/event',
-    'OAT/util/html'
+    'OAT/util/html',
+    // fixme: use a relative path from PCI runtime
+    'qtiItemPci/pciCreator/dev/mathEntryInteraction/runtime/mathquill/mathquill'
 ], function(
     qtiCustomInteractionContext,
     $,
     _,
     event,
-    html
+    html,
+    MathQuill
 ){
     'use strict';
 
@@ -372,6 +376,20 @@ define([
         _recordsAttempts: 0,
 
         render: function render(config) {
+            /* */
+            var MQ = MathQuill.getInterface(2);
+            var mathEntryField = this.$container.find('.mathEntryField').get(0);
+            var answerMathField = MQ.MathField(mathEntryField, {
+                handlers: {
+                    edit: function() {
+                        var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
+                        console.log(enteredMath);
+                    }
+                }
+            });
+            /* */
+            console.log('rendering');
+
             // initialization
             this.initConfig(config);
             this.initRecorder();
@@ -379,11 +397,12 @@ define([
             this.initProgressBar();
 
             // ui rendering
-            this.clearControls();
-            this.createControls();
-            this.displayRemainingAttempts();
-            this.progressBar.clear();
-            this.progressBar.display();
+            // this.clearControls();
+            // this.createControls();
+            // this.displayRemainingAttempts();
+            // this.progressBar.clear();
+            // this.progressBar.display();
+
         },
 
         /**

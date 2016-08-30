@@ -6,9 +6,11 @@
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "libraries": [
-        "IMSGlobal/jquery_2_1_1"
+        "IMSGlobal/jquery_2_1_1",
+        "./runtime/mathquill/mathquill.min"
     ],
     "css": [
+        "./runtime/mathquill/mathquill.css",
         "./runtime/css/mathEntryInteraction.css"
     ],
     "entryPoint": "./runtime/mathEntryInteraction.js",

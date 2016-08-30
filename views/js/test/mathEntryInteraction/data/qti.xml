@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1469017297762182" title="audio pci 1" adaptive="false" timeDependent="false">
-  <responseDeclaration cardinality="record" identifier="RESPONSE"/>
+<assessmentItem
+        xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:m="http://www.w3.org/1998/Math/MathML"
+        xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction"
+        xmlns:html5="html5"
+        xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd"
+        identifier="i1472560050505106" title="Item_2 3" adaptive="false" timeDependent="false">
+  <responseDeclaration cardinality="single" identifier="RESPONSE" baseType="string"/>
   <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
-  <stylesheet href="mathEntryInteraction/runtime/css/mathEntryInteraction.css" title="" type="text/css" media="all"/>
+  <stylesheet href="style/custom/tao-user-styles.css" title="" type="text/css" media="all" />
+  <stylesheet href="mathEntryInteraction/runtime/mathquill/mathquill.css" title="" type="text/css" media="all" />
+  <stylesheet href="mathEntryInteraction/runtime/css/mathEntryInteraction.css" title="" type="text/css" media="all" />
   <itemBody>
     <div class="grid-row">
       <div class="col-12">
@@ -12,24 +21,23 @@
             <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
               <pci:libraries>
                 <pci:lib id="IMSGlobal/jquery_2_1_1"/>
-                <pci:lib id="mathEntryInteraction/runtime/js/renderer"/>
               </pci:libraries>
             </pci:resources>
             <pci:properties>
               <pci:entry key="allowPlayback">true</pci:entry>
               <pci:entry key="audioBitrate">20000</pci:entry>
-              <pci:entry key="autoStart"/>
-              <pci:entry key="displayDownloadLink"/>
-              <pci:entry key="maxRecords">3</pci:entry>
-              <pci:entry key="maxRecordingTime">10</pci:entry>
+              <pci:entry key="autoStart"></pci:entry>
+              <pci:entry key="displayDownloadLink"></pci:entry>
+              <pci:entry key="maxRecords">0</pci:entry>
+              <pci:entry key="maxRecordingTime">120</pci:entry>
             </pci:properties>
             <pci:markup>
               <html5:div class="mathEntryInteraction">
-                <html5:div class="prompt"/>
+                <html5:div class="prompt"></html5:div>
                 <html5:div class="mathEntry">
-                  <html5:div class="toolbar"/>
+                  <html5:div class="toolbar"></html5:div>
                   <html5:div class="mathEntryZone">
-                    <html5:textarea class="mathEntryField"/>
+                    <html5:span class="mathEntryField"/>
                   </html5:div>
                 </html5:div>
               </html5:div>

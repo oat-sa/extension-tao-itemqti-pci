@@ -2,8 +2,8 @@
     <div class="prompt">{{{prompt}}}</div>
     <div class="mathEntry">
         <div class="toolbar"></div>
-        <div class="mathEntryZone">
-            <textarea class="mathEntryField"/>
+        <div>
+            <span class="mathEntryField"></span>
         </div>
     </div>
 </div>

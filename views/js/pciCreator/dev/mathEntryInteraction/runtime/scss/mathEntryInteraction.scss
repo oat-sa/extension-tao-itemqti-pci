@@ -42,7 +42,9 @@ $playback: whiten($info, .3);
 .qti-customInteraction {
   .mathEntryInteraction {
 
-    padding: 10px;
+    .mathEntryField {
+      width: 100%;
+    }
 
     // Buttons
 

@@ -1,10 +1,10 @@
 {
-    "identifier": "i1469017297762182",
-    "serial": "item_57c582dac04fc489915106",
+    "identifier": "i1472560050505106",
+    "serial": "item_57c59dbeee2c4279223080",
     "qtiClass": "assessmentItem",
     "attributes": {
-        "identifier": "i1469017297762182",
-        "title": "audio pci 1",
+        "identifier": "i1472560050505106",
+        "title": "Item_2 3",
         "label": "",
         "adaptive": false,
         "timeDependent": false,
@@ -13,42 +13,41 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_57c582dac04e1483263957",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_57c582dac1913370317506}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_57c59dbeee2a6487617805",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_57c59dbef24bb674000733}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_57c582dac1913370317506": {
-                "serial": "interaction_portablecustominteraction_57c582dac1913370317506",
+            "interaction_portablecustominteraction_57c59dbef24bb674000733": {
+                "serial": "interaction_portablecustominteraction_57c59dbef24bb674000733",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_57c582dac04fc489915106"
+                    "relatedItem": "item_57c59dbeee2c4279223080"
                 },
                 "choices": {},
                 "typeIdentifier": "mathEntryInteraction",
-                "markup": "\n              <div class=\"mathEntryInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"mathEntry\">\n                  <div class=\"toolbar\"><\/div>\n                  <div class=\"mathEntryZone\">\n                    <textarea class=\"mathEntryField\"><\/textarea>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
+                "markup": "\n              <div class=\"mathEntryInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"mathEntry\">\n                  <div class=\"toolbar\"><\/div>\n                  <div class=\"mathEntryZone\">\n                    <span class=\"mathEntryField\"><\/span>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
                 "libraries": [
-                    "IMSGlobal\/jquery_2_1_1",
-                    "mathEntryInteraction\/runtime\/js\/renderer"
+                    "IMSGlobal\/jquery_2_1_1"
                 ],
                 "properties": {
                     "allowPlayback": "true",
                     "audioBitrate": "20000",
                     "autoStart": "",
                     "displayDownloadLink": "",
-                    "maxRecords": "3",
-                    "maxRecordingTime": "10"
+                    "maxRecords": "0",
+                    "maxRecordingTime": "120"
                 },
                 "entryPoint": "mathEntryInteraction\/runtime\/mathEntryInteraction.js"
             }
         },
         "debug": {
-            "relatedItem": "item_57c582dac04fc489915106"
+            "relatedItem": "item_57c59dbeee2c4279223080"
         }
     },
     "debug": {
-        "relatedItem": "item_57c582dac04fc489915106"
+        "relatedItem": "item_57c59dbeee2c4279223080"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
@@ -62,8 +61,34 @@
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
     },
     "stylesheets": {
-        "stylesheet_57c582dac0b16624656866": {
-            "serial": "stylesheet_57c582dac0b16624656866",
+        "stylesheet_57c59dbeef518983841984": {
+            "serial": "stylesheet_57c59dbeef518983841984",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "style\/custom\/tao-user-styles.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_57c59dbeee2c4279223080"
+            }
+        },
+        "stylesheet_57c59dbeefb36290088970": {
+            "serial": "stylesheet_57c59dbeefb36290088970",
+            "qtiClass": "stylesheet",
+            "attributes": {
+                "href": "mathEntryInteraction\/runtime\/mathquill\/mathquill.css",
+                "type": "text\/css",
+                "media": "all",
+                "title": ""
+            },
+            "debug": {
+                "relatedItem": "item_57c59dbeee2c4279223080"
+            }
+        },
+        "stylesheet_57c59dbeefb7e252532077": {
+            "serial": "stylesheet_57c59dbeefb7e252532077",
             "qtiClass": "stylesheet",
             "attributes": {
                 "href": "mathEntryInteraction\/runtime\/css\/mathEntryInteraction.css",
@@ -72,14 +97,14 @@
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_57c582dac04fc489915106"
+                "relatedItem": "item_57c59dbeee2c4279223080"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_57c582dac11f2924477142": {
+        "outcomedeclaration_57c59dbef0920217142795": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_57c582dac11f2924477142",
+            "serial": "outcomedeclaration_57c59dbef0920217142795",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -87,22 +112,23 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_57c582dac04fc489915106"
+                "relatedItem": "item_57c59dbeee2c4279223080"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_57c582dac0fa0473898904": {
+        "responsedeclaration_57c59dbef01ed427261771": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_57c582dac0fa0473898904",
+            "serial": "responsedeclaration_57c59dbef01ed427261771",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
-                "cardinality": "record"
+                "cardinality": "single",
+                "baseType": "string"
             },
             "debug": {
-                "relatedItem": "item_57c582dac04fc489915106"
+                "relatedItem": "item_57c59dbeee2c4279223080"
             },
             "mapping": [],
             "areaMapping": [],
@@ -116,11 +142,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_57c582dac229a702320520",
+        "serial": "response_templatesdriven_57c59dbf009d2761028722",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {
-            "relatedItem": "item_57c582dac04fc489915106"
+            "relatedItem": "item_57c59dbeee2c4279223080"
         },
         "processingType": "templateDriven",
         "responseRules": [
