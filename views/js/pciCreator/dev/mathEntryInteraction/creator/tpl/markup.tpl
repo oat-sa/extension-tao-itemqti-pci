@@ -1,9 +1,9 @@
 <div class="mathEntryInteraction">
     <div class="prompt">{{{prompt}}}</div>
-    <div class="audioRec">
-        <div class="recording"></div>
-        <div class="progress"></div>
-        <div class="controls"></div>
-        <div class="instructions"></div>
+    <div class="mathEntry">
+        <div class="toolbar"></div>
+        <div class="mathEntryZone">
+            <textarea class="mathEntryField"/>
+        </div>
     </div>
 </div>

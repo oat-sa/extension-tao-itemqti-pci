@@ -1,6 +1,6 @@
 {
     "identifier": "i1469017297762182",
-    "serial": "item_57a06cfbdc1ce303328415",
+    "serial": "item_57c582dac04fc489915106",
     "qtiClass": "assessmentItem",
     "attributes": {
         "identifier": "i1469017297762182",
@@ -13,21 +13,21 @@
         "class": ""
     },
     "body": {
-        "serial": "container_containeritembody_57a06cfbdc150515475409",
-        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_57a06cfbddbac461951814}}\n      <\/div>\n    <\/div>\n  ",
+        "serial": "container_containeritembody_57c582dac04e1483263957",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_57c582dac1913370317506}}\n      <\/div>\n    <\/div>\n  ",
         "elements": {
-            "interaction_portablecustominteraction_57a06cfbddbac461951814": {
-                "serial": "interaction_portablecustominteraction_57a06cfbddbac461951814",
+            "interaction_portablecustominteraction_57c582dac1913370317506": {
+                "serial": "interaction_portablecustominteraction_57c582dac1913370317506",
                 "qtiClass": "customInteraction",
                 "attributes": {
                     "responseIdentifier": "RESPONSE"
                 },
                 "debug": {
-                    "relatedItem": "item_57a06cfbdc1ce303328415"
+                    "relatedItem": "item_57c582dac04fc489915106"
                 },
                 "choices": {},
                 "typeIdentifier": "mathEntryInteraction",
-                "markup": "\n              <div class=\"mathEntryInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audioRec\">\n                  <div class=\"recording\"><\/div>\n                  <div class=\"progress\"><\/div>\n                  <div class=\"controls\"><\/div>\n                  <div class=\"instructions\"><\/div>\n                  <div class=\"download\"><\/div>\n                <\/div>\n              <\/div>\n            ",
+                "markup": "\n              <div class=\"mathEntryInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"mathEntry\">\n                  <div class=\"toolbar\"><\/div>\n                  <div class=\"mathEntryZone\">\n                    <textarea class=\"mathEntryField\"><\/textarea>\n                  <\/div>\n                <\/div>\n              <\/div>\n            ",
                 "libraries": [
                     "IMSGlobal\/jquery_2_1_1",
                     "mathEntryInteraction\/runtime\/js\/renderer"
@@ -44,11 +44,11 @@
             }
         },
         "debug": {
-            "relatedItem": "item_57a06cfbdc1ce303328415"
+            "relatedItem": "item_57c582dac04fc489915106"
         }
     },
     "debug": {
-        "relatedItem": "item_57a06cfbdc1ce303328415"
+        "relatedItem": "item_57c582dac04fc489915106"
     },
     "namespaces": {
         "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
@@ -62,8 +62,8 @@
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
     },
     "stylesheets": {
-        "stylesheet_57a06cfbdcd94310190521": {
-            "serial": "stylesheet_57a06cfbdcd94310190521",
+        "stylesheet_57c582dac0b16624656866": {
+            "serial": "stylesheet_57c582dac0b16624656866",
             "qtiClass": "stylesheet",
             "attributes": {
                 "href": "mathEntryInteraction\/runtime\/css\/mathEntryInteraction.css",
@@ -72,14 +72,14 @@
                 "title": ""
             },
             "debug": {
-                "relatedItem": "item_57a06cfbdc1ce303328415"
+                "relatedItem": "item_57c582dac04fc489915106"
             }
         }
     },
     "outcomes": {
-        "outcomedeclaration_57a06cfbdd495578961589": {
+        "outcomedeclaration_57c582dac11f2924477142": {
             "identifier": "SCORE",
-            "serial": "outcomedeclaration_57a06cfbdd495578961589",
+            "serial": "outcomedeclaration_57c582dac11f2924477142",
             "qtiClass": "outcomeDeclaration",
             "attributes": {
                 "identifier": "SCORE",
@@ -87,22 +87,22 @@
                 "baseType": "float"
             },
             "debug": {
-                "relatedItem": "item_57a06cfbdc1ce303328415"
+                "relatedItem": "item_57c582dac04fc489915106"
             },
             "defaultValue": null
         }
     },
     "responses": {
-        "responsedeclaration_57a06cfbdd23e009980462": {
+        "responsedeclaration_57c582dac0fa0473898904": {
             "identifier": "RESPONSE",
-            "serial": "responsedeclaration_57a06cfbdd23e009980462",
+            "serial": "responsedeclaration_57c582dac0fa0473898904",
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
                 "cardinality": "record"
             },
             "debug": {
-                "relatedItem": "item_57a06cfbdc1ce303328415"
+                "relatedItem": "item_57c582dac04fc489915106"
             },
             "mapping": [],
             "areaMapping": [],
@@ -116,11 +116,11 @@
     },
     "feedbacks": {},
     "responseProcessing": {
-        "serial": "response_templatesdriven_57a06cfbde7f3335472362",
+        "serial": "response_templatesdriven_57c582dac229a702320520",
         "qtiClass": "responseProcessing",
         "attributes": [],
         "debug": {
-            "relatedItem": "item_57a06cfbdc1ce303328415"
+            "relatedItem": "item_57c582dac04fc489915106"
         },
         "processingType": "templateDriven",
         "responseRules": [
