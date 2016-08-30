@@ -1,0 +1,24 @@
+{
+    "typeIdentifier": "audioRecordingInteraction",
+    "label": "Audio recording",
+    "description": "Allow test taker to record audio",
+    "version": "0.1",
+    "author": "Christophe Noël",
+    "email": "christophe@taotesting.com",
+    "libraries": [
+        "IMSGlobal/jquery_2_1_1"
+    ],
+    "css": [
+        "./runtime/css/audioRecordingInteraction.css"
+    ],
+    "entryPoint": "./runtime/audioRecordingInteraction.js",
+    "tags": [
+        "audio"
+    ],
+    "icon": "./creator/img/icon.svg",
+    "short": "Audio",
+    "response": {
+        "cardinality": "record"
+    },
+    "debug" : true
+}
