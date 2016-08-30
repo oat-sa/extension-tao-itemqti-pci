@@ -13,7 +13,7 @@ define([
 ){
     'use strict';
 
-    var audioRecordingInteraction;
+    var mathEntryInteraction;
 
     /**
      * @property {String} CREATED   - player instance created, but no media loaded
@@ -365,7 +365,7 @@ define([
      * Main interaction code
      */
 
-    audioRecordingInteraction = {
+    mathEntryInteraction = {
 
         _filePrefix: 'audioRecording',
         _recording: null,
@@ -719,7 +719,7 @@ define([
         id: -1,
 
         getTypeIdentifier: function () {
-            return 'audioRecordingInteraction';
+            return 'mathEntryInteraction';
         },
         /**
          * Render the PCI :
@@ -867,5 +867,5 @@ define([
         }
     };
 
-    qtiCustomInteractionContext.register(audioRecordingInteraction);
+    qtiCustomInteractionContext.register(mathEntryInteraction);
 });

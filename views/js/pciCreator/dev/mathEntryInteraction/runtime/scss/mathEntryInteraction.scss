@@ -5,7 +5,7 @@
 @import "inc/bootstrap";
 
 .item-editor-sidebar .tool-group {
-  .panel.creator-audioRecordingInteraction-spinner {
+  .panel.creator-mathEntryInteraction-spinner {
     .incrementer-ctrl-wrapper {
       display: block;
       width: 100%;
@@ -40,7 +40,7 @@ $playback: whiten($info, .3);
 // =============
 
 .qti-customInteraction {
-  .audioRecordingInteraction {
+  .mathEntryInteraction {
 
     padding: 10px;
 

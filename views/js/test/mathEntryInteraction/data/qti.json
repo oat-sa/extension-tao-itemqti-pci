@@ -26,11 +26,11 @@
                     "relatedItem": "item_57a06cfbdc1ce303328415"
                 },
                 "choices": {},
-                "typeIdentifier": "audioRecordingInteraction",
-                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audioRec\">\n                  <div class=\"recording\"><\/div>\n                  <div class=\"progress\"><\/div>\n                  <div class=\"controls\"><\/div>\n                  <div class=\"instructions\"><\/div>\n                  <div class=\"download\"><\/div>\n                <\/div>\n              <\/div>\n            ",
+                "typeIdentifier": "mathEntryInteraction",
+                "markup": "\n              <div class=\"mathEntryInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audioRec\">\n                  <div class=\"recording\"><\/div>\n                  <div class=\"progress\"><\/div>\n                  <div class=\"controls\"><\/div>\n                  <div class=\"instructions\"><\/div>\n                  <div class=\"download\"><\/div>\n                <\/div>\n              <\/div>\n            ",
                 "libraries": [
                     "IMSGlobal\/jquery_2_1_1",
-                    "audioRecordingInteraction\/runtime\/js\/renderer"
+                    "mathEntryInteraction\/runtime\/js\/renderer"
                 ],
                 "properties": {
                     "allowPlayback": "true",
@@ -40,7 +40,7 @@
                     "maxRecords": "3",
                     "maxRecordingTime": "10"
                 },
-                "entryPoint": "audioRecordingInteraction\/runtime\/audioRecordingInteraction.js"
+                "entryPoint": "mathEntryInteraction\/runtime\/mathEntryInteraction.js"
             }
         },
         "debug": {
@@ -66,7 +66,7 @@
             "serial": "stylesheet_57a06cfbdcd94310190521",
             "qtiClass": "stylesheet",
             "attributes": {
-                "href": "audioRecordingInteraction\/runtime\/css\/audioRecordingInteraction.css",
+                "href": "mathEntryInteraction\/runtime\/css\/mathEntryInteraction.css",
                 "type": "text\/css",
                 "media": "all",
                 "title": ""

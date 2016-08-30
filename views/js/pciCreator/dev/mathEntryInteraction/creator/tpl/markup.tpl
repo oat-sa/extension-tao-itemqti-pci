@@ -1,4 +1,4 @@
-<div class="audioRecordingInteraction">
+<div class="mathEntryInteraction">
     <div class="prompt">{{{prompt}}}</div>
     <div class="audioRec">
         <div class="recording"></div>

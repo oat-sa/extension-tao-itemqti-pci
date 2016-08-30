@@ -1,5 +1,5 @@
 {
-    "typeIdentifier": "audioRecordingInteraction",
+    "typeIdentifier": "mathEntryInteraction",
     "label": "Audio recording",
     "description": "Allow test taker to record audio",
     "version": "0.1",
@@ -9,9 +9,9 @@
         "IMSGlobal/jquery_2_1_1"
     ],
     "css": [
-        "./runtime/css/audioRecordingInteraction.css"
+        "./runtime/css/mathEntryInteraction.css"
     ],
-    "entryPoint": "./runtime/audioRecordingInteraction.js",
+    "entryPoint": "./runtime/mathEntryInteraction.js",
     "tags": [
         "audio"
     ],

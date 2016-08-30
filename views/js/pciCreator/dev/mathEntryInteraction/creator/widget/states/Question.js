@@ -4,7 +4,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
-    'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
+    'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
 ], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){

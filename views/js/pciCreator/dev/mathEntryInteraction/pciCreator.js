@@ -1,13 +1,13 @@
 define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
-    'audioRecordingInteraction/creator/widget/Widget',
-    'tpl!audioRecordingInteraction/creator/tpl/markup'
+    'mathEntryInteraction/creator/widget/Widget',
+    'tpl!mathEntryInteraction/creator/tpl/markup'
 ], function(_, ciRegistry, Widget, markupTpl){
 
-    var _typeIdentifier = 'audioRecordingInteraction';
+    var _typeIdentifier = 'mathEntryInteraction';
 
-    var audioRecordingInteractionCreator = {
+    var mathEntryInteractionCreator = {
         /**
          * (required) Get the typeIdentifier of the custom interaction
          *
@@ -71,5 +71,5 @@ define([
 
     //since we assume we are in a tao context, there is no use to expose the a global object for lib registration
     //all libs should be declared here
-    return audioRecordingInteractionCreator;
+    return mathEntryInteractionCreator;
 });

@@ -21,15 +21,15 @@
         <span class="icon-checkbox"></span>
         {{__ "Auto start recording"}}
     </label>
-    <div class="panel creator-audioRecordingInteraction-spinner">
+    <div class="panel creator-mathEntryInteraction-spinner">
         <label for="audioBitrate" class="spinner">{{__ "Audio bitrate (in bits per second)"}}</label>
         <input name="audioBitrate" value="{{audioBitrate}}" data-increment="1000" data-min="8000" type="text" />
     </div>
-    <div class="panel creator-audioRecordingInteraction-spinner">
+    <div class="panel creator-mathEntryInteraction-spinner">
         <label for="maxRecords" class="spinner">{{__ "Number of allowed recording attemps (0 = unlimited)"}}</label>
         <input name="maxRecords" value="{{maxRecords}}" data-increment="1" data-min="0" type="text" />
     </div>
-    <div class="panel creator-audioRecordingInteraction-spinner">
+    <div class="panel creator-mathEntryInteraction-spinner">
         <label for="maxRecordingTime" class="spinner">{{__ "Max recording time (in seconds)"}}</label>
         <input name="maxRecordingTime" value="{{maxRecordingTime}}" data-increment="10" data-min="10" type="text" />
     </div>
