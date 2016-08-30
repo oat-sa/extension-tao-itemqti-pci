@@ -1,7 +1,7 @@
 {
     "typeIdentifier": "mathEntryInteraction",
-    "label": "Audio recording",
-    "description": "Allow test taker to record audio",
+    "label": "Math entry",
+    "description": "Allow test taker to type math formulas",
     "version": "0.1",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
@@ -13,12 +13,13 @@
     ],
     "entryPoint": "./runtime/mathEntryInteraction.js",
     "tags": [
-        "audio"
+        "math"
     ],
     "icon": "./creator/img/icon.svg",
-    "short": "Audio",
+    "short": "Math",
     "response": {
-        "cardinality": "record"
+      "baseType": "string",
+      "cardinality": "single"
     },
     "debug" : true
 }
