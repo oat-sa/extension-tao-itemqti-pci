@@ -20,82 +20,16 @@ define([
 
     var mathEntryInteraction;
 
-    /**
-     * @property {String} DISABLED  - not clickable
-     * @property {String} ENABLED   - clickable
-     * @property {String} ACTIVE    - clicked, triggered action is ongoing
-     */
-    var controlStates = {
-        DISABLED: 'disabled',
-        ENABLED: 'enabled',
-        ACTIVE: 'active'
-    };
-
-
-    function controlFactory(config) {
-        var state,
-            control,
-            $control = $('<div>', {
-                'class': 'audiorec-control',
-                'data-identifier': config.id,
-                text: config.label
-            });
-
-        $control.appendTo(config.container);
-
-        setState(config.defaultState || controlStates.DISABLED);
-
-        function setState(newState) {
-            $control.removeClass(state);
-            state = newState;
-            $control.addClass(state);
-        }
-
-        control = {
-            getState: function() {
-                return state;
-            },
-            enable: function() {
-                setState(controlStates.ENABLED);
-            },
-            disable: function() {
-                setState(controlStates.DISABLED);
-            },
-            activate: function() {
-                setState(controlStates.ACTIVE);
-            },
-            updateState: function() {
-                this.trigger('updatestate');
-            }
-        };
-        event.addEventMgr(control);
-
-        $control.on('click.qtiCommonRenderer', function() {
-            control.trigger('click');
+    function createTool(config) {
+        var $tool = $('<div>', {
+            'class': 'math-entry-tool',
+            'data-identifier': config.id,
+            'data-latex': config.latex,
+            'data-fn': config.fn,
+            html: config.label
         });
-
-        return control;
-    }
-
-
-    function toolFactory(config) {
-        var tool = {},
-            $tool = $('<div>', {
-                'class': 'math-entry-tool',
-                'data-identifier': config.id,
-                html: config.label
-            });
 
         $tool.appendTo(config.container);
-
-        event.addEventMgr(tool);
-
-        $tool.on('click.qtiCommonRenderer', function() {
-            tool.trigger('click');
-        });
-
-        return tool;
-
     }
 
     /**
@@ -129,14 +63,19 @@ define([
         createTools: function() {
             var self = this,
                 availableTools = {
-                    sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: _('Square root') },
                     frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: _('Fraction') },
-                    pi:     { label: '&Pi;',        latex: '\\pi',      fn: 'write',    desc: _('Pi') }
+                    sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: _('Square root') },
+                    exp:    { label: 'x&#8319;',    latex: '^{}',       fn: 'write',    desc: _('Exponent') },
+                    pi:     { label: '&Pi;',        latex: '\\pi',      fn: 'write',    desc: _('Pi') },
+                    leq:    { label: '&le;',        latex: '\\le',      fn: 'write',    desc: _('Lower than or equal') },
+                    geq:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: _('Greater than or equal') },
+                    times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: _('Multiply') },
+                    divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: _('Divide') }
                 },
                 availableToolbars = {
                     base: {
                         container: this.$toolbar,
-                        tools: ['sqrt', 'frac', 'pi']
+                        tools: ['sqrt', 'frac', 'exp', 'pi', 'leq', 'geq', 'times', 'divide']
                     }
                 },
                 toolbar;
@@ -144,23 +83,26 @@ define([
             toolbar = availableToolbars.base;
 
             toolbar.tools.forEach(function(toolId) {
-                var tool,
-                    toolConfig = availableTools[toolId];
+                var toolConfig = availableTools[toolId];
 
                 toolConfig.id = toolId;
                 toolConfig.container = toolbar.container;
 
-                tool = toolFactory(toolConfig);
+                createTool(toolConfig);
+            });
 
-                if (toolConfig.fn === 'cmd') {
-                    tool.on('click', function() {
-                        self.mathField.cmd(toolConfig.latex);
-                    });
+            this.$toolbar.on('click.qtiCommonRenderer', function(e) {
+                var $target = $(e.target),
+                    fn = $target.data('fn'),
+                    latex = $target.data('latex');
 
-                } else if (toolConfig.fn === 'write') {
-                    tool.on('click', function() {
-                        self.mathField.write(toolConfig.latex);
-                    });
+                switch (fn) {
+                    case 'cmd':
+                        self.mathField.cmd(latex);
+                        break;
+                    case 'write':
+                        self.mathField.write(latex);
+                        break;
                 }
             });
         },
@@ -182,8 +124,6 @@ define([
          * @param {Object} config - json
          */
         initialize: function (id, dom, config) {
-            var self = this;
-
             event.addEventMgr(this);
 
             this.id = id;
@@ -216,7 +156,7 @@ define([
          * @param {Object} response
          */
         setResponse: function (response) {
-
+            return response; //fixme: implement this
         },
         /**
          * Get the response in the json format described in
