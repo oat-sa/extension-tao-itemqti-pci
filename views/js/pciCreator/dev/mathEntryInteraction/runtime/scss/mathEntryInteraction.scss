@@ -4,41 +4,12 @@
 
 @import "inc/bootstrap";
 
-.item-editor-sidebar .tool-group {
-  .panel.creator-mathEntryInteraction-spinner {
-    .incrementer-ctrl-wrapper {
-      display: block;
-      width: 100%;
-
-      input {
-        width: 100% !important;
-      }
-    }
-  }
-}
-
-// Color mapping
+// =============
+// PCI
+// =============
 
 $enabledBg: blacken(white, .2);
 $enabledTxt: whiten(black, .2);
-
-
-
-$disabledBg: whiten($websiteBorder, .3);
-$disabledTxt: black;
-$disabledTxtShadow: white(.8);
-
-$activeBg: whiten($activeInteraction, .1);
-$activeTxt: white;
-$activeTxtShadow: blacken($activeInteraction, .2);
-
-$record: $activeInteraction;
-$playback: whiten($info, .3);
-
-
-// =============
-// Interaction
-// =============
 
 .qti-customInteraction {
   .mathEntryInteraction {
@@ -48,13 +19,13 @@ $playback: whiten($info, .3);
     }
 
     // Buttons
+
     .math-entry-toolgroup {
       margin: 10px 10px 10px 0;
       display: inline-block;
     }
 
     .math-entry-tool {
-      //border-radius: 3px;
       font-size: 14px !important;
       cursor: pointer;
       text-decoration: none !important;
@@ -69,75 +40,13 @@ $playback: whiten($info, .3);
       font-style: normal;
       text-align: center;
       height: 35px;
+      background-color: $enabledBg;
+      color: $enabledTxt;
 
-      &.disabled {
-        background-color: $disabledBg;
-        text-shadow: 1px 1px 0 $disabledTxtShadow !important;
-        cursor: not-allowed !important;
-        opacity: .55 !important;
-        color: $disabledTxt !important;
+      &:hover {
+        background-color: whiten($enabledBg, .5);
       }
 
-      //&.enabled {
-        background-color: $enabledBg;
-        color: $enabledTxt;
-        //text-shadow: 1px 1px 0 $enabledTxtShadow;
-        //cursor: pointer !important;
-
-        &:hover {
-          background-color: whiten($enabledBg, .5);
-        }
-      //}
-
-      &.active {
-        background-color: $activeBg;
-        color: $activeTxt;
-        text-shadow: 1px 1px 0 $activeTxtShadow;
-        cursor: not-allowed !important;
-      }
-
-    }
-
-    // Progress bar
-
-    progress {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-
-      width: 50%;
-      height: 10px;
-      border-radius: 5px;
-      border: darken($disabledBg, .2) 2px solid;
-
-      // background color
-      color: $disabledBg; // FF
-      &::-webkit-progress-bar {
-        background-color: whiten($disabledBg, .5); // Chrome
-      }
-
-      // progress bar color
-
-      &.record {
-        border-color: $record;
-
-        &::-webkit-progress-value {
-          background-color: $record;
-        }
-        &::-moz-progress-bar {
-          background-color: $record;
-        }
-      }
-
-      &.playback {
-        border-color: $playback;
-
-        &::-webkit-progress-value {
-          background-color: $playback;
-        }
-        &::-moz-progress-bar {
-          background-color: $playback;
-        }
-      }
     }
 
   }
