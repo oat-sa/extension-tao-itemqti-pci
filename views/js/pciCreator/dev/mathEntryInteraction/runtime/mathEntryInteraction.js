@@ -21,7 +21,6 @@ define([
     var mathEntryInteraction;
 
 
-
     /**
      * Main interaction code
      */
@@ -30,7 +29,7 @@ define([
         /**
          * PCI State
          */
-        _mathStringLatex: null,
+        _mathStringLatex: null, //fixme: remove me ?
 
 
         /**
@@ -38,13 +37,14 @@ define([
          */
 
         createMathField: function() {
-            var MQ = MathQuill.getInterface(2);
+            var self = this,
+                MQ = MathQuill.getInterface(2);
+
             this.mathField = MQ.MathField(this.$input.get(0), {
-                // more options here
+                // todo: more options here?
                 handlers: {
                     edit: function() {
-                        // var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
-                        // console.log(enteredMath);
+                        self.trigger('responseChange');
                     }
                 }
             });
@@ -53,20 +53,20 @@ define([
         createToolbar: function() {
             var self = this,
                 availableTools = {
-                    frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: _('Fraction') },
-                    sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: _('Square root') },
-                    exp:    { label: 'x&#8319;',    latex: '^{}',       fn: 'write',    desc: _('Exponent') },
-                    pi:     { label: '&Pi;',        latex: '\\pi',      fn: 'write',    desc: _('Pi') },
-                    leq:    { label: '&le;',        latex: '\\le',      fn: 'write',    desc: _('Lower than or equal') },
-                    geq:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: _('Greater than or equal') },
-                    times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: _('Multiply') },
-                    divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: _('Divide') }
+                    frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
+                    sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
+                    exp:    { label: 'x&#8319;',    latex: '^{}',       fn: 'write',    desc: 'Exponent' },
+                    pi:     { label: '&Pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
+                    lte:    { label: '&le;',        latex: '\\le',      fn: 'write',    desc: 'Lower than or equal' },
+                    gte:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: 'Greater than or equal' },
+                    times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
+                    divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' }
                 };
 
             // create buttons
             this.$toolbar.append(createToolGroup('complex',     ['sqrt', 'frac', 'exp']));
             this.$toolbar.append(createToolGroup('pi',          ['pi']));
-            this.$toolbar.append(createToolGroup('comparison',  ['leq', 'geq']));
+            this.$toolbar.append(createToolGroup('comparison',  ['lte', 'gte']));
             this.$toolbar.append(createToolGroup('operands',    ['times', 'divide']));
 
             function createToolGroup(groupId, tools) {
@@ -156,6 +156,7 @@ define([
             // });
 
             // render rich text content in prompt
+            // fixme: remove this in a PCI context?
             html.render(this.$container.find('.prompt'));
         },
         /**
@@ -166,7 +167,9 @@ define([
          * @param {Object} response
          */
         setResponse: function (response) {
-            return response; //fixme: implement this
+            if (response && response.base && response.base.string) {
+                this.mathField.latex(response.base.string);
+            }
         },
         /**
          * Get the response in the json format described in
@@ -176,7 +179,11 @@ define([
          * @returns {Object}
          */
         getResponse: function() {
-
+            return {
+                base: {
+                    string : this.mathField.latex()
+                }
+            };
         },
         /**
          * Remove the current response set in the interaction
@@ -185,7 +192,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse: function () {
-
+            this.mathField.latex('');
         },
         /**
          * Reverse operation performed by render()
@@ -195,7 +202,9 @@ define([
          * @param {Object} interaction
          */
         destroy: function () {
-            // this.$container.off('.qtiCommonRenderer');
+            this.$toolbar.off('click.qtiCommonRenderer');
+            this.resetResponse();
+            this.mathField.revert();
         },
         /**
          * Restore the state of the interaction from the serializedState.

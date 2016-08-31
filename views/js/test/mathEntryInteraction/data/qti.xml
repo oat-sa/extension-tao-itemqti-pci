@@ -9,7 +9,6 @@
         identifier="i1472560050505106" title="Item_2 3" adaptive="false" timeDependent="false">
   <responseDeclaration cardinality="single" identifier="RESPONSE" baseType="string"/>
   <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
-  <stylesheet href="style/custom/tao-user-styles.css" title="" type="text/css" media="all" />
   <stylesheet href="mathEntryInteraction/runtime/mathquill/mathquill.css" title="" type="text/css" media="all" />
   <stylesheet href="mathEntryInteraction/runtime/css/mathEntryInteraction.css" title="" type="text/css" media="all" />
   <itemBody>

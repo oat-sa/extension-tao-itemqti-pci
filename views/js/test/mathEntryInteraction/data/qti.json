@@ -61,19 +61,6 @@
         "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
     },
     "stylesheets": {
-        "stylesheet_57c69326bc1f6413131358": {
-            "serial": "stylesheet_57c69326bc1f6413131358",
-            "qtiClass": "stylesheet",
-            "attributes": {
-                "href": "style\/custom\/tao-user-styles.css",
-                "type": "text\/css",
-                "media": "all",
-                "title": ""
-            },
-            "debug": {
-                "relatedItem": "item_57c69326bb914233135701"
-            }
-        },
         "stylesheet_57c69326bc42e727261183": {
             "serial": "stylesheet_57c69326bc42e727261183",
             "qtiClass": "stylesheet",
