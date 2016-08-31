@@ -19,13 +19,14 @@
 
 // Color mapping
 
+$enabledBg: blacken(white, .2);
+$enabledTxt: whiten(black, .2);
+
+
+
 $disabledBg: whiten($websiteBorder, .3);
 $disabledTxt: black;
 $disabledTxtShadow: white(.8);
-
-$enabledBg: whiten($info, .1);
-$enabledTxt: white;
-$enabledTxtShadow: blacken($info, .2);
 
 $activeBg: whiten($activeInteraction, .1);
 $activeTxt: white;
@@ -47,10 +48,13 @@ $playback: whiten($info, .3);
     }
 
     // Buttons
+    .math-entry-toolgroup {
+      margin: 10px 10px 10px 0;
+      display: inline-block;
+    }
 
     .math-entry-tool {
-      margin: 10px 10px 10px 0;
-      border-radius: 3px;
+      //border-radius: 3px;
       font-size: 14px !important;
       cursor: pointer;
       text-decoration: none !important;
@@ -77,11 +81,11 @@ $playback: whiten($info, .3);
       //&.enabled {
         background-color: $enabledBg;
         color: $enabledTxt;
-        text-shadow: 1px 1px 0 $enabledTxtShadow;
-        cursor: pointer !important;
+        //text-shadow: 1px 1px 0 $enabledTxtShadow;
+        //cursor: pointer !important;
 
         &:hover {
-          opacity: 0.85;
+          background-color: whiten($enabledBg, .5);
         }
       //}
 

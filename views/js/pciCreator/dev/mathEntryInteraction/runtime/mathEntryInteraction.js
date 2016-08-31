@@ -20,17 +20,7 @@ define([
 
     var mathEntryInteraction;
 
-    function createTool(config) {
-        var $tool = $('<div>', {
-            'class': 'math-entry-tool',
-            'data-identifier': config.id,
-            'data-latex': config.latex,
-            'data-fn': config.fn,
-            html: config.label
-        });
 
-        $tool.appendTo(config.container);
-    }
 
     /**
      * Main interaction code
@@ -60,7 +50,7 @@ define([
             });
         },
 
-        createTools: function() {
+        createToolbar: function() {
             var self = this,
                 availableTools = {
                     frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: _('Fraction') },
@@ -71,25 +61,43 @@ define([
                     geq:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: _('Greater than or equal') },
                     times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: _('Multiply') },
                     divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: _('Divide') }
-                },
-                availableToolbars = {
-                    base: {
-                        container: this.$toolbar,
-                        tools: ['sqrt', 'frac', 'exp', 'pi', 'leq', 'geq', 'times', 'divide']
-                    }
-                },
-                toolbar;
+                };
 
-            toolbar = availableToolbars.base;
+            // create buttons
+            this.$toolbar.append(createToolGroup('complex',     ['sqrt', 'frac', 'exp']));
+            this.$toolbar.append(createToolGroup('pi',          ['pi']));
+            this.$toolbar.append(createToolGroup('comparison',  ['leq', 'geq']));
+            this.$toolbar.append(createToolGroup('operands',    ['times', 'divide']));
 
-            toolbar.tools.forEach(function(toolId) {
-                var toolConfig = availableTools[toolId];
+            function createToolGroup(groupId, tools) {
+                var $toolGroup = $('<div>', {
+                    'class': 'math-entry-toolgroup',
+                    'data-identifier': groupId
+                });
 
-                toolConfig.id = toolId;
-                toolConfig.container = toolbar.container;
+                tools.forEach(function(toolId) {
+                    var toolConfig = availableTools[toolId];
 
-                createTool(toolConfig);
-            });
+                    toolConfig.id = toolId;
+                    $toolGroup.append(createTool(toolConfig));
+                });
+
+                return $toolGroup;
+            }
+
+            function createTool(config) {
+                var $tool = $('<div>', {
+                    'class': 'math-entry-tool',
+                    'data-identifier': config.id,
+                    'data-latex': config.latex,
+                    'data-fn': config.fn,
+                    html: config.label
+                });
+
+                return $tool;
+            }
+
+            // add behaviour
 
             this.$toolbar.on('click.qtiCommonRenderer', function(e) {
                 var $target = $(e.target),
@@ -104,6 +112,8 @@ define([
                         self.mathField.write(latex);
                         break;
                 }
+
+                self.mathField.focus();
             });
         },
 
@@ -134,7 +144,7 @@ define([
             this.$toolbar = this.$container.find('.toolbar');
             this.$input = this.$container.find('.math-entry-input');
 
-            this.createTools();
+            this.createToolbar();
             this.createMathField();
 
             //tell the rendering engine that I am ready
