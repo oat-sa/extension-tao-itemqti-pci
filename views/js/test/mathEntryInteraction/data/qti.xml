@@ -33,11 +33,11 @@
             </pci:properties>
             <pci:markup>
               <html5:div class="mathEntryInteraction">
-                <html5:div class="prompt"></html5:div>
-                <html5:div class="mathEntry">
-                  <html5:div class="toolbar"></html5:div>
-                  <html5:div class="mathEntryZone">
-                    <html5:span class="mathEntryField"/>
+                <html5:div class="prompt"/>
+                <html5:div class="math-entry">
+                  <html5:div class="toolbar"/>
+                  <html5:div>
+                    <html5:span class="math-entry-input"/>
                   </html5:div>
                 </html5:div>
               </html5:div>

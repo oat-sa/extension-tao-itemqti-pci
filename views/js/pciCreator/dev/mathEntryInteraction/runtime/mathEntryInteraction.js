@@ -31,14 +31,7 @@ define([
         ACTIVE: 'active'
     };
 
-    /**
-     * Creates a button for recording/playback control
-     * @param {Object}  config
-     * @param {Number}  config.id - control id
-     * @param {String}  config.label - text displayed inside the button
-     * @param {String}  config.defaultState - state in which the button will be created
-     * @param {$}       config.container - jQuery Dom element that the button will be appended to
-     */
+
     function controlFactory(config) {
         var state,
             control,
@@ -85,6 +78,26 @@ define([
     }
 
 
+    function toolFactory(config) {
+        var tool = {},
+            $tool = $('<div>', {
+                'class': 'math-entry-tool',
+                'data-identifier': config.id,
+                html: config.label
+            });
+
+        $tool.appendTo(config.container);
+
+        event.addEventMgr(tool);
+
+        $tool.on('click.qtiCommonRenderer', function() {
+            tool.trigger('click');
+        });
+
+        return tool;
+
+    }
+
     /**
      * Main interaction code
      */
@@ -93,7 +106,64 @@ define([
         /**
          * PCI State
          */
-        _mathEntry: null,
+        _mathStringLatex: null,
+
+
+        /**
+         * PCI private functions
+         */
+
+        createMathField: function() {
+            var MQ = MathQuill.getInterface(2);
+            this.mathField = MQ.MathField(this.$input.get(0), {
+                // more options here
+                handlers: {
+                    edit: function() {
+                        // var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
+                        // console.log(enteredMath);
+                    }
+                }
+            });
+        },
+
+        createTools: function() {
+            var self = this,
+                availableTools = {
+                    sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: _('Square root') },
+                    frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: _('Fraction') },
+                    pi:     { label: '&Pi;',        latex: '\\pi',      fn: 'write',    desc: _('Pi') }
+                },
+                availableToolbars = {
+                    base: {
+                        container: this.$toolbar,
+                        tools: ['sqrt', 'frac', 'pi']
+                    }
+                },
+                toolbar;
+
+            toolbar = availableToolbars.base;
+
+            toolbar.tools.forEach(function(toolId) {
+                var tool,
+                    toolConfig = availableTools[toolId];
+
+                toolConfig.id = toolId;
+                toolConfig.container = toolbar.container;
+
+                tool = toolFactory(toolConfig);
+
+                if (toolConfig.fn === 'cmd') {
+                    tool.on('click', function() {
+                        self.mathField.cmd(toolConfig.latex);
+                    });
+
+                } else if (toolConfig.fn === 'write') {
+                    tool.on('click', function() {
+                        self.mathField.write(toolConfig.latex);
+                    });
+                }
+            });
+        },
 
 
         /**
@@ -118,24 +188,14 @@ define([
 
             this.id = id;
             this.dom = dom;
-            this.controls = {};
+            this.config = config;
 
             this.$container = $(dom);
-            this.$instructionsContainer = this.$container.find('.audioRec > .instructions');
-            this.$controlsContainer = this.$container.find('.audioRec > .controls');
-            this.$progressContainer = this.$container.find('.audioRec > .progress');
+            this.$toolbar = this.$container.find('.toolbar');
+            this.$input = this.$container.find('.math-entry-input');
 
-            // Mathquill specific
-            var MQ = MathQuill.getInterface(2);
-            var mathEntryField = this.$container.find('.mathEntryField').get(0);
-            var answerMathField = MQ.MathField(mathEntryField, {
-                handlers: {
-                    edit: function() {
-                        // var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
-                        // console.log(enteredMath);
-                    }
-                }
-            });
+            this.createTools();
+            this.createMathField();
 
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);

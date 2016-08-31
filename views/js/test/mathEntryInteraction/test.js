@@ -25,7 +25,7 @@ define([
         }
     }];
 
-    module('Audio Recording Interaction', {
+    module('Math Entry Interaction', {
         teardown : function(){
             if(runner){
                 runner.clear();

@@ -42,13 +42,13 @@ $playback: whiten($info, .3);
 .qti-customInteraction {
   .mathEntryInteraction {
 
-    .mathEntryField {
+    .math-entry-input {
       width: 100%;
     }
 
     // Buttons
 
-    .audiorec-control {
+    .math-entry-tool {
       margin: 10px 10px 10px 0;
       border-radius: 3px;
       font-size: 14px !important;
@@ -74,7 +74,7 @@ $playback: whiten($info, .3);
         color: $disabledTxt !important;
       }
 
-      &.enabled {
+      //&.enabled {
         background-color: $enabledBg;
         color: $enabledTxt;
         text-shadow: 1px 1px 0 $enabledTxtShadow;
@@ -83,7 +83,7 @@ $playback: whiten($info, .3);
         &:hover {
           opacity: 0.85;
         }
-      }
+      //}
 
       &.active {
         background-color: $activeBg;
