@@ -4,12 +4,14 @@
 
 @import "inc/bootstrap";
 
+
 // =============
 // PCI
 // =============
 
 $enabledBg: blacken(white, .2);
 $enabledTxt: whiten(black, .2);
+$toolbarFont: "Times New Roman", Times, serif;
 
 .qti-customInteraction {
   .mathEntryInteraction {
@@ -26,7 +28,10 @@ $enabledTxt: whiten(black, .2);
     }
 
     .math-entry-tool {
+      font-family: $toolbarFont;
       font-size: 14px !important;
+      font-weight: bold;
+      font-style: normal;
       cursor: pointer;
       text-decoration: none !important;
       vertical-align: middle;
@@ -36,8 +41,6 @@ $enabledTxt: whiten(black, .2);
       display: inline-block;
       line-height: 2.5;
       padding: 0 15px;
-      font-weight: normal;
-      font-style: normal;
       text-align: center;
       height: 35px;
       background-color: $enabledBg;
