@@ -6,8 +6,7 @@ define([
     'OAT/util/event',
     'OAT/util/html',
     // fixme: use a relative path from PCI runtime
-    'qtiItemPci/pciCreator/dev/mathEntryInteraction/runtime/mathquill/mathquill',
-    'jqueryui'
+    'qtiItemPci/pciCreator/dev/mathEntryInteraction/runtime/mathquill/mathquill'
 ], function(
     qtiCustomInteractionContext,
     $,
@@ -56,7 +55,9 @@ define([
                     frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
                     sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
                     exp:    { label: 'x&#8319;',    latex: '^{}',       fn: 'write',    desc: 'Exponent' },
-                    pi:     { label: '&Pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
+                    pi:     { label: '&pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
+                    cos:    { label: 'cos',         latex: '\\cos',     fn: 'cmd',      desc: 'Cosinus' },
+                    sin:    { label: 'sin',         latex: '\\sin',     fn: 'cmd',      desc: 'Sinus' },
                     lte:    { label: '&le;',        latex: '\\le',      fn: 'write',    desc: 'Lower than or equal' },
                     gte:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: 'Greater than or equal' },
                     times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
@@ -67,6 +68,7 @@ define([
             this.$toolbar.append(createToolGroup('complex',     ['sqrt', 'frac', 'exp']));
             this.$toolbar.append(createToolGroup('pi',          ['pi']));
             this.$toolbar.append(createToolGroup('comparison',  ['lte', 'gte']));
+            this.$toolbar.append(createToolGroup('trigo',       ['sin', 'cos']));
             this.$toolbar.append(createToolGroup('operands',    ['times', 'divide']));
 
             function createToolGroup(groupId, tools) {
@@ -113,7 +115,7 @@ define([
                         break;
                 }
 
-                self.mathField.focus();
+                // self.mathField.focus();
             });
         },
 
