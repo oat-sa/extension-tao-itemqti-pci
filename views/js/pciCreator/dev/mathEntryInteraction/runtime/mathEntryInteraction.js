@@ -54,7 +54,7 @@ define([
                 availableTools = {
                     frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
                     sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
-                    exp:    { label: 'x&#8319;',    latex: '^{}',       fn: 'write',    desc: 'Exponent' },
+                    exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
                     pi:     { label: '&pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
                     cos:    { label: 'cos',         latex: '\\cos',     fn: 'cmd',      desc: 'Cosinus' },
                     sin:    { label: 'sin',         latex: '\\sin',     fn: 'cmd',      desc: 'Sinus' },
@@ -101,10 +101,13 @@ define([
 
             // add behaviour
 
-            this.$toolbar.on('click.qtiCommonRenderer', function(e) {
+            this.$toolbar.on('mousedown.qtiCommonRenderer', function(e) {
                 var $target = $(e.target),
                     fn = $target.data('fn'),
                     latex = $target.data('latex');
+
+                e.stopPropagation();
+                e.preventDefault();
 
                 switch (fn) {
                     case 'cmd':
@@ -115,7 +118,7 @@ define([
                         break;
                 }
 
-                // self.mathField.focus();
+                self.mathField.focus();
             });
         },
 
