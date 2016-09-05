@@ -18,17 +18,24 @@
  *               
  * 
  */               
+use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
+use oat\qtiItemPci\scripts\install\RegisterClientProvider;
+use oat\qtiItemPci\scripts\install\SetupPciRegistry;
+use oat\qtiItemPci\scripts\install\RegisterPortableElement;
 
 return array(
     'name' => 'qtiItemPci',
 	'label' => 'QTI Portable Custom Interaction',
 	'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.1.4',
+    'version' => '1.0.0',
 	'author' => 'Open Assessment Technologies SA',
-	'requires' => array('taoQtiItem' => '>=2.7.0'),
+	'requires' => array('taoQtiItem' => '>=4.3.0'),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
     ),
     'install' => array(
         'rdf' => array(
@@ -36,13 +43,15 @@ return array(
 		    dirname(__FILE__). '/install/ontology/role.rdf'
 		),
         'php'	=> array(
-			dirname(__FILE__).'/scripts/install/addHook.php'
+			SetupPciRegistry::class,
+			SetQtiCreatorConfig::class,
+			RegisterClientProvider::class,
+			RegisterPortableElement::class
 		)
     ),
     'uninstall' => array(
     ),
     'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
-
     'routes' => array(
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ),    
