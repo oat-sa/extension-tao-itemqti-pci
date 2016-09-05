@@ -66,9 +66,8 @@ define([
 
             // create buttons
             this.$toolbar.append(createToolGroup('complex',     ['sqrt', 'frac', 'exp']));
-            this.$toolbar.append(createToolGroup('pi',          ['pi']));
             this.$toolbar.append(createToolGroup('comparison',  ['lte', 'gte']));
-            this.$toolbar.append(createToolGroup('trigo',       ['sin', 'cos']));
+            this.$toolbar.append(createToolGroup('trigo',       ['pi', 'sin', 'cos']));
             this.$toolbar.append(createToolGroup('operands',    ['times', 'divide']));
 
             function createToolGroup(groupId, tools) {
