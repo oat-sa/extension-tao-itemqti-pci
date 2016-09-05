@@ -218,10 +218,12 @@ define([
 
                         self._setState(recorderStates.IDLE);
 
+                        // save chunks of the recording
                         mediaRecorder.ondataavailable = function(e) {
                             chunks.push(e.data);
                         };
 
+                        // build the final recording
                         mediaRecorder.onstop = function() {
                             var blob = new Blob(chunks, { type: mimeType });
                             var duration = new window.Date().getTime() - startTime;
