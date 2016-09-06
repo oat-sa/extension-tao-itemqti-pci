@@ -27,7 +27,7 @@
               <html5:div class="audioRecordingInteraction">
                 <html5:div class="prompt"/>
                 <html5:div class="audioRec">
-                  <html5:div class="recording"/>
+                  <html5:div class="input-meter"/>
                   <html5:div class="progress"/>
                   <html5:div class="controls"/>
                   <html5:div class="instructions"/>

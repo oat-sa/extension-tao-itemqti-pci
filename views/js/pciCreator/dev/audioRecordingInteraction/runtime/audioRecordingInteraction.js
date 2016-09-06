@@ -174,9 +174,10 @@ define([
             mimeType,
             chunks = [],
             chunkSizeMs = 1000,
-            startTime,
+            startTimeMs,
             timerId,
-            timeOutPrecisionMs = 100;
+            analyser,
+            frequencyArray;
 
         setGetUserMedia();
 
@@ -198,6 +199,35 @@ define([
             }
         }
 
+        // analyser is the Web Audio node used to read the input level
+        function initAnalyser(stream) {
+            var audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
+                source = audioCtx.createMediaStreamSource(stream),
+                bufferLength;
+
+            analyser = audioCtx.createAnalyser();
+            analyser.minDecibels = -100; // => 0
+            analyser.maxDecibels = -30;  // => 70 // 0 => 100 ?!?? // todo: make sense of this...
+            analyser.fftSize = 32;
+
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination); //todo: can we mute this ?
+
+            bufferLength = analyser.frequencyBinCount;
+            frequencyArray = new Uint8Array(bufferLength);
+        }
+
+        function getInputLevel() {
+            var sum;
+
+            analyser.getByteFrequencyData(frequencyArray);
+
+            sum = frequencyArray.reduce(function(a, b) {
+                return a + b;
+            });
+            return (sum / frequencyArray.length).toFixed(0);
+        }
+
         recorder = {
             _setState: function(newState) {
                 state = newState;
@@ -216,6 +246,8 @@ define([
                         mediaRecorder = new MediaRecorder(stream, recorderOptions);
                         mimeType = mediaRecorder.mimeType;
 
+                        initAnalyser(stream);
+
                         self._setState(recorderStates.IDLE);
 
                         // save chunks of the recording
@@ -226,9 +258,9 @@ define([
                         // build the final recording
                         mediaRecorder.onstop = function() {
                             var blob = new Blob(chunks, { type: mimeType });
-                            var duration = new window.Date().getTime() - startTime;
+                            var duration = new window.Date().getTime() - startTimeMs;
 
-                            clearInterval(timerId);
+                            cancelAnimationFrame(timerId);
 
                             self.trigger('recordingavailable', [blob, duration]);
                             self._setState(recorderStates.IDLE);
@@ -241,33 +273,94 @@ define([
                     });
             },
 
-            start: function() {
-                var self = this,
-                    currentTime = 0;
+/*
+            readInputLevel: function(stream) {
 
+                // var $inputLevels = $('.recording');
+                var canvas = document.querySelector('.recording');
+                var canvasCtx = canvas.getContext("2d");
+
+                canvas.setAttribute('width', '400px');
+
+
+
+                a
+
+                var WIDTH = '50';
+                var HEIGHT = '200';
+
+                canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+                var drawVisual;
+
+                function draw() {
+                    drawVisual = requestAnimationFrame(draw);
+
+                    analyser.getByteFrequencyData(dataArray);
+
+                    canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+                    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+                    var barWidth = WIDTH;
+                    var barHeight;
+                    var x = 0;
+
+                    var sum = 0;
+
+
+                    for(var i = 0; i < bufferLength; i++) {
+                        sum += dataArray[i];
+                    }
+
+
+
+                    barHeight = (sum / bufferLength).toFixed(0);
+
+                    if (barHeight > 50) {
+                        console.log(JSON.stringify(dataArray));
+                    }
+
+                    console.log(barHeight);
+
+                    canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+                    canvasCtx.fillRect(x,HEIGHT-barHeight,barWidth,barHeight);
+
+                    x += barWidth + 1;
+                }
+
+                draw();
+
+                // $inputLevels.html('here !');
+            },
+                */
+
+            start: function() {
                 mediaRecorder.start(chunkSizeMs);
-                startTime = new window.Date().getTime();
+
+                startTimeMs = new window.Date().getTime();
 
                 this._setState(recorderStates.RECORDING);
 
-                if (config.maxRecordingTime > 0) {
-                    timerId = window.setInterval(function() {
-                        var now = new window.Date().getTime();
-                        currentTime = (now - startTime) / 1000;
-
-                        self.trigger('timeupdate', [currentTime]);
-
-                        if (currentTime >= config.maxRecordingTime) { // && mediaRecorder.state === 'recording') {
-                            self.stop();
-                            clearInterval(timerId);
-                        }
-                    }, timeOutPrecisionMs);
-                }
+                this._monitorRecording();
             },
 
             stop: function() {
                 mediaRecorder.stop();
                 // state change is triggered by onstop handler
+            },
+
+            _monitorRecording: function() {
+                var nowMs = new window.Date().getTime(),
+                    elapsedSeconds = (nowMs - startTimeMs) / 1000;
+
+                timerId = requestAnimationFrame(this._monitorRecording.bind(this));
+
+                this.trigger('timeupdate', [elapsedSeconds]);
+                this.trigger('levelUpdate', [getInputLevel()]);
+
+                if (config.maxRecordingTime > 0 && elapsedSeconds >= config.maxRecordingTime) {
+                    this.stop();
+                    cancelAnimationFrame(timerId);
+                }
             }
         };
         event.addEventMgr(recorder);
@@ -363,6 +456,14 @@ define([
         return progressBar;
     }
 
+    // function inputMeterFactory() {
+    //     var inputMeter;
+    //
+    //
+    //
+    //     return inputMeter;
+    // }
+
     /**
      * Main interaction code
      */
@@ -446,8 +547,17 @@ define([
                 self.updateControls();
             });
 
+            // todo: rename events to camelcase
             this.recorder.on('timeupdate', function(currentTime) {
                 self.progressBar.setValue(currentTime.toFixed(1));
+            });
+
+            var max = 0;
+            this.recorder.on('levelUpdate', function(level) {
+                if (parseInt(level, 10) > max) {
+                    max = level;
+                }
+                self.$meterContainer.html(level + '<br />max = ' + max);
             });
         },
 
@@ -739,9 +849,11 @@ define([
             this.controls = {};
 
             this.$container = $(dom);
+            //todo: rename audioRec > audio-rec
             this.$instructionsContainer = this.$container.find('.audioRec > .instructions');
             this.$controlsContainer = this.$container.find('.audioRec > .controls');
             this.$progressContainer = this.$container.find('.audioRec > .progress');
+            this.$meterContainer = this.$container.find('.audioRec > .input-meter');
 
             this.render(config);
 
