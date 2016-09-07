@@ -33,12 +33,16 @@ define([
          */
         getDefaultProperties : function(){
             return {
-                allowPlayback: true,
-                audioBitrate: 20000,
-                autoStart: false,
-                displayDownloadLink: false,
-                maxRecords: 0,
-                maxRecordingTime: 120
+                tool_frac:      true,
+                tool_sqrt:      true,
+                tool_exp:       true,
+                tool_pi:        true,
+                tool_cos:       true,
+                tool_sin:       true,
+                tool_lte:       true,
+                tool_gte:       true,
+                tool_times:     true,
+                tool_divide:    true
             };
         },
         /**

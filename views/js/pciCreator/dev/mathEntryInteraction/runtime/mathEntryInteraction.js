@@ -17,23 +17,36 @@ define([
 ){
     'use strict';
 
-    var mathEntryInteraction;
-
-
-    /**
-     * Main interaction code
-     */
-
-    mathEntryInteraction = {
+    var mathEntryInteraction = {
         /**
-         * PCI State
+         *
+         * @param {Object} config
+         * @param {Boolean} config.tool_toolId - is the given tool enabled?
          */
-        _mathStringLatex: null, //fixme: remove me ?
+        initConfig: function init(config) {
+            function toBoolean(value, defaultValue) {
+                if (typeof(value) === "undefined") {
+                    return defaultValue;
+                } else {
+                    return (value === true || value === "true");
+                }
+            }
 
-
-        /**
-         * PCI private functions
-         */
+            this.config = {
+                toolsStatus: {
+                    frac:   toBoolean(config.tool_frac,     true),
+                    sqrt:   toBoolean(config.tool_sqrt,     true),
+                    exp:    toBoolean(config.tool_exp,      true),
+                    pi:     toBoolean(config.tool_pi,       true),
+                    cos:    toBoolean(config.tool_cos,      true),
+                    sin:    toBoolean(config.tool_sin,      true),
+                    lte:    toBoolean(config.tool_lte,      true),
+                    gte:    toBoolean(config.tool_gte,      true),
+                    times:  toBoolean(config.tool_times,    true),
+                    divide: toBoolean(config.tool_divide,   true)
+                }
+            };
+        },
 
         createMathField: function() {
             var self = this,
@@ -62,40 +75,48 @@ define([
                     gte:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: 'Greater than or equal' },
                     times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
                     divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' }
+                },
+                availableToolGroups = {
+                    functions:  ['sqrt', 'frac', 'exp'],
+                    trigo:      ['pi', 'sin', 'cos'],
+                    comparison: ['lte', 'gte'],
+                    operands:   ['times', 'divide']
                 };
 
             // create buttons
-            this.$toolbar.append(createToolGroup('complex',     ['sqrt', 'frac', 'exp']));
-            this.$toolbar.append(createToolGroup('comparison',  ['lte', 'gte']));
-            this.$toolbar.append(createToolGroup('trigo',       ['pi', 'sin', 'cos']));
-            this.$toolbar.append(createToolGroup('operands',    ['times', 'divide']));
+            this.$toolbar.append(createToolGroup('functions'));
+            this.$toolbar.append(createToolGroup('trigo'));
+            this.$toolbar.append(createToolGroup('comparison'));
+            this.$toolbar.append(createToolGroup('operands'));
 
-            function createToolGroup(groupId, tools) {
+            function createToolGroup(groupId) {
                 var $toolGroup = $('<div>', {
-                    'class': 'math-entry-toolgroup',
-                    'data-identifier': groupId
-                });
+                        'class': 'math-entry-toolgroup',
+                        'data-identifier': groupId
+                    }),
+                    activeTools = 0;
 
-                tools.forEach(function(toolId) {
+                availableToolGroups[groupId].forEach(function(toolId) {
                     var toolConfig = availableTools[toolId];
 
                     toolConfig.id = toolId;
-                    $toolGroup.append(createTool(toolConfig));
+                    if (self.config.toolsStatus[toolId] === true) {
+                        $toolGroup.append(createTool(toolConfig));
+                        activeTools++;
+                    }
                 });
 
-                return $toolGroup;
+                return (activeTools > 0) ? $toolGroup : '';
             }
 
             function createTool(config) {
-                var $tool = $('<div>', {
+                return $('<div>', {
                     'class': 'math-entry-tool',
                     'data-identifier': config.id,
                     'data-latex': config.latex,
                     'data-fn': config.fn,
                     html: config.label
                 });
-
-                return $tool;
             }
 
             // add behaviour
@@ -142,7 +163,8 @@ define([
 
             this.id = id;
             this.dom = dom;
-            this.config = config;
+
+            this.initConfig(config);
 
             this.$container = $(dom);
             this.$toolbar = this.$container.find('.toolbar');
