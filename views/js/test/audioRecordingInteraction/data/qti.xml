@@ -27,7 +27,7 @@
               <html5:div class="audioRecordingInteraction">
                 <html5:div class="prompt"/>
                 <html5:div class="audioRec">
-                  <html5:div class="input-meter"/>
+                  <html5:div class="input-meter"><img height="28" width="28" src="audioRecordingInteraction/runtime/img/mic.svg" /></html5:div>
                   <html5:div class="progress"/>
                   <html5:div class="controls"/>
                   <html5:div class="instructions"/>

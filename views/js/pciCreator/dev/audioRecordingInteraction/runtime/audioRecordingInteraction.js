@@ -261,6 +261,7 @@ define([
                             var duration = new window.Date().getTime() - startTimeMs;
 
                             cancelAnimationFrame(timerId);
+                            self.trigger('levelUpdate', [0]);
 
                             self.trigger('recordingavailable', [blob, duration]);
                             self._setState(recorderStates.IDLE);
@@ -272,66 +273,6 @@ define([
                         throw err;
                     });
             },
-
-/*
-            readInputLevel: function(stream) {
-
-                // var $inputLevels = $('.recording');
-                var canvas = document.querySelector('.recording');
-                var canvasCtx = canvas.getContext("2d");
-
-                canvas.setAttribute('width', '400px');
-
-
-
-                a
-
-                var WIDTH = '50';
-                var HEIGHT = '200';
-
-                canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-                var drawVisual;
-
-                function draw() {
-                    drawVisual = requestAnimationFrame(draw);
-
-                    analyser.getByteFrequencyData(dataArray);
-
-                    canvasCtx.fillStyle = 'rgb(0, 0, 0)';
-                    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-
-                    var barWidth = WIDTH;
-                    var barHeight;
-                    var x = 0;
-
-                    var sum = 0;
-
-
-                    for(var i = 0; i < bufferLength; i++) {
-                        sum += dataArray[i];
-                    }
-
-
-
-                    barHeight = (sum / bufferLength).toFixed(0);
-
-                    if (barHeight > 50) {
-                        console.log(JSON.stringify(dataArray));
-                    }
-
-                    console.log(barHeight);
-
-                    canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
-                    canvasCtx.fillRect(x,HEIGHT-barHeight,barWidth,barHeight);
-
-                    x += barWidth + 1;
-                }
-
-                draw();
-
-                // $inputLevels.html('here !');
-            },
-                */
 
             start: function() {
                 mediaRecorder.start(chunkSizeMs);
@@ -421,7 +362,7 @@ define([
         return control;
     }
 
-
+    // todo: add jsdoc
     function progressBarFactory(config) {
         var progressBar,
             $progressBar = $('<progress>',{
@@ -456,13 +397,67 @@ define([
         return progressBar;
     }
 
-    // function inputMeterFactory() {
-    //     var inputMeter;
-    //
-    //
-    //
-    //     return inputMeter;
-    // }
+    // todo: add jsdoc
+    function inputMeterFactory(config) {
+        var inputMeter,
+            canvas,
+            canvasCtx,
+
+            grey    = '#cccccc',
+            green   = '#00aa00',
+            orange  = '#ff9300',
+            red     = '#ff0000',
+
+            ledHeight = 4,
+            ledWidth = 10,
+            ledPadding = 0,
+            ledColors = [green, green, green, green, green, orange, orange, orange, red, red],
+            ledNumbers = ledColors.length,
+
+            width = ledWidth,
+            height = (ledHeight * ledNumbers) + (ledPadding * (ledNumbers - 1)),
+
+            scaledLevel;
+
+        canvas = document.createElement('canvas');
+        canvas.height = height;
+        canvas.width = width;
+        config.$container.append($(canvas));
+
+        canvasCtx = canvas.getContext('2d');
+
+        function drawLed(index, color) {
+            var x = 0,
+                y = (ledHeight + ledPadding) * (ledNumbers - (index + 1));
+
+            canvasCtx.fillStyle = color;
+            canvasCtx.fillRect(x, y, ledWidth, ledHeight);
+        }
+
+        inputMeter = {
+            draw: function(level) {
+                var currentColor, i;
+
+                config.maxLevel = 100; // fixme : I need to be a parameter
+
+                scaledLevel = (level / config.maxLevel * height).toFixed(0);
+
+                for (i = 0; i < ledNumbers; i += 1) {
+                    currentColor = grey;
+                    if ((i === 0 && scaledLevel > 0)
+                        || scaledLevel > (config.maxLevel / ledNumbers * i)) {
+                        currentColor = ledColors[i];
+                    }
+                    drawLed(i, currentColor);
+                }
+            }
+        };
+
+        inputMeter.draw(0);
+
+        return inputMeter;
+    }
+
 
     /**
      * Main interaction code
@@ -480,6 +475,7 @@ define([
             this.initRecorder();
             this.initPlayer();
             this.initProgressBar();
+            this.initMeter();
 
             // ui rendering
             this.clearControls();
@@ -552,12 +548,8 @@ define([
                 self.progressBar.setValue(currentTime.toFixed(1));
             });
 
-            var max = 0;
             this.recorder.on('levelUpdate', function(level) {
-                if (parseInt(level, 10) > max) {
-                    max = level;
-                }
-                self.$meterContainer.html(level + '<br />max = ' + max);
+                self.inputMeter.draw(level);
             });
         },
 
@@ -582,6 +574,12 @@ define([
         initProgressBar: function initProgressBar() {
             this.progressBar = progressBarFactory({
                 $container: this.$progressContainer
+            });
+        },
+
+        initMeter: function initMeter() {
+            this.inputMeter = inputMeterFactory({
+                $container: this.$meterContainer
             });
         },
 
