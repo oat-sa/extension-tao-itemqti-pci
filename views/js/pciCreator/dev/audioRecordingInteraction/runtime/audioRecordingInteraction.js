@@ -211,7 +211,6 @@ define([
             analyser.fftSize = 32;
 
             source.connect(analyser);
-            analyser.connect(audioCtx.destination); //todo: can we mute this ?
 
             bufferLength = analyser.frequencyBinCount;
             frequencyArray = new Uint8Array(bufferLength);
@@ -362,7 +361,11 @@ define([
         return control;
     }
 
-    // todo: add jsdoc
+    /**
+     * Creates a progress bar to display recording or playback progress
+     * @param {Object}  config
+     * @param {$}       config.container - jQuery Dom element that the progress bar will be appended to
+     */
     function progressBarFactory(config) {
         var progressBar,
             $progressBar = $('<progress>',{
@@ -397,7 +400,13 @@ define([
         return progressBar;
     }
 
-    // todo: add jsdoc
+
+    /**
+     * Creates a input meter for microphone input signal
+     * @param {Object}  config
+     * @param {Integer} config.maxLevel - level for which all meter leds will be lit
+     * @param {$}       config.container - jQuery Dom element that the meter will be appended to
+     */
     function inputMeterFactory(config) {
         var inputMeter,
             canvas,
@@ -441,8 +450,6 @@ define([
         inputMeter = {
             draw: function(level) {
                 var currentColor, i;
-
-                config.maxLevel = 100; // fixme : I need to be a parameter
 
                 scaledLevel = (level / config.maxLevel * height).toFixed(0);
 
@@ -583,7 +590,8 @@ define([
 
         initMeter: function initMeter() {
             this.inputMeter = inputMeterFactory({
-                $container: this.$meterContainer.find('.leds')
+                $container: this.$meterContainer.find('.leds'),
+                maxLevel: 100
             });
         },
 
