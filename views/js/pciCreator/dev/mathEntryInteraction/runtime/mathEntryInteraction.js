@@ -37,6 +37,9 @@ define([
                     frac:   toBoolean(config.tool_frac,     true),
                     sqrt:   toBoolean(config.tool_sqrt,     true),
                     exp:    toBoolean(config.tool_exp,      true),
+                    log:    toBoolean(config.tool_log,      true),
+                    ln:     toBoolean(config.tool_ln,       true),
+                    e:      toBoolean(config.tool_e,        true),
                     pi:     toBoolean(config.tool_pi,       true),
                     cos:    toBoolean(config.tool_cos,      true),
                     sin:    toBoolean(config.tool_sin,      true),
@@ -68,16 +71,20 @@ define([
                     frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
                     sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
                     exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
+                    log:    { label: 'log',         latex: '\\log',     fn: 'write',    desc: 'Log' },
+                    ln:     { label: 'ln',          latex: '\\ln',      fn: 'write',    desc: 'Ln' },
+                    //todo: check this
+                    e:      { label: '&#8494;', latex: '\\mathrm{e}\\ ',fn: 'write',    desc: 'e' },
                     pi:     { label: '&pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
-                    cos:    { label: 'cos',         latex: '\\cos',     fn: 'cmd',      desc: 'Cosinus' },
-                    sin:    { label: 'sin',         latex: '\\sin',     fn: 'cmd',      desc: 'Sinus' },
+                    cos:    { label: 'cos',         latex: '\\cos',     fn: 'write',    desc: 'Cosinus' },
+                    sin:    { label: 'sin',         latex: '\\sin',     fn: 'write',    desc: 'Sinus' },
                     lte:    { label: '&le;',        latex: '\\le',      fn: 'write',    desc: 'Lower than or equal' },
                     gte:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: 'Greater than or equal' },
                     times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
                     divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' }
                 },
                 availableToolGroups = {
-                    functions:  ['sqrt', 'frac', 'exp'],
+                    functions:  ['sqrt', 'frac', 'exp', 'log', 'ln', 'e'],
                     trigo:      ['pi', 'sin', 'cos'],
                     comparison: ['lte', 'gte'],
                     operands:   ['times', 'divide']
@@ -182,7 +189,6 @@ define([
             // });
 
             // render rich text content in prompt
-            // fixme: remove this in a PCI context?
             html.render(this.$container.find('.prompt'));
         },
         /**
