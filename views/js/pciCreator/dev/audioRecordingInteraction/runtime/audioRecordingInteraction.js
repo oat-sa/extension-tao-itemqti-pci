@@ -859,11 +859,10 @@ define([
             this.controls = {};
 
             this.$container = $(dom);
-            //todo: rename audioRec > audio-rec
-            this.$instructionsContainer = this.$container.find('.audioRec > .instructions');
-            this.$controlsContainer = this.$container.find('.audioRec > .controls');
-            this.$progressContainer = this.$container.find('.audioRec > .progress');
-            this.$meterContainer = this.$container.find('.audioRec > .input-meter');
+            this.$instructionsContainer = this.$container.find('.audio-rec > .instructions');
+            this.$controlsContainer = this.$container.find('.audio-rec > .controls');
+            this.$progressContainer = this.$container.find('.audio-rec > .progress');
+            this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
 
             this.render(config);
 

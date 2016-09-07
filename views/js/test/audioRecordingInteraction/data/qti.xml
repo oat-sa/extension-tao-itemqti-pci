@@ -26,7 +26,7 @@
             <pci:markup>
               <html5:div class="audioRecordingInteraction">
                 <html5:div class="prompt"/>
-                <html5:div class="audioRec">
+                <html5:div class="audio-rec">
                   <html5:div class="input-meter">
                     <html5:div class="leds" />
                     <html5:div class="mic">

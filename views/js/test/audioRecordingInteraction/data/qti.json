@@ -27,7 +27,7 @@
                 },
                 "choices": {},
                 "typeIdentifier": "audioRecordingInteraction",
-                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audioRec\">\n                  <div class=\"input-meter\">\n                    <div class=\"leds\"><\/div>\n                  <div class=\"mic\">\n                      <img src=\"audioRecordingInteraction\/runtime\/img\/mic.svg\"><\/img>\n                    <\/div>\n                    <\/div>\n                  <div class=\"progress\"><\/div>\n                  <div class=\"controls\"><\/div>\n                  <div class=\"instructions\"><\/div>\n                  <div class=\"download\"><\/div>\n                <\/div>\n              <\/div>\n            ",
+                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"><\/div>\n                <div class=\"audio-rec\">\n                  <div class=\"input-meter\">\n                    <div class=\"leds\"><\/div>\n                  <div class=\"mic\">\n                      <img src=\"audioRecordingInteraction\/runtime\/img\/mic.svg\"><\/img>\n                    <\/div>\n                    <\/div>\n                  <div class=\"progress\"><\/div>\n                  <div class=\"controls\"><\/div>\n                  <div class=\"instructions\"><\/div>\n                  <div class=\"download\"><\/div>\n                <\/div>\n              <\/div>\n            ",
                 "libraries": [
                     "IMSGlobal\/jquery_2_1_1",
                     "audioRecordingInteraction\/runtime\/js\/renderer"

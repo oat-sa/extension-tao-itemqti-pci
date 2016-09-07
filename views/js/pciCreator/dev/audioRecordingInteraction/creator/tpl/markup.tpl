@@ -1,6 +1,6 @@
 <div class="audioRecordingInteraction">
     <div class="prompt">{{{prompt}}}</div>
-    <div class="audioRec">
+    <div class="audio-rec">
         <div class="input-meter">
             <div class="leds"></div>
             <div class="mic">
