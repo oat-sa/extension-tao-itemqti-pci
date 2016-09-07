@@ -44,6 +44,35 @@ $playback: whiten($info, .3);
 
     padding: 10px;
 
+    // input meter
+
+    .input-meter {
+      border: 2px solid whiten($disabledBg, .5);
+      border-radius: 10px;
+      width: 58px;
+      padding: 10px;
+      margin-right: 10px;
+      margin-top: 2px;
+      float: left;
+
+      display: flex;
+
+      .leds {
+        flex: 0 0 10px;
+      }
+
+      .mic {
+        flex: 0 0 28px;
+
+        img {
+          height: 28px;
+          width: 28px;
+          margin-top: 10px;
+        }
+      }
+    }
+
+
     // Buttons
 
     .audiorec-control {

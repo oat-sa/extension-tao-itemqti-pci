@@ -408,10 +408,14 @@ define([
             orange  = '#ff9300',
             red     = '#ff0000',
 
-            ledHeight = 4,
+            ledHeight = 3,
             ledWidth = 10,
             ledPadding = 0,
-            ledColors = [green, green, green, green, green, orange, orange, orange, red, red],
+            ledColors = [
+                green, green, green, green, green, green,
+                orange, orange, orange, orange,
+                red, red, red
+            ],
             ledNumbers = ledColors.length,
 
             width = ledWidth,
@@ -579,7 +583,7 @@ define([
 
         initMeter: function initMeter() {
             this.inputMeter = inputMeterFactory({
-                $container: this.$meterContainer
+                $container: this.$meterContainer.find('.leds')
             });
         },
 
