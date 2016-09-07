@@ -18,6 +18,14 @@ define([
     'use strict';
 
     var mathEntryInteraction = {
+
+        render: function render(config) {
+            this.initConfig(config);
+
+            this.createToolbar();
+            this.createMathField();
+        },
+
         /**
          *
          * @param {Object} config
@@ -74,7 +82,7 @@ define([
                     log:    { label: 'log',         latex: '\\log',     fn: 'write',    desc: 'Log' },
                     ln:     { label: 'ln',          latex: '\\ln',      fn: 'write',    desc: 'Ln' },
                     //todo: check this
-                    e:      { label: '&#8494;', latex: '\\mathrm{e}\\ ',fn: 'write',    desc: 'e' },
+                    e:      { label: '&#8494;', latex: '\\mathrm{e}\\ ',fn: 'write',    desc: 'Euler\'s constant' },
                     pi:     { label: '&pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
                     cos:    { label: 'cos',         latex: '\\cos',     fn: 'write',    desc: 'Cosinus' },
                     sin:    { label: 'sin',         latex: '\\sin',     fn: 'write',    desc: 'Sinus' },
@@ -89,6 +97,9 @@ define([
                     comparison: ['lte', 'gte'],
                     operands:   ['times', 'divide']
                 };
+
+
+            this.$toolbar.empty();
 
             // create buttons
             this.$toolbar.append(createToolGroup('functions'));
@@ -166,27 +177,25 @@ define([
          * @param {Object} config - json
          */
         initialize: function (id, dom, config) {
+            var self = this;
+
             event.addEventMgr(this);
 
             this.id = id;
             this.dom = dom;
 
-            this.initConfig(config);
-
             this.$container = $(dom);
             this.$toolbar = this.$container.find('.toolbar');
             this.$input = this.$container.find('.math-entry-input');
 
-            this.createToolbar();
-            this.createMathField();
+            this.render(config);
 
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
 
-            // useful to react to some authoring changes
-            // this.on('configChange', function (newConfig) {
-            //     self.render(newConfig);
-            // });
+            this.on('configChange', function (newConfig) {
+                self.render(newConfig);
+            });
 
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));

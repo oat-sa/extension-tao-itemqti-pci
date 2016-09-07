@@ -10,38 +10,110 @@
            data-validate="$notEmpty; $qtiIdentifier; $availableIdentifier(serial={{serial}});">
 </div>
 
-<div class="panel">
+<hr />
+<h3>{{__ "Functions"}}</h3>
+
+<div>
     <label class="panel">
-        <input name="allowPlayback" type="checkbox" {{#if allowPlayback}}checked="checked"{{/if}}/>
+        <input name="tool_sqrt" type="checkbox" {{#if tool_sqrt}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "Allow playback"}}
+        {{__ "square root"}}
     </label>
+</div>
+<div>
     <label class="panel">
-        <input name="autoStart" type="checkbox" {{#if autoStart}}checked="checked"{{/if}}/>
+        <input name="tool_frac" type="checkbox" {{#if tool_frac}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "Auto start recording"}}
+        {{__ "fraction"}}
     </label>
-    <div class="panel creator-mathEntryInteraction-spinner">
-        <label for="audioBitrate" class="spinner">{{__ "Audio bitrate (in bits per second)"}}</label>
-        <input name="audioBitrate" value="{{audioBitrate}}" data-increment="1000" data-min="8000" type="text" />
-    </div>
-    <div class="panel creator-mathEntryInteraction-spinner">
-        <label for="maxRecords" class="spinner">{{__ "Number of allowed recording attemps (0 = unlimited)"}}</label>
-        <input name="maxRecords" value="{{maxRecords}}" data-increment="1" data-min="0" type="text" />
-    </div>
-    <div class="panel creator-mathEntryInteraction-spinner">
-        <label for="maxRecordingTime" class="spinner">{{__ "Max recording time (in seconds)"}}</label>
-        <input name="maxRecordingTime" value="{{maxRecordingTime}}" data-increment="10" data-min="10" type="text" />
-    </div>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_exp" type="checkbox" {{#if tool_exp}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "exponent"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_log" type="checkbox" {{#if tool_log}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "log"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_ln" type="checkbox" {{#if tool_ln}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "ln"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_e" type="checkbox" {{#if tool_e}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#8494;
+    </label>
 </div>
 
 <hr />
+<h3>{{__ "Trigonometry"}}</h3>
 
-<div class="panel">
-    <h3>{{__ "Testing options"}}</h3>
-    <label>
-        <input name="displayDownloadLink" type="checkbox" {{#if displayDownloadLink}}checked="checked"{{/if}}/>
+<div>
+    <label class="panel">
+        <input name="tool_pi" type="checkbox" {{#if tool_pi}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "Display download link"}}
+        &pi;
     </label>
 </div>
+<div>
+    <label class="panel">
+        <input name="tool_cos" type="checkbox" {{#if tool_cos}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "cosinus"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_sin" type="checkbox" {{#if tool_sin}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "sinus"}}
+    </label>
+</div>
+
+<hr />
+<h3>{{__ "Comparison"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="tool_lte" type="checkbox" {{#if tool_lte}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "lower than or equal"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_gte" type="checkbox" {{#if tool_gte}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "greater than or equal"}}
+    </label>
+</div>
+
+<hr />
+<h3>{{__ "Operands"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="tool_times" type="checkbox" {{#if tool_times}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "times"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_divide" type="checkbox" {{#if tool_divide}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "divide"}}
+    </label>
+</div>
+

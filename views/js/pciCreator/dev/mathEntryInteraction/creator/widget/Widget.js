@@ -2,6 +2,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
     'mathEntryInteraction/creator/widget/states/states'
 ], function(Widget, states){
+    'use strict';
 
     var AudioRecordingInteractionWidget = Widget.clone();
 
