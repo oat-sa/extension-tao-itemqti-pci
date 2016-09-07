@@ -81,8 +81,7 @@ define([
                     exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
                     log:    { label: 'log',         latex: '\\log',     fn: 'write',    desc: 'Log' },
                     ln:     { label: 'ln',          latex: '\\ln',      fn: 'write',    desc: 'Ln' },
-                    //todo: check this
-                    e:      { label: '&#8494;', latex: '\\mathrm{e}\\ ',fn: 'write',    desc: 'Euler\'s constant' },
+                    e:      { label: '&#8494;',     latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
                     pi:     { label: '&pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
                     cos:    { label: 'cos',         latex: '\\cos',     fn: 'write',    desc: 'Cosinus' },
                     sin:    { label: 'sin',         latex: '\\sin',     fn: 'write',    desc: 'Sinus' },
