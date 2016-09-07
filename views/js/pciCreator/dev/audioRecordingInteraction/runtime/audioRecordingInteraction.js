@@ -206,8 +206,8 @@ define([
                 bufferLength;
 
             analyser = audioCtx.createAnalyser();
-            analyser.minDecibels = -100; // => 0
-            analyser.maxDecibels = -30;  // => 70 // 0 => 100 ?!?? // todo: make sense of this...
+            analyser.minDecibels = -100;
+            analyser.maxDecibels = -30;
             analyser.fftSize = 32;
 
             source.connect(analyser);
@@ -591,7 +591,7 @@ define([
         initMeter: function initMeter() {
             this.inputMeter = inputMeterFactory({
                 $container: this.$meterContainer.find('.leds'),
-                maxLevel: 100
+                maxLevel: 100 // this is closely related to the values analyser.minDecibels and analyser.maxDecibels in recorderFactory
             });
         },
 
