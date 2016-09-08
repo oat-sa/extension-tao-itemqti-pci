@@ -23,6 +23,7 @@ namespace oat\qtiItemPci\model;
 use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\portableElement\model\PciDataObject;
 use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
+use oat\qtiItemPci\model\portableElement\parser\PciItemParser;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\PciValidator;
@@ -90,5 +91,11 @@ class PciModel implements PortableElement
         return $packageParser;
     }
 
+    public function getItemParser()
+    {
+        $itemParser = new PciItemParser();
+        $itemParser->setModel($this);
+        return $itemParser;
+    }
 
 }
