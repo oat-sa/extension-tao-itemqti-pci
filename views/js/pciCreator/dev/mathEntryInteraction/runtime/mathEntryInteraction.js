@@ -64,7 +64,7 @@ define([
                 MQ = MathQuill.getInterface(2);
 
             this.mathField = MQ.MathField(this.$input.get(0), {
-                // todo: more options here?
+                spaceBehavesLikeTab: true,
                 handlers: {
                     edit: function() {
                         self.trigger('responseChange');
@@ -99,7 +99,6 @@ define([
 
 
             this.$toolbar.empty();
-            this.$toolbar.off('click.qtiCommonRenderer');
 
             // create buttons
             this.$toolbar.append(createToolGroup('functions'));
@@ -139,6 +138,7 @@ define([
 
             // add behaviour
 
+            this.$toolbar.off('mousedown.qtiCommonRenderer');
             this.$toolbar.on('mousedown.qtiCommonRenderer', function(e) {
                 var $target = $(e.target),
                     fn = $target.data('fn'),
@@ -243,7 +243,7 @@ define([
          * @param {Object} interaction
          */
         destroy: function () {
-            this.$toolbar.off('click.qtiCommonRenderer');
+            this.$toolbar.off('mousedown.qtiCommonRenderer');
             this.resetResponse();
             this.mathField.revert();
         },
