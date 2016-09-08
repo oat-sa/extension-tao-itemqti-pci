@@ -45,10 +45,10 @@ return array(
 		),
         'php'	=> array(
 			SetupPortableElementFileStorage::class,
+			RegisterPciModel::class,
 			SetQtiCreatorConfig::class,
 			RegisterClientProvider::class,
 			RegisterPci::class,
-			RegisterPciModel::class
 		)
     ),
     'uninstall' => array(

@@ -47,6 +47,9 @@ class Updater extends \common_ext_ExtensionUpdater
             $setupPortableElementFileStorage->setServiceLocator($this->getServiceManager());
             $setupPortableElementFileStorage([]);
 
+            $registerPciModel = new RegisterPciModel();
+            $registerPciModel([]);
+
             $setQtiCreatorConfig = new SetQtiCreatorConfig();
             $setQtiCreatorConfig([]);
 
@@ -55,9 +58,6 @@ class Updater extends \common_ext_ExtensionUpdater
 
             $registerPortableElement = new RegisterPci();
             $registerPortableElement([]);
-
-            $registerPciModel = new RegisterPciModel();
-            $registerPciModel([]);
 
             $testManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
             $QTIManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
