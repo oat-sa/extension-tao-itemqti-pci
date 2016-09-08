@@ -99,6 +99,7 @@ define([
 
 
             this.$toolbar.empty();
+            this.$toolbar.off('click.qtiCommonRenderer');
 
             // create buttons
             this.$toolbar.append(createToolGroup('functions'));
