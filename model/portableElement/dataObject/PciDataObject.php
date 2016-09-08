@@ -18,7 +18,7 @@
  *
  */
 
-namespace oat\qtiItemPci\model\portableElement\model;
+namespace oat\qtiItemPci\model\portableElement\dataObject;
 
 use oat\taoQtiItem\model\portableElement\common\model\PortableElementObject;
 

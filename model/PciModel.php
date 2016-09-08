@@ -21,7 +21,7 @@
 namespace oat\qtiItemPci\model;
 
 use oat\oatbox\service\ServiceManager;
-use oat\qtiItemPci\model\portableElement\model\PciDataObject;
+use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
 use oat\qtiItemPci\model\portableElement\parser\PciItemParser;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
@@ -66,7 +66,7 @@ class PciModel implements PortableElement
     public function getRegistry()
     {
         /** @var PortableElementRegistry $registry */
-        $registry = PciRegistry::getRegistry($this);
+        $registry = PciRegistry::getRegistry();
         $registry->setServiceLocator(ServiceManager::getServiceManager());
         $registry->setModel($this);
         return $registry;
@@ -74,7 +74,7 @@ class PciModel implements PortableElement
 
     public function getValidator()
     {
-        return new PciValidator($this);
+        return new PciValidator();
     }
 
     public function getDirectoryParser()
@@ -98,4 +98,8 @@ class PciModel implements PortableElement
         return $itemParser;
     }
 
+    public function __toPhpCode()
+    {
+        return "new " . __CLASS__."()";
+    }
 }

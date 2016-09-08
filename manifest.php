@@ -14,14 +14,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *               
  * 
  */               
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
-use oat\qtiItemPci\scripts\install\SetupPciRegistry;
-use oat\qtiItemPci\scripts\install\RegisterPortableElement;
+use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\RegisterPciModel;
+use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 return array(
     'name' => 'qtiItemPci',
@@ -30,7 +31,7 @@ return array(
     'license' => 'GPL-2.0',
     'version' => '1.0.0',
 	'author' => 'Open Assessment Technologies SA',
-	'requires' => array('taoQtiItem' => '>=4.3.0'),
+	'requires' => array('taoQtiItem' => '>=4.4.0'),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
 		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
@@ -43,10 +44,11 @@ return array(
 		    dirname(__FILE__). '/install/ontology/role.rdf'
 		),
         'php'	=> array(
-			SetupPciRegistry::class,
+			SetupPortableElementFileStorage::class,
 			SetQtiCreatorConfig::class,
 			RegisterClientProvider::class,
-			RegisterPortableElement::class
+			RegisterPci::class,
+			RegisterPciModel::class
 		)
     ),
     'uninstall' => array(

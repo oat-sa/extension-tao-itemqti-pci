@@ -22,11 +22,12 @@
 namespace oat\qtiItemPci\scripts\update;
 
 use oat\generis\model\OntologyAwareTrait;
+use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
-use oat\qtiItemPci\scripts\install\SetupPciRegistry;
-use oat\qtiItemPci\scripts\install\RegisterPortableElement;
 use oat\taoQtiItem\model\HookRegistry;
+use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 class Updater extends \common_ext_ExtensionUpdater
 {
@@ -42,9 +43,9 @@ class Updater extends \common_ext_ExtensionUpdater
         $this->skip('0', '0.1.4');
 
         if ($this->isVersion('0.1.4')) {
-            $setupPciRegistry = new SetupPciRegistry();
-            $setupPciRegistry->setServiceLocator($this->getServiceManager());
-            $setupPciRegistry->updateTo1_0_0();
+            $setupPortableElementFileStorage = new SetupPortableElementFileStorage();
+            $setupPortableElementFileStorage->setServiceLocator($this->getServiceManager());
+            $setupPortableElementFileStorage([]);
 
             $setQtiCreatorConfig = new SetQtiCreatorConfig();
             $setQtiCreatorConfig([]);
@@ -52,8 +53,11 @@ class Updater extends \common_ext_ExtensionUpdater
             $registerClientProvider = new RegisterClientProvider();
             $registerClientProvider([]);
 
-            $registerPortableElement = new RegisterPortableElement();
+            $registerPortableElement = new RegisterPci();
             $registerPortableElement([]);
+
+            $registerPciModel = new RegisterPciModel();
+            $registerPciModel([]);
 
             $testManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
             $QTIManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
@@ -66,7 +70,7 @@ class Updater extends \common_ext_ExtensionUpdater
 
             HookRegistry::getRegistry()->remove('pciCreator');
 
-//            $this->setVersion('1.0.0');
+            $this->setVersion('1.0.0');
         }
     }
 }

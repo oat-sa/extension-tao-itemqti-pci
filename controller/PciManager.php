@@ -22,7 +22,7 @@ namespace oat\qtiItemPci\controller;
 
 
 use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\model\portableElement\model\PciDataObject;
+use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementInvalidModelException;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementNotFoundException;

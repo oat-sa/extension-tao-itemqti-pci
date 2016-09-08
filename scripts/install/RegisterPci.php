@@ -24,7 +24,7 @@ use common_ext_action_InstallAction;
 use oat\oatbox\service\ServiceManager;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 
-class RegisterPortableElement extends common_ext_action_InstallAction
+class RegisterPci extends common_ext_action_InstallAction
 {
     public function __invoke($params)
     {
