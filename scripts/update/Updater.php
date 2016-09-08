@@ -21,6 +21,7 @@
 
 namespace oat\qtiItemPci\scripts\update;
 
+use oat\generis\model\OntologyAwareTrait;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\SetupPciRegistry;
@@ -29,6 +30,8 @@ use oat\taoQtiItem\model\HookRegistry;
 
 class Updater extends \common_ext_ExtensionUpdater
 {
+    use OntologyAwareTrait;
+
     /**
      * 
      * @param string $currentVersion
@@ -36,11 +39,8 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($currentVersion)
     {
-        
-      	if ($this->isBetween('0', '0.1.4')) {
-  	    	$this->setVersion('0.1.4');
-   	    }
-        
+        $this->skip('0', '0.1.4');
+
         if ($this->isVersion('0.1.4')) {
             $setupPciRegistry = new SetupPciRegistry();
             $setupPciRegistry->setServiceLocator($this->getServiceManager());
@@ -55,9 +55,10 @@ class Updater extends \common_ext_ExtensionUpdater
             $registerPortableElement = new RegisterPortableElement();
             $registerPortableElement([]);
 
-            $testManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
-            $QTIManagerRole = new \core_kernel_classes_Resource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
-            $testTakerRole = new \core_kernel_classes_Resource(INSTANCE_ROLE_DELIVERY);
+            $testManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
+            $QTIManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
+            $testTakerRole = $this->getResource(INSTANCE_ROLE_DELIVERY);
+
             $accessService = \funcAcl_models_classes_AccessService::singleton();
             $accessService->grantModuleAccess($testManagerRole, 'qtiItemPci', 'PciLoader');
             $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
@@ -65,7 +66,7 @@ class Updater extends \common_ext_ExtensionUpdater
 
             HookRegistry::getRegistry()->remove('pciCreator');
 
-            $this->setVersion('1.0.0');
+//            $this->setVersion('1.0.0');
         }
     }
 }

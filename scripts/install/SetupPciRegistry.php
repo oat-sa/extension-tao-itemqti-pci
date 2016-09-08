@@ -17,6 +17,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  * 
  */
+
 namespace oat\qtiItemPci\scripts\install;
 
 use League\Flysystem\Adapter\Local;
@@ -43,7 +44,7 @@ class SetupPciRegistry extends \common_ext_action_InstallAction
      * Update script
      *
      * Don't touch it, it used by updater
-     * If you want to change create your update method
+     * If you want to change install script, create your update method
      */
     public function updateTo1_0_0()
     {

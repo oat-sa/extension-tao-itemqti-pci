@@ -20,23 +20,28 @@
 
 namespace oat\qtiItemPci\controller;
 
+
+use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\portableElement\model\PciDataObject;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementInvalidModelException;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementNotFoundException;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementParserException;
-use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
-use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
-use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
-use oat\taoQtiItem\model\portableElement\PortableElementRegistry;
-use \tao_helpers_Http;
-use \tao_actions_CommonModule;
+use oat\taoQtiItem\model\portableElement\common\model\PortableElementObject;
+use oat\taoQtiItem\model\portableElement\common\storage\PortableElementRegistry;
+use oat\taoQtiItem\model\portableElement\PortableElementService;
 
-class PciManager extends tao_actions_CommonModule
+class PciManager extends \tao_actions_CommonModule
 {
     /**
      * @var PortableElementRegistry
      */
-    protected $registry = null;
+    protected $registry;
+
+    /**
+     * @var PortableElementService
+     */
+    protected $service;
 
     public function __call($method, $arguments)
     {
@@ -56,12 +61,21 @@ class PciManager extends tao_actions_CommonModule
 
     protected function getRegistry()
     {
-        if(is_null($this->registry)){
-            $this->registry = PortableElementFactory::getRegistry($this->getDefaultModel());
+        if (! $this->registry) {
+            $this->registry = $this->getDefaultModel()->getRegistry();
         }
         return $this->registry;
     }
-    
+
+    protected function getService()
+    {
+        if (! $this->service) {
+            $this->service = new PortableElementService();
+            $this->service->setServiceLocator($this->getServiceManager());
+        }
+        return $this->service;
+    }
+
     /**
      * Returns the list of registered custom interactions and their data
      */
@@ -86,7 +100,7 @@ class PciManager extends tao_actions_CommonModule
      * }
      *
      * @throws PortableElementParserException
-     * @throws \oat\taoQtiItem\model\portableElement\common\exception\PortableElementInvalidModelException
+     * @throws PortableElementInvalidModelException
      */
     public function verify()
     {
@@ -96,15 +110,13 @@ class PciManager extends tao_actions_CommonModule
         );
 
         try {
-            $file = tao_helpers_Http::getUploadedFile('content');
+            $file = \tao_helpers_Http::getUploadedFile('content');
         } catch (\common_exception_Error $e) {
             throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
         }
 
-        $service = PortableElementFactory::getService($this->getDefaultModel());
-
         try {
-            $model = $service->getValidPortableElementFromZipSource($file['tmp_name']);
+            $model = $this->getService()->getValidPortableElementFromZipSource(PciModel::PCI_IDENTIFIER, $file['tmp_name']);
         }  catch (PortableElementInvalidModelException $e) {
             $result['package'] = [
                 ['messages' => $e->getReportMessages()]
@@ -145,18 +157,19 @@ class PciManager extends tao_actions_CommonModule
         session_write_close();
 
         try {
-            $file = tao_helpers_Http::getUploadedFile('content');
+            $file = \tao_helpers_Http::getUploadedFile('content');
         } catch(\common_exception_Error $e) {
             throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
         }
-        $service = PortableElementFactory::getService($this->getDefaultModel());
-        $portableElement = $service->import($file['tmp_name']);
+        $portableElement = $this->getService()->import(PciModel::PCI_IDENTIFIER, $file['tmp_name']);
 
         $this->returnJson($this->getMinifiedModel($portableElement));
     }
 
     /**
      * Export PCI zip package with all runtime, creator & manifest files
+     * Not used yet
+     * @todo Download path e.q. $path
      */
     public function export()
     {
@@ -168,10 +181,10 @@ class PciManager extends tao_actions_CommonModule
                 throw new PortableElementException('Type identifier parameter missing.');
             }
 
-            $service = PortableElementFactory::getService($this->getDefaultModel());
-            $data = $service->export($this->getRequestParameter('typeIdentifier'));
-
-            $this->returnJson($this->getMinifiedModel($data));
+            $identifier = $this->getRequestParameter('typeIdentifier');
+            $path = $this->getService()->export(PciModel::PCI_IDENTIFIER, $identifier);
+            $object = $this->getService()->getPortableElementByIdentifier(PciModel::PCI_IDENTIFIER, $identifier);
+            $this->returnJson($this->getMinifiedModel($object));
 
         } catch(\common_Exception $e) {
             $this->returnJson(array('error' => $e->getMessage()));
@@ -188,13 +201,13 @@ class PciManager extends tao_actions_CommonModule
         }
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
         $this->returnJson([
-            'success' => $this->getRegistry()->unregister(new PciModel($typeIdentifier))
+            'success' => $this->getRegistry()->unregister(new PciDataObject($typeIdentifier))
         ]);
     }
 
-    protected function getMinifiedModel(PortableElementModel $model)
+    protected function getMinifiedModel(PortableElementObject $object)
     {
-        return $model->toArray(array('typeIdentifier', 'label', 'version'));
+        return $object->toArray(array('typeIdentifier', 'label', 'version'));
     }
 
 }
