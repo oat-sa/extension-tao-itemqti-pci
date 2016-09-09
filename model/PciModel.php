@@ -23,7 +23,6 @@ namespace oat\qtiItemPci\model;
 use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
-use oat\qtiItemPci\model\portableElement\parser\PciItemParser;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\PciValidator;
@@ -66,7 +65,7 @@ class PciModel implements PortableElement
     public function getRegistry()
     {
         /** @var PortableElementRegistry $registry */
-        $registry = PciRegistry::getRegistry();
+        $registry = PciRegistry::getRegistry($this);
         $registry->setServiceLocator(ServiceManager::getServiceManager());
         $registry->setModel($this);
         return $registry;
@@ -91,11 +90,9 @@ class PciModel implements PortableElement
         return $packageParser;
     }
 
-    public function getItemParser()
+    public function getQtiElementClassName()
     {
-        $itemParser = new PciItemParser();
-        $itemParser->setModel($this);
-        return $itemParser;
+        return 'oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction';
     }
 
     public function __toPhpCode()
