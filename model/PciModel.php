@@ -28,9 +28,12 @@ use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\PciValidator;
 use oat\taoQtiItem\model\portableElement\common\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElement;
+use oat\oatbox\PhpSerializeStateless;
 
 class PciModel implements PortableElement
 {
+    use PhpSerializeStateless;
+
     const PCI_IDENTIFIER = 'PCI';
 
     const PCI_MANIFEST = 'pciCreator.json';
@@ -93,10 +96,5 @@ class PciModel implements PortableElement
     public function getQtiElementClassName()
     {
         return 'oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction';
-    }
-
-    public function __toPhpCode()
-    {
-        return "new " . __CLASS__."()";
     }
 }
