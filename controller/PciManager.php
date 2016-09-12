@@ -20,7 +20,6 @@
 
 namespace oat\qtiItemPci\controller;
 
-
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\taoQtiItem\model\portableElement\common\exception\PortableElementException;
@@ -132,8 +131,8 @@ class PciManager extends \tao_actions_CommonModule
             $currentVersion = $all[$model->getTypeIdentifier()]->getVersion();
             if(version_compare($model->getVersion(), $currentVersion, '<')){
                 $result['package'] = [['message' =>
-                    __('A newer version of the pci "%s" already exists (current version: %s, target version: %s)'),
-                        $model->getTypeIdentifier(), $currentVersion, $model->getVersion()
+                    __('A newer version of the pci "%s" already exists (current version: %s, target version: %s)',
+                        $model->getTypeIdentifier(), $currentVersion, $model->getVersion())
                 ]];
                 $result['valid'] = false;
                 $this->returnJson($result);
