@@ -124,7 +124,12 @@ class PciManager extends \tao_actions_CommonModule
             exit();
         }
 
-        $result['exists'] = $this->getRegistry()->has($model);
+        if ($model->hasVersion()) {
+            $result['exists'] = $this->getRegistry()->has($model->getTypeIdentifier(), $model->getVersion());
+        } else {
+            $result['exists'] = $this->getRegistry()->has($model->getTypeIdentifier());
+        }
+
 
         $all = $this->getRegistry()->getLatestCreators();
         if(isset($all[$model->getTypeIdentifier()])){
@@ -206,7 +211,9 @@ class PciManager extends \tao_actions_CommonModule
 
     protected function getMinifiedModel(PortableElementObject $object)
     {
-        return $object->toArray(array('typeIdentifier', 'label', 'version'));
+        $data = $object->toArray(array('typeIdentifier', 'label'));
+        $data['version'] = $object->getVersion();
+        return $data;
     }
 
 }
