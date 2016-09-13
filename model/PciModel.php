@@ -26,11 +26,11 @@ use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\PciValidator;
-use oat\taoQtiItem\model\portableElement\common\storage\PortableElementRegistry;
-use oat\taoQtiItem\model\portableElement\PortableElement;
+use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
+use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
 use oat\oatbox\PhpSerializeStateless;
 
-class PciModel implements PortableElement
+class PciModel implements PortableElementModel
 {
     use PhpSerializeStateless;
 

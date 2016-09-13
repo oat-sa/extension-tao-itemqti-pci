@@ -48,6 +48,7 @@ class Updater extends \common_ext_ExtensionUpdater
             $setupPortableElementFileStorage([]);
 
             $registerPciModel = new RegisterPciModel();
+            $registerPciModel->setServiceLocator($this->getServiceManager());
             $registerPciModel([]);
 
             $setQtiCreatorConfig = new SetQtiCreatorConfig();

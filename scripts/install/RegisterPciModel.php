@@ -21,7 +21,7 @@
 namespace oat\qtiItemPci\scripts\install;
 
 use oat\qtiItemPci\model\PciModel;
-use oat\taoQtiItem\model\portableElement\PortableElementFactory;
+use oat\taoQtiItem\model\portableElement\model\PortableElementFactory;
 
 class RegisterPciModel extends \common_ext_action_InstallAction
 {

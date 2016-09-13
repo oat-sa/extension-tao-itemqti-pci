@@ -20,8 +20,8 @@
 
 namespace oat\qtiItemPci\model\portableElement\validator;
 
-use oat\taoQtiItem\model\portableElement\common\validator\PortableElementModelValidator;
-use oat\taoQtiItem\model\portableElement\common\validator\Validator;
+use oat\taoQtiItem\model\portableElement\validator\PortableElementModelValidator;
+use oat\taoQtiItem\model\portableElement\validator\Validator;
 
 class PciValidator extends PortableElementModelValidator
 {

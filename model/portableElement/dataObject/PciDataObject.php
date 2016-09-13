@@ -20,7 +20,7 @@
 
 namespace oat\qtiItemPci\model\portableElement\dataObject;
 
-use oat\taoQtiItem\model\portableElement\common\model\PortableElementObject;
+use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 
 class PciDataObject extends PortableElementObject
 {

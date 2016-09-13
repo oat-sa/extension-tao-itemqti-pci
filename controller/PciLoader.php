@@ -21,8 +21,8 @@
 namespace oat\qtiItemPci\controller;
 
 use oat\qtiItemPci\model\PciModel;
-use oat\taoQtiItem\model\portableElement\common\exception\PortableElementException;
-use oat\taoQtiItem\model\portableElement\common\storage\PortableElementRegistry;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
+use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use \tao_actions_CommonModule;
 
 class PciLoader extends tao_actions_CommonModule

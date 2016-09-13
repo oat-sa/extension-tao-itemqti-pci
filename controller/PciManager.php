@@ -22,12 +22,12 @@ namespace oat\qtiItemPci\controller;
 
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
-use oat\taoQtiItem\model\portableElement\common\exception\PortableElementException;
-use oat\taoQtiItem\model\portableElement\common\exception\PortableElementInvalidModelException;
-use oat\taoQtiItem\model\portableElement\common\exception\PortableElementNotFoundException;
-use oat\taoQtiItem\model\portableElement\common\exception\PortableElementParserException;
-use oat\taoQtiItem\model\portableElement\common\model\PortableElementObject;
-use oat\taoQtiItem\model\portableElement\common\storage\PortableElementRegistry;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementParserException;
+use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
+use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 class PciManager extends \tao_actions_CommonModule
