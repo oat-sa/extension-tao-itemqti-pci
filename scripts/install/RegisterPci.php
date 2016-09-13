@@ -22,6 +22,7 @@ namespace oat\qtiItemPci\scripts\install;
 
 use common_ext_action_InstallAction;
 use oat\oatbox\service\ServiceManager;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementVersionIncompatibilityException;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 class RegisterPci extends common_ext_action_InstallAction
@@ -33,10 +34,20 @@ class RegisterPci extends common_ext_action_InstallAction
 
         $viewDir = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
 
-        $sourceLikertScale = $viewDir.implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'likertScaleInteraction']).DIRECTORY_SEPARATOR;
-        $sourceLiquid = $viewDir.implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'liquidsInteraction']).DIRECTORY_SEPARATOR;
-        $service->registerFromDirectorySource($sourceLikertScale);
-        $service->registerFromDirectorySource($sourceLiquid);
+        try {
+            $sourceLikertScale = $viewDir.implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'likertScaleInteraction']);
+            $service->registerFromDirectorySource($sourceLikertScale);
+        } catch (PortableElementVersionIncompatibilityException $e) {
+            \common_Logger::i($e->getMessage());
+        }
+
+        try {
+            $sourceLiquid = $viewDir.implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'liquidsInteraction']);
+            $service->registerFromDirectorySource($sourceLiquid);
+        } catch (PortableElementVersionIncompatibilityException $e) {
+            \common_Logger::i($e->getMessage());
+        }
+
 
         return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'PCI registered');
     }
