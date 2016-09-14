@@ -13,7 +13,6 @@ use oat\oatbox\service\ServiceManager;
 
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
-use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
 use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
 use oat\taoQtiItem\model\portableElement\pic\model\PicModel;
 use oat\taoQtiItem\model\portableElement\PortableElementRegistry;

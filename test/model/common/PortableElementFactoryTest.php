@@ -23,18 +23,18 @@ namespace oat\qtiItemPci\test\model\common;
 
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;
-use oat\taoQtiItem\model\portableElement\common\PortableElementFactory;
+use oat\taoQtiItem\model\portableElement\common\PortableModelRegistry;
 use oat\taoQtiItem\model\portableElement\common\validator\PortableElementModelValidator;
 use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
 use oat\taoQtiItem\model\portableElement\pci\validator\PciValidator;
 use oat\taoQtiItem\model\portableElement\pic\model\PicModel;
 use oat\taoQtiItem\model\portableElement\pic\validator\PicValidator;
 
-class PortableElementFactoryTest extends TaoPhpUnitTestRunner
+class PortableModelRegistryTest extends TaoPhpUnitTestRunner
 {
     public function testGetAvailableModels()
     {
-        $reflectionMethod = new \ReflectionMethod(PortableElementFactory::class, 'getAvailableModels');
+        $reflectionMethod = new \ReflectionMethod(PortableModelRegistry::class, 'getAvailableModels');
         $reflectionMethod->setAccessible(true);
         $models = $reflectionMethod->invoke(null);
         $this->assertEquals([new PciModel(), new PicModel()], $models);
@@ -45,7 +45,7 @@ class PortableElementFactoryTest extends TaoPhpUnitTestRunner
      */
     public function testGetValidator($model, $expectedClass)
     {
-        $validator = PortableElementFactory::getValidator($model);
+        $validator = PortableModelRegistry::getValidator($model);
         $this->assertInstanceOf($expectedClass, $validator);
         $this->assertEquals($model, $validator->getModel());
     }
@@ -83,7 +83,7 @@ class PortableElementFactoryTest extends TaoPhpUnitTestRunner
             }
         }
 
-        return new PortableElementFactory(array(
+        return new PortableModelRegistry(array(
             'pciRegistry' => $pciRegistry,
             'picRegistry' => $picRegistry,
         ));

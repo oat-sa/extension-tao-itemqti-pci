@@ -21,24 +21,13 @@
 namespace oat\qtiItemPci\scripts\install;
 
 use oat\qtiItemPci\model\PciModel;
-use oat\taoQtiItem\model\portableElement\model\PortableElementFactory;
+use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 
 class RegisterPciModel extends \common_ext_action_InstallAction
 {
     public function __invoke($params)
     {
-        $modelToRegister = array(PciModel::PCI_IDENTIFIER => new PciModel());
-
-        if (! $this->getServiceLocator()->has(PortableElementFactory::SERVICE_ID)) {
-            $data = $modelToRegister;
-        } else {
-            $data = array_merge(
-                $this->getServiceLocator()->get(PortableElementFactory::SERVICE_ID)->getOptions(),
-                $modelToRegister
-            );
-        }
-
-        $this->getServiceManager()->register(PortableElementFactory::SERVICE_ID, new PortableElementFactory($data));
+        PortableModelRegistry::getRegistry()->register(new PciModel());
         return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Pci Model successfully registered.');
     }
 }
