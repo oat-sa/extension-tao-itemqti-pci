@@ -20,7 +20,7 @@
 
 namespace oat\qtiItemPci\model\portableElement\parser;
 
-use oat\taoQtiItem\model\portableElement\parser\implementation\PortableElementDirectoryParser;
+use oat\taoQtiItem\model\portableElement\parser\element\PortableElementDirectoryParser;
 
 class PciDirectoryParser extends PortableElementDirectoryParser
 {
