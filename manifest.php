@@ -26,12 +26,14 @@ use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 return array(
     'name' => 'qtiItemPci',
-	'label' => 'QTI Portable Custom Interaction',
-	'description' => '',
+    'label' => 'QTI Portable Custom Interaction',
+    'description' => '',
     'license' => 'GPL-2.0',
     'version' => '1.0.0',
-	'author' => 'Open Assessment Technologies SA',
-	'requires' => array('taoQtiItem' => '>=4.4.0'),
+    'author' => 'Open Assessment Technologies SA',
+    'requires' => array(
+        'taoQtiItem' => '>=5.0.0'
+    ),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
 		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
