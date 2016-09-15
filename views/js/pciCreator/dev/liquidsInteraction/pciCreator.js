@@ -1,9 +1,8 @@
 define([
     'lodash',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'liquidsInteraction/creator/widget/Widget',
     'tpl!liquidsInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+], function(_, Widget, markupTpl){
 
     var _typeIdentifier = 'liquidsInteraction';
 

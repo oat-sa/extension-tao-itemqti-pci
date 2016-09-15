@@ -14,21 +14,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *               
  * 
  */               
+use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
+use oat\qtiItemPci\scripts\install\RegisterClientProvider;
+use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\RegisterPciModel;
+use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 return array(
     'name' => 'qtiItemPci',
-	'label' => 'QTI Portable Custom Interaction',
-	'description' => '',
+    'label' => 'QTI Portable Custom Interaction',
+    'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '0.1.4',
-	'author' => 'Open Assessment Technologies SA',
-	'requires' => array('taoQtiItem' => '>=2.7.0'),
+    'version' => '1.0.0',
+    'author' => 'Open Assessment Technologies SA',
+    'requires' => array(
+        'taoQtiItem' => '>=5.0.0'
+    ),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+		array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
     ),
     'install' => array(
         'rdf' => array(
@@ -36,13 +46,16 @@ return array(
 		    dirname(__FILE__). '/install/ontology/role.rdf'
 		),
         'php'	=> array(
-			dirname(__FILE__).'/scripts/install/addHook.php'
+			SetupPortableElementFileStorage::class,
+			RegisterPciModel::class,
+			SetQtiCreatorConfig::class,
+			RegisterClientProvider::class,
+			RegisterPci::class,
 		)
     ),
     'uninstall' => array(
     ),
     'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
-
     'routes' => array(
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ),    

@@ -21,19 +21,57 @@
 
 namespace oat\qtiItemPci\scripts\update;
 
+use oat\generis\model\OntologyAwareTrait;
+use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\RegisterPciModel;
+use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
+use oat\qtiItemPci\scripts\install\RegisterClientProvider;
+use oat\taoQtiItem\model\HookRegistry;
+use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 class Updater extends \common_ext_ExtensionUpdater
 {
+    use OntologyAwareTrait;
+
     /**
      * 
      * @param string $currentVersion
      * @return string $versionUpdatedTo
      */
-    public function update($initialVersion)
+    public function update($currentVersion)
     {
-      	if ($this->isBetween('0', '0.1.4')){
-  	    	$this->setVersion('0.1.4');
-   	    }
-       return null;
+        $this->skip('0', '0.1.4');
+
+        if ($this->isVersion('0.1.4')) {
+            $setupPortableElementFileStorage = new SetupPortableElementFileStorage();
+            $setupPortableElementFileStorage->setServiceLocator($this->getServiceManager());
+            $setupPortableElementFileStorage([]);
+
+            $registerPciModel = new RegisterPciModel();
+            $registerPciModel->setServiceLocator($this->getServiceManager());
+            $registerPciModel([]);
+
+            $setQtiCreatorConfig = new SetQtiCreatorConfig();
+            $setQtiCreatorConfig([]);
+
+            $registerClientProvider = new RegisterClientProvider();
+            $registerClientProvider([]);
+
+            $registerPortableElement = new RegisterPci();
+            $registerPortableElement([]);
+
+            $testManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
+            $QTIManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
+            $testTakerRole = $this->getResource(INSTANCE_ROLE_DELIVERY);
+
+            $accessService = \funcAcl_models_classes_AccessService::singleton();
+            $accessService->grantModuleAccess($testManagerRole, 'qtiItemPci', 'PciLoader');
+            $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
+            $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
+
+            HookRegistry::getRegistry()->remove('pciCreator');
+
+            $this->setVersion('1.0.0');
+        }
     }
 }

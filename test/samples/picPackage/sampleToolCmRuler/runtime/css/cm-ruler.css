@@ -1,0 +1,13 @@
+.sts-scope .sts-sampleToolCmRuler-container .sts-title-bar {
+  display: none !important; }
+.sts-scope .sts-sampleToolCmRuler-container .sts-content {
+  border: none !important;
+  background: rgba(231, 230, 227, 0.75) !important;
+  padding: 0 !important; }
+  .sts-scope .sts-sampleToolCmRuler-container .sts-content img {
+    display: block;
+    border: 1px #ccc solid !important; }
+.sts-scope .sts-sampleToolCmRuler-container [class*=" sts-handle-"]:not(.sts-handle-move), .sts-scope .sts-sampleToolCmRuler-container [class^="sts-handle-"]:not(.sts-handle-move) {
+  display: block !important; }
+
+/*# sourceMappingURL=cm-ruler.css.map */

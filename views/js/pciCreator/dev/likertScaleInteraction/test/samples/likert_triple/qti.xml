@@ -3,6 +3,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1  http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd"
                 xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" 
+                xmlns:html5="html5" 
                 identifier="pci002" title="PCI 002" adaptive="false" timeDependent="false">
     
     <responseDeclaration identifier="likert1" cardinality="single" baseType="integer"/>
@@ -10,7 +11,6 @@
     <responseDeclaration identifier="likert3" cardinality="single" baseType="integer"/>
     
     <!--item specific stylesheets will be added by the item in the method postRender()-->
-    <stylesheet href="likertScaleInteraction/runtime/css/likertScaleInteraction.css" title="" type="text/css" media="all"></stylesheet>
     <stylesheet href="css/likert1.css" type="text/css"/>
     
     <itemBody>

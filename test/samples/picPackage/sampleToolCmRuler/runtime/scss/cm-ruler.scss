@@ -1,0 +1,24 @@
+@import "../../../../../../../../qtiItemPic/views/js/picCreator/dev/studentToolbar/runtime/scss/inc/sts-bootstrap";
+
+.sts-scope {
+    .sts-sampleToolCmRuler-container {
+        .sts-title-bar {
+            display:none !important;
+        }
+        .sts-content {
+            border: none !important;
+            background: $stsTransparentTool !important;
+            padding: 0 !important;
+            img {
+                display:block;
+                border: 1px #ccc solid !important;
+            }
+        }
+        [class*=" sts-handle-"], [class^="sts-handle-"] {
+            &:not(.sts-handle-move) {
+                display:block !important;
+            }
+        }
+    }
+}
+
