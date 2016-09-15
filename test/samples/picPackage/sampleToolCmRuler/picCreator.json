@@ -1,0 +1,29 @@
+{
+    "typeIdentifier": "sampleToolCmRuler",
+    "label": "Cm Ruler",
+    "description": "",
+    "version": "0.1",
+    "author": "",
+    "email": "",
+    "tags": [
+        "student-tool"
+    ],
+    "short" : "Cm Ruler",
+
+    "runtime" : {
+        "hook" : "./runtime/cm-ruler.js",
+        "libraries" : [
+            "IMSGlobal/jquery_2_1_1"
+        ],
+        "stylesheets" : [
+            "./runtime/css/cm-ruler.css"
+        ],
+        "mediaFiles": [
+            "./runtime/media/cm-ruler-widget.png",
+            "./runtime/media/cm-ruler-icon.svg"
+        ]
+    },
+    "creator" : {
+        "icon" : "./creator/media/cm-ruler-icon.svg"
+    }
+}
