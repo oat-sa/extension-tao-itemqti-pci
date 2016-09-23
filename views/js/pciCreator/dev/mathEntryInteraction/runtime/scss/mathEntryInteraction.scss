@@ -2,16 +2,18 @@
 // TAO specific
 // =============
 
-@import "inc/bootstrap";
+@import "inc/bootstrap"; // uncomment if you need functions or variables from TAO
+
+
 
 
 // =============
 // PCI
 // =============
 
-$enabledBg: blacken(white, .2);
-$enabledTxt: whiten(black, .2);
-$toolbarFont: "Times New Roman", Times, serif;
+$buttonBg: blacken(white, .2);
+$buttonTxt: whiten(black, .3);
+$buttonFont: "Times New Roman", Times, serif;
 
 .qti-customInteraction {
   .mathEntryInteraction {
@@ -23,12 +25,12 @@ $toolbarFont: "Times New Roman", Times, serif;
     // Buttons
 
     .math-entry-toolgroup {
-      margin: 10px 10px 10px 0;
+      margin: 10px 12px 10px 0;
       display: inline-block;
     }
 
     .math-entry-tool {
-      font-family: $toolbarFont;
+      font-family: $buttonFont;
       font-size: 14px !important;
       font-weight: bold;
       font-style: normal;
@@ -37,17 +39,17 @@ $toolbarFont: "Times New Roman", Times, serif;
       vertical-align: middle;
       outline: 0;
       overflow: visible;
-      border: none;
       display: inline-block;
       line-height: 2.5;
       padding: 0 15px;
       text-align: center;
       height: 35px;
-      background-color: $enabledBg;
-      color: $enabledTxt;
+      background-color: $buttonBg;
+      color: $buttonTxt;
+      border: 1px solid blacken($buttonBg, 0.2);
 
       &:hover {
-        background-color: whiten($enabledBg, .5);
+        background-color: whiten($buttonBg, .5);
       }
 
     }
