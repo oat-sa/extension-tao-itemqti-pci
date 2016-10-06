@@ -1,12 +1,10 @@
 define([
     'qtiCustomInteractionContext',
-    // fixme: embed jQuery 1.4.3+ or update PCI jQuery version - remove jQuery shared lib dependency
-    'jquery',
+    'IMSGlobal/jquery_2_1_1',
     'OAT/lodash',
     'OAT/util/event',
     'OAT/util/html',
-    // fixme: use a relative path from PCI runtime
-    'qtiItemPci/pciCreator/dev/mathEntryInteraction/runtime/mathquill/mathquill'
+    'mathEntryInteraction/runtime/mathquill/mathquill'
 ], function(
     qtiCustomInteractionContext,
     $,

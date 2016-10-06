@@ -34,7 +34,7 @@ class Updater extends \common_ext_ExtensionUpdater
     use OntologyAwareTrait;
 
     /**
-     * 
+     *
      * @param string $currentVersion
      * @return string $versionUpdatedTo
      */
@@ -72,6 +72,11 @@ class Updater extends \common_ext_ExtensionUpdater
             HookRegistry::getRegistry()->remove('pciCreator');
 
             $this->setVersion('1.0.0');
+        }
+
+        if($this->isVersion('1.0.0')){
+            call_user_func(new RegisterPci(), []);
+            $this->setVersion('1.1.0');
         }
     }
 }

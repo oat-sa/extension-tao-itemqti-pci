@@ -4927,7 +4927,7 @@ for (var key in MQ1) (function(key, val) {
 
 // AMD Module
 if (typeof define === 'function' && define.amd) {
-  define(['qtiItemPci/pciCreator/dev/mathEntryInteraction/runtime/mathquill/mathquill'], function() {
+  define(['mathEntryInteraction/runtime/mathquill/mathquill'], function() {
     return MathQuill;
   });
 }

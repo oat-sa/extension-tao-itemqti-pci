@@ -48,6 +48,13 @@ class RegisterPci extends common_ext_action_InstallAction
             \common_Logger::i($e->getMessage());
         }
 
+        try {
+            $mathEntry = $viewDir.implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'mathEntryInteraction']);
+            $service->registerFromDirectorySource($mathEntry);
+        } catch (PortableElementVersionIncompatibilityException $e) {
+            \common_Logger::i($e->getMessage());
+        }
+
 
         return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'PCI registered');
     }

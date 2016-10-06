@@ -1,31 +1,45 @@
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ *
+ */
 define([
     'jquery',
     'lodash',
     'taoQtiItem/runner/qtiItemRunner',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
+    'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
     'json!qtiItemPci/test/mathEntryInteraction/data/qti.json'
-], function ($, _, qtiItemRunner, itemData){
+], function ($, _, qtiItemRunner, ciRegistry, pciTestProvider, itemData){
 
     'use strict';
 
     var runner;
     var fixtureContainerId = 'item-container';
 
-    //override asset loading in order to resolve it from the runtime location
-    var strategies = [{
-        name : 'portableElementLocation',
-        handle : function handlePortableElementLocation(url){
-            if(/mathEntryInteraction/.test(url.toString())){
-                return '../../../qtiItemPci/views/js/pciCreator/dev/' + url.toString();
-            }
-        }
-    }, {
-        name : 'default',
-        handle : function defaultStrategy(url){
-            return url.toString();
-        }
-    }];
+    //manually register the pci from its manifest
+    pciTestProvider.addManifestPath(
+        'mathEntryInteraction',
+        'qtiItemPci/pciCreator/dev/mathEntryInteraction/pciCreator.json');
+    ciRegistry.resetProviders();
+    ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
-    module('Math Entry Interaction', {
+
+
+    QUnit.module('Math Entry Interaction', {
         teardown : function(){
             if(runner){
                 runner.clear();
@@ -53,7 +67,6 @@ define([
 
                 QUnit.start();
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -94,7 +107,6 @@ define([
             .on('error', function (error){
                 $('#error-display').html(error);
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -141,7 +153,6 @@ define([
             .on('error', function (error){
                 $('#error-display').html(error);
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -182,7 +193,6 @@ define([
             .on('error', function (error){
                 $('#error-display').html(error);
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -218,7 +228,6 @@ define([
                     QUnit.start();
                 }
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -242,7 +251,6 @@ define([
             .on('error', function (error){
                 $('#error-display').html(error);
             })
-            .assets(strategies)
             .init()
             .render($container);
     });

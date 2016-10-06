@@ -1,27 +1,53 @@
 {
     "typeIdentifier": "mathEntryInteraction",
     "label": "Math entry",
+    "short": "Math entry",
     "description": "Allow test taker to type math formulas",
     "version": "0.1",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
-    "libraries": [
-        "IMSGlobal/jquery_2_1_1",
-        "./runtime/mathquill/mathquill.min"
-    ],
-    "css": [
-        "./runtime/mathquill/mathquill.css",
-        "./runtime/css/mathEntryInteraction.css"
-    ],
-    "entryPoint": "./runtime/mathEntryInteraction.js",
     "tags": [
         "math"
     ],
-    "icon": "./creator/img/icon.svg",
-    "short": "Math input",
     "response": {
-      "baseType": "string",
-      "cardinality": "single"
+        "baseType": "string",
+        "cardinality": "single"
     },
-    "debug" : true
+    "runtime" : {
+        "hook" : "./runtime/mathEntryInteraction.js",
+        "libraries" : [
+            "IMSGlobal/jquery_2_1_1",
+            "OAT/lodash",
+            "OAT/util/event",
+            "OAT/util/html",
+            "./runtime/mathquill/mathquill.js"
+        ],
+        "stylesheets" : [
+            "./runtime/mathquill/mathquill.css",
+            "./runtime/css/mathEntryInteraction.css"
+        ],
+        "mediaFiles" : [
+            "./runtime/mathquill/font/Symbola.eot",
+            "./runtime/mathquill/font/Symbola.otf",
+            "./runtime/mathquill/font/Symbola.svg",
+            "./runtime/mathquill/font/Symbola.ttf",
+            "./runtime/mathquill/font/Symbola.woff",
+            "./runtime/mathquill/font/Symbola.woff2",
+            "./runtime/mathquill/font/Symbola-basic.eot",
+            "./runtime/mathquill/font/Symbola-basic.ttf",
+            "./runtime/mathquill/font/Symbola-basic.woff",
+            "./runtime/mathquill/font/Symbola-basic.woff2"
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./pciCreator.js",
+        "libraries" : [
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/widget/Widget.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js"
+        ]
+    }
 }
