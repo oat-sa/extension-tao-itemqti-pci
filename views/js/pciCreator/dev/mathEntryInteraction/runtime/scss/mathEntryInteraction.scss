@@ -1,0 +1,81 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ */
+
+// =============
+// TAO specific
+// =============
+
+@import "inc/bootstrap";
+
+
+
+
+// =============
+// PCI
+// =============
+
+$buttonBg: blacken(white, .2);
+$buttonTxt: whiten(black, .3);
+$buttonFont: "Times New Roman", Times, serif;
+
+.qti-customInteraction {
+  .mathEntryInteraction {
+
+    .math-entry {
+      padding: 10px;
+    }
+
+    .math-entry-input {
+      width: 100%;
+    }
+
+    // Buttons
+
+    .math-entry-toolgroup {
+      margin: 10px 12px 10px 0;
+      display: inline-block;
+    }
+
+    .math-entry-tool {
+      font-family: $buttonFont;
+      font-size: 14px !important;
+      font-weight: bold;
+      font-style: normal;
+      cursor: pointer;
+      text-decoration: none !important;
+      vertical-align: middle;
+      outline: 0;
+      overflow: visible;
+      display: inline-block;
+      line-height: 2.5;
+      padding: 0 15px;
+      text-align: center;
+      height: 35px;
+      background-color: $buttonBg;
+      color: $buttonTxt;
+      border: 1px solid blacken($buttonBg, 0.2);
+
+      &:hover {
+        background-color: whiten($buttonBg, .5);
+      }
+
+    }
+
+  }
+}
+
