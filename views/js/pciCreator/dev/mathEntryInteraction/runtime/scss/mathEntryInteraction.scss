@@ -36,6 +36,10 @@ $buttonFont: "Times New Roman", Times, serif;
 .qti-customInteraction {
   .mathEntryInteraction {
 
+    .math-entry {
+      padding: 10px;
+    }
+
     .math-entry-input {
       width: 100%;
     }
