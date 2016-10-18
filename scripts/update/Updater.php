@@ -76,9 +76,11 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('1.0.0');
         }
 
-        if($this->isVersion('1.0.0')){
+        $this->skip('1.0.0', '1.1.0');
+
+        if($this->isVersion('1.1.0')){
             call_user_func(new RegisterPciMathEntry(), ['0.1.0']);
-            $this->setVersion('1.1.0');
+            $this->setVersion('1.2.0');
         }
     }
 }
