@@ -49,7 +49,7 @@ define([
          * @param {Object} config
          * @param {Boolean} config.tool_toolId - is the given tool enabled?
          */
-        initConfig: function init(config) {
+        initConfig: function initConfig(config) {
             function toBoolean(value, defaultValue) {
                 if (typeof(value) === "undefined") {
                     return defaultValue;
@@ -77,7 +77,7 @@ define([
             };
         },
 
-        createMathField: function() {
+        createMathField: function createMathField() {
             var self = this,
                 MQ = MathQuill.getInterface(2);
 
@@ -91,7 +91,7 @@ define([
             });
         },
 
-        createToolbar: function() {
+        createToolbar: function createToolbar() {
             var self = this,
                 availableTools = {
                     frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
@@ -185,7 +185,7 @@ define([
 
         id: -1,
 
-        getTypeIdentifier: function () {
+        getTypeIdentifier: function getTypeIdentifier() {
             return 'mathEntryInteraction';
         },
         /**
@@ -194,7 +194,7 @@ define([
          * @param {Node} dom
          * @param {Object} config - json
          */
-        initialize: function (id, dom, config) {
+        initialize: function initialize(id, dom, config) {
             var self = this;
 
             event.addEventMgr(this);
@@ -225,7 +225,7 @@ define([
          * @param {Object} interaction
          * @param {Object} response
          */
-        setResponse: function (response) {
+        setResponse: function setResponse(response) {
             if (response && response.base && response.base.string) {
                 this.mathField.latex(response.base.string);
             }
@@ -237,7 +237,7 @@ define([
          * @param {Object} interaction
          * @returns {Object}
          */
-        getResponse: function() {
+        getResponse: function getResponse() {
             return {
                 base: {
                     string : this.mathField.latex()
@@ -250,7 +250,7 @@ define([
          *
          * @param {Object} interaction
          */
-        resetResponse: function () {
+        resetResponse: function resetResponse() {
             this.mathField.latex('');
         },
         /**
@@ -260,7 +260,7 @@ define([
          *
          * @param {Object} interaction
          */
-        destroy: function () {
+        destroy: function destroy() {
             this.$toolbar.off('mousedown.qtiCommonRenderer');
             this.resetResponse();
             this.mathField.revert();
@@ -271,7 +271,7 @@ define([
          * @param {Object} interaction
          * @param {Object} state - json format
          */
-        setSerializedState: function (state) {
+        setSerializedState: function setSerializedState(state) {
             this.setResponse(state);
         },
 
@@ -282,7 +282,7 @@ define([
          * @param {Object} interaction
          * @returns {Object} json format
          */
-        getSerializedState: function () {
+        getSerializedState: function getSerializedState() {
             return this.getResponse();
         }
     };

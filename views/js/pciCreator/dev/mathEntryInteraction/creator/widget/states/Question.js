@@ -55,7 +55,7 @@ define([
         interaction.triggerPci('configChange', [interaction.getProperties()]);
     }
 
-    MathEntryInteractionStateQuestion.prototype.initForm = function(){
+    MathEntryInteractionStateQuestion.prototype.initForm = function initForm(){
 
         var _widget = this.widget,
             $form = _widget.$form,

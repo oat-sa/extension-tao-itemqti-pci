@@ -22,14 +22,14 @@ define([
 ], function(Widget, states){
     'use strict';
 
-    var AudioRecordingInteractionWidget = Widget.clone();
+    var MathEntryInteractionWidget = Widget.clone();
 
-    AudioRecordingInteractionWidget.initCreator = function(){
+    MathEntryInteractionWidget.initCreator = function initCreator(){
 
         this.registerStates(states);
 
         Widget.initCreator.call(this);
     };
 
-    return AudioRecordingInteractionWidget;
+    return MathEntryInteractionWidget;
 });

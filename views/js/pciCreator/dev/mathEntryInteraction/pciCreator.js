@@ -35,7 +35,7 @@ define([
          *
          * @returns {String}
          */
-        getTypeIdentifier : function(){
+        getTypeIdentifier : function getTypeIdentifier(){
             return _typeIdentifier;
         },
         /**
@@ -44,7 +44,7 @@ define([
          *
          * @returns {Object} Widget
          */
-        getWidget : function(){
+        getWidget : function getWidget(){
             return Widget;
         },
         /**
@@ -53,7 +53,7 @@ define([
          *
          * @returns {Object}
          */
-        getDefaultProperties : function(){
+        getDefaultProperties : function getDefaultProperties(){
             return {
                 tool_frac:      true,
                 tool_sqrt:      true,
@@ -76,7 +76,7 @@ define([
          *
          * @returns {Object}
          */
-        afterCreate : function(pci){
+        afterCreate : function afterCreate(pci){
             //do some stuff
         },
         /**
@@ -84,7 +84,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupTemplate : function(){
+        getMarkupTemplate : function getMarkupTemplate(){
             return markupTpl;
         },
         /**
@@ -92,7 +92,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupData : function(pci, defaultData){
+        getMarkupData : function getMarkupData(pci, defaultData){
             defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
