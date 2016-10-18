@@ -1,3 +1,21 @@
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ *
+ */
 define([
     'jquery',
     'i18n',
@@ -7,14 +25,16 @@ define([
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
     'async',
+    'ui/dialog/confirm',
     'ui/deleter',
     'ui/feedback',
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, deleter, feedback){
+], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, confirmBox, deleter, feedback){
+    'use strict';
 
     var ns = '.pcimanager';
 
@@ -67,7 +87,6 @@ define([
 
         //load list of custom interactions from server
         loadListingFromServer(function(data){
-
             //note : init as empty object and not array otherwise _.size will fail later
             listing = _.size(data) ? data : {};
             updateListing(data);
@@ -197,9 +216,10 @@ define([
             var id = interactionHook.typeIdentifier;
 
             listing[id] = interactionHook;
-
-            ciRegistry.register([interactionHook]);
-            ciRegistry.loadOne(id, function(){
+            
+            $container.trigger('added' + ns, [interactionHook]);
+            
+            ciRegistry.loadCreators(true).then(function(){
                 var data = ciRegistry.getAuthoringData(id);
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
@@ -219,8 +239,6 @@ define([
                     throw 'invalid authoring data for custom interaction';
                 }
             });
-
-            $container.trigger('added' + ns, [interactionHook]);
         }
 
         function initUploader(){
@@ -296,16 +314,34 @@ define([
 
             function verify(file, cb){
 
-                var ok = true;
-
                 $uploadForm.sendfile({
                     url : _urls.verify,
                     file : file,
                     loaded : function(r){
-
+                        
+                        function done(ok){
+                            if(ok){
+                                selectedFiles[file.name] = {
+                                    typeIdentifier : r.typeIdentifier,
+                                    label : r.label,
+                                    version : r.version
+                                };
+                            }
+                            cb(ok);
+                        }
+                
                         if(r.valid){
                             if(r.exists){
-                                ok = window.confirm(__('There is already one interaction with the same identifier "%s" (label : "%s"). \n\n Do you want to override the existing one ?', r.typeIdentifier, r.label, r.label));
+                                confirmBox(
+                                    __('There is already one interaction with the same identifier "%s" (label : "%s") and same version : %s. Do you want to override the existing one ?', r.typeIdentifier, r.label, r.version),
+                                    function(){
+                                        done(true);
+                                    },function(){
+                                        done(false);
+                                    });
+                            }else{
+                                //@todo if version higher, notify user that the existing version will be updated by a new one
+                                done(true);
                             }
                         }else{
                             if(_.isArray(r.package)){
@@ -315,21 +351,10 @@ define([
                                     }
                                 });
                             }
-                            ok = false;
+                            done(false);
                         }
-
-                        if(ok){
-                            selectedFiles[file.name] = {
-                                typeIdentifier : r.typeIdentifier,
-                                label : r.label
-                            };
-                        }
-
-                        cb(ok);
                     },
                     failed : function(message){
-
-
                         cb(new Error(message));
                     }
                 });
