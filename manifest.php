@@ -20,7 +20,9 @@
  */
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
-use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
+use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
+use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
@@ -29,10 +31,10 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '1.1.0',
+    'version' => '1.2.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
-        'taoQtiItem' => '>=5.0.0'
+        'taoQtiItem' => '>=5.13.0'
     ),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
@@ -50,7 +52,9 @@ return array(
 			RegisterPciModel::class,
 			SetQtiCreatorConfig::class,
 			RegisterClientProvider::class,
-			RegisterPci::class,
+			RegisterPciLiquid::class,
+			RegisterPciLikertScale::class,
+            RegisterPciMathEntry::class
 		)
     ),
     'uninstall' => array(

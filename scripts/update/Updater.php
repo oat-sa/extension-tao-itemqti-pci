@@ -22,7 +22,9 @@
 namespace oat\qtiItemPci\scripts\update;
 
 use oat\generis\model\OntologyAwareTrait;
-use oat\qtiItemPci\scripts\install\RegisterPci;
+use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
+use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
+use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
@@ -57,8 +59,8 @@ class Updater extends \common_ext_ExtensionUpdater
             $registerClientProvider = new RegisterClientProvider();
             $registerClientProvider([]);
 
-            $registerPortableElement = new RegisterPci();
-            $registerPortableElement([]);
+            call_user_func(new RegisterPciLikertScale(), ['0.2.0']);
+            call_user_func(new RegisterPciLiquid(), ['0.2.0']);
 
             $testManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
             $QTIManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
@@ -75,7 +77,7 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         if($this->isVersion('1.0.0')){
-            call_user_func(new RegisterPci(), []);
+            call_user_func(new RegisterPciMathEntry(), ['0.1.0']);
             $this->setVersion('1.1.0');
         }
     }
