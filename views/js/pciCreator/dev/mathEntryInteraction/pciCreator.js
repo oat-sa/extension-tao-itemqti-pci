@@ -21,10 +21,9 @@
 
 define([
     'lodash',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'mathEntryInteraction/creator/widget/Widget',
     'tpl!mathEntryInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+], function(_, Widget, markupTpl){
     'use strict';
 
     var _typeIdentifier = 'mathEntryInteraction';
