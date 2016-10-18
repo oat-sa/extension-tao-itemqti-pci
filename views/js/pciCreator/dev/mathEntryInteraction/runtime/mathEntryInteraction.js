@@ -37,6 +37,9 @@ define([
 
     var mathEntryInteraction = {
 
+        /**
+         * Render PCI
+         */
         render: function render(config) {
             this.initConfig(config);
 
@@ -45,6 +48,7 @@ define([
         },
 
         /**
+         * Initialise configuration
          *
          * @param {Object} config
          * @param {Boolean} config.tool_toolId - is the given tool enabled?
@@ -77,6 +81,9 @@ define([
             };
         },
 
+        /**
+         * transform a DOM element into a MathQuill Field
+         */
         createMathField: function createMathField() {
             var self = this,
                 MQ = MathQuill.getInterface(2);
@@ -91,6 +98,9 @@ define([
             });
         },
 
+        /**
+         * Create the toolbar markup with event attached
+         */
         createToolbar: function createToolbar() {
             var self = this,
                 availableTools = {
@@ -124,6 +134,11 @@ define([
             this.$toolbar.append(createToolGroup('comparison'));
             this.$toolbar.append(createToolGroup('operands'));
 
+            /**
+             * Create a group of buttons
+             * @param {String} groupId
+             * @returns {JQuery|string} the created element or an empty string
+             */
             function createToolGroup(groupId) {
                 var $toolGroup = $('<div>', {
                         'class': 'math-entry-toolgroup',
@@ -144,6 +159,15 @@ define([
                 return (activeTools > 0) ? $toolGroup : '';
             }
 
+            /**
+             * Create a single button
+             * @param {Object} config
+             * @param {String} config.id    - id of the tool
+             * @param {String} config.latex - latex code to be generated
+             * @param {String} config.fn    - Mathquill function to be called (ie. cmd or write)
+             * @param {String} config.label - label of the rendered button
+             * @returns {jQuery} - the created button
+             */
             function createTool(config) {
                 return $('<div>', {
                     'class': 'math-entry-tool',

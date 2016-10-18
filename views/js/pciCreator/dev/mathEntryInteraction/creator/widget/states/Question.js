@@ -50,6 +50,12 @@ define([
         containerEditor.destroy($prompt);
     });
 
+    /**
+     * Callback for configuration change
+     * @param {Object} interaction - the current interaction
+     * @param {String} value - new value of the changed property
+     * @param {String} name - changed property
+     */
     function configChangeCallBack(interaction, value, name) {
         interaction.prop(name, value);
         interaction.triggerPci('configChange', [interaction.getProperties()]);
