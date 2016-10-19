@@ -1,0 +1,119 @@
+<div class="panel">
+    <label for="" class="has-icon">{{__ "Response identifier"}}</label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
+    <div class="tooltip-content">{{__ 'The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore ("_") and contain only Letters, underscores, hyphens ("-"), period (".", a.k.a. full-stop), Digits, CombiningChars and Extenders.'}}</div>
+
+    <input type="text"
+           name="identifier"
+           value="{{identifier}}"
+           placeholder="e.g. RESPONSE"
+           data-validate="$notEmpty; $qtiIdentifier; $availableIdentifier(serial={{serial}});">
+</div>
+
+<hr />
+<h3>{{__ "Functions"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="tool_sqrt" type="checkbox" {{#if tool_sqrt}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "square root"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_frac" type="checkbox" {{#if tool_frac}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "fraction"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_exp" type="checkbox" {{#if tool_exp}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "exponent"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_log" type="checkbox" {{#if tool_log}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "log"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_ln" type="checkbox" {{#if tool_ln}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "ln"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_e" type="checkbox" {{#if tool_e}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#8494;
+    </label>
+</div>
+
+<hr />
+<h3>{{__ "Trigonometry"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="tool_pi" type="checkbox" {{#if tool_pi}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &pi;
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_cos" type="checkbox" {{#if tool_cos}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "cosinus"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_sin" type="checkbox" {{#if tool_sin}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "sinus"}}
+    </label>
+</div>
+
+<hr />
+<h3>{{__ "Comparison"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="tool_lte" type="checkbox" {{#if tool_lte}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "lower than or equal"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_gte" type="checkbox" {{#if tool_gte}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "greater than or equal"}}
+    </label>
+</div>
+
+<hr />
+<h3>{{__ "Operands"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="tool_times" type="checkbox" {{#if tool_times}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "times"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_divide" type="checkbox" {{#if tool_divide}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "divide"}}
+    </label>
+</div>
+
