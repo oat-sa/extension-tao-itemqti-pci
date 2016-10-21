@@ -1,4 +1,4 @@
-module.exports = function(grunt) { 
+module.exports = function(grunt) {
 
     var sass    = grunt.config('sass') || {};
     var watch   = grunt.config('watch') || {};
@@ -9,12 +9,16 @@ module.exports = function(grunt) {
         options : {
             loadPath : ['../scss/', root + 'scss/inc']
         },
-        files : {}        
+        files : {}
     };
     sass.qtiitempci.files[root + 'css/pci-manager.css'] = root + 'scss/pci-manager.scss';
+    sass.qtiitempci.files[root + 'js/pciCreator/dev/mathEntryInteraction/runtime/css/mathEntryInteraction.css'] = root + 'js/pciCreator/dev/mathEntryInteraction/runtime/scss/mathEntryInteraction.scss';
 
     watch.qtiitempcisass = {
-        files : [root + 'scss/**/*.scss'],
+        files : [
+            root + 'scss/**/*.scss',
+            root + 'js/pciCreator/dev/**/*.scss'
+        ],
         tasks : ['sass:qtiitempci', 'notify:qtiitempcisass'],
         options : {
             debounceDelay : 1000
@@ -23,7 +27,7 @@ module.exports = function(grunt) {
 
     notify.qtiitempcisass = {
         options: {
-            title: 'Grunt SASS', 
+            title: 'Grunt SASS',
             message: 'SASS files compiled to CSS'
         }
     };
