@@ -2,28 +2,23 @@ define([
     'jquery',
     'lodash',
     'taoQtiItem/runner/qtiItemRunner',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
+    'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
     'json!qtiItemPci/test/audioRecordingInteraction/data/qti.json'
-], function ($, _, qtiItemRunner, itemData){
+], function ($, _, qtiItemRunner, ciRegistry, pciTestProvider,  itemData){
 
     'use strict';
 
     var runner;
     var fixtureContainerId = 'item-container';
 
-    //override asset loading in order to resolve it from the runtime location
-    var strategies = [{
-        name : 'portableElementLocation',
-        handle : function handlePortableElementLocation(url){
-            if(/audioRecordingInteraction/.test(url.toString())){
-                return '../../../qtiItemPci/views/js/pciCreator/dev/' + url.toString();
-            }
-        }
-    }, {
-        name : 'default',
-        handle : function defaultStrategy(url){
-            return url.toString();
-        }
-    }];
+    //manually register the pci from its manifest
+    pciTestProvider.addManifestPath(
+        'audioRecordingInteraction',
+        'qtiItemPci/pciCreator/dev/audioRecordingInteraction/pciCreator.json');
+    ciRegistry.resetProviders();
+    ciRegistry.registerProvider(pciTestProvider.getModuleName());
+
 
     module('Audio Recording Interaction', {
         teardown : function(){
@@ -53,7 +48,6 @@ define([
 
                 QUnit.start();
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -151,7 +145,6 @@ define([
             .on('error', function (error){
                 $('#error-display').html(error);
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -207,7 +200,6 @@ define([
             .on('error', function (error){
                 $('#error-display').html(error);
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -258,7 +250,6 @@ define([
                     QUnit.start();
                 }
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
@@ -282,7 +273,6 @@ define([
             .on('error', function (error){
                 $('#error-display').html(error);
             })
-            .assets(strategies)
             .init()
             .render($container);
     });
