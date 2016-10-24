@@ -22,6 +22,7 @@
 namespace oat\qtiItemPci\scripts\update;
 
 use oat\generis\model\OntologyAwareTrait;
+use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
@@ -81,6 +82,11 @@ class Updater extends \common_ext_ExtensionUpdater
         if($this->isVersion('1.1.0')){
             call_user_func(new RegisterPciMathEntry(), ['0.1.0']);
             $this->setVersion('1.2.0');
+        }
+
+        if($this->isVersion('1.2.0')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.1.0']);
+            //$this->setVersion('1.3.0');
         }
     }
 }

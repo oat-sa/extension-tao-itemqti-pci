@@ -848,8 +848,9 @@ define([
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
+         * @param {Object} asset manager
          */
-        initialize: function (id, dom, config) {
+        initialize: function (id, dom, config, assetManager) {
             var self = this;
 
             event.addEventMgr(this);
@@ -863,7 +864,9 @@ define([
             this.$controlsContainer = this.$container.find('.audio-rec > .controls');
             this.$progressContainer = this.$container.find('.audio-rec > .progress');
             this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
-
+            this.$meterContainer.find('.mic').append($('<img>',
+                { src: assetManager.resolve('audioRecordingInteraction/runtime/img/mic.svg')}
+            ));
             this.render(config);
 
             //tell the rendering engine that I am ready

@@ -20,6 +20,7 @@
  */
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
+use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
@@ -31,7 +32,7 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '1.2.0',
+    'version' => '1.3.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
         'taoQtiItem' => '>=5.13.0'
@@ -54,7 +55,8 @@ return array(
 			RegisterClientProvider::class,
 			RegisterPciLiquid::class,
 			RegisterPciLikertScale::class,
-            RegisterPciMathEntry::class
+            RegisterPciMathEntry::class,
+            RegisterPciAudioRecording::class
 		)
     ),
     'uninstall' => array(

@@ -1,24 +1,38 @@
 {
     "typeIdentifier": "audioRecordingInteraction",
     "label": "Audio recording",
+    "short": "Audio",
     "description": "Allow test taker to record audio",
-    "version": "0.1",
+    "version": "0.1.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
-    "libraries": [
-        "IMSGlobal/jquery_2_1_1"
-    ],
-    "css": [
-        "./runtime/css/audioRecordingInteraction.css"
-    ],
-    "entryPoint": "./runtime/audioRecordingInteraction.js",
     "tags": [
         "audio"
     ],
-    "icon": "./creator/img/icon.svg",
-    "short": "Audio",
     "response": {
         "cardinality": "record"
     },
-    "debug" : true
+    "runtime" : {
+        "hook" : "./runtime/audioRecordingInteraction.js",
+        "libraries" : [
+            "IMSGlobal/jquery_2_1_1"
+        ],
+        "stylesheets" : [
+            "./runtime/css/audioRecordingInteraction.css"
+        ],
+        "mediaFiles" : [
+            "./runtime/img/mic.svg"
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./pciCreator.js",
+        "libraries" : [
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/widget/Widget.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/states.js"
+        ]
+    }
 }
