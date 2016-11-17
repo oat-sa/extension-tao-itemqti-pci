@@ -78,7 +78,7 @@ define([
                     times:  toBoolean(config.tool_times,    true),
                     divide: toBoolean(config.tool_divide,   true)
                 },
-                spaceBehavesLikeTab : toBoolean(config.spaceBehavesLikeTab,   true)
+                authorizeWhiteSpace : toBoolean(config.authorizeWhiteSpace,   false)
             };
         },
 
@@ -89,13 +89,15 @@ define([
             var self = this,
                 MQ = MathQuill.getInterface(2),
                 config = {
-                    spaceBehavesLikeTab: this.config.spaceBehavesLikeTab,
+                    spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                     handlers: {
                         edit: function() {
                             self.trigger('responseChange');
                         }
                     }
                 };
+
+            console.log(this.config);
 
             if(this.mathField && this.mathField instanceof MathQuill){
                 //if mathquill element already exists, update the config

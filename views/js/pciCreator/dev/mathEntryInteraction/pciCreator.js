@@ -67,7 +67,7 @@ define([
                 tool_gte:       true,
                 tool_times:     true,
                 tool_divide:    true,
-                spaceBehavesLikeTab: true
+                authorizeWhiteSpace: false
             };
         },
         /**

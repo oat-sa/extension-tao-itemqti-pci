@@ -15,9 +15,9 @@
 
 <div>
     <label class="panel">
-        <input name="spaceBehavesLikeTab" type="checkbox" {{#if spaceBehavesLikeTab}}checked="checked"{{/if}}/>
+        <input name="authorizeWhiteSpace" type="checkbox" {{#if authorizeWhiteSpace}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "prevent white space"}}
+        {{__ "authorize white space"}}
     </label>
 </div>
 <hr />

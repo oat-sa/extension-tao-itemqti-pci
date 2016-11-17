@@ -93,7 +93,7 @@ define([
             tool_gte:       toBoolean(interaction.prop('tool_gte'),     true),
             tool_times:     toBoolean(interaction.prop('tool_times'),   true),
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
-            spaceBehavesLikeTab:    toBoolean(interaction.prop('spaceBehavesLikeTab'),  true)
+            authorizeWhiteSpace:    toBoolean(interaction.prop('authorizeWhiteSpace'),  false)
         }));
 
         //init form javascript
@@ -118,7 +118,7 @@ define([
             tool_gte:       configChangeCallBack,
             tool_times:     configChangeCallBack,
             tool_divide:    configChangeCallBack,
-            spaceBehavesLikeTab:    configChangeCallBack
+            authorizeWhiteSpace:    configChangeCallBack
         });
     };
 
