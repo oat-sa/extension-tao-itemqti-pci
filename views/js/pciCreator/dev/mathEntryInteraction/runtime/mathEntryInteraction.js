@@ -97,8 +97,6 @@ define([
                     }
                 };
 
-            console.log(this.config);
-
             if(this.mathField && this.mathField instanceof MathQuill){
                 //if mathquill element already exists, update the config
                 this.mathField.config(config);
