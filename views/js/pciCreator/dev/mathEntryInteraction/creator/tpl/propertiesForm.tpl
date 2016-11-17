@@ -11,6 +11,17 @@
 </div>
 
 <hr />
+<h3>{{__ "Special Settings"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="spaceBehavesLikeTab" type="checkbox" {{#if spaceBehavesLikeTab}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "prevent white space"}}
+    </label>
+</div>
+<hr />
+
 <h3>{{__ "Functions"}}</h3>
 
 <div>
