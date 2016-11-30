@@ -322,7 +322,7 @@ define([
             $control = $('<div>', {
                 'class': 'audiorec-control',
                 'data-identifier': config.id,
-                text: config.label
+                html: config.label
             });
 
         $control.appendTo(config.container);
@@ -712,7 +712,7 @@ define([
             // Record button
             record = controlFactory({
                 id: 'record',
-                label: 'Record',
+                label: '<span class="icon-radio-checked2"> </span>',
                 defaultState: 'enabled',
                 container: this.$controlsContainer
             });
@@ -738,7 +738,7 @@ define([
             // Stop button
             stop = controlFactory({
                 id: 'stop',
-                label: 'Stop',
+                label: '<span class="icon-stop2"> </span>',
                 defaultState: 'disabled',
                 container: this.$controlsContainer
             });
@@ -767,7 +767,7 @@ define([
             if (this.config.allowPlayback === true) {
                 play = controlFactory({
                     id: 'play',
-                    label: 'Play',
+                    label: '<span class="icon-play3"> </span>',
                     defaultState: 'disabled',
                     container: this.$controlsContainer
                 });
@@ -797,7 +797,7 @@ define([
             if (this.config.maxRecords !== 1) {
                 reset = controlFactory({
                     id: 'reset',
-                    label: 'Try again',
+                    label: '<span class="icon-undo"> </span>',
                     defaultState: 'disabled',
                     container: this.$controlsContainer
                 });

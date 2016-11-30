@@ -21,7 +21,11 @@
             "./runtime/css/audioRecordingInteraction.css"
         ],
         "mediaFiles" : [
-            "./runtime/img/mic.svg"
+            "./runtime/img/mic.svg",
+            "./runtime/fonts/icomoon.eot",
+            "./runtime/fonts/icomoon.svg",
+            "./runtime/fonts/icomoon.ttf",
+            "./runtime/fonts/icomoon.woff"
         ]
     },
     "creator" : {

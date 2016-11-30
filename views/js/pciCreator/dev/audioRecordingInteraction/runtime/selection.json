@@ -1,0 +1,170 @@
+{
+  "IcoMoonType": "selection",
+  "icons": [
+    {
+      "icon": {
+        "paths": [
+          "M512 64c-141.384 0-269.376 57.32-362.032 149.978l-149.968-149.978v384h384l-143.532-143.522c69.496-69.492 165.492-112.478 271.532-112.478 212.068 0 384 171.924 384 384 0 114.696-50.292 217.636-130.018 288l84.666 96c106.302-93.816 173.352-231.076 173.352-384 0-282.77-229.23-512-512-512z"
+        ],
+        "tags": [
+          "undo",
+          "ccw",
+          "arrow"
+        ],
+        "defaultCode": 59749,
+        "grid": 16,
+        "attrs": []
+      },
+      "attrs": [],
+      "properties": {
+        "ligatures": "undo, ccw",
+        "name": "undo",
+        "order": 5,
+        "id": 102,
+        "prevSize": 32,
+        "code": 59749
+      },
+      "setIdx": 0,
+      "setId": 1,
+      "iconIdx": 101
+    },
+    {
+      "icon": {
+        "paths": [
+          "M192 128l640 384-640 384z"
+        ],
+        "tags": [
+          "play",
+          "player"
+        ],
+        "defaultCode": 59932,
+        "grid": 16,
+        "attrs": []
+      },
+      "attrs": [],
+      "properties": {
+        "ligatures": "play3, player8",
+        "name": "play3",
+        "order": 2,
+        "id": 285,
+        "prevSize": 32,
+        "code": 59932
+      },
+      "setIdx": 0,
+      "setId": 1,
+      "iconIdx": 284
+    },
+    {
+      "icon": {
+        "paths": [
+          "M128 128h768v768h-768z"
+        ],
+        "tags": [
+          "stop",
+          "player",
+          "square"
+        ],
+        "defaultCode": 59934,
+        "grid": 16,
+        "attrs": []
+      },
+      "attrs": [],
+      "properties": {
+        "ligatures": "stop2, player10",
+        "name": "stop2",
+        "order": 4,
+        "id": 287,
+        "prevSize": 32,
+        "code": 59934
+      },
+      "setIdx": 0,
+      "setId": 1,
+      "iconIdx": 286
+    },
+    {
+      "icon": {
+        "paths": [
+          "M512 0c-282.77 0-512 229.23-512 512s229.23 512 512 512 512-229.23 512-512-229.23-512-512-512zM512 896c-212.078 0-384-171.922-384-384s171.922-384 384-384c212.078 0 384 171.922 384 384s-171.922 384-384 384zM320 512c0-106.039 85.961-192 192-192s192 85.961 192 192c0 106.039-85.961 192-192 192s-192-85.961-192-192z"
+        ],
+        "tags": [
+          "radio-checked",
+          "radio-button"
+        ],
+        "defaultCode": 59988,
+        "grid": 16,
+        "attrs": []
+      },
+      "attrs": [],
+      "properties": {
+        "ligatures": "radio-checked, radio-button",
+        "name": "radio-checked",
+        "order": 7,
+        "id": 341,
+        "prevSize": 32,
+        "code": 59988
+      },
+      "setIdx": 0,
+      "setId": 1,
+      "iconIdx": 340
+    },
+    {
+      "icon": {
+        "paths": [
+          "M512 0c-282.77 0-512 229.23-512 512s229.23 512 512 512 512-229.23 512-512-229.23-512-512-512zM512 640c-70.692 0-128-57.306-128-128 0-70.692 57.308-128 128-128 70.694 0 128 57.308 128 128 0 70.694-57.306 128-128 128z"
+        ],
+        "tags": [
+          "radio-checked",
+          "radio-button"
+        ],
+        "defaultCode": 59989,
+        "grid": 16,
+        "attrs": []
+      },
+      "attrs": [],
+      "properties": {
+        "ligatures": "radio-checked2, radio-button2",
+        "name": "radio-checked2",
+        "order": 6,
+        "id": 342,
+        "prevSize": 32,
+        "code": 59989
+      },
+      "setIdx": 0,
+      "setId": 1,
+      "iconIdx": 341
+    }
+  ],
+  "height": 1024,
+  "metadata": {
+    "name": "icomoon"
+  },
+  "preferences": {
+    "showGlyphs": true,
+    "showQuickUse": true,
+    "showQuickUse2": true,
+    "showSVGs": true,
+    "fontPref": {
+      "prefix": "icon-",
+      "metadata": {
+        "fontFamily": "icomoon"
+      },
+      "metrics": {
+        "emSize": 1024,
+        "baseline": 6.25,
+        "whitespace": 50
+      },
+      "embed": false
+    },
+    "imagePref": {
+      "prefix": "icon-",
+      "png": true,
+      "useClassSelector": true,
+      "color": 0,
+      "bgColor": 16777215,
+      "classSelector": ".icon"
+    },
+    "historySize": 100,
+    "showCodes": true,
+    "gridSize": 16
+  }
+}
