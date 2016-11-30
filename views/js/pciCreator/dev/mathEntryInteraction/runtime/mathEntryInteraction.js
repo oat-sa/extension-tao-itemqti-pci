@@ -77,7 +77,8 @@ define([
                     gte:    toBoolean(config.tool_gte,      true),
                     times:  toBoolean(config.tool_times,    true),
                     divide: toBoolean(config.tool_divide,   true)
-                }
+                },
+                authorizeWhiteSpace : toBoolean(config.authorizeWhiteSpace,   false)
             };
         },
 
@@ -86,16 +87,23 @@ define([
          */
         createMathField: function createMathField() {
             var self = this,
-                MQ = MathQuill.getInterface(2);
-
-            this.mathField = MQ.MathField(this.$input.get(0), {
-                spaceBehavesLikeTab: true,
-                handlers: {
-                    edit: function() {
-                        self.trigger('responseChange');
+                MQ = MathQuill.getInterface(2),
+                config = {
+                    spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
+                    handlers: {
+                        edit: function() {
+                            self.trigger('responseChange');
+                        }
                     }
-                }
-            });
+                };
+
+            if(this.mathField && this.mathField instanceof MathQuill){
+                //if mathquill element already exists, update the config
+                this.mathField.config(config);
+            }else{
+                //if mathquill element does not exist yet, create it
+                this.mathField = MQ.MathField(this.$input.get(0), config);
+            }
         },
 
         /**
