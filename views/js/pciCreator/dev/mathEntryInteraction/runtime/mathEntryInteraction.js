@@ -77,9 +77,9 @@ define([
                     gte:    toBoolean(config.tool_gte,      true),
                     times:  toBoolean(config.tool_times,    true),
                     divide: toBoolean(config.tool_divide,   true),
-                    newline:toBoolean(config.tool_newline,  true)
                 },
-                authorizeWhiteSpace : toBoolean(config.authorizeWhiteSpace,   false)
+                allowNewLine:           toBoolean(config.allowNewLine,  false),
+                authorizeWhiteSpace:    toBoolean(config.authorizeWhiteSpace,   false)
             };
         },
 
@@ -125,15 +125,13 @@ define([
                     lte:    { label: '&le;',        latex: '\\le',      fn: 'write',    desc: 'Lower than or equal' },
                     gte:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: 'Greater than or equal' },
                     times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
-                    divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' },
-                    newline: { label: 'BR',    latex: '\\textcolor{black}{\\text{}}',     fn: 'write',      desc: 'Line break' }
+                    divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' }
                 },
                 availableToolGroups = {
                     functions:  ['sqrt', 'frac', 'exp', 'log', 'ln', 'e'],
                     trigo:      ['pi', 'sin', 'cos'],
                     comparison: ['lte', 'gte'],
-                    operands:   ['times', 'divide'],
-                    misc:       ['newline']
+                    operands:   ['times', 'divide']
                 };
 
 
@@ -144,7 +142,6 @@ define([
             this.$toolbar.append(createToolGroup('trigo'));
             this.$toolbar.append(createToolGroup('comparison'));
             this.$toolbar.append(createToolGroup('operands'));
-            this.$toolbar.append(createToolGroup('misc'));
 
             /**
              * Create a group of buttons
@@ -211,6 +208,13 @@ define([
                 }
 
                 self.mathField.focus();
+            });
+
+            this.$input.on('keypress.qtiCommonRenderer', function (e) {
+                var latex = '\\textcolor{black}{\\text{}}';
+                if (self.config.allowNewLine && e.keyCode === 13) {
+                    self.mathField.write(latex);
+                }
             });
         },
 

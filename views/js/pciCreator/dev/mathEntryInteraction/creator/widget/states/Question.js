@@ -93,6 +93,7 @@ define([
             tool_gte:       toBoolean(interaction.prop('tool_gte'),     true),
             tool_times:     toBoolean(interaction.prop('tool_times'),   true),
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
+            allowNewLine:           toBoolean(interaction.prop('allowNewLine'),  false),
             authorizeWhiteSpace:    toBoolean(interaction.prop('authorizeWhiteSpace'),  false)
         }));
 
@@ -118,6 +119,7 @@ define([
             tool_gte:       configChangeCallBack,
             tool_times:     configChangeCallBack,
             tool_divide:    configChangeCallBack,
+            allowNewLine:           configChangeCallBack,
             authorizeWhiteSpace:    configChangeCallBack
         });
     };
