@@ -302,6 +302,7 @@ define([
          */
         destroy: function destroy() {
             this.$toolbar.off('mousedown.qtiCommonRenderer');
+            this.$input.off('keypress.qtiCommonRenderer');
             this.resetResponse();
             this.mathField.revert();
         },
