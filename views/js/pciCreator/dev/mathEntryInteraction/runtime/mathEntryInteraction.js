@@ -76,9 +76,10 @@ define([
                     lte:    toBoolean(config.tool_lte,      true),
                     gte:    toBoolean(config.tool_gte,      true),
                     times:  toBoolean(config.tool_times,    true),
-                    divide: toBoolean(config.tool_divide,   true)
+                    divide: toBoolean(config.tool_divide,   true),
                 },
-                authorizeWhiteSpace : toBoolean(config.authorizeWhiteSpace,   false)
+                allowNewLine:           toBoolean(config.allowNewLine,  false),
+                authorizeWhiteSpace:    toBoolean(config.authorizeWhiteSpace,   false)
             };
         },
 
@@ -208,6 +209,13 @@ define([
 
                 self.mathField.focus();
             });
+
+            this.$input.on('keypress.qtiCommonRenderer', function (e) {
+                var latex = '\\textcolor{black}{\\text{}}';
+                if (self.config.allowNewLine && e.keyCode === 13) {
+                    self.mathField.write(latex);
+                }
+            });
         },
 
 
@@ -294,6 +302,7 @@ define([
          */
         destroy: function destroy() {
             this.$toolbar.off('mousedown.qtiCommonRenderer');
+            this.$input.off('keypress.qtiCommonRenderer');
             this.resetResponse();
             this.mathField.revert();
         },
