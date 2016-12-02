@@ -19,6 +19,13 @@
         <span class="icon-checkbox"></span>
         {{__ "authorize white space"}}
     </label>
+    <label class="panel">
+        <input name="allowNewLine" type="checkbox" {{#if allowNewLine}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        <span class="txt-error"><strong>{{__ "EXPERIMENTAL ONLY: "}}</strong></span>
+        <br />allow line break
+
+    </label>
 </div>
 <hr />
 

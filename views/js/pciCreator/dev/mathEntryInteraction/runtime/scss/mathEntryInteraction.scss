@@ -76,6 +76,11 @@ $buttonFont: "Times New Roman", Times, serif;
 
     }
 
+    // hack for newline
+    .mq-textcolor .mq-text-mode {
+      display: block;
+    }
+
   }
 }
 
