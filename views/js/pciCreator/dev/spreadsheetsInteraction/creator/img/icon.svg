@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="190"
+        height="245"
+        id="spreadsheets"
+        version="1.1">
+
+    <!--grid-->
+    <g>
+        <rect x="50" y="100" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="80" y="100" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="110" y="100" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+
+        <rect x="50" y="120" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="80" y="120" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="110" y="120" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+
+        <rect x="50" y="140" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="80" y="140" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="110" y="140" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+
+        <rect x="50" y="160" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="80" y="160" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+        <rect x="110" y="160" width="30" height="20" stroke="black" fill="none" stroke-width="4"/>
+    </g>
+
+    <!--triangle corner-->
+    <path d="M 125 65 l 0 -55 l 55 55 l -55 0" fill="black"/>
+
+    <!--border-->
+    <path
+        d="
+            M95,15
+            L125,15
+            Q135,15 140,20
+            L165,45
+            Q175,55 175,65
+            L175,220
+            Q175,230 165,230
+            L25,230
+            Q15,230 15,220
+            L15,25
+            Q15,15 25,15
+            L95,15
+        "
+        stroke="black"
+        stroke-width="10"
+        fill="none"
+    />
+
+    <path d="M175,70 Q175,60 165,60" stroke="black" stroke-width="10"/>
+    <path d="M120,15 Q130,15 130,25" stroke="black" stroke-width="10"/>
+
+</svg>
