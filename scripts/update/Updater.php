@@ -90,8 +90,13 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         if($this->isVersion('1.3.0')){
-            call_user_func(new RegisterPciAudioRecording(), ['0.1.0']);
+            call_user_func(new RegisterPciMathEntry(), ['0.3.0']);
             $this->setVersion('1.4.0');
+        }
+
+        if($this->isVersion('1.4.0')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.1.0']);
+            $this->setVersion('1.5.0');
         }
     }
 }
