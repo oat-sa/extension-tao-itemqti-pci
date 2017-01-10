@@ -435,6 +435,8 @@ define([
         canvas = document.createElement('canvas');
         canvas.height = height;
         canvas.width = width;
+
+        config.$container.empty();
         config.$container.append($(canvas));
 
         canvasCtx = canvas.getContext('2d');
