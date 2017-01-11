@@ -161,7 +161,6 @@ define([
      * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
      * @param {Number}  config.maxRecordingTime - in seconds
      * @returns {Object} - wrapper for getUserMedia / MediaRecorder
-     * @throws {Error} - if getUserMedia or MediaRecorder is not available in current browser
      */
     function recorderFactory(config) {
         var MediaRecorder = window.MediaRecorder,
@@ -180,10 +179,6 @@ define([
             frequencyArray;
 
         setGetUserMedia();
-
-        if (typeof MediaRecorder === 'undefined') {
-            throw new Error('MediaRecorder API not supported. Please use a compatible browser');
-        }
 
         // Prefered encoding format order:
         // webm/opus, ogg/opus, webm, ogg, default
