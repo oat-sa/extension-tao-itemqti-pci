@@ -730,12 +730,8 @@ define([
                 }
             }.bind(record));
             record.on('updatestate', function() {
-                if (self.player.getState() === playerStates.CREATED) {
-                    if (self.recorder.getState() === recorderStates.RECORDING) {
-                        this.activate();
-                    } else {
-                        this.enable();
-                    }
+                if (self.player.getState() === playerStates.CREATED && self.recorder.getState() === recorderStates.IDLE) {
+                    this.enable();
                 } else {
                     this.disable();
                 }
@@ -790,8 +786,6 @@ define([
                             this.enable();
                             break;
                         case playerStates.PLAYING:
-                            this.activate();
-                            break;
                         default:
                             this.disable();
                             break;
