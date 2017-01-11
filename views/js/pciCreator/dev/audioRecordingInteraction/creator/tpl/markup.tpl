@@ -7,6 +7,5 @@
         </div>
         <div class="progress"> </div>
         <div class="controls"> </div>
-        <div class="instructions"> </div>
     </div>
 </div>

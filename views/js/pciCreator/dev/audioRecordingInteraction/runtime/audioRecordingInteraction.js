@@ -345,6 +345,9 @@ define([
             },
             updateState: function() {
                 this.trigger('updatestate');
+            },
+            updateLabel: function updateLabel(label) {
+                $control.html(label);
             }
         };
         event.addEventMgr(control);
@@ -486,6 +489,9 @@ define([
 
         render: function render(config) {
             // initialization
+            this._recording = null;
+            this._recordsAttempts = 0;
+
             this.initConfig(config);
             this.initRecorder();
             this.initPlayer();
@@ -658,7 +664,6 @@ define([
                         data: base64Data
                     };
                 self.updateResponse(recording, self._recordsAttempts + 1);
-                self.displayRemainingAttempts();
             };
         },
 
@@ -671,18 +676,14 @@ define([
         },
 
         displayRemainingAttempts: function displayRemainingAttempts() {
-            var remaining = this.config.maxRecords - this._recordsAttempts,
-                message;
+            var remaining = this.config.maxRecords - this._recordsAttempts - 1,
+                resetLabel = controlIconFactory(this.assetManager, 'reset');
 
             if (this.config.maxRecords > 1) {
-                if (remaining === 0) {
-                    message = 'You have no more attempts left';
-                } else {
-                    message = 'Remaining attempts: ' + remaining;
-                }
-                this.$instructionsContainer.html(message);
-            } else {
-                this.$instructionsContainer.empty();
+                resetLabel += ' (' + remaining + ')';
+            }
+            if (this.controls.reset) {
+                this.controls.reset.updateLabel(resetLabel);
             }
         },
 
@@ -802,6 +803,7 @@ define([
                     if (this.getState() === controlStates.ENABLED) {
                         self.resetRecording();
                     }
+                    self.displayRemainingAttempts();
                 }.bind(reset));
                 reset.on('updatestate', function() {
                     if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
@@ -858,7 +860,6 @@ define([
             this.assetManager = assetManager;
 
             this.$container = $(dom);
-            this.$instructionsContainer = this.$container.find('.audio-rec > .instructions');
             this.$controlsContainer = this.$container.find('.audio-rec > .controls');
             this.$progressContainer = this.$container.find('.audio-rec > .progress');
             this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
@@ -910,8 +911,6 @@ define([
                     // restore interaction state
                     base64Prefix = 'data:' + recording.mime + ';base64,';
                     this.player.load(base64Prefix + recording.data);
-
-                    this.displayRemainingAttempts();
                 }
             }
         },
