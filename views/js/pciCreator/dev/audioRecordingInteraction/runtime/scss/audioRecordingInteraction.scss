@@ -114,6 +114,7 @@ $playback: whiten($info, .3);
         }
       }
 
+      &:active,
       &.active {
         background-color: $activeBg;
         color: $activeTxt;
