@@ -57,6 +57,11 @@ $playback: whiten($info, .3);
 
       display: flex;
 
+      &.record {
+        border-color: $activeBg;
+        background-color: whiten($activeBg, 0.9);
+      }
+
       .leds {
         flex: 0 0 10px;
       }
@@ -131,6 +136,24 @@ $playback: whiten($info, .3);
 
     // Progress bar
 
+    @mixin progressBarColor($borderColor, $valueColor, $bgColor) {
+      border: $borderColor 2px solid;
+
+      // progress value color
+      &::-webkit-progress-value {
+        background-color: $valueColor;
+      }
+      &::-moz-progress-bar {
+        background-color: $valueColor;
+      }
+
+      // background color
+      color: $bgColor; // FF
+      &::-webkit-progress-bar {
+        background-color: whiten($bgColor, .5); // Chrome
+      }
+    }
+
     progress {
       -webkit-appearance: none;
       -moz-appearance: none;
@@ -138,36 +161,15 @@ $playback: whiten($info, .3);
       width: 50%;
       height: 10px;
       border-radius: 5px;
-      border: darken($disabledBg, .2) 2px solid;
 
-      // background color
-      color: $disabledBg; // FF
-      &::-webkit-progress-bar {
-        background-color: whiten($disabledBg, .5); // Chrome
-      }
-
-      // progress bar color
+      @include progressBarColor(darken($disabledBg, .2), $disabledBg, $disabledBg);
 
       &.record {
-        border-color: $record;
-
-        &::-webkit-progress-value {
-          background-color: $record;
-        }
-        &::-moz-progress-bar {
-          background-color: $record;
-        }
+        @include progressBarColor($record, $record, whiten($record, 0.9));
       }
 
       &.playback {
-        border-color: $playback;
-
-        &::-webkit-progress-value {
-          background-color: $playback;
-        }
-        &::-moz-progress-bar {
-          background-color: $playback;
-        }
+        @include progressBarColor($playback, $playback, whiten($playback, 0.9));
       }
     }
 

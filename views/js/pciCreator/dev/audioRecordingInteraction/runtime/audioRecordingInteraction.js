@@ -558,6 +558,8 @@ define([
                 self.progressBar.setValue(0);
                 self.progressBar.setMax((duration / 1000).toFixed(1));
                 self.progressBar.setStyle('');
+
+                self.$meterContainer.removeClass('record');
             });
 
             this.recorder.on('statechange', function() {
@@ -617,6 +619,7 @@ define([
             function startForReal() {
                 self.recorder.start();
                 if (self.config.maxRecordingTime) {
+                    self.$meterContainer.addClass('record');
                     self.progressBar.setStyle('record');
                     self.progressBar.setMax(self.config.maxRecordingTime);
                 }
