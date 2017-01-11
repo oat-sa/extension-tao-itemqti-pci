@@ -21,6 +21,7 @@
             "./runtime/css/audioRecordingInteraction.css"
         ],
         "mediaFiles" : [
+            "./runtime/img/controls.svg",
             "./runtime/img/mic.svg"
         ]
     },

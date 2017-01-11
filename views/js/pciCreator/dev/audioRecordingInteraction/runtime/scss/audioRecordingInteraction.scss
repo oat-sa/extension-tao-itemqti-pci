@@ -86,12 +86,12 @@ $playback: whiten($info, .3);
       overflow: visible;
       border: none;
       display: inline-block;
-      line-height: 2.5;
-      padding: 0 15px;
+      line-height: initial;
+      padding: 8px 16px;
       font-weight: normal;
       font-style: normal;
       text-align: center;
-      height: 35px;
+      height: auto;
 
       &.disabled {
         background-color: $disabledBg;
@@ -99,11 +99,13 @@ $playback: whiten($info, .3);
         cursor: not-allowed !important;
         opacity: .55 !important;
         color: $disabledTxt !important;
+        fill: $disabledTxt !important;
       }
 
       &.enabled {
         background-color: $enabledBg;
         color: $enabledTxt;
+        fill: $enabledTxt;
         text-shadow: 1px 1px 0 $enabledTxtShadow;
         cursor: pointer !important;
 
@@ -115,10 +117,15 @@ $playback: whiten($info, .3);
       &.active {
         background-color: $activeBg;
         color: $activeTxt;
+        fill: $activeTxt;
         text-shadow: 1px 1px 0 $activeTxtShadow;
         cursor: not-allowed !important;
       }
 
+      svg {
+        width: 16px;
+        height: 16px;
+      }
     }
 
     // Progress bar

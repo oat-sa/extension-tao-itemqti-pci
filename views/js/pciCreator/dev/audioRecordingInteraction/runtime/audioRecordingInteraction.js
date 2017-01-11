@@ -319,10 +319,10 @@ define([
     function controlFactory(config) {
         var state,
             control,
-            $control = $('<div>', {
+            $control = $('<button>', {
                 'class': 'audiorec-control',
                 'data-identifier': config.id,
-                text: config.label
+                html: config.label
             });
 
         $control.appendTo(config.container);
@@ -359,6 +359,13 @@ define([
         });
 
         return control;
+    }
+
+    function controlIconFactory(assetManager, iconId) {
+        var url = assetManager.resolve('audioRecordingInteraction/runtime/img/controls.svg');
+        return '<svg title="' + iconId + '">' +
+                '<use xlink:href="' + url + '#' + iconId + '"/>' +
+            '</svg>';
     }
 
     /**
@@ -556,7 +563,6 @@ define([
                 self.updateControls();
             });
 
-            // todo: rename events to camelcase
             this.recorder.on('timeupdate', function(currentTime) {
                 self.progressBar.setValue(currentTime.toFixed(1));
             });
@@ -714,7 +720,7 @@ define([
             // Record button
             record = controlFactory({
                 id: 'record',
-                label: 'Record',
+                label: controlIconFactory(this.assetManager, 'record'),
                 defaultState: 'enabled',
                 container: this.$controlsContainer
             });
@@ -740,7 +746,7 @@ define([
             // Stop button
             stop = controlFactory({
                 id: 'stop',
-                label: 'Stop',
+                label: controlIconFactory(this.assetManager, 'stop'),
                 defaultState: 'disabled',
                 container: this.$controlsContainer
             });
@@ -769,7 +775,7 @@ define([
             if (this.config.allowPlayback === true) {
                 play = controlFactory({
                     id: 'play',
-                    label: 'Play',
+                    label: controlIconFactory(this.assetManager, 'play'),
                     defaultState: 'disabled',
                     container: this.$controlsContainer
                 });
@@ -799,7 +805,7 @@ define([
             if (this.config.maxRecords !== 1) {
                 reset = controlFactory({
                     id: 'reset',
-                    label: 'Try again',
+                    label: controlIconFactory(this.assetManager, 'reset'),
                     defaultState: 'disabled',
                     container: this.$controlsContainer
                 });
@@ -850,7 +856,7 @@ define([
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
-         * @param {Object} asset manager
+         * @param {Object} assetManager
          */
         initialize: function (id, dom, config, assetManager) {
             var self = this;
@@ -860,6 +866,7 @@ define([
             this.id = id;
             this.dom = dom;
             this.controls = {};
+            this.assetManager = assetManager;
 
             this.$container = $(dom);
             this.$instructionsContainer = this.$container.find('.audio-rec > .instructions');
