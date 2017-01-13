@@ -3,13 +3,15 @@ define([
     'IMSGlobal/jquery_2_1_1',
     'OAT/lodash',
     'OAT/util/event',
-    'OAT/util/html'
+    'OAT/util/html',
+    'OAT/mediaPlayer'
 ], function(
     qtiCustomInteractionContext,
     $,
     _,
     event,
-    html
+    html,
+    mediaPlayerFactory
 ){
     'use strict';
 
@@ -499,6 +501,7 @@ define([
             this.initMeter();
 
             // ui rendering
+            this.renderStimulus();
             this.clearControls();
             this.createControls();
             this.displayRemainingAttempts();
@@ -533,7 +536,8 @@ define([
                 autoStart:              toBoolean(config.autoStart, false),
                 displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
                 maxRecords:             toInteger(config.maxRecords, 3),
-                maxRecordingTime:       toInteger(config.maxRecordingTime, 120)
+                maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
+                media:                  config.media || {}
             };
         },
 
@@ -708,6 +712,20 @@ define([
             }
         },
 
+        renderStimulus: function renderStimulus() {
+            var media = this.config.media || {},
+                mediaPlayer;
+
+            if (media.data) {
+                media.url = this.assetManager.resolve(media.data.replace('/', ''));
+                mediaPlayer = mediaPlayerFactory({
+                    $container: this.$mediaStimulusContainer,
+                    media: media
+                });
+                mediaPlayer.render();
+            }
+        },
+
         createControls: function createControls() {
             var self = this,
 
@@ -863,6 +881,7 @@ define([
             this.assetManager = assetManager;
 
             this.$container = $(dom);
+            this.$mediaStimulusContainer = this.$container.find('.media-stimulus');
             this.$controlsContainer = this.$container.find('.audio-rec > .controls');
             this.$progressContainer = this.$container.find('.audio-rec > .progress');
             this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
