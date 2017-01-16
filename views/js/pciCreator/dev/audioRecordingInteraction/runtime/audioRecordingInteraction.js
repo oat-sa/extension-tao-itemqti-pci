@@ -610,6 +610,11 @@ define([
             });
         },
 
+        canRecord: function canRecord() {
+            // if (config.media.data && )
+            return true;
+        },
+
         startRecording: function startRecording() {
             var self = this;
 
@@ -714,10 +719,12 @@ define([
 
         renderStimulus: function renderStimulus() {
             var media = this.config.media || {},
-                mediaPlayer,
                 options;
 
             this.$mediaStimulusContainer.empty();
+            if (this.mediaPlayer) {
+                this.mediaPlayer.destroy();
+            }
 
             if (media.data) {
                 options = _.defaults({
@@ -725,8 +732,8 @@ define([
                     url:        this.assetManager.resolve(media.data)
                 }, media);
 
-                mediaPlayer = mediaPlayerFactory(options);
-                mediaPlayer.render();
+                this.mediaPlayer = mediaPlayerFactory(options);
+                this.mediaPlayer.render();
             }
         },
 

@@ -11,37 +11,72 @@
 </div>
 
 <div class="panel">
-    <label class="panel">
+    <label>
         <input name="allowPlayback" type="checkbox" {{#if allowPlayback}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "Allow playback"}}
+        <span class="icon-checkbox"></span> {{__ "Allow playback"}}
     </label>
-    <label class="panel">
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "Allow the test taker to play back its own recording."}}
+    </span>
+</div>
+
+<div class="panel">
+    <label>
         <input name="autoStart" type="checkbox" {{#if autoStart}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "Auto start recording"}}
+        <span class="icon-checkbox"></span> {{__ "Auto start recording"}}
     </label>
-    <div class="panel creator-audioRecordingInteraction-spinner">
-        <label for="audioBitrate" class="spinner">{{__ "Audio bitrate (in bits per second)"}}</label>
-        <input name="audioBitrate" value="{{audioBitrate}}" data-increment="1000" data-min="8000" type="text" />
-    </div>
-    <div class="panel creator-audioRecordingInteraction-spinner">
-        <label for="maxRecords" class="spinner">{{__ "Number of allowed recording attemps (0 = unlimited)"}}</label>
-        <input name="maxRecords" value="{{maxRecords}}" data-increment="1" data-min="0" type="text" />
-    </div>
-    <div class="panel creator-audioRecordingInteraction-spinner">
-        <label for="maxRecordingTime" class="spinner">{{__ "Max recording time (in seconds)"}}</label>
-        <input name="maxRecordingTime" value="{{maxRecordingTime}}" data-increment="10" data-min="10" type="text" />
-    </div>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."}}
+    </span>
+</div>
+
+<div class="panel">
+    <label>
+        <input name="displayDownloadLink" type="checkbox" {{#if displayDownloadLink}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Display link"}} <span class="txt-error"><strong>{{__ " - TEST ONLY "}}</strong></span>
+    </label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "This is for testing purposes only. Displays a link to download the recorded file once the recording stops."}}
+    </span>
+</div>
+
+<div class="panel">
+    <label for="audioBitrate" class="spinner">{{__ "Audio bitrate:"}}</label>
+    <input name="audioBitrate" value="{{audioBitrate}}" class="large" data-increment="1000" data-min="8000" type="text" />
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "In bps (bits per second). Set the tradeoff between audio quality and filesize. ith the default value (20.000bps), a 2minutes recording weights roughly 300KB."}}
+    </span>
+</div>
+<div class="panel">
+    <label for="maxRecords" class="spinner">{{__ "Max attempts:"}}</label>
+    <input name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" />
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to clic 2 times on the reset button."}}
+    </span>
+</div>
+<div class="panel">
+    <label for="maxRecordingTime" class="spinner">{{__ "Time limit:"}}</label>
+    <input name="maxRecordingTime" value="{{maxRecordingTime}}" class="large" data-increment="10" data-min="10" type="text" />
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "In seconds. Maximum recording time allowed. Recording will automatically stop once reached."}}
+    </span>
 </div>
 
 <hr />
 
 <div class="panel">
-    <h3>{{__ "Testing options"}}</h3>
+    <h3>{{__ "Media stimulus"}}</h3>
     <label>
-        <input name="displayDownloadLink" type="checkbox" {{#if displayDownloadLink}}checked="checked"{{/if}}/>
+        <input name="useMediaStimulus" type="checkbox" {{#if useMediaStimulus}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "Display download link"}}
+        {{__ "Use media stimulus"}}
     </label>
+    <div class="media-stimulus-form-properties"></div>
 </div>
