@@ -354,7 +354,7 @@ define([
         };
         event.addEventMgr(control);
 
-        $control.on('click.qtiCommonRenderer', function() {
+        $control.on('click.qtiCommonRenderer', function() {//todo: remove this, implement destroy function
             control.trigger('click');
         });
 
@@ -714,16 +714,18 @@ define([
 
         renderStimulus: function renderStimulus() {
             var media = this.config.media || {},
-                mediaPlayer;
+                mediaPlayer,
+                options;
 
             this.$mediaStimulusContainer.empty();
 
             if (media.data) {
-                media.url = this.assetManager.resolve(media.data.replace('/', ''));
-                mediaPlayer = mediaPlayerFactory({
+                options = _.defaults({
                     $container: this.$mediaStimulusContainer,
-                    media: media
-                });
+                    url:        this.assetManager.resolve(media.data)
+                }, media);
+
+                mediaPlayer = mediaPlayerFactory(options);
                 mediaPlayer.render();
             }
         },
