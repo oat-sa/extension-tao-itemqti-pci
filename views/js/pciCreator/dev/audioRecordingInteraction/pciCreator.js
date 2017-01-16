@@ -33,12 +33,13 @@ define([
          */
         getDefaultProperties : function(){
             return {
-                allowPlayback: true,
-                audioBitrate: 20000,
-                autoStart: false,
+                allowPlayback:       true,
+                audioBitrate:        20000,
+                autoStart:           false,
                 displayDownloadLink: false,
-                maxRecords: 0,
-                maxRecordingTime: 120
+                maxRecords:          0,
+                maxRecordingTime:    120,
+                useMediaStimulus:    false
             };
         },
         /**

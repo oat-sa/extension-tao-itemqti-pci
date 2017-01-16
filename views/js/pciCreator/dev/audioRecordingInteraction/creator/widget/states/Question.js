@@ -70,7 +70,8 @@ define([
         var _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
-            response = interaction.getResponseDeclaration();
+            response = interaction.getResponseDeclaration(),
+            $mediaStimulusForm;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
@@ -93,10 +94,12 @@ define([
             autoStart:              toBoolean(interaction.prop('autoStart'), false),
             displayDownloadLink:    toBoolean(interaction.prop('displayDownloadLink'), false),
             maxRecords:             interaction.prop('maxRecords'),
-            maxRecordingTime:       interaction.prop('maxRecordingTime')
+            maxRecordingTime:       interaction.prop('maxRecordingTime'),
+            useMediaStimulus:       toBoolean(interaction.prop('useMediaStimulus'), false)
         }));
 
-        $form.append(pciMediaManager.getForm());
+        $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
+        $mediaStimulusForm.append(pciMediaManager.getForm());
 
         //init form javascript
         formElement.initWidget($form);
@@ -113,7 +116,17 @@ define([
             autoStart:              configChangeCallBack,
             displayDownloadLink:    configChangeCallBack,
             maxRecords:             configChangeCallBack,
-            maxRecordingTime:       configChangeCallBack
+            maxRecordingTime:       configChangeCallBack,
+
+            useMediaStimulus:       function useMediaStimulusCb(boundInteraction, value, name) {
+                if (value) {
+                    $mediaStimulusForm.removeClass('hidden');
+                    $mediaStimulusForm.show(250);
+                } else {
+                    $mediaStimulusForm.hide(250);
+                }
+                configChangeCallBack(boundInteraction, value, name);
+            }
         }, pciMediaManager.getChangeCallbacks()));
 
         pciMediaManager.init();

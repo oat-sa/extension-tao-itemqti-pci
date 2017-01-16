@@ -17,7 +17,7 @@
     </label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "Allow the test taker to play back its own recording."}}
+        {{__ "Give the possibility to the test taker to playback its own recording."}}
     </span>
 </div>
 
@@ -40,7 +40,7 @@
     </label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "This is for testing purposes only. Displays a link to download the recorded file once the recording stops."}}
+        {{__ "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."}}
     </span>
 </div>
 
@@ -72,11 +72,10 @@
 <hr />
 
 <div class="panel">
-    <h3>{{__ "Media stimulus"}}</h3>
     <label>
         <input name="useMediaStimulus" type="checkbox" {{#if useMediaStimulus}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         {{__ "Use media stimulus"}}
     </label>
-    <div class="media-stimulus-form-properties"></div>
+    <div class="media-stimulus-properties-form{{#unless useMediaStimulus}} hidden{{/unless}}"></div>
 </div>

@@ -537,6 +537,7 @@ define([
                 displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
                 maxRecords:             toInteger(config.maxRecords, 3),
                 maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
+                useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
                 media:                  config.media || {}
             };
         },
@@ -726,7 +727,7 @@ define([
                 this.mediaPlayer.destroy();
             }
 
-            if (media.data) {
+            if (this.config.useMediaStimulus && media.data) {
                 options = _.defaults({
                     $container: this.$mediaStimulusContainer,
                     url:        this.assetManager.resolve(media.data)
