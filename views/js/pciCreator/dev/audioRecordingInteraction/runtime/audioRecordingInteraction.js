@@ -46,9 +46,23 @@ define([
      * @property {String} ACTIVE    - clicked, triggered action is ongoing
      */
     var controlStates = {
-        DISABLED: 'disabled',
-        ENABLED: 'enabled',
-        ACTIVE: 'active'
+        DISABLED:   'disabled',
+        ENABLED:    'enabled',
+        ACTIVE:     'active'
+    };
+
+
+    /**
+     * @property {String} CREATED   - mediaStimulus instance created, but no media loaded
+     * @property {String} IDLE      - stimulus loaded, ready to be played
+     * @property {String} PLAYING   - stimulus is being played
+     * @property {String} DISABLED  - no more playing is possible
+     */
+    var mediaStimulusStates = {
+        CREATED:    'created',
+        IDLE:       'idle',
+        PLAYING:    'playing',
+        DISABLED:   'disabled'
     };
 
 
@@ -478,6 +492,73 @@ define([
         return inputMeter;
     }
 
+    /**
+     * xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx
+     */
+    function mediaStimulusFactory(config) {
+        var $container   = config.$container,
+            assetManager = config.assetManager,
+            media        = config.media || {};
+
+        var state = mediaStimulusStates.CREATED;
+
+        var mediaStimulus,
+            mediaPlayer,
+            mediaPlayerOptions,
+            mediaElement;
+
+        mediaStimulus = {
+            _setState: function setState(newState) {
+                state = newState;
+                this.trigger('statechange');
+                this.trigger(state);
+            },
+
+            getState: function getState() {
+                return state;
+            },
+
+            render: function render() {
+                var self = this;
+
+                $container.empty();
+                if (mediaPlayer) {
+                    mediaPlayer.destroy();
+                }
+
+                if (media.data) {
+                    mediaPlayerOptions = _.defaults({
+                        $container: $container,
+                        url:        assetManager.resolve(media.data)
+                        //fixme: add media here to avoid polluting the xml markup with the url
+                    }, media);
+
+                    mediaPlayer = mediaPlayerFactory(mediaPlayerOptions);
+                    mediaPlayer.render();
+
+                    mediaElement = mediaPlayer.getMediaElement();
+
+                    if (mediaElement) {
+                        mediaElement
+                            .on('ready pause stop', function() {
+                                self._setState(mediaStimulusStates.IDLE);
+                            })
+                            .on('play', function() {
+                                self._setState(mediaStimulusStates.PLAYING);
+                            })
+                            .on('disable', function() {
+                                self._setState(mediaStimulusStates.DISABLED);
+                            });
+                    }
+                }
+            }
+        };
+
+        event.addEventMgr(mediaStimulus);
+
+        return mediaStimulus;
+    }
+
 
     /**
      * Main interaction code
@@ -501,12 +582,22 @@ define([
             this.initMeter();
 
             // ui rendering
-            this.renderStimulus();
             this.clearControls();
             this.createControls();
             this.displayRemainingAttempts();
             this.progressBar.clear();
             this.progressBar.display();
+
+            // media stimulus
+            if (this.config.useMediaStimulus) {
+                this.initMediaStimulus();
+                this.mediaStimulus.render();
+            }
+
+            // enable recording control
+            if (this.canRecord()) {
+                this.controls.record.enable();
+            }
         },
 
         /**
@@ -538,6 +629,8 @@ define([
                 maxRecords:             toInteger(config.maxRecords, 3),
                 maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
+                preventRecording:       toBoolean(config.preventRecording, false),
+                replayTimeout:          toBoolean(config.replayTimeout, false),
                 media:                  config.media || {}
             };
         },
@@ -611,9 +704,32 @@ define([
             });
         },
 
+        initMediaStimulus: function initMediaStimulus() {
+            var self = this;
+
+            this.mediaStimulus = mediaStimulusFactory({
+                $container:   this.$mediaStimulusContainer,
+                assetManager: this.assetManager,
+                media :       this.config.media || {}
+            });
+
+            this.mediaStimulus.on('disabled', function() {
+                if (self.config.autoStart) {
+                    self.startRecording();
+
+                } else if (self.canRecord()) {
+                    self.controls.record.enable();
+                }
+            });
+        },
+
         canRecord: function canRecord() {
-            // if (config.media.data && )
-            return true;
+            //todo: check if access to recorder is granted ? if not, comment in function description
+            if (! this.config.useMediaStimulus) {
+                return true;
+            } else {
+                return this.mediaStimulus.getState() === mediaStimulusStates.DISABLED;
+            }
         },
 
         startRecording: function startRecording() {
@@ -626,6 +742,7 @@ define([
             } else {
                 startForReal();
             }
+            //todo: move this one level up
             function startForReal() {
                 self.recorder.start();
                 if (self.config.maxRecordingTime) {
@@ -719,23 +836,7 @@ define([
         },
 
         renderStimulus: function renderStimulus() {
-            var media = this.config.media || {},
-                options;
-
-            this.$mediaStimulusContainer.empty();
-            if (this.mediaPlayer) {
-                this.mediaPlayer.destroy();
-            }
-
-            if (this.config.useMediaStimulus && media.data) {
-                options = _.defaults({
-                    $container: this.$mediaStimulusContainer,
-                    url:        this.assetManager.resolve(media.data)
-                }, media);
-
-                this.mediaPlayer = mediaPlayerFactory(options);
-                this.mediaPlayer.render();
-            }
+            this.mediaStimulus.render();
         },
 
         createControls: function createControls() {
@@ -750,7 +851,7 @@ define([
             record = controlFactory({
                 id: 'record',
                 label: controlIconFactory(this.assetManager, 'record'),
-                defaultState: 'enabled',
+                defaultState: controlStates.DISABLED,
                 container: this.$controlsContainer
             });
             record.on('click', function() {
@@ -772,7 +873,7 @@ define([
             stop = controlFactory({
                 id: 'stop',
                 label: controlIconFactory(this.assetManager, 'stop'),
-                defaultState: 'disabled',
+                defaultState: controlStates.DISABLED,
                 container: this.$controlsContainer
             });
             stop.on('click', function() {
@@ -801,7 +902,7 @@ define([
                 play = controlFactory({
                     id: 'play',
                     label: controlIconFactory(this.assetManager, 'play'),
-                    defaultState: 'disabled',
+                    defaultState: controlStates.DISABLED,
                     container: this.$controlsContainer
                 });
                 play.on('click', function() {
@@ -829,7 +930,7 @@ define([
                 reset = controlFactory({
                     id: 'reset',
                     label: controlIconFactory(this.assetManager, 'reset'),
-                    defaultState: 'disabled',
+                    defaultState: controlStates.DISABLED,
                     container: this.$controlsContainer
                 });
                 reset.on('click', function() {
@@ -862,6 +963,7 @@ define([
 
         clearControls: function clearControls() {
             this.$controlsContainer.empty();
+            //todo: destroy?
             this.controls = {};
         },
 
