@@ -21,7 +21,6 @@ define([
     'OAT/lodash',
     'OAT/util/event',
     'OAT/util/html',
-    'OAT/mediaPlayer',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
     'audioRecordingInteraction/runtime/js/uiElements'
@@ -31,114 +30,15 @@ define([
     _,
     event,
     html,
-    mediaPlayerFactory,
     playerFactory,
     recorderFactory,
     uiElements
 ){
     'use strict';
 
-    var audioRecordingInteraction;
+    var ICONS_FILE = 'audioRecordingInteraction/runtime/img/controls.svg';
 
-    /**
-     * @property {String} CREATED   - mediaStimulus instance created, but no media loaded
-     * @property {String} IDLE      - stimulus loaded, ready to be played
-     * @property {String} PLAYING   - stimulus is being played
-     * @property {String} ENDED     - playing is over
-     * @property {String} DISABLED  - no more playing is possible
-     */
-    var mediaStimulusStates = {
-        CREATED:    'created',
-        IDLE:       'idle',
-        PLAYING:    'playing',
-        ENDED:      'ended',
-        DISABLED:   'disabled'
-    };
-
-    function controlIconFactory(assetManager, iconId) {
-        var url = assetManager.resolve('audioRecordingInteraction/runtime/img/controls.svg'); // fixme: make me a constant
-        return '<svg title="' + iconId + '">' +
-                '<use xlink:href="' + url + '#' + iconId + '"/>' +
-            '</svg>';
-    }
-
-    /**
-     * xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx
-     * todo: is this wrapper necessary ?
-     */
-    function mediaStimulusFactory(config) {
-        var $container   = config.$container,
-            assetManager = config.assetManager,
-            media        = config.media || {};
-
-        var state = mediaStimulusStates.CREATED;
-
-        var mediaStimulus,
-            mediaPlayer,
-            mediaPlayerOptions,
-            mediaElement;
-
-        mediaStimulus = {
-            _setState: function setState(newState) {
-                state = newState;
-                this.trigger('statechange');
-                this.trigger(state);
-            },
-
-            getState: function getState() {
-                return state;
-            },
-
-            render: function render() {
-                var self = this;
-
-                $container.empty();
-                if (mediaPlayer) {
-                    mediaPlayer.destroy();
-                }
-
-                if (media.uri) {
-                    mediaPlayerOptions = _.defaults({
-                        $container: $container,
-                        url:        assetManager.resolve(media.uri)
-                        //fixme: add media here to avoid polluting the xml markup with the url
-                    }, media);
-
-                    mediaPlayer = mediaPlayerFactory(mediaPlayerOptions);
-                    mediaPlayer.render();
-
-                    mediaElement = mediaPlayer.getMediaElement();
-
-                    if (mediaElement) {
-                        mediaElement
-                            .on('ready pause stop', function() {
-                                self._setState(mediaStimulusStates.IDLE);
-                            })
-                            .on('play', function() {
-                                self._setState(mediaStimulusStates.PLAYING);
-                            })
-                            .on('ended', function() {
-                                self._setState(mediaStimulusStates.ENDED);
-                            })
-                            .on('disabled', function() {
-                                self._setState(mediaStimulusStates.DISABLED); //fixme: useless? if so, remove trigger event in media player
-                            });
-                    }
-                }
-            }
-        };
-
-        event.addEventMgr(mediaStimulus);
-
-        return mediaStimulus;
-    }
-
-
-    /**
-     * Main interaction code
-     */
-
-    audioRecordingInteraction = {
+    var audioRecordingInteraction = {
 
         _filePrefix: 'audioRecording',
         _recording: null,
@@ -148,6 +48,7 @@ define([
             // initialization
             this._recording = null;
             this._recordsAttempts = 0;
+            this.iconsFileUrl = this.assetManager.resolve(ICONS_FILE);
 
             this.initConfig(config);
             this.initRecorder();
@@ -156,13 +57,10 @@ define([
             this.initMeter();
 
             // ui rendering
-            this.clearControls();
             this.createControls();
             this.updateResetCount();
             this.progressBar.clear();
             this.progressBar.display();
-
-            // media stimulus
             if (this.config.useMediaStimulus) {
                 this.initMediaStimulus();
                 this.mediaStimulus.render();
@@ -283,10 +181,10 @@ define([
         initMediaStimulus: function initMediaStimulus() {
             var self = this;
 
-            this.mediaStimulus = mediaStimulusFactory({
+            this.mediaStimulus = uiElements.mediaStimulusFactory({
                 $container:   this.$mediaStimulusContainer,
                 assetManager: this.assetManager,
-                media:        this.config.media || {}
+                media:        this.config.media
             });
 
             this.mediaStimulus.on('statechange', function() {
@@ -385,7 +283,7 @@ define([
 
         updateResetCount: function updateResetCount() {
             var remaining = this.config.maxRecords - this._recordsAttempts - 1,
-                resetLabel = controlIconFactory(this.assetManager, 'reset');
+                resetLabel = controlIcon(this.iconsFileUrl, 'reset');
 
             if (this.config.maxRecords > 1) {
                 resetLabel += ' (' + remaining + ')';
@@ -421,10 +319,13 @@ define([
                 play,
                 reset;
 
+            this.clearControls();
+
+
             // Record button
             record = uiElements.controlFactory({
                 id: 'record',
-                label: controlIconFactory(this.assetManager, 'record'),
+                label: controlIcon(this.iconsFileUrl, 'record'),
                 container: this.$controlsContainer
             });
             record.on('click', function() {
@@ -436,7 +337,7 @@ define([
                 if (self.player.is('created')
                     && !self.recorder.is('recording')
                     && (
-                        self.mediaStimulus && (self.mediaStimulus.getState() === mediaStimulusStates.ENDED || self.mediaStimulus.getState() === mediaStimulusStates.DISABLED)
+                        self.mediaStimulus && (self.mediaStimulus.is('ended') || self.mediaStimulus.is('disabled'))
                         || ! self.mediaStimulus
                         // todo: make sure this is reseted on render
                     )
@@ -452,7 +353,7 @@ define([
             // Stop button
             stop = uiElements.controlFactory({
                 id: 'stop',
-                label: controlIconFactory(this.assetManager, 'stop'),
+                label: controlIcon(this.iconsFileUrl, 'stop'),
                 container: this.$controlsContainer
             });
             stop.on('click', function() {
@@ -480,7 +381,7 @@ define([
             if (this.config.allowPlayback === true) {
                 play = uiElements.controlFactory({
                     id: 'play',
-                    label: controlIconFactory(this.assetManager, 'play'),
+                    label: controlIcon(this.iconsFileUrl, 'play'),
                     container: this.$controlsContainer
                 });
                 play.on('click', function() {
@@ -503,7 +404,7 @@ define([
             if (this.config.maxRecords !== 1) {
                 reset = uiElements.controlFactory({
                     id: 'reset',
-                    label: controlIconFactory(this.assetManager, 'reset'),
+                    label: controlIcon(this.iconsFileUrl, 'reset'),
                     container: this.$controlsContainer
                 });
                 reset.on('click', function() {
@@ -566,6 +467,9 @@ define([
             this.dom = dom;
             this.controls = {};
             this.assetManager = assetManager;
+
+
+            // implement a reset
 
             this.$container = $(dom);
             this.$mediaStimulusContainer = this.$container.find('.media-stimulus');
@@ -698,6 +602,12 @@ define([
             return this.getResponse();
         }
     };
+
+    function controlIcon(url, iconId) {
+        return '<svg title="' + iconId + '">' +
+            '<use xlink:href="' + url + '#' + iconId + '"/>' +
+            '</svg>';
+    }
 
     qtiCustomInteractionContext.register(audioRecordingInteraction);
 });

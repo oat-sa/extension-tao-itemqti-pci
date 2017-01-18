@@ -20,9 +20,37 @@
  */
 define([
     'IMSGlobal/jquery_2_1_1',
-    'OAT/util/event'
-], function($, event) {
+    'OAT/lodash',
+    'OAT/util/event',
+    'OAT/mediaPlayer'
+], function($, _, event, mediaPlayerFactory) {
     'use strict';
+
+    /**
+     * @property {String} DISABLED  - not clickable
+     * @property {String} ENABLED   - clickable
+     * @property {String} ACTIVE    - clicked, triggered action is ongoing
+     */
+    var controlStates = {
+        DISABLED:   'disabled',
+        ENABLED:    'enabled',
+        ACTIVE:     'active'
+    };
+
+    /**
+     * @property {String} CREATED   - mediaStimulus instance created, but no media loaded
+     * @property {String} IDLE      - stimulus loaded, ready to be played
+     * @property {String} PLAYING   - stimulus is being played
+     * @property {String} ENDED     - playing is over
+     * @property {String} DISABLED  - no more playing is possible
+     */
+    var mediaStimulusStates = {
+        CREATED:    'created',
+        IDLE:       'idle',
+        PLAYING:    'playing',
+        ENDED:      'ended',
+        DISABLED:   'disabled'
+    };
 
     /**
      * Creates a button for recording/playback control
@@ -33,16 +61,6 @@ define([
      * @param {$}       config.container - jQuery Dom element that the button will be appended to
      */
     function controlFactory(config) {
-        /**
-         * @property {String} DISABLED  - not clickable
-         * @property {String} ENABLED   - clickable
-         * @property {String} ACTIVE    - clicked, triggered action is ongoing
-         */
-        var states = {
-            DISABLED:   'disabled',
-            ENABLED:    'enabled',
-            ACTIVE:     'active'
-        };
 
         var state,
             control,
@@ -54,7 +72,7 @@ define([
 
         $control.appendTo(config.container);
 
-        setState(config.defaultState || states.DISABLED);
+        setState(config.defaultState || controlStates.DISABLED);
 
         function setState(newState) {
             $control.removeClass(state);
@@ -67,13 +85,13 @@ define([
                 return (state === queriedState);
             },
             enable: function() {
-                setState(states.ENABLED);
+                setState(controlStates.ENABLED);
             },
             disable: function() {
-                setState(states.DISABLED);
+                setState(controlStates.DISABLED);
             },
             activate: function() {
-                setState(states.ACTIVE);
+                setState(controlStates.ACTIVE);
             },
             updateState: function() {
                 this.trigger('updatestate');
@@ -201,10 +219,85 @@ define([
         return inputMeter;
     }
 
+
+    /**
+     * This is just a tiny wrapper around the media player instance.
+     * The goal is to have a consistent API with the rest of the components
+     *
+     */
+    function mediaStimulusFactory(config) {
+        var $container   = config.$container,
+            assetManager = config.assetManager,
+            media        = config.media || {};
+
+        var state = mediaStimulusStates.CREATED;
+
+        var mediaStimulus,
+            mediaPlayer,
+            mediaPlayerOptions,
+            mediaElement;
+
+        mediaStimulus = {
+            _setState: function setState(newState) {
+                state = newState;
+                this.trigger('statechange');
+                this.trigger(state);
+            },
+
+            is: function is(queriedState) {
+                return (state === queriedState);
+            },
+
+            render: function render() {
+                var self = this;
+
+                $container.empty();
+                if (mediaPlayer) {
+                    mediaPlayer.destroy();
+                }
+
+                if (media.uri) {
+                    mediaPlayerOptions = _.defaults({
+                        $container: $container,
+                        url:        assetManager.resolve(media.uri)
+                        //fixme: add media here to avoid polluting the xml markup with the url
+                    }, media);
+
+                    mediaPlayer = mediaPlayerFactory(mediaPlayerOptions);
+                    mediaPlayer.render();
+
+                    mediaElement = mediaPlayer.getMediaElement();
+
+                    if (mediaElement) {
+                        mediaElement
+                            .on('ready pause stop', function() {
+                                self._setState(mediaStimulusStates.IDLE);
+                            })
+                            .on('play', function() {
+                                self._setState(mediaStimulusStates.PLAYING);
+                            })
+                            .on('ended', function() {
+                                self._setState(mediaStimulusStates.ENDED);
+                            })
+                            .on('disabled', function() {
+                                self._setState(mediaStimulusStates.DISABLED); //fixme: useless? if so, remove trigger event in media player
+                            });
+                    }
+                }
+            }
+        };
+
+        event.addEventMgr(mediaStimulus);
+
+        return mediaStimulus;
+    }
+
+
     return {
-        controlFactory:     controlFactory,
-        progressBarFactory: progressBarFactory,
-        inputMeterFactory:  inputMeterFactory
+        controlFactory:         controlFactory,
+        progressBarFactory:     progressBarFactory,
+        inputMeterFactory:      inputMeterFactory,
+        mediaStimulusFactory:   mediaStimulusFactory
     };
 
 });
