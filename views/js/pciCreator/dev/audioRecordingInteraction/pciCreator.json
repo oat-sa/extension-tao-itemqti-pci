@@ -15,7 +15,10 @@
     "runtime" : {
         "hook" : "./runtime/audioRecordingInteraction.js",
         "libraries" : [
-            "IMSGlobal/jquery_2_1_1"
+            "IMSGlobal/jquery_2_1_1",
+            "./runtime/js/player.js",
+            "./runtime/js/recorder.js",
+            "./runtime/js/uiElements.js"
         ],
         "stylesheets" : [
             "./runtime/css/audioRecordingInteraction.css"
