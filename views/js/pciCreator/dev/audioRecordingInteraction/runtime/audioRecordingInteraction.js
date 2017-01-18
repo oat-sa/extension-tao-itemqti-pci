@@ -716,8 +716,8 @@ define([
             var media = this.config.media || {},
                 mediaPlayer;
 
-            if (media.data) {
-                media.url = this.assetManager.resolve(media.data.replace('/', ''));
+            if (media.uri) {
+                media.url = this.assetManager.resolve(media.uri.replace('/', ''));
                 mediaPlayer = mediaPlayerFactory({
                     $container: this.$mediaStimulusContainer,
                     media: media
