@@ -63,10 +63,6 @@ define([
                 return (state === queriedState);
             },
 
-            getState: function() {
-                return state;
-            },
-
             load: function(url) {
                 var self = this;
 
@@ -242,10 +238,6 @@ define([
                 return (state === queriedState);
             },
 
-            getState: function() {
-                return state;
-            },
-
             init: function() {
                 var self = this;
 
@@ -369,9 +361,6 @@ define([
         }
 
         control = {
-            getState: function() {
-                return state;
-            },
             is: function(queriedState) {
                 return (state === queriedState);
             },
@@ -401,7 +390,7 @@ define([
     }
 
     function controlIconFactory(assetManager, iconId) {
-        var url = assetManager.resolve('audioRecordingInteraction/runtime/img/controls.svg');
+        var url = assetManager.resolve('audioRecordingInteraction/runtime/img/controls.svg'); // fixme: make me a constant
         return '<svg title="' + iconId + '">' +
                 '<use xlink:href="' + url + '#' + iconId + '"/>' +
             '</svg>';
@@ -451,7 +440,7 @@ define([
      * Creates a input meter for microphone input signal
      * @param {Object}  config
      * @param {Integer} config.maxLevel - level for which all meter leds will be lit
-     * @param {$}       config.container - jQuery Dom element that the meter will be appended to
+     * @param {$}       config.$container - jQuery Dom element that the meter will be appended to
      */
     function inputMeterFactory(config) {
         var inputMeter,
