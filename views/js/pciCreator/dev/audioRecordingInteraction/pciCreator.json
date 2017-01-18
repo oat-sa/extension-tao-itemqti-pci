@@ -10,7 +10,8 @@
         "audio"
     ],
     "response": {
-        "cardinality": "record"
+        "baseType": "file",
+        "cardinality": "single"
     },
     "runtime" : {
         "hook" : "./runtime/audioRecordingInteraction.js",

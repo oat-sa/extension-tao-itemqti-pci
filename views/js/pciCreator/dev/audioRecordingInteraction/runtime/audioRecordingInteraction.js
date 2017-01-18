@@ -273,9 +273,8 @@ define([
             };
         },
 
-        updateResponse: function updateResponse(recording, recordsAttempts) {
+        updateResponse: function updateResponse(recording) {
             this._recording = recording;
-            this._recordsAttempts = recordsAttempts;
             if (typeof this.trigger === 'function') {
                 this.trigger('responseChange');
             }
@@ -503,28 +502,15 @@ define([
          * @param {Object} response
          */
         setResponse: function (response) {
-            var recording,
-                recordsAttempts,
+            var recording = response.base && response.base.file,
                 base64Prefix;
 
-            if (response.record && _.isArray(response.record)) {
-                response.record.forEach(function (record) {
-                    switch(record.name) {
-                        case 'recording':
-                            recording = record.base.file;
-                            break;
-                        case 'recordsAttempts':
-                            recordsAttempts = record.base.integer;
-                            break;
-                    }
-                });
-                if (recording && recordsAttempts) {
-                    this.updateResponse(recording, recordsAttempts);
+            if (recording) {
+                this.updateResponse(recording);
 
-                    // restore interaction state
-                    base64Prefix = 'data:' + recording.mime + ';base64,';
-                    this.player.load(base64Prefix + recording.data);
-                }
+                // restore interaction state
+                base64Prefix = 'data:' + recording.mime + ';base64,';
+                this.player.load(base64Prefix + recording.data);
             }
         },
         /**
@@ -535,25 +521,12 @@ define([
          * @returns {Object}
          */
         getResponse: function() {
-            var recordingResponse = {
-                    name: 'recording',
-                    base: {
-                        file: this._recording
-                    }
-                },
-                recordAttemptsResponse = {
-                    name: 'recordsAttempts',
-                    base: {
-                        integer: this._recordsAttempts
-                    }
-                },
-                response = {
-                    record: [
-                        recordingResponse,
-                        recordAttemptsResponse
-                    ]
-                };
-            return response;
+            var response = {
+                base: {
+                    file: this._recording
+                }
+            };
+            return response ;
         },
         /**
          * Remove the current response set in the interaction
@@ -562,7 +535,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse: function () {
-            this.updateResponse(null, 0);
+            this.updateResponse(null);
         },
         /**
          * Reverse operation performed by render()

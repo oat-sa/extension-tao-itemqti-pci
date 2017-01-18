@@ -40,6 +40,7 @@ define([
                 maxRecords:          0,
                 maxRecordingTime:    120,
                 useMediaStimulus:    false
+                // todo: add new properties here
             };
         },
         /**
