@@ -543,10 +543,10 @@ define([
                     mediaPlayer.destroy();
                 }
 
-                if (media.data) {
+                if (media.uri) {
                     mediaPlayerOptions = _.defaults({
                         $container: $container,
-                        url:        assetManager.resolve(media.data)
+                        url:        assetManager.resolve(media.uri)
                         //fixme: add media here to avoid polluting the xml markup with the url
                     }, media);
 
@@ -883,7 +883,7 @@ define([
                 if (self.player.getState() === playerStates.CREATED
                     && self.recorder.getState() !== recorderStates.RECORDING
                     && (
-                        self.mediaStimulus && self.mediaStimulus.getState() === mediaStimulusStates.ENDED
+                        self.mediaStimulus && (self.mediaStimulus.getState() === mediaStimulusStates.ENDED || self.mediaStimulus.getState() === mediaStimulusStates.DISABLED)
                         || ! self.mediaStimulus
                         // todo: make sure this is reseted on render
                     )
