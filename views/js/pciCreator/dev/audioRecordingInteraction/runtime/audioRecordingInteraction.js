@@ -17,17 +17,6 @@ define([
 
     var audioRecordingInteraction;
 
-    /**
-     * @property {String} CREATED   - recorder instance created, but microphone access not granted
-     * @property {String} IDLE      - ready to record
-     * @property {String} RECORDING - record is in progress
-     */
-    var recorderStates = {
-        CREATED:    'created',
-        IDLE:       'idle',
-        RECORDING:  'recording'
-    };
-
 
     /**
      * @property {String} DISABLED  - not clickable
@@ -185,13 +174,24 @@ define([
      * @returns {Object} - wrapper for getUserMedia / MediaRecorder
      */
     function recorderFactory(config) {
+        /**
+         * @property {String} CREATED   - recorder instance created, but microphone access not granted
+         * @property {String} IDLE      - ready to record
+         * @property {String} RECORDING - record is in progress
+         */
+        var states = {
+            CREATED:    'created',
+            IDLE:       'idle',
+            RECORDING:  'recording'
+        };
+
         var MediaRecorder = window.MediaRecorder,
             mediaRecorder,
             recorder,
             recorderOptions = {
                 audioBitsPerSecond: config.audioBitrate
             },
-            state = recorderStates.CREATED,
+            state = states.CREATED,
             mimeType,
             chunks = [],
             chunkSizeMs = 1000,
@@ -251,6 +251,10 @@ define([
                 this.trigger(newState);
             },
 
+            is: function(queriedState) {
+                return (state === queriedState);
+            },
+
             getState: function() {
                 return state;
             },
@@ -265,7 +269,7 @@ define([
 
                         initAnalyser(stream);
 
-                        self._setState(recorderStates.IDLE);
+                        self._setState(states.IDLE);
 
                         // save chunks of the recording
                         mediaRecorder.ondataavailable = function(e) {
@@ -288,7 +292,7 @@ define([
                             cancelAnimationFrame(timerId);
 
                             self.trigger('levelUpdate', [0]);
-                            self._setState(recorderStates.IDLE);
+                            self._setState(states.IDLE);
 
                             chunks = [];
                         };
@@ -303,7 +307,7 @@ define([
 
                 startTimeMs = new window.Date().getTime();
 
-                this._setState(recorderStates.RECORDING);
+                this._setState(states.RECORDING);
 
                 this._monitorRecording();
             },
@@ -744,7 +748,7 @@ define([
             });
 
             this.mediaStimulus.on('playing', function() {
-                if (self.recorder.getState() === recorderStates.RECORDING) {
+                if (self.recorder.is('recording')) {
                     self.recorder.cancel();
                 }
                 if (self.player.is('playing')) {
@@ -762,7 +766,7 @@ define([
         startRecording: function startRecording() {
             var self = this;
 
-            if (this.recorder.getState() === recorderStates.CREATED) {
+            if (this.recorder.is('created')) {
                 this.recorder.init().then(function() {
                     startForReal();
                 });
@@ -885,7 +889,7 @@ define([
             }.bind(record));
             record.on('updatestate', function() {
                 if (self.player.is('created')
-                    && self.recorder.getState() !== recorderStates.RECORDING
+                    && !self.recorder.is('recording')
                     && (
                         self.mediaStimulus && (self.mediaStimulus.getState() === mediaStimulusStates.ENDED || self.mediaStimulus.getState() === mediaStimulusStates.DISABLED)
                         || ! self.mediaStimulus
@@ -909,7 +913,7 @@ define([
             });
             stop.on('click', function() {
                 if (this.getState() === controlStates.ENABLED) {
-                    if (self.recorder.getState() === recorderStates.RECORDING) {
+                    if (self.recorder.is('recording')) {
                         self.stopRecording();
 
                     } else if (self.player.is('playing')) {
@@ -919,7 +923,7 @@ define([
             }.bind(stop));
             stop.on('updatestate', function() {
                 if (self.player.is('playing')
-                    || self.recorder.getState() === recorderStates.RECORDING) {
+                    || self.recorder.is('recording')) {
                     this.enable();
                 } else {
                     this.disable();
