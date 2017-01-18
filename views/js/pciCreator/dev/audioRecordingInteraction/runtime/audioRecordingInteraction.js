@@ -17,19 +17,6 @@ define([
 
     var audioRecordingInteraction;
 
-
-    /**
-     * @property {String} DISABLED  - not clickable
-     * @property {String} ENABLED   - clickable
-     * @property {String} ACTIVE    - clicked, triggered action is ongoing
-     */
-    var controlStates = {
-        DISABLED:   'disabled',
-        ENABLED:    'enabled',
-        ACTIVE:     'active'
-    };
-
-
     /**
      * @property {String} CREATED   - mediaStimulus instance created, but no media loaded
      * @property {String} IDLE      - stimulus loaded, ready to be played
@@ -352,6 +339,17 @@ define([
      * @param {$}       config.container - jQuery Dom element that the button will be appended to
      */
     function controlFactory(config) {
+        /**
+         * @property {String} DISABLED  - not clickable
+         * @property {String} ENABLED   - clickable
+         * @property {String} ACTIVE    - clicked, triggered action is ongoing
+         */
+        var states = {
+            DISABLED:   'disabled',
+            ENABLED:    'enabled',
+            ACTIVE:     'active'
+        };
+
         var state,
             control,
             $control = $('<button>', {
@@ -362,7 +360,7 @@ define([
 
         $control.appendTo(config.container);
 
-        setState(config.defaultState || controlStates.DISABLED);
+        setState(config.defaultState || states.DISABLED);
 
         function setState(newState) {
             $control.removeClass(state);
@@ -374,14 +372,17 @@ define([
             getState: function() {
                 return state;
             },
+            is: function(queriedState) {
+                return (state === queriedState);
+            },
             enable: function() {
-                setState(controlStates.ENABLED);
+                setState(states.ENABLED);
             },
             disable: function() {
-                setState(controlStates.DISABLED);
+                setState(states.DISABLED);
             },
             activate: function() {
-                setState(controlStates.ACTIVE);
+                setState(states.ACTIVE);
             },
             updateState: function() {
                 this.trigger('updatestate');
@@ -879,11 +880,10 @@ define([
             record = controlFactory({
                 id: 'record',
                 label: controlIconFactory(this.assetManager, 'record'),
-                defaultState: controlStates.DISABLED,
                 container: this.$controlsContainer
             });
             record.on('click', function() {
-                if (this.getState() === controlStates.ENABLED) {
+                if (this.is('enabled')) {
                     self.startRecording();
                 }
             }.bind(record));
@@ -908,11 +908,10 @@ define([
             stop = controlFactory({
                 id: 'stop',
                 label: controlIconFactory(this.assetManager, 'stop'),
-                defaultState: controlStates.DISABLED,
                 container: this.$controlsContainer
             });
             stop.on('click', function() {
-                if (this.getState() === controlStates.ENABLED) {
+                if (this.is('enabled')) {
                     if (self.recorder.is('recording')) {
                         self.stopRecording();
 
@@ -937,11 +936,10 @@ define([
                 play = controlFactory({
                     id: 'play',
                     label: controlIconFactory(this.assetManager, 'play'),
-                    defaultState: controlStates.DISABLED,
                     container: this.$controlsContainer
                 });
                 play.on('click', function() {
-                    if (this.getState() === controlStates.ENABLED) {
+                    if (this.is('enabled')) {
                         self.playRecording();
                     }
                 }.bind(play));
@@ -961,11 +959,10 @@ define([
                 reset = controlFactory({
                     id: 'reset',
                     label: controlIconFactory(this.assetManager, 'reset'),
-                    defaultState: controlStates.DISABLED,
                     container: this.$controlsContainer
                 });
                 reset.on('click', function() {
-                    if (this.getState() === controlStates.ENABLED) {
+                    if (this.is('enabled')) {
                         self.resetRecording();
                         self.updateResetCount();
                     }
