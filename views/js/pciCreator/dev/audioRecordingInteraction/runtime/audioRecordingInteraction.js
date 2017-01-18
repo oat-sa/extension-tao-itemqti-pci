@@ -56,12 +56,14 @@ define([
      * @property {String} CREATED   - mediaStimulus instance created, but no media loaded
      * @property {String} IDLE      - stimulus loaded, ready to be played
      * @property {String} PLAYING   - stimulus is being played
+     * @property {String} ENDED     - playing is over
      * @property {String} DISABLED  - no more playing is possible
      */
     var mediaStimulusStates = {
         CREATED:    'created',
         IDLE:       'idle',
         PLAYING:    'playing',
+        ENDED:      'ended',
         DISABLED:   'disabled'
     };
 
@@ -251,6 +253,7 @@ define([
 
             init: function() {
                 var self = this;
+
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
                         mediaRecorder = new MediaRecorder(stream, recorderOptions);
@@ -265,22 +268,29 @@ define([
                             chunks.push(e.data);
                         };
 
-                        // build the final recording
+                        // stop record callback
                         mediaRecorder.onstop = function() {
-                            var blob = new Blob(chunks, { type: mimeType });
-                            var duration = new window.Date().getTime() - startTimeMs;
+                            var blob,
+                                durationMs;
 
+                            self.trigger('stop');
+
+                            if (! self.cancelled) {
+                                blob = new Blob(chunks, { type: mimeType });
+                                durationMs = new window.Date().getTime() - startTimeMs;
+                                self.trigger('recordingavailable', [blob, durationMs]);
+
+                            }
                             cancelAnimationFrame(timerId);
-                            self.trigger('levelUpdate', [0]);
 
-                            self.trigger('recordingavailable', [blob, duration]);
+                            self.trigger('levelUpdate', [0]);
                             self._setState(recorderStates.IDLE);
 
                             chunks = [];
                         };
                     })
                     .catch(function(err) {
-                        throw err;
+                        throw err; //fixme: really?
                     });
             },
 
@@ -295,8 +305,14 @@ define([
             },
 
             stop: function() {
+                this.cancelled = false;
                 mediaRecorder.stop();
                 // state change is triggered by onstop handler
+            },
+
+            cancel: function() {
+                this.cancelled = true;
+                mediaRecorder.stop();
             },
 
             _monitorRecording: function() {
@@ -494,6 +510,7 @@ define([
 
     /**
      * xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx
+     * todo: is this wrapper necessary ?
      */
     function mediaStimulusFactory(config) {
         var $container   = config.$container,
@@ -546,8 +563,11 @@ define([
                             .on('play', function() {
                                 self._setState(mediaStimulusStates.PLAYING);
                             })
-                            .on('disable', function() {
-                                self._setState(mediaStimulusStates.DISABLED);
+                            .on('ended', function() {
+                                self._setState(mediaStimulusStates.ENDED);
+                            })
+                            .on('disabled', function() {
+                                self._setState(mediaStimulusStates.DISABLED); //fixme: useless? if so, remove trigger event in media player
                             });
                     }
                 }
@@ -584,7 +604,7 @@ define([
             // ui rendering
             this.clearControls();
             this.createControls();
-            this.displayRemainingAttempts();
+            this.updateResetCount();
             this.progressBar.clear();
             this.progressBar.display();
 
@@ -594,10 +614,7 @@ define([
                 this.mediaStimulus.render();
             }
 
-            // enable recording control
-            if (this.canRecord()) {
-                this.controls.record.enable();
-            }
+            this.updateControls();
         },
 
         /**
@@ -629,7 +646,6 @@ define([
                 maxRecords:             toInteger(config.maxRecords, 3),
                 maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
-                preventRecording:       toBoolean(config.preventRecording, false),
                 replayTimeout:          toBoolean(config.replayTimeout, false),
                 media:                  config.media || {}
             };
@@ -640,7 +656,16 @@ define([
 
             this.recorder = recorderFactory(this.config);
 
-            this.recorder.on('recordingavailable', function(blob, duration) {
+            this.recorder.on('stop', function() {
+                self.progressBar.setValue(0);
+                self.progressBar.setStyle('');
+                if (self.config.maxRecordingTime) {
+                    self.progressBar.setMax(self.config.maxRecordingTime);
+                }
+                self.$meterContainer.removeClass('record');
+            });
+
+            this.recorder.on('recordingavailable', function(blob, durationMs) {
                 var recordingUrl = window.URL.createObjectURL(blob),
                     filename =
                         self._filePrefix + '_' +
@@ -652,12 +677,9 @@ define([
                 self.player.load(recordingUrl);
                 self.createBase64Recoding(blob, filename);
 
-                self.displayDownloadLink(recordingUrl, filename, filesize, duration);
-                self.progressBar.setValue(0);
-                self.progressBar.setMax((duration / 1000).toFixed(1));
-                self.progressBar.setStyle('');
+                self.progressBar.setMax((durationMs / 1000).toFixed(1));
 
-                self.$meterContainer.removeClass('record');
+                self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
             });
 
             this.recorder.on('statechange', function() {
@@ -710,26 +732,27 @@ define([
             this.mediaStimulus = mediaStimulusFactory({
                 $container:   this.$mediaStimulusContainer,
                 assetManager: this.assetManager,
-                media :       this.config.media || {}
+                media:        this.config.media || {}
             });
 
-            this.mediaStimulus.on('disabled', function() {
-                if (self.config.autoStart) {
-                    self.startRecording();
+            this.mediaStimulus.on('statechange', function() {
+                self.updateControls();
+            });
 
-                } else if (self.canRecord()) {
-                    self.controls.record.enable();
+            this.mediaStimulus.on('playing', function() {
+                if (self.recorder.getState() === recorderStates.RECORDING) {
+                    self.recorder.cancel();
+                }
+                if (self.player.getState() === playerStates.PLAYING) {
+                    self.player.stop();
                 }
             });
-        },
 
-        canRecord: function canRecord() {
-            //todo: check if access to recorder is granted ? if not, comment in function description
-            if (! this.config.useMediaStimulus) {
-                return true;
-            } else {
-                return this.mediaStimulus.getState() === mediaStimulusStates.DISABLED;
-            }
+            this.mediaStimulus.on('ended', function() {
+                if (self.config.autoStart) {
+                    self.startRecording();
+                }
+            });
         },
 
         startRecording: function startRecording() {
@@ -742,8 +765,9 @@ define([
             } else {
                 startForReal();
             }
-            //todo: move this one level up
+            //todo: move this one level up?
             function startForReal() {
+                self.resetRecording();
                 self.recorder.start();
                 if (self.config.maxRecordingTime) {
                     self.$meterContainer.addClass('record');
@@ -805,7 +829,7 @@ define([
             }
         },
 
-        displayRemainingAttempts: function displayRemainingAttempts() {
+        updateResetCount: function updateResetCount() {
             var remaining = this.config.maxRecords - this._recordsAttempts - 1,
                 resetLabel = controlIconFactory(this.assetManager, 'reset');
 
@@ -835,10 +859,6 @@ define([
             }
         },
 
-        renderStimulus: function renderStimulus() {
-            this.mediaStimulus.render();
-        },
-
         createControls: function createControls() {
             var self = this,
 
@@ -860,7 +880,14 @@ define([
                 }
             }.bind(record));
             record.on('updatestate', function() {
-                if (self.player.getState() === playerStates.CREATED && self.recorder.getState() === recorderStates.IDLE) {
+                if (self.player.getState() === playerStates.CREATED
+                    && self.recorder.getState() !== recorderStates.RECORDING
+                    && (
+                        self.mediaStimulus && self.mediaStimulus.getState() === mediaStimulusStates.ENDED
+                        || ! self.mediaStimulus
+                        // todo: make sure this is reseted on render
+                    )
+                ) {
                     this.enable();
                 } else {
                     this.disable();
@@ -887,8 +914,8 @@ define([
                 }
             }.bind(stop));
             stop.on('updatestate', function() {
-                if (self.player.getState() === playerStates.PLAYING ||
-                    self.recorder.getState() === recorderStates.RECORDING) {
+                if (self.player.getState() === playerStates.PLAYING
+                    || self.recorder.getState() === recorderStates.RECORDING) {
                     this.enable();
                 } else {
                     this.disable();
@@ -937,7 +964,7 @@ define([
                     if (this.getState() === controlStates.ENABLED) {
                         self.resetRecording();
                     }
-                    self.displayRemainingAttempts();
+                    self.updateResetCount();
                 }.bind(reset));
                 reset.on('updatestate', function() {
                     if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
@@ -957,6 +984,15 @@ define([
             for (control in this.controls) {
                 if (this.controls.hasOwnProperty(control)) {
                     this.controls[control].updateState();
+                }
+            }
+        },
+
+        disableControls: function disableControls() {
+            var control;
+            for (control in this.controls) {
+                if (this.controls.hasOwnProperty(control)) {
+                    this.controls[control].disable();
                 }
             }
         },
@@ -1014,7 +1050,7 @@ define([
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
 
-            if (this.config.autoStart === true) {
+            if (this.config.autoStart === true && this.config.useMediaStimulus === false) {
                 self.startRecording();
             }
         },
