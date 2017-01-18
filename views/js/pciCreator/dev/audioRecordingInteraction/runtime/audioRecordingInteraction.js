@@ -18,17 +18,6 @@ define([
     var audioRecordingInteraction;
 
     /**
-     * @property {String} CREATED   - player instance created, but no media loaded
-     * @property {String} IDLE      - media loaded and playable
-     * @property {String} PLAYING   - media is playing
-     */
-    var playerStates = {
-        CREATED:    'created',
-        IDLE:       'idle',
-        PLAYING:    'playing'
-    };
-
-    /**
      * @property {String} CREATED   - recorder instance created, but microphone access not granted
      * @property {String} IDLE      - ready to record
      * @property {String} RECORDING - record is in progress
@@ -72,15 +61,30 @@ define([
      * @returns {Object} - wrapper for an HTMLAudioElement
      */
     function playerFactory() {
+        /**
+         * @property {String} CREATED   - player instance created, but no media loaded
+         * @property {String} IDLE      - media loaded and playable
+         * @property {String} PLAYING   - media is playing
+         */
+        var states = {
+            CREATED:    'created',
+            IDLE:       'idle',
+            PLAYING:    'playing'
+        };
+
         var audioEl,
             player,
-            state = playerStates.CREATED;
+            state = states.CREATED;
 
         player = {
             _setState: function(newState) {
                 state = newState;
                 this.trigger('statechange');
                 this.trigger(newState);
+            },
+
+            is: function(queriedState) {
+                return (state === queriedState);
             },
 
             getState: function() {
@@ -94,18 +98,18 @@ define([
 
                 // when playback is stopped by user or when the media is loaded:
                 audioEl.oncanplay = function() {
-                    self._setState(playerStates.IDLE);
+                    self._setState(states.IDLE);
                 };
 
                 // when playbacks ends on its own:
                 audioEl.onended = function() {
-                    self._setState(playerStates.IDLE);
+                    self._setState(states.IDLE);
                     audioEl.currentTime = 0;
                     self.trigger('timeupdate', [0]);
                 };
 
                 audioEl.onplaying = function() {
-                    self._setState(playerStates.PLAYING);
+                    self._setState(states.PLAYING);
                 };
 
                 audioEl.ontimeupdate = function() {
@@ -126,7 +130,7 @@ define([
 
             unload: function() {
                 audioEl = null;
-                this._setState(playerStates.CREATED);
+                this._setState(states.CREATED);
             }
         };
         event.addEventMgr(player);
@@ -743,7 +747,7 @@ define([
                 if (self.recorder.getState() === recorderStates.RECORDING) {
                     self.recorder.cancel();
                 }
-                if (self.player.getState() === playerStates.PLAYING) {
+                if (self.player.is('playing')) {
                     self.player.stop();
                 }
             });
@@ -880,7 +884,7 @@ define([
                 }
             }.bind(record));
             record.on('updatestate', function() {
-                if (self.player.getState() === playerStates.CREATED
+                if (self.player.is('created')
                     && self.recorder.getState() !== recorderStates.RECORDING
                     && (
                         self.mediaStimulus && (self.mediaStimulus.getState() === mediaStimulusStates.ENDED || self.mediaStimulus.getState() === mediaStimulusStates.DISABLED)
@@ -908,13 +912,13 @@ define([
                     if (self.recorder.getState() === recorderStates.RECORDING) {
                         self.stopRecording();
 
-                    } else if (self.player.getState() === playerStates.PLAYING) {
+                    } else if (self.player.is('playing')) {
                         self.stopPlayback();
                     }
                 }
             }.bind(stop));
             stop.on('updatestate', function() {
-                if (self.player.getState() === playerStates.PLAYING
+                if (self.player.is('playing')
                     || self.recorder.getState() === recorderStates.RECORDING) {
                     this.enable();
                 } else {
@@ -938,14 +942,10 @@ define([
                     }
                 }.bind(play));
                 play.on('updatestate', function() {
-                    switch (self.player.getState()) {
-                        case playerStates.IDLE:
-                            this.enable();
-                            break;
-                        case playerStates.PLAYING:
-                        default:
-                            this.disable();
-                            break;
+                    if (self.player.is('idle')) {
+                        this.enable();
+                    } else {
+                        this.disable();
                     }
                 }.bind(play));
                 this.controls.play = play;
@@ -963,13 +963,13 @@ define([
                 reset.on('click', function() {
                     if (this.getState() === controlStates.ENABLED) {
                         self.resetRecording();
+                        self.updateResetCount();
                     }
-                    self.updateResetCount();
                 }.bind(reset));
                 reset.on('updatestate', function() {
                     if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
                         this.disable();
-                    } else if (self.player.getState() === playerStates.IDLE) {
+                    } else if (self.player.is('idle')) {
                         this.enable();
                     } else {
                         this.disable();
@@ -984,15 +984,6 @@ define([
             for (control in this.controls) {
                 if (this.controls.hasOwnProperty(control)) {
                     this.controls[control].updateState();
-                }
-            }
-        },
-
-        disableControls: function disableControls() {
-            var control;
-            for (control in this.controls) {
-                if (this.controls.hasOwnProperty(control)) {
-                    this.controls[control].disable();
                 }
             }
         },
