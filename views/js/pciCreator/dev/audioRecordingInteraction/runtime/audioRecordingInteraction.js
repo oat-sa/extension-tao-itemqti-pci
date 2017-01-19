@@ -41,6 +41,9 @@ define([
 
     var audioRecordingInteraction;
 
+    /**
+     * Type casting helpers for PCI parameters
+     */
     function toBoolean(value, defaultValue) {
         if (typeof(value) === "undefined") {
             return defaultValue;
@@ -52,15 +55,20 @@ define([
         return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
     }
 
-    audioRecordingInteraction = {
 
+    /**
+     * The main interaction code
+     */
+    audioRecordingInteraction = {
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
 
-        render: function render(dom, config) {
-            this.$container = $(dom);
-
+        /**
+         * Render the PCI
+         * @param {Object} config
+         */
+        render: function render(config) {
             this.$mediaStimulusContainer    = this.$container.find('.audio-rec > .media-stimulus');
             this.$controlsContainer         = this.$container.find('.audio-rec > .controls');
             this.$progressContainer         = this.$container.find('.audio-rec > .progress');
@@ -84,6 +92,7 @@ define([
         },
 
         /**
+         * Initialize the PCI configuration
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
@@ -95,7 +104,6 @@ define([
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
          */
         initConfig: function init(config) {
-
             this.config = {
                 allowPlayback:          toBoolean(config.allowPlayback, true),
                 audioBitrate:           toInteger(config.audioBitrate, 20000),
@@ -108,6 +116,9 @@ define([
             };
         },
 
+        /**
+         * Instanciate the recorder and its event listeners
+         */
         initRecorder: function initRecorder() {
             var self = this;
 
@@ -123,7 +134,7 @@ define([
             });
 
             this.recorder.on('recordingavailable', function(blob, durationMs) {
-                var recordingUrl = window.URL.createObjectURL(blob),
+                var recordingUrl = window.URL && window.URL.createObjectURL && window.URL.createObjectURL(blob),
                     filename =
                         self._filePrefix + '_' +
                         window.Date.now() + '.' +
@@ -152,6 +163,10 @@ define([
             });
         },
 
+        /**
+         * Instanciate the audio player and its event listeners.
+         * This player is only for the playback of the recording. The stimulus uses its own player.
+         */
         initPlayer: function initPlayer() {
             var self = this;
 
@@ -170,14 +185,23 @@ define([
             });
         },
 
+        /**
+         * Create the progress bar object
+         */
         initProgressBar: function initProgressBar() {
             this.progressBar = uiElements.progressBarFactory({
                 $container: this.$progressContainer
             });
         },
 
+        /**
+         * Create the input meter object
+         */
         initMeter: function initMeter() {
-            this.$meterContainer.find('.mic').append($('<img>',
+            var $micIcon = this.$meterContainer.find('.mic');
+
+            $micIcon.empty();
+            $micIcon.append($('<img>',
                 { src: this.assetManager.resolve(ICON_MIC)}
             ));
 
@@ -187,6 +211,10 @@ define([
             });
         },
 
+        /**
+         * Instanciate the media stimulus player and its event listeners
+         * This player is only for the playback of the stimulus. The recorded audio uses its own player.
+         */
         initMediaStimulus: function initMediaStimulus() {
             var self = this;
 
@@ -222,14 +250,25 @@ define([
             }
         },
 
+        /**
+         * Check if the item has a media stimulus defined
+         * @returns {Boolean}
+         */
         hasMediaStimulus: function hasMediaStimulus() {
             return (this.config.useMediaStimulus && this.config.media && this.config.media.uri);
         },
 
+        /**
+         * Check if the media stimulus has been played
+         * @returns {Boolean}
+         */
         mediaStimulusHasPlayed: function mediaStimulusHasPlayed() {
             return this.mediaStimulus && (this.mediaStimulus.is('ended') || this.mediaStimulus.is('disabled'));
         },
 
+        /**
+         * Starts the recording if has permission to access the mic. If not, ask for it.
+         */
         startRecording: function startRecording() {
             var self = this;
 
@@ -240,7 +279,7 @@ define([
             } else {
                 startForReal();
             }
-            //todo: move this one level up?
+
             function startForReal() {
                 self.resetRecording();
                 self.recorder.start();
@@ -253,28 +292,46 @@ define([
             }
         },
 
+        /**
+         * Stop the current recording
+         */
         stopRecording: function stopRecording() {
             this.recorder.stop();
             this.updateControls();
         },
 
+        /**
+         * Stop the playback of the recording
+         */
         stopPlayback: function stopPlayback() {
             this.player.stop();
             this.updateControls();
         },
 
+        /**
+         * Start the playback of the recording
+         */
         playRecording: function playRecording() {
             this.player.play();
             this.progressBar.setStyle('playback');
             this.updateControls();
         },
 
+        /**
+         * Clear the PCI response and reset the player
+         */
         resetRecording: function resetRecording() {
             this.player.unload();
-            this.updateResponse(null, this._recordsAttempts);
+            this.updateResponse(null);
             this.updateControls();
         },
 
+        /**
+         * This function is called when the recordings ends.
+         * It creates a base64 encoded file from the output of the recorder and stores it as the PCI response.
+         * @param {Blob} blob - the recording
+         * @param {String} filename - will be part of the QTI response
+         */
         createBase64Recoding: function createBase64Recoding(blob, filename) {
             var self = this;
 
@@ -292,20 +349,30 @@ define([
                         name: filename,
                         data: base64Data
                     };
-                self.updateResponse(recording, self._recordsAttempts + 1);
+                self.updateResponse(recording);
             };
         },
 
+        /**
+         * Update the PCI response. The recording parameter should follow the QTI 'file' response type
+         * @param {Object} recording
+         * @param {String} recording.mime - mime type of the file
+         * @param {String} recording.name - filename
+         * @param {String} recording.data - base64 encoded file
+         */
         updateResponse: function updateResponse(recording) {
             this._recording = recording;
             if (typeof this.trigger === 'function') {
-                this.trigger('responseChange');
+                this.trigger('responseChange'); // this has to be camelcase
             }
         },
 
+        /**
+         * Update the reset recording button with the number of remaining attempts
+         */
         updateResetCount: function updateResetCount() {
             var remaining = this.config.maxRecords - this._recordsAttempts - 1,
-                resetLabel = controlIcon(this.iconsFileUrl, 'reset');
+                resetLabel = this.getControlIcon('reset');
 
             if (this.config.maxRecords > 1) {
                 resetLabel += ' (' + remaining + ')';
@@ -315,7 +382,15 @@ define([
             }
         },
 
-        displayDownloadLink: function displayDownloadLink(url, filename, filesize, duration) {
+        /**
+         * Add a download link for the recording to the document body (! see inline comment).
+         * This is to be used for testing purposes only.
+         * @param {String} url
+         * @param {String} filename
+         * @param {Number} filesize - in Bytes, size of the recording
+         * @param {Number} durationMs - length of the recording
+         */
+        displayDownloadLink: function displayDownloadLink(url, filename, filesize, durationMs) {
             var downloadLink;
 
             if (this.config.displayDownloadLink === true) {
@@ -327,27 +402,29 @@ define([
                 downloadLink.text =
                     'download ' + this._recordsAttempts + ' - ' +
                     Math.round(filesize / 1000) + 'KB - ' +
-                    Math.round(duration / 1000) + 's';
+                    Math.round(durationMs / 1000) + 's';
                 downloadLink.download = filename;
                 downloadLink.href = url;
             }
         },
 
+        /**
+         * Create the recorder controls
+         */
         initControls: function initControls() {
             var self = this,
-
                 record,
                 stop,
                 play,
                 reset;
 
-            this.clearControls();
-
+            this.$controlsContainer.empty();
+            this.controls = {};
 
             // Record button
             record = uiElements.controlFactory({
                 id: 'record',
-                label: controlIcon(this.iconsFileUrl, 'record'),
+                label: this.getControlIcon('record'),
                 container: this.$controlsContainer
             });
             record.on('click', function() {
@@ -375,7 +452,7 @@ define([
             // Stop button
             stop = uiElements.controlFactory({
                 id: 'stop',
-                label: controlIcon(this.iconsFileUrl, 'stop'),
+                label: this.getControlIcon('stop'),
                 container: this.$controlsContainer
             });
             stop.on('click', function() {
@@ -403,7 +480,7 @@ define([
             if (this.config.allowPlayback === true) {
                 play = uiElements.controlFactory({
                     id: 'play',
-                    label: controlIcon(this.iconsFileUrl, 'play'),
+                    label: this.getControlIcon('play'),
                     container: this.$controlsContainer
                 });
                 play.on('click', function() {
@@ -426,7 +503,7 @@ define([
             if (this.config.maxRecords !== 1) {
                 reset = uiElements.controlFactory({
                     id: 'reset',
-                    label: controlIcon(this.iconsFileUrl, 'reset'),
+                    label: this.getControlIcon('reset'),
                     container: this.$controlsContainer
                 });
                 reset.on('click', function() {
@@ -450,6 +527,9 @@ define([
             self.updateControls();
         },
 
+        /**
+         * Update the state of all the controls
+         */
         updateControls: function updateControls() {
             var control;
             for (control in this.controls) {
@@ -459,11 +539,18 @@ define([
             }
         },
 
-        clearControls: function clearControls() {
-            this.$controlsContainer.empty();
-            //todo: destroy?
-            this.controls = {};
+        /**
+         * Get the svg markup for a given iconId
+         * @param {String} iconId
+         * @returns {string}
+         */
+        getControlIcon: function getControlIcon(iconId) {
+            return '<svg title="' + iconId + '">' +
+                '<use href="' + this.iconsFileUrl + '#' + iconId + '"/>' +
+                '</svg>';
         },
+
+
 
 
         /**
@@ -488,10 +575,10 @@ define([
             event.addEventMgr(this);
 
             this.id = id;
-            this.dom = dom;
             this.assetManager = assetManager;
+            this.$container = $(dom);
 
-            this.render(dom, config);
+            this.render(config);
 
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
@@ -588,13 +675,6 @@ define([
             return this.getResponse();
         }
     };
-
-    /// todo: move this into interaction
-    function controlIcon(url, iconId) {
-        return '<svg title="' + iconId + '">' +
-            '<use xlink:href="' + url + '#' + iconId + '"/>' +
-            '</svg>';
-    }
 
     qtiCustomInteractionContext.register(audioRecordingInteraction);
 });
