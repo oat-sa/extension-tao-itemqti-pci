@@ -16,6 +16,9 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 /**
+ * This wraps the getUserMedia / MediaRecorder APIs. Works only with a few compliant browsers,
+ * meaning Chrome (https) and Firefox.
+ *
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
@@ -35,7 +38,8 @@ define([
     };
 
     /**
-     * MediaDevices.getUserMedia polyfill - https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
+     * MediaDevices.getUserMedia polyfill
+     * https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
      * Mozilla Public License, version 2.0 - https://www.mozilla.org/en-US/MPL/
      */
     function setGetUserMedia() {
@@ -76,25 +80,64 @@ define([
 
     /**
      * @param {Object}  config
-     * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
+     * @param {Number}  config.audioBitrate - in bits per second, quality of the recording
      * @param {Number}  config.maxRecordingTime - in seconds
-     * @returns {Object} - wrapper for getUserMedia / MediaRecorder
+     * @returns {Object} - The recorder
      */
     return function recorderFactory(config) {
-        var MediaRecorder = window.MediaRecorder,
-            mediaRecorder,
-            recorder,
-            recorderOptions = {
-                audioBitsPerSecond: config.audioBitrate
-            },
-            state = recorderStates.CREATED,
-            mimeType,
-            chunks = [],
-            chunkSizeMs = 1000,
-            startTimeMs,
-            timerId,
-            analyser,
-            frequencyArray;
+        var MediaRecorder = window.MediaRecorder,       // The MediaRecorder API
+            mediaRecorder,                              // The MediaRecorder instance
+            recorderOptions = {                         // Options for the MediaRecorder constructor
+                audioBitsPerSecond: config.audioBitrate || 20000
+            };
+
+        var recorder,                       // Return value of the present factory
+            state = recorderStates.CREATED; // recorder inner state
+
+        var mimeType,               // mime type of the recording
+            chunks = [],            // contains the current recording split in chunks
+            chunkSizeMs = 1000,     // size of a chunk
+            startTimeMs,            // start time of the recording - used for calculating record duration
+            timerId;                // a place to store the requestAnimationFrame return value
+
+        var analyser,               // the WebAudio node use to read the input level
+            frequencyArray;         // used to compute the input level from the current array of frequencies
+
+        /**
+         * Create the Web Audio node that will be use to analyse the input stream
+         * @param {MediaStream} stream
+         */
+        function initAnalyser(stream) {
+            var audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
+                source = audioCtx.createMediaStreamSource(stream),
+                bufferLength;
+
+            analyser = audioCtx.createAnalyser();
+            analyser.minDecibels = -100;
+            analyser.maxDecibels = -30;
+            analyser.fftSize = 32;
+
+            source.connect(analyser);
+
+            bufferLength = analyser.frequencyBinCount;
+            frequencyArray = new Uint8Array(bufferLength);
+        }
+
+        /**
+         * Computes the input level from the current frequency range
+         * @returns {Number}
+         */
+        function getInputLevel() {
+            var sum;
+
+            analyser.getByteFrequencyData(frequencyArray);
+
+            sum = frequencyArray.reduce(function(a, b) {
+                return a + b;
+            });
+            return (sum / frequencyArray.length).toFixed(0);
+        }
+
 
         setGetUserMedia();
 
@@ -112,46 +155,32 @@ define([
             }
         }
 
-        // analyser is the Web Audio node used to read the input level
-        function initAnalyser(stream) {
-            var audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
-                source = audioCtx.createMediaStreamSource(stream),
-                bufferLength;
-
-            analyser = audioCtx.createAnalyser();
-            analyser.minDecibels = -100;
-            analyser.maxDecibels = -30;
-            analyser.fftSize = 32;
-
-            source.connect(analyser);
-
-            bufferLength = analyser.frequencyBinCount;
-            frequencyArray = new Uint8Array(bufferLength);
-        }
-
-        function getInputLevel() {
-            var sum;
-
-            analyser.getByteFrequencyData(frequencyArray);
-
-            sum = frequencyArray.reduce(function(a, b) {
-                return a + b;
-            });
-            return (sum / frequencyArray.length).toFixed(0);
-        }
-
         recorder = {
-            _setState: function(newState) {
+            /**
+             * Set recorder state
+             * @param {String} newState
+             * @private
+             */
+            _setState: function _setState(newState) {
                 state = newState;
                 this.trigger('statechange');
                 this.trigger(newState);
             },
 
-            is: function(queriedState) {
+            /**
+             * Check the current state
+             * @param {String} queriedState
+             * @returns {Boolean}
+             */
+            is: function is(queriedState) {
                 return (state === queriedState);
             },
 
-            init: function() {
+            /**
+             * Initialise the MediaRecorder stream
+             * @returns {Promise}
+             */
+            init: function init() {
                 var self = this;
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
@@ -164,12 +193,12 @@ define([
                         self._setState(recorderStates.IDLE);
 
                         // save chunks of the recording
-                        mediaRecorder.ondataavailable = function(e) {
+                        mediaRecorder.ondataavailable = function ondataavailable(e) {
                             chunks.push(e.data);
                         };
 
                         // stop record callback
-                        mediaRecorder.onstop = function() {
+                        mediaRecorder.onstop = function onstop() {
                             var blob,
                                 durationMs;
 
@@ -190,11 +219,14 @@ define([
                         };
                     })
                     .catch(function(err) {
-                        throw err; //fixme: really?
+                        throw err;
                     });
             },
 
-            start: function() {
+            /**
+             * Start the recording
+             */
+            start: function start() {
                 mediaRecorder.start(chunkSizeMs);
 
                 startTimeMs = new window.Date().getTime();
@@ -204,18 +236,28 @@ define([
                 this._monitorRecording();
             },
 
-            stop: function() {
+            /**
+             * Stop the recording
+             */
+            stop: function stop() {
                 this.cancelled = false;
                 mediaRecorder.stop();
                 // state change is triggered by onstop handler
             },
 
-            cancel: function() {
+            /**
+             * Cancel the current recording
+             */
+            cancel: function cancel() {
                 this.cancelled = true;
                 mediaRecorder.stop();
             },
 
-            _monitorRecording: function() {
+            /**
+             * Send the current recording description through events: input level and duration
+             * @private
+             */
+            _monitorRecording: function _monitorRecording() {
                 var nowMs = new window.Date().getTime(),
                     elapsedSeconds = (nowMs - startTimeMs) / 1000;
 
@@ -226,9 +268,16 @@ define([
 
                 if (config.maxRecordingTime > 0 && elapsedSeconds >= config.maxRecordingTime) {
                     this.stop();
-                    cancelAnimationFrame(timerId);
                 }
+            },
+
+            /**
+             * Destroy the recorder instance
+             */
+            destroy: function destroy() {
+                mediaRecorder = null;
             }
+
         };
         event.addEventMgr(recorder);
 

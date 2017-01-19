@@ -47,7 +47,7 @@ define([
 
         player = {
             /**
-             * set the state of the player
+             * Set player state
              * @param {String} newState
              * @private
              */
@@ -60,7 +60,7 @@ define([
             /**
              * Check the current state
              * @param {String} queriedState
-             * @returns {boolean}
+             * @returns {Boolean}
              */
             is: function is(queriedState) {
                 return (state === queriedState);

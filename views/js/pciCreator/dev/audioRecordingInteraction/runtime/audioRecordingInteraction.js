@@ -335,8 +335,13 @@ define([
         createBase64Recoding: function createBase64Recoding(blob, filename) {
             var self = this;
 
-            //todo: implement a spinner or something to feedback that work is in progress while this is happening:
-            //todo: as the response is not yet ready, the user shouldn't leave the item in the meantime
+            /**
+             * TODO:
+             * implement a spinner or something to feedback that work is in progress while this is happening:
+             * as the response is not yet ready, the user shouldn't leave the item in the meantime.
+             * The asynchronous nature of this operation might also be problematic for saving the recording
+             * when the user exit the item in the middle of a recording (destroy() on the PCI interface should be implemented as a Promise)
+             */
             var reader = new FileReader();
             reader.readAsDataURL(blob);
 
@@ -438,7 +443,6 @@ define([
                     && (
                         self.hasMediaStimulus() && self.mediaStimulusHasPlayed()
                         || ! self.hasMediaStimulus()
-                        // todo: make sure this is reseted on render
                     )
                 ) {
                     this.enable();
@@ -559,7 +563,7 @@ define([
 
         id: -1,
 
-        getTypeIdentifier: function () {
+        getTypeIdentifier: function getTypeIdentifier() {
             return 'audioRecordingInteraction';
         },
         /**
@@ -569,7 +573,7 @@ define([
          * @param {Object} config - json
          * @param {Object} assetManager
          */
-        initialize: function (id, dom, config, assetManager) {
+        initialize: function initialize(id, dom, config, assetManager) {
             var self = this;
 
             event.addEventMgr(this);
@@ -601,7 +605,7 @@ define([
          * @param {Object} interaction
          * @param {Object} response
          */
-        setResponse: function (response) {
+        setResponse: function setResponse(response) {
             var recording = response.base && response.base.file,
                 base64Prefix;
 
@@ -620,7 +624,7 @@ define([
          * @param {Object} interaction
          * @returns {Object}
          */
-        getResponse: function() {
+        getResponse: function getResponse() {
             var response = {
                 base: {
                     file: this._recording
@@ -634,7 +638,7 @@ define([
          *
          * @param {Object} interaction
          */
-        resetResponse: function () {
+        resetResponse: function resetResponse() {
             this.updateResponse(null);
         },
         /**
@@ -644,17 +648,21 @@ define([
          *
          * @param {Object} interaction
          */
-        destroy: function () {
-            this.$container.off('.qtiCommonRenderer');
+        destroy: function destroy() {
             this.resetResponse();
 
-            //todo: check if ongoing recording
+            // if a recording is ongoing, we try to save whatever has been recorded until now
+            // this might not work as the base64 file creation from a Blob is an asynchronous operation
+            if (this.recorder.is('recording')) {
+                this.stopRecording();
+            }
 
             if (this.player) {
                 this.player.unload();
                 this.player = null;
             }
             if (this.recorder) {
+                this.recorder.destroy();
                 this.recorder = null;
             }
         },
@@ -664,7 +672,7 @@ define([
          * @param {Object} interaction
          * @param {Object} state - json format
          */
-        setSerializedState: function (state) {
+        setSerializedState: function setSerializedState(state) {
             this.setResponse(state);
         },
 
@@ -675,7 +683,7 @@ define([
          * @param {Object} interaction
          * @returns {Object} json format
          */
-        getSerializedState: function () {
+        getSerializedState: function getSerializedState() {
             return this.getResponse();
         }
     };
