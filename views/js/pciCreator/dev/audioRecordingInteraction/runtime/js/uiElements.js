@@ -73,35 +73,77 @@ define([
 
         setState(config.defaultState || controlStates.DISABLED);
 
+        /**
+         * Set the state of the control
+         * @param {String} newState
+         */
         function setState(newState) {
             $control.removeClass(state);
             state = newState;
             $control.addClass(state);
         }
 
+        /**
+         * The control instance
+         */
         control = {
+            /**
+             * Check the current state
+             * @param {String} queriedState
+             * @returns {boolean}
+             */
             is: function is(queriedState) {
                 return (state === queriedState);
             },
+
+            /**
+             * Enable the control
+             */
             enable: function enable() {
                 setState(controlStates.ENABLED);
             },
+
+            /**
+             * Disable the control
+             */
             disable: function disable() {
                 setState(controlStates.DISABLED);
             },
+
+            /**
+             * Activate the control
+             */
             activate: function activate() {
                 setState(controlStates.ACTIVE);
             },
+
+            /**
+             * Trigger the update state callback
+             */
             updateState: function updateState() {
                 this.trigger('updatestate');
             },
+
+            /**
+             * Change the control label
+             * @param {String} label
+             */
             updateLabel: function updateLabel(label) {
                 $control.html(label);
+            },
+
+            /**
+             * Destroy the control
+             */
+            destroy: function destroy() {
+                $control.off('.audioPCI');
+                $control.empty();
+                $control = null;
             }
         };
         event.addEventMgr(control);
 
-        $control.on('click.qtiCommonRenderer', function() {//todo: remove this, implement destroy function
+        $control.on('click.audioPCI', function() {
             control.trigger('click');
         });
 
@@ -110,8 +152,8 @@ define([
 
     /**
      * Creates a progress bar to display recording or playback progress
-     * @param {Object}  config
-     * @param {$}       config.$container - jQuery Dom element that the progress bar will be appended to
+     * @param {Object} config
+     * @param {$} config.$container - jQuery element that the progress bar will be appended to
      */
     function progressBarFactory(config) {
         var progressBar,
@@ -121,23 +163,27 @@ define([
             currentClass;
 
         progressBar = {
-            clear: function() {
-                config.$container.empty();
-            },
-
-            render: function() {
-                config.$container.append($progressBar);
-            },
-
+            /**
+             * Set the maximum value of the progress bar
+             * @param {Number} max
+             */
             setMax: function setMax(max) {
                 $progressBar.attr('max', max);
             },
 
+            /**
+             * Set the current value of the progress bar
+             * @param {Number} value
+             */
             setValue: function setValue(value) {
                 $progressBar.attr('value', value);
                 $progressBar.text(value);
             },
 
+            /**
+             * Set the CSS class on the progressbar element
+             * @param {String} className
+             */
             setStyle: function setStyle(className) {
                 $progressBar.removeClass(currentClass);
                 currentClass = className;
@@ -145,30 +191,31 @@ define([
             }
         };
 
-        progressBar.clear();
-        progressBar.render();
+        config.$container.empty();
+        config.$container.append($progressBar);
 
         return progressBar;
     }
 
 
     /**
-     * Creates a input meter for microphone input signal
-     * @param {Object}  config
+     * Creates a input meter for microphone input signal. Uses the canvas.
+     * The meter is actually composed of multiple "leds" stacked on top of each other.
+     * @param {Object} config
      * @param {Integer} config.maxLevel - level for which all meter leds will be lit
-     * @param {$}       config.$container - jQuery Dom element that the meter will be appended to
+     * @param {$} config.$container - jQuery Dom element that the meter will be appended to
      */
     function inputMeterFactory(config) {
         var inputMeter,
             canvas,
-            canvasCtx,
+            canvasCtx;
 
-            grey    = '#cccccc',
+        var grey    = '#cccccc',
             green   = '#00aa00',
             orange  = '#ff9300',
-            red     = '#ff0000',
+            red     = '#ff0000';
 
-            ledHeight = 3,
+        var ledHeight = 3,
             ledWidth = 10,
             ledPadding = 0,
             ledColors = [
@@ -179,9 +226,9 @@ define([
             ledNumbers = ledColors.length,
 
             width = ledWidth,
-            height = (ledHeight * ledNumbers) + (ledPadding * (ledNumbers - 1)),
+            height = (ledHeight * ledNumbers) + (ledPadding * (ledNumbers - 1));
 
-            scaledLevel;
+        var scaledLevel;
 
         canvas = document.createElement('canvas');
         canvas.height = height;
@@ -192,6 +239,11 @@ define([
 
         canvasCtx = canvas.getContext('2d');
 
+        /**
+         * Draw a single led
+         * @param {Number} index - of the Led to draw
+         * @param {String} color - hex code in which to draw the led
+         */
         function drawLed(index, color) {
             var x = 0,
                 y = (ledHeight + ledPadding) * (ledNumbers - (index + 1));
@@ -201,7 +253,11 @@ define([
         }
 
         inputMeter = {
-            draw: function(level) {
+            /**
+             * Draw the whole meter with the given input level
+             * @param {Number} level
+             */
+            draw: function draw(level) {
                 var currentColor, i;
 
                 scaledLevel = (level / config.maxLevel * height).toFixed(0);
@@ -214,6 +270,15 @@ define([
                     }
                     drawLed(i, currentColor);
                 }
+            },
+
+            /**
+             * Destroy the canvas element
+             */
+            destroy: function destroy() {
+                canvasCtx = null;
+                canvas = null;
+                config.$container.empty();
             }
         };
 
@@ -224,9 +289,11 @@ define([
 
 
     /**
-     * This is just a tiny wrapper around the media player instance.
-     * The goal is to have a consistent API with the rest of the components
-     *
+     * This is just a tiny wrapper around the media player instance, for the goal of having a consistent API with the rest of the components
+     * @param {Object} config
+     * @param {Object} config.$container
+     * @param {Object} config.assetManager - the PCI assetmanager used to resolve the media URL
+     * @param {Object} config.media - the media properties as given by the PCI media manager helper
      */
     function mediaStimulusFactory(config) {
         var $container   = config.$container,
@@ -241,16 +308,29 @@ define([
             mediaElement;
 
         mediaStimulus = {
+            /**
+             * Set state of the mediaStimulus
+             * @param {String} newState
+             * @private
+             */
             _setState: function setState(newState) {
                 state = newState;
                 this.trigger('statechange');
                 this.trigger(state);
             },
 
+            /**
+             * Check current state
+             * @param {String} queriedState
+             * @returns {boolean}
+             */
             is: function is(queriedState) {
                 return (state === queriedState);
             },
 
+            /**
+             * Render the media player
+             */
             render: function render() {
                 var self = this;
 
@@ -260,11 +340,10 @@ define([
                 }
 
                 if (media.uri) {
-                    mediaPlayerOptions = _.defaults({
+                    mediaPlayerOptions = _.assign({}, media, {
                         $container: $container,
                         url:        assetManager.resolve(media.uri)
-                        //fixme: add media here to avoid polluting the xml markup with the url
-                    }, media);
+                    });
 
                     mediaPlayer = mediaPlayerFactory(mediaPlayerOptions);
                     mediaPlayer.render();
@@ -283,10 +362,15 @@ define([
                                 self._setState(mediaStimulusStates.ENDED);
                             })
                             .on('disabled', function() {
-                                self._setState(mediaStimulusStates.DISABLED); //fixme: useless? if so, remove trigger event in media player
+                                self._setState(mediaStimulusStates.DISABLED);
                             });
                     }
                 }
+            },
+
+            destroy: function destroy() {
+                mediaPlayer.destroy();
+                $container.empty();
             }
         };
 

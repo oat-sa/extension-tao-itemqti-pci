@@ -544,6 +544,19 @@ define([
         },
 
         /**
+         * Destroy the state of all the controls
+         */
+        destroyControls: function destroyControls() {
+            var control;
+            for (control in this.controls) {
+                if (this.controls.hasOwnProperty(control)) {
+                    this.controls[control].destroy();
+                }
+            }
+            this.controls = null;
+        },
+
+        /**
          * Get the svg markup for a given iconId
          * @param {String} iconId
          * @returns {string}
@@ -649,22 +662,29 @@ define([
          * @param {Object} interaction
          */
         destroy: function destroy() {
-            this.resetResponse();
-
-            // if a recording is ongoing, we try to save whatever has been recorded until now
-            // this might not work as the base64 file creation from a Blob is an asynchronous operation
             if (this.recorder.is('recording')) {
                 this.stopRecording();
             }
 
-            if (this.player) {
-                this.player.unload();
-                this.player = null;
+            this.destroyControls();
+
+            this.inputMeter.destroy();
+            this.inputMeter = null;
+
+            this.progressBar = null;
+
+            if (this.mediaStimulus) {
+                this.mediaStimulus.destroy();
+                this.mediaStimulus = null;
             }
-            if (this.recorder) {
-                this.recorder.destroy();
-                this.recorder = null;
-            }
+
+            this.player.unload();
+            this.player = null;
+
+            this.recorder.destroy();
+            this.recorder = null;
+
+            this.resetResponse();
         },
         /**
          * Restore the state of the interaction from the serializedState.
