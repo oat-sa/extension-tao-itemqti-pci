@@ -142,6 +142,8 @@ define([
                         blob.type.split(';')[0].split('/')[1],
                     filesize = blob.size;
 
+                self._recordsAttempts++;
+
                 self.player.load(recordingUrl);
                 self.createBase64Recoding(blob, filename);
 
