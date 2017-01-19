@@ -61,7 +61,6 @@ define([
      * @param {$}       config.container - jQuery Dom element that the button will be appended to
      */
     function controlFactory(config) {
-
         var state,
             control,
             $control = $('<button>', {
@@ -81,19 +80,19 @@ define([
         }
 
         control = {
-            is: function(queriedState) {
+            is: function is(queriedState) {
                 return (state === queriedState);
             },
-            enable: function() {
+            enable: function enable() {
                 setState(controlStates.ENABLED);
             },
-            disable: function() {
+            disable: function disable() {
                 setState(controlStates.DISABLED);
             },
-            activate: function() {
+            activate: function activate() {
                 setState(controlStates.ACTIVE);
             },
-            updateState: function() {
+            updateState: function updateState() {
                 this.trigger('updatestate');
             },
             updateLabel: function updateLabel(label) {
@@ -112,7 +111,7 @@ define([
     /**
      * Creates a progress bar to display recording or playback progress
      * @param {Object}  config
-     * @param {$}       config.container - jQuery Dom element that the progress bar will be appended to
+     * @param {$}       config.$container - jQuery Dom element that the progress bar will be appended to
      */
     function progressBarFactory(config) {
         var progressBar,
@@ -126,7 +125,7 @@ define([
                 config.$container.empty();
             },
 
-            display: function() {
+            render: function() {
                 config.$container.append($progressBar);
             },
 
@@ -145,6 +144,10 @@ define([
                 $progressBar.addClass(currentClass);
             }
         };
+
+        progressBar.clear();
+        progressBar.render();
+
         return progressBar;
     }
 

@@ -37,10 +37,14 @@ define([
                 audioBitrate:        20000,
                 autoStart:           false,
                 displayDownloadLink: false,
-                maxRecords:          0,
+                maxRecords:          2,
                 maxRecordingTime:    120,
-                useMediaStimulus:    false
-                // todo: add new properties here
+                useMediaStimulus:    false,
+                media:               {
+                    autostart:     true,
+                    replayTimeout: 5,
+                    maxPlays:      2
+                }
             };
         },
         /**

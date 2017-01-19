@@ -36,37 +36,51 @@ define([
 ){
     'use strict';
 
-    var ICONS_FILE = 'audioRecordingInteraction/runtime/img/controls.svg';
+    var ICON_CONTROLS = 'audioRecordingInteraction/runtime/img/controls.svg';
+    var ICON_MIC      = 'audioRecordingInteraction/runtime/img/mic.svg';
 
-    var audioRecordingInteraction = {
+    var audioRecordingInteraction;
+
+    function toBoolean(value, defaultValue) {
+        if (typeof(value) === "undefined") {
+            return defaultValue;
+        } else {
+            return (value === true || value === "true");
+        }
+    }
+    function toInteger(value, defaultValue) {
+        return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
+    }
+
+    audioRecordingInteraction = {
 
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
 
-        render: function render(config) {
-            // initialization
-            this._recording = null;
-            this._recordsAttempts = 0;
-            this.iconsFileUrl = this.assetManager.resolve(ICONS_FILE);
+        render: function render(dom, config) {
+            this.$container = $(dom);
+
+            this.$mediaStimulusContainer    = this.$container.find('.audio-rec > .media-stimulus');
+            this.$controlsContainer         = this.$container.find('.audio-rec > .controls');
+            this.$progressContainer         = this.$container.find('.audio-rec > .progress');
+            this.$meterContainer            = this.$container.find('.audio-rec > .input-meter');
+
+            this._recording         = null;
+            this._recordsAttempts   = 0;
+
+            this.config             = {};
+            this.controls           = {};
+            this.iconsFileUrl       = this.assetManager.resolve(ICON_CONTROLS);
 
             this.initConfig(config);
             this.initRecorder();
             this.initPlayer();
             this.initProgressBar();
             this.initMeter();
-
-            // ui rendering
-            this.createControls();
+            this.initMediaStimulus();
+            this.initControls();
             this.updateResetCount();
-            this.progressBar.clear();
-            this.progressBar.display();
-            if (this.config.useMediaStimulus) {
-                this.initMediaStimulus();
-                this.mediaStimulus.render();
-            }
-
-            this.updateControls();
         },
 
         /**
@@ -77,18 +91,10 @@ define([
          * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
+         * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
+         * @param {Object}  config.media - media object (handled by the PCI media manager helper)
          */
         initConfig: function init(config) {
-            function toBoolean(value, defaultValue) {
-                if (typeof(value) === "undefined") {
-                    return defaultValue;
-                } else {
-                    return (value === true || value === "true");
-                }
-            }
-            function toInteger(value, defaultValue) {
-                return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
-            }
 
             this.config = {
                 allowPlayback:          toBoolean(config.allowPlayback, true),
@@ -98,7 +104,6 @@ define([
                 maxRecords:             toInteger(config.maxRecords, 3),
                 maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
-                replayTimeout:          toBoolean(config.replayTimeout, false),
                 media:                  config.media || {}
             };
         },
@@ -172,6 +177,10 @@ define([
         },
 
         initMeter: function initMeter() {
+            this.$meterContainer.find('.mic').append($('<img>',
+                { src: this.assetManager.resolve(ICON_MIC)}
+            ));
+
             this.inputMeter = uiElements.inputMeterFactory({
                 $container: this.$meterContainer.find('.leds'),
                 maxLevel: 100 // this is closely related to the values analyser.minDecibels and analyser.maxDecibels in recorderFactory
@@ -181,30 +190,44 @@ define([
         initMediaStimulus: function initMediaStimulus() {
             var self = this;
 
-            this.mediaStimulus = uiElements.mediaStimulusFactory({
-                $container:   this.$mediaStimulusContainer,
-                assetManager: this.assetManager,
-                media:        this.config.media
-            });
+            if (this.hasMediaStimulus()) {
+                this.mediaStimulus = uiElements.mediaStimulusFactory({
+                    $container:   this.$mediaStimulusContainer,
+                    assetManager: this.assetManager,
+                    media:        this.config.media
+                });
 
-            this.mediaStimulus.on('statechange', function() {
-                self.updateControls();
-            });
+                this.mediaStimulus.on('statechange', function() {
+                    self.updateControls();
+                });
 
-            this.mediaStimulus.on('playing', function() {
-                if (self.recorder.is('recording')) {
-                    self.recorder.cancel();
-                }
-                if (self.player.is('playing')) {
-                    self.player.stop();
-                }
-            });
+                this.mediaStimulus.on('playing', function() {
+                    if (self.recorder.is('recording')) {
+                        self.recorder.cancel();
+                    }
+                    if (self.player.is('playing')) {
+                        self.player.stop();
+                    }
+                });
 
-            this.mediaStimulus.on('ended', function() {
-                if (self.config.autoStart) {
-                    self.startRecording();
-                }
-            });
+                this.mediaStimulus.on('ended', function() {
+                    if (self.config.autoStart) {
+                        self.startRecording();
+                    }
+                });
+                this.mediaStimulus.render();
+
+            } else {
+                this.$mediaStimulusContainer.empty();
+            }
+        },
+
+        hasMediaStimulus: function hasMediaStimulus() {
+            return (this.config.useMediaStimulus && this.config.media && this.config.media.uri);
+        },
+
+        mediaStimulusHasPlayed: function mediaStimulusHasPlayed() {
+            return this.mediaStimulus && (this.mediaStimulus.is('ended') || this.mediaStimulus.is('disabled'));
         },
 
         startRecording: function startRecording() {
@@ -310,7 +333,7 @@ define([
             }
         },
 
-        createControls: function createControls() {
+        initControls: function initControls() {
             var self = this,
 
                 record,
@@ -336,8 +359,8 @@ define([
                 if (self.player.is('created')
                     && !self.recorder.is('recording')
                     && (
-                        self.mediaStimulus && (self.mediaStimulus.is('ended') || self.mediaStimulus.is('disabled'))
-                        || ! self.mediaStimulus
+                        self.hasMediaStimulus() && self.mediaStimulusHasPlayed()
+                        || ! self.hasMediaStimulus()
                         // todo: make sure this is reseted on render
                     )
                 ) {
@@ -423,6 +446,8 @@ define([
                 }.bind(reset));
                 this.controls.reset = reset;
             }
+
+            self.updateControls();
         },
 
         updateControls: function updateControls() {
@@ -464,21 +489,9 @@ define([
 
             this.id = id;
             this.dom = dom;
-            this.controls = {};
             this.assetManager = assetManager;
 
-
-            // implement a reset
-
-            this.$container = $(dom);
-            this.$mediaStimulusContainer = this.$container.find('.media-stimulus');
-            this.$controlsContainer = this.$container.find('.audio-rec > .controls');
-            this.$progressContainer = this.$container.find('.audio-rec > .progress');
-            this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
-            this.$meterContainer.find('.mic').append($('<img>',
-                { src: assetManager.resolve('audioRecordingInteraction/runtime/img/mic.svg')}
-            ));
-            this.render(config);
+            this.render(dom, config);
 
             //tell the rendering engine that I am ready
             qtiCustomInteractionContext.notifyReady(this);
@@ -576,6 +589,7 @@ define([
         }
     };
 
+    /// todo: move this into interaction
     function controlIcon(url, iconId) {
         return '<svg title="' + iconId + '">' +
             '<use xlink:href="' + url + '#' + iconId + '"/>' +
