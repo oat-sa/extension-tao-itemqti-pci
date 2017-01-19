@@ -78,13 +78,13 @@ define([
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
 
-            allowPlayback:          typeCaster.toBoolean(interaction.prop('allowPlayback'), true),
+            allowPlayback:          typeCaster.strToBool(interaction.prop('allowPlayback'), true),
             audioBitrate:           interaction.prop('audioBitrate'),
-            autoStart:              typeCaster.toBoolean(interaction.prop('autoStart'), false),
-            displayDownloadLink:    typeCaster.toBoolean(interaction.prop('displayDownloadLink'), false),
+            autoStart:              typeCaster.strToBool(interaction.prop('autoStart'), false),
+            displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false),
             maxRecords:             interaction.prop('maxRecords'),
             maxRecordingTime:       interaction.prop('maxRecordingTime'),
-            useMediaStimulus:       typeCaster.toBoolean(interaction.prop('useMediaStimulus'), false)
+            useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false)
         }));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
