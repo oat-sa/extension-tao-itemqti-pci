@@ -16,6 +16,8 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 /**
+ * Those are the UI elements used by the audio recording PCI: media stimulus, progress bar, input meter and controls
+ *
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([

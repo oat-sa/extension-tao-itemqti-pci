@@ -1,9 +1,27 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ */
 define([
     'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'audioRecordingInteraction/creator/widget/Widget',
     'tpl!audioRecordingInteraction/creator/tpl/markup'
 ], function(_, ciRegistry, Widget, markupTpl){
+    'use strict';
 
     var _typeIdentifier = 'audioRecordingInteraction';
 
@@ -13,7 +31,7 @@ define([
          *
          * @returns {String}
          */
-        getTypeIdentifier : function(){
+        getTypeIdentifier : function getTypeIdentifier(){
             return _typeIdentifier;
         },
         /**
@@ -22,7 +40,7 @@ define([
          *
          * @returns {Object} Widget
          */
-        getWidget : function(){
+        getWidget : function getWidget(){
             return Widget;
         },
         /**
@@ -31,7 +49,7 @@ define([
          *
          * @returns {Object}
          */
-        getDefaultProperties : function(){
+        getDefaultProperties : function getDefaultProperties(){
             return {
                 allowPlayback:       true,
                 audioBitrate:        20000,
@@ -53,7 +71,7 @@ define([
          *
          * @returns {Object}
          */
-        afterCreate : function(pci){
+        afterCreate : function afterCreate(){
             //do some stuff
         },
         /**
@@ -61,7 +79,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupTemplate : function(){
+        getMarkupTemplate : function getMarkupTemplate(){
             return markupTpl;
         },
         /**
@@ -69,7 +87,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupData : function(pci, defaultData){
+        getMarkupData : function getMarkupData(pci, defaultData){
             defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
