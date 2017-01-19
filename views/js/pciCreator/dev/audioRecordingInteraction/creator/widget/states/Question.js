@@ -25,8 +25,9 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/pciMediaManager/pciMediaManager',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
-    'tpl!audioRecordingInteraction/creator/tpl/propertiesForm'
-], function( _, __, $, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, containerEditor, formTpl){
+    'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
+    'util/typeCaster'
+], function( _, __, $, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, containerEditor, formTpl, typeCaster){
     'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(Question, function create(){
@@ -53,19 +54,16 @@ define([
     });
 
     /**
-     * xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx
-     * @param interaction
-     * @param value
-     * @param name
+     * Change callback of form values
+     * @param {Object} interaction
+     * @param {*} value
+     * @param {String} name
      */
     function configChangeCallBack(interaction, value, name) {
         interaction.prop(name, value);
         interaction.triggerPci('configChange', [interaction.getProperties()]);
     }
 
-    /**
-     * xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx
-     */
     AudioRecordingInteractionStateQuestion.prototype.initForm = function initForm(){
         var _widget = this.widget,
             $form = _widget.$form,
@@ -75,27 +73,18 @@ define([
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
-        //fixme: use helper ?
-        function toBoolean(value, defaultValue) {
-            if (typeof(value) === "undefined") {
-                return defaultValue;
-            } else {
-                return (value === true || value === "true");
-            }
-        }
-
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
 
-            allowPlayback:          toBoolean(interaction.prop('allowPlayback'), true),
+            allowPlayback:          typeCaster.toBoolean(interaction.prop('allowPlayback'), true),
             audioBitrate:           interaction.prop('audioBitrate'),
-            autoStart:              toBoolean(interaction.prop('autoStart'), false),
-            displayDownloadLink:    toBoolean(interaction.prop('displayDownloadLink'), false),
+            autoStart:              typeCaster.toBoolean(interaction.prop('autoStart'), false),
+            displayDownloadLink:    typeCaster.toBoolean(interaction.prop('displayDownloadLink'), false),
             maxRecords:             interaction.prop('maxRecords'),
             maxRecordingTime:       interaction.prop('maxRecordingTime'),
-            useMediaStimulus:       toBoolean(interaction.prop('useMediaStimulus'), false)
+            useMediaStimulus:       typeCaster.toBoolean(interaction.prop('useMediaStimulus'), false)
         }));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
