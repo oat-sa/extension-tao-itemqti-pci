@@ -668,6 +668,9 @@ define([
             if (this.recorder.is('recording')) {
                 this.stopRecording();
             }
+            if (this.player.is('playing')) {
+                this.stopPlayback();
+            }
 
             this.destroyControls();
 

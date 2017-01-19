@@ -74,8 +74,14 @@
 <div class="panel">
     <label>
         <input name="useMediaStimulus" type="checkbox" {{#if useMediaStimulus}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "Use media stimulus"}}
+        <span class="icon-checkbox"></span> {{__ "Use media stimulus"}}
     </label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "This options allow to insert a media stimulus that will have to be played before recording can happen."}}
+    </span>
+</div>
+
+<div class="panel">
     <div class="media-stimulus-properties-form{{#unless useMediaStimulus}} hidden{{/unless}}"></div>
 </div>
