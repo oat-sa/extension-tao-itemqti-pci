@@ -65,7 +65,7 @@ $playback: whiten($info, .3);
     }
 
 
-    // Buttons
+    // Controls
 
     .audiorec-control {
       margin: 10px 10px 10px 0;
@@ -162,7 +162,7 @@ $playback: whiten($info, .3);
 
     // Media stimulus
 
-    .media-stimulus {
+    .media-stimulus.active {
       padding-bottom: 10px;
       margin-bottom: 20px;
       border-bottom: 1px #bbb solid;

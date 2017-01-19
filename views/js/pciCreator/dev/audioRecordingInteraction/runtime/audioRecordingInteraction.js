@@ -219,6 +219,8 @@ define([
             var self = this;
 
             if (this.hasMediaStimulus()) {
+                this.$mediaStimulusContainer.addClass('active');
+
                 this.mediaStimulus = uiElements.mediaStimulusFactory({
                     $container:   this.$mediaStimulusContainer,
                     assetManager: this.assetManager,
@@ -247,6 +249,7 @@ define([
 
             } else {
                 this.$mediaStimulusContainer.empty();
+                this.$mediaStimulusContainer.removeClass('active');
             }
         },
 
