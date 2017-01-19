@@ -646,8 +646,12 @@ define([
          */
         destroy: function () {
             this.$container.off('.qtiCommonRenderer');
+            this.resetResponse();
+
+            //todo: check if ongoing recording
+
             if (this.player) {
-                this.resetResponse();
+                this.player.unload();
                 this.player = null;
             }
             if (this.recorder) {

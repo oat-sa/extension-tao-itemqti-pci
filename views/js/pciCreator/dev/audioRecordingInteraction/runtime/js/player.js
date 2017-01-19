@@ -16,6 +16,9 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 /**
+ * This is an audio player for the sole purpose of playing back the recorded media.
+ * It is actually a very simple wrapper around an HTMLAudioElement
+ *
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
@@ -35,7 +38,7 @@ define([
     };
 
     /**
-     * @returns {Object} - wrapper for an HTMLAudioElement
+     * @returns {Object} - The player
      */
     return function playerFactory() {
         var audioEl,
@@ -43,54 +46,77 @@ define([
             state = playerStates.CREATED;
 
         player = {
-            _setState: function(newState) {
+            /**
+             * set the state of the player
+             * @param {String} newState
+             * @private
+             */
+            _setState: function _setState(newState) {
                 state = newState;
                 this.trigger('statechange');
                 this.trigger(newState);
             },
 
-            is: function(queriedState) {
+            /**
+             * Check the current state
+             * @param {String} queriedState
+             * @returns {boolean}
+             */
+            is: function is(queriedState) {
                 return (state === queriedState);
             },
 
-            load: function(url) {
+            /**
+             * Load a media into the player and register audio element event handlers
+             * @param {String} url
+             */
+            load: function load(url) {
                 var self = this;
 
                 audioEl = new Audio(url);
 
                 // when playback is stopped by user or when the media is loaded:
-                audioEl.oncanplay = function() {
+                audioEl.oncanplay = function oncanplay() {
                     self._setState(playerStates.IDLE);
                 };
 
                 // when playbacks ends on its own:
-                audioEl.onended = function() {
+                audioEl.onended = function onended() {
                     self._setState(playerStates.IDLE);
                     audioEl.currentTime = 0;
                     self.trigger('timeupdate', [0]);
                 };
 
-                audioEl.onplaying = function() {
+                audioEl.onplaying = function onplaying() {
                     self._setState(playerStates.PLAYING);
                 };
 
-                audioEl.ontimeupdate = function() {
+                audioEl.ontimeupdate = function ontimeupdate() {
                     self.trigger('timeupdate', [audioEl.currentTime]);
                 };
             },
 
-            play: function() {
+            /**
+             * Start the playback
+             */
+            play: function play() {
                 audioEl.play();
                 // state change has to be triggered by the onplaying listener
             },
 
-            stop: function() {
+            /**
+             * Stop the playback
+             */
+            stop: function stop() {
                 audioEl.pause();
                 audioEl.currentTime = 0;
                 // state change is triggered by the oncanplay listener
             },
 
-            unload: function() {
+            /**
+             * Reinitialise the audio element. Can be used as a destroy() function
+             */
+            unload: function unload() {
                 audioEl = null;
                 this._setState(playerStates.CREATED);
             }
