@@ -22,8 +22,9 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
+    'OAT/lodash',
     'OAT/util/event'
-], function(event) {
+], function(_, event) {
     'use strict';
 
     /**
@@ -103,6 +104,13 @@ define([
         var analyser,               // the WebAudio node use to read the input level
             frequencyArray;         // used to compute the input level from the current array of frequencies
 
+        var codecsByPreferenceOrder = [
+            'audio/webm;codecs=opus',
+            'audio/ogg;codecs=opus',
+            'audio/webm',
+            'audio/ogg'
+        ];
+
         /**
          * Create the Web Audio node that will be use to analyse the input stream
          * @param {MediaStream} stream
@@ -153,18 +161,14 @@ define([
 
         setGetUserMedia();
 
-        // Prefered encoding format order:
-        // webm/opus, ogg/opus, webm, ogg, default
+        // set the prefered encoding format, if we are able to detect what is supported
+        // if not, the browser default will be used
         if (typeof MediaRecorder.isTypeSupported === 'function') {
-            if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
-                recorderOptions.mimeType = 'audio/webm;codecs=opus';
-            } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
-                recorderOptions.mimeType = 'audio/ogg;codecs=opus';
-            } else if (MediaRecorder.isTypeSupported('audio/webm')) {
-                recorderOptions.mimeType = 'audio/webm';
-            } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
-                recorderOptions.mimeType = 'audio/ogg';
-            }
+            codecsByPreferenceOrder.forEach(function (format) {
+                if (_.isUndefined(recorderOptions.mimeType) && MediaRecorder.isTypeSupported(format)) {
+                    recorderOptions.mimeType = format;
+                }
+            });
         }
 
         recorder = {
