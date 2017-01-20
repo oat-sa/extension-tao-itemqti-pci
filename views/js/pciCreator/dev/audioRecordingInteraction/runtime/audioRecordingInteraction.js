@@ -147,7 +147,7 @@ define([
                 self.player.load(recordingUrl);
                 self.createBase64Recoding(blob, filename);
 
-                self.progressBar.setMax((durationMs / 1000).toFixed(1));
+                self.progressBar.setMax(Math.round(durationMs / 1000));
 
                 self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
             });
@@ -157,7 +157,7 @@ define([
             });
 
             this.recorder.on('timeupdate', function(currentTime) {
-                self.progressBar.setValue(currentTime.toFixed(1));
+                self.progressBar.setValue(currentTime);
             });
 
             this.recorder.on('levelUpdate', function(level) {
@@ -183,7 +183,7 @@ define([
             });
 
             this.player.on('timeupdate', function(currentTime) {
-                self.progressBar.setValue(currentTime.toFixed(1));
+                self.progressBar.setValue(currentTime);
             });
         },
 

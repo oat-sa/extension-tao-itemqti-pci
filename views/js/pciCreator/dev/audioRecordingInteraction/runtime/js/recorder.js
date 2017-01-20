@@ -135,7 +135,7 @@ define([
             sum = frequencyArray.reduce(function(a, b) {
                 return a + b;
             });
-            return (sum / frequencyArray.length).toFixed(0);
+            return Math.floor(sum / frequencyArray.length);
         }
 
 

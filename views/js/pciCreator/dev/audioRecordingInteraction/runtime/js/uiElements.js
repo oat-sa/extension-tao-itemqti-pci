@@ -262,7 +262,7 @@ define([
             draw: function draw(level) {
                 var currentColor, i;
 
-                scaledLevel = (level / config.maxLevel * height).toFixed(0);
+                scaledLevel = Math.floor(level / config.maxLevel * height);
 
                 for (i = 0; i < ledNumbers; i += 1) {
                     currentColor = grey;
