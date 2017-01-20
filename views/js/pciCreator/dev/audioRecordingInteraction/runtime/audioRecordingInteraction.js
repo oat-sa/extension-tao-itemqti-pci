@@ -542,24 +542,14 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
-            var control;
-            for (control in this.controls) {
-                if (this.controls.hasOwnProperty(control)) {
-                    this.controls[control].updateState();
-                }
-            }
+            _.invoke(this.controls, 'updateState');
         },
 
         /**
          * Destroy the state of all the controls
          */
         destroyControls: function destroyControls() {
-            var control;
-            for (control in this.controls) {
-                if (this.controls.hasOwnProperty(control)) {
-                    this.controls[control].destroy();
-                }
-            }
+            _.invoke(this.controls, 'destroy');
             this.controls = null;
         },
 
