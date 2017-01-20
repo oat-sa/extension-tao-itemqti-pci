@@ -45,18 +45,19 @@ define([
             player,
             state = playerStates.CREATED;
 
-        player = {
-            /**
-             * Set player state
-             * @param {String} newState
-             * @private
-             */
-            _setState: function _setState(newState) {
-                state = newState;
-                this.trigger('statechange');
-                this.trigger(newState);
-            },
+        /**
+         * Set player state
+         * @param {Object} playerInstance - the player instance
+         * @param {String} newState - the new state
+         * @private
+         */
+        function setState(playerInstance, newState) {
+            state = newState;
+            playerInstance.trigger('statechange');
+            playerInstance.trigger(newState);
+        }
 
+        player = {
             /**
              * Check the current state
              * @param {String} queriedState
@@ -77,18 +78,18 @@ define([
 
                 // when playback is stopped by user or when the media is loaded:
                 audioEl.oncanplay = function oncanplay() {
-                    self._setState(playerStates.IDLE);
+                    setState(player, playerStates.IDLE);
                 };
 
                 // when playbacks ends on its own:
                 audioEl.onended = function onended() {
-                    self._setState(playerStates.IDLE);
+                    setState(player, playerStates.IDLE);
                     audioEl.currentTime = 0;
                     self.trigger('timeupdate', [0]);
                 };
 
                 audioEl.onplaying = function onplaying() {
-                    self._setState(playerStates.PLAYING);
+                    setState(player, playerStates.PLAYING);
                 };
 
                 audioEl.ontimeupdate = function ontimeupdate() {
@@ -118,7 +119,7 @@ define([
              */
             unload: function unload() {
                 audioEl = null;
-                this._setState(playerStates.CREATED);
+                setState(player, playerStates.CREATED);
             }
         };
         event.addEventMgr(player);

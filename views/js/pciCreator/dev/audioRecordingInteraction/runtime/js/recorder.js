@@ -43,13 +43,13 @@ define([
      * Mozilla Public License, version 2.0 - https://www.mozilla.org/en-US/MPL/
      */
     function setGetUserMedia() {
-        var promisifiedOldGUM = function(constraints) {
+        var promisifiedOldGUM = function promisifiedOldGUM(constraints) {
 
             // First get ahold of getUserMedia, if present
             var getUserMedia = (navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia ||
-            navigator.msGetUserMedia);
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia);
 
             // Some browsers just don't implement it - return a rejected promise with an error
             // to keep a consistent interface
@@ -138,6 +138,18 @@ define([
             return Math.floor(sum / frequencyArray.length);
         }
 
+        /**
+         * Set recorder state
+         * @param {Object} recorderInstance - the recorder instance
+         * @param {String} newState - the new state
+         * @private
+         */
+        function setState(recorderInstance, newState) {
+            state = newState;
+            recorderInstance.trigger('statechange');
+            recorderInstance.trigger(newState);
+        }
+
 
         setGetUserMedia();
 
@@ -156,17 +168,6 @@ define([
         }
 
         recorder = {
-            /**
-             * Set recorder state
-             * @param {String} newState
-             * @private
-             */
-            _setState: function _setState(newState) {
-                state = newState;
-                this.trigger('statechange');
-                this.trigger(newState);
-            },
-
             /**
              * Check the current state
              * @param {String} queriedState
@@ -190,7 +191,7 @@ define([
 
                         initAnalyser(stream);
 
-                        self._setState(recorderStates.IDLE);
+                        setState(recorder, recorderStates.IDLE);
 
                         // save chunks of the recording
                         mediaRecorder.ondataavailable = function ondataavailable(e) {
@@ -213,13 +214,10 @@ define([
                             cancelAnimationFrame(timerId);
 
                             self.trigger('levelUpdate', [0]);
-                            self._setState(recorderStates.IDLE);
+                            setState(recorder, recorderStates.IDLE);
 
                             chunks = [];
                         };
-                    })
-                    .catch(function(err) {
-                        throw err;
                     });
             },
 
@@ -231,7 +229,7 @@ define([
 
                 startTimeMs = new window.Date().getTime();
 
-                this._setState(recorderStates.RECORDING);
+                setState(recorder, recorderStates.RECORDING);
 
                 this._monitorRecording();
             },

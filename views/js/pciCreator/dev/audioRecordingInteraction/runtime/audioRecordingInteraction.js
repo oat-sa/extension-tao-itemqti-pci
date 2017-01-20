@@ -281,6 +281,8 @@ define([
                 this.recorder.init().then(function() {
                     startForReal();
                 });
+                // We don't catch anything here as this is not a reliable way to determine if the user has accepted or not.
+                // Clicking outside the auth request dialog closes the dialog but doesn't reject the Promise...
             } else {
                 startForReal();
             }
