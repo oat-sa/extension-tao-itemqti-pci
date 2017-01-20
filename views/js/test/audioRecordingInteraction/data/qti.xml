@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1477301008217489" title="AudioSample" label="AudioSample" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint37">
+  <responseDeclaration identifier="RESPONSE" cardinality="record"/>
+  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <pci:portableCustomInteraction customInteractionTypeIdentifier="audioRecordingInteraction" hook="something" version="">
+            <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+            <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+              <pci:libraries>
+              </pci:libraries>
+              <pci:stylesheets>
+              </pci:stylesheets>
+              <pci:mediaFiles>
+              </pci:mediaFiles>
+            </pci:resources>
+            <pci:properties xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction">
+              <pci:entry key="allowPlayback">true</pci:entry>
+              <pci:entry key="audioBitrate">20000</pci:entry>
+              <pci:entry key="autoStart"/>
+              <pci:entry key="displayDownloadLink"/>
+              <pci:entry key="maxRecords">0</pci:entry>
+              <pci:entry key="maxRecordingTime">120</pci:entry>
+            </pci:properties>
+            <pci:markup>
+              <html5:div class="audioRecordingInteraction">
+                <html5:div class="prompt"> </html5:div>
+                <html5:div class="audio-rec">
+                  <html5:div class="input-meter">
+                    <html5:div class="leds"> </html5:div>
+                    <html5:div class="mic"> </html5:div>
+                  </html5:div>
+                  <html5:div class="progress"> </html5:div>
+                  <html5:div class="controls"> </html5:div>
+                  <html5:div class="instructions"> </html5:div>
+                </html5:div>
+              </html5:div>
+            </pci:markup>
+          </pci:portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>
