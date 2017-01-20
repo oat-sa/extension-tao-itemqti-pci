@@ -49,7 +49,6 @@ define([
          * Set player state
          * @param {Object} playerInstance - the player instance
          * @param {String} newState - the new state
-         * @private
          */
         function setState(playerInstance, newState) {
             state = newState;

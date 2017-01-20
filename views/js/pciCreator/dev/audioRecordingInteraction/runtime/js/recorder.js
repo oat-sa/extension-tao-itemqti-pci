@@ -150,7 +150,6 @@ define([
          * Set recorder state
          * @param {Object} recorderInstance - the recorder instance
          * @param {String} newState - the new state
-         * @private
          */
         function setState(recorderInstance, newState) {
             state = newState;
