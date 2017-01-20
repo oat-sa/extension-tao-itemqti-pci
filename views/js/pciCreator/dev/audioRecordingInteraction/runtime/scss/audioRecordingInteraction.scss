@@ -1,0 +1,178 @@
+// =============
+// TAO specific
+// =============
+
+@import "inc/bootstrap";
+
+// Color mapping
+
+$disabledBg: whiten($websiteBorder, .3);
+$disabledTxt: black;
+$disabledTxtShadow: white(.8);
+
+$enabledBg: whiten($info, .1);
+$enabledTxt: white;
+$enabledTxtShadow: blacken($info, .2);
+
+$activeBg: whiten($activeInteraction, .1);
+$activeTxt: white;
+$activeTxtShadow: blacken($activeInteraction, .2);
+
+$record: $activeInteraction;
+$playback: whiten($info, .3);
+
+
+// =============
+// Interaction
+// =============
+
+.qti-customInteraction {
+  .audioRecordingInteraction {
+
+    padding: 10px;
+
+    // input meter
+
+    .input-meter {
+      border: 2px solid whiten($disabledBg, .5);
+      border-radius: 10px;
+      width: 58px;
+      padding: 10px;
+      margin-right: 10px;
+      margin-top: 2px;
+      float: left;
+
+      display: flex;
+
+      &.record {
+        border-color: $activeBg;
+        background-color: whiten($activeBg, 0.9);
+      }
+
+      .leds {
+        flex: 0 0 10px;
+      }
+
+      .mic {
+        flex: 0 0 28px;
+
+        img {
+          height: 28px;
+          width: 28px;
+          margin-top: 10px;
+        }
+      }
+    }
+
+
+    // Controls
+
+    .audiorec-control {
+      margin: 10px 10px 10px 0;
+      border-radius: 3px;
+      font-size: 14px !important;
+      cursor: pointer;
+      text-decoration: none !important;
+      vertical-align: middle;
+      outline: 0;
+      overflow: visible;
+      border: none;
+      display: inline-block;
+      line-height: initial;
+      padding: 8px 16px;
+      font-weight: normal;
+      font-style: normal;
+      text-align: center;
+      height: auto;
+
+      &.disabled {
+        background-color: $disabledBg;
+        text-shadow: 1px 1px 0 $disabledTxtShadow !important;
+        cursor: not-allowed !important;
+        opacity: .55 !important;
+        color: $disabledTxt !important;
+        fill: $disabledTxt !important;
+      }
+
+      &.enabled {
+        background-color: $enabledBg;
+        color: $enabledTxt;
+        fill: $enabledTxt;
+        text-shadow: 1px 1px 0 $enabledTxtShadow;
+        cursor: pointer !important;
+
+        &:hover {
+          opacity: 0.85;
+        }
+      }
+
+      &:active,
+      &.active {
+        background-color: $activeBg;
+        color: $activeTxt;
+        fill: $activeTxt;
+        text-shadow: 1px 1px 0 $activeTxtShadow;
+        cursor: not-allowed !important;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    // Progress bar
+
+    @mixin progressBarColor($borderColor, $valueColor, $bgColor) {
+      border: $borderColor 2px solid;
+
+      // progress value color
+      &::-webkit-progress-value {
+        background-color: $valueColor;
+      }
+      &::-moz-progress-bar {
+        background-color: $valueColor;
+      }
+
+      // background color
+      color: $bgColor; // FF
+      &::-webkit-progress-bar {
+        background-color: whiten($bgColor, .5); // Chrome
+      }
+    }
+
+    progress {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+
+      width: 75%;
+      height: 10px;
+      border-radius: 5px;
+
+      @include progressBarColor(darken($disabledBg, .2), $disabledBg, $disabledBg);
+
+      &.record {
+        @include progressBarColor($record, $record, whiten($record, 0.9));
+      }
+
+      &.playback {
+        @include progressBarColor($playback, $playback, whiten($playback, 0.9));
+      }
+    }
+
+    // Media stimulus
+
+    .media-stimulus.active {
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px #bbb solid;
+
+      .mediaplayer {
+        margin: 0 auto;
+      }
+
+    }
+
+  }
+}
+

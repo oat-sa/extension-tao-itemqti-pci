@@ -20,6 +20,7 @@
  */
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
+use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
@@ -31,31 +32,33 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '1.4.0',
+    'version' => '1.5.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
-        'taoQtiItem' => '>=5.13.0'
+        'tao' => '>=7.50.0',
+        'taoQtiItem' => '>=6.9.0'
     ),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
-		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
-		array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
-		array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+        array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+        array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+        array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
     ),
     'install' => array(
         'rdf' => array(
-			dirname(__FILE__). '/install/ontology/registry.rdf',
-		    dirname(__FILE__). '/install/ontology/role.rdf'
-		),
-        'php'	=> array(
-			SetupPortableElementFileStorage::class,
-			RegisterPciModel::class,
-			SetQtiCreatorConfig::class,
-			RegisterClientProvider::class,
-			RegisterPciLiquid::class,
-			RegisterPciLikertScale::class,
-            RegisterPciMathEntry::class
-		)
+            dirname(__FILE__). '/install/ontology/registry.rdf',
+            dirname(__FILE__). '/install/ontology/role.rdf'
+        ),
+        'php' => array(
+            SetupPortableElementFileStorage::class,
+            RegisterPciModel::class,
+            SetQtiCreatorConfig::class,
+            RegisterClientProvider::class,
+            RegisterPciLiquid::class,
+            RegisterPciLikertScale::class,
+            RegisterPciMathEntry::class,
+            RegisterPciAudioRecording::class
+        )
     ),
     'uninstall' => array(
     ),
@@ -63,14 +66,14 @@ return array(
     'routes' => array(
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ),
-	'constants' => array(
-	    # views directory
-	    "DIR_VIEWS" => dirname(__FILE__).DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR,
+    'constants' => array(
+        # views directory
+        "DIR_VIEWS" => dirname(__FILE__).DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR,
 
-		#BASE URL (usually the domain root)
-		'BASE_URL' => ROOT_URL.'qtiItemPci/',
+        #BASE URL (usually the domain root)
+        'BASE_URL' => ROOT_URL.'qtiItemPci/',
 
         #BASE WWW the web resources path
         'BASE_WWW' => ROOT_URL.'qtiItemPci/views/'
-	)
+    )
 );

@@ -1,0 +1,170 @@
+{
+    "identifier": "i1477301008217489",
+    "serial": "item_580dd3912e9a1639693387",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "i1477301008217489",
+        "title": "AudioSample",
+        "label": "AudioSample",
+        "xml:lang": "en-US",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "3.1.0-sprint15",
+        "class": ""
+    },
+    "body": {
+        "serial": "container_containeritembody_580dd3912e925941969263",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_portablecustominteraction_580dd391312e2517070741}}\n      <\/div>\n    <\/div>\n  ",
+        "elements": {
+            "interaction_portablecustominteraction_580dd391312e2517070741": {
+                "serial": "interaction_portablecustominteraction_580dd391312e2517070741",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "RESPONSE"
+                },
+                "debug": {
+                    "relatedItem": "item_580dd3912e9a1639693387"
+                },
+                "choices": {},
+                "typeIdentifier": "audioRecordingInteraction",
+                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"> <\/div>\n                <div class=\"audio-rec\">\n                  <div class=\"input-meter\">\n                    <div class=\"leds\"> <\/div>\n                    <div class=\"mic\"> <\/div>\n                  <\/div>\n                  <div class=\"progress\"> <\/div>\n                  <div class=\"controls\"> <\/div>\n                  <div class=\"instructions\"> <\/div>\n                <\/div>\n              <\/div>\n            ",
+                "libraries": [],
+                "properties": {
+                    "allowPlayback": "true",
+                    "audioBitrate": "20000",
+                    "autoStart": "",
+                    "displayDownloadLink": "",
+                    "maxRecords": "0",
+                    "maxRecordingTime": "120"
+                },
+                "entryPoint": "something"
+            }
+        },
+        "debug": {
+            "relatedItem": "item_580dd3912e9a1639693387"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_580dd3912e9a1639693387"
+    },
+    "namespaces": {
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
+        "html5": "html5",
+        "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
+        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+        "xml": "http:\/\/www.w3.org\/XML\/1998\/namespace",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+    },
+    "schemaLocations": {
+        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
+    },
+    "stylesheets": {},
+    "outcomes": {
+        "outcomedeclaration_580dd391304f9527140381": {
+            "identifier": "SCORE",
+            "serial": "outcomedeclaration_580dd391304f9527140381",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "SCORE",
+                "cardinality": "single",
+                "baseType": "float"
+            },
+            "debug": {
+                "relatedItem": "item_580dd3912e9a1639693387"
+            },
+            "defaultValue": null
+        }
+    },
+    "responses": {
+        "responsedeclaration_580dd3913023d939504636": {
+            "identifier": "RESPONSE",
+            "serial": "responsedeclaration_580dd3913023d939504636",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "RESPONSE",
+                "cardinality": "record"
+            },
+            "debug": {
+                "relatedItem": "item_580dd3912e9a1639693387"
+            },
+            "mapping": [],
+            "areaMapping": [],
+            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "correctResponses": [],
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_templatesdriven_580dd391350fe596071997",
+        "qtiClass": "responseProcessing",
+        "attributes": [],
+        "debug": {
+            "relatedItem": "item_580dd3912e9a1639693387"
+        },
+        "processingType": "templateDriven",
+        "responseRules": [
+            {
+                "qtiClass": "responseCondition",
+                "responseIf": {
+                    "qtiClass": "responseIf",
+                    "expression": {
+                        "qtiClass": "match",
+                        "expressions": [
+                            {
+                                "qtiClass": "variable",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            },
+                            {
+                                "qtiClass": "correct",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            }
+                        ]
+                    },
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                "responseElse": {
+                    "qtiClass": "responseElse",
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "0"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "apipAccessibility": ""
+}
