@@ -560,7 +560,7 @@ define([
          */
         getControlIcon: function getControlIcon(iconId) {
             return '<svg title="' + iconId + '">' +
-                '<use href="' + this.iconsFileUrl + '#' + iconId + '"/>' +
+                '<use xlink:href="' + this.iconsFileUrl + '#' + iconId + '"/>' +
                 '</svg>';
         },
 
