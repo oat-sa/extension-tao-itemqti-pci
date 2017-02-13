@@ -84,6 +84,20 @@
         &#8734;
     </label>
 </div>
+<div>
+    <label class="panel">
+        <input name="tool_lbrack" type="checkbox" {{#if tool_lbrack}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        [ (left square bracket)
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_rbrack" type="checkbox" {{#if tool_rbrack}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        ] (right square bracket)
+    </label>
+</div>
 
 <hr />
 <h3>{{__ "Trigonometry"}}</h3>

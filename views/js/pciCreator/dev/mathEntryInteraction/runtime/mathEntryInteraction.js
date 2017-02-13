@@ -71,6 +71,8 @@ define([
                     ln:       toBoolean(config.tool_ln,       true),
                     e:        toBoolean(config.tool_e,        true),
                     infinity: toBoolean(config.tool_infinity, true),
+                    lbrack:   toBoolean(config.tool_lbrack,   true),
+                    rbrack:   toBoolean(config.tool_lbrack,   true),
                     pi:       toBoolean(config.tool_pi,       true),
                     cos:      toBoolean(config.tool_cos,      true),
                     sin:      toBoolean(config.tool_sin,      true),
@@ -122,6 +124,8 @@ define([
                     ln:     { label: 'ln',          latex: '\\ln',      fn: 'write',    desc: 'Ln' },
                     e:      { label: '&#8494;',     latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
                     infinity: { label: '&#8734;',   latex: '\\infty',   fn: 'write',    desc: 'Infinity' },
+                    lbrack: { label: '[',           latex: '\\lbrack',  fn: 'write',    desc: 'Left bracket' },
+                    rbrack: { label: ']',           latex: '\\rbrack',  fn: 'write',    desc: 'Right bracket' },
                     pi:     { label: '&pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
                     cos:    { label: 'cos',         latex: '\\cos',     fn: 'write',    desc: 'Cosinus' },
                     sin:    { label: 'sin',         latex: '\\sin',     fn: 'write',    desc: 'Sinus' },
@@ -133,7 +137,7 @@ define([
                 },
                 availableToolGroups = [ // we use an array to maintain order
                     { id: 'functions',  tools: ['sqrt', 'frac', 'exp', 'log', 'ln'] },
-                    { id: 'symbols',    tools: ['e', 'infinity'] },
+                    { id: 'symbols',    tools: ['e', 'infinity', 'lbrack', 'rbrack'] },
                     { id: 'trigo',      tools: ['pi', 'sin', 'cos'] },
                     { id: 'comparison', tools: ['lte', 'gte'] },
                     { id: 'operands',   tools: ['times', 'divide', 'plusminus'] }
