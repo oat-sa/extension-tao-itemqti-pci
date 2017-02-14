@@ -186,7 +186,7 @@ define([
             });
 
             this.player.on('durationchange', function(durationSeconds) {
-                self.progressBar.setMax(Math.ceil(durationSeconds));
+                self.progressBar.setMax(durationSeconds);
             });
         },
 
