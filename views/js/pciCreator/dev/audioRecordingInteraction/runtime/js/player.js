@@ -75,6 +75,10 @@ define([
 
                 audioEl = new Audio(url);
 
+                audioEl.ondurationchange = function ondurationchange() {
+                    self.trigger('durationchange', [audioEl.duration]);
+                };
+
                 // when playback is stopped by user or when the media is loaded:
                 audioEl.oncanplay = function oncanplay() {
                     setState(player, playerStates.IDLE);
