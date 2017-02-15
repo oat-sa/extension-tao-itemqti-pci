@@ -57,7 +57,7 @@
     <input name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" />
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to clic 2 times on the reset button."}}
+        {{__ "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."}}
     </span>
 </div>
 <div class="panel">
@@ -65,7 +65,7 @@
     <input name="maxRecordingTime" value="{{maxRecordingTime}}" class="large" data-increment="10" data-min="10" type="text" />
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "In seconds. Maximum recording time allowed. Recording will automatically stop once reached."}}
+        {{__ "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."}}
     </span>
 </div>
 
