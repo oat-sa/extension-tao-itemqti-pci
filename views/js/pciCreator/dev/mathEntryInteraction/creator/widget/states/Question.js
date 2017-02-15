@@ -86,6 +86,9 @@ define([
             tool_log:       toBoolean(interaction.prop('tool_log'),     true),
             tool_ln:        toBoolean(interaction.prop('tool_ln'),      true),
             tool_e:         toBoolean(interaction.prop('tool_e'),       true),
+            tool_infinity:  toBoolean(interaction.prop('tool_infinity'),true),
+            tool_lbrack:    toBoolean(interaction.prop('tool_lbrack'),  true),
+            tool_rbrack:    toBoolean(interaction.prop('tool_rbrack'),  true),
             tool_pi:        toBoolean(interaction.prop('tool_pi'),      true),
             tool_cos:       toBoolean(interaction.prop('tool_cos'),     true),
             tool_sin:       toBoolean(interaction.prop('tool_sin'),     true),
@@ -93,8 +96,9 @@ define([
             tool_gte:       toBoolean(interaction.prop('tool_gte'),     true),
             tool_times:     toBoolean(interaction.prop('tool_times'),   true),
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
-            allowNewLine:           toBoolean(interaction.prop('allowNewLine'),  false),
-            authorizeWhiteSpace:    toBoolean(interaction.prop('authorizeWhiteSpace'),  false)
+            tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
+            allowNewLine:   toBoolean(interaction.prop('allowNewLine'),  false),
+            authorizeWhiteSpace: toBoolean(interaction.prop('authorizeWhiteSpace'),  false)
         }));
 
         //init form javascript
@@ -112,6 +116,9 @@ define([
             tool_log:       configChangeCallBack,
             tool_ln:        configChangeCallBack,
             tool_e:         configChangeCallBack,
+            tool_infinity:  configChangeCallBack,
+            tool_lbrack:    configChangeCallBack,
+            tool_rbrack:    configChangeCallBack,
             tool_pi:        configChangeCallBack,
             tool_cos:       configChangeCallBack,
             tool_sin:       configChangeCallBack,
@@ -119,8 +126,9 @@ define([
             tool_gte:       configChangeCallBack,
             tool_times:     configChangeCallBack,
             tool_divide:    configChangeCallBack,
-            allowNewLine:           configChangeCallBack,
-            authorizeWhiteSpace:    configChangeCallBack
+            tool_plusminus: configChangeCallBack,
+            allowNewLine:   configChangeCallBack,
+            authorizeWhiteSpace: configChangeCallBack
         });
     };
 

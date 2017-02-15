@@ -64,19 +64,23 @@ define([
 
             this.config = {
                 toolsStatus: {
-                    frac:   toBoolean(config.tool_frac,     true),
-                    sqrt:   toBoolean(config.tool_sqrt,     true),
-                    exp:    toBoolean(config.tool_exp,      true),
-                    log:    toBoolean(config.tool_log,      true),
-                    ln:     toBoolean(config.tool_ln,       true),
-                    e:      toBoolean(config.tool_e,        true),
-                    pi:     toBoolean(config.tool_pi,       true),
-                    cos:    toBoolean(config.tool_cos,      true),
-                    sin:    toBoolean(config.tool_sin,      true),
-                    lte:    toBoolean(config.tool_lte,      true),
-                    gte:    toBoolean(config.tool_gte,      true),
-                    times:  toBoolean(config.tool_times,    true),
-                    divide: toBoolean(config.tool_divide,   true),
+                    frac:     toBoolean(config.tool_frac,     true),
+                    sqrt:     toBoolean(config.tool_sqrt,     true),
+                    exp:      toBoolean(config.tool_exp,      true),
+                    log:      toBoolean(config.tool_log,      true),
+                    ln:       toBoolean(config.tool_ln,       true),
+                    e:        toBoolean(config.tool_e,        true),
+                    infinity: toBoolean(config.tool_infinity, true),
+                    lbrack:   toBoolean(config.tool_lbrack,   true),
+                    rbrack:   toBoolean(config.tool_lbrack,   true),
+                    pi:       toBoolean(config.tool_pi,       true),
+                    cos:      toBoolean(config.tool_cos,      true),
+                    sin:      toBoolean(config.tool_sin,      true),
+                    lte:      toBoolean(config.tool_lte,      true),
+                    gte:      toBoolean(config.tool_gte,      true),
+                    times:    toBoolean(config.tool_times,    true),
+                    divide:   toBoolean(config.tool_divide,   true),
+                    plusminus:toBoolean(config.tool_plusminus,   true)
                 },
                 allowNewLine:           toBoolean(config.allowNewLine,  false),
                 authorizeWhiteSpace:    toBoolean(config.authorizeWhiteSpace,   false)
@@ -119,43 +123,49 @@ define([
                     log:    { label: 'log',         latex: '\\log',     fn: 'write',    desc: 'Log' },
                     ln:     { label: 'ln',          latex: '\\ln',      fn: 'write',    desc: 'Ln' },
                     e:      { label: '&#8494;',     latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
+                    infinity: { label: '&#8734;',   latex: '\\infty',   fn: 'write',    desc: 'Infinity' },
+                    lbrack: { label: '[',           latex: '\\lbrack',  fn: 'write',    desc: 'Left bracket' },
+                    rbrack: { label: ']',           latex: '\\rbrack',  fn: 'write',    desc: 'Right bracket' },
                     pi:     { label: '&pi;',        latex: '\\pi',      fn: 'write',    desc: 'Pi' },
                     cos:    { label: 'cos',         latex: '\\cos',     fn: 'write',    desc: 'Cosinus' },
                     sin:    { label: 'sin',         latex: '\\sin',     fn: 'write',    desc: 'Sinus' },
                     lte:    { label: '&le;',        latex: '\\le',      fn: 'write',    desc: 'Lower than or equal' },
                     gte:    { label: '&ge;',        latex: '\\ge',      fn: 'write',    desc: 'Greater than or equal' },
                     times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
-                    divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' }
+                    divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' },
+                    plusminus: { label: '&#177;',   latex: '\\pm',      fn: 'write',    desc: 'Plus/minus' }
                 },
-                availableToolGroups = {
-                    functions:  ['sqrt', 'frac', 'exp', 'log', 'ln', 'e'],
-                    trigo:      ['pi', 'sin', 'cos'],
-                    comparison: ['lte', 'gte'],
-                    operands:   ['times', 'divide']
-                };
+                availableToolGroups = [ // we use an array to maintain order
+                    { id: 'functions',  tools: ['sqrt', 'frac', 'exp', 'log', 'ln'] },
+                    { id: 'symbols',    tools: ['e', 'infinity', 'lbrack', 'rbrack'] },
+                    { id: 'trigo',      tools: ['pi', 'sin', 'cos'] },
+                    { id: 'comparison', tools: ['lte', 'gte'] },
+                    { id: 'operands',   tools: ['times', 'divide', 'plusminus'] }
+                ];
 
-
-            this.$toolbar.empty();
 
             // create buttons
-            this.$toolbar.append(createToolGroup('functions'));
-            this.$toolbar.append(createToolGroup('trigo'));
-            this.$toolbar.append(createToolGroup('comparison'));
-            this.$toolbar.append(createToolGroup('operands'));
+            this.$toolbar.empty();
+
+            availableToolGroups.forEach(function (toolgroup) {
+                self.$toolbar.append(createToolGroup(toolgroup));
+            });
 
             /**
              * Create a group of buttons
-             * @param {String} groupId
+             * @param {String} group - description of the toolgroup
+             * @param {String} group.id
+             * @param {Array} group.tools - ids of tools
              * @returns {JQuery|string} the created element or an empty string
              */
-            function createToolGroup(groupId) {
+            function createToolGroup(group) {
                 var $toolGroup = $('<div>', {
                         'class': 'math-entry-toolgroup',
-                        'data-identifier': groupId
+                        'data-identifier': group.id
                     }),
                     activeTools = 0;
 
-                availableToolGroups[groupId].forEach(function(toolId) {
+                group.tools.forEach(function(toolId) {
                     var toolConfig = availableTools[toolId];
 
                     toolConfig.id = toolId;
