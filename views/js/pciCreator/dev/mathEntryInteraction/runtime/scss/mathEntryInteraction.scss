@@ -28,50 +28,80 @@
 // =============
 // PCI
 // =============
+$base: rgb(164, 187, 197);
 
-$buttonBg: blacken(white, .2);
-$buttonTxt: whiten(black, .3);
+$buttonBg: whiten($base, 0.6);
+$buttonHover: blacken($base, 0.5);
+$buttonTxt: blacken($base, 0.5);;
+$buttonTxtHover: white;
 $buttonFont: "Times New Roman", Times, serif;
+
+$buttonRadius: 4px; //todo: use mixin?
+
+$borderColor: blacken($base, 0.3);
 
 .qti-customInteraction {
   .mathEntryInteraction {
 
     .math-entry {
-      padding: 10px;
+      padding: 8px;
     }
 
     .math-entry-input {
       width: 100%;
+      margin-top: 8px;
     }
 
     // Buttons
-
     .math-entry-toolgroup {
-      margin: 10px 12px 10px 0;
+      margin: 8px 8px 8px 0;
       display: inline-block;
+
+      border-radius: $buttonRadius;
+      border: 1px solid $borderColor;
+
+      .math-entry-tool {
+        &:first-child {
+          border-top-left-radius: $buttonRadius;
+          border-bottom-left-radius: $buttonRadius;
+        }
+        &:last-child {
+          border-top-right-radius: $buttonRadius;
+          border-bottom-right-radius: $buttonRadius;
+        }
+      }
     }
 
     .math-entry-tool {
-      font-family: $buttonFont;
-      font-size: 14px !important;
-      font-weight: bold;
-      font-style: normal;
-      cursor: pointer;
-      text-decoration: none !important;
       vertical-align: middle;
       outline: 0;
       overflow: visible;
       display: inline-block;
-      line-height: 2.5;
-      padding: 0 15px;
-      text-align: center;
-      height: 35px;
+      padding: 8px 16px;
+      height: auto;
+
+      border-right: 1px solid blacken($borderColor, 0.2);
+
       background-color: $buttonBg;
       color: $buttonTxt;
-      border: 1px solid blacken($buttonBg, 0.2);
+
+      cursor: pointer;
+
+      line-height: normal;
+      text-align: center;
+      text-decoration: none !important;
+      font-family: $buttonFont;
+      font-size: 15px !important;
+      font-weight: bold;
+      font-style: normal;
 
       &:hover {
-        background-color: whiten($buttonBg, .5);
+        background-color: $buttonHover;
+        color: $buttonTxtHover;
+      }
+
+      &:last-child {
+        border-right: none;
       }
 
     }

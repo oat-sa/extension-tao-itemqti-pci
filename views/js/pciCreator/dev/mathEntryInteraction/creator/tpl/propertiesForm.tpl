@@ -66,11 +66,36 @@
         {{__ "ln"}}
     </label>
 </div>
+
+<hr />
+<h3>{{__ "Symbols"}}</h3>
+
 <div>
     <label class="panel">
         <input name="tool_e" type="checkbox" {{#if tool_e}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         &#8494;
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_infinity" type="checkbox" {{#if tool_infinity}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#8734;
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_lbrack" type="checkbox" {{#if tool_lbrack}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        [ (left square bracket)
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_rbrack" type="checkbox" {{#if tool_rbrack}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        ] (right square bracket)
     </label>
 </div>
 
@@ -132,6 +157,13 @@
         <input name="tool_divide" type="checkbox" {{#if tool_divide}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         {{__ "divide"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_plusminus" type="checkbox" {{#if tool_plusminus}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Plus/minus"}}
     </label>
 </div>
 
