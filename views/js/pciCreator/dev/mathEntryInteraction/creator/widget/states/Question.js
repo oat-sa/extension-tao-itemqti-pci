@@ -87,8 +87,7 @@ define([
             tool_ln:        toBoolean(interaction.prop('tool_ln'),      true),
             tool_e:         toBoolean(interaction.prop('tool_e'),       true),
             tool_infinity:  toBoolean(interaction.prop('tool_infinity'),true),
-            tool_lbrack:    toBoolean(interaction.prop('tool_lbrack'),  true),
-            tool_rbrack:    toBoolean(interaction.prop('tool_rbrack'),  true),
+            squarebkts:     toBoolean(interaction.prop('tool_rbrack'),  true) && toBoolean(interaction.prop('tool_lbrack'), true),
             tool_pi:        toBoolean(interaction.prop('tool_pi'),      true),
             tool_cos:       toBoolean(interaction.prop('tool_cos'),     true),
             tool_sin:       toBoolean(interaction.prop('tool_sin'),     true),
@@ -117,8 +116,6 @@ define([
             tool_ln:        configChangeCallBack,
             tool_e:         configChangeCallBack,
             tool_infinity:  configChangeCallBack,
-            tool_lbrack:    configChangeCallBack,
-            tool_rbrack:    configChangeCallBack,
             tool_pi:        configChangeCallBack,
             tool_cos:       configChangeCallBack,
             tool_sin:       configChangeCallBack,
@@ -128,7 +125,12 @@ define([
             tool_divide:    configChangeCallBack,
             tool_plusminus: configChangeCallBack,
             allowNewLine:   configChangeCallBack,
-            authorizeWhiteSpace: configChangeCallBack
+            authorizeWhiteSpace: configChangeCallBack,
+            squarebkts:     function squarebktsChangeCallBack(i, value) {
+                i.prop('tool_lbrack', value);
+                i.prop('tool_rbrack', value);
+                i.triggerPci('configChange', [i.getProperties()]);
+            }
         });
     };
 
