@@ -126,7 +126,7 @@ define([
             tool_plusminus: configChangeCallBack,
             allowNewLine:   configChangeCallBack,
             authorizeWhiteSpace: configChangeCallBack,
-            squarebkts:     function(i, value) {
+            squarebkts:     function squarebktsChangeCallBack(i, value) {
                 i.prop('tool_lbrack', value);
                 i.prop('tool_rbrack', value);
                 i.triggerPci('configChange', [i.getProperties()]);
