@@ -72,7 +72,7 @@ define([
                     e:        toBoolean(config.tool_e,        true),
                     infinity: toBoolean(config.tool_infinity, true),
                     lbrack:   toBoolean(config.tool_lbrack,   true),
-                    rbrack:   toBoolean(config.tool_lbrack,   true),
+                    rbrack:   toBoolean(config.tool_rbrack,   true),
                     pi:       toBoolean(config.tool_pi,       true),
                     cos:      toBoolean(config.tool_cos,      true),
                     sin:      toBoolean(config.tool_sin,      true),
@@ -80,7 +80,7 @@ define([
                     gte:      toBoolean(config.tool_gte,      true),
                     times:    toBoolean(config.tool_times,    true),
                     divide:   toBoolean(config.tool_divide,   true),
-                    plusminus:toBoolean(config.tool_plusminus,   true)
+                    plusminus:toBoolean(config.tool_plusminus,true)
                 },
                 allowNewLine:           toBoolean(config.allowNewLine,  false),
                 authorizeWhiteSpace:    toBoolean(config.authorizeWhiteSpace,   false)
