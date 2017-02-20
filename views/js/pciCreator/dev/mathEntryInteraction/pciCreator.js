@@ -60,6 +60,9 @@ define([
                 tool_log:       true,
                 tool_ln:        true,
                 tool_e:         true,
+                tool_infinity:  true,
+                tool_lbrack:    true,
+                tool_rbrack:    true,
                 tool_pi:        true,
                 tool_cos:       true,
                 tool_sin:       true,
@@ -67,6 +70,8 @@ define([
                 tool_gte:       true,
                 tool_times:     true,
                 tool_divide:    true,
+                tool_plusminus: true,
+                allowNewLine:   false,
                 authorizeWhiteSpace: false
             };
         },
