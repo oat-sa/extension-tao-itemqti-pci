@@ -107,10 +107,15 @@ $borderColor: blacken($base, 0.3);
     }
 
     // hack for newline
-    .mq-textcolor .mq-text-mode {
+    .mq-textcolor[style="color:newline"] {
       display: block;
+      background: transparent;
+      height: 2px; // first line break only makes the cursor goes to next line
     }
 
+    .mq-textcolor[style="color:newline"] + .mq-textcolor[style="color:newline"] {
+      height: auto; // second (and following) line break(s) creates a blank line
+    }
   }
 }
 
