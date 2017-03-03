@@ -220,8 +220,22 @@ define([
                 self.mathField.focus();
             });
 
+            /**
+             * Ugly hack to allow for a line break on enter
+             * inspired by https://github.com/mathquill/mathquill/issues/174
+             *
+             * The latex will turn into the following markup:
+             * <span class="mq-textcolor" style="color:newline"> </span>
+             *
+             * which, along with the following css:
+             * .mq-textcolor[style="color:newline"] {
+             *      display: block;
+             * }
+             *
+             *  ...creates a newline!!!
+             */
             this.$input.on('keypress.qtiCommonRenderer', function (e) {
-                var latex = '\\textcolor{black}{\\text{}}';
+                var latex = '\\textcolor{newline}{ }';
                 if (self.config.allowNewLine && e.keyCode === 13) {
                     self.mathField.write(latex);
                 }
