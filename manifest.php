@@ -32,10 +32,10 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '1.6.2',
+    'version' => '2.0.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
-        'tao' => '>=7.50.0',
+        'tao' => '>=9.0.0',
         'taoQtiItem' => '>=6.9.0'
     ),
     'acl' => array(
@@ -72,8 +72,5 @@ return array(
 
         #BASE URL (usually the domain root)
         'BASE_URL' => ROOT_URL.'qtiItemPci/',
-
-        #BASE WWW the web resources path
-        'BASE_WWW' => ROOT_URL.'qtiItemPci/views/'
     )
 );
