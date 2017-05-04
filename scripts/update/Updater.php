@@ -30,6 +30,7 @@ use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\tao\model\accessControl\func\AccessRule;
+use oat\tao\model\accessControl\func\AclProxy;
 use oat\taoQtiItem\model\HookRegistry;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
