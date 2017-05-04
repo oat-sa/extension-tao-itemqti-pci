@@ -29,6 +29,8 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
+use oat\tao\model\accessControl\func\AccessRule;
+use oat\tao\model\accessControl\func\AclProxy;
 use oat\taoQtiItem\model\HookRegistry;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
@@ -63,14 +65,26 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciLikertScale(), ['0.2.0']);
             call_user_func(new RegisterPciLiquid(), ['0.2.0']);
 
-            $testManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole');
-            $QTIManagerRole = $this->getResource('http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole');
-            $testTakerRole = $this->getResource(INSTANCE_ROLE_DELIVERY);
+            // Grants access on PciLoader for TestManager role.
+            AclProxy::applyRule(new AccessRule(
+                AccessRule::GRANT,
+                'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole',
+                ['ext' => 'qtiItemPci' , 'mod' => 'PciLoader']
+            ));
 
-            $accessService = \funcAcl_models_classes_AccessService::singleton();
-            $accessService->grantModuleAccess($testManagerRole, 'qtiItemPci', 'PciLoader');
-            $accessService->grantModuleAccess($QTIManagerRole, 'qtiItemPci', 'PciLoader');
-            $accessService->grantModuleAccess($testTakerRole, 'qtiItemPci', 'PciLoader');
+            // Grants access on PciLoader for QTIManager role.
+            AclProxy::applyRule(new AccessRule(
+                AccessRule::GRANT,
+                'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole',
+                ['ext' => 'qtiItemPci' , 'mod' => 'PciLoader']
+            ));
+
+            // Grants access on PciLoader for TestTaker role.
+            AclProxy::applyRule(new AccessRule(
+                AccessRule::GRANT,
+                INSTANCE_ROLE_DELIVERY,
+                ['ext' => 'qtiItemPci' , 'mod' => 'PciLoader']
+            ));
 
             HookRegistry::getRegistry()->remove('pciCreator');
 
@@ -124,6 +138,6 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('1.6.2');
         }
 
-        $this->skip('1.6.2', '2.0.0');
+        $this->skip('1.6.2', '2.0.1');
     }
 }
