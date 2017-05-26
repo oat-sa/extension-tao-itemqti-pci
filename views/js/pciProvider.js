@@ -16,7 +16,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(['jquery', 'helpers', 'core/promise'], function($, helpers, Promise){
+define('qtiItemPci/pciProvider', ['jquery', 'helpers', 'core/promise'], function($, helpers, Promise){
     'use strict';
     
     var _serverUrl = helpers._url('load', 'PciLoader', 'qtiItemPci');
