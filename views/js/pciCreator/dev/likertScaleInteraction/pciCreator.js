@@ -63,7 +63,8 @@ define([
          * @returns {Object}
          */
         afterCreate : function(pci){
-            //do some stuff
+            //always set the NONE response processing mode to likert scale
+            pci.getResponseDeclaration().setTemplate('NONE');
         },
         /**
          * (required) Gives the qti pci xml template 

@@ -138,6 +138,11 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('1.6.2');
         }
 
-        $this->skip('1.6.2', '2.0.1');
+        $this->skip('1.6.2', '2.0.2');
+
+        if($this->isVersion('2.0.2')){
+            call_user_func(new RegisterPciLikertScale(), ['0.3.0']);
+            $this->setVersion('2.1.0');
+        }
     }
 }
