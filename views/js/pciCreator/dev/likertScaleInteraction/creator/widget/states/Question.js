@@ -82,8 +82,7 @@ define([
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
-            levels : levelData,
-            identifier : interaction.attr('responseIdentifier')
+            levels : levelData
         }));
 
         //init form javascript
@@ -98,10 +97,6 @@ define([
                 
                 //trigger change event:
                 interaction.triggerPci('levelchange', [parseInt(value)]);
-            },
-            identifier : function(i, value){
-                response.id(value);
-                interaction.attr('responseIdentifier', value);
             }
         });
 
