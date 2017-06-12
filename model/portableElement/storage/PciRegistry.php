@@ -24,23 +24,5 @@ use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 
 class PciRegistry extends PortableElementRegistry
 {
-    const REGISTRY_EXTENSION = 'qtiItemPci';
-    const REGISTRY_ID = 'pciRegistryEntries';
-
-    /**
-     * @return \common_ext_Extension
-     * @throws \common_ext_ExtensionException
-     */
-    protected function getExtension()
-    {
-        return \common_ext_ExtensionsManager::singleton()->getExtensionById(self::REGISTRY_EXTENSION);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getConfigId()
-    {
-        return self::REGISTRY_ID;
-    }
+    protected $fileSystemId = 'qtiItemPci';
 }
