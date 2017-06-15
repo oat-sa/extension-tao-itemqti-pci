@@ -22,12 +22,13 @@ define('qtiItemPci/pciProvider', ['jquery', 'helpers', 'core/promise'], function
     var _serverUrl = helpers._url('load', 'PciLoader', 'qtiItemPci');
     
     return {
-        load: function load(){
+        load: function load(options){
             return new Promise(function(resolve, reject){
                 $.ajax({
                     url : _serverUrl,
                     dataType : 'json',
-                    type : 'GET'
+                    type : 'GET',
+                    data: options
                 }).done(resolve).fail(reject);
             });
         }

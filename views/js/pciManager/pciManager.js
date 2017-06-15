@@ -43,7 +43,8 @@ define([
 
     var _urls = {
         load : helpers._url('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
-        delete : helpers._url('delete', 'PciManager', 'qtiItemPci'),
+        disable : helpers._url('disable', 'PciManager', 'qtiItemPci'),
+        enable : helpers._url('enable', 'PciManager', 'qtiItemPci'),
         verify : helpers._url('verify', 'PciManager', 'qtiItemPci'),
         add : helpers._url('add', 'PciManager', 'qtiItemPci')
     };
@@ -89,6 +90,7 @@ define([
         loadListingFromServer(function(data){
             //note : init as empty object and not array otherwise _.size will fail later
             listing = _.size(data) ? data : {};
+            console.log(listing);
             updateListing(data);
         });
 
@@ -116,22 +118,32 @@ define([
 
             deleter($fileContainer);
 
-            $fileContainer.on('delete.deleter', function(e, $target){
-
-                if(e.namespace === 'deleter' && $target.length){
-
-                    var typeIdentifier = $target.data('type-identifier');
-                    $(this).one('deleted.deleter', function(){
-
-                        $.getJSON(_urls.delete, {typeIdentifier : typeIdentifier}, function(data){
-                            if(data.success){
-                                interactionsToolbar.remove(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
-                                delete listing[typeIdentifier];
-                                updateListing();
-                            }
-                        });
-                    });
-                }
+            $fileContainer.on('click', 'li[data-type-identifier] a[data-role=enable]', function(){
+                var $li = $(this).closest('.pci-list-element');
+                var typeIdentifier = $li.data('type-identifier');
+                $li.removeClass('disabled');
+                $.getJSON(_urls.enable, {typeIdentifier : typeIdentifier}, function(data){
+                    if(data.success){
+                        if(interactionsToolbar.exists(config.interactionSidebar, 'customInteraction.' + typeIdentifier)){
+                            interactionsToolbar.enable(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
+                            listing[typeIdentifier].enabled = true;
+                            updateListing();
+                        }else{
+                            add(data.interactionHook).then(updateListing);
+                        }
+                    }
+                });
+            }).on('click', 'li[data-type-identifier] a[data-role=disable]', function(){
+                var $li = $(this).closest('.pci-list-element');
+                var typeIdentifier = $li.data('type-identifier');
+                $li.addClass('disabled');
+                $.getJSON(_urls.disable, {typeIdentifier : typeIdentifier}, function(data){
+                    if(data.success){
+                        interactionsToolbar.disable(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
+                        listing[typeIdentifier].enabled = false;
+                        updateListing();
+                    }
+                });
             });
 
             //switch to upload mode
@@ -153,7 +165,6 @@ define([
                     require(reqPaths);
                 }
             });
-            
         }
 
         function updateListing(){
@@ -166,7 +177,7 @@ define([
                     .empty()
                     .html(
                         listingTpl({
-                            files : listing
+                            interactions : listing
                         }))
                     .show();
 
@@ -219,7 +230,7 @@ define([
             
             $container.trigger('added' + ns, [interactionHook]);
             
-            ciRegistry.loadCreators(true).then(function(){
+            ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
                 var data = ciRegistry.getAuthoringData(id);
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){

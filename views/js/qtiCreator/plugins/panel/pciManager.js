@@ -28,7 +28,7 @@ define([
 ], function($, _, __, pluginFactory, interactionsToolbar, PciManager, triggerTpl) {
     'use strict';
 
-    var _ns = '.customRpEditor';
+    var _ns = '.pciManager';
 
     function addManagerButton($container, $interactionSidebar, itemUri){
 
