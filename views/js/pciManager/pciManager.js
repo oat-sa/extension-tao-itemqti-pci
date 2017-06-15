@@ -230,7 +230,7 @@ define([
             
             $container.trigger('added' + ns, [interactionHook]);
             
-            ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
+            return ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
                 var data = ciRegistry.getAuthoringData(id);
                 if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
                     if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
