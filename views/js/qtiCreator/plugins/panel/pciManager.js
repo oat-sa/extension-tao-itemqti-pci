@@ -21,13 +21,13 @@ define([
     'lodash',
     'i18n',
     'core/plugin',
-    'core/promise',
+    'util/url',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'qtiItemPci/pciManager/pciManager',
-    'taoQtiItem/portableElementRegistry/ciRegistry',
     'tpl!qtiItemPci/pciManager/tpl/managerTrigger',
     'css!qtiItemPciCss/pci-manager'
-], function($, _, __, pluginFactory, Promise, interactionsToolbar, pciManager, ciRegistry, triggerTpl) {
+], function($, _, __, pluginFactory, url, ciRegistry, interactionsToolbar, pciManager, triggerTpl) {
     'use strict';
 
     var _ns = '.pciManager';
@@ -45,63 +45,62 @@ define([
 
             interactionsToolbar.whenReady($interactionSidebar).then(function addManagerButton(){
 
-                var pciMgr;
-                var $button;
+                //instantiate the pci manager component
+                var pciMgr = pciManager({
+                    renderTo : $container,
+                    loadUrl : url.route('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
+                    disableUrl : url.route('disable', 'PciManager', 'qtiItemPci'),
+                    enableUrl : url.route('enable', 'PciManager', 'qtiItemPci'),
+                    verifyUrl : url.route('verify', 'PciManager', 'qtiItemPci'),
+                    addUrl : url.route('add', 'PciManager', 'qtiItemPci')
+                }).on('pciAdded', function(typeIdentifier){
+                    this.trigger('pciEnabled', typeIdentifier);
+                }).on('pciEnabled', function(typeIdentifier){
+                    if(interactionsToolbar.exists($interactionSidebar, 'customInteraction.' + typeIdentifier)){
+                        interactionsToolbar.enable($interactionSidebar, 'customInteraction.' + typeIdentifier);
+                    }else{
+                        ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
+                            var $insertable, $itemBody;
+                            var data = ciRegistry.getAuthoringData(typeIdentifier);
+                            if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
+                                if(!interactionsToolbar.exists($interactionSidebar, data.qtiClass)){
 
-                //get the custom interaction section in the toolbar
+                                    //add toolbar button
+                                    $insertable = interactionsToolbar.add($interactionSidebar, data);
+
+                                    //init insertable
+                                    $itemBody = $('.qti-itemBody');//current editor instance
+                                    $itemBody.gridEditor('addInsertables', $insertable, {
+                                        helper : function(){
+                                            return $(this).find('.icon').clone().addClass('dragging');
+                                        }
+                                    });
+                                }
+                            }else{
+                                throw 'invalid authoring data for custom interaction';
+                            }
+                        });
+                    }
+                }).on('pciDisabled', function(typeIdentifier){
+                    interactionsToolbar.disable($interactionSidebar, 'customInteraction.' + typeIdentifier);
+                });
+
+                //get the custom interaction section in the interaction toolbar toolbar
                 var customInteractionTag = interactionsToolbar.getCustomInteractionTag();
+
+                //get the location of the pci manager trigger
                 var $section = interactionsToolbar.getGroup($interactionSidebar, customInteractionTag);
                 if(!$section.length){
                     //no custom interaction yet, add a section
                     $section = interactionsToolbar.addGroup($interactionSidebar, customInteractionTag);
                 }
 
-                //instantiate the pci manager component
-                pciMgr = pciManager({
-                    renderTo : $container,
-                }).on('pciAdded', function(typeIdentifier){
-                    console.log('pciAdded', typeIdentifier);
-                }).on('pciEnabled', function(typeIdentifier){
-                    console.log('pciEnabled', typeIdentifier);
-                    if(interactionsToolbar.exists($interactionSidebar, 'customInteraction.' + typeIdentifier)){
-                        interactionsToolbar.enable($interactionSidebar, 'customInteraction.' + typeIdentifier);
-                    }else{
-                        ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
-                            var data = ciRegistry.getAuthoringData(typeIdentifier);
-                            if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
-                                if(!interactionsToolbar.exists($interactionSidebar, data.qtiClass)){
-
-                                    //add toolbar button
-                                    var $insertable = interactionsToolbar.add($interactionSidebar, data);
-
-                                    //init insertable
-                                    var $itemBody = $('.qti-itemBody');//current editor instance
-                                    $itemBody.gridEditor('addInsertables', $insertable, {
-                                        helper : function(){
-                                            return $(this).find('.icon').clone().addClass('dragging');
-                                        }
-                                    });
-                                    //self.trigger('updateListing');
-                                }
-                            }else{
-                                throw 'invalid authoring data for custom interaction';
-                            }
-                        }).catch(function(err){
-                            console.log('err', err);
-                        });
-                    }
-                }).on('pciDisabled', function(typeIdentifier){
-                    console.log('pciDisabled', typeIdentifier);
-                    interactionsToolbar.disable($interactionSidebar, 'customInteraction.' + typeIdentifier);
-                });
-
-                //add button
-                $button = $(triggerTpl({
+                //add pci manager trigger
+                $(triggerTpl({
                     title : __('Manage custom interactions')
                 })).on('click'+_ns, function(){
                     pciMgr.open();
-                });
-                $section.children('.panel').append($button);
+                }).appendTo($section.children('.panel'));
             });
         }
     });

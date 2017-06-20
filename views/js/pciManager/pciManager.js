@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA;
  *
  */
 define([
@@ -37,43 +37,30 @@ define([
 ], function($, __, _, helpers, component, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, confirmBox, deleter, feedback){
     'use strict';
 
-    var ns = '.pcimanager';
-
     var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
         _fileExtFilter = /.+\.(zip)$/;
 
-    var _urls = {
-        load : helpers._url('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
-        disable : helpers._url('disable', 'PciManager', 'qtiItemPci'),
-        enable : helpers._url('enable', 'PciManager', 'qtiItemPci'),
-        verify : helpers._url('verify', 'PciManager', 'qtiItemPci'),
-        add : helpers._url('add', 'PciManager', 'qtiItemPci')
+    var _defaults = {
+        loadUrl : '',
+        disableUrl : '',
+        enableUrl : '',
+        verifyUrl : '',
+        addUrl : '',
     };
 
-    function validateConfig(config){
-
-    }
+    var pciManager = {
+        open: function open(){
+            this.trigger('showListing');
+            this.getElement().modal('open');
+        }
+    };
 
     function PciManager(initConfig){
-        //creates the container from the layout template
-        //var $container = $(layoutTpl());
-        //config.container.append($container);
-        var listing = {};
-        var _defaults = {};
-        var pciManager = {
-            open: function open(){
-                this.trigger('showListing');
-                this.getElement().modal('open');
-            }
-        };
 
-        validateConfig(initConfig);
+        var listing = {};
 
         return component(pciManager, _defaults)
             .setTemplate(layoutTpl)
-            .on('destroy', function() {
-                console.log('destroyed');
-            })
             .on('showListing', function(){
                 var $fileSelector = this.getElement().find('.file-selector'),
                     $title = $fileSelector.find('.title'),
@@ -139,6 +126,7 @@ define([
 
                 //init variables:
                 var self = this,
+                    urls = _.pick(this.config, ['loadUrl', 'disableUrl', 'enableUrl', 'verifyUrl', 'addUrl']),
                     $container = this.getElement(),
                     $fileSelector = $container.find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
@@ -157,7 +145,7 @@ define([
                 initUploader();
 
                 //load list of custom interactions from server
-                $.getJSON(_urls.load, function(data){
+                $.getJSON(urls.loadUrl, function(data){
                     //note : init as empty object and not array otherwise _.size will fail later
                     listing = _.size(data) ? data : {};
                     self.trigger('updateListing', data);
@@ -171,7 +159,7 @@ define([
                         var $li = $(this).closest('.pci-list-element');
                         var typeIdentifier = $li.data('type-identifier');
                         $li.removeClass('disabled');
-                        $.getJSON(_urls.enable, {typeIdentifier : typeIdentifier}, function(data){
+                        $.getJSON(urls.enableUrl, {typeIdentifier : typeIdentifier}, function(data){
                             if(data.success){
                                 listing[typeIdentifier].enabled = true;
                                 self.trigger('pciEnabled', typeIdentifier);
@@ -181,7 +169,7 @@ define([
                         var $li = $(this).closest('.pci-list-element');
                         var typeIdentifier = $li.data('type-identifier');
                         $li.addClass('disabled');
-                        $.getJSON(_urls.disable, {typeIdentifier : typeIdentifier}, function(data){
+                        $.getJSON(urls.disableUrl, {typeIdentifier : typeIdentifier}, function(data){
                             if(data.success){
                                 listing[typeIdentifier].enabled = false;
                                 self.trigger('pciDisabled', typeIdentifier);
@@ -207,8 +195,8 @@ define([
 
                     $uploader.on('upload.uploader', function(e, file, interactionHook){
 
-                        console.log('SHOULD NOT BE CALLED');
-                        add(interactionHook);
+                        listing[interactionHook.typeIdentifier] = interactionHook;
+                        self.trigger('pciAdded', interactionHook.typeIdentifier);
 
                     }).on('fail.uploader', function(e, file, err){
 
@@ -217,7 +205,7 @@ define([
                     }).on('end.uploader', function(){
 
                         if(errors.length === 0){
-                            //timeout to give time to the user to realize that the upload is other and now transitioning to another view
+                            //add delay to give enough time to the user to realize that the upload is completed and now transitioning to another view
                             _.delay(function(){
                                 self.trigger('showListing');
                             }, 500);
@@ -251,7 +239,7 @@ define([
                     $uploader.uploader({
                         upload : true,
                         multiple : true,
-                        uploadUrl : _urls.add,
+                        uploadUrl : urls.addUrl,
                         fileSelect : function fileSelect(files, done){
 
                             var givenLength = files.length;
@@ -278,7 +266,7 @@ define([
                     function verify(file, cb){
 
                         $uploadForm.sendfile({
-                            url : _urls.verify,
+                            url : urls.verifyUrl,
                             file : file,
                             loaded : function(r){
 
