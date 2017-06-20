@@ -51,9 +51,7 @@ define([
     };
 
     function validateConfig(config){
-        if(!config.interactionSidebar || !(config.interactionSidebar instanceof $)){
-            throw new Error('Invalid container in config object : missing interaction sidebar');
-        }
+
     }
 
     function PciManager(initConfig){
@@ -68,8 +66,6 @@ define([
                 this.getElement().modal('open');
             }
         };
-
-        var config = initConfig;
 
         validateConfig(initConfig);
 
@@ -113,11 +109,7 @@ define([
             .on('updateListing', function(){
                 var $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
-                    $placeholder = $fileSelector.find('.empty'),
-                    $title = $fileSelector.find('.title'),
-                    $uploader = $fileSelector.find('.file-upload-container'),
-                    $switcher = $fileSelector.find('.upload-switcher a'),
-                    $uploadForm;
+                    $placeholder = $fileSelector.find('.empty');
 
                 if(_.size(listing)){
 
@@ -150,8 +142,6 @@ define([
                     $container = this.getElement(),
                     $fileSelector = $container.find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
-                    $placeholder = $fileSelector.find('.empty'),
-                    $title = $fileSelector.find('.title'),
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $switcher = $fileSelector.find('.upload-switcher a'),
                     $uploadForm;
@@ -162,27 +152,16 @@ define([
                     minWidth : 450
                 });
 
-                //load list of custom interactions from server
-                loadListingFromServer(function(data){
-                    //note : init as empty object and not array otherwise _.size will fail later
-                    listing = _.size(data) ? data : {};
-                    self.trigger('updateListing', data);
-                });
-
                 //init event listeners
                 initEventListeners();
                 initUploader();
 
-                /**
-                 * Below are all function definitions
-                 */
-
-                function loadListingFromServer(callback){
-
-                    $.getJSON(_urls.load, function(data){
-                        callback(data);
-                    });
-                }
+                //load list of custom interactions from server
+                $.getJSON(_urls.load, function(data){
+                    //note : init as empty object and not array otherwise _.size will fail later
+                    listing = _.size(data) ? data : {};
+                    self.trigger('updateListing', data);
+                });
 
                 function initEventListeners(){
 
@@ -217,55 +196,6 @@ define([
                             self.trigger('hideListing');
                         }else{
                             self.trigger('showListing');
-                        }
-                    });
-
-                    return;
-                    //when a pci is created add required resources :
-                    $(document).on('resourceadded.qti-creator.qti-hook-pci', function(e, typeIdentifier, resources, interaction){
-                        console.log('resourceadded.qti-creator.qti-hook-pci');
-                        //render new stylesheet:
-                        var reqPaths = [];
-                        _.each(resources, function(res){
-                            if(/\.css$/.test(res)){
-                                reqPaths.push('css!'+typeIdentifier + '/' + res);
-                            }
-                        });
-                        if(reqPaths.length){
-                            require(reqPaths);
-                        }
-                    });
-                }
-
-                function add(interactionHook){
-                    console.log('DEPRECTEAD');
-                    return;
-                    self.trigger('pciAdded', interactionHook.typeIdentifier);
-                    var id = interactionHook.typeIdentifier;
-
-                    listing[id] = interactionHook;
-
-                    //for backward compatibility only
-                    $container.trigger('added' + ns, [interactionHook]);
-
-                    return ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
-                        var data = ciRegistry.getAuthoringData(id);
-                        if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
-                            if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
-
-                                //add toolbar button
-                                var $insertable = interactionsToolbar.add(config.interactionSidebar, data);
-
-                                //init insertable
-                                var $itemBody = $('.qti-itemBody');//current editor instance
-                                $itemBody.gridEditor('addInsertables', $insertable, {
-                                    helper : function(){
-                                        return $(this).find('.icon').clone().addClass('dragging');
-                                    }
-                                });
-                            }
-                        }else{
-                            throw 'invalid authoring data for custom interaction';
                         }
                     });
                 }
