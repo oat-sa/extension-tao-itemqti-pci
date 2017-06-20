@@ -21,16 +21,18 @@ define([
     'lodash',
     'i18n',
     'core/plugin',
+    'core/promise',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'qtiItemPci/pciManager/pciManager',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
     'tpl!qtiItemPci/pciManager/tpl/managerTrigger',
     'css!qtiItemPciCss/pci-manager'
-], function($, _, __, pluginFactory, interactionsToolbar, PciManager, triggerTpl) {
+], function($, _, __, pluginFactory, Promise, interactionsToolbar, pciManager, ciRegistry, triggerTpl) {
     'use strict';
 
     var _ns = '.pciManager';
 
-    function addManagerButton($container, $interactionSidebar, itemUri){
+    function addManagerButton($container, $interactionSidebar){
 
         //get the custom interaction section in the toolbar
         var customInteractionTag = interactionsToolbar.getCustomInteractionTag();
@@ -46,13 +48,52 @@ define([
         }));
         $section.children('.panel').append($button);
 
-        var pciManager = new PciManager({
-            container : $container,
-            interactionSidebar : $interactionSidebar,
-            itemUri : itemUri
+        var pciMgr = pciManager({
+            renderTo : $container,
+            interactionSidebar : $interactionSidebar
+        }).on('pciAdded', function(typeIdentifier){
+            console.log('pciAdded', typeIdentifier);
+        }).on('pciEnabled', function(typeIdentifier){
+            console.log('pciEnabled', typeIdentifier);
+            var self = this;
+            if(interactionsToolbar.exists($interactionSidebar, 'customInteraction.' + typeIdentifier)){
+                interactionsToolbar.enable($interactionSidebar, 'customInteraction.' + typeIdentifier);
+                //listing[typeIdentifier].enabled = true;
+                //this.trigger('updateListing');
+            }else{
+
+                ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
+                    var data = ciRegistry.getAuthoringData(typeIdentifier);
+                    if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
+                        if(!interactionsToolbar.exists($interactionSidebar, data.qtiClass)){
+
+                            //add toolbar button
+                            var $insertable = interactionsToolbar.add($interactionSidebar, data);
+
+                            //init insertable
+                            var $itemBody = $('.qti-itemBody');//current editor instance
+                            $itemBody.gridEditor('addInsertables', $insertable, {
+                                helper : function(){
+                                    return $(this).find('.icon').clone().addClass('dragging');
+                                }
+                            });
+                            //self.trigger('updateListing');
+                        }
+                    }else{
+                        throw 'invalid authoring data for custom interaction';
+                    }
+                }).catch(function(err){
+                    console.log('err', err);
+                });
+            }
+        }).on('pciDisabled', function(typeIdentifier){
+            console.log('pciDisabled', typeIdentifier);
+            interactionsToolbar.disable($interactionSidebar, 'customInteraction.' + typeIdentifier);
+            //this.trigger('updateListing');
         });
-        $button.on('click', function(){
-            pciManager.open();
+
+        $button.on('click'+_ns, function(){
+            pciMgr.open();
         });
     }
 
@@ -63,16 +104,15 @@ define([
          * Initialize the plugin (called during runner's init)
          */
         init : function init(){
-            var itemUri = this.getHost().getItem().data('uri');
             var $container = this.getAreaBroker().getModalContainerArea();
             var $interactionSidebar = this.getAreaBroker().getInteractionPanelArea();
 
             if(interactionsToolbar.isReady($interactionSidebar)){
-                addManagerButton($container, $interactionSidebar, itemUri);
+                addManagerButton($container, $interactionSidebar);
             }else{
                 //wait until the interaction toolbar construciton is done:
                 $interactionSidebar.on('interactiontoolbarready.qti-widget', function(){
-                    addManagerButton($container, $interactionSidebar, itemUri);
+                    addManagerButton($container, $interactionSidebar);
                 });
             }
         }

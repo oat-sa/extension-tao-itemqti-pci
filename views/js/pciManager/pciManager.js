@@ -21,6 +21,7 @@ define([
     'i18n',
     'lodash',
     'helpers',
+    'ui/component',
     'tpl!qtiItemPci/pciManager/tpl/layout',
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
@@ -33,7 +34,7 @@ define([
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function($, __, _, helpers, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, confirmBox, deleter, feedback){
+], function($, __, _, helpers, component, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, confirmBox, deleter, feedback){
     'use strict';
 
     var ns = '.pcimanager';
@@ -50,330 +51,350 @@ define([
     };
 
     function validateConfig(config){
-
-        if(!config.container || !(config.container instanceof $)){
-            throw new Error('Invalid container in config object : missing container');
-        }
         if(!config.interactionSidebar || !(config.interactionSidebar instanceof $)){
             throw new Error('Invalid container in config object : missing interaction sidebar');
         }
-        if(!config.itemUri){
-            throw new Error('Invalid container in config object : missing itemUri');
-        }
     }
 
-    function PciManager(config){
-
-        validateConfig(config);
-
+    function PciManager(initConfig){
         //creates the container from the layout template
-        var $container = $(layoutTpl());
-        config.container.append($container);
+        //var $container = $(layoutTpl());
+        //config.container.append($container);
+        var listing = {};
+        var _defaults = {};
+        var pciManager = {
+            open: function open(){
+                this.trigger('showListing');
+                this.getElement().modal('open');
+            }
+        };
 
-        //init variables:
-        var listing = {},
-            $fileSelector = $container.find('.file-selector'),
-            $fileContainer = $fileSelector.find('.files'),
-            $placeholder = $fileSelector.find('.empty'),
-            $title = $fileSelector.find('.title'),
-            $uploader = $fileSelector.find('.file-upload-container'),
-            $switcher = $fileSelector.find('.upload-switcher a'),
-            $uploadForm;
+        var config = initConfig;
 
-        //init modal box
-        $container.modal({
-            startClosed : true,
-            minWidth : 450
-        });
+        validateConfig(initConfig);
 
-        //load list of custom interactions from server
-        loadListingFromServer(function(data){
-            //note : init as empty object and not array otherwise _.size will fail later
-            listing = _.size(data) ? data : {};
-            console.log(listing);
-            updateListing(data);
-        });
+        return component(pciManager, _defaults)
+            .setTemplate(layoutTpl)
+            .on('destroy', function() {
+                console.log('destroyed');
+            })
+            .on('showListing', function(){
+                var $fileSelector = this.getElement().find('.file-selector'),
+                    $title = $fileSelector.find('.title'),
+                    $uploader = $fileSelector.find('.file-upload-container'),
+                    $switcher = $fileSelector.find('.upload-switcher a');
 
-        //init event listeners
-        initEventListeners();
-        initUploader();
+                $switcher.filter('.upload').css({display : 'inline-block'});
+                $switcher.filter('.listing').hide();
 
-        /**
-         * Below are all function definitions
-         */
+                $uploader.hide();
+                $title.text(__('Manage custom interactions'));
 
-        function loadListingFromServer(callback){
+                this.trigger('updateListing');
+            })
+            .on('hideListing', function(){
+                var $fileSelector = this.getElement().find('.file-selector'),
+                    $fileContainer = $fileSelector.find('.files'),
+                    $placeholder = $fileSelector.find('.empty'),
+                    $title = $fileSelector.find('.title'),
+                    $uploader = $fileSelector.find('.file-upload-container'),
+                    $switcher = $fileSelector.find('.upload-switcher a');
 
-            $.getJSON(_urls.load, function(data){
-                callback(data);
-            });
-        }
-
-        function open(){
-            showListing();
-            $container.modal('open');
-        }
-
-        function initEventListeners(){
-
-            deleter($fileContainer);
-
-            $fileContainer.on('click', 'li[data-type-identifier] a[data-role=enable]', function(){
-                var $li = $(this).closest('.pci-list-element');
-                var typeIdentifier = $li.data('type-identifier');
-                $li.removeClass('disabled');
-                $.getJSON(_urls.enable, {typeIdentifier : typeIdentifier}, function(data){
-                    if(data.success){
-                        if(interactionsToolbar.exists(config.interactionSidebar, 'customInteraction.' + typeIdentifier)){
-                            interactionsToolbar.enable(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
-                            listing[typeIdentifier].enabled = true;
-                            updateListing();
-                        }else{
-                            add(data.interactionHook).then(updateListing);
-                        }
-                    }
-                });
-            }).on('click', 'li[data-type-identifier] a[data-role=disable]', function(){
-                var $li = $(this).closest('.pci-list-element');
-                var typeIdentifier = $li.data('type-identifier');
-                $li.addClass('disabled');
-                $.getJSON(_urls.disable, {typeIdentifier : typeIdentifier}, function(data){
-                    if(data.success){
-                        interactionsToolbar.disable(config.interactionSidebar, 'customInteraction.' + typeIdentifier);
-                        listing[typeIdentifier].enabled = false;
-                        updateListing();
-                    }
-                });
-            });
-
-            //switch to upload mode
-            $switcher.click(function(e){
-                e.preventDefault();
-                switchUpload();
-            });
-
-            //when a pci is created add required resources :
-            $(document).on('resourceadded.qti-creator.qti-hook-pci', function(e, typeIdentifier, resources, interaction){
-                //render new stylesheet:
-                var reqPaths = [];
-                _.each(resources, function(res){
-                    if(/\.css$/.test(res)){
-                        reqPaths.push('css!'+typeIdentifier + '/' + res);
-                    }
-                });
-                if(reqPaths.length){
-                    require(reqPaths);
-                }
-            });
-        }
-
-        function updateListing(){
-
-            if(_.size(listing)){
-
-                $placeholder.hide();
-
-                $fileContainer
-                    .empty()
-                    .html(
-                        listingTpl({
-                            interactions : listing
-                        }))
-                    .show();
-
-            }else{
+                $switcher.filter('.upload').hide();
+                $switcher.filter('.listing').css({display : 'inline-block'});
 
                 $fileContainer.hide();
-                $placeholder.show();
-            }
-        }
+                $placeholder.hide();
+                $title.text(__('Upload new custom interaction (zip package)'));
 
-        function switchUpload(){
+                $uploader.uploader('reset');
+                $uploader.show();
+            })
+            .on('updateListing', function(){
+                var $fileSelector = this.getElement().find('.file-selector'),
+                    $fileContainer = $fileSelector.find('.files'),
+                    $placeholder = $fileSelector.find('.empty'),
+                    $title = $fileSelector.find('.title'),
+                    $uploader = $fileSelector.find('.file-upload-container'),
+                    $switcher = $fileSelector.find('.upload-switcher a'),
+                    $uploadForm;
 
-            if($uploader.css('display') === 'none'){
-                hideListing();
-            }else{
-                showListing();
-            }
-        }
+                if(_.size(listing)){
 
-        function hideListing(){
+                    $placeholder.hide();
 
-            $switcher.filter('.upload').hide();
-            $switcher.filter('.listing').css({display : 'inline-block'});
+                    $fileContainer
+                        .empty()
+                        .html(
+                            listingTpl({
+                                interactions : listing
+                            }))
+                        .show();
 
-            $fileContainer.hide();
-            $placeholder.hide();
-            $title.text(__('Upload new custom interaction (zip package)'));
-
-            $uploader.uploader('reset');
-            $uploader.show();
-        }
-
-        function showListing(){
-
-            // Note: show() would display as inline, not inline-block!
-            $switcher.filter('.upload').css({display : 'inline-block'});
-            $switcher.filter('.listing').hide();
-
-            $uploader.hide();
-            $title.text(__('Manage custom interactions'));
-
-            updateListing();
-        }
-
-        function add(interactionHook){
-
-            var id = interactionHook.typeIdentifier;
-
-            listing[id] = interactionHook;
-            
-            $container.trigger('added' + ns, [interactionHook]);
-            
-            return ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
-                var data = ciRegistry.getAuthoringData(id);
-                if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
-                    if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
-
-                        //add toolbar button
-                        var $insertable = interactionsToolbar.add(config.interactionSidebar, data);
-
-                        //init insertable
-                        var $itemBody = $('.qti-itemBody');//current editor instance
-                        $itemBody.gridEditor('addInsertables', $insertable, {
-                            helper : function(){
-                                return $(this).find('.icon').clone().addClass('dragging');
-                            }
-                        });
-                    }
                 }else{
-                    throw 'invalid authoring data for custom interaction';
+
+                    $fileContainer.hide();
+                    $placeholder.show();
                 }
-            });
-        }
+            })
+            .on('pciEnabled', function(){
+                this.trigger('updateListing');
+            })
+            .on('pciDisabled', function(){
+                this.trigger('updateListing');
+            })
+            .on('render', function() {
 
-        function initUploader(){
+                //init variables:
+                var self = this,
+                    $container = this.getElement(),
+                    $fileSelector = $container.find('.file-selector'),
+                    $fileContainer = $fileSelector.find('.files'),
+                    $placeholder = $fileSelector.find('.empty'),
+                    $title = $fileSelector.find('.title'),
+                    $uploader = $fileSelector.find('.file-upload-container'),
+                    $switcher = $fileSelector.find('.upload-switcher a'),
+                    $uploadForm;
 
-            var errors = [],
-                selectedFiles = {};
-
-            $uploader.on('upload.uploader', function(e, file, interactionHook){
-
-                add(interactionHook);
-
-            }).on('fail.uploader', function(e, file, err){
-
-                errors.push(__('Unable to upload file %s : %s', file.name, err));
-
-            }).on('end.uploader', function(){
-
-                if(errors.length === 0){
-                    _.delay(showListing, 500);
-                }else{
-                    feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>", {encodeHtml: false});
-                }
-                //reset errors
-                errors = [];
-
-            }).on('create.uploader', function(){
-
-                //get ref to the uploadForm for later verification usage
-                $uploadForm = $uploader.parent('form');
-                
-            }).on('fileselect.uploader', function(){
-
-                $uploadForm.find('li[data-file-name]').each(function(){
-
-                    var $li = $(this),
-                        filename = $li.data('file-name'),
-                        packageMeta = selectedFiles[filename];
-
-                    if(packageMeta){
-                        //update label:
-                        $li.prepend(packageMetaTpl(packageMeta));
-                    }
+                //init modal box
+                $container.modal({
+                    startClosed : true,
+                    minWidth : 450
                 });
 
-            });
+                //load list of custom interactions from server
+                loadListingFromServer(function(data){
+                    //note : init as empty object and not array otherwise _.size will fail later
+                    listing = _.size(data) ? data : {};
+                    self.trigger('updateListing', data);
+                });
 
-            $uploader.uploader({
-                upload : true,
-                multiple : true,
-                uploadUrl : _urls.add,
-                fileSelect : function(files, done){
-                    
-                    var givenLength = files.length;
+                //init event listeners
+                initEventListeners();
+                initUploader();
 
-                    //check the mime-type
-                    files = _.filter(files, function(file){
-                        // for some weird reasons some browsers have quotes around the file type
-                        var checkType = file.type.replace(/("|')/g, '');
-                        return _.contains(_fileTypeFilters, checkType) || (checkType === '' && _fileExtFilter.test(file.name));
+                /**
+                 * Below are all function definitions
+                 */
+
+                function loadListingFromServer(callback){
+
+                    $.getJSON(_urls.load, function(data){
+                        callback(data);
                     });
-                    
-                    if(files.length !== givenLength){
-                        feedback().error('Invalid files have been removed');
-                    }
-
-                    //reset selectedFiles list
-                    selectedFiles = {};
-
-                    //verify selected files
-                    async.filter(files, verify, done);
                 }
-            });
 
-            function verify(file, cb){
+                function initEventListeners(){
 
-                $uploadForm.sendfile({
-                    url : _urls.verify,
-                    file : file,
-                    loaded : function(r){
-                        
-                        function done(ok){
-                            if(ok){
-                                selectedFiles[file.name] = {
-                                    typeIdentifier : r.typeIdentifier,
-                                    label : r.label,
-                                    version : r.version
-                                };
+                    deleter($fileContainer);
+
+                    $fileContainer.on('click', 'li[data-type-identifier] a[data-role=enable]', function(){
+                        var $li = $(this).closest('.pci-list-element');
+                        var typeIdentifier = $li.data('type-identifier');
+                        $li.removeClass('disabled');
+                        $.getJSON(_urls.enable, {typeIdentifier : typeIdentifier}, function(data){
+                            if(data.success){
+                                listing[typeIdentifier].enabled = true;
+                                self.trigger('pciEnabled', typeIdentifier);
                             }
-                            cb(ok);
-                        }
-                
-                        if(r.valid){
-                            if(r.exists){
-                                confirmBox(
-                                    __('There is already one interaction with the same identifier "%s" (label : "%s") and same version : %s. Do you want to override the existing one ?', r.typeIdentifier, r.label, r.version),
-                                    function(){
-                                        done(true);
-                                    },function(){
-                                        done(false);
-                                    });
-                            }else{
-                                //@todo if version higher, notify user that the existing version will be updated by a new one
-                                done(true);
+                        });
+                    }).on('click', 'li[data-type-identifier] a[data-role=disable]', function(){
+                        var $li = $(this).closest('.pci-list-element');
+                        var typeIdentifier = $li.data('type-identifier');
+                        $li.addClass('disabled');
+                        $.getJSON(_urls.disable, {typeIdentifier : typeIdentifier}, function(data){
+                            if(data.success){
+                                listing[typeIdentifier].enabled = false;
+                                self.trigger('pciDisabled', typeIdentifier);
                             }
+                        });
+                    });
+
+                    //switch to upload mode
+                    $switcher.click(function(e){
+                        e.preventDefault();
+                        if($uploader.css('display') === 'none'){
+                            self.trigger('hideListing');
                         }else{
-                            if(_.isArray(r.package)){
-                                _.each(r.package, function(msg){
-                                    if(msg.message){
-                                        feedback().error(msg.message);
+                            self.trigger('showListing');
+                        }
+                    });
+
+                    return;
+                    //when a pci is created add required resources :
+                    $(document).on('resourceadded.qti-creator.qti-hook-pci', function(e, typeIdentifier, resources, interaction){
+                        console.log('resourceadded.qti-creator.qti-hook-pci');
+                        //render new stylesheet:
+                        var reqPaths = [];
+                        _.each(resources, function(res){
+                            if(/\.css$/.test(res)){
+                                reqPaths.push('css!'+typeIdentifier + '/' + res);
+                            }
+                        });
+                        if(reqPaths.length){
+                            require(reqPaths);
+                        }
+                    });
+                }
+
+                function add(interactionHook){
+                    console.log('DEPRECTEAD');
+                    return;
+                    self.trigger('pciAdded', interactionHook.typeIdentifier);
+                    var id = interactionHook.typeIdentifier;
+
+                    listing[id] = interactionHook;
+
+                    //for backward compatibility only
+                    $container.trigger('added' + ns, [interactionHook]);
+
+                    return ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
+                        var data = ciRegistry.getAuthoringData(id);
+                        if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
+                            if(!interactionsToolbar.exists(config.interactionSidebar, data.qtiClass)){
+
+                                //add toolbar button
+                                var $insertable = interactionsToolbar.add(config.interactionSidebar, data);
+
+                                //init insertable
+                                var $itemBody = $('.qti-itemBody');//current editor instance
+                                $itemBody.gridEditor('addInsertables', $insertable, {
+                                    helper : function(){
+                                        return $(this).find('.icon').clone().addClass('dragging');
                                     }
                                 });
                             }
-                            done(false);
+                        }else{
+                            throw 'invalid authoring data for custom interaction';
                         }
-                    },
-                    failed : function(message){
-                        cb(new Error(message));
-                    }
-                });
-            }
-        }
+                    });
+                }
 
-        //expose a few functions
-        this.open = open;
+                function initUploader(){
+
+                    var errors = [],
+                        selectedFiles = {};
+
+                    $uploader.on('upload.uploader', function(e, file, interactionHook){
+
+                        console.log('SHOULD NOT BE CALLED');
+                        add(interactionHook);
+
+                    }).on('fail.uploader', function(e, file, err){
+
+                        errors.push(__('Unable to upload file %s : %s', file.name, err));
+
+                    }).on('end.uploader', function(){
+
+                        if(errors.length === 0){
+                            //timeout to give time to the user to realize that the upload is other and now transitioning to another view
+                            _.delay(function(){
+                                self.trigger('showListing');
+                            }, 500);
+                        }else{
+                            feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>", {encodeHtml: false});
+                        }
+                        //reset errors
+                        errors = [];
+
+                    }).on('create.uploader', function(){
+
+                        //get ref to the uploadForm for later verification usage
+                        $uploadForm = $uploader.parent('form');
+
+                    }).on('fileselect.uploader', function(){
+
+                        $uploadForm.find('li[data-file-name]').each(function(){
+
+                            var $li = $(this),
+                                filename = $li.data('file-name'),
+                                packageMeta = selectedFiles[filename];
+
+                            if(packageMeta){
+                                //update label:
+                                $li.prepend(packageMetaTpl(packageMeta));
+                            }
+                        });
+
+                    });
+
+                    $uploader.uploader({
+                        upload : true,
+                        multiple : true,
+                        uploadUrl : _urls.add,
+                        fileSelect : function fileSelect(files, done){
+
+                            var givenLength = files.length;
+
+                            //check the mime-type
+                            files = _.filter(files, function(file){
+                                // for some weird reasons some browsers have quotes around the file type
+                                var checkType = file.type.replace(/("|')/g, '');
+                                return _.contains(_fileTypeFilters, checkType) || (checkType === '' && _fileExtFilter.test(file.name));
+                            });
+
+                            if(files.length !== givenLength){
+                                feedback().error('Invalid files have been removed');
+                            }
+
+                            //reset selectedFiles list
+                            selectedFiles = {};
+
+                            //verify selected files
+                            async.filter(files, verify, done);
+                        }
+                    });
+
+                    function verify(file, cb){
+
+                        $uploadForm.sendfile({
+                            url : _urls.verify,
+                            file : file,
+                            loaded : function(r){
+
+                                function done(ok){
+                                    if(ok){
+                                        selectedFiles[file.name] = {
+                                            typeIdentifier : r.typeIdentifier,
+                                            label : r.label,
+                                            version : r.version
+                                        };
+                                    }
+                                    cb(ok);
+                                }
+
+                                if(r.valid){
+                                    if(r.exists){
+                                        confirmBox(
+                                            __('There is already one interaction with the same identifier "%s" (label : "%s") and same version : %s. Do you want to override the existing one ?', r.typeIdentifier, r.label, r.version),
+                                            function(){
+                                                done(true);
+                                            },function(){
+                                                done(false);
+                                            });
+                                    }else{
+                                        done(true);
+                                    }
+                                }else{
+                                    if(_.isArray(r.package)){
+                                        _.each(r.package, function(msg){
+                                            if(msg.message){
+                                                feedback().error(msg.message);
+                                            }
+                                        });
+                                    }
+                                    done(false);
+                                }
+                            },
+                            failed : function(message){
+                                cb(new Error(message));
+                            }
+                        });
+                    }
+                }
+
+            })
+            .init(initConfig);
     }
 
     return PciManager;
