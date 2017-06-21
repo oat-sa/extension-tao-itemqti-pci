@@ -55,10 +55,32 @@ define([
         }
     };
 
-    function PciManager(initConfig){
+    /**
+     * Create a pci manager
+     *
+     * @param {Object} config
+     * @param {String} config.loadUrl - the service be called to load the list of pcis
+     * @param {String} config.verifyUrl - the service be called to verify a pci package
+     * @param {String} config.addUrl - the service be called to add a pci
+     * @param {String} config.enableUrl - the service be called to enable the pcis
+     * @param {String} config.disableUrl - the service be called to disable the pcis
+     * @returns {*}
+     */
+    return function pciManagerFactory(config){
 
         var listing = {};
 
+        /**
+         * Create pci manager component
+         *
+         * @returns {Object} a pciManager component
+         * @fires pciManager#loaded - when the pci manager is initially loaded
+         * @fires pciManager#showListing - when the list of pci is displayed
+         * @fires pciManager#hideListing - when the list of pci is hidden
+         * @fires pciManager#updateListing - when the list of pci is updated
+         * @fires pciManager#pciEnabled - when a pci is enabled
+         * @fires pciManager#pciDisabled - when a pci is disabled
+         */
         return component(pciManager, _defaults)
             .setTemplate(layoutTpl)
             .on('showListing', function(){
@@ -149,6 +171,7 @@ define([
                     //note : init as empty object and not array otherwise _.size will fail later
                     listing = _.size(data) ? data : {};
                     self.trigger('updateListing', data);
+                    self.trigger('loaded', data);
                 });
 
                 function initEventListeners(){
@@ -312,8 +335,6 @@ define([
                 }
 
             })
-            .init(initConfig);
-    }
-
-    return PciManager;
+            .init(config);
+    };
 });

@@ -1,0 +1,9 @@
+{
+    "success": true,
+    "interactionHook": {
+        "typeIdentifier": "liquidsInteraction",
+        "label": "Liquids",
+        "version": "0.2.0",
+        "enabled": true
+    }
+}
