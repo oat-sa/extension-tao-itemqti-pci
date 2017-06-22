@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA;
  *
  */
 define([
@@ -21,40 +21,16 @@ define([
     'lodash',
     'i18n',
     'core/plugin',
+    'util/url',
+    'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/qtiCreator/editor/interactionsToolbar',
     'qtiItemPci/pciManager/pciManager',
     'tpl!qtiItemPci/pciManager/tpl/managerTrigger',
     'css!qtiItemPciCss/pci-manager'
-], function($, _, __, pluginFactory, interactionsToolbar, PciManager, triggerTpl) {
+], function($, _, __, pluginFactory, url, ciRegistry, interactionsToolbar, pciManager, triggerTpl) {
     'use strict';
 
-    var _ns = '.customRpEditor';
-
-    function addManagerButton($container, $interactionSidebar, itemUri){
-
-        //get the custom interaction section in the toolbar
-        var customInteractionTag = interactionsToolbar.getCustomInteractionTag();
-        var $section = interactionsToolbar.getGroup($interactionSidebar, customInteractionTag);
-        if(!$section.length){
-            //no custom interaction yet, add a section
-            $section = interactionsToolbar.addGroup($interactionSidebar, customInteractionTag);
-        }
-
-        //add button
-        var $button = $(triggerTpl({
-            title : __('Manage custom interactions')
-        }));
-        $section.children('.panel').append($button);
-
-        var pciManager = new PciManager({
-            container : $container,
-            interactionSidebar : $interactionSidebar,
-            itemUri : itemUri
-        });
-        $button.on('click', function(){
-            pciManager.open();
-        });
-    }
+    var _ns = '.pciManager';
 
     return pluginFactory({
         name : 'pciManager',
@@ -63,18 +39,69 @@ define([
          * Initialize the plugin (called during runner's init)
          */
         init : function init(){
-            var itemUri = this.getHost().getItem().data('uri');
+
             var $container = this.getAreaBroker().getModalContainerArea();
             var $interactionSidebar = this.getAreaBroker().getInteractionPanelArea();
 
-            if(interactionsToolbar.isReady($interactionSidebar)){
-                addManagerButton($container, $interactionSidebar, itemUri);
-            }else{
-                //wait until the interaction toolbar construciton is done:
-                $interactionSidebar.on('interactiontoolbarready.qti-widget', function(){
-                    addManagerButton($container, $interactionSidebar, itemUri);
+            interactionsToolbar.whenReady($interactionSidebar).then(function addManagerButton(){
+
+                //instantiate the pci manager component
+                var pciMgr = pciManager({
+                    renderTo : $container,
+                    loadUrl : url.route('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
+                    disableUrl : url.route('disable', 'PciManager', 'qtiItemPci'),
+                    enableUrl : url.route('enable', 'PciManager', 'qtiItemPci'),
+                    verifyUrl : url.route('verify', 'PciManager', 'qtiItemPci'),
+                    addUrl : url.route('add', 'PciManager', 'qtiItemPci')
+                }).on('pciAdded', function(typeIdentifier){
+                    this.trigger('pciEnabled', typeIdentifier);
+                }).on('pciEnabled', function(typeIdentifier){
+                    if(interactionsToolbar.exists($interactionSidebar, 'customInteraction.' + typeIdentifier)){
+                        interactionsToolbar.enable($interactionSidebar, 'customInteraction.' + typeIdentifier);
+                    }else{
+                        ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
+                            var $insertable, $itemBody;
+                            var data = ciRegistry.getAuthoringData(typeIdentifier);
+                            if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
+                                if(!interactionsToolbar.exists($interactionSidebar, data.qtiClass)){
+
+                                    //add toolbar button
+                                    $insertable = interactionsToolbar.add($interactionSidebar, data);
+
+                                    //init insertable
+                                    $itemBody = $('.qti-itemBody');//current editor instance
+                                    $itemBody.gridEditor('addInsertables', $insertable, {
+                                        helper : function(){
+                                            return $(this).find('.icon').clone().addClass('dragging');
+                                        }
+                                    });
+                                }
+                            }else{
+                                throw 'invalid authoring data for custom interaction';
+                            }
+                        });
+                    }
+                }).on('pciDisabled', function(typeIdentifier){
+                    interactionsToolbar.disable($interactionSidebar, 'customInteraction.' + typeIdentifier);
                 });
-            }
+
+                //get the custom interaction section in the interaction toolbar toolbar
+                var customInteractionTag = interactionsToolbar.getCustomInteractionTag();
+
+                //get the location of the pci manager trigger
+                var $section = interactionsToolbar.getGroup($interactionSidebar, customInteractionTag);
+                if(!$section.length){
+                    //no custom interaction yet, add a section
+                    $section = interactionsToolbar.addGroup($interactionSidebar, customInteractionTag);
+                }
+
+                //add pci manager trigger
+                $(triggerTpl({
+                    title : __('Manage custom interactions')
+                })).on('click'+_ns, function(){
+                    pciMgr.open();
+                }).appendTo($section.children('.panel'));
+            });
         }
     });
 });
