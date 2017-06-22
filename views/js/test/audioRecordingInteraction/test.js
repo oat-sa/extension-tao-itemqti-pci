@@ -56,7 +56,6 @@ define([
 
     QUnit.asyncTest('destroys', function(assert){
         var $container = $('#' + fixtureContainerId);
-        var onerrorBackup = window.onerror;
 
         QUnit.expect(3);
 
@@ -65,21 +64,21 @@ define([
 
         runner = qtiItemRunner('qti', itemData)
             .on('render', function(){
-                var $record;
+                var $controls;
 
                 //call destroy manually
                 var interaction = this._item.getInteractions()[0];
                 interaction.renderer.destroy(interaction);
 
-                window.onerror = function() {
-                    assert.ok(true, 'recorder has been destroyed');
-                    window.onerror = onerrorBackup;
-                    QUnit.start();
-                };
+                $controls = $('.audiorec-control', $container);
+                assert.equal($controls.length, 0, 'recorder has been destroyed');
 
-                $record = $('.audiorec-control[data-identifier="record"]', $container);
-                $record.addClass('enabled');
-                $record.trigger('click');
+                QUnit.start();
+                try {
+                    interaction.renderer.destroy(interaction);
+                } catch(e){
+                    console.log(e);
+                }
             })
             .on('error', function (error){
                 $('#error-display').html(error);
