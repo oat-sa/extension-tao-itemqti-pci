@@ -226,7 +226,8 @@ class PciManager extends \tao_actions_CommonModule
         return $this->getRegistry()->getLatestVersion($typeIdentifier);
     }
 
-    public function enable(){
+    public function enable()
+    {
         $pci = $this->getRequestPciDataObject();
         $pci->enable();
         $this->getRegistry()->update($pci);
@@ -236,7 +237,8 @@ class PciManager extends \tao_actions_CommonModule
         ]);
     }
 
-    public function disable(){
+    public function disable()
+    {
         $pci = $this->getRequestPciDataObject();
         $pci->disable();
         $this->getRegistry()->update($pci);

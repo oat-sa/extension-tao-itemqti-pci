@@ -22,6 +22,7 @@ define([
     'lodash',
     'helpers',
     'ui/component',
+    'ui/hider',
     'tpl!qtiItemPci/pciManager/tpl/layout',
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
@@ -34,18 +35,18 @@ define([
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function($, __, _, helpers, component, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, async, confirmBox, deleter, feedback){
+], function($, __, _, helpers, component, hider, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, asyncLib, confirmBox, deleter, feedback){
     'use strict';
 
     var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
         _fileExtFilter = /.+\.(zip)$/;
 
     var _defaults = {
-        loadUrl : '',
-        disableUrl : '',
-        enableUrl : '',
-        verifyUrl : '',
-        addUrl : '',
+        loadUrl : null,
+        disableUrl : null,
+        enableUrl : null,
+        verifyUrl : null,
+        addUrl : null
     };
 
     var pciManager = {
@@ -89,10 +90,10 @@ define([
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $switcher = $fileSelector.find('.upload-switcher a');
 
-                $switcher.filter('.upload').css({display : 'inline-block'});
-                $switcher.filter('.listing').hide();
+                hider.show($switcher.filter('.upload'));
+                hider.hide($switcher.filter('.listing'));
 
-                $uploader.hide();
+                hider.hide($uploader);
                 $title.text(__('Manage custom interactions'));
 
                 this.trigger('updateListing');
@@ -105,15 +106,16 @@ define([
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $switcher = $fileSelector.find('.upload-switcher a');
 
-                $switcher.filter('.upload').hide();
+                hider.show($switcher.filter('.listing'));
+                hider.hide($switcher.filter('.upload'));
                 $switcher.filter('.listing').css({display : 'inline-block'});
 
-                $fileContainer.hide();
-                $placeholder.hide();
+                hider.hide($fileContainer);
+                hider.hide($placeholder);
                 $title.text(__('Upload new custom interaction (zip package)'));
 
                 $uploader.uploader('reset');
-                $uploader.show();
+                hider.show($uploader);
             })
             .on('updateListing', function(){
                 var $fileSelector = this.getElement().find('.file-selector'),
@@ -122,20 +124,20 @@ define([
 
                 if(_.size(listing)){
 
-                    $placeholder.hide();
+                    hider.hide($placeholder);
 
                     $fileContainer
                         .empty()
-                        .html(
-                            listingTpl({
-                                interactions : listing
-                            }))
-                        .show();
+                        .html(listingTpl({
+                            interactions : listing
+                        }));
+
+                    hider.show($fileContainer);
 
                 }else{
 
-                    $fileContainer.hide();
-                    $placeholder.show();
+                    hider.hide($fileContainer);
+                    hider.show($placeholder);
                 }
             })
             .on('pciEnabled', function(){
@@ -201,9 +203,9 @@ define([
                     });
 
                     //switch to upload mode
-                    $switcher.click(function(e){
+                    $switcher.on('click', function(e){
                         e.preventDefault();
-                        if($uploader.css('display') === 'none'){
+                        if(hider.isHidden($uploader)){
                             self.trigger('hideListing');
                         }else{
                             self.trigger('showListing');
@@ -282,7 +284,7 @@ define([
                             selectedFiles = {};
 
                             //verify selected files
-                            async.filter(files, verify, done);
+                            asyncLib.filter(files, verify, done);
                         }
                     });
 
