@@ -1,0 +1,68 @@
+{
+    "liquidsInteraction": {
+        "typeIdentifier": "liquidsInteraction",
+        "label": "Liquids",
+        "version": "0.2.0",
+        "enabled": false
+    },
+    "likertScaleInteraction": {
+        "typeIdentifier": "likertScaleInteraction",
+        "label": "Likert Scale",
+        "version": "0.3.0",
+        "enabled": true
+    },
+    "mathEntryInteraction": {
+        "typeIdentifier": "mathEntryInteraction",
+        "label": "Math entry",
+        "version": "0.4.2",
+        "enabled": false
+    },
+    "audioRecordingInteraction": {
+        "typeIdentifier": "audioRecordingInteraction",
+        "label": "Audio recording",
+        "version": "0.1.2",
+        "enabled": false
+    },
+    "portableCustomInteractionSampleC": {
+        "typeIdentifier": "portableCustomInteractionSampleC",
+        "label": "portableCustomInteractionSampleC",
+        "version": "0.1.0",
+        "enabled": false
+    },
+    "portableCustomInteractionSampleE": {
+        "typeIdentifier": "portableCustomInteractionSampleE",
+        "label": "PCI E",
+        "version": "0.1.0",
+        "enabled": true
+    },
+    "portableCustomInteractionSampleG": {
+        "typeIdentifier": "portableCustomInteractionSampleG",
+        "label": "PCI G",
+        "version": "0.1.0",
+        "enabled": true
+    },
+    "portableCustomInteractionSampleH": {
+        "typeIdentifier": "portableCustomInteractionSampleH",
+        "label": "PCI G",
+        "version": "0.1.0",
+        "enabled": false
+    },
+    "portableCustomInteractionSampleI": {
+        "typeIdentifier": "portableCustomInteractionSampleI",
+        "label": "PCI I",
+        "version": "0.1.0",
+        "enabled": false
+    },
+    "portableCustomInteractionSampleK": {
+        "typeIdentifier": "portableCustomInteractionSampleK",
+        "label": "PCI K",
+        "version": "0.1.0",
+        "enabled": false
+    },
+    "portableCustomInteractionSampleD": {
+        "typeIdentifier": "portableCustomInteractionSampleD",
+        "label": "PCI D",
+        "version": "0.1.0",
+        "enabled": true
+    }
+}

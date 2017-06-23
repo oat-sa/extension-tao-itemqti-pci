@@ -13,6 +13,8 @@
     .file-selector{
         display:block;
         min-height:400px;
+        min-width: 100%;
+        margin-bottom: 20px;
         .title-container{
             margin-right:75px;
             .title{
@@ -26,7 +28,45 @@
         }
         .note-container{
             position: absolute;
-            bottom : -10px;
+            bottom : -30px;
+        }
+        ul.files{
+            overflow-y:auto;
+        }
+        .pci-list-element{
+            cursor: default !important;
+            .button-disable{
+                height: 18px;
+                padding: 4px 6px;
+                display: inline-block;
+            }
+            .button-enable{
+                height: 18px;
+                padding: 4px 6px;
+                display: none;
+            }
+            .disable-tag{
+                display: none;
+                font-style: italic;
+            }
+            &.disabled{
+                background-color: transparent !important;
+                .button-disable{
+                    display: none;
+                }
+                .button-enable{
+                    display: inline-block;
+                }
+                .desc{
+                    font-style: italic;
+                }
+                .disable-tag{
+                    display: inline-block;
+                }
+            }
+        }
+        .file-upload-container{
+            display: block;
         }
     }
 }
