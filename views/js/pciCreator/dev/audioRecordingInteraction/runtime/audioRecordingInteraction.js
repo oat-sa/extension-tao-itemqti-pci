@@ -662,17 +662,19 @@ define([
          * @param {Object} interaction
          */
         destroy: function destroy() {
-            if (this.recorder.is('recording')) {
+            if (this.recorder && this.recorder.is('recording')) {
                 this.stopRecording();
             }
-            if (this.player.is('playing')) {
+            if (this.player && this.player.is('playing')) {
                 this.stopPlayback();
             }
 
             this.destroyControls();
 
-            this.inputMeter.destroy();
-            this.inputMeter = null;
+            if (this.inputMeter) {
+                this.inputMeter.destroy();
+                this.inputMeter = null;
+            }
 
             this.progressBar = null;
 
@@ -681,11 +683,15 @@ define([
                 this.mediaStimulus = null;
             }
 
-            this.player.unload();
-            this.player = null;
+            if (this.player) {
+                this.player.unload();
+                this.player = null;
+            }
 
-            this.recorder.destroy();
-            this.recorder = null;
+            if (this.recorder) {
+                this.recorder.destroy();
+                this.recorder = null;
+            }
 
             this.resetResponse();
         },
