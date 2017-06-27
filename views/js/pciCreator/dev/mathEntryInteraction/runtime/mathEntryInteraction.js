@@ -280,7 +280,7 @@ define([
             });
 
             // render rich text content in prompt
-            // html.render(this.$container.find('.prompt'));
+            html.render(this.$container.find('.prompt'));
         },
         /**
          * Programmatically set the response following the json schema described in
