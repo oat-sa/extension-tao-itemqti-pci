@@ -22,7 +22,10 @@
 namespace oat\qtiItemPci\scripts\update;
 
 use oat\generis\model\OntologyAwareTrait;
+use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
+use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
@@ -150,6 +153,31 @@ class Updater extends \common_ext_ExtensionUpdater
         if($this->isVersion('2.2.0')){
             call_user_func(new RegisterPciAudioRecording(), ['0.1.3']);
             $this->setVersion('2.2.1');
+        }
+
+        if($this->isVersion('2.2.1')){
+            $this->runExtensionScript(RegisterPciFilesystem::class);
+
+            $model = new PciModel();
+            $registry = PciRegistry::getRegistry();
+            $registry->setServiceLocator($this->getServiceManager());
+            $registry->setModel($model);
+
+            /** @var \common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
+
+            foreach ($map as $key => $value){
+                uksort($value, function($a, $b) {
+                    return version_compare($a, $b, '<');
+                });
+                $portableElementObject = $model->createDataObject(reset($value));
+                //set it the new way
+                $registry->update($portableElementObject);
+            }
+
+            $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->unsetConfig(PciRegistry::REGISTRY_ID);
+            $this->setVersion('3.0.0');
         }
     }
 }
