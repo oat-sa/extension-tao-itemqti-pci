@@ -25,4 +25,9 @@ use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 class PciRegistry extends PortableElementRegistry
 {
     protected $fileSystemId = 'qtiItemPci';
+
+    /** @deprecated */
+    const REGISTRY_EXTENSION = 'qtiItemPci';
+    /** @deprecated */
+    const REGISTRY_ID = 'pciRegistryEntries';
 }
