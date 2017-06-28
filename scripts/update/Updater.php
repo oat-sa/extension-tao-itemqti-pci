@@ -144,5 +144,12 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciLikertScale(), ['0.3.0']);
             $this->setVersion('2.1.0');
         }
+
+        $this->skip('2.1.0', '2.2.0');
+
+        if($this->isVersion('2.2.0')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.1.3']);
+            $this->setVersion('2.2.1');
+        }
     }
 }

@@ -139,7 +139,7 @@ define([
              */
             destroy: function destroy() {
                 $control.off('.audioPCI');
-                $control.empty();
+                $control.remove();
                 $control = null;
             }
         };

@@ -213,7 +213,39 @@ class PciManager extends \tao_actions_CommonModule
     {
         $data = $object->toArray(array('typeIdentifier', 'label'));
         $data['version'] = $object->getVersion();
+        $data['enabled'] = $object->isEnabled();
         return $data;
+    }
+
+    protected function getRequestPciDataObject()
+    {
+        if (!$this->hasRequestParameter('typeIdentifier')) {
+            throw new PortableElementException('Type identifier parameter missing.');
+        }
+        $typeIdentifier = $this->getRequestParameter('typeIdentifier');
+        return $this->getRegistry()->getLatestVersion($typeIdentifier);
+    }
+
+    public function enable()
+    {
+        $pci = $this->getRequestPciDataObject();
+        $pci->enable();
+        $this->getRegistry()->update($pci);
+        $this->returnJson([
+            'success' => true,
+            'interactionHook' => $this->getMinifiedModel($pci)
+        ]);
+    }
+
+    public function disable()
+    {
+        $pci = $this->getRequestPciDataObject();
+        $pci->disable();
+        $this->getRegistry()->update($pci);
+        $this->returnJson([
+            'success' => true,
+            'interactionHook' => $this->getMinifiedModel($pci)
+        ]);
     }
 
 }
