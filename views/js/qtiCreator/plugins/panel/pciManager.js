@@ -57,12 +57,14 @@ define([
                     this.trigger('pciEnabled', typeIdentifier);
                 }).on('pciEnabled', function(typeIdentifier){
                     if(interactionsToolbar.exists($interactionSidebar, 'customInteraction.' + typeIdentifier)){
+                        ciRegistry.enable(typeIdentifier);
                         interactionsToolbar.enable($interactionSidebar, 'customInteraction.' + typeIdentifier);
                     }else{
                         ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
                             var $insertable, $itemBody;
                             var data = ciRegistry.getAuthoringData(typeIdentifier);
                             if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
+                                ciRegistry.enable(typeIdentifier);
                                 if(!interactionsToolbar.exists($interactionSidebar, data.qtiClass)){
 
                                     //add toolbar button
@@ -82,6 +84,7 @@ define([
                         });
                     }
                 }).on('pciDisabled', function(typeIdentifier){
+                    ciRegistry.disable(typeIdentifier);
                     interactionsToolbar.disable($interactionSidebar, 'customInteraction.' + typeIdentifier);
                 });
 
