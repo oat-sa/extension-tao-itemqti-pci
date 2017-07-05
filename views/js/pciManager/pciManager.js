@@ -26,8 +26,6 @@ define([
     'tpl!qtiItemPci/pciManager/tpl/layout',
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
-    'taoQtiItem/qtiCreator/editor/interactionsToolbar',
-    'taoQtiItem/portableElementRegistry/ciRegistry',
     'async',
     'ui/dialog/confirm',
     'ui/deleter',
@@ -35,7 +33,7 @@ define([
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function($, __, _, helpers, component, hider, layoutTpl, listingTpl, packageMetaTpl, interactionsToolbar, ciRegistry, asyncLib, confirmBox, deleter, feedback){
+], function($, __, _, helpers, component, hider, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, deleter, feedback){
     'use strict';
 
     var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
