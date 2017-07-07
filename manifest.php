@@ -25,6 +25,7 @@ use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
+use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 return array(
@@ -32,7 +33,7 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '2.2.2',
+    'version' => '3.0.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
         'tao' => '>=9.0.0',
@@ -50,6 +51,7 @@ return array(
             dirname(__FILE__). '/install/ontology/role.rdf'
         ),
         'php' => array(
+            RegisterPciFilesystem::class,
             SetupPortableElementFileStorage::class,
             RegisterPciModel::class,
             SetQtiCreatorConfig::class,
@@ -57,7 +59,7 @@ return array(
             RegisterPciLiquid::class,
             RegisterPciLikertScale::class,
             RegisterPciMathEntry::class,
-            RegisterPciAudioRecording::class
+            RegisterPciAudioRecording::class,
         )
     ),
     'uninstall' => array(
