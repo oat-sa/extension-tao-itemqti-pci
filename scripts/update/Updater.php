@@ -155,7 +155,9 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('2.2.1');
         }
 
-        if($this->isVersion('2.2.1')){
+        $this->skip('2.2.1', '2.2.2');
+        
+        if($this->isVersion('2.2.2')){
             $this->runExtensionScript(RegisterPciFilesystem::class);
 
             $model = new PciModel();
