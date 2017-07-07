@@ -1,0 +1,45 @@
+{
+    "typeIdentifier": "likertInteraction",
+    "label": "Likert Scale v1",
+    "short": "Likert v1",
+    "description": "A simple implementation of likert scale.",
+    "version": "1.0.0",
+    "author": "Sam Sipasseuth",
+    "email": "sam@taotesting.com",
+    "tags": [
+        "mcq",
+        "likert"
+    ],
+    "response": {
+        "baseType": "integer",
+        "cardinality": "single"
+    },
+    "runtime" : {
+        "modules" : [
+            "./runtime/likertInteraction.js",
+            "IMSGlobal/jquery_2_1_1",
+            "./runtime/js/renderer.js"
+        ],
+        "stylesheets" : [
+            "./runtime/css/base.css",
+            "./runtime/css/likertInteraction.css"
+        ],
+        "mediaFiles" : [
+            "./runtime/assets/ThumbDown.png",
+            "./runtime/assets/ThumbUp.png",
+            "./runtime/css/img/bg.png"
+        ]
+    },
+    "creator" : {
+        "icon": "./creator/img/icon.svg",
+        "hook": "./pciCreator.js",
+        "modules" : [
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/widget/Widget.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/Answer.js",
+            "./creator/widget/states/states.js"
+        ]
+    }
+}
