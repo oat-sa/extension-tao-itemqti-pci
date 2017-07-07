@@ -148,15 +148,13 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('2.1.0');
         }
 
-        $this->skip('2.1.0', '2.2.0');
+        $this->skip('2.1.0', '2.2.1');
 
-        if($this->isVersion('2.2.0')){
+        if($this->isVersion('2.2.1')){
             call_user_func(new RegisterPciAudioRecording(), ['0.1.3']);
-            $this->setVersion('2.2.1');
+            $this->setVersion('2.2.2');
         }
 
-        $this->skip('2.2.1', '2.2.2');
-        
         if($this->isVersion('2.2.2')){
             $this->runExtensionScript(RegisterPciFilesystem::class);
 
