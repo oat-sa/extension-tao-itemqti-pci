@@ -48,6 +48,11 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($currentVersion)
     {
+
+        //this is related to the actual version of the source code,
+        //otherwise it's not possible to register any PCI
+        $this->runExtensionScript(RegisterPciFilesystem::class);
+
         $this->skip('0', '0.1.4');
 
         if ($this->isVersion('0.1.4')) {
@@ -179,5 +184,7 @@ class Updater extends \common_ext_ExtensionUpdater
             $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->unsetConfig(PciRegistry::REGISTRY_ID);
             $this->setVersion('3.0.0');
         }
+
+        $this->skip('3.0.0', '3.0.1');
     }
 }
