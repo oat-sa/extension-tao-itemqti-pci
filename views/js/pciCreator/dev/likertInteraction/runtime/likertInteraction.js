@@ -13,13 +13,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  *
  */
 define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
 
+    var _typeIdentifier = 'likertInteraction';
+
     var likertInteraction = {
+
+        /*********************************
+         * IMS specific PCI API property and methods
+         *********************************/
+        typeIdentifier : _typeIdentifier,
         getInstance : function getInstance(dom, config, state){
             var response = config.boundTo;
             this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
@@ -28,9 +35,54 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
         getState : function getState(){
             return this.getSerializedState();
         },
+        onready : function onready(customInteraction, state){
 
+        },
+        ondone : function ondone(customInteraction, response, state, status){
+
+        },
+
+        /*********************************
+         * TAO and IMS specific PCI API methods
+         *********************************/
+
+        /**
+         * Get the response in the json format described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} interaction
+         * @returns {Object}
+         */
+        getResponse : function(){
+
+            var $container = $(this.dom),
+                value = parseInt($container.find('input:checked').val()) || 0;
+
+            return {base : {integer : value}};
+        },
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         *
+         * @param {Object} interaction
+         */
+        destroy : function(){
+
+            var $container = $(this.dom);
+            $container.off().empty();
+        },
+
+        /*********************************
+         * TAO specific PCI API methods
+         *********************************/
+
+        /**
+         * Get the type identifier of a pci
+          * @returns {string}
+         */
         getTypeIdentifier : function(){
-            return 'likertInteraction';
+            return _typeIdentifier;
         },
         /**
          * Render the PCI : 
@@ -73,20 +125,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
 
             $container.find('input[value="' + value + '"]').prop('checked', true);
         },
-        /**
-         * Get the response in the json format described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
-         * @param {Object} interaction
-         * @returns {Object}
-         */
-        getResponse : function(){
 
-            var $container = $(this.dom),
-                value = parseInt($container.find('input:checked').val()) || 0;
-
-            return {base : {integer : value}};
-        },
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
@@ -99,18 +138,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
 
             $container.find('input').prop('checked', false);
         },
-        /**
-         * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains 
-         * Event listeners are removed and the state and the response are reset
-         * 
-         * @param {Object} interaction
-         */
-        destroy : function(){
 
-            var $container = $(this.dom);
-            $container.off().empty();
-        },
         /**
          * Restore the state of the interaction from the serializedState.
          * 
