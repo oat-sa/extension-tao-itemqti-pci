@@ -152,32 +152,28 @@ define([
             runner = qtiItemRunner('qti', itemData, {assetManager: assetManager})
                 .on('render', function () {
 
-                    var self = this;
+                    assert.equal($('input:radio[name=likert1]:checked').val(), '2', 'likert 1 state set');
+                    assert.equal($('input:radio[name=likert2]:checked').val(), '5', 'likert 2 state set');
+                    assert.equal($('input:radio[name=likert3]:checked').val(), undefined, 'likert 3 state untouched');
 
-                    this.setState({
-                        likert1: {response: {base: {integer: 1}}},
-                        likert2: {response: {base: {integer: 3}}}
-                    });
+                    assert.deepEqual(this.getState(), {
+                        likert1: {response: {base: {integer: 2}}},
+                        likert2: {response: {base: {integer: 5}}},
+                        likert3: {response: {base: {integer: 0}}},
+                    }, 'state ok');
 
-                    _.delay(function(){
-                        assert.equal($('input:radio[name=likert1]:checked').val(), '1', 'likert 1 state set');
-                        assert.equal($('input:radio[name=likert2]:checked').val(), '3', 'likert 2 state set');
-                        assert.equal($('input:radio[name=likert3]:checked').val(), undefined, 'likert 3 state untouched');
-
-                        assert.deepEqual(self.getState(), {
-                            likert1: {response: {base: {integer: 1}}},
-                            likert2: {response: {base: {integer: 3}}},
-                            likert3: {response: {base: {integer: 0}}},
-                        }, 'state ok');
-
-                        QUnit.start();
-                    }, 100);
+                    QUnit.start();
                 })
                 .on('error', function (error) {
                     $('#error-display').html(error);
                 })
                 .init()
-                .render($container);
+                .render($container, {
+                    state : {
+                        likert1: {response: {base: {integer: 2}}},
+                        likert2: {response: {base: {integer: 5}}}
+                    }
+                });
         });
     });
 
