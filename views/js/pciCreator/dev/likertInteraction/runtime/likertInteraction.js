@@ -35,6 +35,9 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
         getState : function getState(){
             return this.getSerializedState();
         },
+        oncompleted : function oncompleted(){
+
+        },
         onready : function onready(customInteraction, state){
 
         },
@@ -43,7 +46,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
         },
 
         /*********************************
-         * TAO and IMS specific PCI API methods
+         * TAO and IMS shared PCI API methods
          *********************************/
 
         /**
