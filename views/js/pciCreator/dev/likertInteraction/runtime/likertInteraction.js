@@ -24,29 +24,69 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
     var likertInteraction = {
 
         /*********************************
+         *
          * IMS specific PCI API property and methods
+         *
          *********************************/
+
         typeIdentifier : _typeIdentifier,
+
+        /**
+         * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
+         * @param {DOMELement} dom - the dom element the PCI can use
+         * @param {Object} config - the sandard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
+         */
         getInstance : function getInstance(dom, config, state){
             var response = config.boundTo;
+            //simply mapped to existing TAO PCI API
             this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
             this.setSerializedState(state);
         },
+
+        /**
+         * Get the current state fo the PCI
+         * @returns {Object}
+         */
         getState : function getState(){
+            //simply mapped to existing TAO PCI API
             return this.getSerializedState();
         },
+
+        /**
+         * Called by delivery engine when PCI is fully completed
+         */
         oncompleted : function oncompleted(){
-
+            this.destroy();
         },
+
+        /**
+         * Callback to be called by the PCI instance when its initialization is done
+         *
+         * @todo should be a method of the qtiCustomInteractionContext ?
+         * @param {Object} customInteraction - a pci instance
+         * @param {Object} state - the json serialized state object, returned by previous call to getStatus()
+         */
         onready : function onready(customInteraction, state){
-
+            //delivery engine actions when the event PCI ready is triggered
         },
+
+        /**
+         * Callback to be called by the PCI instance when its initialization is done
+         *
+         * @todo should be a method of the qtiCustomInteractionContext ?
+         * @param {Object} customInteraction - a pci instance
+         * @param {Object} state - the json serialized state object, returned by previous call to getStatus()
+         */
         ondone : function ondone(customInteraction, response, state, status){
-
+            //delivery engine actions when the event PCI done is triggered
         },
+
 
         /*********************************
+         *
          * TAO and IMS shared PCI API methods
+         *
          *********************************/
 
         /**
@@ -76,8 +116,11 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
             $container.off().empty();
         },
 
+
         /*********************************
+         *
          * TAO specific PCI API methods
+         *
          *********************************/
 
         /**
@@ -87,6 +130,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
         getTypeIdentifier : function(){
             return _typeIdentifier;
         },
+        
         /**
          * Render the PCI : 
          * @param {String} id
@@ -114,6 +158,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
                 renderer.renderChoices(id, self.dom, self.config);
             });
         },
+
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
@@ -151,6 +196,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
         setSerializedState : function(state){
             this.setResponse(state.response);
         },
+
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
