@@ -195,8 +195,10 @@ class Updater extends \common_ext_ExtensionUpdater
             $registeredPortableElements = array_keys($portableElementRegistry->getLatestRuntimes());
             foreach($registeredPortableElements as $typeIdentifier){
                 $portableElement = $portableElementRegistry->fetch($typeIdentifier);
-                $portableElement->enable();
-                $portableElementRegistry->update($portableElement);
+                if (! $portableElement->hasEnabled()) {
+                    $portableElement->enable();
+                    $portableElementRegistry->update($portableElement);
+                }
             }
             $this->setVersion('3.0.2');
         }
