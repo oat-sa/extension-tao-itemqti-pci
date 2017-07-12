@@ -35,6 +35,7 @@ use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\tao\model\accessControl\func\AclProxy;
 use oat\taoQtiItem\model\HookRegistry;
+use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 class Updater extends \common_ext_ExtensionUpdater
@@ -186,5 +187,18 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         $this->skip('3.0.0', '3.0.1');
+
+        if($this->isVersion('3.0.1')) {
+            //automatically enable all current installed portable elements
+            $model = PortableModelRegistry::getRegistry()->getModel(PciModel::PCI_IDENTIFIER);
+            $portableElementRegistry = $model->getRegistry();
+            $registeredPortableElements = array_keys($portableElementRegistry->getLatestRuntimes());
+            foreach($registeredPortableElements as $typeIdentifier){
+                $portableElement = $portableElementRegistry->fetch($typeIdentifier);
+                $portableElement->enable();
+                $portableElementRegistry->update($portableElement);
+            }
+            $this->setVersion('3.0.2');
+        }
     }
 }
