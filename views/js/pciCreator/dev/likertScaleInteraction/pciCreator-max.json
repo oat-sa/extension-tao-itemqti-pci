@@ -3,7 +3,7 @@
     "label": "Likert Scale",
     "short": "Likert",
     "description": "A simple implementation of likert scale.",
-    "version": "0.4.2",
+    "version": "0.4.1",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "tags": [
@@ -16,7 +16,19 @@
     },
     "runtime" : {
         "hook" : "./runtime/likert.js",
-        "libraries" : [],
+        "libraries" : [
+            "./runtime/js/lib/jquery_2_1_1.js",
+            "./runtime/js/lib/asset.js",
+            "./runtime/js/lib/event.js",
+            "./runtime/js/lib/EventMgr.js",
+            "./runtime/js/lib/handlebars.js",
+            "./runtime/js/lib/html.js",
+            "./runtime/js/lib/lodash.js",
+            "./runtime/js/lib/math.js",
+            "./runtime/js/lib/tpl.js",
+            "./runtime/js/lib/xml.js",
+            "./runtime/js/renderer.js"
+        ],
         "stylesheets" : [
             "./runtime/css/base.css",
             "./runtime/css/likertScaleInteraction.css"
@@ -25,8 +37,7 @@
             "./runtime/assets/ThumbDown.png",
             "./runtime/assets/ThumbUp.png",
             "./runtime/css/img/bg.png"
-        ],
-        "src" : "./runtime/likertScaleInteraction.js"
+        ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
@@ -38,7 +49,6 @@
             "./creator/widget/states/Question.js",
             "./creator/widget/states/Answer.js",
             "./creator/widget/states/states.js"
-        ],
-        "src" : "./pciCreator.js"
+        ]
     }
 }

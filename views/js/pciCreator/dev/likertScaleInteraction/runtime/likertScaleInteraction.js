@@ -16,7 +16,12 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
+define([
+    'qtiCustomInteractionContext',
+    'likertScaleInteraction/runtime/js/lib/jquery_2_1_1',
+    'likertScaleInteraction/runtime/js/renderer',
+    'likertScaleInteraction/runtime/js/lib/event'
+], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
 
     var likertScaleInteraction = {

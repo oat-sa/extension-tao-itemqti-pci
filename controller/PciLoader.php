@@ -36,6 +36,7 @@ class PciLoader extends tao_actions_CommonModule
     public function load()
     {
         try {
+            //add option to load from source (as opposed to load from min.js files)
             $this->returnJson($this->getPciRegistry()->getLatestRuntimes());
         } catch (PortableElementException $e) {
             $this->returnJson($e->getMessage(), 500);

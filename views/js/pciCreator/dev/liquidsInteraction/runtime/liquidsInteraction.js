@@ -1,4 +1,4 @@
-define(['IMSGlobal/jquery_2_1_1', 'qtiCustomInteractionContext', 'OAT/util/event'], function($, qtiCustomInteractionContext, event){
+define(['taoQtiItem/portableElementLib/jquery_2_1_1', 'qtiCustomInteractionContext', 'taoQtiItem/portableElementLib/OAT/util/event'], function($, qtiCustomInteractionContext, event){
 
     var liquidsInteraction = {
         
