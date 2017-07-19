@@ -16,7 +16,8 @@
     },
     "runtime" : {
         "hook" : "./runtime/likert.js",
-        "libraries" : [],
+        "libraries" : [
+        ],
         "stylesheets" : [
             "./runtime/css/base.css",
             "./runtime/css/likertScaleInteraction.css"
@@ -26,7 +27,10 @@
             "./runtime/assets/ThumbUp.png",
             "./runtime/css/img/bg.png"
         ],
-        "src" : "./runtime/likertScaleInteraction.js"
+        "src" : [
+            "./runtime/likertScaleInteraction.js",
+            "./runtime/js/renderer.js"
+        ]
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
@@ -38,7 +42,6 @@
             "./creator/widget/states/Question.js",
             "./creator/widget/states/Answer.js",
             "./creator/widget/states/states.js"
-        ],
-        "src" : "./pciCreator.js"
+        ]
     }
 }

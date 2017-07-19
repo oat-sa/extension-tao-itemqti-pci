@@ -18,15 +18,15 @@
  */
 define([
     'qtiCustomInteractionContext',
-    'likertScaleInteraction/runtime/js/lib/jquery_2_1_1',
-    'likertScaleInteraction/runtime/js/renderer',
-    'likertScaleInteraction/runtime/js/lib/event'
-], function(qtiCustomInteractionContext, $, renderer, event){
+    'taoQtiItem/portableElementLib/jquery_2_1_1',
+    'taoQtiItem/portableElementLib/OAT/util/event',
+    'likertScaleInteraction/runtime/js/renderer'
+], function(qtiCustomInteractionContext, $, event, renderer){
     'use strict';
 
     var likertScaleInteraction = {
         id : -1,
-        getTypeIdentifier : function(){
+        getTypeIdentifier : function getTypeIdentifier(){
             return 'likertScaleInteraction';
         },
         /**
@@ -35,15 +35,15 @@ define([
          * @param {Node} dom
          * @param {Object} config - json
          */
-        initialize : function(id, dom, config, assetManager){
+        initialize : function initialize(id, dom, config, assetManager){
 
-            //add method on(), off() and trigger() to the current object
-            event.addEventMgr(this);
-
-            var _this = this;
+            var self = this;
             this.id = id;
             this.dom = dom;
             this.config = config || {};
+
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
 
             renderer.render(this.id, this.dom, this.config, assetManager);
 
@@ -52,8 +52,8 @@ define([
 
             //listening to dynamic configuration change
             this.on('levelchange', function(level){
-                _this.config.level = level;
-                renderer.renderChoices(_this.id, _this.dom, _this.config);
+                self.config.level = level;
+                renderer.renderChoices(self.id, self.dom, self.config);
             });
         },
         /**
@@ -63,7 +63,7 @@ define([
          * @param {Object} interaction
          * @param {Object} response
          */
-        setResponse : function(response){
+        setResponse : function setResponse(response){
 
             var $container = $(this.dom),
                 value = response && response.base ? parseInt(response.base.integer) : -1;
@@ -77,7 +77,7 @@ define([
          * @param {Object} interaction
          * @returns {Object}
          */
-        getResponse : function(){
+        getResponse : function getResponse(){
 
             var $container = $(this.dom),
                 value = parseInt($container.find('input:checked').val()) || 0;
@@ -90,7 +90,7 @@ define([
          * 
          * @param {Object} interaction
          */
-        resetResponse : function(){
+        resetResponse : function resetResponse(){
 
             var $container = $(this.dom);
 
@@ -103,7 +103,7 @@ define([
          * 
          * @param {Object} interaction
          */
-        destroy : function(){
+        destroy : function destroy(){
 
             var $container = $(this.dom);
             $container.off().empty();
@@ -114,8 +114,8 @@ define([
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
-        setSerializedState : function(state){
-
+        setSerializedState : function setSerializedState(state){
+            this.setResponse(state.response);
         },
         /**
          * Get the current state of the interaction as a string.
@@ -124,9 +124,8 @@ define([
          * @param {Object} interaction
          * @returns {Object} json format
          */
-        getSerializedState : function(){
-
-            return {};
+        getSerializedState : function getSerializedState(){
+            return {response : this.getResponse()};
         }
     };
 

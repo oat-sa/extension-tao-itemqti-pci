@@ -17,8 +17,8 @@
  *
  */
 define([
-    'likertScaleInteraction/runtime/js/lib/jquery_2_1_1',
-    'likertScaleInteraction/runtime/js/lib/html'
+    'taoQtiItem/portableElementLib/jquery_2_1_1',
+    'taoQtiItem/portableElementLib/OAT/util/html'
 ], function($, html){
     'use strict';
 
