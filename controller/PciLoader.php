@@ -35,9 +35,28 @@ class PciLoader extends tao_actions_CommonModule
      */
     public function load()
     {
+        $customInteractionDirs = \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem')->getConfig('debug_portable_element');
+
         try {
-            //add option to load from source (as opposed to load from min.js files)
-            $this->returnJson($this->getPciRegistry()->getLatestRuntimes());
+            $latestRuntimes = $this->getPciRegistry()->getLatestRuntimes();
+            if(is_array($customInteractionDirs)){
+                foreach($latestRuntimes as $id => &$versions){
+                    if(isset($customInteractionDirs[$id])){
+                        //add option to load from source (as opposed to from the default min.js files)
+                        foreach($versions as &$version){
+                            if(isset($version['runtime']) && isset($version['runtime']['src'])){
+                                $version['runtime']['libraries'] = $version['runtime']['src'];
+                                unset($version['runtime']['hook']);
+                            }
+                            if(isset($version['creator']) && isset($version['creator']['src'])){
+                                $version['creator']['libraries'] = $version['creator']['src'];
+                                unset($version['creator']['hook']);
+                            }
+                        }
+                    }
+                }
+            }
+            $this->returnJson($latestRuntimes);
         } catch (PortableElementException $e) {
             $this->returnJson($e->getMessage(), 500);
         }
