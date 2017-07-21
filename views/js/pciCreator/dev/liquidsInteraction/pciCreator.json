@@ -18,6 +18,9 @@
         "stylesheets" : [
         ],
         "mediaFiles" : [
+        ],
+        "src" : [
+            "./runtime/hook.js"
         ]
     },
     "creator" : {

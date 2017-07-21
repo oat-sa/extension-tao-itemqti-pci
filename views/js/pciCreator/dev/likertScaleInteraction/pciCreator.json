@@ -28,7 +28,7 @@
             "./runtime/css/img/bg.png"
         ],
         "src" : [
-            "./runtime/likertScaleInteraction.js",
+            "./runtime/js/hook.js",
             "./runtime/js/renderer.js"
         ]
     },
