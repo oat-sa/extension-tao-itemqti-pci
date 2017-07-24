@@ -203,9 +203,11 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('3.0.2');
         }
 
-        if($this->isVersion('3.0.2')){
+        $this->skip('3.0.2', '3.0.3');
+
+        if($this->isVersion('3.0.3')){
             call_user_func(new RegisterPciLikertScale(), ['0.4.0']);
-//            $this->setVersion('4.0.0');
+//            $this->setVersion('3.1.0');
         }
     }
 }
