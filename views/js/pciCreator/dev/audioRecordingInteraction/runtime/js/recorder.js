@@ -22,8 +22,8 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'OAT/lodash',
-    'OAT/util/event'
+    'taoQtiItem/portableElementLib/lodash',
+    'taoQtiItem/portableElementLib/OAT/util/event'
 ], function(_, event) {
     'use strict';
 

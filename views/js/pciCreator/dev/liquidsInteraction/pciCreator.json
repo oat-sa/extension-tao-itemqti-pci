@@ -13,7 +13,7 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/liquid.js",
+        "hook" : "./runtime/liquidInteraction.js",
         "libraries" : [],
         "stylesheets" : [
         ],
