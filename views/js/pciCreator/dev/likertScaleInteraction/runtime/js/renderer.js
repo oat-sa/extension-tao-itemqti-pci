@@ -17,8 +17,8 @@
  *
  */
 define([
-    'taoQtiItem/portableElementLib/jquery_2_1_1',
-    'taoQtiItem/portableElementLib/OAT/util/html'
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/OAT/util/html'
 ], function($, html){
     'use strict';
 

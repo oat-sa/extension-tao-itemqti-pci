@@ -22,7 +22,7 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'taoQtiItem/portableElementLib/OAT/util/event'
+    'taoQtiItem/portableLib/OAT/util/event'
 ], function(event) {
     'use strict';
 
