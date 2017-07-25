@@ -15,19 +15,17 @@
     },
     "runtime" : {
         "hook" : "./runtime/audioRecordingInteraction.js",
-        "libraries" : [],
+        "libraries" : [
+            "./runtime/js/player.js",
+            "./runtime/js/recorder.js",
+            "./runtime/js/uiElements.js"
+        ],
         "stylesheets" : [
             "./runtime/css/audioRecordingInteraction.css"
         ],
         "mediaFiles" : [
             "./runtime/img/controls.svg",
             "./runtime/img/mic.svg"
-        ],
-        "src" : [
-            "./runtime/js/hook.js",
-            "./runtime/js/player.js",
-            "./runtime/js/recorder.js",
-            "./runtime/js/uiElements.js"
         ]
     },
     "creator" : {
