@@ -36,8 +36,8 @@ return array(
     'version' => '3.1.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
-        'tao' => '>=10.0.0',
-        'taoQtiItem' => '>=8.15.0'
+        'tao' => '>=9.2.2',
+        'taoQtiItem' => '>=10.0.0'
     ),
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
