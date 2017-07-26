@@ -6,16 +6,17 @@
     </metadata>
     <organizations/>
     <resources>
-                <resource identifier="i150107567172373" type="imsqti_item_xmlv2p2" href="i150107567172373/qti.xml">
+        <resource identifier="i150107567172373" type="imsqti_item_xmlv2p2" href="i150107567172373/qti.xml">
             <file href="i150107567172373/qti.xml"/>
-                        <file href="i150107567172373/likertScaleInteraction/runtime/likertScaleInteraction.amd.js"/>
-                        <file href="i150107567172373/likertScaleInteraction/runtime/js/renderer.js"/>
-                        <file href="i150107567172373/likertScaleInteraction/runtime/css/base.css"/>
-                        <file href="i150107567172373/likertScaleInteraction/runtime/css/likertScaleInteraction.css"/>
-                        <file href="i150107567172373/likertScaleInteraction/runtime/assets/ThumbDown.png"/>
-                        <file href="i150107567172373/likertScaleInteraction/runtime/assets/ThumbUp.png"/>
-                        <file href="i150107567172373/likertScaleInteraction/runtime/css/img/bg.png"/>
-                        <file href="i150107567172373/style/custom/tao-user-styles.css"/>
-                    </resource>
-            </resources>
+            <file href="i150107567172373/likertScaleInteraction/portableLib/jquery_2_1_1.js"/>
+            <file href="i150107567172373/likertScaleInteraction/runtime/likertScaleInteraction.js"/>
+            <file href="i150107567172373/likertScaleInteraction/runtime/js/renderer.js"/>
+            <file href="i150107567172373/likertScaleInteraction/runtime/css/base.css"/>
+            <file href="i150107567172373/likertScaleInteraction/runtime/css/likertScaleInteraction.css"/>
+            <file href="i150107567172373/likertScaleInteraction/runtime/assets/ThumbDown.png"/>
+            <file href="i150107567172373/likertScaleInteraction/runtime/assets/ThumbUp.png"/>
+            <file href="i150107567172373/likertScaleInteraction/runtime/css/img/bg.png"/>
+            <file href="i150107567172373/style/custom/tao-user-styles.css"/>
+        </resource>
+    </resources>
 </manifest>
