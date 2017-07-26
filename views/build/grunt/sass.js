@@ -1,4 +1,5 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
+    'use strict';
 
     var sass    = grunt.config('sass') || {};
     var watch   = grunt.config('watch') || {};
@@ -6,9 +7,7 @@ module.exports = function(grunt) {
     var root    = grunt.option('root') + '/qtiItemPci/views/';
 
     sass.qtiitempci = {
-        options : {
-            loadPath : ['../scss/', root + 'scss/inc']
-        },
+        options : {},
         files : {}
     };
     sass.qtiitempci.files[root + 'css/pci-manager.css'] = root + 'scss/pci-manager.scss';

@@ -22,7 +22,10 @@
 namespace oat\qtiItemPci\scripts\update;
 
 use oat\generis\model\OntologyAwareTrait;
+use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
+use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
@@ -32,6 +35,7 @@ use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\tao\model\accessControl\func\AclProxy;
 use oat\taoQtiItem\model\HookRegistry;
+use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 class Updater extends \common_ext_ExtensionUpdater
@@ -45,6 +49,11 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($currentVersion)
     {
+
+        //this is related to the actual version of the source code,
+        //otherwise it's not possible to register any PCI
+        $this->runExtensionScript(RegisterPciFilesystem::class);
+
         $this->skip('0', '0.1.4');
 
         if ($this->isVersion('0.1.4')) {
@@ -145,11 +154,55 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('2.1.0');
         }
 
-        $this->skip('2.1.0', '2.2.0');
+        $this->skip('2.1.0', '2.2.1');
 
-        if($this->isVersion('2.2.0')){
+        if($this->isVersion('2.2.1')){
             call_user_func(new RegisterPciAudioRecording(), ['0.1.3']);
-            $this->setVersion('2.2.1');
+            $this->setVersion('2.2.2');
         }
+
+        if($this->isVersion('2.2.2')){
+            $this->runExtensionScript(RegisterPciFilesystem::class);
+
+            $model = new PciModel();
+            $registry = PciRegistry::getRegistry();
+            $registry->setServiceLocator($this->getServiceManager());
+            $registry->setModel($model);
+
+            /** @var \common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
+
+            foreach ($map as $key => $value){
+                uksort($value, function($a, $b) {
+                    return version_compare($a, $b, '<');
+                });
+                $portableElementObject = $model->createDataObject(reset($value));
+                //set it the new way
+                $registry->update($portableElementObject);
+            }
+
+            $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->unsetConfig(PciRegistry::REGISTRY_ID);
+            $this->setVersion('3.0.0');
+        }
+
+        $this->skip('3.0.0', '3.0.1');
+
+        if($this->isVersion('3.0.1')) {
+            //automatically enable all current installed portable elements
+            $model = PortableModelRegistry::getRegistry()->getModel(PciModel::PCI_IDENTIFIER);
+            $portableElementRegistry = $model->getRegistry();
+            $registeredPortableElements = array_keys($portableElementRegistry->getLatestRuntimes());
+            foreach($registeredPortableElements as $typeIdentifier){
+                $portableElement = $portableElementRegistry->fetch($typeIdentifier);
+                if (! $portableElement->hasEnabled()) {
+                    $portableElement->enable();
+                    $portableElementRegistry->update($portableElement);
+                }
+            }
+            $this->setVersion('3.0.2');
+        }
+
+        $this->skip('3.0.2', '3.0.3');
     }
 }
