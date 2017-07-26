@@ -118,9 +118,6 @@ define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtim
 
             var self = this;
 
-            //add method on(), off() and trigger() to the current object
-            event.addEventMgr(this);
-
             this.dom = dom;
             this.config = config || {};
 
