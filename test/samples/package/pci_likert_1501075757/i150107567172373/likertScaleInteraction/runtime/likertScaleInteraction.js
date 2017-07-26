@@ -41,7 +41,19 @@ define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtim
             var response = config.boundTo;
             //simply mapped to existing TAO PCI API
             this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
-            this.setSerializedState(state);
+
+            //restore serialized state if given in param
+            if(state){
+                this.setSerializedState(state);
+            }
+
+            //tell the rendering engine that I am ready
+            if (this.config.onready !== undefined && this.config.onready !== null) {
+                this.config.onready(this, this.getState());
+            }
+
+            //but why not having a direct call to qtiCustomInteractionContext ? like:
+            //qtiCustomInteractionContext.onready(this, this.getState());
         },
 
         /**
@@ -122,9 +134,6 @@ define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtim
             this.config = config || {};
 
             renderer.render(id, this.dom, this.config, assetManager);
-
-            //tell the rendering engine that I am ready
-            qtiCustomInteractionContext.onready(this);
 
             //listening to dynamic configuration change
             this.on('levelchange', function(level){
