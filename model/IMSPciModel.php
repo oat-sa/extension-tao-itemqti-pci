@@ -16,20 +16,29 @@
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
- * */
+ */
 
-namespace oat\qtiItemPci\scripts\install;
+namespace oat\qtiItemPci\model;
 
-use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\model\IMSPciModel;
-use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
+use oat\oatbox\PhpSerializeStateless;
 
-class RegisterPciModel extends \common_ext_action_InstallAction
+class IMSPciModel extends PciModel
 {
-    public function __invoke($params)
+    use PhpSerializeStateless;
+
+    const PCI_IDENTIFIER = 'IMSPCI';
+
+    const PCI_MANIFEST = 'pciCreator.json';
+
+    const PCI_ENGINE = 'pciCreator.js';
+
+    public function getId()
     {
-        PortableModelRegistry::getRegistry()->register(new PciModel());
-        PortableModelRegistry::getRegistry()->register(new IMSPciModel());
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Pci Model successfully registered.');
+        return self::PCI_IDENTIFIER;
+    }
+
+    public function getQtiElementClassName()
+    {
+        return 'oat\taoQtiItem\model\qti\interaction\ImsPortableCustomInteraction';
     }
 }
