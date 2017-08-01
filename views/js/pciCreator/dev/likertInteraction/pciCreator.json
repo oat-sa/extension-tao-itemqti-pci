@@ -1,4 +1,5 @@
 {
+    "model" : "IMSPCI",
     "typeIdentifier": "likertInteraction",
     "label": "Likert Scale v1",
     "short": "Likert v1",
@@ -15,14 +16,17 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "modules" : [
-            "./runtime/likertInteraction.js",
-            "IMSGlobal/jquery_2_1_1",
-            "./runtime/js/renderer.js"
-        ],
-        "stylesheets" : [
-            "./runtime/css/base.css",
-            "./runtime/css/likertInteraction.css"
+        "modules" : {
+            "likertInteraction/runtime/js/likertInteraction" : [
+                "runtime/js/likertInteraction.js"
+            ],
+            "likertInteraction/runtime/js/renderer" : [
+                "runtime/js/renderer.js"
+            ]
+        },
+        "stylesheetsX" : [
+            "runtime/css/base.css",
+            "runtime/css/likertInteraction.css"
         ],
         "mediaFiles" : [
             "./runtime/assets/ThumbDown.png",

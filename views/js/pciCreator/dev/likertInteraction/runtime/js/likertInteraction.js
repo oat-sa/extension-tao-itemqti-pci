@@ -194,7 +194,9 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-            this.setResponse(state.response);
+            if(state && state.response){
+                this.setResponse(state.response);
+            }
         },
 
         /**

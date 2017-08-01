@@ -144,8 +144,12 @@ define([
     QUnit.asyncTest('state standard', function (assert) {
 
         var $container = $('#' + fixtureContainerId);
+        var state1 = {response: {base: {integer: 2}}};
+        var state2 = {response: {base: {integer: 5}}};
+
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
+
 
         parseXml(likertTripleXml).then(function (itemData) {
             var assetManager = getAssetManager('/qtiItemPci/views/js/test/likertInteraction/data/likert_triple/');
@@ -157,8 +161,8 @@ define([
                     assert.equal($('input:radio[name=likert3]:checked').val(), undefined, 'likert 3 state untouched');
 
                     assert.deepEqual(this.getState(), {
-                        likert1: {response: {base: {integer: 2}}},
-                        likert2: {response: {base: {integer: 5}}},
+                        likert1: state1,
+                        likert2: state2,
                         likert3: {response: {base: {integer: 0}}},
                     }, 'state ok');
 
@@ -170,8 +174,8 @@ define([
                 .init()
                 .render($container, {
                     state : {
-                        likert1: {response: {base: {integer: 2}}},
-                        likert2: {response: {base: {integer: 5}}}
+                        likert1: state1,
+                        likert2: state2
                     }
                 });
         });
