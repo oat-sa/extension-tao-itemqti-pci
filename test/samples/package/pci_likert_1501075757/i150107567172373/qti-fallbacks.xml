@@ -15,9 +15,9 @@
               <pci:property key="label-min">min</pci:property>
               <pci:property key="label-max">max</pci:property>
             </pci:properties>
-            <pci:modules primaryConfiguration="oat-pci.json">
+            <pci:modules primaryConfiguration="oat-pci-unexisting.json" fallbackConfiguration="oat-pci.json">
               <pci:module id="likertScaleInteraction/runtime/js/likertScaleInteraction" primaryPath="likertScaleInteraction/runtime/js/likertScaleInteraction.js"/>
-              <pci:module id="likertScaleInteraction/runtime/js/renderer" primaryPath="likertScaleInteraction/runtime/js/renderer.js"/>
+              <pci:module id="likertScaleInteraction/runtime/js/renderer" primaryPath="likertScaleInteraction/runtime/js/renderer-unexisting.js" fallbackPath="likertScaleInteraction/runtime/js/renderer.js"/>
               <pci:module id="jquery_2_1_1"/>
             </pci:modules>
             <pci:markup>

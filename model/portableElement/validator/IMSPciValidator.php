@@ -23,7 +23,7 @@ namespace oat\qtiItemPci\model\portableElement\validator;
 use oat\taoQtiItem\model\portableElement\validator\PortableElementModelValidator;
 use oat\taoQtiItem\model\portableElement\validator\Validator;
 
-class PciValidatorPciValidator extends PortableElementModelValidator
+class IMSPciValidator extends PortableElementModelValidator
 {
     /**
      * Return model constraint validators
@@ -48,6 +48,14 @@ class PciValidatorPciValidator extends PortableElementModelValidator
     public function getAssetConstraints($key)
     {
         $pciConstraints = [
+            'runtime' => [
+                'hook',
+                'libraries',
+                'stylesheets',
+                'mediaFiles',
+                'modules',
+                'config'
+            ],
             'creator' => [
                 'icon',
                 'hook',
@@ -57,7 +65,8 @@ class PciValidatorPciValidator extends PortableElementModelValidator
             ]
         ];
 
-        $this->assetConstraints = array_merge($pciConstraints, $this->assetConstraints);
+        $this->assetConstraints = array_merge($this->assetConstraints, $pciConstraints);
+//        var_dump('$this->assetConstraints', $this->assetConstraints);
         return parent::getAssetConstraints($key);
     }
 

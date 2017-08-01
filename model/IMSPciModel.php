@@ -21,6 +21,8 @@
 namespace oat\qtiItemPci\model;
 
 use oat\oatbox\PhpSerializeStateless;
+use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
+use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
 
 class IMSPciModel extends PciModel
 {
@@ -35,6 +37,18 @@ class IMSPciModel extends PciModel
     public function getId()
     {
         return self::PCI_IDENTIFIER;
+    }
+
+    public function createDataObject(array $data)
+    {
+        $object = (new IMSPciDataObject())->exchangeArray($data);
+        $object->setModel($this);
+        return $object;
+    }
+
+    public function getValidator()
+    {
+        return new IMSPciValidator();
     }
 
     public function getQtiElementClassName()
