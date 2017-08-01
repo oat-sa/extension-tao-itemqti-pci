@@ -23,7 +23,7 @@ namespace oat\qtiItemPci\model\portableElement\validator;
 use oat\taoQtiItem\model\portableElement\validator\PortableElementModelValidator;
 use oat\taoQtiItem\model\portableElement\validator\Validator;
 
-class PciValidatorPciValidator extends PortableElementModelValidator
+class PciValidator extends PortableElementModelValidator
 {
     /**
      * Return model constraint validators
