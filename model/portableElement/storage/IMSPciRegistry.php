@@ -18,28 +18,11 @@
  *
  */
 
-namespace oat\qtiItemPci\model\portableElement\dataObject;
+namespace oat\qtiItemPci\model\portableElement\storage;
 
-class IMSPciDataObject extends PciDataObject
+use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
+
+class IMSPciRegistry extends PortableElementRegistry
 {
-    /**
-     * Return runtime files with relative path
-     *
-     * @return array
-     */
-    public function getRuntimePath()
-    {
-        //simply return the assigned runtime configuration data with no change
-        return $this->getRuntime();
-    }
-
-    /**
-     * Return creator files with relative aliases
-     *
-     * @return array
-     */
-    public function getRuntimeAliases()
-    {
-        return $this->getRuntime();
-    }
+    protected $fileSystemId = 'qtiItemImsPci';
 }

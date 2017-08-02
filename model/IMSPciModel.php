@@ -20,8 +20,10 @@
 
 namespace oat\qtiItemPci\model;
 
+use oat\oatbox\service\ServiceManager;
 use oat\oatbox\PhpSerializeStateless;
 use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
+use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
 
 class IMSPciModel extends PciModel
@@ -44,6 +46,15 @@ class IMSPciModel extends PciModel
         $object = (new IMSPciDataObject())->exchangeArray($data);
         $object->setModel($this);
         return $object;
+    }
+
+    public function getRegistry()
+    {
+        /** @var IMSPciRegistry $registry */
+        $registry = IMSPciRegistry::getRegistry($this);
+        $registry->setServiceLocator(ServiceManager::getServiceManager());
+        $registry->setModel($this);
+        return $registry;
     }
 
     public function getValidator()
