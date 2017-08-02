@@ -43,10 +43,12 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
         var $ul = $container.find('ul.likert');
         var $labelMin = $('<span>', {'class' : 'likert-label likert-label-min'}).html(config['label-min']);
         var $labelMax = $('<span>', {'class' : 'likert-label likert-label-max'}).html(config['label-max']);
-        
-        $labelMin.append($('<img>', {src: assetManager.resolve('likertInteraction/runtime/assets/ThumbDown.png')}).css({top: 6, marginLeft:12}));
-        $labelMax.prepend($('<img>', {src: assetManager.resolve('likertInteraction/runtime/assets/ThumbUp.png')}).css({top: 2, marginRight:12}));
-        
+
+        if(assetManager){
+            $labelMin.append($('<img>', {src: assetManager.resolve('likertInteraction/runtime/assets/ThumbDown.png')}).css({top: 6, marginLeft:12}));
+            $labelMax.prepend($('<img>', {src: assetManager.resolve('likertInteraction/runtime/assets/ThumbUp.png')}).css({top: 2, marginRight:12}));
+        }
+
         $ul.before($labelMin);
         $ul.after($labelMax);
     }
