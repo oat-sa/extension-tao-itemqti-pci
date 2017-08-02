@@ -16,8 +16,16 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "config": [
-            "runtime/likertConfig.json"
+        "config" : [
+            {
+                "file": "runtime/likertConfig.json",
+                "data": {
+                    "waitSeconds": 30,
+                    "paths": {
+                        "likertInteraction/runtime/js/renderer" : "runtime/js/renderer.js"
+                    }
+                }
+            }
         ],
         "modules" : {
             "likertInteraction/runtime/js/likertInteraction" : [
