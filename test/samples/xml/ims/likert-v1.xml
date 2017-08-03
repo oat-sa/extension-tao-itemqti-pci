@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction_v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i150107567172373" title="PCI likert" label="PCI likert" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint56">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer"/>
+  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+  <stylesheet href="likertInteraction/runtime/css/base.css" type="text/css" media="all" title=""/>
+  <stylesheet href="likertInteraction/runtime/css/likertInteraction.css" type="text/css" media="all" title=""/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <pci:portableCustomInteraction customInteractionTypeIdentifier="likertInteraction" data-version="1.0.0">
+            <pci:properties>
+              <pci:property key="level">5</pci:property>
+              <pci:property key="label-min">min</pci:property>
+              <pci:property key="label-max">max</pci:property>
+            </pci:properties>
+            <pci:modules primaryConfiguration="likertInteraction/runtime/likertConfig.json">
+              <pci:module id="likertInteraction/runtime/js/likertInteraction" primaryPath="likertInteraction/runtime/js/likertInteraction.js"/>
+              <pci:module id="likertInteraction/runtime/js/renderer"/>
+            </pci:modules>
+            <pci:markup>
+              <html5:div class="likertInteraction">
+                <html5:div class="prompt"/>
+                <html5:ul class="likert"/>
+                <html5:div class="hidden assets">
+                    <html5:img class="ThumbDown" src="likertInteraction/runtime/assets/ThumbDown.png" alt="thumb down"/>
+                    <html5:img class="ThumbUp" src="likertInteraction/runtime/assets/ThumbUp.png" alt="thumb up"/>
+                    <html5:img class="bg" src="likertInteraction/runtime/css/img/bg.png" alt=""/>
+                </html5:div>
+              </html5:div>
+            </pci:markup>
+          </pci:portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+</assessmentItem>
+

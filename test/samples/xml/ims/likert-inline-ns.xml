@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i150107567172373" title="PCI likert" label="PCI likert" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint56">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer"/>
+  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+  <stylesheet href="likertScaleInteraction/runtime/css/base.css" type="text/css" media="all" title=""/>
+  <stylesheet href="likertScaleInteraction/runtime/css/likertScaleInteraction.css" type="text/css" media="all" title=""/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteraction" data-version="1.0.0" xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1">
+            <responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+            <properties>
+              <property key="level">5</property>
+              <property key="label-min">min</property>
+              <property key="label-max">max</property>
+            </properties>
+            <modules primaryConfiguration="oat-pci-unexisting.json" fallbackConfiguration="oat-pci.json">
+              <module id="likertScaleInteraction/runtime/js/likertScaleInteraction" primaryPath="likertScaleInteraction/runtime/js/likertScaleInteraction.js"/>
+              <module id="likertScaleInteraction/runtime/js/renderer" primaryPath="likertScaleInteraction/runtime/js/renderer-unexisting.js" fallbackPath="likertScaleInteraction/runtime/js/renderer.js"/>
+              <module id="jquery_2_1_1"/>
+            </modules>
+            <markup xmlns="html5">
+              <div class="likertScaleInteraction">
+                <div class="prompt"/>
+                <ul class="likert"/>
+                <div class="hidden assets">
+                    <img class="ThumbDown" src="likertScaleInteraction/runtime/assets/ThumbDown.png" alt="thumb down"/>
+                    <img class="ThumbUp" src="likertScaleInteraction/runtime/assets/ThumbUp.png" alt="thumb up"/>
+                    <img class="bg" src="likertScaleInteraction/runtime/css/img/bg.png" alt=""/>
+                </div>
+              </div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+</assessmentItem>
