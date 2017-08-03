@@ -12,24 +12,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
- * */
+ */
 
-namespace oat\qtiItemPci\scripts\install;
+namespace oat\qtiItemPci\model\portableElement\storage;
 
-use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\model\IMSPciModel;
-use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
+use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 
-class RegisterPciModel extends \common_ext_action_InstallAction
+class IMSPciRegistry extends PortableElementRegistry
 {
-    public function __invoke($params)
-    {
-        PortableModelRegistry::getRegistry()->register(new PciModel());
-        PortableModelRegistry::getRegistry()->register(new IMSPciModel());
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Pci Model successfully registered.');
-    }
+    protected $fileSystemId = 'qtiItemImsPci';
 }

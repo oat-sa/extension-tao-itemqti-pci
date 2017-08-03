@@ -21,35 +21,27 @@
 namespace oat\qtiItemPci\controller;
 
 use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\IMSPciModel;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
-use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use \tao_actions_CommonModule;
 
 class PciLoader extends tao_actions_CommonModule
 {
-    /** @var PortableElementRegistry */
-    protected $registry;
-
     /**
      * Load latest PCI runtimes
      */
     public function load()
     {
         try {
-            $this->returnJson($this->getPciRegistry()->getLatestRuntimes());
+            $this->returnJson(array_reduce($this->getRegistries(), function($acc, $registry){
+                return array_merge($acc, $registry->getLatestRuntimes());
+            }, []));
         } catch (PortableElementException $e) {
             $this->returnJson($e->getMessage(), 500);
         }
     }
 
-    /**
-     * @return PortableElementRegistry
-     */
-    protected function getPciRegistry()
-    {
-        if (! $this->registry) {
-            $this->registry = (new PciModel())->getRegistry();
-        }
-        return $this->registry;
+    protected function getRegistries(){
+        return [(new PciModel())->getRegistry(), (new IMSPciModel())->getRegistry()];
     }
 }
