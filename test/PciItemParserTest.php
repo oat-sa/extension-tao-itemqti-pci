@@ -76,8 +76,7 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
      */
     public function testParseImsPci($file){
 
-		$qtiParser = new Parser($file);
-
+        $qtiParser = new Parser($file);
         $qtiParser->validate();
         if(!$qtiParser->isValid()){
             echo $qtiParser->displayErrors();
