@@ -207,6 +207,7 @@ class Updater extends \common_ext_ExtensionUpdater
         $this->skip('3.0.2', '3.0.4');
 
         if($this->isVersion('3.0.4')){
+            call_user_func(new RegisterPciLikertScale(), ['0.3.1']);
             PortableModelRegistry::getRegistry()->register(new IMSPciModel());
             $this->setVersion('3.1.0');
         }
