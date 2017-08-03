@@ -31,16 +31,7 @@
             "likertInteraction/runtime/js/likertInteraction" : [
                 "runtime/js/likertInteraction.js"
             ]
-        },
-        "stylesheetsX" : [
-            "runtime/css/base.css",
-            "runtime/css/likertInteraction.css"
-        ],
-        "mediaFiles" : [
-            "./runtime/assets/ThumbDown.png",
-            "./runtime/assets/ThumbUp.png",
-            "./runtime/css/img/bg.png"
-        ]
+        }
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",

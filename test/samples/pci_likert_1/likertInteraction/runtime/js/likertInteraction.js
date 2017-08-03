@@ -42,6 +42,11 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
             //simply mapped to existing TAO PCI API
             this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
             this.setSerializedState(state);
+
+            //tell the rendering engine that I am ready
+            if (typeof config.onready === 'function') {
+                config.onready(this, this.getState());
+            }
         },
 
         /**
@@ -59,29 +64,6 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
         oncompleted : function oncompleted(){
             this.destroy();
         },
-
-        /**
-         * Callback to be called by the PCI instance when its initialization is done
-         *
-         * @todo should be a method of the qtiCustomInteractionContext ?
-         * @param {Object} customInteraction - a pci instance
-         * @param {Object} state - the json serialized state object, returned by previous call to getStatus()
-         */
-        onready : function onready(customInteraction, state){
-            //delivery engine actions when the event PCI ready is triggered
-        },
-
-        /**
-         * Callback to be called by the PCI instance when its initialization is done
-         *
-         * @todo should be a method of the qtiCustomInteractionContext ?
-         * @param {Object} customInteraction - a pci instance
-         * @param {Object} state - the json serialized state object, returned by previous call to getStatus()
-         */
-        ondone : function ondone(customInteraction, response, state, status){
-            //delivery engine actions when the event PCI done is triggered
-        },
-
 
         /*********************************
          *
@@ -148,9 +130,6 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
             this.config = config || {};
 
             renderer.render(id, this.dom, this.config, assetManager);
-
-            //tell the rendering engine that I am ready
-            qtiCustomInteractionContext.notifyReady(this);
 
             //listening to dynamic configuration change
             this.on('levelchange', function(level){
