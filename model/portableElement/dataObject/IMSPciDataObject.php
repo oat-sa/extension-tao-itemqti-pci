@@ -45,20 +45,41 @@ class IMSPciDataObject extends PciDataObject
     }
 
     /**
-     * Get the registration path for the source within a standard QTI package
+     * Get the registration path of the source within a standard QTI package
      * @param $packagePath - absolute path to the root of the item package
      * @param $itemPath - absolute path to the root of the item folder
      * @return string
      */
-    public function getRegistrationPath($packagePath, $itemPath){
+    public function getRegistrationSourcePath($packagePath, $itemPath){
         return $packagePath . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Get the registration file entry
+     * @param $file - the relative path to the file
+     * @return string
+     */
+    public function getRegistrationFileId($file){
+        //use it as it is without changes
+        return $file;
+    }
+
+    /**
+     * Check the given file entry should be registered or not
+     * @param $file
+     * @return bool
+     */
+    public function isRegistrableFile($file){
+        //register all files for now
+        return true;
     }
 
     /**
      * Get the array of key in the portable element model that should not be registered as files
      * @return array
      */
-    public function getExcludedKey(){
+    public function getRegistrationExcludedKey(){
+        //per standard the waitSeconds is an integer so should not be registered as a file
         return ['waitSeconds'];
     }
 }
