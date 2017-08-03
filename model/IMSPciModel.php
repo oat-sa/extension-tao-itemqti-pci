@@ -25,8 +25,9 @@ use oat\oatbox\PhpSerializeStateless;
 use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
 use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
+use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
 
-class IMSPciModel extends PciModel
+class IMSPciModel implements PortableElementModel
 {
     use PhpSerializeStateless;
 
@@ -39,6 +40,19 @@ class IMSPciModel extends PciModel
     public function getId()
     {
         return self::PCI_IDENTIFIER;
+    }
+
+    public function getDefinitionFiles()
+    {
+        return [
+            self::PCI_MANIFEST,
+            self::PCI_ENGINE
+        ];
+    }
+
+    public function getManifestName()
+    {
+        return self::PCI_MANIFEST;
     }
 
     public function createDataObject(array $data)
@@ -60,6 +74,18 @@ class IMSPciModel extends PciModel
     public function getValidator()
     {
         return new IMSPciValidator();
+    }
+
+    public function getDirectoryParser()
+    {
+        //not available yet
+        return null;
+    }
+
+    public function getPackageParser()
+    {
+        //not available yet
+        return null;
     }
 
     public function getQtiElementClassName()
