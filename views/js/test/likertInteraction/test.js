@@ -65,14 +65,6 @@ define([
     ciRegistry.resetProviders();
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
-    QUnit.module('Likert Interaction', {
-        teardown: function () {
-            if (runner) {
-                //runner.clear();
-            }
-        }
-    });
-
     QUnit.asyncTest('renders correctly', function (assert) {
 
         var $container = $('#' + fixtureContainerId);
@@ -92,46 +84,7 @@ define([
                     assert.equal($container.find('.qti-customInteraction .prompt').length, 3, 'the interaction contains 3 prompts');
 
                     QUnit.start();
-                })
-                .on('error', function (error) {
-                    $('#error-display').html(error);
-                })
-                .init()
-                .render($container);
-        });
-    });
-
-    QUnit.asyncTest('state', function (assert) {
-
-        var $container = $('#' + fixtureContainerId);
-        assert.equal($container.length, 1, 'the item container exists');
-        assert.equal($container.children().length, 0, 'the container has no children');
-
-        parseXml(likertTripleXml).then(function (itemData) {
-            var assetManager = getAssetManager('/qtiItemPci/views/js/test/likertInteraction/data/likert_triple/');
-            runner = qtiItemRunner('qti', itemData, {assetManager: assetManager})
-                .on('render', function () {
-
-                    var self = this;
-
-                    this.setState({
-                        likert1: {response: {base: {integer: 1}}},
-                        likert2: {response: {base: {integer: 3}}}
-                    });
-
-                    _.delay(function(){
-                        assert.equal($('input:radio[name=likert1]:checked').val(), '1', 'likert 1 state set');
-                        assert.equal($('input:radio[name=likert2]:checked').val(), '3', 'likert 2 state set');
-                        assert.equal($('input:radio[name=likert3]:checked').val(), undefined, 'likert 3 state untouched');
-
-                        assert.deepEqual(self.getState(), {
-                            likert1: {response: {base: {integer: 1}}},
-                            likert2: {response: {base: {integer: 3}}},
-                            likert3: {response: {base: {integer: 0}}},
-                        }, 'state ok');
-
-                        QUnit.start();
-                    }, 100);
+                    runner.clear();
                 })
                 .on('error', function (error) {
                     $('#error-display').html(error);
