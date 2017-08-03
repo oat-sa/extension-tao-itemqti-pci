@@ -43,4 +43,14 @@ class IMSPciDataObject extends PciDataObject
         //simply return the assigned runtime configuration data with no change
         return $this->getRuntime();
     }
+
+    /**
+     * Get the registration path for the source within a standard QTI package
+     * @param $packagePath - absolute path to the root of the item package
+     * @param $itemPath - absolute path to the root of the item folder
+     * @return string
+     */
+    public function getRegistrationPath($packagePath, $itemPath){
+        return $packagePath . DIRECTORY_SEPARATOR;
+    }
 }
