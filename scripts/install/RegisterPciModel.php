@@ -21,6 +21,7 @@
 namespace oat\qtiItemPci\scripts\install;
 
 use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\IMSPciModel;
 use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 
 class RegisterPciModel extends \common_ext_action_InstallAction
@@ -28,6 +29,7 @@ class RegisterPciModel extends \common_ext_action_InstallAction
     public function __invoke($params)
     {
         PortableModelRegistry::getRegistry()->register(new PciModel());
+        PortableModelRegistry::getRegistry()->register(new IMSPciModel());
         return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Pci Model successfully registered.');
     }
 }
