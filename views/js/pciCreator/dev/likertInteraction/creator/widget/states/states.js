@@ -1,5 +1,4 @@
-<?php
-/**
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,20 +15,13 @@
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
- * */
-
-namespace oat\qtiItemPci\scripts\install;
-
-use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\model\IMSPciModel;
-use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
-
-class RegisterPciModel extends \common_ext_action_InstallAction
-{
-    public function __invoke($params)
-    {
-        PortableModelRegistry::getRegistry()->register(new PciModel());
-        PortableModelRegistry::getRegistry()->register(new IMSPciModel());
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Pci Model successfully registered.');
-    }
-}
+ */
+define([
+    'taoQtiItem/qtiCreator/widgets/states/factory',
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
+    'likertInteraction/creator/widget/states/Question',
+    'likertInteraction/creator/widget/states/Answer'
+], function(factory, states){
+    'use strict';
+    return factory.createBundle(states, arguments, ['correct', 'map']);
+});

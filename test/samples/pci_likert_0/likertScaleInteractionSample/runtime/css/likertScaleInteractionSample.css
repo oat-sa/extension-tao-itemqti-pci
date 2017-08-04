@@ -1,0 +1,26 @@
+/*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
+@import url("base.css");
+
+.qti-customInteraction .likertScaleInteractionSample ul.likert{
+    list-style-type: none;
+    margin: 0 5px;
+    padding: 0;
+    display:inline-block;
+    position: relative;
+    top:7px;
+}
+
+.qti-customInteraction .likertScaleInteractionSample ul.likert li{
+    float: left;
+    text-align: left;
+    list-style-type: none;
+}
+
+.qti-customInteraction .likertScaleInteractionSample ul.likert li input{margin: 0 3px; cursor: pointer;}
+
+.qti-customInteraction .likertScaleInteractionSample .prompt {position:relative;}
+
+.qti-customInteraction .likertScaleInteractionSample .likert-label {min-width:90px; color: #444;}
+.qti-customInteraction .likertScaleInteractionSample .likert-label-min {text-align: right;}
+.qti-customInteraction .likertScaleInteractionSample .likert-label-max {text-align: left;}
+.qti-customInteraction .likertScaleInteractionSample .likert-label img {position:relative; width:16px;}

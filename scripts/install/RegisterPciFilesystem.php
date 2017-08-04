@@ -48,6 +48,10 @@ class RegisterPciFilesystem extends InstallAction
                 $fileSystemService->createFileSystem('qtiItemPci');
                 $this->registerService(FileSystemService::SERVICE_ID, $fileSystemService);
             }
+            if (! $fileSystemService->hasDirectory('qtiItemImsPci')) {
+                $fileSystemService->createFileSystem('qtiItemImsPci');
+                $this->registerService(FileSystemService::SERVICE_ID, $fileSystemService);
+            }
         } catch (\Exception $e) {
             return new \common_report_Report(\common_report_Report::TYPE_ERROR, 'Fail to create pci directory.');
         }

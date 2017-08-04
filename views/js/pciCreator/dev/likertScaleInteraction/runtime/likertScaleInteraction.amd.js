@@ -105,23 +105,25 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
         },
         /**
          * Restore the state of the interaction from the serializedState.
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            if(state && state.response){
+                this.setResponse(state.response);
+            }
         },
+
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object} json format
          */
         getSerializedState : function(){
-
-            return {};
+            return {response : this.getResponse()};
         }
     };
 

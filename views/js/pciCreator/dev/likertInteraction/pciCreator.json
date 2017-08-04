@@ -1,9 +1,10 @@
 {
-    "typeIdentifier": "likertScaleInteraction",
-    "label": "Likert Scale",
-    "short": "Likert",
+    "model" : "IMSPCI",
+    "typeIdentifier": "likertInteraction",
+    "label": "Likert Scale v1",
+    "short": "Likert v1",
     "description": "A simple implementation of likert scale.",
-    "version": "0.3.1",
+    "version": "1.0.0",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "tags": [
@@ -15,25 +16,27 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/likertScaleInteraction.amd.js",
-        "libraries" : [
-            "IMSGlobal/jquery_2_1_1",
-            "./runtime/js/renderer.js"
+        "config" : [
+            {
+                "file": "runtime/likertConfig.json",
+                "data": {
+                    "waitSeconds": 30,
+                    "paths": {
+                        "likertInteraction/runtime/js/renderer" : "runtime/js/renderer.js"
+                    }
+                }
+            }
         ],
-        "stylesheets" : [
-            "./runtime/css/base.css",
-            "./runtime/css/likertScaleInteraction.css"
-        ],
-        "mediaFiles" : [
-            "./runtime/assets/ThumbDown.png",
-            "./runtime/assets/ThumbUp.png",
-            "./runtime/css/img/bg.png"
-        ]
+        "modules" : {
+            "likertInteraction/runtime/js/likertInteraction" : [
+                "runtime/js/likertInteraction.js"
+            ]
+        }
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
         "hook": "./pciCreator.js",
-        "libraries" : [
+        "modules" : [
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/widget/Widget.js",

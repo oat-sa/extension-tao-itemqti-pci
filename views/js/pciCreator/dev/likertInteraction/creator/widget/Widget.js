@@ -1,5 +1,4 @@
-<?php
-/**
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -16,20 +15,24 @@
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
- * */
+ */
+define([
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
+    'likertInteraction/creator/widget/states/states'
+], function(Widget, states){
+    'use strict';
 
-namespace oat\qtiItemPci\scripts\install;
+    var LikertScaleInteractionWidget = Widget.clone();
 
-use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\model\IMSPciModel;
-use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
+    LikertScaleInteractionWidget.initCreator = function(){
 
-class RegisterPciModel extends \common_ext_action_InstallAction
-{
-    public function __invoke($params)
-    {
-        PortableModelRegistry::getRegistry()->register(new PciModel());
-        PortableModelRegistry::getRegistry()->register(new IMSPciModel());
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Pci Model successfully registered.');
-    }
-}
+        this.registerStates(states);
+
+        Widget.initCreator.call(this);
+
+        //for existing likert scale PCI, ensure that the rp template is always NONE
+        this.element.getResponseDeclaration().setTemplate('NONE');
+    };
+    
+    return LikertScaleInteractionWidget;
+});
