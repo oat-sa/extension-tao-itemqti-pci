@@ -22,6 +22,7 @@
 namespace oat\qtiItemPci\scripts\update;
 
 use oat\generis\model\OntologyAwareTrait;
+use oat\qtiItemPci\model\IMSPciModel;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
@@ -203,14 +204,20 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('3.0.2');
         }
 
-        $this->skip('3.0.2', '3.0.3');
+        $this->skip('3.0.2', '3.0.4');
 
-        if($this->isVersion('3.0.3')){
+        if($this->isVersion('3.0.4')){
+            call_user_func(new RegisterPciLikertScale(), ['0.3.1']);
+            PortableModelRegistry::getRegistry()->register(new IMSPciModel());
+            $this->setVersion('3.1.0');
+        }
+
+        if($this->isVersion('3.1.0')){
             call_user_func(new RegisterPciAudioRecording(), ['0.2.0']);
             call_user_func(new RegisterPciLikertScale(), ['0.4.0']);
             call_user_func(new RegisterPciLiquid(), ['0.3.0']);
             call_user_func(new RegisterPciMathEntry(), ['0.5.0']);
-            $this->setVersion('3.1.0');
+            $this->setVersion('3.2.0');
         }
     }
 }

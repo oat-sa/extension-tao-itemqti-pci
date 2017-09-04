@@ -1,0 +1,8 @@
+.likertInteraction{
+    width:100%;
+    padding:10px 20px 16px !important;
+    margin-bottom:20px;
+    /* IMS PCI v1 adaptation: change from img/bg.png to bg.png because all item assets are copied to the item root but css paths are not updated  */
+    background-image: url("bg.png");
+    background-repeat: repeat;
+}

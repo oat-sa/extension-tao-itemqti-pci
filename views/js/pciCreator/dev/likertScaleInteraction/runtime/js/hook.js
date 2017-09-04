@@ -110,21 +110,24 @@ define([
         },
         /**
          * Restore the state of the interaction from the serializedState.
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
-        setSerializedState : function setSerializedState(state){
-            this.setResponse(state.response);
+        setSerializedState : function(state){
+            if(state && state.response){
+                this.setResponse(state.response);
+            }
         },
+
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object} json format
          */
-        getSerializedState : function getSerializedState(){
+        getSerializedState : function(){
             return {response : this.getResponse()};
         }
     };
