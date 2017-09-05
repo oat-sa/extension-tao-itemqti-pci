@@ -15,7 +15,7 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/likertScaleInteraction.js",
+        "hook" : "./runtime/likertScaleInteraction.min.js",
         "libraries" : [
         ],
         "stylesheets" : [
@@ -28,7 +28,7 @@
             "./runtime/css/img/bg.png"
         ],
         "src" : [
-            "./runtime/js/hook.js",
+            "./runtime/js/likertScaleInteraction.js",
             "./runtime/js/renderer.js"
         ]
     },

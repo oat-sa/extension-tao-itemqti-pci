@@ -14,7 +14,7 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/mathEntryInteraction.js",
+        "hook" : "./runtime/mathEntryInteraction.min.js",
         "libraries" : [],
         "stylesheets" : [
             "./runtime/mathquill/mathquill.css",
@@ -33,7 +33,7 @@
             "./runtime/mathquill/font/Symbola-basic.woff2"
         ],
         "src" : [
-            "./runtime/hook.js",
+            "./runtime/mathEntryInteraction.js",
             "./runtime/mathquill/mathquill.js"
         ]
     },
