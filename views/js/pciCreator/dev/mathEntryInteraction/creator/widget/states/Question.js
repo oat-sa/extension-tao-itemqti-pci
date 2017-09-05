@@ -17,16 +17,23 @@
  */
 
 define([
+    'jquery',
+    'i18n',
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!mathEntryInteraction/creator/tpl/propertiesForm'
-], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl){
+], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl){
     'use strict';
 
-    var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function(){
+    var $addGapBtn = $('<div>', {
+        'class': 'add-option',
+        html: '<span class="icon-add"></span> ' + __('Add gap')
+    });
+
+    var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
 
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt'),
@@ -42,14 +49,27 @@ define([
             related : interaction
         });
 
-    }, function(){
+        if (toBoolean(interaction.prop('useGapExpression'), false)) {
+            this.createAddGapBtn();
+        }
+
+    }, function exit(){
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt');
 
         simpleEditor.destroy($container);
         containerEditor.destroy($prompt);
+
+        this.removeAddGapBtn();
     });
 
+    function toBoolean(value, defaultValue) {
+        if (typeof(value) === "undefined") {
+            return defaultValue;
+        } else {
+            return (value === true || value === "true");
+        }
+    }
     /**
      * Callback for configuration change
      * @param {Object} interaction - the current interaction
@@ -63,23 +83,20 @@ define([
 
     MathEntryInteractionStateQuestion.prototype.initForm = function initForm(){
 
-        var _widget = this.widget,
+        var self = this,
+            _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
             response = interaction.getResponseDeclaration();
-
-        function toBoolean(value, defaultValue) {
-            if (typeof(value) === "undefined") {
-                return defaultValue;
-            } else {
-                return (value === true || value === "true");
-            }
-        }
 
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
+
+            authorizeWhiteSpace: toBoolean(interaction.prop('authorizeWhiteSpace'), false),
+            useGapExpression:    toBoolean(interaction.prop('useGapExpression'),    false),
+
             tool_frac:      toBoolean(interaction.prop('tool_frac'),    true),
             tool_sqrt:      toBoolean(interaction.prop('tool_sqrt'),    true),
             tool_exp:       toBoolean(interaction.prop('tool_exp'),     true),
@@ -96,8 +113,8 @@ define([
             tool_times:     toBoolean(interaction.prop('tool_times'),   true),
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
             tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
-            allowNewLine:   toBoolean(interaction.prop('allowNewLine'),  false),
-            authorizeWhiteSpace: toBoolean(interaction.prop('authorizeWhiteSpace'),  false)
+
+            allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false)
         }));
 
         //init form javascript
@@ -109,6 +126,16 @@ define([
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
+            useGapExpression: function gapChangeCallback(i, value) {
+                if (toBoolean(value, false)) {
+                    self.createAddGapBtn();
+                } else {
+                    self.removeAddGapBtn();
+                }
+                configChangeCallBack(i, value, 'useGapExpression');
+            },
+            authorizeWhiteSpace: configChangeCallBack,
+
             tool_frac:      configChangeCallBack,
             tool_sqrt:      configChangeCallBack,
             tool_exp:       configChangeCallBack,
@@ -124,14 +151,34 @@ define([
             tool_times:     configChangeCallBack,
             tool_divide:    configChangeCallBack,
             tool_plusminus: configChangeCallBack,
-            allowNewLine:   configChangeCallBack,
-            authorizeWhiteSpace: configChangeCallBack,
-            squarebkts:     function squarebktsChangeCallBack(i, value) {
+
+            squarebkts: function squarebktsChangeCallBack(i, value) {
                 i.prop('tool_lbrack', value);
                 i.prop('tool_rbrack', value);
                 i.triggerPci('configChange', [i.getProperties()]);
-            }
+            },
+
+            allowNewLine: configChangeCallBack
         });
+    };
+
+    MathEntryInteractionStateQuestion.prototype.createAddGapBtn = function createAddGapBtn() {
+        var _widget = this.widget,
+            $container = _widget.$container,
+            $toolbar = $container.find('.toolbar'),
+            interaction =_widget.element;
+
+        if ($toolbar.length) {
+            $toolbar.after($addGapBtn);
+            $addGapBtn.on('click', function() {
+                interaction.triggerPci('addGap');
+            });
+        }
+    };
+
+    MathEntryInteractionStateQuestion.prototype.removeAddGapBtn = function removeAddGapBtn() {
+        $addGapBtn.off('click');
+        $addGapBtn.remove();
     };
 
     return MathEntryInteractionStateQuestion;

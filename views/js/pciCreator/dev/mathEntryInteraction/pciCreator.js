@@ -54,6 +54,9 @@ define([
          */
         getDefaultProperties : function getDefaultProperties(){
             return {
+                authorizeWhiteSpace: false,
+                useGapExpression: false,
+
                 tool_frac:      true,
                 tool_sqrt:      true,
                 tool_exp:       true,
@@ -71,8 +74,8 @@ define([
                 tool_times:     true,
                 tool_divide:    true,
                 tool_plusminus: true,
-                allowNewLine:   false,
-                authorizeWhiteSpace: false
+
+                allowNewLine:   false
             };
         },
         /**

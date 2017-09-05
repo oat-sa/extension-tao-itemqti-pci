@@ -57,9 +57,13 @@ $borderColor: blacken($base, 0.3);
     }
 
     .math-entry-placeholder {
-      height: 20px;
+      height: 23px;
       background-color: white;
       border: 1px solid #ddd;
+    }
+
+    .add-option {
+      padding: 5px 5px 5px 6px;
     }
 
     // Buttons

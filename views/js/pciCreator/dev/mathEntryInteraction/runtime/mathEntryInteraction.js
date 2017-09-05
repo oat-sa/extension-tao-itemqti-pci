@@ -57,15 +57,15 @@ define([
             this.initConfig(config);
 
             this.createToolbar();
-            if (! this.inQtiCreator()) {
+            if (this.inQtiCreator() && !this.config.useGapExpression) {
+                this.togglePlaceholder(true);
+
+            } else {
                 this.togglePlaceholder(false);
 
                 this.createMathField();
                 this.addToolbarListeners();
                 this.addInputListeners();
-
-            } else {
-                this.togglePlaceholder(true);
             }
         },
 
@@ -104,8 +104,9 @@ define([
                     divide:   toBoolean(config.tool_divide,   true),
                     plusminus:toBoolean(config.tool_plusminus,true)
                 },
-                allowNewLine:           toBoolean(config.allowNewLine,  false),
-                authorizeWhiteSpace:    toBoolean(config.authorizeWhiteSpace,   false)
+                allowNewLine:        toBoolean(config.allowNewLine, false),
+                authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
+                useGapExpression:    toBoolean(config.useGapExpression, false)
             };
         },
 
@@ -246,17 +247,23 @@ define([
                     e.stopPropagation();
                     e.preventDefault();
 
-                    switch (fn) {
-                        case 'cmd':
-                            self.mathField.cmd(latex);
-                            break;
-                        case 'write':
-                            self.mathField.write(latex);
-                            break;
-                    }
-
-                    self.mathField.focus();
+                    self.insertLatex(latex, fn);
                 });
+        },
+
+        insertLatex: function insertLatex(latex, fn) {
+            var self = this;
+
+            switch (fn) {
+                case 'cmd':
+                    self.mathField.cmd(latex);
+                    break;
+                case 'write':
+                    self.mathField.write(latex);
+                    break;
+            }
+
+            self.mathField.focus();
         },
 
         addInputListeners: function addInputListeners() {
@@ -284,6 +291,10 @@ define([
                         self.mathField.write(latex);
                     }
                 });
+        },
+
+        addGap: function addGap() {
+            this.insertLatex('\\MathQuillMathField', 'cmd');
         },
 
 
@@ -322,6 +333,10 @@ define([
 
             this.on('configChange', function (newConfig) {
                 self.render(newConfig);
+            });
+
+            this.on('addGap', function () {
+                self.addGap();
             });
 
             // render rich text content in prompt
