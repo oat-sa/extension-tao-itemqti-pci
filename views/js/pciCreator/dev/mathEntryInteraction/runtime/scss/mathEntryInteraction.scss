@@ -49,7 +49,17 @@ $borderColor: blacken($base, 0.3);
 
     .math-entry-input {
       width: 100%;
+    }
+
+    .math-entry-input-wrapper {
+      width: 100%;
       margin-top: 8px;
+    }
+
+    .math-entry-placeholder {
+      height: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
     }
 
     // Buttons

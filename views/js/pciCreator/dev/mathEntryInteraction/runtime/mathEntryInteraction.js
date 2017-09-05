@@ -35,7 +35,20 @@ define([
 ){
     'use strict';
 
-    var mathEntryInteraction = {
+    var mathEntryInteraction,
+        ns = '.mathEntryInteraction';
+
+    mathEntryInteraction = {
+
+        /**
+         * Are we in a TAO QTI Creator context?
+         */
+        inQtiCreator: function isInCreator() {
+            if (_.isUndefined(this._inQtiCreator) && this.$container) {
+                this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
+            }
+            return this._inQtiCreator;
+        },
 
         /**
          * Render PCI
@@ -44,7 +57,16 @@ define([
             this.initConfig(config);
 
             this.createToolbar();
-            this.createMathField();
+            if (! this.inQtiCreator()) {
+                this.togglePlaceholder(false);
+
+                this.createMathField();
+                this.addToolbarListeners();
+                this.addInputListeners();
+
+            } else {
+                this.togglePlaceholder(true);
+            }
         },
 
         /**
@@ -85,6 +107,19 @@ define([
                 allowNewLine:           toBoolean(config.allowNewLine,  false),
                 authorizeWhiteSpace:    toBoolean(config.authorizeWhiteSpace,   false)
             };
+        },
+
+        /**
+         *
+         */
+        togglePlaceholder: function togglePlaceholder(displayPlaceholder) {
+            if (displayPlaceholder) {
+                this.$input.hide();
+                this.$inputPlaceholder.show();
+            } else {
+                this.$input.show();
+                this.$inputPlaceholder.hide();
+            }
         },
 
         /**
@@ -196,29 +231,36 @@ define([
                     html: config.label
                 });
             }
+        },
 
-            // add behaviour
+        addToolbarListeners: function addToolbarListeners() {
+            var self = this;
 
-            this.$toolbar.off('mousedown.qtiCommonRenderer');
-            this.$toolbar.on('mousedown.qtiCommonRenderer', function(e) {
-                var $target = $(e.target),
-                    fn = $target.data('fn'),
-                    latex = $target.data('latex');
+            this.$toolbar
+                .off('mousedown' + ns)
+                .on('mousedown' + ns, function (e) {
+                    var $target = $(e.target),
+                        fn = $target.data('fn'),
+                        latex = $target.data('latex');
 
-                e.stopPropagation();
-                e.preventDefault();
+                    e.stopPropagation();
+                    e.preventDefault();
 
-                switch (fn) {
-                    case 'cmd':
-                        self.mathField.cmd(latex);
-                        break;
-                    case 'write':
-                        self.mathField.write(latex);
-                        break;
-                }
+                    switch (fn) {
+                        case 'cmd':
+                            self.mathField.cmd(latex);
+                            break;
+                        case 'write':
+                            self.mathField.write(latex);
+                            break;
+                    }
 
-                self.mathField.focus();
-            });
+                    self.mathField.focus();
+                });
+        },
+
+        addInputListeners: function addInputListeners() {
+            var self = this;
 
             /**
              * Ugly hack to allow for a line break on enter
@@ -234,12 +276,14 @@ define([
              *
              *  ...creates a newline!!!
              */
-            this.$input.on('keypress.qtiCommonRenderer', function (e) {
-                var latex = '\\textcolor{newline}{ }';
-                if (self.config.allowNewLine && e.keyCode === 13) {
-                    self.mathField.write(latex);
-                }
-            });
+            this.$input
+                .off('keypress' + ns)
+                .on('keypress' + ns, function (e) {
+                    var latex = '\\textcolor{newline}{ }';
+                    if (self.config.allowNewLine && e.keyCode === 13) {
+                        self.mathField.write(latex);
+                    }
+                });
         },
 
 
@@ -266,9 +310,10 @@ define([
             this.id = id;
             this.dom = dom;
 
-            this.$container = $(dom);
-            this.$toolbar = this.$container.find('.toolbar');
-            this.$input = this.$container.find('.math-entry-input');
+            this.$container         = $(dom);
+            this.$toolbar           = this.$container.find('.toolbar');
+            this.$input             = this.$container.find('.math-entry-input');
+            this.$inputPlaceholder  = this.$container.find('.math-entry-placeholder');
 
             this.render(config);
 
@@ -325,8 +370,8 @@ define([
          * @param {Object} interaction
          */
         destroy: function destroy() {
-            this.$toolbar.off('mousedown.qtiCommonRenderer');
-            this.$input.off('keypress.qtiCommonRenderer');
+            this.$toolbar.off(ns);
+            this.$input.off(ns);
             this.resetResponse();
             this.mathField.revert();
         },
