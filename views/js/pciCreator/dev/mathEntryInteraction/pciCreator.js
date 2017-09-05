@@ -56,6 +56,7 @@ define([
             return {
                 authorizeWhiteSpace: false,
                 useGapExpression: false,
+                gapExpression: '',
 
                 tool_frac:      true,
                 tool_sqrt:      true,

@@ -35,7 +35,8 @@ define([
 ){
     'use strict';
 
-    var mathEntryInteraction,
+    var MQ = MathQuill.getInterface(2),
+        mathEntryInteraction,
         ns = '.mathEntryInteraction';
 
     mathEntryInteraction = {
@@ -62,8 +63,16 @@ define([
 
             } else {
                 this.togglePlaceholder(false);
+                // this.$input.removeClass('editable-static');
 
-                this.createMathField();
+                if (!this.inQtiCreator() && this.config.useGapExpression) {
+                    this.$input.text(this.config.gapExpression);
+                    this.createMathStatic();
+                } else {
+                    this.createMathEditable();
+                    // this.$input.addClass('editable-static');
+                    this.mathField.latex(this.config.gapExpression);
+                }
                 this.addToolbarListeners();
                 this.addInputListeners();
             }
@@ -106,7 +115,8 @@ define([
                 },
                 allowNewLine:        toBoolean(config.allowNewLine, false),
                 authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
-                useGapExpression:    toBoolean(config.useGapExpression, false)
+                useGapExpression:    toBoolean(config.useGapExpression, false),
+                gapExpression:       config.gapExpression || ''
             };
         },
 
@@ -123,12 +133,17 @@ define([
             }
         },
 
+        createMathStatic: function createMathStatic() {
+            if(! this.mathField) {
+                this.mathField = MQ.StaticMath(this.$input.get(0));
+            }
+        },
+
         /**
          * transform a DOM element into a MathQuill Field
          */
-        createMathField: function createMathField() {
+        createMathEditable: function createMathEditable() {
             var self = this,
-                MQ = MathQuill.getInterface(2),
                 config = {
                     spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                     handlers: {

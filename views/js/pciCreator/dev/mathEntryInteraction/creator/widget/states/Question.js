@@ -53,6 +53,8 @@ define([
             this.createAddGapBtn();
         }
 
+        this.addMathFieldListener();
+
     }, function exit(){
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt');
@@ -95,7 +97,7 @@ define([
             identifier : interaction.attr('responseIdentifier'),
 
             authorizeWhiteSpace: toBoolean(interaction.prop('authorizeWhiteSpace'), false),
-            useGapExpression:    toBoolean(interaction.prop('useGapExpression'),    false),
+            useGapExpression: toBoolean(interaction.prop('useGapExpression'), false),
 
             tool_frac:      toBoolean(interaction.prop('tool_frac'),    true),
             tool_sqrt:      toBoolean(interaction.prop('tool_sqrt'),    true),
@@ -114,7 +116,7 @@ define([
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
             tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
 
-            allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false)
+            allowNewLine: toBoolean(interaction.prop('allowNewLine'), false)
         }));
 
         //init form javascript
@@ -130,6 +132,7 @@ define([
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
                 } else {
+                    i.prop('gapExpression', '');
                     self.removeAddGapBtn();
                 }
                 configChangeCallBack(i, value, 'useGapExpression');
@@ -159,6 +162,24 @@ define([
             },
 
             allowNewLine: configChangeCallBack
+        });
+    };
+
+    // Change callback for editable math field
+    MathEntryInteractionStateQuestion.prototype.addMathFieldListener = function addMathFieldListener() {
+        var _widget = this.widget,
+            interaction = _widget.element,
+            response;
+
+        interaction.onPci('responseChange', function() {
+            var latex;
+            if (toBoolean(interaction.prop('useGapExpression'), false)) {
+                response = interaction.getResponse();
+                latex = (response && response.base && response.base.string) || '';
+                interaction.prop('gapExpression', latex);
+            } else {
+                interaction.prop('gapExpression', '');
+            }
         });
     };
 

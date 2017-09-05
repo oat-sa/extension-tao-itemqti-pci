@@ -49,6 +49,10 @@ $borderColor: blacken($base, 0.3);
 
     .math-entry-input {
       width: 100%;
+
+      //.editable-static {
+      //  border: 0;
+      //}
     }
 
     .math-entry-input-wrapper {
