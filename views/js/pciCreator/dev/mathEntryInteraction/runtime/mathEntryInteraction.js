@@ -39,6 +39,19 @@ define([
         mathEntryInteraction,
         ns = '.mathEntryInteraction';
 
+    // Warning: this is an experimental MathQuill API that might change or be removed upon MathQuill update
+    MQ.registerEmbed('gap', function registerGap() {
+        return {
+            htmlString: '<span class="mq-tao-gap"></span>',
+            text: function text() {
+                return 'tao_gap';
+            },
+            latex: function latex() {
+                return '\\taoGap';
+            }
+        };
+    });
+
     mathEntryInteraction = {
 
         /**
@@ -51,31 +64,56 @@ define([
             return this._inQtiCreator;
         },
 
+        inGapMode: function inGapMode() {
+            return this.config.useGapExpression;
+        },
+
         /**
          * Render PCI
          */
         render: function render(config) {
+            var self = this;
+
             this.initConfig(config);
 
             this.createToolbar();
-            if (this.inQtiCreator() && !this.config.useGapExpression) {
+            this.togglePlaceholder(false);
+
+            // QtiCreator rendering of the PCI in Gap Expression mode: display a MathQuill editable field containing the gap expression
+            if (this.inGapMode() && this.inQtiCreator()) {
+                this.createMathEditable();
+                this.setLatex(this.config.gapExpression.replace('\\taoGap', '\\embed{gap}'));
+
+                this.addToolbarListeners();
+                this.addInputListeners();
+
+            // Normal rendering of the PCI in Gap Expression mode: render a static MathQuill field with editable gaps
+            } else if (this.inGapMode() && !this.inQtiCreator()) {
+                this.setMathStaticContent(this.config.gapExpression);
+                this.createMathStatic();
+
+            // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
+            } else if (!this.inGapMode() && this.inQtiCreator()) {
                 this.togglePlaceholder(true);
 
+            // Normal rendering of the PCI: display an empty MathQuill editable field
             } else {
-                this.togglePlaceholder(false);
-                // this.$input.removeClass('editable-static');
+                this.createMathEditable();
 
-                if (!this.inQtiCreator() && this.config.useGapExpression) {
-                    this.$input.text(this.config.gapExpression);
-                    this.createMathStatic();
-                } else {
-                    this.createMathEditable();
-                    // this.$input.addClass('editable-static');
-                    this.mathField.latex(this.config.gapExpression);
-                }
                 this.addToolbarListeners();
                 this.addInputListeners();
             }
+
+            // remove me, eventually
+            this.$container.find('.insertTextBtn').on('click', function() {
+                var latex = self.$container.find('.insertText').val();
+                self.insertLatex(latex, 'cmd');
+            });
+
+            this.$container.find('.insertTextBtn2').on('click', function() {
+                var latex = self.$container.find('.insertText').val();
+                self.insertLatex(latex, 'write');
+            });
         },
 
         /**
@@ -133,9 +171,16 @@ define([
             }
         },
 
+        setMathStaticContent: function setMathStaticContent(exp) {
+            var regex = /\\taoGap/g;
+            exp = exp.replace(regex, '\\MathQuillMathField{}');
+            this.$input.text(exp);
+        },
+
         createMathStatic: function createMathStatic() {
-            if(! this.mathField) {
-                this.mathField = MQ.StaticMath(this.$input.get(0));
+            if(! this.mathField) { // todo: this will probably have side effects?
+                // this.mathField = // todo: fix this !
+                MQ.StaticMath(this.$input.get(0));
             }
         },
 
@@ -266,6 +311,10 @@ define([
                 });
         },
 
+        setLatex: function setLatex(latex) {
+            this.mathField.latex(latex);
+        },
+
         insertLatex: function insertLatex(latex, fn) {
             var self = this;
 
@@ -309,7 +358,8 @@ define([
         },
 
         addGap: function addGap() {
-            this.insertLatex('\\MathQuillMathField', 'cmd');
+            var latex = '\\embed{gap}';
+            this.insertLatex(latex, 'write');
         },
 
 
@@ -366,7 +416,7 @@ define([
          */
         setResponse: function setResponse(response) {
             if (response && response.base && response.base.string) {
-                this.mathField.latex(response.base.string);
+                this.setLatex(response.base.string);
             }
         },
         /**
@@ -390,7 +440,7 @@ define([
          * @param {Object} interaction
          */
         resetResponse: function resetResponse() {
-            this.mathField.latex('');
+            this.setLatex('');
         },
         /**
          * Reverse operation performed by render()

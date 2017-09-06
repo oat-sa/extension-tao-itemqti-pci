@@ -66,6 +66,15 @@ $borderColor: blacken($base, 0.3);
       border: 1px solid #ddd;
     }
 
+    .mq-tao-gap {
+      display: inline-block;
+      height: 21px; // huh?
+      min-width: 14px;
+      margin: 0 3px;
+      background-color: #ccc;
+      border: 1px solid #bbb;
+    }
+
     .add-option {
       padding: 5px 5px 5px 6px;
     }
