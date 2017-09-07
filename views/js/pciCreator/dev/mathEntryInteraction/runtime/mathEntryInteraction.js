@@ -106,17 +106,6 @@ define([
                 this.addToolbarListeners();
                 this.addInputListeners();
             }
-
-            // remove me, eventually
-            this.$container.find('.insertTextBtn').on('click', function() {
-                var latex = self.$container.find('.insertText').val();
-                self.insertLatex(latex, 'cmd');
-            });
-
-            this.$container.find('.insertTextBtn2').on('click', function() {
-                var latex = self.$container.find('.insertText').val();
-                self.insertLatex(latex, 'write');
-            });
         },
 
         /**
