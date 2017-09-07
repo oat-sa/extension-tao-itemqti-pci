@@ -82,19 +82,22 @@ define([
             // QtiCreator rendering of the PCI in Gap Expression mode: display a MathQuill editable field containing the gap expression
             if (this.inGapMode() && this.inQtiCreator()) {
                 this.createMathEditable();
-                this.setLatex(this.config.gapExpression.replace('\\taoGap', '\\embed{gap}'));
+                this.setLatex(this.config.gapExpression);
 
                 this.addToolbarListeners();
                 this.addInputListeners();
+
+            // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
+            } else if (!this.inGapMode() && this.inQtiCreator()) {
+                this.togglePlaceholder(true);
 
             // Normal rendering of the PCI in Gap Expression mode: render a static MathQuill field with editable gaps
             } else if (this.inGapMode() && !this.inQtiCreator()) {
                 this.setMathStaticContent(this.config.gapExpression);
                 this.createMathStatic();
 
-            // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
-            } else if (!this.inGapMode() && this.inQtiCreator()) {
-                this.togglePlaceholder(true);
+                this.monitorActiveInnerField();
+                this.addToolbarListeners();
 
             // Normal rendering of the PCI: display an empty MathQuill editable field
             } else {
@@ -171,16 +174,28 @@ define([
             }
         },
 
-        setMathStaticContent: function setMathStaticContent(exp) {
+        setMathStaticContent: function setMathStaticContent(latex) {
             var regex = /\\taoGap/g;
-            exp = exp.replace(regex, '\\MathQuillMathField{}');
-            this.$input.text(exp);
+            latex = latex.replace(regex, '\\MathQuillMathField{}');
+            this.$input.text(latex);
         },
 
         createMathStatic: function createMathStatic() {
-            if(! this.mathField) { // todo: this will probably have side effects?
-                // this.mathField = // todo: fix this !
-                MQ.StaticMath(this.$input.get(0));
+            this.mathField = MQ.StaticMath(this.$input.get(0));
+        },
+
+        monitorActiveInnerField: function monitorActiveInnerField() {
+            var self = this,
+                $editableFields = this.$input.find('.mq-editable-field');
+
+            this._activeInnerFieldIndex = null;
+
+            if ($editableFields.length) {
+                $editableFields.each(function(index) {
+                    $(this).on('click keyup', function() {
+                        self._activeInnerFieldIndex = index;
+                    });
+                });
             }
         },
 
@@ -312,22 +327,44 @@ define([
         },
 
         setLatex: function setLatex(latex) {
+            var regex = /\\taoGap/g;
+            latex = latex.replace(regex, '\\embed{gap}');
+
             this.mathField.latex(latex);
         },
 
         insertLatex: function insertLatex(latex, fn) {
-            var self = this;
+            var activeMathField = this.getActiveMathField();
 
-            switch (fn) {
-                case 'cmd':
-                    self.mathField.cmd(latex);
-                    break;
-                case 'write':
-                    self.mathField.write(latex);
-                    break;
+            if (activeMathField) {
+                switch (fn) {
+                    case 'cmd':
+                        activeMathField.cmd(latex);
+                        break;
+                    case 'write':
+                        activeMathField.write(latex);
+                        break;
+                }
+                activeMathField.focus();
             }
+        },
 
-            self.mathField.focus();
+        getActiveMathField: function getActiveMathField() {
+            var activeMathField;
+
+            if (this.inGapMode() && !this.inQtiCreator()) {
+                // default to the first inner field if none has received the focus yet
+                if (! _.isFinite(this._activeInnerFieldIndex)) {
+                    this._activeInnerFieldIndex = 0;
+                }
+                // access the MQ instance
+                if (this.mathField && _.isArray(this.mathField.innerFields)) {
+                    activeMathField = this.mathField.innerFields[this._activeInnerFieldIndex];
+                }
+            } else {
+                activeMathField =  this.mathField;
+            }
+            return activeMathField;
         },
 
         addInputListeners: function addInputListeners() {
@@ -415,8 +452,10 @@ define([
          * @param {Object} response
          */
         setResponse: function setResponse(response) {
-            if (response && response.base && response.base.string) {
-                this.setLatex(response.base.string);
+            if (! this.inGapMode()) {
+                if (response && response.base && response.base.string) {
+                    this.setLatex(response.base.string);
+                }
             }
         },
         /**
