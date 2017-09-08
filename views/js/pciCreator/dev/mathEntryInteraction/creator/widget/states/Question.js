@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA;
  */
 
 define([
@@ -167,7 +167,10 @@ define([
         });
     };
 
-    // Change callback for editable math field
+    /**
+     * Change callback for editable math field
+     */
+
     MathEntryInteractionStateQuestion.prototype.addMathFieldListener = function addMathFieldListener() {
         var _widget = this.widget,
             interaction = _widget.element;
@@ -181,6 +184,9 @@ define([
         });
     };
 
+    /**
+     * Display the "Add Gap" button
+     */
     MathEntryInteractionStateQuestion.prototype.createAddGapBtn = function createAddGapBtn() {
         var _widget = this.widget,
             $container = _widget.$container,
@@ -195,6 +201,9 @@ define([
         }
     };
 
+    /**
+     * Hide the "Add Gap" button
+     */
     MathEntryInteractionStateQuestion.prototype.removeAddGapBtn = function removeAddGapBtn() {
         $addGapBtn.off('click');
         $addGapBtn.remove();
