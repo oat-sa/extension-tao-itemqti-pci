@@ -52,6 +52,18 @@ define([
             }
         };
     });
+    // Experimental line break...
+    MQ.registerEmbed('br', function registerBr() {
+        return {
+            htmlString: '<div class="mq-tao-br"></div>',
+            text: function text() {
+                return 'tao_br';
+            },
+            latex: function latex() {
+                return '\\taoBr';
+            }
+        };
+    });
 
     mathEntryInteraction = {
 
@@ -84,7 +96,6 @@ define([
                 this.setLatex(this.config.gapExpression);
 
                 this.addToolbarListeners();
-                this.addInputListeners();
 
             // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
             } else if (!this.inGapMode() && this.inQtiCreator()) {
@@ -103,7 +114,6 @@ define([
                 this.createMathEditable();
 
                 this.addToolbarListeners();
-                this.addInputListeners();
             }
         },
 
@@ -195,6 +205,11 @@ define([
                 handlers: {
                     edit: function(mathField) {
                         self.trigger('responseChange', [mathField.latex()]);
+                    },
+                    enter: function(mathField) {
+                        if (self.config.allowNewLine && !self.inGapMode()) {
+                            mathField.write('\\embed{br}');
+                        }
                     }
                 }
             };
@@ -388,33 +403,6 @@ define([
             return (this.mathField && _.isArray(this.mathField.innerFields))
                 ? this.mathField.innerFields
                 : [];
-        },
-
-        addInputListeners: function addInputListeners() {
-            var self = this;
-
-            /**
-             * Ugly hack to allow for a line break on enter
-             * inspired by https://github.com/mathquill/mathquill/issues/174
-             *
-             * The latex will turn into the following markup:
-             * <span class="mq-textcolor" style="color:newline"> </span>
-             *
-             * which, along with the following css:
-             * .mq-textcolor[style="color:newline"] {
-             *      display: block;
-             * }
-             *
-             *  ...creates a newline!!!
-             */
-            this.$input
-                .off('keypress' + ns)
-                .on('keypress' + ns, function (e) {
-                    var latex = '\\textcolor{newline}{ }';
-                    if (self.config.allowNewLine && e.keyCode === 13) {
-                        self.mathField.write(latex);
-                    }
-                });
         },
 
         addGap: function addGap() {
