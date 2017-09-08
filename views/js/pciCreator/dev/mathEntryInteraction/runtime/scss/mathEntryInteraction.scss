@@ -102,8 +102,9 @@ $borderColor: blacken($base, 0.3);
                 @include text-input();
                 display: inline-block;
                 height: 21px; // huh?
-                min-width: 14px;
+                min-width: 12px;
                 margin: 0 3px;
+                vertical-align: middle;
             }
 
             // Buttons

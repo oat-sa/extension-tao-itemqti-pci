@@ -510,9 +510,6 @@ define([
 
             this.render(config);
 
-            //tell the rendering engine that I am ready
-            qtiCustomInteractionContext.notifyReady(this);
-
             this.on('configChange', function (newConfig) {
                 self.render(newConfig);
             });
@@ -524,6 +521,9 @@ define([
 
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
+
+            //tell the rendering engine that I am ready
+            qtiCustomInteractionContext.notifyReady(this);
         },
         /**
          * Programmatically set the response following the json schema described in
