@@ -72,8 +72,6 @@ define([
          * Render PCI
          */
         render: function render(config) {
-            var self = this;
-
             this.initConfig(config);
 
             this.createToolbar();
@@ -154,11 +152,19 @@ define([
          *
          */
         togglePlaceholder: function togglePlaceholder(displayPlaceholder) {
+            if (! this.$inputPlaceholder) {
+                // this is not in the PCI markup for backward-compatibility reasons
+                this.$inputPlaceholder  = $('<div>', {
+                    'class': 'math-entry-placeholder'
+                });
+                this.$toolbar.after(this.$inputPlaceholder);
+            }
             if (displayPlaceholder) {
                 this.$input.hide();
                 this.$inputPlaceholder.show();
+
             } else {
-                this.$input.show();
+                this.$input.css({ display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
                 this.$inputPlaceholder.hide();
             }
         },
@@ -197,7 +203,7 @@ define([
                     spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                     handlers: {
                         edit: function() {
-                            self.trigger('responseChange');
+                            self.trigger('responseChange', [self.mathField.latex()]);
                         }
                     }
                 };
@@ -316,10 +322,21 @@ define([
         },
 
         setLatex: function setLatex(latex) {
-            var regex = /\\taoGap/g;
-            latex = latex.replace(regex, '\\embed{gap}');
+            var innerFields,
+                regex = /\\taoGap/g;
 
-            this.mathField.latex(latex);
+            if (this.inGapMode() && _.isArray(latex)) {
+                innerFields = this.getInnerFields();
+                latex.forEach(function (latexExpr, i) {
+                    if (innerFields[i]) {
+                        innerFields[i].latex(latexExpr);
+                    }
+                });
+
+            } else {
+                latex = latex.replace(regex, '\\embed{gap}');
+                this.mathField.latex(latex);
+            }
         },
 
         insertLatex: function insertLatex(latex, fn) {
@@ -347,13 +364,19 @@ define([
                     this._activeInnerFieldIndex = 0;
                 }
                 // access the MQ instance
-                if (this.mathField && _.isArray(this.mathField.innerFields)) {
+                if (this.getInnerFields().length > 0) {
                     activeMathField = this.mathField.innerFields[this._activeInnerFieldIndex];
                 }
             } else {
                 activeMathField =  this.mathField;
             }
             return activeMathField;
+        },
+
+        getInnerFields: function getInnerFields() {
+            return (this.mathField && _.isArray(this.mathField.innerFields))
+                ? this.mathField.innerFields
+                : [];
         },
 
         addInputListeners: function addInputListeners() {
@@ -415,7 +438,6 @@ define([
             this.$container         = $(dom);
             this.$toolbar           = this.$container.find('.toolbar');
             this.$input             = this.$container.find('.math-entry-input');
-            this.$inputPlaceholder  = this.$container.find('.math-entry-placeholder');
 
             this.render(config);
 
@@ -441,7 +463,15 @@ define([
          * @param {Object} response
          */
         setResponse: function setResponse(response) {
-            if (! this.inGapMode()) {
+            var innerFieldsLatex;
+
+            if (this.inGapMode()) {
+                innerFieldsLatex = this.getInnerFields().map(function(innerField) {
+                    return innerField.latex();
+                });
+                this.setLatex(innerFieldsLatex);
+
+            } else {
                 if (response && response.base && response.base.string) {
                     this.setLatex(response.base.string);
                 }
@@ -455,11 +485,24 @@ define([
          * @returns {Object}
          */
         getResponse: function getResponse() {
-            return {
-                base: {
-                    string : this.mathField.latex()
-                }
-            };
+            var response;
+
+            if (this.inGapMode()) {
+                response = {
+                    list: {
+                        string: this.getInnerFields().map(function(innerField) {
+                            return innerField.latex();
+                        })
+                    }
+                };
+            } else {
+                response = {
+                    base: {
+                        string : this.mathField.latex()
+                    }
+                };
+            }
+            return response;
         },
         /**
          * Remove the current response set in the interaction
@@ -468,7 +511,14 @@ define([
          * @param {Object} interaction
          */
         resetResponse: function resetResponse() {
-            this.setLatex('');
+            var innerFields = this.getInnerFields();
+            if (this.inGapMode()) {
+                innerFields.forEach(function(innerField) {
+                    innerField.latex('');
+                });
+            } else {
+                this.setLatex('');
+            }
         },
         /**
          * Reverse operation performed by render()

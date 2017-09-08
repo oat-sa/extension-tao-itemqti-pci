@@ -131,9 +131,11 @@ define([
             useGapExpression: function gapChangeCallback(i, value) {
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
+                    response.attr('cardinality', 'multiple');
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
+                    response.attr('cardinality', 'single');
                 }
                 configChangeCallBack(i, value, 'useGapExpression');
             },
@@ -168,14 +170,10 @@ define([
     // Change callback for editable math field
     MathEntryInteractionStateQuestion.prototype.addMathFieldListener = function addMathFieldListener() {
         var _widget = this.widget,
-            interaction = _widget.element,
-            response;
+            interaction = _widget.element;
 
-        interaction.onPci('responseChange', function() {
-            var latex;
+        interaction.onPci('responseChange', function(latex) {
             if (toBoolean(interaction.prop('useGapExpression'), false)) {
-                response = interaction.getResponse();
-                latex = (response && response.base && response.base.string) || '';
                 interaction.prop('gapExpression', latex);
             } else {
                 interaction.prop('gapExpression', '');
