@@ -35,11 +35,12 @@ define([
 ){
     'use strict';
 
-    var MQ = MathQuill.getInterface(2),
-        mathEntryInteraction,
-        ns = '.mathEntryInteraction';
+    var ns = '.mathEntryInteraction';
+    var MQ = MathQuill.getInterface(2);
+    var mathEntryInteraction;
 
-    // Warning: this is an experimental MathQuill API that might change or be removed upon MathQuill update
+    // Warning: this is an experimental MathQuill API that might change or be removed upon MathQuill update.
+    // Still, it is the most satisfying way to implement some required functionality without ugly hacks.
     MQ.registerEmbed('gap', function registerGap() {
         return {
             htmlString: '<span class="mq-tao-gap"></span>',
@@ -176,7 +177,27 @@ define([
         },
 
         createMathStatic: function createMathStatic() {
+            var self = this,
+                innerFields;
+
             this.mathField = MQ.StaticMath(this.$input.get(0));
+
+            innerFields = this.getInnerFields();
+            innerFields.forEach(function(field) {
+                field.config(self.getMqConfig());
+            });
+        },
+
+        getMqConfig: function getMqConfig() {
+            var self = this;
+            return {
+                spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
+                handlers: {
+                    edit: function(mathField) {
+                        self.trigger('responseChange', [mathField.latex()]);
+                    }
+                }
+            };
         },
 
         monitorActiveInnerField: function monitorActiveInnerField() {
@@ -198,22 +219,12 @@ define([
          * transform a DOM element into a MathQuill Field
          */
         createMathEditable: function createMathEditable() {
-            var self = this,
-                config = {
-                    spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
-                    handlers: {
-                        edit: function() {
-                            self.trigger('responseChange', [self.mathField.latex()]);
-                        }
-                    }
-                };
-
             if(this.mathField && this.mathField instanceof MathQuill){
                 //if mathquill element already exists, update the config
-                this.mathField.config(config);
+                this.mathField.config(this.getMqConfig());
             }else{
                 //if mathquill element does not exist yet, create it
-                this.mathField = MQ.MathField(this.$input.get(0), config);
+                this.mathField = MQ.MathField(this.$input.get(0), this.getMqConfig());
             }
         },
 
@@ -463,13 +474,10 @@ define([
          * @param {Object} response
          */
         setResponse: function setResponse(response) {
-            var innerFieldsLatex;
-
             if (this.inGapMode()) {
-                innerFieldsLatex = this.getInnerFields().map(function(innerField) {
-                    return innerField.latex();
-                });
-                this.setLatex(innerFieldsLatex);
+                if (response && response.list && _.isArray(response.list.string)) {
+                    this.setLatex(response.list.string);
+                }
 
             } else {
                 if (response && response.base && response.base.string) {

@@ -62,7 +62,7 @@ define([
                 assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
                 assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
                 assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
-                assert.equal($container.find('.qti-customInteraction .mathEntryInteraction').length, 1, 'the container contains a Point Line Graph interaction');
+                assert.equal($container.find('.qti-customInteraction .mathEntryInteraction').length, 1, 'the container contains a Math Entry interaction');
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
 
                 QUnit.start();
@@ -159,6 +159,60 @@ define([
 
     /* */
 
+    QUnit.asyncTest('resets the response with gap expression', function(assert){
+        var changeCounter = 0;
+        var response = {
+            list : {
+                string: [
+                    '\\frac{1}{2}',
+                    '\\frac{1}{4}'
+                ]
+            }
+        };
+        var $container = $('#' + fixtureContainerId);
+
+        var newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.useGapExpression = 'true';
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.gapExpression = '\\frac{1}{2}+\\taoGap=\\frac{5}{4}-\\taoGap';
+        newItemData.responses.responsedeclaration_59b29448bccf2756213375.cardinality = 'multiple';
+
+        runner = qtiItemRunner('qti', newItemData)
+            .on('render', function (){
+                var interaction,
+                    interactions = this._item.getInteractions();
+
+                assert.equal(_.size(interactions), 1, 'one interaction');
+                interaction = interactions[0];
+
+                // first we set the response
+                interaction.setResponse(response);
+            })
+            .on('responsechange', function (res){
+                var interactions = this._item.getInteractions(),
+                    interaction = interactions[0];
+                changeCounter++;
+
+                if (changeCounter === 1) {
+                    interaction.resetResponse();
+                } else if (changeCounter === 3) {
+                    assert.ok(_.isPlainObject(res), 'response changed');
+                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                    assert.ok(_.isPlainObject(res.RESPONSE.list), 'response list is an object');
+                    assert.ok(_.isArray(res.RESPONSE.list.string), 'response list string is an array');
+                    assert.equal(res.RESPONSE.list.string[0], '', 'first response is empty');
+                    assert.equal(res.RESPONSE.list.string[1], '', 'second response is empty');
+                    QUnit.start();
+                }
+            })
+            .on('error', function (error){
+                $('#error-display').html(error);
+            })
+            .init()
+            .render($container);
+    });
+
+    /* */
+
     QUnit.asyncTest('set and get response', function (assert){
         var changeCounter = 0;
         var response = {
@@ -184,6 +238,51 @@ define([
             .on('responsechange', function (res){
                 changeCounter++;
                 if (changeCounter === 1) { // so it runs only once
+                    assert.ok(_.isPlainObject(res), 'response changed');
+                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                    assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
+                    QUnit.start();
+                }
+            })
+            .on('error', function (error){
+                $('#error-display').html(error);
+            })
+            .init()
+            .render($container);
+    });
+
+    QUnit.asyncTest('set and get response with gap expression', function (assert){
+        var changeCounter = 0;
+        var response = {
+            list : {
+                string: [
+                    '\\frac{1}{2}',
+                    '\\frac{1}{4}'
+                ]
+            }
+        };
+        var $container = $('#' + fixtureContainerId);
+
+        var newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.useGapExpression = 'true';
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.gapExpression = '\\frac{1}{2}+\\taoGap=\\frac{5}{4}-\\taoGap';
+        newItemData.responses.responsedeclaration_59b29448bccf2756213375.cardinality = 'multiple';
+
+        runner = qtiItemRunner('qti', newItemData)
+            .on('render', function (){
+                var interaction,
+                    interactions = this._item.getInteractions();
+
+                assert.equal(_.size(interactions), 1, 'one interaction');
+                interaction = interactions[0];
+
+                //set the response
+                interaction.setResponse(response);
+            })
+            .on('responsechange', function (res){
+
+                changeCounter++;
+                if (changeCounter === 3) {
                     assert.ok(_.isPlainObject(res), 'response changed');
                     assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                     assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
@@ -234,14 +333,61 @@ define([
 
     /* */
 
+    QUnit.asyncTest('set and get state with gap expression', function (assert){
+        var changeCounter = 0;
+        var state = {
+            RESPONSE: {
+                list : {
+                    string: [
+                        '\\frac{1}{2}',
+                        '\\frac{1}{4}'
+                    ]
+                }
+            }
+        };
+        var $container = $('#' + fixtureContainerId);
+
+        var newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.useGapExpression = 'true';
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.gapExpression = '\\frac{1}{2}+\\taoGap=\\frac{5}{4}-\\taoGap';
+        newItemData.responses.responsedeclaration_59b29448bccf2756213375.cardinality = 'multiple';
+
+        runner = qtiItemRunner('qti', newItemData)
+            .on('render', function (){
+
+                this.setState(state);
+                assert.deepEqual(this.getState(), state, 'state set/get ok');
+            })
+            .on('responsechange', function (res){
+                changeCounter++;
+                if (changeCounter === 3) { // so it runs only once
+                    assert.ok(_.isPlainObject(res), 'response changed');
+                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
+                    assert.deepEqual(res, state, 'response set/get ok');
+
+                    QUnit.start();
+                }
+            })
+            .init()
+            .render($container);
+    });
+
+    /* */
+
     module('Visual test');
 
     QUnit.asyncTest('display and play', function (assert){
 
         var $container = $('#outside-container');
+
+        var newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.useGapExpression = 'true';
+        newItemData.body.elements.interaction_portablecustominteraction_59b29448bdbf1249551660.properties.gapExpression = '\\frac{1}{2}+\\taoGap=\\frac{5}{4}-\\taoGap';
+        newItemData.responses.responsedeclaration_59b29448bccf2756213375.cardinality = 'multiple';
+
         assert.equal($container.length, 1, 'the item container exists');
 
-        runner = qtiItemRunner('qti', itemData)
+        runner = qtiItemRunner('qti', newItemData)
             .on('render', function (){
                 QUnit.start();
             })
