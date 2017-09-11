@@ -218,8 +218,7 @@ define([
          * @param {String} latex - the math expression with gaps
          */
         setMathStaticContent: function setMathStaticContent(latex) {
-            var regex = /\\taoGap/g;
-            latex = latex.replace(regex, '\\MathQuillMathField{}');
+            latex = latex.replace('\\taoGap/', '\\MathQuillMathField{}');
             this.$input.text(latex);
         },
 
@@ -279,8 +278,7 @@ define([
          * @param {String|String[]} latex - String for standard mode, array of strings for gap mode.
          */
         setLatex: function setLatex(latex) {
-            var gapFields,
-                regex = /\\taoGap/g;
+            var gapFields;
 
             if (this.inGapMode() && _.isArray(latex)) {
                 gapFields = this.getGapFields();
@@ -291,7 +289,7 @@ define([
                 });
 
             } else {
-                latex = latex.replace(regex, '\\embed{gap}');
+                latex = latex.replace('\\taoGap', '\\embed{gap}');
                 this.mathField.latex(latex);
             }
         },
