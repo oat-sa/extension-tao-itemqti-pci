@@ -186,7 +186,6 @@ define([
 
         /**
          * Create a placeholder that will be displayed instead off the MathQuill field in authoring mode
-         * todo: what not use the MQ span ? better for backward compatibility
          */
         togglePlaceholder: function togglePlaceholder(displayPlaceholder) {
             if (! this.$inputPlaceholder) {
