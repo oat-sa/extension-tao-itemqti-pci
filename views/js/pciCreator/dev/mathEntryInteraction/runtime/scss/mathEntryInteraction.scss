@@ -11,7 +11,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  */
@@ -101,7 +101,7 @@ $borderColor: blacken($base, 0.3);
             .mq-tao-gap {
                 @include text-input();
                 display: inline-block;
-                height: 21px; // huh?
+                height: 21px;
                 min-width: 12px;
                 margin: 0 3px;
                 vertical-align: middle;
