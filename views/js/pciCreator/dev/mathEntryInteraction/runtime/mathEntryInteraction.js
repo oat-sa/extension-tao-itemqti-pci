@@ -218,7 +218,7 @@ define([
          * @param {String} latex - the math expression with gaps
          */
         setMathStaticContent: function setMathStaticContent(latex) {
-            latex = latex.replace('\\taoGap/', '\\MathQuillMathField{}');
+            latex = latex.replace(/\\taoGap/g, '\\MathQuillMathField{}');
             this.$input.text(latex);
         },
 
@@ -289,7 +289,7 @@ define([
                 });
 
             } else {
-                latex = latex.replace('\\taoGap', '\\embed{gap}');
+                latex = latex.replace(/\\taoGap/g, '\\embed{gap}');
                 this.mathField.latex(latex);
             }
         },
@@ -597,7 +597,9 @@ define([
             this.$input.off(ns);
             this.$toolbar.off(ns);
             this.resetResponse();
-            this.mathField.revert();
+            if (this.mathField instanceof MathQuill) {
+                this.mathField.revert();
+            }
         },
         /**
          * Restore the state of the interaction from the serializedState.
