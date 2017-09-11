@@ -216,6 +216,6 @@ class Updater extends \common_ext_ExtensionUpdater
             PortableModelRegistry::getRegistry()->register(new IMSPciModel());
             $this->setVersion('3.1.0');
         }
-        $this->skip('3.1.0', '3.1.1');
+        $this->skip('3.1.0', '3.1.2');
     }
 }
