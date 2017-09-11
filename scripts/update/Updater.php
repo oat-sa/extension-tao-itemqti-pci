@@ -172,18 +172,23 @@ class Updater extends \common_ext_ExtensionUpdater
 
             /** @var \common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
-            $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
 
-            foreach ($map as $key => $value){
-                uksort($value, function($a, $b) {
-                    return version_compare($a, $b, '<');
-                });
-                $portableElementObject = $model->createDataObject(reset($value));
-                //set it the new way
-                $registry->update($portableElementObject);
+            if($extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->hasConfig(PciRegistry::REGISTRY_ID)){
+                $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
+
+                if(is_array($map)){
+                    foreach ($map as $key => $value){
+                        uksort($value, function($a, $b) {
+                            return version_compare($a, $b, '<');
+                        });
+                        $portableElementObject = $model->createDataObject(reset($value));
+                        //set it the new way
+                        $registry->update($portableElementObject);
+                    }
+                }
+
+                $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->unsetConfig(PciRegistry::REGISTRY_ID);
             }
-
-            $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->unsetConfig(PciRegistry::REGISTRY_ID);
             $this->setVersion('3.0.0');
         }
 
@@ -212,7 +217,9 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('3.1.0');
         }
 
-        if($this->isVersion('3.1.0')){
+        $this->skip('3.1.0', '3.1.1');
+
+        if($this->isVersion('3.1.1')){
             call_user_func(new RegisterPciMathEntry(), ['0.5.0']);
             $this->setVersion('3.2.0');
         }
