@@ -24,14 +24,12 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
-    'tpl!mathEntryInteraction/creator/tpl/propertiesForm'
-], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl){
+    'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
+    'tpl!mathEntryInteraction/creator/tpl/addGapBtn'
+], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl){
     'use strict';
 
-    var $addGapBtn = $('<div>', {
-        'class': 'add-option',
-        html: '<span class="icon-add"></span> ' + __('Add gap')
-    });
+    var $addGapBtn = $(addGapBtnTpl());
 
     var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
 
@@ -202,7 +200,7 @@ define([
     };
 
     /**
-     * Hide the "Add Gap" button
+     * Remove the "Add Gap" button from the DOM
      */
     MathEntryInteractionStateQuestion.prototype.removeAddGapBtn = function removeAddGapBtn() {
         $addGapBtn.off('click');

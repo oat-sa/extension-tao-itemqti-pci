@@ -81,6 +81,7 @@ $borderColor: blacken($base, 0.3);
             .add-option {
                 padding: 5px 5px 5px 6px;
                 margin-bottom: 8px;
+                max-width: 100px;
             }
 
             .math-entry-input {

@@ -45,6 +45,7 @@
         "libraries" : [
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/addGapBtn.tpl",
             "./creator/widget/Widget.js",
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js"
