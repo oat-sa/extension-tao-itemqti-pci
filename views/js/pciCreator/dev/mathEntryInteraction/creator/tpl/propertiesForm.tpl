@@ -11,7 +11,8 @@
 </div>
 
 <hr />
-<h3>{{__ "Special Settings"}}</h3>
+
+<h3>{{__ "Options"}}</h3>
 
 <div>
     <label class="panel">
@@ -20,13 +21,12 @@
         {{__ "authorize white space"}}
     </label>
     <label class="panel">
-        <input name="allowNewLine" type="checkbox" {{#if allowNewLine}}checked="checked"{{/if}}/>
+        <input name="useGapExpression" type="checkbox" {{#if useGapExpression}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        <span class="txt-error"><strong>{{__ "EXPERIMENTAL ONLY: "}}</strong></span>
-        <br />allow line break
-
+        {{__ "use expression with gaps"}}
     </label>
 </div>
+
 <hr />
 
 <h3>{{__ "Functions"}}</h3>
@@ -157,6 +157,18 @@
         <input name="tool_plusminus" type="checkbox" {{#if tool_plusminus}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         {{__ "Plus/minus"}}
+    </label>
+</div>
+
+<hr />
+
+<h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "Experimental only"}}</strong></h3>
+
+<div>
+    <label class="panel">
+        <input name="allowNewLine" type="checkbox" {{#if allowNewLine}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "allow line break"}}
     </label>
 </div>
 
