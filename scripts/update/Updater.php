@@ -216,6 +216,12 @@ class Updater extends \common_ext_ExtensionUpdater
             PortableModelRegistry::getRegistry()->register(new IMSPciModel());
             $this->setVersion('3.1.0');
         }
+
         $this->skip('3.1.0', '3.1.1');
+
+        if($this->isVersion('3.1.1')){
+            call_user_func(new RegisterPciMathEntry(), ['0.5.0']);
+            $this->setVersion('3.2.0');
+        }
     }
 }

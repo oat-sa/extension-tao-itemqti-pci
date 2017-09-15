@@ -24,11 +24,17 @@ define([
 
     var MathEntryInteractionWidget = Widget.clone();
 
-    MathEntryInteractionWidget.initCreator = function initCreator(){
+    MathEntryInteractionWidget.initCreator = function initCreator() {
+        var $interaction;
 
         this.registerStates(states);
 
         Widget.initCreator.call(this);
+
+        $interaction = this.$container.find('.mathEntryInteraction');
+        if ($interaction.length) {
+            $interaction.addClass('tao-qti-creator-context');
+        }
     };
 
     return MathEntryInteractionWidget;
