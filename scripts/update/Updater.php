@@ -35,6 +35,7 @@ use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\tao\model\accessControl\func\AclProxy;
+use oat\tao\model\TaoOntology;
 use oat\taoQtiItem\model\HookRegistry;
 use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
@@ -92,7 +93,7 @@ class Updater extends \common_ext_ExtensionUpdater
             // Grants access on PciLoader for TestTaker role.
             AclProxy::applyRule(new AccessRule(
                 AccessRule::GRANT,
-                INSTANCE_ROLE_DELIVERY,
+				TaoOntology::INSTANCE_ROLE_DELIVERY,
                 ['ext' => 'qtiItemPci' , 'mod' => 'PciLoader']
             ));
 
@@ -223,5 +224,7 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciMathEntry(), ['0.5.0']);
             $this->setVersion('3.2.0');
         }
+
+		$this->skip('3.2.0', '3.2.1');
     }
 }
