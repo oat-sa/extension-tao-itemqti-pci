@@ -17,10 +17,10 @@
  */
 define([
     'qtiCustomInteractionContext',
-    'IMSGlobal/jquery_2_1_1',
-    'OAT/lodash',
-    'OAT/util/event',
-    'OAT/util/html',
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
     'audioRecordingInteraction/runtime/js/uiElements'

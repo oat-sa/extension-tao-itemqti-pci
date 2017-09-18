@@ -14,14 +14,8 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/mathEntryInteraction.js",
-        "libraries" : [
-            "IMSGlobal/jquery_2_1_1",
-            "OAT/lodash",
-            "OAT/util/event",
-            "OAT/util/html",
-            "./runtime/mathquill/mathquill.js"
-        ],
+        "hook" : "./runtime/mathEntryInteraction.min.js",
+        "libraries" : [],
         "stylesheets" : [
             "./runtime/mathquill/mathquill.css",
             "./runtime/css/mathEntryInteraction.css"
@@ -37,6 +31,10 @@
             "./runtime/mathquill/font/Symbola-basic.ttf",
             "./runtime/mathquill/font/Symbola-basic.woff",
             "./runtime/mathquill/font/Symbola-basic.woff2"
+        ],
+        "src" : [
+            "./runtime/mathEntryInteraction.js",
+            "./runtime/mathquill/mathquill.js"
         ]
     },
     "creator" : {
