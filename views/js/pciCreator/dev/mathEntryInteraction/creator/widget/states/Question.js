@@ -31,6 +31,8 @@ define([
 
     var $addGapBtn = $(addGapBtnTpl());
 
+    var currentGapStyle;
+
     var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
 
         var $container = this.widget.$container,
@@ -87,7 +89,10 @@ define([
             _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
-            response = interaction.getResponseDeclaration();
+            $mathEntryInteraction = _widget.$container.find('.qti-customInteraction .mathEntryInteraction'),
+            response = interaction.getResponseDeclaration(),
+            $gapStyleBox,
+            $gapStyleSelector;
 
         //render the form using the form template
         $form.html(formTpl({
@@ -129,10 +134,12 @@ define([
             useGapExpression: function gapChangeCallback(i, value) {
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
+                    $gapStyleBox.show();
                     response.attr('cardinality', 'multiple');
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
+                    $gapStyleBox.hide();
                     response.attr('cardinality', 'single');
                 }
                 configChangeCallBack(i, value, 'useGapExpression');
@@ -163,6 +170,30 @@ define([
 
             allowNewLine: configChangeCallBack
         });
+
+
+        $gapStyleBox = $form.find('.mathgap-style-box');
+        $gapStyleSelector = $gapStyleBox.find('[data-mathgap-style]');
+
+        $gapStyleSelector.select2({
+            width: '100%',
+            minimumResultsForSearch: Infinity
+        })
+        .val(interaction.prop('gapStyle'))
+        .on('change', function() {
+            var newStyle = $gapStyleSelector.select2('val');
+
+            // model
+            interaction.prop('gapStyle', newStyle);
+
+            // current visual
+            $mathEntryInteraction.removeClass(currentGapStyle);
+            $mathEntryInteraction.addClass(newStyle);
+
+            // reset current
+            currentGapStyle = newStyle;
+        }).trigger('change');
+
     };
 
     /**

@@ -63,13 +63,38 @@ $buttonRadius: 4px;
 
 $borderColor: blacken($base, 0.3);
 
+$defaultGapWidth: 30;
+
 @mixin text-input() {
     background-color: white;
     border: 1px solid #ddd;
 }
 
 .qti-customInteraction {
+
+    .mq-tao-gap, .mq-editable-field {
+        min-width: $defaultGapWidth * 1px;
+    }
+
     .mathEntryInteraction {
+
+        &.math-gap {
+            &-small {
+                .mq-tao-gap, .mq-editable-field {
+                    min-width: $defaultGapWidth * 1px;
+                }
+            }
+            &-medium {
+                .mq-tao-gap, .mq-editable-field {
+                    min-width: 70px;
+                }
+            }
+            &-large {
+                .mq-tao-gap, .mq-editable-field {
+                    min-width: 110px;
+                }
+            }
+        }
 
         .math-entry {
             padding: 8px;
@@ -103,7 +128,6 @@ $borderColor: blacken($base, 0.3);
                 @include text-input();
                 display: inline-block;
                 height: 21px;
-                min-width: 12px;
                 margin: 0 3px;
                 vertical-align: middle;
             }
