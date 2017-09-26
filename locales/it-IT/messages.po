@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.2.0-sprint60\n"
-"PO-Revision-Date: 2017-09-22T14:15:00\n"
+"PO-Revision-Date: 2017-09-26T07:26:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: it-IT\n"
@@ -76,10 +76,16 @@ msgstr ""
 msgid "Functions"
 msgstr ""
 
+msgid "Gap size"
+msgstr "Dimensione dello spazio"
+
 msgid "Give the possibility to the test taker to playback its own recording."
 msgstr ""
 
 msgid "greater than or equal"
+msgstr ""
+
+msgid "Hello World"
 msgstr ""
 
 msgid "id : "
@@ -91,8 +97,8 @@ msgstr ""
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr ""
 
-msgid "large gaps"
-msgstr "spazi grandi"
+msgid "Large"
+msgstr "Grande"
 
 msgid "Level"
 msgstr ""
@@ -115,8 +121,8 @@ msgstr ""
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
 msgstr ""
 
-msgid "medium gaps"
-msgstr "spazi medi"
+msgid "Medium"
+msgstr "Medio"
 
 msgid "No Custom Interaction"
 msgstr ""
@@ -142,8 +148,8 @@ msgstr ""
 msgid "sinus"
 msgstr ""
 
-msgid "small gaps"
-msgstr "spazi piccoli"
+msgid "Small"
+msgstr "Piccolo"
 
 msgid "square root"
 msgstr ""
