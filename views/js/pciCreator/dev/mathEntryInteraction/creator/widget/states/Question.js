@@ -87,7 +87,9 @@ define([
             _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
-            response = interaction.getResponseDeclaration();
+            response = interaction.getResponseDeclaration(),
+            $gapStyleBox,
+            $gapStyleSelector;
 
         //render the form using the form template
         $form.html(formTpl({
@@ -129,13 +131,21 @@ define([
             useGapExpression: function gapChangeCallback(i, value) {
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
+                    $gapStyleBox.show();
                     response.attr('cardinality', 'multiple');
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
+                    $gapStyleBox.hide();
                     response.attr('cardinality', 'single');
                 }
                 configChangeCallBack(i, value, 'useGapExpression');
+            },
+            gapStyle: function gapStyleChangeCallback(i, newStyle) {
+
+                i.prop('gapStyle', newStyle);
+
+                configChangeCallBack(i, newStyle, 'gapStyle');
             },
             authorizeWhiteSpace: configChangeCallBack,
 
@@ -163,6 +173,17 @@ define([
 
             allowNewLine: configChangeCallBack
         });
+
+
+        $gapStyleBox = $form.find('.mathgap-style-box');
+        $gapStyleSelector = $gapStyleBox.find('[data-mathgap-style]');
+
+        $gapStyleSelector.select2({
+            width: '100%',
+            minimumResultsForSearch: Infinity
+        })
+        .val(interaction.prop('gapStyle'))
+        .trigger('change');
     };
 
     /**
