@@ -125,7 +125,7 @@ define([
          * @param {Boolean} config.authorizeWhiteSpace - if space key creates a space
          * @param {Boolean} config.useGapExpression - create a math expression with gaps (placeholders)
          * @param {Boolean} config.gapExpression - content of the math expression
-         * @param {Boolean} config.gapStyle - size of the gaps math-gap-small|math-gap-medium|math-gap-large
+         * @param {('math-gap-small'|'math-gap-medium'|'math-gap-large')} config.gapStyle - size of the gaps
          * @param {Boolean} config.tool_toolId - is the given tool enabled?
          * @param {Boolean} config.allowNewLine - experimental... allows the test taker to create a new line on Enter
          */
@@ -480,11 +480,15 @@ define([
         },
 
         /**
-         * Add the style that sets the width of the gaps
+         * Add the style that sets the width of the gaps, discard previous style
          */
         addGapStyle: function addGapStyle() {
             var self = this;
+
             if(self.config.gapStyle) {
+                self.$container.removeClass(function (index, className) {
+                    return (className.match(/\bmath-gap-[\w]+\b/g) || []).join(' ');
+                });
                 self.$container.addClass(self.config.gapStyle);
             }
         },

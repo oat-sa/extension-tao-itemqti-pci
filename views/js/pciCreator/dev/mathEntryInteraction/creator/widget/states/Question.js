@@ -31,8 +31,6 @@ define([
 
     var $addGapBtn = $(addGapBtnTpl());
 
-    var currentGapStyle;
-
     var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
 
         var $container = this.widget.$container,
@@ -89,7 +87,6 @@ define([
             _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
-            $mathEntryInteraction = _widget.$container.find('.qti-customInteraction .mathEntryInteraction'),
             response = interaction.getResponseDeclaration(),
             $gapStyleBox,
             $gapStyleSelector;
@@ -144,6 +141,12 @@ define([
                 }
                 configChangeCallBack(i, value, 'useGapExpression');
             },
+            gapStyle: function gapStyleChangeCallback(i, newStyle) {
+
+                i.prop('gapStyle', newStyle);
+
+                configChangeCallBack(i, newStyle, 'gapStyle');
+            },
             authorizeWhiteSpace: configChangeCallBack,
 
             tool_frac:      configChangeCallBack,
@@ -180,20 +183,7 @@ define([
             minimumResultsForSearch: Infinity
         })
         .val(interaction.prop('gapStyle'))
-        .on('change', function() {
-            var newStyle = $gapStyleSelector.select2('val');
-
-            // model
-            interaction.prop('gapStyle', newStyle);
-
-            // current visual
-            $mathEntryInteraction.removeClass(currentGapStyle);
-            $mathEntryInteraction.addClass(newStyle);
-
-            // reset current
-            currentGapStyle = newStyle;
-        }).trigger('change');
-
+        .trigger('change');
     };
 
     /**

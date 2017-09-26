@@ -106,7 +106,8 @@ $defaultGapWidth: 30;
             .add-option {
                 padding: 5px 5px 5px 6px;
                 margin-bottom: 8px;
-                max-width: 150px;
+                max-width: none;
+                display: inline-block;
             }
 
             .math-entry-input {
