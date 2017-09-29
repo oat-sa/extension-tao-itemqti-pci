@@ -16,7 +16,10 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
+define([
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/OAT/util/html'
+], function($, html){
     'use strict';
 
     function renderChoices(id, $container, config){

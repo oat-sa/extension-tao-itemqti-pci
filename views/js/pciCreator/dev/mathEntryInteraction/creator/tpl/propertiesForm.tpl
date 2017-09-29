@@ -25,6 +25,14 @@
         <span class="icon-checkbox"></span>
         {{__ "use expression with gaps"}}
     </label>
+    <div class="panel mathgap-style-box" {{#unless useGapExpression}}style="display:none"{{/unless}}>
+        <label for="gapStyle">{{__ "Gap size"}}</label>
+        <select name="gapStyle" data-mathgap-style>
+            <option value="math-gap-small">{{__ 'Small'}}</option>
+            <option value="math-gap-medium">{{__ 'Medium'}}</option>
+            <option value="math-gap-large">{{__ 'Large'}}</option>
+        </select>
+    </div>
 </div>
 
 <hr />

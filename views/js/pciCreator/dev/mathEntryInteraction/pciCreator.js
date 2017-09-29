@@ -57,6 +57,7 @@ define([
                 authorizeWhiteSpace: 'false',
                 useGapExpression: 'false',
                 gapExpression: '',
+                gapStyle: '',
 
                 tool_frac:      'true',
                 tool_sqrt:      'true',

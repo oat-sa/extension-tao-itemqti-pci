@@ -21,10 +21,10 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'IMSGlobal/jquery_2_1_1',
-    'OAT/lodash',
-    'OAT/util/event',
-    'OAT/mediaPlayer'
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/mediaPlayer'
 ], function($, _, event, mediaPlayerFactory) {
     'use strict';
 

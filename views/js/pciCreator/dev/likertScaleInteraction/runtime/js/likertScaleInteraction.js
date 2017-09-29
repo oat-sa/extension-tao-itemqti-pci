@@ -16,12 +16,17 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
+define([
+    'qtiCustomInteractionContext',
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'likertScaleInteraction/runtime/js/renderer'
+], function(qtiCustomInteractionContext, $, event, renderer){
     'use strict';
 
     var likertScaleInteraction = {
         id : -1,
-        getTypeIdentifier : function(){
+        getTypeIdentifier : function getTypeIdentifier(){
             return 'likertScaleInteraction';
         },
         /**
@@ -30,15 +35,15 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
          * @param {Node} dom
          * @param {Object} config - json
          */
-        initialize : function(id, dom, config, assetManager){
+        initialize : function initialize(id, dom, config, assetManager){
 
-            //add method on(), off() and trigger() to the current object
-            event.addEventMgr(this);
-
-            var _this = this;
+            var self = this;
             this.id = id;
             this.dom = dom;
             this.config = config || {};
+
+            //add method on(), off() and trigger() to the current object
+            event.addEventMgr(this);
 
             renderer.render(this.id, this.dom, this.config, assetManager);
 
@@ -47,8 +52,8 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
 
             //listening to dynamic configuration change
             this.on('levelchange', function(level){
-                _this.config.level = level;
-                renderer.renderChoices(_this.id, _this.dom, _this.config);
+                self.config.level = level;
+                renderer.renderChoices(self.id, self.dom, self.config);
             });
         },
         /**
@@ -58,7 +63,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
          * @param {Object} interaction
          * @param {Object} response
          */
-        setResponse : function(response){
+        setResponse : function setResponse(response){
 
             var $container = $(this.dom),
                 value = response && response.base ? parseInt(response.base.integer) : -1;
@@ -72,7 +77,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
          * @param {Object} interaction
          * @returns {Object}
          */
-        getResponse : function(){
+        getResponse : function getResponse(){
 
             var $container = $(this.dom),
                 value = parseInt($container.find('input:checked').val()) || 0;
@@ -85,7 +90,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
          * 
          * @param {Object} interaction
          */
-        resetResponse : function(){
+        resetResponse : function resetResponse(){
 
             var $container = $(this.dom);
 
@@ -98,7 +103,7 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertScaleInt
          * 
          * @param {Object} interaction
          */
-        destroy : function(){
+        destroy : function destroy(){
 
             var $container = $(this.dom);
             $container.off().empty();
