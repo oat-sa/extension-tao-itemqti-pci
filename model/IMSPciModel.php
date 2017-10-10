@@ -23,6 +23,7 @@ namespace oat\qtiItemPci\model;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\PhpSerializeStateless;
 use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
+use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
@@ -84,8 +85,9 @@ class IMSPciModel implements PortableElementModel
 
     public function getPackageParser()
     {
-        //not available yet
-        return null;
+        $packageParser = new PciPackagerParser();
+        $packageParser->setModel($this);
+        return $packageParser;
     }
 
     public function getQtiElementClassName()

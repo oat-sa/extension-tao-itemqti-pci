@@ -22,27 +22,6 @@ namespace oat\qtiItemPci\model\portableElement\dataObject;
 
 class IMSPciDataObject extends PciDataObject
 {
-    /**
-     * Return runtime files with relative path
-     *
-     * @return array
-     */
-    public function getRuntimePath()
-    {
-        //simply return the assigned runtime configuration data with no change
-        return $this->getRuntime();
-    }
-
-    /**
-     * Return creator files with relative aliases
-     *
-     * @return array
-     */
-    public function getRuntimeAliases()
-    {
-        //simply return the assigned runtime configuration data with no change
-        return $this->getRuntime();
-    }
 
     /**
      * Get the registration path of the source within a standard QTI package
@@ -81,5 +60,37 @@ class IMSPciDataObject extends PciDataObject
     public function getRegistrationExcludedKey(){
         //per standard the waitSeconds is an integer so should not be registered as a file
         return ['waitSeconds'];
+    }
+
+    /**
+     * Return runtime files with relative path
+     *
+     * @return array
+     */
+    public function getRuntimePath()
+    {
+        $paths = [];
+        foreach ($this->getRuntime() as $key => $value) {
+            if (in_array($key, ['stylesheets', 'src'])) {
+                $paths[$key] = preg_replace('/^' . $this->getTypeIdentifier() . '/', '.', $value);
+            }
+        }
+        return $paths;
+    }
+
+    /**
+     * Return creator files with relative aliases
+     *
+     * @return array
+     */
+    public function getRuntimeAliases()
+    {
+        $paths = [];
+        foreach ($this->getRuntime() as $key => $value) {
+            if (in_array($key, ['stylesheets', 'src'])) {
+                $paths[$key] = preg_replace('/^(.\/)(.*)/', $this->getTypeIdentifier() . "/$2", $this->getRuntimeKey($key));
+            }
+        }
+        return $paths;
     }
 }

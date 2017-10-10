@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\controller;
 
+use oat\qtiItemPci\model\IMSPciModel;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
@@ -27,6 +28,7 @@ use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelEx
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementParserException;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
+use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 
@@ -90,6 +92,20 @@ class PciManager extends \tao_actions_CommonModule
     }
 
     /**
+     * Return the list of registered PCI php subclasses
+     * @return array
+     */
+    private function getPciModels(){
+        $pciModels = [];
+        foreach(PortableModelRegistry::getRegistry()->getModels() as $model){
+            if(is_subclass_of($model->getQtiElementClassName(), '\\oat\\taoQtiItem\\model\\qti\\interaction\\CustomInteraction')){
+                $pciModels[] = $model;
+            }
+        }
+        return $pciModels;
+    }
+
+    /**
      * Service to check if the uploaded file archive is a valid and non-existing one
      * 
      * JSON structure:
@@ -114,30 +130,41 @@ class PciManager extends \tao_actions_CommonModule
             throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
         }
 
-        try {
-            $model = $this->getService()->getValidPortableElementFromZipSource(PciModel::PCI_IDENTIFIER, $file['tmp_name']);
-        }  catch (PortableElementInvalidModelException $e) {
+        $invalidModelErrors = [];
+        $pciModels = $this->getPciModels();
+        foreach($pciModels as $pciModel){
+            try {
+                $pciObject = $this->getService()->getValidPortableElementFromZipSource($pciModel->getId(), $file['tmp_name']);
+                if(!is_null($pciObject)){
+                    break;//stop at the first one
+                }
+            }  catch (PortableElementInvalidModelException $e) {
+                $invalidModelErrors = $e->getReportMessages();
+            }
+        }
+
+        if(is_null($pciObject)){
             $result['package'] = [
-                ['messages' => $e->getReportMessages()]
+                ['messages' => $invalidModelErrors]
             ];
             $this->returnJson($result);
             exit();
         }
 
-        if ($model->hasVersion()) {
-            $result['exists'] = $this->getRegistry()->has($model->getTypeIdentifier(), $model->getVersion());
+        if ($pciObject->hasVersion()) {
+            $result['exists'] = $this->getRegistry()->has($pciObject->getTypeIdentifier(), $pciObject->getVersion());
         } else {
-            $result['exists'] = $this->getRegistry()->has($model->getTypeIdentifier());
+            $result['exists'] = $this->getRegistry()->has($pciObject->getTypeIdentifier());
         }
 
 
         $all = $this->getRegistry()->getLatestCreators();
-        if(isset($all[$model->getTypeIdentifier()])){
-            $currentVersion = $all[$model->getTypeIdentifier()]->getVersion();
-            if(version_compare($model->getVersion(), $currentVersion, '<')){
+        if(isset($all[$pciObject->getTypeIdentifier()])){
+            $currentVersion = $all[$pciObject->getTypeIdentifier()]->getVersion();
+            if(version_compare($pciObject->getVersion(), $currentVersion, '<')){
                 $result['package'] = [['message' =>
                     __('A newer version of the pci "%s" already exists (current version: %s, target version: %s)',
-                        $model->getTypeIdentifier(), $currentVersion, $model->getVersion())
+                        $pciObject->getTypeIdentifier(), $currentVersion, $pciObject->getVersion())
                 ]];
                 $result['valid'] = false;
                 $this->returnJson($result);
@@ -147,8 +174,7 @@ class PciManager extends \tao_actions_CommonModule
 
         $result['valid'] = true;
 
-        $this->returnJson(array_merge($result, $this->getMinifiedModel($model)));
-        exit();
+        $this->returnJson(array_merge($result, $this->getMinifiedModel($pciObject)));
     }
 
     /**
@@ -156,18 +182,26 @@ class PciManager extends \tao_actions_CommonModule
      */
     public function add()
     {
-
         //as upload may be called multiple times, we remove the session lock as soon as possible
         session_write_close();
 
         try {
             $file = \tao_helpers_Http::getUploadedFile('content');
-        } catch(\common_exception_Error $e) {
+        } catch (\common_exception_Error $e) {
             throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
         }
-        $portableElement = $this->getService()->import(PciModel::PCI_IDENTIFIER, $file['tmp_name']);
 
-        $this->returnJson($this->getMinifiedModel($portableElement));
+        $pciModels = $this->getPciModels();
+        foreach ($pciModels as $pciModel) {
+            try {
+                $portableElement = $this->getService()->import($pciModel->getId(), $file['tmp_name']);
+                $this->returnJson($this->getMinifiedModel($portableElement));
+                if(!is_null($portableElement)){
+                    break;//stop at the first one
+                }
+            } catch (PortableElementInvalidModelException $e) {
+            }
+        }
     }
 
     /**
@@ -214,6 +248,7 @@ class PciManager extends \tao_actions_CommonModule
         $data = $object->toArray(array('typeIdentifier', 'label'));
         $data['version'] = $object->getVersion();
         $data['enabled'] = $object->isEnabled();
+        $data['model'] = $object->getModelId();
         return $data;
     }
 

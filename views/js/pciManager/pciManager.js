@@ -54,6 +54,16 @@ define([
         }
     };
 
+    var getModelName = function getModelName(name){
+        switch(name){
+            case 'PCI':
+                return 'OAT-PCI';
+            case 'IMSPCI':
+                return 'IMS-PCI';
+        }
+        return name;
+    };
+
     /**
      * Create a pci manager
      *
@@ -251,8 +261,11 @@ define([
                                 filename = $li.data('file-name'),
                                 packageMeta = selectedFiles[filename];
 
+                            console.log(packageMeta);
+
                             if(packageMeta){
                                 //update label:
+                                console.log(packageMeta);
                                 $li.prepend(packageMetaTpl(packageMeta));
                             }
                         });
@@ -298,7 +311,8 @@ define([
                                         selectedFiles[file.name] = {
                                             typeIdentifier : r.typeIdentifier,
                                             label : r.label,
-                                            version : r.version
+                                            version : r.version,
+                                            model : getModelName(r.model)
                                         };
                                     }
                                     cb(ok);
@@ -318,9 +332,11 @@ define([
                                     }
                                 }else{
                                     if(_.isArray(r.package)){
-                                        _.each(r.package, function(msg){
-                                            if(msg.message){
-                                                feedback().error(msg.message);
+                                        _.each(r.package, function(report){
+                                            if(_.isArray(report.messages)){
+                                                _.forEach(report.messages, function(msg){
+                                                    feedback().error(msg.message);
+                                                });
                                             }
                                         });
                                     }
