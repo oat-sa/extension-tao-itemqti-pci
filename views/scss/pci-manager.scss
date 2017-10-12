@@ -32,6 +32,7 @@
         }
         ul.files{
             overflow-y:auto;
+            min-height: 300px;
         }
         .pci-list-element{
             cursor: default !important;

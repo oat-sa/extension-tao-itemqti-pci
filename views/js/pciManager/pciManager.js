@@ -54,16 +54,6 @@ define([
         }
     };
 
-    var getModelName = function getModelName(name){
-        switch(name){
-            case 'PCI':
-                return 'OAT-PCI';
-            case 'IMSPCI':
-                return 'IMS-PCI';
-        }
-        return name;
-    };
-
     /**
      * Create a pci manager
      *
@@ -98,6 +88,8 @@ define([
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $switcher = $fileSelector.find('.upload-switcher a');
 
+                console.log('showListing');
+
                 hider.show($switcher.filter('.upload'));
                 hider.hide($switcher.filter('.listing'));
 
@@ -130,6 +122,7 @@ define([
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty');
 
+                console.log('updateListing');
                 if(_.size(listing)){
 
                     hider.hide($placeholder);
@@ -149,9 +142,11 @@ define([
                 }
             })
             .on('pciEnabled', function(){
+                console.log('pciEnabled');
                 this.trigger('updateListing');
             })
             .on('pciDisabled', function(){
+                console.log('pciDisabled');
                 this.trigger('updateListing');
             })
             .on('render', function() {
@@ -238,10 +233,12 @@ define([
                     }).on('end.uploader', function(){
 
                         if(errors.length === 0){
+                            console.log('upload complete');
                             //add delay to give enough time to the user to realize that the upload is completed and now transitioning to another view
                             _.delay(function(){
+                                console.log('sdsd');
                                 self.trigger('showListing');
-                            }, 500);
+                            }, 1000);
                         }else{
                             feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>", {encodeHtml: false});
                         }
@@ -309,7 +306,7 @@ define([
                                             typeIdentifier : r.typeIdentifier,
                                             label : r.label,
                                             version : r.version,
-                                            model : getModelName(r.model)
+                                            model : r.model
                                         };
                                     }
                                     cb(ok);
