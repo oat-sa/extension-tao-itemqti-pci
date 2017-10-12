@@ -34,6 +34,8 @@ class IMSPciModel implements PortableElementModel
 
     const PCI_IDENTIFIER = 'IMSPCI';
 
+    const PCI_LABEL = 'IMS PCI';
+
     const PCI_MANIFEST = 'pciCreator.json';
 
     const PCI_ENGINE = 'pciCreator.js';
@@ -41,6 +43,11 @@ class IMSPciModel implements PortableElementModel
     public function getId()
     {
         return self::PCI_IDENTIFIER;
+    }
+
+    public function getLabel()
+    {
+        return self::PCI_LABEL;
     }
 
     public function getDefinitionFiles()

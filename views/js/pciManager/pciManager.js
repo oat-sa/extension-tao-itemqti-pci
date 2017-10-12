@@ -261,11 +261,8 @@ define([
                                 filename = $li.data('file-name'),
                                 packageMeta = selectedFiles[filename];
 
-                            console.log(packageMeta);
-
                             if(packageMeta){
                                 //update label:
-                                console.log(packageMeta);
                                 $li.prepend(packageMetaTpl(packageMeta));
                             }
                         });

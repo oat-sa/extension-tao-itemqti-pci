@@ -1,7 +1,7 @@
 {{#each interactions}}
 <li data-type-identifier="{{typeIdentifier}}" class="pci-list-element{{#unless enabled}} disabled"{{/unless}}">
     <span class="desc truncate">
-        <span class="name">{{label}} - {{version}}</span>
+        <span class="name">({{model}}) - {{label}} - v{{version}}</span>
         <span class="disable-tag">- {{__ "disabled"}}</span>
     </span>
 
