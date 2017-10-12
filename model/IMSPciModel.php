@@ -23,6 +23,7 @@ namespace oat\qtiItemPci\model;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\PhpSerializeStateless;
 use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
+use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
@@ -86,8 +87,9 @@ class IMSPciModel implements PortableElementModel
 
     public function getDirectoryParser()
     {
-        //not available yet
-        return null;
+        $directoryParser = new PciDirectoryParser();
+        $directoryParser->setModel($this);
+        return $directoryParser;
     }
 
     public function getPackageParser()
