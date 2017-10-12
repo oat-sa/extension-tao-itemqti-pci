@@ -36,7 +36,7 @@
     "creator" : {
         "icon": "./creator/img/icon.svg",
         "hook": "./pciCreator.js",
-        "modules" : [
+        "libraries" : [
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/widget/Widget.js",

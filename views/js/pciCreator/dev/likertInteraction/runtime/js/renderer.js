@@ -16,12 +16,13 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
+define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/OAT/util/html'], function($, html){
     'use strict';
 
     function renderChoices(id, $container, config){
 
-        var $li,
+        var i,
+            $li,
             level = parseInt(config.level) || 5,
             $ul = $container.find('ul.likert');
         
@@ -29,7 +30,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
         $ul.empty();
         
         //add levels
-        for(var i = 1; i <= level; i++){
+        for(i = 1; i <= level; i++){
 
             $li = $('<li>', {'class' : 'likert'});
             $li.append($('<input>', {type : 'radio', name : id, value : i}));
