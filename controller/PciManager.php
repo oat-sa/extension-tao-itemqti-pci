@@ -221,20 +221,6 @@ class PciManager extends \tao_actions_CommonModule
         }
     }
 
-    /**
-     * Delete a custom interaction from the registry
-     */
-    public function delete()
-    {
-        if (!$this->hasRequestParameter('typeIdentifier')) {
-            throw new PortableElementException('Type identifier parameter missing.');
-        }
-        $typeIdentifier = $this->getRequestParameter('typeIdentifier');
-        $this->returnJson([
-            'success' => $this->getRegistry()->unregister(new PciDataObject($typeIdentifier))
-        ]);
-    }
-
     protected function getMinifiedModel(PortableElementObject $object)
     {
         $data = $object->toArray(array('typeIdentifier', 'label'));
