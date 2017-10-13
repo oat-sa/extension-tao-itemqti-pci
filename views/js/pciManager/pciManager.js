@@ -235,10 +235,7 @@ define([
                     }).on('end.uploader', function(){
 
                         if(errors.length === 0){
-                            //add delay to give enough time to the user to realize that the upload is completed and now transitioning to another view
-                            _.delay(function(){
-                                self.trigger('showListing');
-                            }, 500);
+                            self.trigger('showListing');
                         }else{
                             feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>", {encodeHtml: false});
                         }
