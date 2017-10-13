@@ -23,17 +23,17 @@ define([
     'helpers',
     'ui/component',
     'ui/hider',
+    'ui/switch/switch',
     'tpl!qtiItemPci/pciManager/tpl/layout',
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
     'async',
     'ui/dialog/confirm',
-    'ui/deleter',
     'ui/feedback',
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function($, __, _, helpers, component, hider, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, deleter, feedback){
+], function($, __, _, helpers, component, hider, switchFactory, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, feedback){
     'use strict';
 
     var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
@@ -78,7 +78,7 @@ define([
          * @fires pciManager#hideListing - when the list of pci is hidden
          * @fires pciManager#updateListing - when the list of pci is updated
          * @fires pciManager#pciEnabled - when a pci is enabled
-         * @fires pciManager#pciDisabled - when a pci is disabled
+         * @fires pciManager#pciDisabled - when a pci is pci-disabled
          */
         return component(pciManager, _defaults)
             .setTemplate(layoutTpl)
@@ -87,8 +87,6 @@ define([
                     $title = $fileSelector.find('.title'),
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $switcher = $fileSelector.find('.upload-switcher a');
-
-                console.log('showListing');
 
                 hider.show($switcher.filter('.upload'));
                 hider.hide($switcher.filter('.listing'));
@@ -118,11 +116,12 @@ define([
                 hider.show($uploader);
             })
             .on('updateListing', function(){
-                var $fileSelector = this.getElement().find('.file-selector'),
+                var self = this,
+                    urls = _.pick(this.config, ['disableUrl', 'enableUrl']),
+                    $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty');
 
-                console.log('updateListing');
                 if(_.size(listing)){
 
                     hider.hide($placeholder);
@@ -133,6 +132,36 @@ define([
                             interactions : listing
                         }));
 
+                    $fileContainer.find('.switch-box').each(function(){
+                        var $switch = $(this);
+                        var $li = $switch.closest('.pci-list-element');
+                        var typeIdentifier = $li.data('type-identifier');
+                        switchFactory($switch, {
+                            on : {
+                                active : !$li.hasClass('pci-disabled')
+                            },
+                            off : {
+                                active : $li.hasClass('pci-disabled')
+                            }
+                        }).on('on', function(){
+                            $li.removeClass('pci-disabled');
+                            $.getJSON(urls.enableUrl, {typeIdentifier : typeIdentifier}, function(data){
+                                if(data.success){
+                                    listing[typeIdentifier].enabled = true;
+                                    self.trigger('pciEnabled', typeIdentifier);
+                                }
+                            });
+                        }).on('off', function(){
+                            $li.addClass('pci-disabled');
+                            $.getJSON(urls.disableUrl, {typeIdentifier : typeIdentifier}, function(data){
+                                if(data.success){
+                                    listing[typeIdentifier].enabled = false;
+                                    self.trigger('pciDisabled', typeIdentifier);
+                                }
+                            });
+                        });
+                    });
+
                     hider.show($fileContainer);
 
                 }else{
@@ -142,11 +171,9 @@ define([
                 }
             })
             .on('pciEnabled', function(){
-                console.log('pciEnabled');
                 this.trigger('updateListing');
             })
             .on('pciDisabled', function(){
-                console.log('pciDisabled');
                 this.trigger('updateListing');
             })
             .on('render', function() {
@@ -180,31 +207,6 @@ define([
                 });
 
                 function initEventListeners(){
-
-                    deleter($fileContainer);
-
-                    $fileContainer.on('click', 'li[data-type-identifier] a[data-role=enable]', function(){
-                        var $li = $(this).closest('.pci-list-element');
-                        var typeIdentifier = $li.data('type-identifier');
-                        $li.removeClass('disabled');
-                        $.getJSON(urls.enableUrl, {typeIdentifier : typeIdentifier}, function(data){
-                            if(data.success){
-                                listing[typeIdentifier].enabled = true;
-                                self.trigger('pciEnabled', typeIdentifier);
-                            }
-                        });
-                    }).on('click', 'li[data-type-identifier] a[data-role=disable]', function(){
-                        var $li = $(this).closest('.pci-list-element');
-                        var typeIdentifier = $li.data('type-identifier');
-                        $li.addClass('disabled');
-                        $.getJSON(urls.disableUrl, {typeIdentifier : typeIdentifier}, function(data){
-                            if(data.success){
-                                listing[typeIdentifier].enabled = false;
-                                self.trigger('pciDisabled', typeIdentifier);
-                            }
-                        });
-                    });
-
                     //switch to upload mode
                     $switcher.on('click', function(e){
                         e.preventDefault();
@@ -233,12 +235,10 @@ define([
                     }).on('end.uploader', function(){
 
                         if(errors.length === 0){
-                            console.log('upload complete');
                             //add delay to give enough time to the user to realize that the upload is completed and now transitioning to another view
                             _.delay(function(){
-                                console.log('sdsd');
                                 self.trigger('showListing');
-                            }, 1000);
+                            }, 500);
                         }else{
                             feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>", {encodeHtml: false});
                         }
