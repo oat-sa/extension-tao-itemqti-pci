@@ -8,7 +8,7 @@
             </div>
             <div class="upload-switcher rgt">
                 <a href="#" class="btn-info small upload"><span class="icon-add"></span>{{__ 'Add Interaction'}}</a>
-                <a href="#" class="btn-info small listing"><span class="icon-undo"></span>{{__ 'Back to listing'}}</a>
+                <a href="#" class="btn-info small listing hidden"><span class="icon-undo"></span>{{__ 'Back to listing'}}</a>
             </div>
         </h1>
         
@@ -18,7 +18,7 @@
 
         <ul class="files"></ul>
 
-        <div class="file-upload-container"></div>
+        <div class="file-upload-container hidden"></div>
         
         <div class="note-container"><span class="note">*</span>{{__ "warning : changes affect all users of the item creator"}}</div>
     </section>   

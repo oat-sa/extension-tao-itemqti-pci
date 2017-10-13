@@ -36,6 +36,8 @@ class PciModel implements PortableElementModel
 
     const PCI_IDENTIFIER = 'PCI';
 
+    const PCI_LABEL = 'OAT PCI';
+
     const PCI_MANIFEST = 'pciCreator.json';
 
     const PCI_ENGINE = 'pciCreator.js';
@@ -43,6 +45,11 @@ class PciModel implements PortableElementModel
     public function getId()
     {
         return self::PCI_IDENTIFIER;
+    }
+
+    public function getLabel()
+    {
+        return self::PCI_LABEL;
     }
 
     public function getDefinitionFiles()

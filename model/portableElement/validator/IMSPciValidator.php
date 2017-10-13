@@ -49,10 +49,6 @@ class IMSPciValidator extends PortableElementModelValidator
     {
         $pciConstraints = [
             'runtime' => [
-                'hook',
-                'libraries',
-                'stylesheets',
-                'mediaFiles',
                 'modules',
                 'config'
             ],
