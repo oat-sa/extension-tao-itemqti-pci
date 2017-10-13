@@ -16,7 +16,12 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  *
  */
-define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
+define([
+    'qtiCustomInteractionContext',
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'likertInteraction/runtime/js/renderer',
+    'taoQtiItem/portableLib/OAT/util/event'
+], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
 
     var _typeIdentifier = 'likertInteraction';

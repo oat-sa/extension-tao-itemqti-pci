@@ -16,12 +16,13 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
+define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/OAT/util/html'], function($, html){
     'use strict';
 
     function renderChoices(id, $container, config){
 
-        var $li,
+        var i,
+            $li,
             level = parseInt(config.level) || 5,
             $ul = $container.find('ul.likert');
         
@@ -29,7 +30,7 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
         $ul.empty();
         
         //add levels
-        for(var i = 1; i <= level; i++){
+        for(i = 1; i <= level; i++){
 
             $li = $('<li>', {'class' : 'likert'});
             $li.append($('<input>', {type : 'radio', name : id, value : i}));
@@ -38,16 +39,11 @@ define(['IMSGlobal/jquery_2_1_1', 'OAT/util/html'], function($, html){
         }
     }
 
-    function renderLabels(id, $container, config, assetManager){
+    function renderLabels(id, $container, config){
 
         var $ul = $container.find('ul.likert');
         var $labelMin = $('<span>', {'class' : 'likert-label likert-label-min'}).html(config['label-min']);
         var $labelMax = $('<span>', {'class' : 'likert-label likert-label-max'}).html(config['label-max']);
-
-        if(assetManager){
-            $labelMin.append($('<img>', {src: assetManager.resolve('likertInteraction/runtime/assets/ThumbDown.png')}).css({top: 6, marginLeft:12}));
-            $labelMax.prepend($('<img>', {src: assetManager.resolve('likertInteraction/runtime/assets/ThumbUp.png')}).css({top: 2, marginRight:12}));
-        }
 
         $ul.before($labelMin);
         $ul.after($labelMax);

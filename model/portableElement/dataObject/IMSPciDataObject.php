@@ -22,27 +22,6 @@ namespace oat\qtiItemPci\model\portableElement\dataObject;
 
 class IMSPciDataObject extends PciDataObject
 {
-    /**
-     * Return runtime files with relative path
-     *
-     * @return array
-     */
-    public function getRuntimePath()
-    {
-        //simply return the assigned runtime configuration data with no change
-        return $this->getRuntime();
-    }
-
-    /**
-     * Return creator files with relative aliases
-     *
-     * @return array
-     */
-    public function getRuntimeAliases()
-    {
-        //simply return the assigned runtime configuration data with no change
-        return $this->getRuntime();
-    }
 
     /**
      * Get the registration path of the source within a standard QTI package
@@ -81,5 +60,76 @@ class IMSPciDataObject extends PciDataObject
     public function getRegistrationExcludedKey(){
         //per standard the waitSeconds is an integer so should not be registered as a file
         return ['waitSeconds'];
+    }
+
+    /**
+     * Return runtime files with relative path
+     *
+     * @return array
+     */
+    public function getRuntimePath()
+    {
+        $paths = [];
+
+        $runtimeManifest = $this->getRuntime();
+        if(isset($runtimeManifest['src'])){
+            $paths['src'] = preg_replace('/^' . $this->getTypeIdentifier() . '/', '.', $runtimeManifest['src']);
+        }
+
+        $modules = [];
+        if(isset($runtimeManifest['modules'])){
+
+            foreach($runtimeManifest['modules'] as $module){
+                //merge all module declaration as numeric array
+                $modules = array_merge($modules, array_values($module));
+            }
+        }
+        if(isset($runtimeManifest['config'])){
+            $configs = [];
+            foreach($runtimeManifest['config'] as $config){
+                if(isset($config['file'])){
+                    $configs[] = $config['file'];
+                }
+                if(isset($config['data']) && isset($config['data']['paths']) && is_array($config['data']['paths'])){
+                    $modules = array_merge($modules, array_values($config['data']['paths']));
+                }
+            }
+            $paths['config'] = $configs;
+        }
+
+        $paths['modules'] = $modules;
+
+        return $paths;
+    }
+
+    public function getRuntimeAliases()
+    {
+        $runtimeManifest = $this->getRuntime();
+        if(isset($runtimeManifest['src'])) {
+            $runtimeManifest['src'] = $this->getAlias($runtimeManifest['src']);
+        }
+
+        if(isset($runtimeManifest['modules'])){
+            foreach($runtimeManifest['modules'] as $id => $paths){
+                $runtimeManifest['modules'][$id] = $this->getAlias($paths);
+            }
+        }
+        if(isset($runtimeManifest['config'])){
+            foreach($runtimeManifest['config'] as &$config){
+                if(isset($config['file'])){
+                    $config['file'] = $this->getAlias($config['file']);
+                }
+                if(isset($config['data']) && isset($config['data']['paths']) && is_array($config['data']['paths'])){
+                    $config['data']['paths'] = $this->getAlias($config['data']['paths']);
+                }
+            }
+        }
+
+        return $runtimeManifest;
+    }
+
+    protected function getAlias($paths = []){
+        return $paths;
+        return preg_replace('/^(.\/)?(.*)/', $this->getTypeIdentifier() . "/$2", $paths);
     }
 }

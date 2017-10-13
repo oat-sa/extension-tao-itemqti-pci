@@ -23,6 +23,8 @@ namespace oat\qtiItemPci\model;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\PhpSerializeStateless;
 use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
+use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
+use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
@@ -33,6 +35,8 @@ class IMSPciModel implements PortableElementModel
 
     const PCI_IDENTIFIER = 'IMSPCI';
 
+    const PCI_LABEL = 'IMS PCI';
+
     const PCI_MANIFEST = 'pciCreator.json';
 
     const PCI_ENGINE = 'pciCreator.js';
@@ -40,6 +44,11 @@ class IMSPciModel implements PortableElementModel
     public function getId()
     {
         return self::PCI_IDENTIFIER;
+    }
+
+    public function getLabel()
+    {
+        return self::PCI_LABEL;
     }
 
     public function getDefinitionFiles()
@@ -78,14 +87,16 @@ class IMSPciModel implements PortableElementModel
 
     public function getDirectoryParser()
     {
-        //not available yet
-        return null;
+        $directoryParser = new PciDirectoryParser();
+        $directoryParser->setModel($this);
+        return $directoryParser;
     }
 
     public function getPackageParser()
     {
-        //not available yet
-        return null;
+        $packageParser = new PciPackagerParser();
+        $packageParser->setModel($this);
+        return $packageParser;
     }
 
     public function getQtiElementClassName()
