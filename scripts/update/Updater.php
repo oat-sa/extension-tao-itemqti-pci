@@ -238,5 +238,14 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         $this->skip('3.4.0', '3.5.0');
+
+        if($this->isVersion('3.5.0')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.2.0']);
+            call_user_func(new RegisterPciLikertScale(), ['0.4.0']);
+            call_user_func(new RegisterPciLiquid(), ['0.3.0']);
+            call_user_func(new RegisterPciMathEntry(), ['0.6.0']);
+            $this->setVersion('3.5.1');
+        }
+
     }
 }
