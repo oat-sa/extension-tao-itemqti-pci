@@ -87,6 +87,7 @@ class IMSPciModel implements PortableElementModel
 
     public function getDirectoryParser()
     {
+        return null;
         $directoryParser = new PciDirectoryParser();
         $directoryParser->setModel($this);
         return $directoryParser;
@@ -94,6 +95,7 @@ class IMSPciModel implements PortableElementModel
 
     public function getPackageParser()
     {
+        return null;
         $packageParser = new PciPackagerParser();
         $packageParser->setModel($this);
         return $packageParser;
