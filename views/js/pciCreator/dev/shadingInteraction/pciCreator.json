@@ -1,0 +1,19 @@
+{
+    "model" : "IMSPCI",
+    "typeIdentifier": "hmhcoPciShading",
+    "label": "pci:shading",
+    "short": "shading",
+    "description": "",
+    "version": "0.1.0",
+    "author": "Padraig O hIceadha",
+    "email": "Padraig.OhIceadha@hmhco.com",
+    "tags": [],
+    "runtime" : {
+        "config" : [],
+        "modules" : {
+            "shading" : [
+                "hmh/modules/shading.js"
+            ]
+        }
+    }
+}

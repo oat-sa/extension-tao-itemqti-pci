@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<manifest xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 http://www.imsglobal.org/xsd/qti/qtiv2p2/qtiv2p2_imscpv1p2_v1p0.xsd" identifier="MANIFEST-tao59e60045038754-50331866">
+    <metadata>
+        <schema>QTIv2.2 Package</schema>
+        <schemaversion>1.0.0</schemaversion>
+    </metadata>
+    <organizations/>
+    <resources>
+                <resource identifier="i1508244964682167" type="imsqti_item_xmlv2p2" href="i1508244964682167/qti.xml">
+            <file href="i1508244964682167/qti.xml"/>
+                        <file href="hmh/modules/shading.js"/>
+                    </resource>
+            </resources>
+</manifest>

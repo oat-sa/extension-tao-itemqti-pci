@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem
+        xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
+        xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction_v1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/imsqti_v2p1.xsd"
+        identifier="fractions-no-dependencies"
+        title="Simple Shaded Grid Interaction with no module dependencies"
+        adaptive="false"
+        timeDependent="false">
+    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer">
+        <correctResponse>
+            <value>1</value>
+        </correctResponse>
+    </responseDeclaration>
+    <responseDeclaration identifier="EXAMPLE" cardinality="single" baseType="integer">
+        <correctResponse>
+            <value>6</value>
+        </correctResponse>
+    </responseDeclaration>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">
+        <defaultValue>
+            <value>0.0</value>
+        </defaultValue>
+    </outcomeDeclaration>
+    <itemBody>
+        <div>
+            Mary is saving to buy a birthday present for her mother.
+            Every week she counts the money she has saved into piles of $5.
+            At the end of the first week Mary had saved $10 and was planning to
+            buy her mother a present worth $30.
+            <p> </p>
+            She represented this in the following shaded chart with a shaded square
+            for every $5 saved and a target of $30.
+            <p> </p>
+            <customInteraction responseIdentifier="EXAMPLE" id="shadedGridExample">
+                <portableCustomInteraction customInteractionTypeIdentifier="hmhcoPciShading" xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1">
+                    <properties>
+                        <property key="controls">none</property>
+                        <property key="render">grid</property>
+                        <property key="selected">0.0,1.0</property>
+                        <property key="selected_color">red</property>
+                        <property key="unselected_color">white</property>
+                        <property key="dimension1_initial">3</property>
+                        <property key="dimension2_initial">2</property>
+                        <property key="element_diameter">60</property>
+                        <property key="value">numShaded</property>
+                        <property key="active">0</property>
+                    </properties>
+                    <modules>
+                        <!-- the primaryPath URL is deliberately incorrect to demonstrate the use of the fallbackPath -->
+                        <module id="shading" primaryPath="hmh/modules/shading.js"/>
+                    </modules>
+                    <markup xmlns="http://www.w3.org/1999/xhtml">
+                        <!-- PCI hook dynamically adds content to this div. -->
+                        <div></div>
+                    </markup>
+                </portableCustomInteraction>
+            </customInteraction>
+            <p>By the second week she has already saved the exact amount she planned
+                on spending on the present ($30) and is trying to work out if she will be able
+                to afford a more expensive present costing $45.</p>
+            <p>To help her do this use the buttons below to create a chart representing
+                $45 assuming that each square represents $5 and then click to shade the
+                fraction of the chart representing the amount saved in two weeks.</p>
+            <customInteraction responseIdentifier="RESPONSE" id="shadedGridPresent">
+                <portableCustomInteraction customInteractionTypeIdentifier="hmhcoPciShading" xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1">
+                    <properties>
+                        <property key="controls">full</property>
+                        <property key="render">grid</property>
+                        <property key="selected_color">red</property>
+                        <property key="unselected_color">white</property>
+                        <property key="dimension1_initial">2</property>
+                        <property key="dimension2_initial">2</property>
+                        <property key="element_diameter">60</property>
+                        <property key="value">numShaded</property>
+                    </properties>
+                    <modules>
+                        <!-- the primaryPath URL is deliberately incorrect to demonstrate the use of the fallbackPath -->
+                        <module id="shading" primaryPath="hmh/modules/shading.js"/>
+                    </modules>
+                    <markup xmlns="http://www.w3.org/1999/xhtml">
+                        <!-- PCI module dynamically adds content to this div. -->
+                        <div></div>
+                    </markup>
+                </portableCustomInteraction>
+            </customInteraction>
+        </div>
+    </itemBody>
+    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>
