@@ -34,7 +34,7 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     }
 
 
-    public function _testParseOatPci(){
+    public function testParseOatPci(){
         $qtiParser = new Parser(dirname(__FILE__).'/samples/xml/oat/version_and_assets.xml');
 
         $qtiParser->validate();
@@ -74,7 +74,7 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     /**
      * @dataProvider imsPciPovider
      */
-    public function _testParseImsPci($file){
+    public function testParseImsPci($file){
 
         $qtiParser = new Parser($file);
         $qtiParser->validate();
@@ -107,7 +107,7 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $pci->getProperties());
     }
 
-    public function _testParseImsPciWithConfig(){
+    public function testParseImsPciWithConfig(){
         $qtiParser = new Parser(dirname(__FILE__).'/samples/xml/ims/likert-v1.xml');
 
         $qtiParser->validate();
