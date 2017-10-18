@@ -127,8 +127,10 @@ class PciManager extends \tao_actions_CommonModule
                 if(!is_null($pciObject)){
                     break;//stop at the first one
                 }
-            }  catch (PortableElementInvalidModelException $e) {
+            } catch (PortableElementInvalidModelException $e) {
                 $invalidModelErrors = $e->getReportMessages();
+            } catch (PortableElementParserException $e){
+                $invalidModelErrors[] = ['message' => $e->getMessage()];
             }
         }
 
@@ -190,6 +192,7 @@ class PciManager extends \tao_actions_CommonModule
                     break;//stop at the first one
                 }
             } catch (PortableElementInvalidModelException $e) {
+            } catch (PortableElementParserException $e) {
             }
         }
     }

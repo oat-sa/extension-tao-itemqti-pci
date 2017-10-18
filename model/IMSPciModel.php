@@ -37,9 +37,9 @@ class IMSPciModel implements PortableElementModel
 
     const PCI_LABEL = 'IMS PCI';
 
-    const PCI_MANIFEST = 'pciCreator.json';
+    const PCI_MANIFEST = 'imsPciCreator.json';
 
-    const PCI_ENGINE = 'pciCreator.js';
+    const PCI_ENGINE = 'imsPciCreator.js';
 
     public function getId()
     {
@@ -87,7 +87,6 @@ class IMSPciModel implements PortableElementModel
 
     public function getDirectoryParser()
     {
-        return null;
         $directoryParser = new PciDirectoryParser();
         $directoryParser->setModel($this);
         return $directoryParser;
@@ -95,7 +94,6 @@ class IMSPciModel implements PortableElementModel
 
     public function getPackageParser()
     {
-        return null;
         $packageParser = new PciPackagerParser();
         $packageParser->setModel($this);
         return $packageParser;

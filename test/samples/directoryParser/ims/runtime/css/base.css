@@ -1,0 +1,7 @@
+.qti-customInteraction .likertInteraction{
+    width:100%;
+    padding:10px 20px 16px;
+    margin-bottom:20px;
+    background-image: url("img/bg.png");
+    background-repeat: repeat;
+}
