@@ -124,7 +124,6 @@ class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
         }
 
         $portableAssetHandler->finalize();
-
         foreach($portableObjects as $portableObject){
             $retrivedElement = $portableElementService->getPortableElementByIdentifier($portableObject->getModel()->getId(), $portableObject->getTypeIdentifier());
             $this->assertEquals($portableObject->getTypeIdentifier(), $retrivedElement->getTypeIdentifier());

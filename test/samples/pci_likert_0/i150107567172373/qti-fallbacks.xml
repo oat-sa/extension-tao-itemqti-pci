@@ -9,7 +9,6 @@
       <div class="col-12">
         <customInteraction responseIdentifier="RESPONSE">
           <pci:portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteractionSample" data-version="1.0.0">
-            <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
             <pci:properties>
               <pci:property key="level">5</pci:property>
               <pci:property key="label-min">min</pci:property>

@@ -38,8 +38,7 @@
       <div class="col-12">
         <customInteraction responseIdentifier="RESPONSE_1">
           <portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteraction" hook="" xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction">
-            <responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
-            <resources location="http://imsglobal.org/oatpci/1.0.15/sharedLibraries.xml">
+            <resources>
               <libraries>
                 <lib id="IMSGlobal/jquery_2_1_1"/>
                 <lib id="likertScaleInteraction/runtime/renderer"/>

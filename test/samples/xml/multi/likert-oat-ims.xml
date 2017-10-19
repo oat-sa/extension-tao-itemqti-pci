@@ -38,8 +38,7 @@
       <div class="col-12">
         <customInteraction responseIdentifier="RESPONSE_1">
           <oatpci:portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteraction" hook="">
-            <oatpci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
-            <oatpci:resources location="http://imsglobal.org/oatpci/1.0.15/sharedLibraries.xml">
+            <oatpci:resources>
               <oatpci:libraries>
                 <oatpci:lib id="IMSGlobal/jquery_2_1_1"/>
                 <oatpci:lib id="likertScaleInteraction/runtime/renderer"/>
