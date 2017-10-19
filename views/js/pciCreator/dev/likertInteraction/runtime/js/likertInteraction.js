@@ -196,4 +196,6 @@ define([
     };
 
     qtiCustomInteractionContext.register(likertInteraction);
+
+    return likertInteraction;
 });

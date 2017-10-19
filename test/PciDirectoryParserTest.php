@@ -51,7 +51,5 @@ class PciDirectoryParserTest extends TaoPhpUnitTestRunner
 
         $this->assertTrue($imsPciDirectoryParser->hasValidPortableElement($imsPciDir));
         $this->assertNotTrue($oatPciDirectoryParser->hasValidPortableElement($imsPciDir));
-
-        $oatPciDirectoryParser->validate();
     }
 }

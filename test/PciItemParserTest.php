@@ -173,7 +173,7 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals(1, count($pcis));
         $oatPci = reset($pcis);
 
-        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNs()->getUri());
-        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $imsPci->getNs()->getUri());
+        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNamespace()->getUri());
+        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $imsPci->getNamespace()->getUri());
     }
 }
