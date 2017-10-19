@@ -41,6 +41,8 @@ class IMSPciModel implements PortableElementModel
 
     const PCI_ENGINE = 'imsPciCreator.js';
 
+    const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction_v1';
+
     public function getId()
     {
         return self::PCI_IDENTIFIER;
@@ -49,6 +51,11 @@ class IMSPciModel implements PortableElementModel
     public function getLabel()
     {
         return self::PCI_LABEL;
+    }
+
+    public function getNamespace()
+    {
+        return self::PCI_NAMESPACE;
     }
 
     public function getDefinitionFiles()
