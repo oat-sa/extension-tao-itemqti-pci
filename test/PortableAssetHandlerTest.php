@@ -29,7 +29,7 @@ use oat\taoQtiItem\model\portableElement\parser\itemParser\PortableElementItemPa
 
 class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
 {
-    public function testLikertV0()
+    public function testImsLikertV0()
     {
         $packageDir = dirname(__FILE__).'/samples/pci_likert_0/';
         $qtiParser = new Parser($packageDir.'/i150107567172373/qti.xml');
@@ -67,10 +67,7 @@ class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
         foreach($portableObjects as $portableObject) {
             try{
                 $portableElementService->unregisterModel($portableObject);
-            }catch(PortableElementNotFoundException $e){
-
-            }
-
+            }catch(PortableElementNotFoundException $e){}
         }
 
         $portableAssetHandler->finalize();
@@ -83,7 +80,7 @@ class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
         }
     }
 
-    public function testLikertV1()
+    public function testImsLikertV1()
     {
         $packageDir = dirname(__FILE__).'/samples/pci_likert_1/';
         $qtiParser = new Parser($packageDir.'/i150107567172373/qti.xml');
@@ -124,6 +121,61 @@ class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
         }
 
         $portableAssetHandler->finalize();
+        foreach($portableObjects as $portableObject){
+            $retrivedElement = $portableElementService->getPortableElementByIdentifier($portableObject->getModel()->getId(), $portableObject->getTypeIdentifier());
+            $this->assertEquals($portableObject->getTypeIdentifier(), $retrivedElement->getTypeIdentifier());
+
+            $portableElementService->unregisterModel($retrivedElement);
+        }
+    }
+
+    public function testOatLikertV0()
+    {
+        $packageDir = dirname(__FILE__).'/samples/oat_likert_0/';
+        $itemDir = $packageDir . 'i150107567172373/';
+        $qtiParser = new Parser($itemDir.'qti.xml');
+        $portableAssetHandler = new PortableAssetHandler($qtiParser->load(), $packageDir, $itemDir);
+
+        $portableElementService = new PortableElementService();
+
+        $reflectionClass = new \ReflectionClass(PortableAssetHandler::class);
+        $reflectionProperty = $reflectionClass->getProperty('portableItemParser');
+        $reflectionProperty->setAccessible(true);
+        $this->assertInstanceOf(PortableElementItemParser::class, $reflectionProperty->getValue($portableAssetHandler));
+
+        $portableItemParser = $reflectionProperty->getValue($portableAssetHandler);
+
+        $reqs = [
+            'likertScaleInteractionSample/runtime/js/likertScaleInteractionSample.js',
+            'likertScaleInteractionSample/runtime/js/renderer.js',
+            'likertScaleInteractionSample/runtime/css/base.css',
+            'likertScaleInteractionSample/runtime/css/likertScaleInteractionSample.css',
+            'likertScaleInteractionSample/runtime/assets/ThumbDown.png',
+            'likertScaleInteractionSample/runtime/assets/ThumbUp.png',
+            'likertScaleInteractionSample/runtime/css/img/bg.png'
+        ];
+
+        //check that required files are
+        foreach($reqs as $req){
+            $this->assertEquals(true, $portableAssetHandler->isApplicable($req));
+            $absPath = $itemDir. '/' . $req;
+            $this->assertEquals(false, empty($portableAssetHandler->handle($absPath, $req)));
+        }
+
+        //check that not required files are not
+        $this->assertEquals(false, $portableAssetHandler->isApplicable('likertScaleInteractionSample/runtime/js/renderer-unexisting.js'));
+        $this->assertEquals(false, $portableAssetHandler->isApplicable('oat-pci-unexisting.json'));
+
+        $portableObjects = $portableItemParser->getPortableObjects();
+
+        foreach($portableObjects as $portableObject) {
+            try{
+                $portableElementService->unregisterModel($portableObject);
+            }catch(PortableElementNotFoundException $e){}
+        }
+
+        $portableAssetHandler->finalize();
+
         foreach($portableObjects as $portableObject){
             $retrivedElement = $portableElementService->getPortableElementByIdentifier($portableObject->getModel()->getId(), $portableObject->getTypeIdentifier());
             $this->assertEquals($portableObject->getTypeIdentifier(), $retrivedElement->getTypeIdentifier());
