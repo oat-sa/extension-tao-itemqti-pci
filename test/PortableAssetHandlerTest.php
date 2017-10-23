@@ -31,7 +31,7 @@ class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
 {
     public function testImsLikertV0()
     {
-        $packageDir = dirname(__FILE__).'/samples/pci_likert_0/';
+        $packageDir = dirname(__FILE__).'/samples/ims_likert_0/';
         $qtiParser = new Parser($packageDir.'/i150107567172373/qti.xml');
         $portableAssetHandler = new PortableAssetHandler($qtiParser->load(), $packageDir);
 
@@ -82,7 +82,7 @@ class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
 
     public function testImsLikertV1()
     {
-        $packageDir = dirname(__FILE__).'/samples/pci_likert_1/';
+        $packageDir = dirname(__FILE__).'/samples/ims_likert_1/';
         $qtiParser = new Parser($packageDir.'/i150107567172373/qti.xml');
         $portableAssetHandler = new PortableAssetHandler($qtiParser->load(), $packageDir);
 
