@@ -121,6 +121,7 @@ class PciManager extends \tao_actions_CommonModule
 
         $invalidModelErrors = [];
         $pciModels = $this->getPciModels();
+        $pciObject = null;
         foreach($pciModels as $pciModel){
             try {
                 $pciObject = $this->getService()->getValidPortableElementFromZipSource($pciModel->getId(), $file['tmp_name']);
