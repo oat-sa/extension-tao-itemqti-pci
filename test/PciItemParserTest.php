@@ -176,4 +176,25 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNamespace()->getUri());
         $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $imsPci->getNamespace()->getUri());
     }
+
+    public function testParseOatMulti(){
+
+        $qtiParser = new Parser(dirname(__FILE__).'/samples/xml/oat/likert_audio.xml');
+
+        $qtiParser->validate();
+        if(!$qtiParser->isValid()){
+            echo $qtiParser->displayErrors();
+        }
+
+        $item = $qtiParser->load();
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+
+        $this->assertEquals(2, count($item->getInteractions()));
+
+        $pcis = $item->getComposingElements('\\oat\\taoQtiItem\\model\\qti\\interaction\\PortableCustomInteraction');
+        $this->assertEquals(2, count($pcis));
+        $oatPci = array_pop($pcis);
+
+        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNamespace()->getUri());
+    }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<manifest xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 http://www.imsglobal.org/xsd/qti/qtiv2p2/qtiv2p2_imscpv1p2_v1p0.xsd" identifier="MANIFEST-tao59edef31dba0d7-45020501">
+    <metadata>
+        <schema>QTIv2.2 Package</schema>
+        <schemaversion>1.0.0</schemaversion>
+    </metadata>
+    <organizations/>
+    <resources>
+                <resource identifier="i1508765460275176" type="imsqti_item_xmlv2p2" href="i1508765460275176/qti.xml">
+            <file href="i1508765460275176/qti.xml"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/likertScaleInteraction.min.js"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/css/base.css"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/css/likertScaleInteraction.css"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/assets/ThumbDown.png"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/assets/ThumbUp.png"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/css/img/bg.png"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/js/likertScaleInteraction.js"/>
+                        <file href="i1508765460275176/likertScaleInteraction/runtime/js/renderer.js"/>
+                        <file href="i1508765460275176/audioRecordingInteraction/runtime/audioRecordingInteraction.js"/>
+                        <file href="i1508765460275176/audioRecordingInteraction/runtime/js/player.js"/>
+                        <file href="i1508765460275176/audioRecordingInteraction/runtime/js/recorder.js"/>
+                        <file href="i1508765460275176/audioRecordingInteraction/runtime/js/uiElements.js"/>
+                        <file href="i1508765460275176/audioRecordingInteraction/runtime/css/audioRecordingInteraction.css"/>
+                        <file href="i1508765460275176/audioRecordingInteraction/runtime/img/controls.svg"/>
+                        <file href="i1508765460275176/audioRecordingInteraction/runtime/img/mic.svg"/>
+                    </resource>
+            </resources>
+</manifest>

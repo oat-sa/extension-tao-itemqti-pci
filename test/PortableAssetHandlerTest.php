@@ -183,4 +183,65 @@ class PortableAssetHandlerTest extends TaoPhpUnitTestRunner
             $portableElementService->unregisterModel($retrivedElement);
         }
     }
+
+    public function testOatComposite()
+    {
+        $packageDir = dirname(__FILE__).'/samples/oat_likert_audio/';
+        $itemDir = $packageDir . 'i1508765460275176/';
+        $qtiParser = new Parser($itemDir.'qti.xml');
+        $portableAssetHandler = new PortableAssetHandler($qtiParser->load(), $packageDir, $itemDir);
+
+        $portableElementService = new PortableElementService();
+
+        $reflectionClass = new \ReflectionClass(PortableAssetHandler::class);
+        $reflectionProperty = $reflectionClass->getProperty('portableItemParser');
+        $reflectionProperty->setAccessible(true);
+        $this->assertInstanceOf(PortableElementItemParser::class, $reflectionProperty->getValue($portableAssetHandler));
+
+        $portableItemParser = $reflectionProperty->getValue($portableAssetHandler);
+
+        $reqs = [
+            'likertScaleInteraction/runtime/likertScaleInteraction.min.js',
+            'likertScaleInteraction/runtime/css/base.css',
+            'likertScaleInteraction/runtime/css/likertScaleInteraction.css',
+            'likertScaleInteraction/runtime/assets/ThumbDown.png',
+            'likertScaleInteraction/runtime/assets/ThumbUp.png',
+            'likertScaleInteraction/runtime/css/img/bg.png',
+            'audioRecordingInteraction/runtime/audioRecordingInteraction.js',
+            'audioRecordingInteraction/runtime/js/player.js',
+            'audioRecordingInteraction/runtime/js/recorder.js',
+            'audioRecordingInteraction/runtime/js/uiElements.js',
+            'audioRecordingInteraction/runtime/css/audioRecordingInteraction.css',
+            'audioRecordingInteraction/runtime/img/controls.svg',
+            'audioRecordingInteraction/runtime/img/mic.svg'
+        ];
+
+        //check that required files are
+        foreach($reqs as $req){
+            $this->assertEquals(true, $portableAssetHandler->isApplicable($req));
+            $absPath = $itemDir. '/' . $req;
+            $this->assertEquals(false, empty($portableAssetHandler->handle($absPath, $req)));
+        }
+
+        //check that not required files are not
+        $this->assertEquals(false, $portableAssetHandler->isApplicable('likertScaleInteraction/runtime/js/renderer-unexisting.js'));
+        $this->assertEquals(false, $portableAssetHandler->isApplicable('oat-pci-unexisting.json'));
+
+        $portableObjects = $portableItemParser->getPortableObjects();
+
+        foreach($portableObjects as $portableObject) {
+            try{
+                $portableElementService->unregisterModel($portableObject);
+            }catch(PortableElementNotFoundException $e){}
+        }
+
+        $portableAssetHandler->finalize();
+
+        foreach($portableObjects as $portableObject){
+            $retrivedElement = $portableElementService->getPortableElementByIdentifier($portableObject->getModel()->getId(), $portableObject->getTypeIdentifier());
+            $this->assertEquals($portableObject->getTypeIdentifier(), $retrivedElement->getTypeIdentifier());
+
+            $portableElementService->unregisterModel($retrivedElement);
+        }
+    }
 }
