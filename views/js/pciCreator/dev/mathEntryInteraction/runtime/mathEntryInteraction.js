@@ -80,13 +80,12 @@ define([
         var lineWidth = 0;
         $container.find(autoWrapSelector).remove();
         $container.children().each(function() {
-            var $block = $(this);
             var width = getWidth(this);
             if (this.classList.contains(newLineSelector)) {
                 lineWidth = 0;
             } else {
                 if (lineWidth + width >= maxWidth) {
-                    $block.before(htmlMarkup(autoWrapClass));
+                    $(this).before(htmlMarkup(autoWrapClass));
                     lineWidth = 0;
                 }
                 lineWidth += width;
