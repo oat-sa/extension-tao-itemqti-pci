@@ -638,12 +638,13 @@ define([
          * @returns {Object}
          */
         getResponse: function getResponse() {
-            var response = {
-                base: {
-                    file: this._recording
-                }
-            };
-            return response ;
+            if (this._recording) {
+                return {
+                    base: {
+                        file: this._recording
+                    }
+                };
+            }
         },
         /**
          * Remove the current response set in the interaction
