@@ -128,6 +128,7 @@ define([
          * @param {('math-gap-small'|'math-gap-medium'|'math-gap-large')} config.gapStyle - size of the gaps
          * @param {Boolean} config.tool_toolId - is the given tool enabled?
          * @param {Boolean} config.allowNewLine - experimental... allows the test taker to create a new line on Enter
+         * @param {Boolean} config.allowAutoWrap - experimental... allows the editor to auto wrap the content
          */
         initConfig: function initConfig(config) {
             function toBoolean(value, defaultValue) {
@@ -164,7 +165,8 @@ define([
                     plusminus:toBoolean(config.tool_plusminus,true)
                 },
 
-                allowNewLine: toBoolean(config.allowNewLine, false)
+                allowNewLine: toBoolean(config.allowNewLine, false),
+                allowAutoWrap: toBoolean(config.allowAutoWrap, false)
             };
         },
 

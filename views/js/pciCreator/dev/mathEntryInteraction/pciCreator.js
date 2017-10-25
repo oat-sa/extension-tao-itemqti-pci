@@ -77,7 +77,8 @@ define([
                 tool_divide:    'true',
                 tool_plusminus: 'true',
 
-                allowNewLine:   'false'
+                allowNewLine:   'false',
+                allowAutoWrap:  'false'
             };
         },
         /**
