@@ -36,14 +36,69 @@ define([
     'use strict';
 
     var ns = '.mathEntryInteraction';
+    var rootClass = 'mq-root-block';
+    var newLineClass = 'mq-tao-br';
+    var autoWrapClass = 'mq-tao-wrap';
+    var rootSelector = '.' + rootClass;
+    var newLineSelector = '.' + newLineClass;
+    var autoWrapSelector = '.' + autoWrapClass;
     var MQ = MathQuill.getInterface(2);
     var mathEntryInteraction;
+
+    /**
+     * Builds a simple HTML markup.
+     * @param {String} cls
+     * @param {String} [tag='div']
+     * @returns {String}
+     */
+    function htmlMarkup(cls, tag) {
+        tag = tag || 'div';
+        return '<' + tag + ' class="' + cls + '"></' + tag + '>';
+    }
+
+    /**
+     * Computes the full width of an element, plus its margin.
+     * This approach is more reliable than jQuery, as the decimals part is taken into account.
+     * @param element
+     * @returns {Number}
+     */
+    function getWidth(element) {
+        var style = element.currentStyle || window.getComputedStyle(element);
+        var rect = element.getBoundingClientRect();
+        var borderBox = style.boxSizing === 'border-box';
+        return rect.width + parseFloat(style.marginLeft) + parseFloat(style.marginRight) +
+            (borderBox ? 0 : parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)) +
+            (borderBox ? 0 : parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth));
+    }
+
+    /**
+     * Auto wraps the content to avoid overflow
+     * @param $container
+     */
+    function applyAutoWrap($container) {
+        var maxWidth = $container.width();
+        var lineWidth = 0;
+        $container.find(autoWrapSelector).remove();
+        $container.children().each(function() {
+            var $block = $(this);
+            var width = getWidth(this);
+            if (this.classList.contains(newLineSelector)) {
+                lineWidth = 0;
+            } else {
+                if (lineWidth + width >= maxWidth) {
+                    $block.before(htmlMarkup(autoWrapClass));
+                    lineWidth = 0;
+                }
+                lineWidth += width;
+            }
+        });
+    }
 
     // Warning: this is an experimental MathQuill API that might change or be removed upon MathQuill update.
     // Still, it is the most satisfying way to implement some required functionality without ugly hacks.
     MQ.registerEmbed('gap', function registerGap() {
         return {
-            htmlString: '<span class="mq-tao-gap"></span>',
+            htmlString: htmlMarkup('mq-tao-gap', 'span'),
             text: function text() {
                 return 'tao_gap';
             },
@@ -55,7 +110,7 @@ define([
     // Experimental line break...
     MQ.registerEmbed('br', function registerBr() {
         return {
-            htmlString: '<div class="mq-tao-br"></div>', // <div> is displayed as block: that's enough to create a new line. "<br />" breaks Mathquill.
+            htmlString: htmlMarkup(newLineClass), // <div> is displayed as block: that's enough to create a new line. "<br />" breaks Mathquill.
             text: function text() {
                 return 'tao_br';
             },
@@ -179,6 +234,9 @@ define([
                 spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                 handlers: {
                     edit: function onChange(mathField) {
+                        if (self.config.allowAutoWrap) {
+                            applyAutoWrap(self.$input.find(rootSelector));
+                        }
                         self.trigger('responseChange', [mathField.latex()]);
                     },
                     enter: function onEnter(mathField) {
