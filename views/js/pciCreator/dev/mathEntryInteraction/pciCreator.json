@@ -3,7 +3,7 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "0.6.1",
+    "version": "0.7.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
