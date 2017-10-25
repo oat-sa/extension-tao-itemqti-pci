@@ -29,6 +29,8 @@ use oat\taoQtiItem\model\qti\Parser;
 use oat\taoQtiItem\model\portableElement\parser\itemParser\PortableElementItemParser;
 use oat\taoQtiItem\model\Export\QTIPackedItemExporter;
 use oat\taoQtiItem\model\QtiItemCompiler;
+use \RecursiveDirectoryIterator;
+use \RecursiveIteratorIterator;
 use \taoItems_models_classes_ItemsService;
 use \tao_models_classes_service_FileStorage;
 use \ZipArchive;
@@ -155,11 +157,18 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->portableElementService->retrieve('PCI', 'oatSamplePciAudio');
     }
 
-    public function testImportPCI()
+    /**
+     * @expectedException oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException
+     */
+    public function testInexistingPciImsLikert(){
+        $this->portableElementService->retrieve('IMSPCI', 'imsSamplePciLikert');
+    }
+
+    public function testImportOatPci()
     {
         $itemClass = $this->itemService->getRootClass();
         $report = $this->importService->importQTIPACKFile(
-            $this->getSamplePath('samples/export/oat_pci_likert_audio.zip'),
+            $this->createZipFromDir($this->getSamplePath('samples/export/oat_pci_likert_audio')),
             $itemClass
         );
         $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
@@ -230,6 +239,43 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         return $items[0];
     }
 
+    public function testImportImsPci()
+    {
+        $itemClass = $this->itemService->getRootClass();
+        $report = $this->importService->importQTIPACKFile(
+            $this->createZipFromDir($this->getSamplePath('samples/export/ims_pci_likert')),
+            $itemClass
+        );
+        $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
+
+        $items = array();
+        foreach ($report as $itemReport) {
+            $this->assertEquals(Report::TYPE_SUCCESS, $itemReport->getType());
+            $data = $itemReport->getData();
+            if (!is_null($data)) {
+                $items[] = $data;
+            }
+        }
+        $this->assertEquals(1, count($items));
+        $item = QtiService::singleton()->getDataItemByRdfItem($items[0], DEFAULT_LANG, false);
+
+        $itemData = $item->toArray();
+
+        $likertData = current($itemData['body']['elements']);
+
+        //check parsed likert interaction data
+        $this->assertEquals('imsSamplePciLikert', $likertData['typeIdentifier']);
+        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $likertData['xmlns']);
+        $this->assertEquals(['oat-pci.json'], $likertData['config']);
+        $this->assertEquals(['imsSamplePciLikert/runtime/js/imsSamplePciLikert', 'imsSamplePciLikert/runtime/js/renderer', 'jquery_2_1_1'], array_keys($likertData['modules']));
+        $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $likertData['properties']);
+
+        $pciLikert = $this->portableElementService->retrieve('IMSPCI', 'imsSamplePciLikert');
+        $this->assertInstanceOf('oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject', $pciLikert);
+
+        return $items[0];
+    }
+
     public function _testImport()
     {
         $itemClass = $this->itemService->getRootClass();
@@ -284,7 +330,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
     }
 
     /**
-     * @depends testImportPCI
+     * @depends testImportOatPci
      * @param $item
      */
     public function testCompile($item)
@@ -299,7 +345,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
     }
 
     /**
-     * @depends testImportPCI
+     * @depends testImportOatPci
      * @param $item
      * @throws Exception
      * @throws \oat\taoQtiItem\model\qti\exception\ExtractException
@@ -336,7 +382,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
     }
 
     /**
-     * @depends testImportPCI
+     * @depends testImportOatPci
      */
     public function testRemoveItem()
     {
@@ -353,8 +399,12 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $pciAudio = $this->portableElementService->retrieve('PCI', 'oatSamplePciAudio');
         $this->assertInstanceOf('oat\qtiItemPci\model\portableElement\dataObject\PciDataObject', $pciAudio);
 
+        $pciImsLikert = $this->portableElementService->retrieve('IMSPCI', 'imsSamplePciLikert');
+        $this->assertInstanceOf('oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject', $pciImsLikert);
+
         $this->portableElementService->unregisterModel($pciLikert);
         $this->portableElementService->unregisterModel($pciAudio);
+        $this->portableElementService->unregisterModel($pciImsLikert);
     }
 
     private function removeItem($item)
@@ -419,6 +469,35 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertNotEmpty($content);
 
         return $content;
+    }
+
+    private function createZipFromDir($dir){
+
+        $rootPath = realpath($dir);
+
+        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR. uniqid('item_') . '.zip';
+
+        $zip = new ZipArchive();
+        $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file){
+            if (!$file->isDir()){
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
+        $this->assertTrue(file_exists($path), 'could not find create zip from dir ' . $dir . ' to '.$path);
+        $this->exportedZips[] = $path;
+
+        return $path;
     }
 
 }
