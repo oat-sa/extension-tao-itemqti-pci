@@ -180,7 +180,17 @@ define([
                         self.trigger('responseChange', [mathField.latex()]);
                     },
                     enter: function onEnter(mathField) {
-                        if (self.config.allowNewLine && !self.inGapMode()) {
+                        // The "allow new line" option works under the following conditions:
+                        // - in runtime, only in normal mode
+                        // - in authoring, only in gapMode
+                        function isBrAllowed() {
+                            return self.config.allowNewLine
+                                && (
+                                       (!self.inGapMode() && !self.inQtiCreator()) // normal && runtime
+                                    || ( self.inGapMode() &&  self.inQtiCreator()) // gap mode && authoring
+                                );
+                        }
+                        if (isBrAllowed()) {
                             mathField.write('\\embed{br}');
                         }
                     }
@@ -221,7 +231,9 @@ define([
          * @param {String} latex - the math expression with gaps
          */
         setMathStaticContent: function setMathStaticContent(latex) {
-            latex = latex.replace(/\\taoGap/g, '\\MathQuillMathField{}');
+            latex = latex
+                .replace(/\\taoGap/g, '\\MathQuillMathField{}')
+                .replace(/\\taoBr/g, '\\embed{br}');
             this.$input.text(latex);
         },
 
@@ -292,7 +304,9 @@ define([
                 });
 
             } else {
-                latex = latex.replace(/\\taoGap/g, '\\embed{gap}');
+                latex = latex
+                    .replace(/\\taoGap/g, '\\embed{gap}')
+                    .replace(/\\taoBr/g, '\\embed{br}');
                 this.mathField.latex(latex);
             }
         },
