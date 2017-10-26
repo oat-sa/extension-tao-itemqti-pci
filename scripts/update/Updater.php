@@ -266,7 +266,7 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         if($this->isVersion('3.5.2')){
-            call_user_func(new RegisterPciMathEntry(), ['0.2.1']);
+            call_user_func(new RegisterPciAudioRecording(), ['0.2.1']);
             $this->setVersion('3.5.3');
         }
     }
