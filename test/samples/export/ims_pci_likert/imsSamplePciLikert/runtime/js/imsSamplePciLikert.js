@@ -16,12 +16,12 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  *
  */
-define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtime/js/renderer'], function(qtiCustomInteractionContext, $, renderer){
+define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'imsSamplePciLikert/runtime/js/renderer'], function(qtiCustomInteractionContext, $, renderer){
     'use strict';
 
-    var _typeIdentifier = 'likertInteraction';
+    var _typeIdentifier = 'imsSamplePciLikert';
 
-    var likertInteraction = {
+    var imsSamplePciLikert = {
 
         /*********************************
          *
@@ -134,12 +134,6 @@ define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtim
             this.config = config || {};
 
             renderer.render(id, this.dom, this.config, assetManager);
-
-            //listening to dynamic configuration change
-            this.on('levelchange', function(level){
-                self.config.level = level;
-                renderer.renderChoices(id, self.dom, self.config);
-            });
         },
 
         /**
@@ -192,5 +186,5 @@ define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtim
         }
     };
 
-    qtiCustomInteractionContext.register(likertInteraction);
+    qtiCustomInteractionContext.register(imsSamplePciLikert);
 });
