@@ -24,7 +24,8 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/OAT/util/html',
-    'mathEntryInteraction/runtime/mathquill/mathquill'
+    'mathEntryInteraction/runtime/mathquill/mathquill',
+    'mathEntryInteraction/runtime/polyfill/es6-collections'
 ], function(
     qtiCustomInteractionContext,
     $,
@@ -270,53 +271,49 @@ define([
          * Will wrap the content, to avoid overflow, if autoWrap is enabled
          */
         autoWrapContent: function autoWrapContent() {
-            var $container, $cursor, current, maxWidth, lineWidth, cache, cacheCount;
+            var $container, $cursor, current, maxWidth, lineWidth, cache;
             if (this.config.enableAutoWrap) {
                 $container = this.$input.find(cssSelectors.root);
                 $cursor = $container.find(cssSelectors.cursor);
                 current = $cursor.closest(cssSelectors.root + '>span').get(0);
 
                 maxWidth = $container.width();
-                cache = this.wrapCache || {};
-                cacheCount = this.wrapCacheCount || 0;
+                if (!this.wrapCache) {
+                    this.wrapCache = new window.WeakMap();
+                }
+                cache = this.wrapCache;
                 lineWidth = 0;
 
                 // iterate over each block and insert a line break each time a block is overflowing its container
                 $container.children().each(function() {
-                    var classList = this.classList;
-                    var width, id;
+                    var block = cache.get(this);
+                    if (!block) {
+                        block = {
+                            classList: this.classList
+                        };
+                        cache.set(this, block);
+                    }
 
-                    if (classList.contains(cssClass.autoWrap)) {
+                    if (block.classList.contains(cssClass.autoWrap)) {
                         // remove previously added auto line break
                         $(this).remove();
-                    } else if (classList.contains(cssClass.newLine)) {
+                    } else if (block.classList.contains(cssClass.newLine)) {
                         // ignore manual line break, but reset the line width
                         lineWidth = 0;
-                    } else if (!classList.contains(cssClass.cursor)) {
+                    } else if (!block.classList.contains(cssClass.cursor)) {
                         // get the block width
-                        id = this.getAttribute('mathquill-command-id');
-                        if (!cache[id] || current === this) {
-                            cache[id] = {
-                                width: getWidth(this)
-                            };
+                        if (current === this || 'undefined' === typeof block.width) {
+                            block.width = getWidth(this);
                         }
-                        cache[id].flag = cacheCount;
-                        width = cache[id].width;
 
                         // check if a line break is needed
-                        if (lineWidth + width >= maxWidth) {
+                        if (lineWidth + block.width >= maxWidth) {
                             $(this).before(htmlMarkup(cssClass.autoWrap));
                             lineWidth = 0;
                         }
-                        lineWidth += width;
+                        lineWidth += block.width;
                     }
                 });
-
-                // clean the cache from removed nodes
-                this.wrapCache = _.omit(cache, function(val) {
-                    return val.flag !== cacheCount;
-                });
-                this.wrapCacheCount = cacheCount + 1;
             }
         },
 
