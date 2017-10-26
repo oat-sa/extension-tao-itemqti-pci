@@ -117,7 +117,7 @@ define([
             tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
 
             allowNewLine: toBoolean(interaction.prop('allowNewLine'), false),
-            allowAutoWrap: toBoolean(interaction.prop('allowAutoWrap'), false)
+            enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
         }));
 
         //init form javascript
@@ -173,7 +173,7 @@ define([
             },
 
             allowNewLine: configChangeCallBack,
-            allowAutoWrap: configChangeCallBack
+            enableAutoWrap: configChangeCallBack
         });
 
 

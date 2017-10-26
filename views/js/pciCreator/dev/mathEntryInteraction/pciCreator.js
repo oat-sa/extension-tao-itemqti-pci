@@ -78,7 +78,7 @@ define([
                 tool_plusminus: 'true',
 
                 allowNewLine:   'false',
-                allowAutoWrap:  'false'
+                enableAutoWrap:  'false'
             };
         },
         /**

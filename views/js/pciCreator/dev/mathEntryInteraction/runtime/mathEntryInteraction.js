@@ -36,12 +36,14 @@ define([
     'use strict';
 
     var ns = '.mathEntryInteraction';
-    var rootClass = 'mq-root-block';
-    var newLineClass = 'mq-tao-br';
-    var autoWrapClass = 'mq-tao-wrap';
-    var rootSelector = '.' + rootClass;
-    var newLineSelector = '.' + newLineClass;
-    var autoWrapSelector = '.' + autoWrapClass;
+    var cssClass = {
+        root: 'mq-root-block',
+        newLine: 'mq-tao-br',
+        autoWrap: 'mq-tao-wrap'
+    };
+    var cssSelectors = _.mapValues(cssClass, function(cls) {
+        return '.' + cls;
+    });
     var MQ = MathQuill.getInterface(2);
     var mathEntryInteraction;
 
@@ -78,14 +80,14 @@ define([
     function applyAutoWrap($container) {
         var maxWidth = $container.width();
         var lineWidth = 0;
-        $container.find(autoWrapSelector).remove();
+        $container.find(cssSelectors.autoWrap).remove();
         $container.children().each(function() {
             var width = getWidth(this);
-            if (this.classList.contains(newLineSelector)) {
+            if (this.classList.contains(cssSelectors.newLine)) {
                 lineWidth = 0;
             } else {
                 if (lineWidth + width >= maxWidth) {
-                    $(this).before(htmlMarkup(autoWrapClass));
+                    $(this).before(htmlMarkup(cssClass.autoWrap));
                     lineWidth = 0;
                 }
                 lineWidth += width;
@@ -109,7 +111,7 @@ define([
     // Experimental line break...
     MQ.registerEmbed('br', function registerBr() {
         return {
-            htmlString: htmlMarkup(newLineClass), // <div> is displayed as block: that's enough to create a new line. "<br />" breaks Mathquill.
+            htmlString: htmlMarkup(cssClass.newLine), // <div> is displayed as block: that's enough to create a new line. "<br />" breaks Mathquill.
             text: function text() {
                 return 'tao_br';
             },
@@ -182,7 +184,7 @@ define([
          * @param {('math-gap-small'|'math-gap-medium'|'math-gap-large')} config.gapStyle - size of the gaps
          * @param {Boolean} config.tool_toolId - is the given tool enabled?
          * @param {Boolean} config.allowNewLine - experimental... allows the test taker to create a new line on Enter
-         * @param {Boolean} config.allowAutoWrap - experimental... allows the editor to auto wrap the content
+         * @param {Boolean} config.enableAutoWrap - experimental... allows the editor to auto wrap the content
          */
         initConfig: function initConfig(config) {
             function toBoolean(value, defaultValue) {
@@ -220,7 +222,7 @@ define([
                 },
 
                 allowNewLine: toBoolean(config.allowNewLine, false),
-                allowAutoWrap: toBoolean(config.allowAutoWrap, false)
+                enableAutoWrap: toBoolean(config.enableAutoWrap, false)
             };
         },
 
@@ -233,8 +235,8 @@ define([
                 spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                 handlers: {
                     edit: function onChange(mathField) {
-                        if (self.config.allowAutoWrap) {
-                            applyAutoWrap(self.$input.find(rootSelector));
+                        if (self.config.enableAutoWrap) {
+                            applyAutoWrap(self.$input.find(cssSelectors.root));
                         }
                         self.trigger('responseChange', [mathField.latex()]);
                     },

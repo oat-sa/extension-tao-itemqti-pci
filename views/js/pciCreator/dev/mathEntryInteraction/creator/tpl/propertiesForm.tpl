@@ -181,9 +181,9 @@
 </div>
 <div>
     <label class="panel">
-        <input name="allowAutoWrap" type="checkbox" {{#if allowAutoWrap}}checked="checked"{{/if}}/>
+        <input name="enableAutoWrap" type="checkbox" {{#if enableAutoWrap}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "allow auto wrap"}}
+        {{__ "enable auto wrap"}}
     </label>
 </div>
 
