@@ -38,6 +38,7 @@ define([
     var ns = '.mathEntryInteraction';
     var cssClass = {
         root: 'mq-root-block',
+        cursor: 'mq-cursor',
         newLine: 'mq-tao-br',
         autoWrap: 'mq-tao-wrap'
     };
@@ -71,28 +72,6 @@ define([
         return rect.width + parseFloat(style.marginLeft) + parseFloat(style.marginRight) +
             (borderBox ? 0 : parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)) +
             (borderBox ? 0 : parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth));
-    }
-
-    /**
-     * Auto wraps the content to avoid overflow
-     * @param $container
-     */
-    function applyAutoWrap($container) {
-        var maxWidth = $container.width();
-        var lineWidth = 0;
-        $container.find(cssSelectors.autoWrap).remove();
-        $container.children().each(function() {
-            var width = getWidth(this);
-            if (this.classList.contains(cssSelectors.newLine)) {
-                lineWidth = 0;
-            } else {
-                if (lineWidth + width >= maxWidth) {
-                    $(this).before(htmlMarkup(cssClass.autoWrap));
-                    lineWidth = 0;
-                }
-                lineWidth += width;
-            }
-        });
     }
 
     // Warning: this is an experimental MathQuill API that might change or be removed upon MathQuill update.
@@ -288,11 +267,56 @@ define([
          */
 
         /**
-         * Will wrap content if autoWrap is enabled
+         * Will wrap the content, to avoid overflow, if autoWrap is enabled
          */
         autoWrapContent: function autoWrapContent() {
+            var $container, $cursor, current, maxWidth, lineWidth, cache, cacheCount;
             if (this.config.enableAutoWrap) {
-                applyAutoWrap(this.$input.find(cssSelectors.root));
+                $container = this.$input.find(cssSelectors.root);
+                $cursor = $container.find(cssSelectors.cursor);
+                current = $cursor.closest(cssSelectors.root + '>span').get(0);
+
+                maxWidth = $container.width();
+                cache = this.wrapCache || {};
+                cacheCount = this.wrapCacheCount || 0;
+                lineWidth = 0;
+
+                // iterate over each block and insert a line break each time a block is overflowing its container
+                $container.children().each(function() {
+                    var classList = this.classList;
+                    var width, id;
+
+                    if (classList.contains(cssClass.autoWrap)) {
+                        // remove previously added auto line break
+                        $(this).remove();
+                    } else if (classList.contains(cssClass.newLine)) {
+                        // ignore manual line break, but reset the line width
+                        lineWidth = 0;
+                    } else if (!classList.contains(cssClass.cursor)) {
+                        // get the block width
+                        id = this.getAttribute('mathquill-command-id');
+                        if (!cache[id] || current === this) {
+                            cache[id] = {
+                                width: getWidth(this)
+                            };
+                        }
+                        cache[id].flag = cacheCount;
+                        width = cache[id].width;
+
+                        // check if a line break is needed
+                        if (lineWidth + width >= maxWidth) {
+                            $(this).before(htmlMarkup(cssClass.autoWrap));
+                            lineWidth = 0;
+                        }
+                        lineWidth += width;
+                    }
+                });
+
+                // clean the cache from removed nodes
+                this.wrapCache = _.omit(cache, function(val) {
+                    return val.flag !== cacheCount;
+                });
+                this.wrapCacheCount = cacheCount + 1;
             }
         },
 
