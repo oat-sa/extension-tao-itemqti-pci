@@ -155,6 +155,7 @@ define([
                 this.setLatex(this.config.gapExpression);
                 this.addToolbarListeners();
                 this.addGapStyle();
+                this.autoWrapContent();
 
             // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
             } else if (!this.inGapMode() && this.inQtiCreator()) {
@@ -168,6 +169,7 @@ define([
                 this.monitorActiveGapField();
                 this.addToolbarListeners();
                 this.addGapStyle();
+                this.autoWrapContent();
 
             // Normal rendering of the PCI: display an empty MathQuill editable field
             } else {
@@ -235,10 +237,8 @@ define([
                 spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                 handlers: {
                     edit: function onChange(mathField) {
-                        if (self.config.enableAutoWrap) {
-                            applyAutoWrap(self.$input.find(cssSelectors.root));
-                        }
                         self.trigger('responseChange', [mathField.latex()]);
+                        self.autoWrapContent();
                     },
                     enter: function onEnter(mathField) {
                         // The "allow new line" option works under the following conditions:
@@ -286,6 +286,15 @@ define([
          * MathQuill fields management
          * ===========================
          */
+
+        /**
+         * Will wrap content if autoWrap is enabled
+         */
+        autoWrapContent: function autoWrapContent() {
+            if (this.config.enableAutoWrap) {
+                applyAutoWrap(this.$input.find(cssSelectors.root));
+            }
+        },
 
         /**
          * Gap mode only: fill the mathfield markup with the math expression before creating the MathQuill instance
@@ -367,7 +376,8 @@ define([
             } else {
                 latex = latex
                     .replace(/\\taoGap/g, '\\embed{gap}')
-                    .replace(/\\taoBr/g, '\\embed{br}');
+                    .replace(/\\taoBr/g, '\\embed{br}')
+                    .replace(/\\text\{\}/g, '\\text{ }');  // quick fix for edge case that introduce empty text block
                 this.mathField.latex(latex);
             }
         },
