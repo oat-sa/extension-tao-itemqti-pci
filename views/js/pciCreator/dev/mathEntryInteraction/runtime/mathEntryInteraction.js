@@ -46,6 +46,7 @@ define([
     var cssSelectors = _.mapValues(cssClass, function(cls) {
         return '.' + cls;
     });
+    var reSpace = /^(\s|&nbsp;)+$/;
     var MQ = MathQuill.getInterface(2);
     var mathEntryInteraction;
 
@@ -271,7 +272,9 @@ define([
          * Will wrap the content, to avoid overflow, if autoWrap is enabled
          */
         autoWrapContent: function autoWrapContent() {
-            var $container, $cursor, current, maxWidth, lineWidth, cache;
+            var $container, $cursor, current, lastSpace, lineBreak;
+            var maxWidth, lineWidth, cache, nodes, node, index, length, block;
+
             if (this.config.enableAutoWrap) {
                 $container = this.$input.find(cssSelectors.root);
                 $cursor = $container.find(cssSelectors.cursor);
@@ -285,35 +288,54 @@ define([
                 lineWidth = 0;
 
                 // iterate over each block and insert a line break each time a block is overflowing its container
-                $container.children().each(function() {
-                    var block = cache.get(this);
+                nodes = _.toArray($container.get(0).childNodes);
+                for (length = nodes.length, index = 0; index < length; index ++) {
+                    node = nodes[index];
+                    block = cache.get(node);
+
                     if (!block) {
                         block = {
-                            classList: this.classList
+                            classList: node.classList,
+                            isSpace: reSpace.test(node.innerHTML)
                         };
-                        cache.set(this, block);
+                        cache.set(node, block);
                     }
 
                     if (block.classList.contains(cssClass.autoWrap)) {
                         // remove previously added auto line break
-                        $(this).remove();
+                        $(node).remove();
                     } else if (block.classList.contains(cssClass.newLine)) {
                         // ignore manual line break, but reset the line width
                         lineWidth = 0;
                     } else if (!block.classList.contains(cssClass.cursor)) {
                         // get the block width
-                        if (current === this || 'undefined' === typeof block.width) {
-                            block.width = getWidth(this);
+                        if (current === node || 'undefined' === typeof block.width) {
+                            block.width = getWidth(node);
+                        }
+
+                        if (block.isSpace) {
+                            lastSpace = {
+                                node: node,
+                                index: index
+                            };
                         }
 
                         // check if a line break is needed
                         if (lineWidth + block.width >= maxWidth) {
-                            $(this).before(htmlMarkup(cssClass.autoWrap));
-                            lineWidth = 0;
+                            lineBreak = htmlMarkup(cssClass.autoWrap);
+                            if (lastSpace) {
+                                $(lastSpace.node).after(lineBreak);
+                                index = lastSpace.index;
+                                lineWidth = -block.width;
+                            } else {
+                                $(node).before(lineBreak);
+                                lineWidth = 0;
+                            }
+                            lastSpace = null;
                         }
                         lineWidth += block.width;
                     }
-                });
+                }
             }
         },
 
