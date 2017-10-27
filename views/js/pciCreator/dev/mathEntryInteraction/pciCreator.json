@@ -33,9 +33,9 @@
             "./runtime/mathquill/font/Symbola-basic.woff2"
         ],
         "src" : [
-            "./runtime/polyfill/es6-collections.js",
             "./runtime/mathEntryInteraction.js",
-            "./runtime/mathquill/mathquill.js"
+            "./runtime/mathquill/mathquill.js",
+            "./runtime/polyfill/es6-collections.js"
         ]
     },
     "creator" : {
