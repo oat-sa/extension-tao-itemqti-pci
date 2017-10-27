@@ -3,7 +3,7 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -34,7 +34,8 @@
         ],
         "src" : [
             "./runtime/mathEntryInteraction.js",
-            "./runtime/mathquill/mathquill.js"
+            "./runtime/mathquill/mathquill.js",
+            "./runtime/polyfill/es6-collections.js"
         ]
     },
     "creator" : {

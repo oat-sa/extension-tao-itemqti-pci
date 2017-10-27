@@ -179,4 +179,11 @@
         {{__ "allow line break"}}
     </label>
 </div>
+<div>
+    <label class="panel">
+        <input name="enableAutoWrap" type="checkbox" {{#if enableAutoWrap}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "enable auto wrap"}}
+    </label>
+</div>
 
