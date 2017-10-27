@@ -139,9 +139,7 @@ define([
                         interaction.resetResponse();
                     } else if (changeCounter === 2) {
                         assert.ok(_.isPlainObject(res), 'response changed');
-                        assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                        assert.ok(_.isPlainObject(res.RESPONSE.base), 'response base is an object');
-                        assert.ok(_.isNull(res.RESPONSE.base.file), 'response record is empty');
+                        assert.ok(_.isUndefined(res.RESPONSE), 'no response is given when there is no recording');
                         QUnit.start();
                     }
                 })
