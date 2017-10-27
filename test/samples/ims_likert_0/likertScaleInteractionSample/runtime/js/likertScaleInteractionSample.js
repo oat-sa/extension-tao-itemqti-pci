@@ -16,7 +16,7 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  *
  */
-define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtime/js/renderer'], function(qtiCustomInteractionContext, $, renderer){
+define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertScaleInteractionSample/runtime/js/renderer'], function(qtiCustomInteractionContext, $, renderer){
     'use strict';
 
     var _typeIdentifier = 'likertInteraction';
@@ -128,18 +128,10 @@ define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'likertInteraction/runtim
          */
         initialize : function(id, dom, config, assetManager){
 
-            var self = this;
-
             this.dom = dom;
             this.config = config || {};
 
             renderer.render(id, this.dom, this.config, assetManager);
-
-            //listening to dynamic configuration change
-            this.on('levelchange', function(level){
-                self.config.level = level;
-                renderer.renderChoices(id, self.dom, self.config);
-            });
         },
 
         /**

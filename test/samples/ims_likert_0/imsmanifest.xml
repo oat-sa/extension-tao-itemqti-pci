@@ -8,14 +8,15 @@
     <resources>
         <resource identifier="i150107567172373" type="imsqti_item_xmlv2p2" href="i150107567172373/qti.xml">
             <file href="i150107567172373/qti.xml"/>
-            <file href="i150107567172373/likertScaleInteractionSample/portableLib/jquery_2_1_1.js"/>
-            <file href="i150107567172373/likertScaleInteractionSample/runtime/likertScaleInteractionSample.js"/>
-            <file href="i150107567172373/likertScaleInteractionSample/runtime/js/renderer.js"/>
-            <file href="i150107567172373/likertScaleInteractionSample/runtime/css/base.css"/>
-            <file href="i150107567172373/likertScaleInteractionSample/runtime/css/likertScaleInteractionSample.css"/>
-            <file href="i150107567172373/likertScaleInteractionSample/runtime/assets/ThumbDown.png"/>
-            <file href="i150107567172373/likertScaleInteractionSample/runtime/assets/ThumbUp.png"/>
-            <file href="i150107567172373/likertScaleInteractionSample/runtime/css/img/bg.png"/>
+            <file href="oat-pci.json"/>
+            <file href="portableLib/jquery_2_1_1.js"/>
+            <file href="likertScaleInteractionSample/runtime/js/likertScaleInteractionSample.js"/>
+            <file href="likertScaleInteractionSample/runtime/js/renderer.js"/>
+            <file href="likertScaleInteractionSample/runtime/css/base.css"/>
+            <file href="likertScaleInteractionSample/runtime/css/likertScaleInteractionSample.css"/>
+            <file href="likertScaleInteractionSample/runtime/assets/ThumbDown.png"/>
+            <file href="likertScaleInteractionSample/runtime/assets/ThumbUp.png"/>
+            <file href="likertScaleInteractionSample/runtime/css/img/bg.png"/>
             <file href="i150107567172373/style/custom/tao-user-styles.css"/>
         </resource>
     </resources>

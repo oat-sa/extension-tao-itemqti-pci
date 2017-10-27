@@ -266,7 +266,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         //check parsed likert interaction data
         $this->assertEquals('imsSamplePciLikert', $likertData['typeIdentifier']);
         $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $likertData['xmlns']);
-        $this->assertEquals(['oat-pci.json'], $likertData['config']);
+        $this->assertEquals(['../oat-pci.json'], $likertData['config']);
         $this->assertEquals(['imsSamplePciLikert/runtime/js/imsSamplePciLikert', 'imsSamplePciLikert/runtime/js/renderer', 'jquery_2_1_1'], array_keys($likertData['modules']));
         $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $likertData['properties']);
 
@@ -439,14 +439,14 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertEquals([
             'imsSamplePciLikert/runtime/js/imsSamplePciLikert.js',
             'imsSamplePciLikert/runtime/js/renderer.js',
-            'imsSamplePciLikert/portableLib/jquery_2_1_1.js',
+            'portableLib/jquery_2_1_1.js',
             $itemFolder.'/imsSamplePciLikert/runtime/assets/ThumbDown.png',
             $itemFolder.'/imsSamplePciLikert/runtime/assets/ThumbUp.png',
             $itemFolder.'/imsSamplePciLikert/runtime/css/img/bg.png',
             $itemFolder.'/style/custom/tao-user-styles.css',
             $itemFolder.'/imsSamplePciLikert/runtime/css/base.css',
             $itemFolder.'/imsSamplePciLikert/runtime/css/imsSamplePciLikert.css',
-            'imsSamplePciLikert/oat-pci.json',
+            'oat-pci.json',
             $itemFolder.'/qti.xml',
             'imsmanifest.xml'
         ], $zipContent['files']);
@@ -523,6 +523,36 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         }
     }
 
+    private function createZipFromDir($dir){
+
+        $rootPath = realpath($dir);
+
+        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR. uniqid('item_') . '.zip';
+
+        $zip = new ZipArchive();
+        $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file){
+            if (!$file->isDir()){
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
+        $this->assertTrue(file_exists($path), 'could not find create zip from dir ' . $dir . ' to '.$path);
+
+        $this->exportedZips[] = $path;
+
+        return $path;
+    }
+
     /**
      * @param $item
      * @param $manifest
@@ -553,6 +583,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertTrue(file_exists($path),'could not find path ' . $path);
         $this->exportedZips[] = $path;
 //        var_dump($path);
+
 
         return array($path, $manifest);
     }
@@ -585,8 +616,8 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             $files[] = $zip->getNameIndex($i);
         }
 
-//        if($zip->locateName('imsSamplePciLikert/oat-pci.json')){
-//            var_dump($zip->getFromName('imsSamplePciLikert/oat-pci.json'));
+//        if($zip->locateName('oat-pci.json')){
+//            var_dump($zip->getFromName('oat-pci.json'));
 //        }
 
         return [
@@ -596,34 +627,6 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         ];
     }
 
-    private function createZipFromDir($dir){
 
-        $rootPath = realpath($dir);
-
-        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR. uniqid('item_') . '.zip';
-
-        $zip = new ZipArchive();
-        $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($rootPath),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
-
-        foreach ($files as $name => $file){
-            if (!$file->isDir()){
-                $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($rootPath) + 1);
-                $zip->addFile($filePath, $relativePath);
-            }
-        }
-
-        $zip->close();
-        $this->assertTrue(file_exists($path), 'could not find create zip from dir ' . $dir . ' to '.$path);
-
-        $this->exportedZips[] = $path;
-
-        return $path;
-    }
 
 }

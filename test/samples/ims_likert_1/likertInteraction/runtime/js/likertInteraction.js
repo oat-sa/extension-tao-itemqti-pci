@@ -131,11 +131,6 @@ define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteract
 
             renderer.render(id, this.dom, this.config, assetManager);
 
-            //listening to dynamic configuration change
-            this.on('levelchange', function(level){
-                self.config.level = level;
-                renderer.renderChoices(id, self.dom, self.config);
-            });
         },
 
         /**
