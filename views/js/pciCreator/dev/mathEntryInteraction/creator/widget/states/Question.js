@@ -116,7 +116,8 @@ define([
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
             tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
 
-            allowNewLine: toBoolean(interaction.prop('allowNewLine'), false)
+            allowNewLine: toBoolean(interaction.prop('allowNewLine'), false),
+            enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
         }));
 
         //init form javascript
@@ -171,7 +172,8 @@ define([
                 i.triggerPci('configChange', [i.getProperties()]);
             },
 
-            allowNewLine: configChangeCallBack
+            allowNewLine: configChangeCallBack,
+            enableAutoWrap: configChangeCallBack
         });
 
 
