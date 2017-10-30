@@ -28,6 +28,9 @@ use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
+use oat\qtiItemPci\model\portableElement\export\ImsPciExporter;
+use oat\taoQtiItem\model\Export\AbstractQTIItemExporter;
+use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 
 class IMSPciModel implements PortableElementModel
 {
@@ -104,6 +107,11 @@ class IMSPciModel implements PortableElementModel
         $packageParser = new PciPackagerParser();
         $packageParser->setModel($this);
         return $packageParser;
+    }
+
+    public function getExporter(PortableElementObject $dataObject, AbstractQTIItemExporter $qtiItemExporter)
+    {
+        return new ImsPciExporter($dataObject, $qtiItemExporter);
     }
 
     public function getQtiElementClassName()
