@@ -88,7 +88,7 @@ class ImsPciExporter extends PortableElementExporter{
             }
 
             $basePath = $this->qtiItemExporter->buildBasePath();
-            $itemRelPath = \helpers_File::getRelPath($basePath, '');//TODO fix that for test export
+            $itemRelPath = $this->getItemRelativePath($basePath);
 
             //set version
             $currentPortableNode->setAttribute('data-version', $portableElement->getVersion());
@@ -157,9 +157,16 @@ class ImsPciExporter extends PortableElementExporter{
         $stream = fopen('php://memory','r+');
         fwrite($stream, $dataString);
         rewind($stream);
-//        var_dump("replacing $fileToReplace with $dataString");exit;
         $this->qtiItemExporter->addFile($stream, $fileToReplace);
         fclose($stream);
     }
 
+    private function getItemRelativePath($itemBasePath){
+        $returnValue = '';
+        $arrDir = explode(DIRECTORY_SEPARATOR, rtrim($itemBasePath, DIRECTORY_SEPARATOR));
+        for($i = 0 ; $i < count($arrDir); $i++){
+            $returnValue .= '..'.DIRECTORY_SEPARATOR;
+        }
+        return $returnValue;
+    }
 }
