@@ -105,11 +105,6 @@ class OatPciExporter extends PortableElementExporter{
             //set version
             $currentPortableNode->setAttribute('version', $portableElement->getVersion());
 
-            // If asset files list is empty for current identifier skip
-            if ( !isset($portableAssetsToExport) || !isset($portableAssetsToExport[$portableElement->getTypeIdentifier()]) ){
-                continue;
-            }
-
             /** @var \DOMElement $resourcesNode */
             $resourcesNode = $currentPortableNode->getElementsByTagName('resources')->item(0);
 
@@ -122,7 +117,7 @@ class OatPciExporter extends PortableElementExporter{
             foreach ($portableElement->getRuntimeKey('libraries') as $library) {
                 $libraryNode = $dom->createElement($localNs . 'lib');
                 //the exported lib id must be adapted from a href mode to an amd name mode
-                $libraryNode->setAttribute('id', preg_replace('/\.js$/', '', $library));
+                $libraryNode->setAttribute('id', preg_replace('/\.js$/', '', $this->getOatPciExportPath($library)));
                 $librariesNode->appendChild($libraryNode);
             }
             if ($librariesNode->hasChildNodes()) {
