@@ -201,13 +201,13 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $likertData = current($itemData['body']['elements']);
 
         //check parsed likert interaction data
-        $this->assertEquals('imsSamplePciLikert', $likertData['typeIdentifier']);
+        $this->assertEquals('urn:oat:pci:likert', $likertData['typeIdentifier']);
         $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $likertData['xmlns']);
         $this->assertEquals(['../oat-pci.json'], $likertData['config']);
         $this->assertEquals(['imsSamplePciLikert/runtime/js/imsSamplePciLikert', 'imsSamplePciLikert/runtime/js/renderer', 'jquery_2_1_1'], array_keys($likertData['modules']));
         $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $likertData['properties']);
 
-        $pciLikert = $this->portableElementService->retrieve('IMSPCI', 'imsSamplePciLikert');
+        $pciLikert = $this->portableElementService->retrieve('IMSPCI', 'urn:oat:pci:likert');
         $this->assertInstanceOf('oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject', $pciLikert);
 
         return $items[0];
@@ -376,7 +376,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $pciAudio = $this->portableElementService->retrieve('PCI', 'oatSamplePciAudio');
         $this->assertInstanceOf('oat\qtiItemPci\model\portableElement\dataObject\PciDataObject', $pciAudio);
 
-        $pciImsLikert = $this->portableElementService->retrieve('IMSPCI', 'imsSamplePciLikert');
+        $pciImsLikert = $this->portableElementService->retrieve('IMSPCI', 'urn:oat:pci:likert');
         $this->assertInstanceOf('oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject', $pciImsLikert);
 
         $this->portableElementService->unregisterModel($pciLikert);

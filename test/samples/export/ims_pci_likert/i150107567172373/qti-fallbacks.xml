@@ -8,7 +8,7 @@
     <div class="grid-row">
       <div class="col-12">
         <customInteraction responseIdentifier="RESPONSE">
-          <pci:portableCustomInteraction customInteractionTypeIdentifier="imsSamplePciLikert" data-version="1.0.0">
+          <pci:portableCustomInteraction customInteractionTypeIdentifier="urn:oat:pci:likert" data-version="1.0.0">
             <pci:properties>
               <pci:property key="level">5</pci:property>
               <pci:property key="label-min">min</pci:property>

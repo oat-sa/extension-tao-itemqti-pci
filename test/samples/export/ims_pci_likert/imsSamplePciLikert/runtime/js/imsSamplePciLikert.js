@@ -19,7 +19,7 @@
 define(['qtiCustomInteractionContext', 'jquery_2_1_1', 'imsSamplePciLikert/runtime/js/renderer'], function(qtiCustomInteractionContext, $, renderer){
     'use strict';
 
-    var _typeIdentifier = 'imsSamplePciLikert';
+    var _typeIdentifier = 'urn:oat:pci:likert';
 
     var imsSamplePciLikert = {
 

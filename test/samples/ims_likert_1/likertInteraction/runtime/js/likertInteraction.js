@@ -19,7 +19,7 @@
 define(['qtiCustomInteractionContext', 'IMSGlobal/jquery_2_1_1', 'likertInteraction/runtime/js/renderer', 'OAT/util/event'], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
 
-    var _typeIdentifier = 'likertInteraction';
+    var _typeIdentifier = 'urn:oat:pci:likert';
 
     var likertInteraction = {
 
