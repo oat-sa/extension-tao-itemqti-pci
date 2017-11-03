@@ -41,69 +41,6 @@ use oat\taoQtiItem\model\qti\Service as QtiService;
 
 class ImportExportTest extends TaoPhpUnitTestRunner
 {
-    public function _testImsLikertV1()
-    {
-        $packageDir = dirname(__FILE__).'/samples/ims_likert_1/';
-        $qtiParser = new Parser($packageDir.'/i150107567172373/qti.xml');
-        $portableAssetHandler = new PortableAssetHandler($qtiParser->load(), $packageDir);
-
-        $portableElementService = new PortableElementService();
-
-        $reflectionClass = new \ReflectionClass(PortableAssetHandler::class);
-        $reflectionProperty = $reflectionClass->getProperty('portableItemParser');
-        $reflectionProperty->setAccessible(true);
-        $this->assertInstanceOf(PortableElementItemParser::class, $reflectionProperty->getValue($portableAssetHandler));
-
-        $portableItemParser = $reflectionProperty->getValue($portableAssetHandler);
-
-        $reqs = [
-            'likertInteraction/runtime/js/likertInteraction.js',
-            'likertInteraction/runtime/js/renderer.js',
-            'likertInteraction/runtime/likertConfig.json'
-        ];
-
-        //check that required files are
-        foreach($reqs as $req){
-            $this->assertEquals(true, $portableAssetHandler->isApplicable($req));
-            $absPath = $packageDir. '/' . $req;
-            $this->assertEquals(false, empty($portableAssetHandler->handle($absPath, $req)));
-        }
-
-        //check that not required files are not
-        $this->assertEquals(false, $portableAssetHandler->isApplicable('likertScaleInteractionSample/runtime/js/renderer-unexisting.js'));
-        $this->assertEquals(false, $portableAssetHandler->isApplicable('oat-pci-unexisting.json'));
-
-        $portableObjects = $portableItemParser->getPortableObjects();
-
-        foreach($portableObjects as $portableObject) {
-            try{
-                $portableElementService->unregisterModel($portableObject);
-            }catch(PortableElementNotFoundException $e){}
-        }
-
-
-        $folder = $packageDir;
-        $itemClass = new \core_kernel_classes_Class('http://www.tao.lu/Ontologies/TAOItem.rdf#Item');
-
-//        $qtiItemResources = ImportService::singleton()->createQtiManifest($folder . 'imsmanifest.xml');
-//        $report = ImportService::singleton()->importQtiItem(
-//            $folder,
-//            $qtiItemResource,
-//            $itemClass
-//        );
-
-
-        $portableAssetHandler->finalize();
-        foreach($portableObjects as $portableObject){
-            $retrivedElement = $portableElementService->getPortableElementByIdentifier($portableObject->getModel()->getId(), $portableObject->getTypeIdentifier());
-            $this->assertEquals($portableObject->getTypeIdentifier(), $retrivedElement->getTypeIdentifier());
-
-            $portableElementService->unregisterModel($retrivedElement);
-        }
-    }
-
-    //TODO starting point
-
     /**
      * @var ImportService
      */
@@ -276,59 +213,6 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         return $items[0];
     }
 
-    public function _testImport()
-    {
-        $itemClass = $this->itemService->getRootClass();
-        $report = $this->importService->importQTIPACKFile($this->getSamplePath('/package/QTI/package.zip'),
-            $itemClass);
-
-        $items = array();
-        foreach ($report as $itemReport) {
-            $data = $itemReport->getData();
-            if (!is_null($data)) {
-                $items[] = $data;
-            }
-        }
-        $this->assertEquals(1, count($items));
-
-        $item = current($items);
-        $this->assertInstanceOf('\core_kernel_classes_Resource', $item);
-        $this->assertTrue($item->exists());
-
-        $resourceManager = new LocalItemSource(
-            array( 'item' => $item,
-                'lang' =>DEFAULT_LANG)
-        );
-        $data = $resourceManager->getDirectory();
-        $this->assertTrue(is_array($data));
-        $this->assertTrue(isset($data['path']));
-        $this->assertEquals('/', $data['path']);
-
-        $this->assertTrue(isset($data['children']));
-        $children = $data['children'];
-        $this->assertEquals(3, count($children));
-
-        $check = array('/images/','/style/');
-
-        $file = null;
-        $dir = null;
-        foreach ($children as $child) {
-            if (isset($child['path'])) {
-                $this->assertContains($child['path'],$check);
-            }
-            if (isset($child['name'])) {
-                $file = $child;
-            }
-        }
-
-        $this->assertEquals("qti.xml", $file['name']);
-        $this->assertContains("/xml", $file['mime']);
-        $this->assertTrue($file['size'] > 0);
-
-
-        return $item;
-    }
-
     /**
      * @depends testImportOatPci
      * @param $item
@@ -360,10 +244,6 @@ class ImportExportTest extends TaoPhpUnitTestRunner
 
         $zipContent = $this->readZipArchive($path, $item);
         $itemFolder = $this->getItemFolder($item);
-
-//        var_dump($zipContent['item']);
-//        var_dump($zipContent['manifest']);
-//        var_dump($zipContent['files']);
 
         $this->assertEquals([
             $itemFolder.'/oatSamplePciLikert/runtime/oatSamplePciLikert.min.js',
@@ -431,10 +311,6 @@ class ImportExportTest extends TaoPhpUnitTestRunner
 
         $zipContent = $this->readZipArchive($path, $item);
         $itemFolder = $this->getItemFolder($item);
-
-//        var_dump($zipContent['item']);
-//        var_dump($zipContent['manifest']);
-//        var_dump($zipContent['files']);
 
         $this->assertEquals([
             'imsSamplePciLikert/runtime/js/imsSamplePciLikert.js',
@@ -582,8 +458,6 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $zipArchive->close();
         $this->assertTrue(file_exists($path),'could not find path ' . $path);
         $this->exportedZips[] = $path;
-//        var_dump($path);
-
 
         return array($path, $manifest);
     }
@@ -616,9 +490,9 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             $files[] = $zip->getNameIndex($i);
         }
 
-//        if($zip->locateName('oat-pci.json')){
-//            var_dump($zip->getFromName('oat-pci.json'));
-//        }
+        if($zip->locateName('oat-pci.json')){
+            \common_Logger::d('portable element manifest: '.$zip->getFromName('oat-pci.json'));
+        }
 
         return [
             'files' => $files,
