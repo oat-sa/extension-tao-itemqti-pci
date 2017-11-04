@@ -1,6 +1,6 @@
 {
     "model" : "IMSPCI",
-    "typeIdentifier": "likertInteraction",
+    "typeIdentifier": "urn:fdc:taotesting.com:pci:likert",
     "label": "Likert Scale v1",
     "short": "Likert v1",
     "description": "A simple implementation of likert scale.",

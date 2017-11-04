@@ -24,7 +24,7 @@ define([
 ], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
 
-    var _typeIdentifier = 'likertInteraction';
+    var _typeIdentifier = 'urn:fdc:taotesting.com:pci:likert';
 
     var likertInteraction = {
 
