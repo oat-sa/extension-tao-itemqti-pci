@@ -31,11 +31,7 @@
             "likertInteraction/runtime/js/likertInteraction" : [
                 "likert/runtime/js/likertInteraction.js"
             ]
-        },
-        "src" : [
-            "./likert/runtime/js/likertInteraction.js",
-            "./likert/runtime/js/renderer.js"
-        ]
+        }
     },
     "creator" : {
         "icon": "./likert/creator/img/icon.svg",

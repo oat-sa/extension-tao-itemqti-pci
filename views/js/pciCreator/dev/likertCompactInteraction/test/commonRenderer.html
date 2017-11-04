@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-        <title>PCI Likert Interaction Common Renderer Test</title>
+        <title>PCI Likert Interaction Compact Version Common Renderer Test</title>
         <link rel="stylesheet" type="text/css" href="/tao/views/js/lib/qunit/qunit.css">
         <script type="text/javascript" src="/tao/views/js/lib/require.js"></script>
         <script type="text/javascript" src="/tao/views/js/lib/qunit/qunit.js"></script>
@@ -20,16 +20,16 @@
                     'taoQtiItem/portableElementRegistry/ciRegistry',
                     'taoQtiItem/portableElementRegistry/provider/localManifestProvider'
                 ], function (runner, ciRegistry, pciTestProvider){
-                    pciTestProvider.addManifestPath('likertInteraction', 'qtiItemPci/pciCreator/dev/likertInteraction/imsPciCreator.json');
+                    pciTestProvider.addManifestPath('likertCompactInteraction', 'qtiItemPci/pciCreator/dev/likertCompactInteraction/imsPciCreator.json');
                     ciRegistry.resetProviders();
                     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
                     QUnit.start();
 
                     runner.run({
-                        relBaseUrl : 'qtiItemPci/pciCreator/dev/likertInteraction/test/samples/likert_triple/',
+                        relBaseUrl : 'qtiItemPci/pciCreator/dev/likertCompactInteraction/test/samples/likert_triple/',
                         runtimeLocations : {
-                            likertInteraction : 'qtiItemPci/pciCreator/dev/likertInteraction/'
+                            likertCompactInteraction : 'qtiItemPci/pciCreator/dev/likertCompactInteraction/'
                         },
                         assertions : {
                             interactionCount : 3,
