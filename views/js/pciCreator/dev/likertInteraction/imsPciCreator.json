@@ -18,35 +18,35 @@
     "runtime" : {
         "config" : [
             {
-                "file": "runtime/likertConfig.json",
+                "file": "likert/runtime/likertConfig.json",
                 "data": {
                     "waitSeconds": 30,
                     "paths": {
-                        "likertInteraction/runtime/js/renderer" : "runtime/js/renderer.js"
+                        "likertInteraction/runtime/js/renderer" : "likert/runtime/js/renderer.js"
                     }
                 }
             }
         ],
         "modules" : {
             "likertInteraction/runtime/js/likertInteraction" : [
-                "runtime/js/likertInteraction.js"
+                "likert/runtime/js/likertInteraction.js"
             ]
         },
         "src" : [
-            "./runtime/js/likertInteraction.js",
-            "./runtime/js/renderer.js"
+            "./likert/runtime/js/likertInteraction.js",
+            "./likert/runtime/js/renderer.js"
         ]
     },
     "creator" : {
-        "icon": "./creator/img/icon.svg",
+        "icon": "./likert/creator/img/icon.svg",
         "hook": "./imsPciCreator.js",
         "libraries" : [
-            "./creator/tpl/markup.tpl",
-            "./creator/tpl/propertiesForm.tpl",
-            "./creator/widget/Widget.js",
-            "./creator/widget/states/Question.js",
-            "./creator/widget/states/Answer.js",
-            "./creator/widget/states/states.js"
+            "./likert/creator/tpl/markup.tpl",
+            "./likert/creator/tpl/propertiesForm.tpl",
+            "./likert/creator/widget/Widget.js",
+            "./likert/creator/widget/states/Question.js",
+            "./likert/creator/widget/states/Answer.js",
+            "./likert/creator/widget/states/states.js"
         ]
     }
 }

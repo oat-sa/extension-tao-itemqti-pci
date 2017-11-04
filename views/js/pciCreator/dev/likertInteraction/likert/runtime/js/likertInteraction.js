@@ -19,7 +19,7 @@
 define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'likertInteraction/runtime/js/renderer',
+    'likertInteraction/likert/runtime/js/renderer',
     'taoQtiItem/portableLib/OAT/util/event'
 ], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
