@@ -21,28 +21,16 @@ define([
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
-    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!likertCompactInteraction/likert/creator/tpl/propertiesForm',
     'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){
+], function(stateFactory, Question, formElement, simpleEditor, formTpl, _){
     'use strict';
 
     var LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
 
         var $container = this.widget.$container,
-            $prompt = $container.find('.prompt'),
             interaction = this.widget.element;
-
-        containerEditor.create($prompt, {
-            change : function(text){
-                interaction.data('prompt', text);
-                interaction.updateMarkup();
-            },
-            markup : interaction.markup,
-            markupSelector : '.prompt',
-            related : interaction
-        });
 
         simpleEditor.create($container, '.likert-label-min', function(text){
             interaction.prop('label-min', text);
@@ -54,11 +42,7 @@ define([
 
     }, function(){
 
-        var $container = this.widget.$container,
-            $prompt = $container.find('.prompt');
-
-        simpleEditor.destroy($container);
-        containerEditor.destroy($prompt);
+        simpleEditor.destroy(this.widget.$container);
     });
 
     LikertInteractionStateQuestion.prototype.initForm = function(){

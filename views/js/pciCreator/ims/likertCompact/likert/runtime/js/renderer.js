@@ -16,7 +16,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/OAT/util/html', 'likertCompactInteraction/likert/runtime/js/assets'], function($, html, assets){
+define(['taoQtiItem/portableLib/jquery_2_1_1', 'likertCompactInteraction/likert/runtime/js/assets'], function($, assets){
     'use strict';
 
     function renderChoices(id, $container, config){
@@ -56,9 +56,6 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'taoQtiItem/portableLib/OAT/util/
 
             renderChoices(id, $container, config);
             renderLabels($container, config, assetManager);
-            
-            //render rich text content in prompt
-            html.render($container.find('.prompt'));
         },
         renderChoices : function(id, container, config){
             renderChoices(id, $(container), config);
