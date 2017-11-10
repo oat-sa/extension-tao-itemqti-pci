@@ -106,30 +106,9 @@ class IMSPciDataObject extends PciDataObject
     {
         $runtimeManifest = $this->getRuntime();
         if(isset($runtimeManifest['src'])) {
-            $runtimeManifest['src'] = $this->getAlias($runtimeManifest['src']);
-        }
-
-        if(isset($runtimeManifest['modules'])){
-            foreach($runtimeManifest['modules'] as $id => $paths){
-                $runtimeManifest['modules'][$id] = $this->getAlias($paths);
-            }
-        }
-        if(isset($runtimeManifest['config'])){
-            foreach($runtimeManifest['config'] as &$config){
-                if(isset($config['file'])){
-                    $config['file'] = $this->getAlias($config['file']);
-                }
-                if(isset($config['data']) && isset($config['data']['paths']) && is_array($config['data']['paths'])){
-                    $config['data']['paths'] = $this->getAlias($config['data']['paths']);
-                }
-            }
+            $runtimeManifest['src'] = preg_replace('/^(.\/)?(.*)/', $this->getTypeIdentifier() . "/$2", $runtimeManifest['src']);
         }
 
         return $runtimeManifest;
-    }
-
-    protected function getAlias($paths = []){
-        return $paths;
-        return preg_replace('/^(.\/)?(.*)/', $this->getTypeIdentifier() . "/$2", $paths);
     }
 }

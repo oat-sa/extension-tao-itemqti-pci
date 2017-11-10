@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i1508765460275176" title="Item 13" label="Item 13" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint62">
+    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer"/>
+    <responseDeclaration identifier="RESPONSE_1" cardinality="single" baseType="file"/>
+    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+    <itemBody>
+        <div class="grid-row">
+            <div class="col-12">
+                <customInteraction responseIdentifier="RESPONSE">
+                    <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction" customInteractionTypeIdentifier="likertScaleInteraction" hook="likertScaleInteraction/runtime/likertScaleInteraction.min.js" version="0.4.0">
+                        <resources>
+                            <stylesheets>
+                                <link href="likertScaleInteraction/runtime/css/base.css" type="text/css" title="base"/>
+                                <link href="likertScaleInteraction/runtime/css/likertScaleInteraction.css" type="text/css" title="likertScaleInteraction"/>
+                            </stylesheets>
+                            <mediaFiles>
+                                <file src="likertScaleInteraction/runtime/assets/ThumbDown.png" type="image/png"/>
+                                <file src="likertScaleInteraction/runtime/assets/ThumbUp.png" type="image/png"/>
+                                <file src="likertScaleInteraction/runtime/css/img/bg.png" type="image/png"/>
+                            </mediaFiles>
+                        </resources>
+                        <properties>
+                            <property key="level">5</property>
+                            <property key="label-min">min</property>
+                            <property key="label-max">max</property>
+                        </properties>
+                        <markup>
+                            <html5:div class="likertScaleInteraction">
+                                <html5:div class="prompt"/>
+                                <html5:ul class="likert"/>
+                            </html5:div>
+                        </markup>
+                    </portableCustomInteraction>
+                </customInteraction>
+            </div>
+        </div>
+        <div class="grid-row">
+            <div class="col-12">
+                <customInteraction responseIdentifier="RESPONSE_1">
+                    <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction" customInteractionTypeIdentifier="audioRecordingInteraction" hook="audioRecordingInteraction/runtime/audioRecordingInteraction.js" version="0.2.0">
+                        <resources>
+                            <libraries>
+                                <lib id="audioRecordingInteraction/runtime/js/player"/>
+                                <lib id="audioRecordingInteraction/runtime/js/recorder"/>
+                                <lib id="audioRecordingInteraction/runtime/js/uiElements"/>
+                            </libraries>
+                            <stylesheets>
+                                <link href="audioRecordingInteraction/runtime/css/audioRecordingInteraction.css" type="text/css" title="audioRecordingInteraction"/>
+                            </stylesheets>
+                            <mediaFiles>
+                                <file src="audioRecordingInteraction/runtime/img/controls.svg" type="image/svg+xml"/>
+                                <file src="audioRecordingInteraction/runtime/img/mic.svg" type="image/svg+xml"/>
+                            </mediaFiles>
+                        </resources>
+                        <properties>
+                            <property key="allowPlayback">true</property>
+                            <property key="audioBitrate">20000</property>
+                            <property key="autoStart"></property>
+                            <property key="displayDownloadLink"></property>
+                            <property key="maxRecords">2</property>
+                            <property key="maxRecordingTime">120</property>
+                            <property key="useMediaStimulus"></property>
+                            <properties key="media">
+                                <property key="autostart">true</property>
+                                <property key="replayTimeout">5</property>
+                                <property key="maxPlays">2</property>
+                                <property key="loop"></property>
+                                <property key="pause"></property>
+                                <property key="uri"></property>
+                                <property key="type"></property>
+                                <property key="height">270</property>
+                                <property key="width">480</property>
+                            </properties>
+                        </properties>
+                        <markup>
+                            <html5:div class="audioRecordingInteraction">
+                                <html5:div class="prompt"> </html5:div>
+                                <html5:div class="audio-rec">
+                                    <html5:div class="media-stimulus"> </html5:div>
+                                    <html5:div class="input-meter">
+                                        <html5:div class="leds"> </html5:div>
+                                        <html5:div class="mic"> </html5:div>
+                                    </html5:div>
+                                    <html5:div class="progress"> </html5:div>
+                                    <html5:div class="controls"> </html5:div>
+                                </html5:div>
+                            </html5:div>
+                        </markup>
+                    </portableCustomInteraction>
+                </customInteraction>
+            </div>
+        </div>
+    </itemBody>
+    <responseProcessing>
+        <responseCondition>
+            <responseIf>
+                <match>
+                    <variable identifier="RESPONSE_1"/>
+                    <correct identifier="RESPONSE_1"/>
+                </match>
+                <setOutcomeValue identifier="SCORE">
+                    <sum>
+                        <variable identifier="SCORE"/>
+                        <baseValue baseType="integer">1</baseValue>
+                    </sum>
+                </setOutcomeValue>
+            </responseIf>
+        </responseCondition>
+    </responseProcessing>
+</assessmentItem>

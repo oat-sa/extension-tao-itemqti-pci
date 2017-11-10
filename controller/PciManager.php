@@ -121,14 +121,17 @@ class PciManager extends \tao_actions_CommonModule
 
         $invalidModelErrors = [];
         $pciModels = $this->getPciModels();
+        $pciObject = null;
         foreach($pciModels as $pciModel){
             try {
                 $pciObject = $this->getService()->getValidPortableElementFromZipSource($pciModel->getId(), $file['tmp_name']);
                 if(!is_null($pciObject)){
                     break;//stop at the first one
                 }
-            }  catch (PortableElementInvalidModelException $e) {
+            } catch (PortableElementInvalidModelException $e) {
                 $invalidModelErrors = $e->getReportMessages();
+            } catch (PortableElementParserException $e){
+                $invalidModelErrors[] = ['message' => $e->getMessage()];
             }
         }
 
@@ -190,6 +193,7 @@ class PciManager extends \tao_actions_CommonModule
                     break;//stop at the first one
                 }
             } catch (PortableElementInvalidModelException $e) {
+            } catch (PortableElementParserException $e) {
             }
         }
     }

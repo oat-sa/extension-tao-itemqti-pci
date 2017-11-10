@@ -136,4 +136,65 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals(['likertInteraction/runtime/likertConfig.json'], $pci->getConfig());
         $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $pci->getProperties());
     }
+
+    /**
+     * @return array
+     */
+    public function compositeOatImsPciPovider()
+    {
+        return [
+            [dirname(__FILE__).'/samples/xml/multi/likert-oat-ims.xml'],
+            [dirname(__FILE__).'/samples/xml/multi/likert-oat-ims-ns.xml']
+        ];
+    }
+
+    /**
+     * @dataProvider compositeOatImsPciPovider
+     */
+    public function testParseOatAndImsPciWithConfig($file){
+
+        $qtiParser = new Parser($file);
+
+        $qtiParser->validate();
+        if(!$qtiParser->isValid()){
+            echo $qtiParser->displayErrors();
+        }
+
+        $item = $qtiParser->load();
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+
+        $this->assertEquals(2, count($item->getInteractions()));
+
+        $pcis = $item->getComposingElements('\\oat\\taoQtiItem\\model\\qti\\interaction\\ImsPortableCustomInteraction');
+        $this->assertEquals(1, count($pcis));
+        $imsPci = reset($pcis);
+
+        $pcis = $item->getComposingElements('\\oat\\taoQtiItem\\model\\qti\\interaction\\PortableCustomInteraction');
+        $this->assertEquals(1, count($pcis));
+        $oatPci = reset($pcis);
+
+        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNamespace()->getUri());
+        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $imsPci->getNamespace()->getUri());
+    }
+
+    public function testParseOatMulti(){
+
+        $qtiParser = new Parser(dirname(__FILE__).'/samples/xml/oat/likert_audio.xml');
+
+        $qtiParser->validate();
+        if(!$qtiParser->isValid()){
+            echo $qtiParser->displayErrors();
+        }
+
+        $item = $qtiParser->load();
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+
+        $this->assertEquals(2, count($item->getInteractions()));
+
+        $pcis = $item->getComposingElements('\\oat\\taoQtiItem\\model\\qti\\interaction\\PortableCustomInteraction');
+        $this->assertEquals(2, count($pcis));
+        $oatPci = array_pop($pcis);
+
+        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNamespace()->getUri());
+    }
 }
