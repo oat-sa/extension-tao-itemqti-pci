@@ -61,7 +61,7 @@ define([
     }
 
     //manually register the pci from its manifest
-    pciTestProvider.addManifestPath('likertInteraction', 'qtiItemPci/pciCreator/dev/likertInteraction/pciCreator.json');
+    pciTestProvider.addManifestPath('likertInteraction', 'qtiItemPci/pciCreator/dev/likertInteraction/imsPciCreator.json');
     ciRegistry.resetProviders();
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
