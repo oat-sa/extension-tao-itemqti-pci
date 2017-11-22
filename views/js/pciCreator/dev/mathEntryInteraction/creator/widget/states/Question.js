@@ -44,7 +44,8 @@ define([
             },
             markup : interaction.markup,
             markupSelector : '.prompt',
-            related : interaction
+            related : interaction,
+            areaBroker: this.widget.getAreaBroker()
         });
 
         if (toBoolean(interaction.prop('useGapExpression'), false)) {

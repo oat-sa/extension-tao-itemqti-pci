@@ -41,7 +41,8 @@ define([
             },
             markup : interaction.markup,
             markupSelector : '.prompt',
-            related : interaction
+            related : interaction,
+            areaBroker: this.widget.getAreaBroker()
         });
 
         simpleEditor.create($container, '.likert-label-min', function(text){
@@ -94,7 +95,7 @@ define([
 
                 //update the pci property value:
                 interaction.prop('level', value);
-                
+
                 //trigger change event:
                 interaction.triggerPci('levelchange', [parseInt(value)]);
             }
