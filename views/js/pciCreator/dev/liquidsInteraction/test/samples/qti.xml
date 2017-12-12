@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem
+        xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:m="http://www.w3.org/1998/Math/MathML"
+        xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction"
+        xmlns:html5="html5"
+        xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd"
+        identifier="i15003927952383173" title="Item 13" adaptive="false" timeDependent="false">
+    <responseDeclaration cardinality="single" identifier="RESPONSE" baseType="integer"/>
+    <outcomeDeclaration cardinality="single" baseType="float" identifier="SCORE"/>
+    <itemBody>
+        <div class="grid-row">
+            <div class="col-12">
+                <customInteraction responseIdentifier="RESPONSE">
+                    <pci:portableCustomInteraction customInteractionTypeIdentifier="liquidsInteraction" hook="">
+                        <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+                        <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+                            <pci:libraries></pci:libraries>
+                        </pci:resources>
+                        <pci:properties></pci:properties>
+                        <pci:markup>
+                            <html5:div class="liquidsInteraction">
+                                <html5:div class="prompt"></html5:div>
+                                <html5:canvas class="liquids" width="400" height="400"></html5:canvas>
+                            </html5:div>
+                        </pci:markup>
+                    </pci:portableCustomInteraction>
+                </customInteraction>
+            </div>
+        </div>
+    </itemBody>
+    <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<manifest xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 http://www.imsglobal.org/xsd/qti/qtiv2p2/qtiv2p2_imscpv1p2_v1p0.xsd" identifier="MANIFEST-tao5978992df3b812-44603123">
+    <metadata>
+        <schema>QTIv2.2 Package</schema>
+        <schemaversion>1.0.0</schemaversion>
+    </metadata>
+    <organizations/>
+    <resources>
+        <resource identifier="i150107567172373" type="imsqti_item_xmlv2p2" href="i150107567172373/qti.xml">
+            <file href="i150107567172373/qti.xml"/>
+            <file href="oat-pci.json"/>
+            <file href="portableLib/jquery_2_1_1.js"/>
+            <file href="likertScaleInteractionSample/runtime/js/likertScaleInteractionSample.js"/>
+            <file href="likertScaleInteractionSample/runtime/js/renderer.js"/>
+            <file href="likertScaleInteractionSample/runtime/css/base.css"/>
+            <file href="likertScaleInteractionSample/runtime/css/likertScaleInteractionSample.css"/>
+            <file href="likertScaleInteractionSample/runtime/assets/ThumbDown.png"/>
+            <file href="likertScaleInteractionSample/runtime/assets/ThumbUp.png"/>
+            <file href="likertScaleInteractionSample/runtime/css/img/bg.png"/>
+            <file href="i150107567172373/style/custom/tao-user-styles.css"/>
+        </resource>
+    </resources>
+</manifest>

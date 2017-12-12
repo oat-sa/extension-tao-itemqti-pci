@@ -20,15 +20,14 @@
  */
 namespace oat\qtiItemPci\test;
 
+use oat\qtiItemPci\model\IMSPciModel;
+use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\tao\test\TaoPhpUnitTestRunner;
-use oat\taoQtiItem\model\portableElement\common\parser\PortableElementPackageParser;
-use oat\taoQtiItem\model\portableElement\pci\model\PciModel;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementParserException;
 
 class PciPackageParserTest extends TaoPhpUnitTestRunner
 {
-
-    protected $qtiService;
-
     /**
      * tests initialization
      * load qti service
@@ -38,30 +37,65 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
         TaoPhpUnitTestRunner::initTest();
     }
 
-
-    public function testValidate()
+    public function testValidatePci()
     {
-
         $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
-        $parser = new PortableElementPackageParser($packageValid);
+        $parser = new PciPackagerParser();
         $parser->setModel(new PciModel());
-        $this->assertTrue($parser->validate());
-        
+        $this->assertTrue($parser->validate($packageValid));
     }
 
     public function testExtractFromManifest()
     {
-
         $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
 
-        $parser = new PortableElementPackageParser($packageValid);
+        $parser = new PciPackagerParser();
         $parser->setModel(new PciModel());
-        $parser->validate();
-        $model = $parser->getModel();
+        $parser->validate($packageValid);
+        $manifest = $parser->getManifestContent($packageValid);
 
-        $this->assertInstanceOf(PciModel::class, $model);
-        $this->assertEquals('likertScaleInteraction', $model->getTypeIdentifier());
+        $this->assertTrue(is_array($manifest));
+        $this->assertEquals(11, count($manifest));
+        $this->assertEquals('likertScaleInteraction', $manifest['typeIdentifier']);
     }
 
+    public function testValidateWrongModel()
+    {
+        $this->setExpectedException(PortableElementParserException::class);
+        $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
+        $parser = new PciPackagerParser();
+        $parser->setModel(new IMSPciModel());
+        $this->assertFalse($parser->validate($packageValid));
+    }
 
+    public function testValidateIms()
+    {
+        $packageValid = dirname(__FILE__).'/samples/package/imsLikert_v0.1.0.zip';
+        $parser = new PciPackagerParser();
+        $parser->setModel(new IMSPciModel());
+        $this->assertTrue($parser->validate($packageValid));
+    }
+
+    public function testExtractFromManifestIms()
+    {
+        $packageValid = dirname(__FILE__).'/samples/package/imsLikert_v0.1.0.zip';
+
+        $parser = new PciPackagerParser();
+        $parser->setModel(new IMSPciModel());
+        $parser->validate($packageValid);
+        $manifest = $parser->getManifestContent($packageValid);
+
+        $this->assertTrue(is_array($manifest));
+        $this->assertEquals(12, count($manifest));
+        $this->assertEquals('likertInteraction', $manifest['typeIdentifier']);
+    }
+
+    public function testValidateWrongModelIms()
+    {
+        $this->setExpectedException(PortableElementParserException::class);
+        $packageValid = dirname(__FILE__).'/samples/package/imsLikert_v0.1.0.zip';
+        $parser = new PciPackagerParser();
+        $parser->setModel(new PciModel());
+        $this->assertFalse($parser->validate($packageValid));
+    }
 }

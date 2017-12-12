@@ -14,7 +14,7 @@
  * - Disabled eslint warnings
  */
 /* eslint-disable */
-define(['jquery'], function(jQuery) {
+define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
     var undefined,
         mqCmdId = 'mathquill-command-id',
         mqBlockId = 'mathquill-block-id',

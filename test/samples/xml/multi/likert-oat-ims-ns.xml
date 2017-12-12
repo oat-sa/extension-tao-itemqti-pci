@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i150107567172373" title="PCI likert" label="PCI likert" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint56">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer"/>
+  <responseDeclaration identifier="RESPONSE_1" cardinality="single" baseType="integer"/>
+  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+  <stylesheet href="likertInteraction/runtime/css/base.css" type="text/css" media="all" title=""/>
+  <stylesheet href="likertInteraction/runtime/css/likertInteraction.css" type="text/css" media="all" title=""/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <portableCustomInteraction customInteractionTypeIdentifier="likertInteraction" data-version="1.0.0" xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1">
+            <properties>
+              <property key="level">5</property>
+              <property key="label-min">min</property>
+              <property key="label-max">max</property>
+            </properties>
+            <modules primaryConfiguration="likertInteraction/runtime/likertConfig.json">
+              <module id="likertInteraction/runtime/js/likertInteraction" primaryPath="likertInteraction/runtime/js/likertInteraction.js"/>
+              <module id="likertInteraction/runtime/js/renderer"/>
+            </modules>
+            <markup>
+              <html5:div class="likertInteraction">
+                <html5:div class="prompt"/>
+                <html5:ul class="likert"/>
+                <html5:div class="hidden assets">
+                    <html5:img class="ThumbDown" src="likertInteraction/runtime/assets/ThumbDown.png" alt="thumb down"/>
+                    <html5:img class="ThumbUp" src="likertInteraction/runtime/assets/ThumbUp.png" alt="thumb up"/>
+                    <html5:img class="bg" src="likertInteraction/runtime/css/img/bg.png" alt=""/>
+                </html5:div>
+              </html5:div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE_1">
+          <portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteraction" hook="" xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction">
+            <resources>
+              <libraries>
+                <lib id="IMSGlobal/jquery_2_1_1"/>
+                <lib id="likertScaleInteraction/runtime/renderer"/>
+              </libraries>
+              <stylesheets>
+                <link href="likertScaleInteraction/style/base.css" type="text/css" title="base"></link>
+                <link href="likertScaleInteraction/style/renderer.css" type="text/css" title="base"></link>
+              </stylesheets>
+              <mediaFiles>
+                <file src="likertScaleInteraction/runtime/style/img/icon_add.png" type="image/png"></file><!--- need to declare absolutely all required resources -->
+                <file src="likertScaleInteraction/runtime/style/img/icon_add.png" type="image/png"></file>
+                <file src="likertScaleInteraction/runtime/assets/img/buttonA.png" type="image/png"></file>
+                <file src="likertScaleInteraction/runtime/assets/img/canvasB.png" type="image/png"></file>
+                <file src="likertScaleInteraction/runtime/assets/demo.mp4" type="video/mpeg"></file>
+              </mediaFiles>
+            </resources>
+            <properties>
+              <entry key="level">5</entry>
+              <entry key="label-min">min</entry>
+              <entry key="label-max">max</entry>
+            </properties>
+            <markup>
+              <html5:div class="likertScaleInteraction">
+                <html5:div class="prompt"></html5:div>
+                <html5:ul class="likert"></html5:ul>
+              </html5:div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+</assessmentItem>
+

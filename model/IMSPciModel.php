@@ -23,9 +23,14 @@ namespace oat\qtiItemPci\model;
 use oat\oatbox\service\ServiceManager;
 use oat\oatbox\PhpSerializeStateless;
 use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
+use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
+use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
+use oat\qtiItemPci\model\portableElement\export\ImsPciExporter;
+use oat\taoQtiItem\model\Export\AbstractQTIItemExporter;
+use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 
 class IMSPciModel implements PortableElementModel
 {
@@ -33,13 +38,27 @@ class IMSPciModel implements PortableElementModel
 
     const PCI_IDENTIFIER = 'IMSPCI';
 
-    const PCI_MANIFEST = 'pciCreator.json';
+    const PCI_LABEL = 'IMS PCI';
 
-    const PCI_ENGINE = 'pciCreator.js';
+    const PCI_MANIFEST = 'imsPciCreator.json';
+
+    const PCI_ENGINE = 'imsPciCreator.js';
+
+    const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction_v1';
 
     public function getId()
     {
         return self::PCI_IDENTIFIER;
+    }
+
+    public function getLabel()
+    {
+        return self::PCI_LABEL;
+    }
+
+    public function getNamespace()
+    {
+        return self::PCI_NAMESPACE;
     }
 
     public function getDefinitionFiles()
@@ -78,14 +97,21 @@ class IMSPciModel implements PortableElementModel
 
     public function getDirectoryParser()
     {
-        //not available yet
-        return null;
+        $directoryParser = new PciDirectoryParser();
+        $directoryParser->setModel($this);
+        return $directoryParser;
     }
 
     public function getPackageParser()
     {
-        //not available yet
-        return null;
+        $packageParser = new PciPackagerParser();
+        $packageParser->setModel($this);
+        return $packageParser;
+    }
+
+    public function getExporter(PortableElementObject $dataObject, AbstractQTIItemExporter $qtiItemExporter)
+    {
+        return new ImsPciExporter($dataObject, $qtiItemExporter);
     }
 
     public function getQtiElementClassName()

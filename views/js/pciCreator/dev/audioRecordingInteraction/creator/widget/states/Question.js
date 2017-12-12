@@ -42,7 +42,8 @@ define([
             },
             markup : interaction.markup,
             markupSelector : '.prompt',
-            related : interaction
+            related : interaction,
+            areaBroker: this.widget.getAreaBroker()
         });
 
     }, function destroy(){

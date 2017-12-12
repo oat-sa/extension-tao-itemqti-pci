@@ -1,0 +1,198 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 3.2.0-sprint60\n"
+"PO-Revision-Date: 2017-09-26T07:26:43\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: it-IT\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: it-IT\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid " - TEST ONLY "
+msgstr ""
+
+msgid "A newer version of the pci \"%s\" already exists (current version: %s, target version: %s)"
+msgstr ""
+
+msgid "Add gap"
+msgstr "Aggiungi spazio"
+
+msgid "Add Interaction"
+msgstr ""
+
+msgid "allow line break"
+msgstr ""
+
+msgid "Allow playback"
+msgstr ""
+
+msgid "Audio bitrate:"
+msgstr ""
+
+msgid "authorize white space"
+msgstr ""
+
+msgid "Auto start recording"
+msgstr ""
+
+msgid "Back to listing"
+msgstr ""
+
+msgid "Comparison"
+msgstr ""
+
+msgid "cosinus"
+msgstr ""
+
+msgid "Disable this custom interaction"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "Display link"
+msgstr ""
+
+msgid "divide"
+msgstr ""
+
+msgid "Enable this custom interaction"
+msgstr ""
+
+msgid "Experimental only"
+msgstr ""
+
+msgid "exponent"
+msgstr ""
+
+msgid "fraction"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "Gap size"
+msgstr "Dimensione dello spazio"
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr ""
+
+msgid "greater than or equal"
+msgstr ""
+
+msgid "Hello World"
+msgstr ""
+
+msgid "id : "
+msgstr ""
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. ith the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr ""
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr ""
+
+msgid "Large"
+msgstr "Grande"
+
+msgid "Level"
+msgstr ""
+
+msgid "ln"
+msgstr ""
+
+msgid "log"
+msgstr ""
+
+msgid "lower than or equal"
+msgstr ""
+
+msgid "Manage custom interactions"
+msgstr ""
+
+msgid "Max attempts:"
+msgstr ""
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr ""
+
+msgid "Medium"
+msgstr "Medio"
+
+msgid "No Custom Interaction"
+msgstr ""
+
+msgid "Operands"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Plus/minus"
+msgstr ""
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr ""
+
+msgid "Response identifier"
+msgstr ""
+
+msgid "Scale size"
+msgstr ""
+
+msgid "sinus"
+msgstr ""
+
+msgid "Small"
+msgstr "Piccolo"
+
+msgid "square root"
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr ""
+
+msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
+msgstr ""
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr ""
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr ""
+
+msgid "Time limit:"
+msgstr ""
+
+msgid "times"
+msgstr ""
+
+msgid "Trigonometry"
+msgstr ""
+
+msgid "Unable to upload file %s : %s"
+msgstr ""
+
+msgid "Upload new custom interaction (zip package)"
+msgstr ""
+
+msgid "use expression with gaps"
+msgstr "usa espressione con spazi"
+
+msgid "Use media stimulus"
+msgstr ""
+
+msgid "version : "
+msgstr ""
+
+msgid "warning : changes affect all users of the item creator"
+msgstr ""
+

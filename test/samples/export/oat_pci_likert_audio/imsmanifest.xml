@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<manifest xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 http://www.imsglobal.org/xsd/qti/qtiv2p2/qtiv2p2_imscpv1p2_v1p0.xsd" identifier="MANIFEST-tao59f078742de3d8-81928597">
+    <metadata>
+        <schema>QTIv2.2 Package</schema>
+        <schemaversion>1.0.0</schemaversion>
+    </metadata>
+    <organizations/>
+    <resources>
+                <resource identifier="i15089314362453203" type="imsqti_item_xmlv2p2" href="i15089314362453203/qti.xml">
+            <file href="i15089314362453203/qti.xml"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/oatSamplePciLikert.min.js"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/css/base.css"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/css/oatSamplePciLikert.css"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/assets/ThumbDown.png"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/assets/ThumbUp.png"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/css/img/bg.png"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/js/oatSamplePciLikert.js"/>
+                        <file href="i15089314362453203/oatSamplePciLikert/runtime/js/renderer.js"/>
+                        <file href="i15089314362453203/oatSamplePciAudio/runtime/oatSamplePciAudio.js"/>
+                        <file href="i15089314362453203/oatSamplePciAudio/runtime/js/player.js"/>
+                        <file href="i15089314362453203/oatSamplePciAudio/runtime/js/recorder.js"/>
+                        <file href="i15089314362453203/oatSamplePciAudio/runtime/js/uiElements.js"/>
+                        <file href="i15089314362453203/oatSamplePciAudio/runtime/css/oatSamplePciAudio.css"/>
+                        <file href="i15089314362453203/oatSamplePciAudio/runtime/img/controls.svg"/>
+                        <file href="i15089314362453203/oatSamplePciAudio/runtime/img/mic.svg"/>
+                        <file href="i15089314362453203/who02.jpg"/>
+                        <file href="i15089314362453203/style/custom/tao-user-styles.css"/>
+                    </resource>
+            </resources>
+</manifest>

@@ -57,6 +57,7 @@ define([
                 authorizeWhiteSpace: 'false',
                 useGapExpression: 'false',
                 gapExpression: '',
+                gapStyle: '',
 
                 tool_frac:      'true',
                 tool_sqrt:      'true',
@@ -76,7 +77,8 @@ define([
                 tool_divide:    'true',
                 tool_plusminus: 'true',
 
-                allowNewLine:   'false'
+                allowNewLine:   'false',
+                enableAutoWrap:  'false'
             };
         },
         /**

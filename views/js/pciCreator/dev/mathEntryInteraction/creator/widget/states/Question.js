@@ -44,7 +44,8 @@ define([
             },
             markup : interaction.markup,
             markupSelector : '.prompt',
-            related : interaction
+            related : interaction,
+            areaBroker: this.widget.getAreaBroker()
         });
 
         if (toBoolean(interaction.prop('useGapExpression'), false)) {
@@ -87,7 +88,9 @@ define([
             _widget = this.widget,
             $form = _widget.$form,
             interaction = _widget.element,
-            response = interaction.getResponseDeclaration();
+            response = interaction.getResponseDeclaration(),
+            $gapStyleBox,
+            $gapStyleSelector;
 
         //render the form using the form template
         $form.html(formTpl({
@@ -114,7 +117,8 @@ define([
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
             tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
 
-            allowNewLine: toBoolean(interaction.prop('allowNewLine'), false)
+            allowNewLine: toBoolean(interaction.prop('allowNewLine'), false),
+            enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
         }));
 
         //init form javascript
@@ -129,13 +133,21 @@ define([
             useGapExpression: function gapChangeCallback(i, value) {
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
+                    $gapStyleBox.show();
                     response.attr('cardinality', 'multiple');
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
+                    $gapStyleBox.hide();
                     response.attr('cardinality', 'single');
                 }
                 configChangeCallBack(i, value, 'useGapExpression');
+            },
+            gapStyle: function gapStyleChangeCallback(i, newStyle) {
+
+                i.prop('gapStyle', newStyle);
+
+                configChangeCallBack(i, newStyle, 'gapStyle');
             },
             authorizeWhiteSpace: configChangeCallBack,
 
@@ -161,8 +173,20 @@ define([
                 i.triggerPci('configChange', [i.getProperties()]);
             },
 
-            allowNewLine: configChangeCallBack
+            allowNewLine: configChangeCallBack,
+            enableAutoWrap: configChangeCallBack
         });
+
+
+        $gapStyleBox = $form.find('.mathgap-style-box');
+        $gapStyleSelector = $gapStyleBox.find('[data-mathgap-style]');
+
+        $gapStyleSelector.select2({
+            width: '100%',
+            minimumResultsForSearch: Infinity
+        })
+        .val(interaction.prop('gapStyle'))
+        .trigger('change');
     };
 
     /**

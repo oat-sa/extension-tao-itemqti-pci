@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i15089314362453203" title="OAT PCI likert audio" label="OAT PCI likert audio" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint62">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer"/>
+  <responseDeclaration identifier="RESPONSE_1" cardinality="single" baseType="file"/>
+  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
+  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-6">
+        <customInteraction responseIdentifier="RESPONSE">
+          <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction" customInteractionTypeIdentifier="oatSamplePciLikert" hook="oatSamplePciLikert/runtime/oatSamplePciLikert.min.js" version="0.4.0">
+            <resources>
+                                            <stylesheets><link href="oatSamplePciLikert/runtime/css/base.css" type="text/css" title="base"/><link href="oatSamplePciLikert/runtime/css/oatSamplePciLikert.css" type="text/css" title="oatSamplePciLikert"/></stylesheets><mediaFiles><file src="oatSamplePciLikert/runtime/assets/ThumbDown.png" type="image/png"/><file src="oatSamplePciLikert/runtime/assets/ThumbUp.png" type="image/png"/><file src="oatSamplePciLikert/runtime/css/img/bg.png" type="image/png"/></mediaFiles></resources>
+            <properties>
+              <property key="level">7</property>
+              <property key="label-min">Don't like</property>
+              <property key="label-max"> Like</property>
+            </properties>
+            <markup>
+              <html5:div class="oatSamplePciLikert">
+                <html5:div class="prompt">
+                  <html5:p>
+                    <html5:img src="who02.jpg" alt="who02" width="21%"/>
+                  </html5:p>
+                </html5:div>
+                <html5:ul class="likert"/>
+              </html5:div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+      <div class="col-6">
+        <customInteraction responseIdentifier="RESPONSE_1">
+          <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction" customInteractionTypeIdentifier="oatSamplePciAudio" hook="oatSamplePciAudio/runtime/oatSamplePciAudio.js" version="0.2.0">
+            <resources>
+                                            <libraries><lib id="oatSamplePciAudio/runtime/js/player"/><lib id="oatSamplePciAudio/runtime/js/recorder"/><lib id="oatSamplePciAudio/runtime/js/uiElements"/></libraries><stylesheets><link href="oatSamplePciAudio/runtime/css/oatSamplePciAudio.css" type="text/css" title="oatSamplePciAudio"/></stylesheets><mediaFiles><file src="oatSamplePciAudio/runtime/img/controls.svg" type="image/svg+xml"/><file src="oatSamplePciAudio/runtime/img/mic.svg" type="image/svg+xml"/></mediaFiles></resources>
+            <properties>
+              <property key="allowPlayback">true</property>
+              <property key="audioBitrate">20000</property>
+              <property key="autoStart"></property>
+              <property key="displayDownloadLink"></property>
+              <property key="maxRecords">2</property>
+              <property key="maxRecordingTime">120</property>
+              <property key="useMediaStimulus"></property>
+              <properties key="media">
+                <property key="autostart">true</property>
+                <property key="replayTimeout">5</property>
+                <property key="maxPlays">2</property>
+                <property key="loop"></property>
+                <property key="pause"></property>
+                <property key="uri"></property>
+                <property key="type"></property>
+                <property key="height">270</property>
+                <property key="width">480</property>
+              </properties>
+            </properties>
+            <markup>
+              <html5:div class="oatSamplePciAudio">
+                <html5:div class="prompt"> </html5:div>
+                <html5:div class="audio-rec">
+                  <html5:div class="media-stimulus"> </html5:div>
+                  <html5:div class="input-meter">
+                    <html5:div class="leds"> </html5:div>
+                    <html5:div class="mic"> </html5:div>
+                  </html5:div>
+                  <html5:div class="progress"> </html5:div>
+                  <html5:div class="controls"> </html5:div>
+                </html5:div>
+              </html5:div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing>
+    <responseCondition>
+      <responseIf>
+        <match>
+          <variable identifier="RESPONSE_1"/>
+          <correct identifier="RESPONSE_1"/>
+        </match>
+        <setOutcomeValue identifier="SCORE">
+          <sum>
+            <variable identifier="SCORE"/>
+            <baseValue baseType="integer">1</baseValue>
+          </sum>
+        </setOutcomeValue>
+      </responseIf>
+    </responseCondition>
+  </responseProcessing>
+</assessmentItem>

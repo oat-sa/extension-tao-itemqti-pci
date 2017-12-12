@@ -20,11 +20,12 @@
  */
 define([
     'qtiCustomInteractionContext',
-    'IMSGlobal/jquery_2_1_1',
-    'OAT/lodash',
-    'OAT/util/event',
-    'OAT/util/html',
-    'mathEntryInteraction/runtime/mathquill/mathquill'
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/util/html',
+    'mathEntryInteraction/runtime/mathquill/mathquill',
+    'mathEntryInteraction/runtime/polyfill/es6-collections'
 ], function(
     qtiCustomInteractionContext,
     $,
@@ -36,14 +37,50 @@ define([
     'use strict';
 
     var ns = '.mathEntryInteraction';
+    var cssClass = {
+        root: 'mq-root-block',
+        cursor: 'mq-cursor',
+        newLine: 'mq-tao-br',
+        autoWrap: 'mq-tao-wrap'
+    };
+    var cssSelectors = _.mapValues(cssClass, function(cls) {
+        return '.' + cls;
+    });
+    var reSpace = /^(\s|&nbsp;)+$/;
     var MQ = MathQuill.getInterface(2);
     var mathEntryInteraction;
+
+    /**
+     * Builds a simple HTML markup.
+     * @param {String} cls
+     * @param {String} [tag='div']
+     * @returns {String}
+     */
+    function htmlMarkup(cls, tag) {
+        tag = tag || 'div';
+        return '<' + tag + ' class="' + cls + '"></' + tag + '>';
+    }
+
+    /**
+     * Computes the full width of an element, plus its margin.
+     * This approach is more reliable than jQuery, as the decimals part is taken into account.
+     * @param element
+     * @returns {Number}
+     */
+    function getWidth(element) {
+        var style = element.currentStyle || window.getComputedStyle(element);
+        var rect = element.getBoundingClientRect();
+        var borderBox = style.boxSizing === 'border-box';
+        return rect.width + parseFloat(style.marginLeft) + parseFloat(style.marginRight) +
+            (borderBox ? 0 : parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)) +
+            (borderBox ? 0 : parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth));
+    }
 
     // Warning: this is an experimental MathQuill API that might change or be removed upon MathQuill update.
     // Still, it is the most satisfying way to implement some required functionality without ugly hacks.
     MQ.registerEmbed('gap', function registerGap() {
         return {
-            htmlString: '<span class="mq-tao-gap"></span>',
+            htmlString: htmlMarkup('mq-tao-gap', 'span'),
             text: function text() {
                 return 'tao_gap';
             },
@@ -55,7 +92,7 @@ define([
     // Experimental line break...
     MQ.registerEmbed('br', function registerBr() {
         return {
-            htmlString: '<div class="mq-tao-br"></div>', // <div> is displayed as block: that's enough to create a new line. "<br />" breaks Mathquill.
+            htmlString: htmlMarkup(cssClass.newLine), // <div> is displayed as block: that's enough to create a new line. "<br />" breaks Mathquill.
             text: function text() {
                 return 'tao_br';
             },
@@ -98,6 +135,8 @@ define([
                 this.createMathEditable();
                 this.setLatex(this.config.gapExpression);
                 this.addToolbarListeners();
+                this.addGapStyle();
+                this.autoWrapContent();
 
             // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
             } else if (!this.inGapMode() && this.inQtiCreator()) {
@@ -110,6 +149,8 @@ define([
 
                 this.monitorActiveGapField();
                 this.addToolbarListeners();
+                this.addGapStyle();
+                this.autoWrapContent();
 
             // Normal rendering of the PCI: display an empty MathQuill editable field
             } else {
@@ -123,8 +164,10 @@ define([
          * @param {Boolean} config.authorizeWhiteSpace - if space key creates a space
          * @param {Boolean} config.useGapExpression - create a math expression with gaps (placeholders)
          * @param {Boolean} config.gapExpression - content of the math expression
+         * @param {('math-gap-small'|'math-gap-medium'|'math-gap-large')} config.gapStyle - size of the gaps
          * @param {Boolean} config.tool_toolId - is the given tool enabled?
          * @param {Boolean} config.allowNewLine - experimental... allows the test taker to create a new line on Enter
+         * @param {Boolean} config.enableAutoWrap - experimental... allows the editor to auto wrap the content
          */
         initConfig: function initConfig(config) {
             function toBoolean(value, defaultValue) {
@@ -139,6 +182,7 @@ define([
                 authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
                 useGapExpression:    toBoolean(config.useGapExpression, false),
                 gapExpression:       config.gapExpression || '',
+                gapStyle:            config.gapStyle,
 
                 toolsStatus: {
                     frac:     toBoolean(config.tool_frac,     true),
@@ -160,7 +204,8 @@ define([
                     plusminus:toBoolean(config.tool_plusminus,true)
                 },
 
-                allowNewLine: toBoolean(config.allowNewLine, false)
+                allowNewLine: toBoolean(config.allowNewLine, false),
+                enableAutoWrap: toBoolean(config.enableAutoWrap, false)
             };
         },
 
@@ -174,9 +219,20 @@ define([
                 handlers: {
                     edit: function onChange(mathField) {
                         self.trigger('responseChange', [mathField.latex()]);
+                        self.autoWrapContent();
                     },
                     enter: function onEnter(mathField) {
-                        if (self.config.allowNewLine && !self.inGapMode()) {
+                        // The "allow new line" option works under the following conditions:
+                        // - in runtime, only in normal mode
+                        // - in authoring, only in gapMode
+                        function isBrAllowed() {
+                            return self.config.allowNewLine
+                                && (
+                                       (!self.inGapMode() && !self.inQtiCreator()) // normal && runtime
+                                    || ( self.inGapMode() &&  self.inQtiCreator()) // gap mode && authoring
+                                );
+                        }
+                        if (isBrAllowed()) {
                             mathField.write('\\embed{br}');
                         }
                     }
@@ -213,11 +269,84 @@ define([
          */
 
         /**
+         * Will wrap the content, to avoid overflow, if autoWrap is enabled
+         */
+        autoWrapContent: function autoWrapContent() {
+            var $container, $cursor, current, lastSpace, lineBreak;
+            var maxWidth, lineWidth, cache, nodes, node, index, length, block;
+
+            if (this.config.enableAutoWrap) {
+                $container = this.$input.find(cssSelectors.root);
+                $cursor = $container.find(cssSelectors.cursor);
+                current = $cursor.closest(cssSelectors.root + '>span').get(0);
+
+                maxWidth = $container.width();
+                if (!this.wrapCache) {
+                    this.wrapCache = new window.WeakMap();
+                }
+                cache = this.wrapCache;
+                lineWidth = 0;
+
+                // iterate over each block and insert a line break each time a block is overflowing its container
+                nodes = _.toArray($container.get(0).childNodes);
+                for (length = nodes.length, index = 0; index < length; index ++) {
+                    node = nodes[index];
+                    block = cache.get(node);
+
+                    if (!block) {
+                        block = {
+                            classList: node.classList,
+                            isSpace: reSpace.test(node.innerHTML)
+                        };
+                        cache.set(node, block);
+                    }
+
+                    if (block.classList.contains(cssClass.autoWrap)) {
+                        // remove previously added auto line break
+                        $(node).remove();
+                    } else if (block.classList.contains(cssClass.newLine)) {
+                        // ignore manual line break, but reset the line width
+                        lineWidth = 0;
+                    } else if (!block.classList.contains(cssClass.cursor)) {
+                        // get the block width
+                        if (current === node || 'undefined' === typeof block.width) {
+                            block.width = getWidth(node);
+                        }
+
+                        if (block.isSpace) {
+                            lastSpace = {
+                                node: node,
+                                index: index
+                            };
+                        }
+
+                        // check if a line break is needed
+                        if (lineWidth + block.width >= maxWidth) {
+                            lineBreak = htmlMarkup(cssClass.autoWrap);
+                            if (lastSpace) {
+                                $(lastSpace.node).after(lineBreak);
+                                index = lastSpace.index;
+                                lineWidth = -block.width;
+                            } else {
+                                $(node).before(lineBreak);
+                                lineWidth = 0;
+                            }
+                            lastSpace = null;
+                        }
+                        lineWidth += block.width;
+                    }
+                }
+            }
+        },
+
+        /**
          * Gap mode only: fill the mathfield markup with the math expression before creating the MathQuill instance
          * @param {String} latex - the math expression with gaps
          */
         setMathStaticContent: function setMathStaticContent(latex) {
-            latex = latex.replace(/\\taoGap/g, '\\MathQuillMathField{}');
+            latex = latex
+                .replace(/\\taoGap/g, '\\MathQuillMathField{}')
+                .replace(/\\taoBr/g, '\\embed{br}');
             this.$input.text(latex);
         },
 
@@ -288,7 +417,10 @@ define([
                 });
 
             } else {
-                latex = latex.replace(/\\taoGap/g, '\\embed{gap}');
+                latex = latex
+                    .replace(/\\taoGap/g, '\\embed{gap}')
+                    .replace(/\\taoBr/g, '\\embed{br}')
+                    .replace(/\\text\{\}/g, '\\text{ }');  // quick fix for edge case that introduce empty text block
                 this.mathField.latex(latex);
             }
         },
@@ -475,6 +607,19 @@ define([
                 });
         },
 
+        /**
+         * Add the style that sets the width of the gaps, discard previous style
+         */
+        addGapStyle: function addGapStyle() {
+            var self = this;
+
+            if(self.config.gapStyle) {
+                self.$container.removeClass(function (index, className) {
+                    return (className.match(/\bmath-gap-[\w]+\b/g) || []).join(' ');
+                });
+                self.$container.addClass(self.config.gapStyle);
+            }
+        },
 
         /**
          * ====================

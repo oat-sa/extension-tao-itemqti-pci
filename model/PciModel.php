@@ -29,6 +29,9 @@ use oat\qtiItemPci\model\portableElement\validator\PciValidator;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
 use oat\oatbox\PhpSerializeStateless;
+use oat\qtiItemPci\model\portableElement\export\OatPciExporter;
+use oat\taoQtiItem\model\Export\AbstractQTIItemExporter;
+use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 
 class PciModel implements PortableElementModel
 {
@@ -36,13 +39,27 @@ class PciModel implements PortableElementModel
 
     const PCI_IDENTIFIER = 'PCI';
 
+    const PCI_LABEL = 'OAT PCI';
+
     const PCI_MANIFEST = 'pciCreator.json';
 
     const PCI_ENGINE = 'pciCreator.js';
 
+    const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction';
+
     public function getId()
     {
         return self::PCI_IDENTIFIER;
+    }
+
+    public function getLabel()
+    {
+        return self::PCI_LABEL;
+    }
+
+    public function getNamespace()
+    {
+        return self::PCI_NAMESPACE;
     }
 
     public function getDefinitionFiles()
@@ -91,6 +108,11 @@ class PciModel implements PortableElementModel
         $packageParser = new PciPackagerParser();
         $packageParser->setModel($this);
         return $packageParser;
+    }
+
+    public function getExporter(PortableElementObject $dataObject, AbstractQTIItemExporter $qtiItemExporter)
+    {
+        return new OatPciExporter($dataObject, $qtiItemExporter);
     }
 
     public function getQtiElementClassName()
