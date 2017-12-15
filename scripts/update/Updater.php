@@ -289,5 +289,7 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciMathEntry(), ['0.7.1']);
             $this->setVersion('4.0.1');
         }
+
+        $this->skip('4.0.1', '4.0.2');
     }
 }
