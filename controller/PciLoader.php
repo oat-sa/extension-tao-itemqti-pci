@@ -42,13 +42,37 @@ class PciLoader extends tao_actions_CommonModule
                         if(isset($customInteractionDirs[$id])){
                             //add option to load from source (as opposed to from the default min.js files)
                             foreach($versions as &$version){
-                                if(isset($version['runtime']) && isset($version['runtime']['src'])){
-                                    $version['runtime']['libraries'] = $version['runtime']['src'];
-                                    unset($version['runtime']['hook']);
-                                }
-                                if(isset($version['creator']) && isset($version['creator']['src'])){
-                                    $version['creator']['libraries'] = $version['creator']['src'];
-                                    unset($version['creator']['hook']);
+                                // IMS PCI
+                                if (isset($version['model']) && $version['model'] == 'IMSPCI') {
+                                    $modules = (isset($version['runtime']) && isset($version['runtime']['modules'])) ? $version['runtime']['modules'] : [];
+                                    $src = (isset($version['runtime']) && isset($version['runtime']['src'])) ? $version['runtime']['src'] : [];
+
+                                    // in case of a TAO bundled PCI (= we have a "src" entry),
+                                    // we redirect the module to the entry point of the PCI instead of its minified version
+                                    if (count($src) > 0) {
+                                        foreach($modules as $moduleKey => &$allModulesFiles) {
+                                            if (strpos($moduleKey, '.min') == (strlen($moduleKey) - strlen('.min'))) {
+                                                foreach($allModulesFiles as &$moduleFile) {
+                                                    $moduleFile = str_replace('.min.js', '.js', $moduleFile);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (isset($version['runtime']) && isset($version['runtime']['modules'])) {
+                                        $version['runtime']['modules'] = $modules;
+                                    }
+
+                                // TAO PCI
+                                } else {
+                                    if(isset($version['runtime']) && isset($version['runtime']['src'])){
+                                        $version['runtime']['libraries'] = $version['runtime']['src'];
+                                        unset($version['runtime']['hook']);
+                                    }
+                                    if(isset($version['creator']) && isset($version['creator']['src'])){
+                                        $version['creator']['libraries'] = $version['creator']['src'];
+                                        unset($version['creator']['hook']);
+                                    }
                                 }
                             }
                         }
