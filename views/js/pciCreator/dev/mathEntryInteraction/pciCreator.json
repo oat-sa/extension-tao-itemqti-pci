@@ -3,7 +3,7 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "0.4.2",
+    "version": "0.7.1",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -14,14 +14,8 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/mathEntryInteraction.js",
-        "libraries" : [
-            "IMSGlobal/jquery_2_1_1",
-            "OAT/lodash",
-            "OAT/util/event",
-            "OAT/util/html",
-            "./runtime/mathquill/mathquill.js"
-        ],
+        "hook" : "./runtime/mathEntryInteraction.min.js",
+        "libraries" : [],
         "stylesheets" : [
             "./runtime/mathquill/mathquill.css",
             "./runtime/css/mathEntryInteraction.css"
@@ -37,6 +31,11 @@
             "./runtime/mathquill/font/Symbola-basic.ttf",
             "./runtime/mathquill/font/Symbola-basic.woff",
             "./runtime/mathquill/font/Symbola-basic.woff2"
+        ],
+        "src" : [
+            "./runtime/mathEntryInteraction.js",
+            "./runtime/mathquill/mathquill.js",
+            "./runtime/polyfill/es6-collections.js"
         ]
     },
     "creator" : {
@@ -45,6 +44,7 @@
         "libraries" : [
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
+            "./creator/tpl/addGapBtn.tpl",
             "./creator/widget/Widget.js",
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js"

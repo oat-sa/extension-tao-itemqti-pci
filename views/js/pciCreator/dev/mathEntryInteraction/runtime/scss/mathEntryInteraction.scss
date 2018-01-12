@@ -22,7 +22,30 @@
 
 @import "inc/bootstrap";
 
+#item-editor-scope {
+    .widget-box {
+        &.edit-sleep {
+            .math-entry-input {
+                &.mq-editable-field {
+                    border: 0;
+                }
+            }
+        }
+        &.edit-active {
+            .math-entry-input {
+                &.mq-editable-field {
+                    border: 1px dotted $info;
 
+                    .mq-tao-gap {
+                        background-color: #dad8d6;
+                        border: 0;
+                    }
+                }
+            }
+        }
+    }
+
+}
 
 
 // =============
@@ -36,86 +59,135 @@ $buttonTxt: blacken($base, 0.5);;
 $buttonTxtHover: white;
 $buttonFont: "Times New Roman", Times, serif;
 
-$buttonRadius: 4px; //todo: use mixin?
+$buttonRadius: 4px;
 
 $borderColor: blacken($base, 0.3);
 
+$defaultGapWidth: 30;
+
+@mixin text-input() {
+    background-color: white;
+    border: 1px solid #ddd;
+}
+
 .qti-customInteraction {
-  .mathEntryInteraction {
 
-    .math-entry {
-      padding: 8px;
+    .mq-tao-gap, .mq-editable-field {
+        min-width: $defaultGapWidth * 1px;
     }
 
-    .math-entry-input {
-      width: 100%;
-      margin-top: 8px;
-    }
+    .mathEntryInteraction {
 
-    // Buttons
-    .math-entry-toolgroup {
-      margin: 8px 8px 8px 0;
-      display: inline-block;
-
-      border-radius: $buttonRadius;
-      border: 1px solid $borderColor;
-
-      .math-entry-tool {
-        &:first-child {
-          border-top-left-radius: $buttonRadius;
-          border-bottom-left-radius: $buttonRadius;
+        &.math-gap {
+            &-small {
+                .mq-tao-gap, .mq-editable-field {
+                    min-width: $defaultGapWidth * 1px;
+                }
+            }
+            &-medium {
+                .mq-tao-gap, .mq-editable-field {
+                    min-width: 70px;
+                }
+            }
+            &-large {
+                .mq-tao-gap, .mq-editable-field {
+                    min-width: 110px;
+                }
+            }
         }
-        &:last-child {
-          border-top-right-radius: $buttonRadius;
-          border-bottom-right-radius: $buttonRadius;
+
+        .math-entry {
+            padding: 8px;
+
+            .toolbar {
+                margin-bottom: 8px;
+            }
+
+            .add-option {
+                padding: 5px 5px 5px 6px;
+                margin-bottom: 8px;
+                max-width: none;
+                display: inline-block;
+            }
+
+            .math-entry-input {
+                width: 100%;
+                border: 0;
+                min-height: 23px;
+            }
+
+            .mq-editable-field {
+                @include text-input();
+            }
+
+            .math-entry-placeholder {
+                height: 23px;
+                @include text-input();
+            }
+
+            .mq-tao-gap {
+                @include text-input();
+                display: inline-block;
+                height: 21px;
+                margin: 0 3px;
+                vertical-align: middle;
+            }
+
+            // Buttons
+            .math-entry-toolgroup {
+                margin: 8px 8px 8px 0;
+                display: inline-block;
+
+                border-radius: $buttonRadius;
+                border: 1px solid $borderColor;
+
+                .math-entry-tool {
+                    &:first-child {
+                        border-top-left-radius: $buttonRadius;
+                        border-bottom-left-radius: $buttonRadius;
+                    }
+                    &:last-child {
+                        border-top-right-radius: $buttonRadius;
+                        border-bottom-right-radius: $buttonRadius;
+                    }
+                }
+            }
+
+            .math-entry-tool {
+                vertical-align: middle;
+                outline: 0;
+                overflow: visible;
+                display: inline-block;
+                padding: 8px 16px;
+                height: auto;
+
+                border-right: 1px solid blacken($borderColor, 0.2);
+
+                background-color: $buttonBg;
+                color: $buttonTxt;
+
+                cursor: pointer;
+
+                line-height: normal;
+                text-align: center;
+                text-decoration: none !important;
+                font-family: $buttonFont;
+                font-size: 15px !important;
+                font-weight: bold;
+                font-style: normal;
+
+                &:hover {
+                    background-color: $buttonHover;
+                    color: $buttonTxtHover;
+                }
+
+                &:last-child {
+                    border-right: none;
+                }
+
+            }
+
         }
-      }
     }
-
-    .math-entry-tool {
-      vertical-align: middle;
-      outline: 0;
-      overflow: visible;
-      display: inline-block;
-      padding: 8px 16px;
-      height: auto;
-
-      border-right: 1px solid blacken($borderColor, 0.2);
-
-      background-color: $buttonBg;
-      color: $buttonTxt;
-
-      cursor: pointer;
-
-      line-height: normal;
-      text-align: center;
-      text-decoration: none !important;
-      font-family: $buttonFont;
-      font-size: 15px !important;
-      font-weight: bold;
-      font-style: normal;
-
-      &:hover {
-        background-color: $buttonHover;
-        color: $buttonTxtHover;
-      }
-
-      &:last-child {
-        border-right: none;
-      }
-
-    }
-
-    // hack for newline
-    .mq-textcolor[style="color:newline"] {
-      display: block;
-      background: transparent;
-      height: 2px; // first line break only makes the cursor goes to next line
-    }
-
-    .mq-textcolor[style="color:newline"] + .mq-textcolor[style="color:newline"] {
-      height: auto; // second (and following) line break(s) creates a blank line
-    }
-  }
 }
 

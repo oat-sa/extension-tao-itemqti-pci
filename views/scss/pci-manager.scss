@@ -32,9 +32,20 @@
         }
         ul.files{
             overflow-y:auto;
+            min-height: 300px;
         }
         .pci-list-element{
             cursor: default !important;
+            div.actions{
+                width:auto !important;
+                height:auto !important;
+                line-height: 1.4;
+                .switch-box{
+                    position: relative;
+                    top: 5px;
+                    right:7px;
+                }
+            }
             .button-disable{
                 height: 18px;
                 padding: 4px 6px;
@@ -49,8 +60,11 @@
                 display: none;
                 font-style: italic;
             }
-            &.disabled{
-                background-color: transparent !important;
+            &.pci-disabled{
+                color: whiten($textColor, 0.6);
+                &:hover{
+                    background: whiten($uiClickableHoverBg, 0.9);
+                }
                 .button-disable{
                     display: none;
                 }

@@ -49,12 +49,9 @@ class IMSPciValidator extends PortableElementModelValidator
     {
         $pciConstraints = [
             'runtime' => [
-                'hook',
-                'libraries',
-                'stylesheets',
-                'mediaFiles',
                 'modules',
-                'config'
+                'config',
+                'src'
             ],
             'creator' => [
                 'icon',
@@ -71,7 +68,7 @@ class IMSPciValidator extends PortableElementModelValidator
 
     /**
      * Return optional constraints
-     * 
+     *
      * @param $key
      * @param $constraint
      * @return bool

@@ -17,10 +17,10 @@
  */
 define([
     'qtiCustomInteractionContext',
-    'IMSGlobal/jquery_2_1_1',
-    'OAT/lodash',
-    'OAT/util/event',
-    'OAT/util/html',
+    'taoQtiItem/portableLib/jquery_2_1_1',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/util/event',
+    'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
     'audioRecordingInteraction/runtime/js/uiElements'
@@ -638,12 +638,14 @@ define([
          * @returns {Object}
          */
         getResponse: function getResponse() {
-            var response = {
-                base: {
-                    file: this._recording
-                }
+            var response;
+
+            if (this._recording) {
+                response = { file: this._recording };
+            }
+            return {
+                base: response
             };
-            return response ;
         },
         /**
          * Remove the current response set in the interaction

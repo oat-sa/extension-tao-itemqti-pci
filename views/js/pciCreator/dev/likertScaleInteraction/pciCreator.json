@@ -3,7 +3,7 @@
     "label": "Likert Scale",
     "short": "Likert",
     "description": "A simple implementation of likert scale.",
-    "version": "0.3.1",
+    "version": "0.4.1",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "tags": [
@@ -15,10 +15,8 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/likertScaleInteraction.amd.js",
+        "hook" : "./runtime/likertScaleInteraction.min.js",
         "libraries" : [
-            "IMSGlobal/jquery_2_1_1",
-            "./runtime/js/renderer.js"
         ],
         "stylesheets" : [
             "./runtime/css/base.css",
@@ -28,6 +26,10 @@
             "./runtime/assets/ThumbDown.png",
             "./runtime/assets/ThumbUp.png",
             "./runtime/css/img/bg.png"
+        ],
+        "src" : [
+            "./runtime/js/likertScaleInteraction.js",
+            "./runtime/js/renderer.js"
         ]
     },
     "creator" : {

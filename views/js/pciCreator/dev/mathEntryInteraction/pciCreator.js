@@ -54,25 +54,31 @@ define([
          */
         getDefaultProperties : function getDefaultProperties(){
             return {
-                tool_frac:      true,
-                tool_sqrt:      true,
-                tool_exp:       true,
-                tool_log:       true,
-                tool_ln:        true,
-                tool_e:         true,
-                tool_infinity:  true,
-                tool_lbrack:    true,
-                tool_rbrack:    true,
-                tool_pi:        true,
-                tool_cos:       true,
-                tool_sin:       true,
-                tool_lte:       true,
-                tool_gte:       true,
-                tool_times:     true,
-                tool_divide:    true,
-                tool_plusminus: true,
-                allowNewLine:   false,
-                authorizeWhiteSpace: false
+                authorizeWhiteSpace: 'false',
+                useGapExpression: 'false',
+                gapExpression: '',
+                gapStyle: '',
+
+                tool_frac:      'true',
+                tool_sqrt:      'true',
+                tool_exp:       'true',
+                tool_log:       'true',
+                tool_ln:        'true',
+                tool_e:         'true',
+                tool_infinity:  'true',
+                tool_lbrack:    'true',
+                tool_rbrack:    'true',
+                tool_pi:        'true',
+                tool_cos:       'true',
+                tool_sin:       'true',
+                tool_lte:       'true',
+                tool_gte:       'true',
+                tool_times:     'true',
+                tool_divide:    'true',
+                tool_plusminus: 'true',
+
+                allowNewLine:   'false',
+                enableAutoWrap:  'false'
             };
         },
         /**

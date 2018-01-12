@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i150107567172373" title="PCI likert" label="PCI likert" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint56">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="integer"/>
+  <stylesheet href="style/custom/tao-user-styles.css" type="text/css" media="all" title=""/>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <pci:portableCustomInteraction customInteractionTypeIdentifier="likertScaleInteractionSample" hook="likertScaleInteractionSample/runtime/js/likertScaleInteractionSample.js" version="0.2.0">
+            <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
+            <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
+              <pci:libraries>
+                <pci:lib id="IMSGlobal/jquery_2_1_1"/>
+                <pci:lib id="likertScaleInteractionSample/runtime/js/renderer"/>
+              </pci:libraries>
+              <pci:stylesheets>
+                <pci:link href="likertScaleInteractionSample/runtime/css/base.css" type="text/css" title="base"/>
+                <pci:link href="likertScaleInteractionSample/runtime/css/likertScaleInteractionSample.css" type="text/css" title="likertScaleInteractionSample"/>
+              </pci:stylesheets>
+              <pci:mediaFiles>
+                <pci:file src="likertScaleInteractionSample/runtime/assets/ThumbDown.png" type="image/png"/>
+                <pci:file src="likertScaleInteractionSample/runtime/assets/ThumbUp.png" type="image/png"/>
+                <pci:file src="likertScaleInteractionSample/runtime/css/img/bg.png" type="image/png"/>
+              </pci:mediaFiles>
+            </pci:resources>
+            <pci:properties xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction">
+              <pci:entry key="level">5</pci:entry>
+              <pci:entry key="label-min">min</pci:entry>
+              <pci:entry key="label-max">max</pci:entry>
+            </pci:properties>
+            <pci:markup>
+              <html5:div class="likertScaleInteractionSample">
+                <html5:div class="prompt"/>
+                <html5:ul class="likert"/>
+              </html5:div>
+            </pci:markup>
+          </pci:portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+</assessmentItem>
+

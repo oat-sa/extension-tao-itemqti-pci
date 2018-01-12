@@ -35,6 +35,7 @@ use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\tao\model\accessControl\func\AclProxy;
+use oat\tao\model\TaoOntology;
 use oat\taoQtiItem\model\HookRegistry;
 use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
@@ -92,7 +93,7 @@ class Updater extends \common_ext_ExtensionUpdater
             // Grants access on PciLoader for TestTaker role.
             AclProxy::applyRule(new AccessRule(
                 AccessRule::GRANT,
-                INSTANCE_ROLE_DELIVERY,
+				TaoOntology::PROPERTY_INSTANCE_ROLE_DELIVERY,
                 ['ext' => 'qtiItemPci' , 'mod' => 'PciLoader']
             ));
 
@@ -216,6 +217,80 @@ class Updater extends \common_ext_ExtensionUpdater
             PortableModelRegistry::getRegistry()->register(new IMSPciModel());
             $this->setVersion('3.1.0');
         }
-        $this->skip('3.1.0', '3.1.2');
+
+        $this->skip('3.1.0', '3.1.1');
+
+        if($this->isVersion('3.1.1')){
+            call_user_func(new RegisterPciMathEntry(), ['0.5.0']);
+            $this->setVersion('3.2.0');
+        }
+
+        if($this->isVersion('3.2.0')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.2.0']);
+            call_user_func(new RegisterPciLikertScale(), ['0.4.0']);
+            call_user_func(new RegisterPciLiquid(), ['0.3.0']);
+            call_user_func(new RegisterPciMathEntry(), ['0.5.0']);
+            $this->setVersion('3.3.0');
+        }
+
+        if($this->isVersion('3.3.0')){
+            call_user_func(new RegisterPciMathEntry(), ['0.6.0']);
+            $this->setVersion('3.4.0');
+        }
+
+        $this->skip('3.4.0', '3.5.0');
+
+        if($this->isVersion('3.5.0')){
+            $registry = (new IMSPciModel())->getRegistry();
+            if($registry->has('likertScaleInteraction')){
+                $registry->removeAllVersions('likertScaleInteraction');
+            }
+            if($registry->has('liquidsInteraction')){
+                $registry->removeAllVersions('liquidsInteraction');
+            }
+            if($registry->has('mathEntryInteraction')){
+                $registry->removeAllVersions('mathEntryInteraction');
+            }
+            if($registry->has('audioRecordingInteraction')){
+                $registry->removeAllVersions('audioRecordingInteraction');
+            }
+            call_user_func(new RegisterPciAudioRecording(), ['0.2.0']);
+            call_user_func(new RegisterPciLikertScale(), ['0.4.0']);
+            call_user_func(new RegisterPciLiquid(), ['0.3.0']);
+            call_user_func(new RegisterPciMathEntry(), ['0.6.0']);
+            $this->setVersion('3.5.1');
+        }
+
+        if($this->isVersion('3.5.1')){
+            call_user_func(new RegisterPciMathEntry(), ['0.6.1']);
+            $this->setVersion('3.5.2');
+        }
+
+        if($this->isVersion('3.5.2')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.2.1']);
+            $this->setVersion('3.5.3');
+        }
+
+        if($this->isVersion('3.5.3')){
+            call_user_func(new RegisterPciMathEntry(), ['0.7.0']);
+            $this->setVersion('3.6.0');
+        }
+
+        if($this->isVersion('3.6.0')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.2.2']);
+            $this->setVersion('3.6.1');
+        }
+
+        $this->skip('3.6.1', '4.0.0');
+
+        if($this->isVersion('4.0.0')){
+            call_user_func(new RegisterPciAudioRecording(), ['0.2.3']);
+            call_user_func(new RegisterPciLikertScale(), ['0.4.1']);
+            call_user_func(new RegisterPciLiquid(), ['0.3.1']);
+            call_user_func(new RegisterPciMathEntry(), ['0.7.1']);
+            $this->setVersion('4.0.1');
+        }
+
+        $this->skip('4.0.1', '4.3.0');
     }
 }
