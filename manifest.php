@@ -33,10 +33,10 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '4.1.0',
+    'version' => '4.2.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
-        'tao' => '>=12.21.4',
+        'tao' => '>=15.4.0',
         'taoQtiItem' => '>=11.2.0'
     ),
     'acl' => array(

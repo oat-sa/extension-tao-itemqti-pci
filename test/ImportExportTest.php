@@ -221,6 +221,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
     {
         $storage = tao_models_classes_service_FileStorage::singleton();
         $compiler = new QtiItemCompiler($item, $storage);
+        $compiler->setServiceLocator($this->getServiceLocator());
         $report = $compiler->compile();
         $this->assertEquals($report->getType(), Report::TYPE_SUCCESS);
         $serviceCall = $report->getData();
