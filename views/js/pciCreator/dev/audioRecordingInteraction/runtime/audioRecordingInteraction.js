@@ -95,24 +95,33 @@ define([
          * Initialize the PCI configuration
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
-         * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
-         * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
+         * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
+         * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
+         * @param {Number}  config.pcmSampleRate - audio sample rate in case of uncompressed recording
+         * @param {Boolean} config.isStereo - switch the number of channels (1 vs 2) for uncompressed recording
          * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
+         * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          */
         initConfig: function init(config) {
             this.config = {
                 allowPlayback:          toBoolean(config.allowPlayback, true),
-                audioBitrate:           toInteger(config.audioBitrate, 20000),
                 autoStart:              toBoolean(config.autoStart, false),
-                displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
                 maxRecords:             toInteger(config.maxRecords, 3),
                 maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
+
+                isCompressed:           toBoolean(config.isCompressed, true),
+                audioBitrate:           toInteger(config.audioBitrate, 20000),
+                pcmSampleRate:          toInteger(config.pcmSampleRate, 8000),
+                isStereo:               toBoolean(config.isStereo, false),
+
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
-                media:                  config.media || {}
+                media:                  config.media || {},
+
+                displayDownloadLink:    toBoolean(config.displayDownloadLink, false)
             };
         },
 
