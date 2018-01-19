@@ -22,8 +22,8 @@
               <pci:entry key="maxRecords">0</pci:entry>
               <pci:entry key="maxRecordingTime">120</pci:entry>
               <pci:entry key="audioBitrate">20000</pci:entry>
+              <pci:entry key="pcmSampleRate">44100</pci:entry>
               <pci:entry key="isStereo">false</pci:entry>
-              <pci:entry key="sampleRate">22050</pci:entry>
               <pci:entry key="displayDownloadLink">true</pci:entry>
             </pci:properties>
             <pci:markup>

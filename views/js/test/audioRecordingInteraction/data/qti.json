@@ -41,7 +41,7 @@
                     "maxRecordingTime": "120",
                     "audioBitrate": "20000",
                     "isStereo": "false",
-                    "sampleRate": "22050",
+                    "pcmSampleRate": "44100",
                     "displayDownloadLink": "true"
                 },
                 "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
