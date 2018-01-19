@@ -18,7 +18,12 @@
         "libraries" : [
             "./runtime/js/player.js",
             "./runtime/js/recorder.js",
-            "./runtime/js/uiElements.js"
+            "./runtime/js/webAudioRecorder.js",
+            "./runtime/js/uiElements.js",
+            "./runtime/js/workers/WavAudioEncoder.js",
+            "./runtime/js/workers/WavAudioEncoder.min.js",
+            "./runtime/js/workers/WebAudioRecorderWav.js",
+            "./runtime/js/workers/WebAudioRecorderWav.min.js"
         ],
         "stylesheets" : [
             "./runtime/css/audioRecordingInteraction.css"
