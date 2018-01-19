@@ -29,6 +29,12 @@ use \DOMXPath;
 
 class ImsPciExporter extends PortableElementExporter{
 
+    /**
+     * Cope the asset files of the PCI to the item exporter and return the list of copied assets
+     * @param $replacementList
+     * @return array
+     * @throws \oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidAssetException
+     */
     public function copyAssetFiles(&$replacementList){
         $object = $this->object;
         $portableAssetsToExport = [];
@@ -42,7 +48,7 @@ class ImsPciExporter extends PortableElementExporter{
             $portableAssetsToExport[$url] = $replacement;
             \common_Logger::i('File copied: "' . $url . '" for portable element ' . $object->getTypeIdentifier());
         }
-        $this->portableAssetsToExport = $portableAssetsToExport;
+        return $this->portableAssetsToExport = $portableAssetsToExport;
     }
 
     public function getNodeName(){
