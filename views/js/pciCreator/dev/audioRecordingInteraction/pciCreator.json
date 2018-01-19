@@ -19,18 +19,18 @@
             "./runtime/js/player.js",
             "./runtime/js/recorder.js",
             "./runtime/js/webAudioRecorder.js",
-            "./runtime/js/uiElements.js",
-            "./runtime/js/workers/WavAudioEncoder.js",
-            "./runtime/js/workers/WavAudioEncoder.min.js",
-            "./runtime/js/workers/WebAudioRecorderWav.js",
-            "./runtime/js/workers/WebAudioRecorderWav.min.js"
+            "./runtime/js/uiElements.js"
         ],
         "stylesheets" : [
             "./runtime/css/audioRecordingInteraction.css"
         ],
         "mediaFiles" : [
             "./runtime/img/controls.svg",
-            "./runtime/img/mic.svg"
+            "./runtime/img/mic.svg",
+            "./runtime/js/workers/WavAudioEncoder.js",
+            "./runtime/js/workers/WavAudioEncoder.min.js",
+            "./runtime/js/workers/WebAudioRecorderWav.js",
+            "./runtime/js/workers/WebAudioRecorderWav.min.js"
         ]
     },
     "creator" : {

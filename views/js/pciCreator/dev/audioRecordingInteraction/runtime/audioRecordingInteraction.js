@@ -23,6 +23,7 @@ define([
     'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
+    'audioRecordingInteraction/runtime/js/webAudioRecorder',
     'audioRecordingInteraction/runtime/js/uiElements'
 ], function(
     qtiCustomInteractionContext,
@@ -32,6 +33,7 @@ define([
     html,
     playerFactory,
     recorderFactory,
+    webAudioRecorderFactory,
     uiElements
 ){
     'use strict';
@@ -131,7 +133,12 @@ define([
         initRecorder: function initRecorder() {
             var self = this;
 
-            this.recorder = recorderFactory(this.config);
+            if (this.config.isCompressed) {
+                // this.recorder = recorderFactory(this.config);
+                this.recorder = webAudioRecorderFactory(this.config, this.assetManager);
+            } else {
+                this.recorder = webAudioRecorderFactory(this.config, this.assetManager);
+            }
 
             this.recorder.on('stop', function() {
                 self.progressBar.setValue(0);
