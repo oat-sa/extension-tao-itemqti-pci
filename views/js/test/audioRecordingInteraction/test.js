@@ -1,16 +1,27 @@
 define([
     'jquery',
     'lodash',
+    'taoItems/assets/manager',
+    'taoItems/assets/strategies',
+    'taoQtiItem/portableElementRegistry/assetManager/portableAssetStrategy',
     'taoQtiItem/runner/qtiItemRunner',
     'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
     'json!qtiItemPci/test/audioRecordingInteraction/data/qti.json'
-], function ($, _, qtiItemRunner, ciRegistry, pciTestProvider,  itemData){
+], function ($, _, assetManagerFactory, assetStrategies, portableAssetStrategy, qtiItemRunner, ciRegistry, pciTestProvider,  itemData){
 
     'use strict';
 
     var runner;
     var fixtureContainerId = 'item-container';
+
+    function getAssetManager(baseUrl) {
+        return assetManagerFactory([
+            assetStrategies.external,
+            assetStrategies.baseUrl,
+            portableAssetStrategy
+        ], {baseUrl: baseUrl || ''});
+    }
 
     //manually register the pci from its manifest
     pciTestProvider.addManifestPath(
@@ -244,12 +255,12 @@ define([
     module('Visual test');
 
     QUnit.asyncTest('display and play', function (assert){
-
         var $container = $('#outside-container');
+        var assetManager = getAssetManager('/qtiItemPci/views/js/pciCreator/dev/audioRecordingInteraction/');
         assert.equal($container.length, 1, 'the item container exists');
 
         if (supportsMediaRecorder()) {
-            runner = qtiItemRunner('qti', itemData)
+            runner = qtiItemRunner('qti', itemData, {assetManager: assetManager})
                 .on('render', function (){
                     QUnit.start();
                 })
