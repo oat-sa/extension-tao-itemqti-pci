@@ -23,7 +23,8 @@
  * SOFTWARE.
  */
 /**
- * OAT version with bugfix:
+ * OAT version with the following changes:
+ * - record(): do not timeout if maxBuffers (= timeLimit option) is equal to zero
  * - cleanup(): removed chaining assignment that might result in a TypeError
  */
 importScripts("WavAudioEncoder.min.js");
@@ -62,7 +63,7 @@ function start(bufferSize) {
 }
 
 function record(buffer) {
-    if (bufferCount++ < maxBuffers)
+    if (!maxBuffers || bufferCount++ < maxBuffers)
         if (encoder)
             encoder.encode(buffer);
         else

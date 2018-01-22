@@ -53,10 +53,9 @@ define([
                     sampleRate: config.pcmSampleRate
                 },
                 options: {
-                    timeLimit: 300,           // recording time limit (sec)
-                    encodeAfterRecord: false, // process encoding after recording
-                    progressInterval: 1000,   // encoding progress report interval (millisec)
-                    bufferSize: bufferSize,   // buffer size (use browser default)
+                    timeLimit: 0,
+                    progressInterval: 1000, // encoding progress report interval (millisec)
+                    bufferSize: bufferSize,
                     wav: {
                         mimeType: "audio/wav"
                     }
@@ -95,10 +94,6 @@ define([
                         }
                         case 'error': {
                             window.console.error(data.message);
-                            break;
-                        }
-                        case 'timeout': {
-                            console.log('TIMEOUT !');
                             break;
                         }
                     }
@@ -140,7 +135,8 @@ define([
                     audioContext.close();
                     audioNodes = {};
                 }
-                // close worker ?
+                recorderWorker.terminate();
+                recorderWorker = null;
             }
         };
 

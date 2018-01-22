@@ -38,7 +38,7 @@
                     "allowPlayback": "true",
                     "autoStart": "",
                     "maxRecords": "0",
-                    "maxRecordingTime": "120",
+                    "maxRecordingTime": "20",
                     "audioBitrate": "20000",
                     "isStereo": "false",
                     "pcmSampleRate": "44100",
