@@ -170,9 +170,9 @@ define([
                     .then(function(stream) {
                         provider = (config.isCompressed)
                             ? mediaRecorderProvider(config)
-                            : webAudioProvider(config);
+                            : webAudioProvider(config, assetManager);
 
-                        provider.init(stream, assetManager);
+                        provider.init(stream);
 
                         provider.on('blobavailable', function(blob) {
                             self.trigger('recordingavailable', [blob, durationMs]);

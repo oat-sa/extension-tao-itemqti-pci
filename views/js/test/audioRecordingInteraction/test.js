@@ -266,7 +266,7 @@ define([
                 newConfig = {};
             if (interaction) {
                 newConfig[$target.attr('name')] = $target.is(':checked');
-                interaction.triggerPci('configChange', [newConfig]);
+                interaction.triggerPci('configChange', [_.assign(interaction.properties, newConfig)]);
             }
         });
 
