@@ -102,14 +102,23 @@ define([
 
         /**
          * Create the Web Audio node that will be use to analyse the input stream
-         * @param {MediaStream} stream
+         * @param {MediaStream} stream - incoming audio stream from the microphone
          */
         function initAnalyser(stream) {
-            var audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
-                source = audioCtx.createMediaStreamSource(stream),
+            var audioContext,
+                source,
                 bufferLength;
 
-            analyser = audioCtx.createAnalyser();
+            // Try to re-use the provider audio context, if it has one
+            if (_.isFunction(provider.getAudioContext)) {
+                audioContext = provider.getAudioContext();
+            }
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            source = audioContext.createMediaStreamSource(stream);
+
+            analyser = audioContext.createAnalyser();
             analyser.minDecibels = -100;
             analyser.maxDecibels = -30;
             analyser.fftSize = 32;
@@ -178,7 +187,7 @@ define([
                             self.trigger('recordingavailable', [blob, durationMs]);
                         });
 
-                        // initAnalyser(stream);
+                        initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);
 /*
@@ -259,7 +268,7 @@ define([
                 timerId = requestAnimationFrame(this._monitorRecording.bind(this));
 
                 this.trigger('timeupdate', [elapsedSeconds]);
-                // this.trigger('levelUpdate', [getInputLevel()]);
+                this.trigger('levelUpdate', [getInputLevel()]);
 
                 if (config.maxRecordingTime > 0 && elapsedSeconds >= config.maxRecordingTime) {
                     this.stop();

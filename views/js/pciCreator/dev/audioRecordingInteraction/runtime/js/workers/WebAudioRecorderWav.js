@@ -22,6 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+/**
+ * OAT version with bugfix:
+ * - cleanup(): removed chaining assignment that might result in a TypeError
+ */
 importScripts("WavAudioEncoder.min.js");
 
 var sampleRate = 44100,
@@ -94,7 +98,8 @@ function finish() {
 };
 
 function cleanup() {
-    encoder = recBuffers = undefined;
+    encoder = undefined;
+    recBuffers = undefined;
     bufferCount = 0;
 }
 

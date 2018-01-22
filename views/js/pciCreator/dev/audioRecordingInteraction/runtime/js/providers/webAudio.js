@@ -69,6 +69,10 @@ define([
         }
 
         webAudioProvider = {
+            getAudioContext: function getAudioContext() {
+                return audioContext;
+            },
+
             init: function init(stream) {
                 var self = this;
 
