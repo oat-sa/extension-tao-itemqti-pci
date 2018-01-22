@@ -16,18 +16,15 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 /**
- * XXXXXX
- * XXXXXX
- * XXXXXX
+ * This wraps the getUserMedia / MediaRecorder APIs. Works only with a few compliant browsers,
+ * meaning Chrome (https) and Firefox.
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
     'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/util/event',
-    'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
-    'audioRecordingInteraction/runtime/js/providers/webAudio'
-], function(_, event, mediaRecorderProvider, webAudioProvider) {
+    'taoQtiItem/portableLib/OAT/util/event'
+], function(_, event) {
     'use strict';
 
     /**
@@ -83,22 +80,36 @@ define([
 
 
     /**
-     * @param {Object} config
-     * @param {Number} config.maxRecordingTime - in seconds
-     * @param {Object} assetManager - used to resolve static assets, here the worker file
+     * @param {Object}  config
+     * @param {Number}  config.audioBitrate - in bits per second, quality of the recording
+     * @param {Number}  config.maxRecordingTime - in seconds
      * @returns {Object} - The recorder
      */
-    return function recorderFactory(config, assetManager) {
+    return function recorderFactory(config) {
+        var MediaRecorder = window.MediaRecorder,       // The MediaRecorder API
+            mediaRecorder,                              // The MediaRecorder instance
+            recorderOptions = {                         // Options for the MediaRecorder constructor
+                audioBitsPerSecond: config.audioBitrate || 20000
+            };
+
         var recorder,                       // Return value of the present factory
-            provider,                       // provider for audio processing/encoding
             state = recorderStates.CREATED; // recorder inner state
 
-        var startTimeMs,            // start time of the recording - used for calculating record duration
-            durationMs,             // duration of the recording
+        var mimeType,               // mime type of the recording
+            chunks = [],            // contains the current recording split in chunks
+            chunkSizeMs = 1000,     // size of a chunk
+            startTimeMs,            // start time of the recording - used for calculating record duration
             timerId;                // a place to store the requestAnimationFrame return value
 
         var analyser,               // the WebAudio node use to read the input level
             frequencyArray;         // used to compute the input level from the current array of frequencies
+
+        var codecsByPreferenceOrder = [
+            'audio/webm;codecs=opus',
+            'audio/ogg;codecs=opus',
+            'audio/webm',
+            'audio/ogg'
+        ];
 
         /**
          * Create the Web Audio node that will be use to analyse the input stream
@@ -149,6 +160,16 @@ define([
 
         setGetUserMedia();
 
+        // set the prefered encoding format, if we are able to detect what is supported
+        // if not, the browser default will be used
+        if (typeof MediaRecorder.isTypeSupported === 'function') {
+            codecsByPreferenceOrder.forEach(function (format) {
+                if (_.isUndefined(recorderOptions.mimeType) && MediaRecorder.isTypeSupported(format)) {
+                    recorderOptions.mimeType = format;
+                }
+            });
+        }
+
         recorder = {
             /**
              * Check the current state
@@ -168,20 +189,13 @@ define([
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
-                        provider = (config.isCompressed)
-                            ? mediaRecorderProvider(config)
-                            : webAudioProvider(config);
+                        mediaRecorder = new MediaRecorder(stream, recorderOptions);
+                        mimeType = mediaRecorder.mimeType;
 
-                        provider.init(stream, assetManager);
-
-                        provider.on('blobavailable', function(blob) {
-                            self.trigger('recordingavailable', [blob, durationMs]);
-                        });
-
-                        // initAnalyser(stream);
+                        initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);
-/*
+
                         // save chunks of the recording
                         mediaRecorder.ondataavailable = function ondataavailable(e) {
                             chunks.push(e.data);
@@ -207,16 +221,17 @@ define([
 
                             chunks = [];
                         };
-*/
                     });
             },
+
             /**
              * Start the recording
              */
             start: function start() {
+                mediaRecorder.start(chunkSizeMs);
+
                 startTimeMs = new window.Date().getTime();
 
-                provider.start();
                 setState(recorder, recorderStates.RECORDING);
 
                 this._monitorRecording();
@@ -226,26 +241,17 @@ define([
              * Stop the recording
              */
             stop: function stop() {
-                durationMs = new window.Date().getTime() - startTimeMs;
-
-                provider.stop();
-                cancelAnimationFrame(timerId);
-
-                setState(recorder, recorderStates.IDLE);
-                this.trigger('stop');
-                this.trigger('levelUpdate', [0]);
+                this.cancelled = false;
+                mediaRecorder.stop();
+                // state change is triggered by onstop handler
             },
 
             /**
              * Cancel the current recording
              */
             cancel: function cancel() {
-                provider.cancel();
-                cancelAnimationFrame(timerId);
-
-                setState(recorder, recorderStates.IDLE);
-                this.trigger('stop'); // fixme: make this cancel
-                this.trigger('levelUpdate', [0]);
+                this.cancelled = true;
+                mediaRecorder.stop();
             },
 
             /**
@@ -259,7 +265,7 @@ define([
                 timerId = requestAnimationFrame(this._monitorRecording.bind(this));
 
                 this.trigger('timeupdate', [elapsedSeconds]);
-                // this.trigger('levelUpdate', [getInputLevel()]);
+                this.trigger('levelUpdate', [getInputLevel()]);
 
                 if (config.maxRecordingTime > 0 && elapsedSeconds >= config.maxRecordingTime) {
                     this.stop();
@@ -270,8 +276,7 @@ define([
              * Destroy the recorder instance
              */
             destroy: function destroy() {
-                cancelAnimationFrame(timerId);
-                provider.destroy();
+                mediaRecorder = null;
             }
 
         };
