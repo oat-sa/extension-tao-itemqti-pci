@@ -133,7 +133,7 @@ define([
 
             this.recorder = recorderFactory(this.config, this.assetManager);
 
-            this.recorder.on('stop', function() {
+            this.recorder.on('stop', function() { //todo: add cancel here
                 self.progressBar.setValue(0);
                 self.progressBar.setStyle('');
                 if (self.config.maxRecordingTime) {

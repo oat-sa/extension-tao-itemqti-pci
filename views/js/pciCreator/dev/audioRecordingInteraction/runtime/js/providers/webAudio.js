@@ -37,7 +37,7 @@ define([
         var recorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js', // todo: use min version
             recorderWorker;
 
-        var audioContext = new (window.AudioContext || window.webkitAudioContext)(),
+        var audioContext,
             audioNodes = {};
 
         var numChannels = (config.isStereo) ? 2 : 1,
@@ -50,7 +50,7 @@ define([
             sendToWorker('init', {
                 config: {
                     numChannels: numChannels,
-                    sampleRate: config.pcmSampleRate
+                    sampleRate: audioContext.sampleRate
                 },
                 options: {
                     timeLimit: 0,
@@ -75,13 +75,15 @@ define([
             init: function init(stream) {
                 var self = this;
 
-                initWorker();
-
                 // create base audio nodes
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 audioNodes.source = audioContext.createMediaStreamSource(stream);
-                audioNodes.volume = audioContext.createGain();
+                audioNodes.inputGain = audioContext.createGain();
 
-                audioNodes.source.connect(audioNodes.volume);
+                audioNodes.source.connect(audioNodes.inputGain);
+
+                // setup worker
+                initWorker();
 
                 recorderWorker.onmessage = function(e) {
                     var data = e.data;
@@ -109,14 +111,16 @@ define([
                     }
                     sendToWorker('record', { buffer: buffer });
                 };
-                audioNodes.volume.connect(audioNodes.processor);
+                audioNodes.inputGain.connect(audioNodes.processor);
+                // the scriptProcessor node does not work under Chrome without the following connexion:
+                audioNodes.processor.connect(audioContext.destination);
 
                 sendToWorker('start', { bufferSize: bufferSize });
             },
 
             _interruptRecording: function _interruptRecording() {
                 audioNodes.processor.onaudioprocess = null;
-                audioNodes.volume.disconnect();
+                audioNodes.inputGain.disconnect();
                 delete audioNodes.processor;
             },
 

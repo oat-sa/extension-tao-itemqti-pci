@@ -18,8 +18,9 @@
         "libraries" : [
             "./runtime/js/player.js",
             "./runtime/js/recorder.js",
-            "./runtime/js/webAudioRecorder.js",
-            "./runtime/js/uiElements.js"
+            "./runtime/js/uiElements.js",
+            "./runtime/js/providers/mediaRecorder.js",
+            "./runtime/js/providers/webAudio.js"
         ],
         "stylesheets" : [
             "./runtime/css/audioRecordingInteraction.css"
