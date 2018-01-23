@@ -75,20 +75,6 @@
 
 <div data-role="uncompressedOptions"  {{#if isCompressed}}style="display:none"{{/if}}>
     <div class="panel">
-        <label for="pcmSampleRate">{{__ "PCM sample rate"}}</label>
-        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-        <span class="tooltip-content">
-            {{__ "XXXXXX XXXXXX XXXXXX "}}
-        </span>
-        <select name="pcmSampleRate">
-            <option value="8000">{{__ '8 KHz'}}</option>
-            <option value="11025">{{__ '11 KHz'}}</option>
-            <option value="22050">{{__ '22 KHz'}}</option>
-            <option value="44100">{{__ '44.1 KHz'}}</option>
-        </select>
-    </div>
-
-    <div class="panel">
         <label for="isStereo">{{__ "Channels"}}</label>
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">

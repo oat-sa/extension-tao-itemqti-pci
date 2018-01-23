@@ -88,7 +88,6 @@ define([
 
             isCompressed:           typeCaster.strToBool(interaction.prop('isCompressed'), true),
             audioBitrate:           interaction.prop('audioBitrate'),
-            pcmSampleRate:          interaction.prop('pcmSampleRate'),
             isStereo:               typeCaster.strToBool(interaction.prop('isStereo'), false),
 
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
@@ -128,7 +127,6 @@ define([
                 configChangeCallBack(boundInteraction, value, name);
             },
             audioBitrate:       configChangeCallBack,
-            pcmSampleRate:      configChangeCallBack,
             isStereo:           configChangeCallBack,
 
             useMediaStimulus: function useMediaStimulusCb(boundInteraction, value, name) {

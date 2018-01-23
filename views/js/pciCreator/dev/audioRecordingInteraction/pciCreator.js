@@ -58,7 +58,6 @@ define([
 
                 isCompressed:       true,
                 audioBitrate:       20000,
-                pcmSampleRate:      8000,
                 isStereo:           false,
 
                 useMediaStimulus:   false,

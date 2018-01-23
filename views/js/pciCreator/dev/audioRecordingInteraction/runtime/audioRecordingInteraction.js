@@ -100,7 +100,6 @@ define([
          * @param {Number}  config.maxRecordingTime - in seconds
          * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
          * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
-         * @param {Number}  config.pcmSampleRate - audio sample rate in case of uncompressed recording
          * @param {Boolean} config.isStereo - switch the number of channels (1 vs 2) for uncompressed recording
          * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
@@ -115,7 +114,6 @@ define([
 
                 isCompressed:           toBoolean(config.isCompressed, true),
                 audioBitrate:           toInteger(config.audioBitrate, 20000),
-                pcmSampleRate:          toInteger(config.pcmSampleRate, 8000),
                 isStereo:               toBoolean(config.isStereo, false),
 
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
