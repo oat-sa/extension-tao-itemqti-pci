@@ -29,7 +29,6 @@ define([
     /**
      * @param {Object} config
      * @param {Number} config.isStereo
-     * @param {Number} config.pcmSampleRate
      */
     return function webAudioProviderFactory(config, assetManager) {
         var webAudioProvider;
@@ -41,7 +40,6 @@ define([
             audioNodes = {};
 
         var numChannels = (config.isStereo) ? 2 : 1,
-            bufferSize = 2048, //todo: make this a parameter
             buffer = [];
 
         function initWorker() {
@@ -55,7 +53,6 @@ define([
                 options: {
                     timeLimit: 0,
                     progressInterval: 1000, // encoding progress report interval (millisec)
-                    bufferSize: bufferSize,
                     wav: {
                         mimeType: "audio/wav"
                     }
@@ -103,7 +100,7 @@ define([
             },
 
             start: function start() {
-                audioNodes.processor = audioContext.createScriptProcessor(bufferSize, numChannels, numChannels);
+                audioNodes.processor = audioContext.createScriptProcessor(0, numChannels, numChannels);
                 audioNodes.processor.onaudioprocess = function(e) {
                     var ch;
                     for (ch = 0; ch < numChannels; ++ch) {
@@ -115,7 +112,7 @@ define([
                 // the scriptProcessor node does not work under Chrome without the following connexion:
                 audioNodes.processor.connect(audioContext.destination);
 
-                sendToWorker('start', { bufferSize: bufferSize });
+                sendToWorker('start', { bufferSize: audioNodes.processor.bufferSize });
             },
 
             _interruptRecording: function _interruptRecording() {

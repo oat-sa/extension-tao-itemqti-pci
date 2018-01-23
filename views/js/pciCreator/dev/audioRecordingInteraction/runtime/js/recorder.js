@@ -237,23 +237,29 @@ define([
             stop: function stop() {
                 durationMs = new window.Date().getTime() - startTimeMs;
 
-                provider.stop();
-                cancelAnimationFrame(timerId);
+                this._interruptRecording();
 
-                setState(recorder, recorderStates.IDLE);
+                provider.stop();
                 this.trigger('stop');
-                this.trigger('levelUpdate', [0]);
             },
 
             /**
              * Cancel the current recording
              */
             cancel: function cancel() {
-                provider.cancel();
-                cancelAnimationFrame(timerId);
+                this._interruptRecording();
 
+                provider.cancel();
+                this.trigger('cancel');
+            },
+
+            /**
+             * perform interrupt recording action, whether stop() or cancel() related
+             * @private
+             */
+            _interruptRecording: function _interruptRecording() {
+                cancelAnimationFrame(timerId);
                 setState(recorder, recorderStates.IDLE);
-                this.trigger('stop'); // fixme: make this cancel
                 this.trigger('levelUpdate', [0]);
             },
 
@@ -280,7 +286,9 @@ define([
              */
             destroy: function destroy() {
                 cancelAnimationFrame(timerId);
-                provider.destroy();
+                if (provider) {
+                    provider.destroy();
+                }
             }
 
         };
