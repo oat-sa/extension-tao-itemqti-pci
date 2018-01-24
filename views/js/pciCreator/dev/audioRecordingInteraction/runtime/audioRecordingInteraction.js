@@ -618,15 +618,13 @@ define([
          * @param {Object} response
          */
         setResponse: function setResponse(response) {
-            var recording = response.base && response.base.file,
-                base64Prefix;
+            var recording = response.base && response.base.file;
 
             if (recording) {
                 this.updateResponse(recording);
 
                 // restore interaction state
-                base64Prefix = 'data:' + recording.mime + ';base64,';
-                this.player.load(base64Prefix + recording.data);
+                this.player.loadFromBase64(recording.data, recording.mime);
             }
         },
         /**

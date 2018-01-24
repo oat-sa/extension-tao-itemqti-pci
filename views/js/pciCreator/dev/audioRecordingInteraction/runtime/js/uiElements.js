@@ -168,7 +168,7 @@ define([
         progressBar = {
             /**
              * Set the maximum value of the progress bar
-             * @param {Number} max
+             * @param {Number} max - in seconds
              */
             setMax: function setMax(max) {
                 $progressBar.attr('max', max);

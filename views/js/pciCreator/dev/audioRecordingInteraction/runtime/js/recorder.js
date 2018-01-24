@@ -190,33 +190,6 @@ define([
                         initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);
-/*
-                        // save chunks of the recording
-                        mediaRecorder.ondataavailable = function ondataavailable(e) {
-                            chunks.push(e.data);
-                        };
-
-                        // stop record callback
-                        mediaRecorder.onstop = function onstop() {
-                            var blob,
-                                durationMs;
-
-                            self.trigger('stop');
-
-                            if (! self.cancelled) {
-                                blob = new Blob(chunks, { type: mimeType });
-                                durationMs = new window.Date().getTime() - startTimeMs;
-                                self.trigger('recordingavailable', [blob, durationMs]);
-
-                            }
-                            cancelAnimationFrame(timerId);
-
-                            self.trigger('levelUpdate', [0]);
-                            setState(recorder, recorderStates.IDLE);
-
-                            chunks = [];
-                        };
-*/
                     });
             },
             /**

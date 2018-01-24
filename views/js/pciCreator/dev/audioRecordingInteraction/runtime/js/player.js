@@ -22,8 +22,10 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
+    'lodash',
+    'jquery',
     'taoQtiItem/portableLib/OAT/util/event'
-], function(event) {
+], function(_, $, event) {
     'use strict';
 
     /**
@@ -36,6 +38,40 @@ define([
         IDLE:       'idle',
         PLAYING:    'playing'
     };
+
+    /**
+     * Converts a base64 string to a blob
+     * [Source]{@link https://github.com/jeremybanks/b64-to-blob}
+     * [CC0 1.0]{@link https://creativecommons.org/publicdomain/zero/1.0/}
+     * @param b64Data - raw base64 data without any prefix
+     * @param contentType - mime type
+     * @param sliceSize
+     * @returns {Blob}
+     */
+    function b64toBlob(b64Data, contentType, sliceSize) {
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+        var offset, slice, byteNumbers, byteArray, blob, i;
+
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+
+        for (offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            byteNumbers = new Array(slice.length);
+            for (i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        blob = new Blob(byteArrays, {type: contentType});
+        return blob;
+    }
 
     /**
      * @returns {Object} - The player
@@ -76,7 +112,9 @@ define([
                 audioEl = new Audio(url);
 
                 audioEl.ondurationchange = function ondurationchange() {
-                    self.trigger('durationchange', [audioEl.duration]);
+                    if (_.isFinite(audioEl.duration)) {
+                        self.trigger('durationchange', [audioEl.duration]);
+                    }
                 };
 
                 // when playback is stopped by user or when the media is loaded:
@@ -98,6 +136,34 @@ define([
                 audioEl.ontimeupdate = function ontimeupdate() {
                     self.trigger('timeupdate', [audioEl.currentTime]);
                 };
+
+                audioEl.onloadedmetadata = function() {
+                    var ontimeupdateBackup = audioEl.ontimeupdate;
+
+                    // Chrome workaround for bug https://bugs.chromium.org/p/chromium/issues/detail?id=642012
+                    // source: https://stackoverflow.com/questions/38443084/how-can-i-add-predefined-length-to-audio-recorded-from-mediarecorder-in-chrome/39971175#39971175
+                    if (audioEl.duration === Infinity) {
+                        audioEl.ontimeupdate = function() {
+                            audioEl.ontimeupdate = ontimeupdateBackup;
+                            audioEl.currentTime = 0;
+                            audioEl.load();
+                        };
+                        audioEl.currentTime = 1e101;
+                        audioEl.onloadedmetadata = null;
+                    }
+                };
+            },
+
+            /**
+             * Load from base64
+             */
+            loadFromBase64: function loadFromBase64(base64, mime) {
+                var blob = b64toBlob(base64, mime),
+                    blobUrl = window.URL && window.URL.createObjectURL && window.URL.createObjectURL(blob);
+
+                if (blobUrl) {
+                    this.load(blobUrl);
+                }
             },
 
             /**
