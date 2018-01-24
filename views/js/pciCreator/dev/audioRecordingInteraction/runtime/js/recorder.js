@@ -254,7 +254,7 @@ define([
             },
 
             /**
-             * perform interrupt recording action, whether stop() or cancel() related
+             * Perform interrupt recording actions, whether stop() or cancel() related
              * @private
              */
             _interruptRecording: function _interruptRecording() {
@@ -277,6 +277,7 @@ define([
                 this.trigger('levelUpdate', [getInputLevel()]);
 
                 if (config.maxRecordingTime > 0 && elapsedSeconds >= config.maxRecordingTime) {
+                    this.trigger('timeout');
                     this.stop();
                 }
             },

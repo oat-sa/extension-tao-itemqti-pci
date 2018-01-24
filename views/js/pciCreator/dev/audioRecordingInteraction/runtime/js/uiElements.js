@@ -154,10 +154,11 @@ define([
 
     /**
      * Creates a progress bar to display recording or playback progress
+     * @param {$} $container - jQuery element that the progress bar will be appended to
      * @param {Object} config
-     * @param {$} config.$container - jQuery element that the progress bar will be appended to
+     * @param {Number} config.maxRecordingTime - in seconds
      */
-    function progressBarFactory(config) {
+    function progressBarFactory($container, config) {
         var progressBar,
             $progressBar = $('<progress>',{
                 value: '0'
@@ -190,11 +191,19 @@ define([
                 $progressBar.removeClass(currentClass);
                 currentClass = className;
                 $progressBar.addClass(currentClass);
+            },
+
+            reset: function reset() {
+                this.setValue(0);
+                this.setStyle('');
+                if (config.maxRecordingTime) {
+                    this.setMax(config.maxRecordingTime);
+                }
             }
         };
 
-        config.$container.empty();
-        config.$container.append($progressBar);
+        $container.empty();
+        $container.append($progressBar);
 
         return progressBar;
     }

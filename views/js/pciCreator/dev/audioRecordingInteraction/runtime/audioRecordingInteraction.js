@@ -23,7 +23,8 @@ define([
     'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
-    'audioRecordingInteraction/runtime/js/uiElements'
+    'audioRecordingInteraction/runtime/js/uiElements',
+    'text!audioRecordingInteraction/runtime/img/mic.svg'
 ], function(
     qtiCustomInteractionContext,
     $,
@@ -32,12 +33,12 @@ define([
     html,
     playerFactory,
     recorderFactory,
-    uiElements
+    uiElements,
+    micIcon
 ){
     'use strict';
 
     var ICON_CONTROLS = 'audioRecordingInteraction/runtime/img/controls.svg';
-    var ICON_MIC      = 'audioRecordingInteraction/runtime/img/mic.svg';
 
     var audioRecordingInteraction;
 
@@ -131,12 +132,8 @@ define([
 
             this.recorder = recorderFactory(this.config, this.assetManager);
 
-            this.recorder.on('stop cancel', function() {
-                self.progressBar.setValue(0);
-                self.progressBar.setStyle('');
-                if (self.config.maxRecordingTime) {
-                    self.progressBar.setMax(self.config.maxRecordingTime);
-                }
+            this.recorder.on('cancel', function() {
+                self.progressBar.reset();
                 self.$meterContainer.removeClass('record');
             });
 
@@ -201,9 +198,7 @@ define([
          * Create the progress bar object
          */
         initProgressBar: function initProgressBar() {
-            this.progressBar = uiElements.progressBarFactory({
-                $container: this.$progressContainer
-            });
+            this.progressBar = uiElements.progressBarFactory(this.$progressContainer, this.config);
         },
 
         /**
@@ -213,9 +208,7 @@ define([
             var $micIcon = this.$meterContainer.find('.mic');
 
             $micIcon.empty();
-            $micIcon.append($('<img>',
-                { src: this.assetManager.resolve(ICON_MIC)}
-            ));
+            $micIcon.append(micIcon);
 
             this.inputMeter = uiElements.inputMeterFactory({
                 $container: this.$meterContainer.find('.leds'),
@@ -352,13 +345,6 @@ define([
         createBase64Recoding: function createBase64Recoding(blob, filename) {
             var self = this;
 
-            /**
-             * TODO:
-             * implement a spinner or something to feedback that work is in progress while this is happening:
-             * as the response is not yet ready, the user shouldn't leave the item in the meantime.
-             * The asynchronous nature of this operation might also be problematic for saving the recording
-             * when the user exit the item in the middle of a recording (destroy() on the PCI interface should be implemented as a Promise)
-             */
             var reader = new FileReader();
             reader.readAsDataURL(blob);
 
@@ -372,6 +358,12 @@ define([
                         data: base64Data
                     };
                 self.updateResponse(recording);
+
+                // now that the response is ready, we can turn off the visual recording feedback that we had had let
+                // "turned on" as a hint to the test taker that the recording was not completely over,
+                // and that he should not leave the item yet. In most case, this little delay should go completely unnoticed.
+                self.progressBar.reset();
+                self.$meterContainer.removeClass('record');
             };
         },
 
