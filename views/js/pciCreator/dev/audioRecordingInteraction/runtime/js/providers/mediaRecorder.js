@@ -17,6 +17,7 @@
  */
 /**
  * This audio processing provider is based on the mediaRecorder API.
+ * It generates compressed files, exact codec and container depends on the browser implementation.
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
@@ -60,7 +61,14 @@ define([
             });
         }
 
+        /**
+         * The provider
+         */
         mediaRecorderProvider = {
+            /**
+             * Create and configure the mediaRecorder object
+             * @param {MediaStream} stream
+             */
             init: function init(stream) {
                 var self = this;
 
@@ -88,20 +96,32 @@ define([
                 };
             },
 
+            /**
+             * Start the recording
+             */
             start: function start() {
                 mediaRecorder.start(chunkSizeMs);
             },
 
+            /**
+             * Stop the recording
+             */
             stop: function stop() {
                 this.cancelled = false;
                 mediaRecorder.stop();
             },
 
+            /**
+             * Cancel the recording
+             */
             cancel: function cancel() {
                 this.cancelled = true;
                 mediaRecorder.stop();
             },
 
+            /**
+             * Destroy the mediaRecorder
+             */
             destroy: function destroy() {
                 mediaRecorder = null;
             }

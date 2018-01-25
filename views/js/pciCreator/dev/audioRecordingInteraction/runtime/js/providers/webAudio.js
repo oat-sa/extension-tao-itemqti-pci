@@ -16,7 +16,8 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  */
 /**
- * This audio processing provider is based on the Web Audio API.
+ * This audio processing provider is based on the Web Audio API and is used for un-compressed audio recording (Wav).
+ * It delegates the actual Wav-building process to a worker for background processing and improved performances.
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
@@ -33,7 +34,9 @@ define([
     return function webAudioProviderFactory(config, assetManager) {
         var webAudioProvider;
 
-        var recorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js', // todo: use min version
+        // todo: it would be nice to use a bundled and minified version of the worker.
+        // Leaving it as it is for now as the primary use case for uncompressed recording is offline testing.
+        var recorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js',
             recorderWorker;
 
         var audioContext,
@@ -42,6 +45,9 @@ define([
         var numChannels = (config.isStereo) ? 2 : 1,
             buffer = [];
 
+        /**
+         * Load the worker and configure it
+         */
         function initWorker() {
             recorderWorker = new Worker(assetManager.resolve(recorderWorkerPath));
 
@@ -51,7 +57,7 @@ define([
                     sampleRate: audioContext.sampleRate
                 },
                 options: {
-                    timeLimit: 0,
+                    timeLimit: 0,           // time limit is handled by the provider wrapper
                     progressInterval: 1000, // encoding progress report interval (millisec)
                     wav: {
                         mimeType: "audio/wav"
@@ -60,26 +66,40 @@ define([
             });
         }
 
+        /**
+         * Execute a command on the worker. See workers/WebAudioRecorderWav.js for a list of commands and their parameters
+         * @param {String} command
+         * @param {Object} payload - command parameters, depends on the actual command
+         */
         function sendToWorker(command, payload) {
             recorderWorker.postMessage(_.merge({ command: command }, payload));
         }
 
+        /**
+         * The provider
+         */
         webAudioProvider = {
+            /**
+             * Expose the Audio context so consumers can use it instead of creating a new one
+             * @returns {AudioContext}
+             */
             getAudioContext: function getAudioContext() {
                 return audioContext;
             },
 
+            /**
+             * Create the base audio nodes and add listeners for worker commands
+             * @param {MediaStream} stream
+             */
             init: function init(stream) {
                 var self = this;
 
-                // create base audio nodes
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 audioNodes.source = audioContext.createMediaStreamSource(stream);
                 audioNodes.inputGain = audioContext.createGain();
 
                 audioNodes.source.connect(audioNodes.inputGain);
 
-                // setup worker
                 initWorker();
 
                 recorderWorker.onmessage = function(e) {
@@ -99,6 +119,10 @@ define([
                 };
             },
 
+            /**
+             * Starting the recording simply consist in connecting the audio input to a ScriptProcessor node.
+             * We then forward the buffer data to the Worker for actual processing.
+             */
             start: function start() {
                 audioNodes.processor = audioContext.createScriptProcessor(0, numChannels, numChannels);
                 audioNodes.processor.onaudioprocess = function(e) {
@@ -115,22 +139,34 @@ define([
                 sendToWorker('start', { bufferSize: audioNodes.processor.bufferSize });
             },
 
+            /**
+             * Disconnect the script processor node to stop the recording
+             */
             _interruptRecording: function _interruptRecording() {
                 audioNodes.processor.onaudioprocess = null;
                 audioNodes.inputGain.disconnect();
                 delete audioNodes.processor;
             },
 
+            /**
+             * Stop the recording
+             */
             stop: function stop() {
                 this._interruptRecording();
                 sendToWorker('finish');
             },
 
+            /**
+             * Cancel the recording
+             */
             cancel: function cancel() {
                 this._interruptRecording();
                 sendToWorker('cancel');
             },
 
+            /**
+             * Close the audio context and destroy created assets
+             */
             destroy: function destroy() {
                 if (audioContext) {
                     audioContext.close();

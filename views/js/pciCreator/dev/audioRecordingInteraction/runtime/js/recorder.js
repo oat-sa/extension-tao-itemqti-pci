@@ -16,9 +16,14 @@
  * Copyright (c) 2017-2018 (original work) Open Assessment Technologies SA;
  */
 /**
- * XXXXXX
- * XXXXXX
- * XXXXXX
+ * This module wraps an audio processor provider which depends on the requested recording format:
+ * - compressed: mediaRecorder provider
+ * - uncompressed: webAudio provider
+ *
+ * It also handles:
+ * - microphone access
+ * - time related functionality (recording duration, time limit...)
+ * - reading of the input level for the meter
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
@@ -101,7 +106,7 @@ define([
             frequencyArray;         // used to compute the input level from the current array of frequencies
 
         /**
-         * Create the Web Audio node that will be use to analyse the input stream
+         * Create the Web Audio node that will be used to analyse the input stream
          * @param {MediaStream} stream - incoming audio stream from the microphone
          */
         function initAnalyser(stream) {
@@ -109,7 +114,7 @@ define([
                 source,
                 bufferLength;
 
-            // Try to re-use the provider's audioContext, if ever it has one
+            // Try to re-use the provider's audioContext, if it has one
             if (_.isFunction(provider.getAudioContext)) {
                 audioContext = provider.getAudioContext();
             }

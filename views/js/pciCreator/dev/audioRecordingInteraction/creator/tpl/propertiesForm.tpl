@@ -54,7 +54,7 @@
     <label for="isCompressed">{{__ "Recording format"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "XXXXXX XXXXXX XXXXXX "}}
+        {{__ "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."}}
     </span>
     <select name="isCompressed">
         <option value="true">{{__ 'Compressed'}}</option>
@@ -68,7 +68,7 @@
         <input name="audioBitrate" value="{{audioBitrate}}" class="large" data-increment="1000" data-min="8000" type="text" />
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
-            {{__ "In bps (bits per second). Set the tradeoff between audio quality and filesize. ith the default value (20.000bps), a 2minutes recording weights roughly 300KB."}}
+            {{__ "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."}}
         </span>
     </div>
 </div>
@@ -78,7 +78,7 @@
         <label for="isStereo">{{__ "Channels"}}</label>
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
-            {{__ "XXXXXX XXXXXX XXXXXX "}}
+            {{__ "Number of channels for the recording. Allow to cut the record size in half is used in mono."}}
         </span>
         <select name="isStereo">
             <option value="false">{{__ 'Mono'}}</option>
