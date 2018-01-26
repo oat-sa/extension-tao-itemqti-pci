@@ -36,7 +36,7 @@ define([
             interaction = this.widget.element;
 
         containerEditor.create($prompt, {
-            change : function(text){
+            change : function change(text){
                 interaction.data('prompt', text);
                 interaction.updateMarkup();
             },
@@ -106,7 +106,7 @@ define([
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, _.assign({
-            identifier : function(i, value){
+            identifier : function identifier(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
@@ -116,7 +116,7 @@ define([
             maxRecords:         configChangeCallBack,
             maxRecordingTime:   configChangeCallBack,
 
-            isCompressed: function(boundInteraction, value, name) {
+            isCompressed: function isCompressed(boundInteraction, value, name) {
                 if (value === 'true') {
                     $uncompressedOptions.hide();
                     $compressedOptions.show();

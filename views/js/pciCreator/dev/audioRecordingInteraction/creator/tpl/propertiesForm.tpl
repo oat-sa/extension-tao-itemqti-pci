@@ -78,7 +78,7 @@
         <label for="isStereo">{{__ "Channels"}}</label>
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
-            {{__ "Number of channels for the recording. Allow to cut the record size in half is used in mono."}}
+            {{__ "Number of channels for the recording. Allow to cut the record size in half if used in mono."}}
         </span>
         <select name="isStereo">
             <option value="false">{{__ 'Mono'}}</option>
