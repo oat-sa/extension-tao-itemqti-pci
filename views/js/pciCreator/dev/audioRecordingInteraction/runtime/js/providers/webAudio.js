@@ -111,10 +111,6 @@ define([
                             self.trigger('blobavailable', [blob]);
                             break;
                         }
-                        case 'error': {
-                            window.console.error(data.message);
-                            break;
-                        }
                     }
                 };
             },
