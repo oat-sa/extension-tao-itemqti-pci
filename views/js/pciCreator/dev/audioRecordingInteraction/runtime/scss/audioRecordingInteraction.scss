@@ -45,6 +45,11 @@ $playback: whiten($info, .3);
       display: flex;
 
       &.record {
+        .mic {
+          path {
+            fill: $activeBg
+          }
+        }
         border-color: $activeBg;
         background-color: whiten($activeBg, 0.9);
       }
@@ -56,10 +61,13 @@ $playback: whiten($info, .3);
       .mic {
         flex: 0 0 28px;
 
-        img {
+        svg {
           height: 28px;
           width: 28px;
           margin-top: 10px;
+        }
+        path {
+          fill: $disabledBg
         }
       }
     }

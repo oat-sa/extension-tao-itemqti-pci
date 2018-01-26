@@ -18,11 +18,13 @@
             </pci:resources>
             <pci:properties xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction">
               <pci:entry key="allowPlayback">true</pci:entry>
-              <pci:entry key="audioBitrate">20000</pci:entry>
               <pci:entry key="autoStart"/>
-              <pci:entry key="displayDownloadLink"/>
               <pci:entry key="maxRecords">0</pci:entry>
               <pci:entry key="maxRecordingTime">120</pci:entry>
+              <pci:entry key="audioBitrate">20000</pci:entry>
+              <pci:entry key="pcmSampleRate">44100</pci:entry>
+              <pci:entry key="isStereo">false</pci:entry>
+              <pci:entry key="displayDownloadLink">true</pci:entry>
             </pci:properties>
             <pci:markup>
               <html5:div class="audioRecordingInteraction">
