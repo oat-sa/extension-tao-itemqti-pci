@@ -23,7 +23,8 @@ define([
     'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
-    'audioRecordingInteraction/runtime/js/uiElements'
+    'audioRecordingInteraction/runtime/js/uiElements',
+    'text!audioRecordingInteraction/runtime/img/mic.svg'
 ], function(
     qtiCustomInteractionContext,
     $,
@@ -32,12 +33,12 @@ define([
     html,
     playerFactory,
     recorderFactory,
-    uiElements
+    uiElements,
+    micIcon
 ){
     'use strict';
 
     var ICON_CONTROLS = 'audioRecordingInteraction/runtime/img/controls.svg';
-    var ICON_MIC      = 'audioRecordingInteraction/runtime/img/mic.svg';
 
     var audioRecordingInteraction;
 
@@ -95,24 +96,31 @@ define([
          * Initialize the PCI configuration
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
-         * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
-         * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
+         * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
+         * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
+         * @param {Boolean} config.isStereo - switch the number of channels (1 vs 2) for uncompressed recording
          * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
+         * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          */
         initConfig: function init(config) {
             this.config = {
                 allowPlayback:          toBoolean(config.allowPlayback, true),
-                audioBitrate:           toInteger(config.audioBitrate, 20000),
                 autoStart:              toBoolean(config.autoStart, false),
-                displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
                 maxRecords:             toInteger(config.maxRecords, 3),
                 maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
+
+                isCompressed:           toBoolean(config.isCompressed, true),
+                audioBitrate:           toInteger(config.audioBitrate, 20000),
+                isStereo:               toBoolean(config.isStereo, false),
+
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
-                media:                  config.media || {}
+                media:                  config.media || {},
+
+                displayDownloadLink:    toBoolean(config.displayDownloadLink, false)
             };
         },
 
@@ -122,14 +130,10 @@ define([
         initRecorder: function initRecorder() {
             var self = this;
 
-            this.recorder = recorderFactory(this.config);
+            this.recorder = recorderFactory(this.config, this.assetManager);
 
-            this.recorder.on('stop', function() {
-                self.progressBar.setValue(0);
-                self.progressBar.setStyle('');
-                if (self.config.maxRecordingTime) {
-                    self.progressBar.setMax(self.config.maxRecordingTime);
-                }
+            this.recorder.on('cancel', function() {
+                self.progressBar.reset();
                 self.$meterContainer.removeClass('record');
             });
 
@@ -194,9 +198,7 @@ define([
          * Create the progress bar object
          */
         initProgressBar: function initProgressBar() {
-            this.progressBar = uiElements.progressBarFactory({
-                $container: this.$progressContainer
-            });
+            this.progressBar = uiElements.progressBarFactory(this.$progressContainer, this.config);
         },
 
         /**
@@ -206,9 +208,7 @@ define([
             var $micIcon = this.$meterContainer.find('.mic');
 
             $micIcon.empty();
-            $micIcon.append($('<img>',
-                { src: this.assetManager.resolve(ICON_MIC)}
-            ));
+            $micIcon.append(micIcon);
 
             this.inputMeter = uiElements.inputMeterFactory({
                 $container: this.$meterContainer.find('.leds'),
@@ -345,13 +345,6 @@ define([
         createBase64Recoding: function createBase64Recoding(blob, filename) {
             var self = this;
 
-            /**
-             * TODO:
-             * implement a spinner or something to feedback that work is in progress while this is happening:
-             * as the response is not yet ready, the user shouldn't leave the item in the meantime.
-             * The asynchronous nature of this operation might also be problematic for saving the recording
-             * when the user exit the item in the middle of a recording (destroy() on the PCI interface should be implemented as a Promise)
-             */
             var reader = new FileReader();
             reader.readAsDataURL(blob);
 
@@ -365,6 +358,12 @@ define([
                         data: base64Data
                     };
                 self.updateResponse(recording);
+
+                // now that the response is ready, we can turn off the visual recording feedback that we had had let
+                // "turned on" as a hint to the test taker that the recording was not completely over,
+                // and that he should not leave the item yet. In most case, this little delay should go completely unnoticed.
+                self.progressBar.reset();
+                self.$meterContainer.removeClass('record');
             };
         },
 
@@ -619,15 +618,13 @@ define([
          * @param {Object} response
          */
         setResponse: function setResponse(response) {
-            var recording = response.base && response.base.file,
-                base64Prefix;
+            var recording = response.base && response.base.file;
 
             if (recording) {
                 this.updateResponse(recording);
 
                 // restore interaction state
-                base64Prefix = 'data:' + recording.mime + ';base64,';
-                this.player.load(base64Prefix + recording.data);
+                this.player.loadFromBase64(recording.data, recording.mime);
             }
         },
         /**

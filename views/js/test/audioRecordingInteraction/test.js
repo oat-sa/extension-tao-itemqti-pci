@@ -1,16 +1,27 @@
 define([
     'jquery',
     'lodash',
+    'taoItems/assets/manager',
+    'taoItems/assets/strategies',
+    'taoQtiItem/portableElementRegistry/assetManager/portableAssetStrategy',
     'taoQtiItem/runner/qtiItemRunner',
     'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
     'json!qtiItemPci/test/audioRecordingInteraction/data/qti.json'
-], function ($, _, qtiItemRunner, ciRegistry, pciTestProvider,  itemData){
+], function ($, _, assetManagerFactory, assetStrategies, portableAssetStrategy, qtiItemRunner, ciRegistry, pciTestProvider,  itemData){
 
     'use strict';
 
     var runner;
     var fixtureContainerId = 'item-container';
+
+    function getAssetManager(baseUrl) {
+        return assetManagerFactory([
+            assetStrategies.external,
+            assetStrategies.baseUrl,
+            portableAssetStrategy
+        ], {baseUrl: baseUrl || ''});
+    }
 
     //manually register the pci from its manifest
     pciTestProvider.addManifestPath(
@@ -244,23 +255,48 @@ define([
     module('Visual test');
 
     QUnit.asyncTest('display and play', function (assert){
-
         var $container = $('#outside-container');
+        var assetManager = getAssetManager('/qtiItemPci/views/js/pciCreator/dev/audioRecordingInteraction/');
+
+        var interaction;
+
+        var $form = $('#form');
+        $form.on('change', function(e) {
+            var $target = $(e.target),
+                newConfig = {};
+            if (interaction) {
+                newConfig[$target.attr('name')] = $target.is(':checked');
+                interaction.triggerPci('configChange', [_.assign(interaction.properties, newConfig)]);
+            }
+        });
+
+        QUnit.expect(1);
         assert.equal($container.length, 1, 'the item container exists');
 
         if (supportsMediaRecorder()) {
-            runner = qtiItemRunner('qti', itemData)
+            runner = qtiItemRunner('qti', itemData, {assetManager: assetManager})
                 .on('render', function (){
+                    var interactions = this._item.getInteractions();
+                    interaction = interactions[0];
+
                     QUnit.start();
                 })
                 .on('responsechange', function (response){
+                    if (response
+                        && response.RESPONSE
+                        && response.RESPONSE.base
+                        && response.RESPONSE.base.file
+                        && response.RESPONSE.base.file.data
+                    ) {
+                        response.RESPONSE.base.file.data = 'DATA'; // do not display the base64-encoded file!
+                    }
                     $('#response-display').html(JSON.stringify(response, null, 2));
                 })
                 .on('error', function (error){
                     $('#error-display').html(error);
                 })
                 .init()
-                .render($container);
+                .render($container.find('#pci'));
         }
     });
 

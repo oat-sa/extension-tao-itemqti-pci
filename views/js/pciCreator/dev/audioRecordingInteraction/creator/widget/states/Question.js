@@ -36,7 +36,7 @@ define([
             interaction = this.widget.element;
 
         containerEditor.create($prompt, {
-            change : function(text){
+            change : function change(text){
                 interaction.data('prompt', text);
                 interaction.updateMarkup();
             },
@@ -70,7 +70,9 @@ define([
             $form = _widget.$form,
             interaction = _widget.element,
             response = interaction.getResponseDeclaration(),
-            $mediaStimulusForm;
+            $mediaStimulusForm,
+            $compressedOptions,
+            $uncompressedOptions;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
@@ -80,35 +82,54 @@ define([
             identifier : interaction.attr('responseIdentifier'),
 
             allowPlayback:          typeCaster.strToBool(interaction.prop('allowPlayback'), true),
-            audioBitrate:           interaction.prop('audioBitrate'),
             autoStart:              typeCaster.strToBool(interaction.prop('autoStart'), false),
-            displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false),
             maxRecords:             interaction.prop('maxRecords'),
             maxRecordingTime:       interaction.prop('maxRecordingTime'),
-            useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false)
+
+            isCompressed:           typeCaster.strToBool(interaction.prop('isCompressed'), true),
+            audioBitrate:           interaction.prop('audioBitrate'),
+            isStereo:               typeCaster.strToBool(interaction.prop('isStereo'), false),
+
+            useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
+
+            displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
         }));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
         $mediaStimulusForm.append(pciMediaManager.getForm());
+
+        $compressedOptions = $form.find('[data-role="compressedOptions"]');
+        $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
 
         //init form javascript
         formElement.initWidget($form);
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, _.assign({
-            identifier : function(i, value){
+            identifier : function identifier(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
 
-            allowPlayback:          configChangeCallBack,
-            audioBitrate:           configChangeCallBack,
-            autoStart:              configChangeCallBack,
-            displayDownloadLink:    configChangeCallBack,
-            maxRecords:             configChangeCallBack,
-            maxRecordingTime:       configChangeCallBack,
+            allowPlayback:      configChangeCallBack,
+            autoStart:          configChangeCallBack,
+            maxRecords:         configChangeCallBack,
+            maxRecordingTime:   configChangeCallBack,
 
-            useMediaStimulus:       function useMediaStimulusCb(boundInteraction, value, name) {
+            isCompressed: function isCompressed(boundInteraction, value, name) {
+                if (value === 'true') {
+                    $uncompressedOptions.hide();
+                    $compressedOptions.show();
+                } else {
+                    $uncompressedOptions.show();
+                    $compressedOptions.hide();
+                }
+                configChangeCallBack(boundInteraction, value, name);
+            },
+            audioBitrate:       configChangeCallBack,
+            isStereo:           configChangeCallBack,
+
+            useMediaStimulus: function useMediaStimulusCb(boundInteraction, value, name) {
                 if (value) {
                     $mediaStimulusForm.removeClass('hidden');
                     $mediaStimulusForm.show(250);
@@ -116,7 +137,10 @@ define([
                     $mediaStimulusForm.hide(250);
                 }
                 configChangeCallBack(boundInteraction, value, name);
-            }
+            },
+
+            displayDownloadLink: configChangeCallBack
+
         }, pciMediaManager.getChangeCallbacks()));
 
         pciMediaManager.init();

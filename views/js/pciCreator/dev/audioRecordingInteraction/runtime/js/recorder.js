@@ -13,18 +13,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2018 (original work) Open Assessment Technologies SA;
  */
 /**
- * This wraps the getUserMedia / MediaRecorder APIs. Works only with a few compliant browsers,
- * meaning Chrome (https) and Firefox.
+ * This module wraps an audio processor provider which depends on the requested recording format:
+ * - compressed: mediaRecorder provider
+ * - uncompressed: webAudio provider
+ *
+ * It also handles:
+ * - microphone access
+ * - time related functionality (recording duration, time limit...)
+ * - reading of the input level for the meter
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
     'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/util/event'
-], function(_, event) {
+    'taoQtiItem/portableLib/OAT/util/event',
+    'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
+    'audioRecordingInteraction/runtime/js/providers/webAudio'
+], function(_, event, mediaRecorderProvider, webAudioProvider) {
     'use strict';
 
     /**
@@ -80,47 +88,42 @@ define([
 
 
     /**
-     * @param {Object}  config
-     * @param {Number}  config.audioBitrate - in bits per second, quality of the recording
-     * @param {Number}  config.maxRecordingTime - in seconds
+     * @param {Object} config
+     * @param {Number} config.maxRecordingTime - in seconds
+     * @param {Object} assetManager - used to resolve static assets, here the worker file
      * @returns {Object} - The recorder
      */
-    return function recorderFactory(config) {
-        var MediaRecorder = window.MediaRecorder,       // The MediaRecorder API
-            mediaRecorder,                              // The MediaRecorder instance
-            recorderOptions = {                         // Options for the MediaRecorder constructor
-                audioBitsPerSecond: config.audioBitrate || 20000
-            };
-
+    return function recorderFactory(config, assetManager) {
         var recorder,                       // Return value of the present factory
+            provider,                       // provider for audio processing/encoding
             state = recorderStates.CREATED; // recorder inner state
 
-        var mimeType,               // mime type of the recording
-            chunks = [],            // contains the current recording split in chunks
-            chunkSizeMs = 1000,     // size of a chunk
-            startTimeMs,            // start time of the recording - used for calculating record duration
+        var startTimeMs,            // start time of the recording - used for calculating record duration
+            durationMs,             // duration of the recording
             timerId;                // a place to store the requestAnimationFrame return value
 
         var analyser,               // the WebAudio node use to read the input level
             frequencyArray;         // used to compute the input level from the current array of frequencies
 
-        var codecsByPreferenceOrder = [
-            'audio/webm;codecs=opus',
-            'audio/ogg;codecs=opus',
-            'audio/webm',
-            'audio/ogg'
-        ];
-
         /**
-         * Create the Web Audio node that will be use to analyse the input stream
-         * @param {MediaStream} stream
+         * Create the Web Audio node that will be used to analyse the input stream
+         * @param {MediaStream} stream - incoming audio stream from the microphone
          */
         function initAnalyser(stream) {
-            var audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
-                source = audioCtx.createMediaStreamSource(stream),
+            var audioContext,
+                source,
                 bufferLength;
 
-            analyser = audioCtx.createAnalyser();
+            // Try to re-use the provider's audioContext, if it has one
+            if (_.isFunction(provider.getAudioContext)) {
+                audioContext = provider.getAudioContext();
+            }
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            source = audioContext.createMediaStreamSource(stream);
+
+            analyser = audioContext.createAnalyser();
             analyser.minDecibels = -100;
             analyser.maxDecibels = -30;
             analyser.fftSize = 32;
@@ -160,16 +163,6 @@ define([
 
         setGetUserMedia();
 
-        // set the prefered encoding format, if we are able to detect what is supported
-        // if not, the browser default will be used
-        if (typeof MediaRecorder.isTypeSupported === 'function') {
-            codecsByPreferenceOrder.forEach(function (format) {
-                if (_.isUndefined(recorderOptions.mimeType) && MediaRecorder.isTypeSupported(format)) {
-                    recorderOptions.mimeType = format;
-                }
-            });
-        }
-
         recorder = {
             /**
              * Check the current state
@@ -189,49 +182,28 @@ define([
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
-                        mediaRecorder = new MediaRecorder(stream, recorderOptions);
-                        mimeType = mediaRecorder.mimeType;
+                        provider = (config.isCompressed)
+                            ? mediaRecorderProvider(config)
+                            : webAudioProvider(config, assetManager);
+
+                        provider.init(stream);
+
+                        provider.on('blobavailable', function(blob) {
+                            self.trigger('recordingavailable', [blob, durationMs]);
+                        });
 
                         initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);
-
-                        // save chunks of the recording
-                        mediaRecorder.ondataavailable = function ondataavailable(e) {
-                            chunks.push(e.data);
-                        };
-
-                        // stop record callback
-                        mediaRecorder.onstop = function onstop() {
-                            var blob,
-                                durationMs;
-
-                            self.trigger('stop');
-
-                            if (! self.cancelled) {
-                                blob = new Blob(chunks, { type: mimeType });
-                                durationMs = new window.Date().getTime() - startTimeMs;
-                                self.trigger('recordingavailable', [blob, durationMs]);
-
-                            }
-                            cancelAnimationFrame(timerId);
-
-                            self.trigger('levelUpdate', [0]);
-                            setState(recorder, recorderStates.IDLE);
-
-                            chunks = [];
-                        };
                     });
             },
-
             /**
              * Start the recording
              */
             start: function start() {
-                mediaRecorder.start(chunkSizeMs);
-
                 startTimeMs = new window.Date().getTime();
 
+                provider.start();
                 setState(recorder, recorderStates.RECORDING);
 
                 this._monitorRecording();
@@ -241,17 +213,32 @@ define([
              * Stop the recording
              */
             stop: function stop() {
-                this.cancelled = false;
-                mediaRecorder.stop();
-                // state change is triggered by onstop handler
+                durationMs = new window.Date().getTime() - startTimeMs;
+
+                this._interruptRecording();
+
+                provider.stop();
+                this.trigger('stop');
             },
 
             /**
              * Cancel the current recording
              */
             cancel: function cancel() {
-                this.cancelled = true;
-                mediaRecorder.stop();
+                this._interruptRecording();
+
+                provider.cancel();
+                this.trigger('cancel');
+            },
+
+            /**
+             * Perform interrupt recording actions, whether stop() or cancel() related
+             * @private
+             */
+            _interruptRecording: function _interruptRecording() {
+                cancelAnimationFrame(timerId);
+                setState(recorder, recorderStates.IDLE);
+                this.trigger('levelUpdate', [0]);
             },
 
             /**
@@ -268,6 +255,7 @@ define([
                 this.trigger('levelUpdate', [getInputLevel()]);
 
                 if (config.maxRecordingTime > 0 && elapsedSeconds >= config.maxRecordingTime) {
+                    this.trigger('timeout');
                     this.stop();
                 }
             },
@@ -276,7 +264,10 @@ define([
              * Destroy the recorder instance
              */
             destroy: function destroy() {
-                mediaRecorder = null;
+                cancelAnimationFrame(timerId);
+                if (provider) {
+                    provider.destroy();
+                }
             }
 
         };

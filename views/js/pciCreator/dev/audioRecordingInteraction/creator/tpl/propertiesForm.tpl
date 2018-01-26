@@ -33,26 +33,6 @@
 </div>
 
 <div class="panel">
-    <label>
-        <input name="displayDownloadLink" type="checkbox" {{#if displayDownloadLink}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "Display link"}} <span class="txt-error"><strong>{{__ " - TEST ONLY "}}</strong></span>
-    </label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">
-        {{__ "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."}}
-    </span>
-</div>
-
-<div class="panel">
-    <label for="audioBitrate" class="spinner">{{__ "Audio bitrate:"}}</label>
-    <input name="audioBitrate" value="{{audioBitrate}}" class="large" data-increment="1000" data-min="8000" type="text" />
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">
-        {{__ "In bps (bits per second). Set the tradeoff between audio quality and filesize. ith the default value (20.000bps), a 2minutes recording weights roughly 300KB."}}
-    </span>
-</div>
-<div class="panel">
     <label for="maxRecords" class="spinner">{{__ "Max attempts:"}}</label>
     <input name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" />
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
@@ -70,6 +50,44 @@
 </div>
 
 <hr />
+<div class="panel">
+    <label for="isCompressed">{{__ "Recording format"}}</label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."}}
+    </span>
+    <select name="isCompressed">
+        <option value="true">{{__ 'Compressed'}}</option>
+        <option value="false">{{__ 'Uncompressed'}}</option>
+    </select>
+</div>
+
+<div data-role="compressedOptions" {{#unless isCompressed}}style="display:none"{{/unless}}>
+    <div class="panel">
+        <label for="audioBitrate" class="spinner">{{__ "Audio bitrate:"}}</label>
+        <input name="audioBitrate" value="{{audioBitrate}}" class="large" data-increment="1000" data-min="8000" type="text" />
+        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+        <span class="tooltip-content">
+            {{__ "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."}}
+        </span>
+    </div>
+</div>
+
+<div data-role="uncompressedOptions"  {{#if isCompressed}}style="display:none"{{/if}}>
+    <div class="panel">
+        <label for="isStereo">{{__ "Channels"}}</label>
+        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+        <span class="tooltip-content">
+            {{__ "Number of channels for the recording. Allow to cut the record size in half if used in mono."}}
+        </span>
+        <select name="isStereo">
+            <option value="false">{{__ 'Mono'}}</option>
+            <option value="true">{{__ 'Stereo'}}</option>
+        </select>
+    </div>
+</div>
+
+<hr />
 
 <div class="panel">
     <label>
@@ -84,4 +102,20 @@
 
 <div class="panel">
     <div class="media-stimulus-properties-form{{#unless useMediaStimulus}} hidden{{/unless}}"></div>
+</div>
+
+<hr />
+
+<h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "For tests only"}}</strong></h3>
+
+<div class="panel">
+    <label>
+        <input name="displayDownloadLink" type="checkbox" {{#if displayDownloadLink}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Allow download"}}
+    </label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."}}
+    </span>
 </div>
