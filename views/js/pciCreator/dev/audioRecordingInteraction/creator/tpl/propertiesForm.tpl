@@ -57,8 +57,8 @@
         {{__ "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."}}
     </span>
     <select name="isCompressed">
-        <option value="true">{{__ 'Compressed'}}</option>
-        <option value="false">{{__ 'Uncompressed'}}</option>
+        <option value="true"{{#if isCompressed}} selected="selected"{{/if}}>{{__ 'Compressed'}}</option>
+        <option value="false"{{#unless isCompressed}} selected="selected"{{/unless}}>{{__ 'Uncompressed'}}</option>
     </select>
 </div>
 
@@ -81,8 +81,8 @@
             {{__ "Number of channels for the recording. Allow to cut the record size in half if used in mono."}}
         </span>
         <select name="isStereo">
-            <option value="false">{{__ 'Mono'}}</option>
-            <option value="true">{{__ 'Stereo'}}</option>
+            <option value="false"{{#unless isStereo}} selected="selected"{{/unless}}>{{__ 'Mono'}}</option>
+            <option value="true"{{#if isStereo}} selected="selected"{{/if}}>{{__ 'Stereo'}}</option>
         </select>
     </div>
 </div>
