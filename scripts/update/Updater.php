@@ -303,6 +303,9 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('4.5.1');
         }
 
-        $this->skip('4.4.1', '4.4.2');
+        if($this->isVersion('4.5.1')){
+            call_user_func(new RegisterPciMathEntry(), ['0.7.2']);
+            $this->setVersion('4.5.2');
+        }
     }
 }
