@@ -133,6 +133,11 @@ $defaultGapWidth: 30;
                 vertical-align: middle;
             }
 
+            sup, sub {
+                line-height: inherit;
+                top: initial;
+            }
+
             // Buttons
             .math-entry-toolgroup {
                 margin: 8px 8px 8px 0;
