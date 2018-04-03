@@ -3,7 +3,7 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -40,8 +40,9 @@
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
-        "libraries" : [
+        "hook": "./pciCreator.min.js",
+        "src" : [
+            "./pciCreator.js",
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/tpl/addGapBtn.tpl",

@@ -16,8 +16,6 @@
     },
     "runtime" : {
         "hook" : "./runtime/likertScaleInteraction.min.js",
-        "libraries" : [
-        ],
         "stylesheets" : [
             "./runtime/css/base.css",
             "./runtime/css/likertScaleInteraction.css"
@@ -35,8 +33,6 @@
     "creator" : {
         "icon": "./creator/img/icon.svg",
         "hook": "./pciCreator.min.js",
-        "libraries" : [
-        ],
         "src" : [
             "./pciCreator.js",
             "./creator/tpl/markup.tpl",
