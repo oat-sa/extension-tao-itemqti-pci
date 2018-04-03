@@ -34,6 +34,8 @@ class PciLoader extends tao_actions_CommonModule
     {
         $customInteractionDirs = \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem')->getConfig('debug_portable_element');
 
+        \common_Logger::d('XXXXX ' . print_r($customInteractionDirs, true));
+
         try {
             $this->returnJson(array_reduce($this->getRegistries(), function($acc, $registry) use ($customInteractionDirs){
                 $latestRuntimes = $registry->getLatestRuntimes();
@@ -62,16 +64,23 @@ class PciLoader extends tao_actions_CommonModule
                                     if (isset($version['runtime']) && isset($version['runtime']['modules'])) {
                                         $version['runtime']['modules'] = $modules;
                                     }
+                                    if(isset($version['creator']) && isset($version['creator']['src'])){
+                                        $version['creator']['hook'] = array_shift($version['creator']['src']);
+                                        $version['creator']['modules'] = $version['creator']['src'];
+                                        unset($version['creator']['src']);
+                                    }
 
                                 // TAO PCI
                                 } else {
                                     if(isset($version['runtime']) && isset($version['runtime']['src'])){
                                         $version['runtime']['libraries'] = $version['runtime']['src'];
                                         unset($version['runtime']['hook']);
+                                        unset($version['runtime']['src']);
                                     }
                                     if(isset($version['creator']) && isset($version['creator']['src'])){
-                                        $version['creator']['libraries'] = $version['creator']['src'];
-                                        unset($version['creator']['hook']);
+                                        $version['creator']['hook'] = array_shift($version['creator']['src']);
+                                        $version['creator']['modules'] = $version['creator']['src'];
+                                        unset($version['creator']['src']);
                                     }
                                 }
                             }
