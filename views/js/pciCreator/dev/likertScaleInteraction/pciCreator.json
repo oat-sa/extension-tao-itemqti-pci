@@ -3,7 +3,7 @@
     "label": "Likert Scale",
     "short": "Likert",
     "description": "A simple implementation of likert scale.",
-    "version": "0.4.1",
+    "version": "0.5.0",
     "author": "Sam Sipasseuth",
     "email": "sam@taotesting.com",
     "tags": [
@@ -34,8 +34,12 @@
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
+        "hook": "./pciCreator.min.js",
         "libraries" : [
+        ],
+        "src" : [
+            "./pciCreator.js",
+            "./creator/tpl/markup.tpl",
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/widget/Widget.js",
