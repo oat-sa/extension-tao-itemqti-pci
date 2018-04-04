@@ -34,8 +34,6 @@ class PciLoader extends tao_actions_CommonModule
     {
         $customInteractionDirs = \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem')->getConfig('debug_portable_element');
 
-        \common_Logger::d('XXXXX ' . print_r($customInteractionDirs, true));
-
         try {
             $this->returnJson(array_reduce($this->getRegistries(), function($acc, $registry) use ($customInteractionDirs){
                 $latestRuntimes = $registry->getLatestRuntimes();
