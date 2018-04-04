@@ -63,6 +63,7 @@ class PciLoader extends tao_actions_CommonModule
                                         $version['runtime']['modules'] = $modules;
                                     }
                                     if(isset($version['creator']) && isset($version['creator']['src'])){
+                                        //the first entry of the src array is always the entrypoint (PCI hook)
                                         $version['creator']['hook'] = array_shift($version['creator']['src']);
                                         $version['creator']['modules'] = $version['creator']['src'];
                                         unset($version['creator']['src']);
@@ -76,6 +77,7 @@ class PciLoader extends tao_actions_CommonModule
                                         unset($version['runtime']['src']);
                                     }
                                     if(isset($version['creator']) && isset($version['creator']['src'])){
+                                        //the first entry of the src array is always the entrypoint (PCI hook)
                                         $version['creator']['hook'] = array_shift($version['creator']['src']);
                                         $version['creator']['modules'] = $version['creator']['src'];
                                         unset($version['creator']['src']);
