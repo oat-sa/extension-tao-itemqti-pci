@@ -3,7 +3,7 @@
     "label": "Audio recording",
     "short": "Audio",
     "description": "Allow test taker to record audio",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -36,8 +36,9 @@
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.js",
-        "libraries" : [
+        "hook": "./pciCreator.min.js",
+        "src" : [
+            "./pciCreator.js",
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/widget/Widget.js",

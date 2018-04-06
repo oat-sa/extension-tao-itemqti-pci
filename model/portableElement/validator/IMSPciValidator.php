@@ -59,6 +59,7 @@ class IMSPciValidator extends PortableElementModelValidator
                 'libraries',
                 'stylesheets',
                 'mediaFiles',
+                'src'
             ]
         ];
 

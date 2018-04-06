@@ -60,7 +60,7 @@ define([
                         ciRegistry.enable(typeIdentifier);
                         interactionsToolbar.enable($interactionSidebar, 'customInteraction.' + typeIdentifier);
                     }else{
-                        ciRegistry.loadCreators({reload: true, enabledOnly : true}).then(function(){
+                        ciRegistry.loadCreators({reload: true}).then(function(){
                             var $insertable, $itemBody;
                             var data = ciRegistry.getAuthoringData(typeIdentifier);
                             if(data.tags && data.tags[0] === interactionsToolbar.getCustomInteractionTag()){
