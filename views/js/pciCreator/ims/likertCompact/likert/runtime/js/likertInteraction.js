@@ -20,8 +20,7 @@ define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'likertCompactInteraction/likert/runtime/js/renderer',
-    'taoQtiItem/portableLib/OAT/util/event',
-    'css!likertCompactInteraction/likert/runtime/css/style'
+    'taoQtiItem/portableLib/OAT/util/event'
 ], function(qtiCustomInteractionContext, $, renderer, event){
     'use strict';
 
@@ -118,9 +117,9 @@ define([
         getTypeIdentifier : function(){
             return _typeIdentifier;
         },
-        
+
         /**
-         * Render the PCI : 
+         * Render the PCI :
          * @param {String} id
          * @param {Node} dom
          * @param {Object} config - json
@@ -147,7 +146,7 @@ define([
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} response
          */
@@ -162,7 +161,7 @@ define([
         /**
          * Remove the current response set in the interaction
          * The state may not be restored at this point.
-         * 
+         *
          * @param {Object} interaction
          */
         resetResponse : function(){
@@ -174,7 +173,7 @@ define([
 
         /**
          * Restore the state of the interaction from the serializedState.
-         * 
+         *
          * @param {Object} interaction
          * @param {Object} serializedState - json format
          */
@@ -187,7 +186,7 @@ define([
         /**
          * Get the current state of the interaction as a string.
          * It enables saving the state for later usage.
-         * 
+         *
          * @param {Object} interaction
          * @returns {Object} json format
          */

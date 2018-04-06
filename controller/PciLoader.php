@@ -62,16 +62,25 @@ class PciLoader extends tao_actions_CommonModule
                                     if (isset($version['runtime']) && isset($version['runtime']['modules'])) {
                                         $version['runtime']['modules'] = $modules;
                                     }
+                                    if(isset($version['creator']) && isset($version['creator']['src'])){
+                                        //the first entry of the src array is always the entrypoint (PCI hook)
+                                        $version['creator']['hook'] = array_shift($version['creator']['src']);
+                                        $version['creator']['modules'] = $version['creator']['src'];
+                                        unset($version['creator']['src']);
+                                    }
 
                                 // TAO PCI
                                 } else {
                                     if(isset($version['runtime']) && isset($version['runtime']['src'])){
                                         $version['runtime']['libraries'] = $version['runtime']['src'];
                                         unset($version['runtime']['hook']);
+                                        unset($version['runtime']['src']);
                                     }
                                     if(isset($version['creator']) && isset($version['creator']['src'])){
-                                        $version['creator']['libraries'] = $version['creator']['src'];
-                                        unset($version['creator']['hook']);
+                                        //the first entry of the src array is always the entrypoint (PCI hook)
+                                        $version['creator']['hook'] = array_shift($version['creator']['src']);
+                                        $version['creator']['modules'] = $version['creator']['src'];
+                                        unset($version['creator']['src']);
                                     }
                                 }
                             }
