@@ -31,7 +31,7 @@ define([
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
 
-    module('Audio Recording Interaction', {
+    QUnit.module('Audio Recording Interaction', {
         teardown : function(){
             if(runner){
                 runner.clear();
@@ -252,7 +252,7 @@ define([
 
     /* */
 
-    module('Visual test');
+    QUnit.module('Visual test');
 
     QUnit.asyncTest('display and play', function (assert){
         var $container = $('#outside-container');
@@ -270,10 +270,9 @@ define([
             }
         });
 
-        QUnit.expect(1);
-        assert.equal($container.length, 1, 'the item container exists');
-
         if (supportsMediaRecorder()) {
+            QUnit.expect(1);
+            assert.equal($container.length, 1, 'the item container exists');
             runner = qtiItemRunner('qti', itemData, {assetManager: assetManager})
                 .on('render', function (){
                     var interactions = this._item.getInteractions();
