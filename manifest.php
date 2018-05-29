@@ -14,10 +14,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2016-2018 (original work) Open Assessment Technologies SA;
  *
  */
+
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
@@ -26,6 +26,7 @@ use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
+use oat\qtiItemPci\scripts\install\RegisterPciLoaderService;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 return array(
@@ -33,7 +34,7 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '4.6.1',
+    'version' => '4.7.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
         'tao' => '>=15.4.0',
@@ -60,6 +61,7 @@ return array(
             RegisterPciLikertScale::class,
             RegisterPciMathEntry::class,
             RegisterPciAudioRecording::class,
+            RegisterPciLoaderService::class
         )
     ),
     'uninstall' => array(

@@ -23,6 +23,7 @@ namespace oat\qtiItemPci\scripts\update;
 
 use oat\generis\model\OntologyAwareTrait;
 use oat\qtiItemPci\model\IMSPciModel;
+use oat\qtiItemPci\model\PciLoaderService;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
@@ -316,5 +317,12 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('4.6.0');
         }
         $this->skip('4.6.0', '4.6.1');
+
+        if ($this->isVersion('4.6.1')) {
+            $pciLoaderService = new PciLoaderService();
+            $this->getServiceManager()->register(PciLoaderService::SERVICE_ID, $pciLoaderService);
+
+            $this->setVersion('4.7.0');
+        }
     }
 }
