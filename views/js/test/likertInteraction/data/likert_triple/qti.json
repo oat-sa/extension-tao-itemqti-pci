@@ -1,0 +1,204 @@
+{
+  "identifier": "pci002",
+  "serial": "item_5b07da24f1c5e082350329",
+  "qtiClass": "assessmentItem",
+  "attributes": {
+    "identifier": "pci002",
+    "title": "PCI 002",
+    "label": "",
+    "adaptive": false,
+    "timeDependent": false,
+    "toolName": "TAO",
+    "toolVersion": "3.3.0-sprint77",
+    "class": ""
+  },
+  "body": {
+    "serial": "container_containeritembody_5b07da24f1c50822086021",
+    "body": "\n        \n        <p>This is a sample PCI.<\/p>\n        \n        {{interaction_portablecustominteraction_5b07da250112d182933654}}\n        \n        <p>Here is another one.<\/p>\n        \n        {{interaction_portablecustominteraction_5b07da2501556207762223}}\n        \n        <p>Here is yet another one.<\/p>\n        \n        {{interaction_portablecustominteraction_5b07da2501605590608293}}\n\n    ",
+    "elements": {
+      "interaction_portablecustominteraction_5b07da250112d182933654": {
+        "serial": "interaction_portablecustominteraction_5b07da250112d182933654",
+        "qtiClass": "customInteraction",
+        "attributes": {
+          "responseIdentifier": "likert1"
+        },
+        "debug": {
+          "relatedItem": "item_5b07da24f1c5e082350329"
+        },
+        "choices": {},
+        "typeIdentifier": "likertScaleInteraction",
+        "markup": "\n                    <div class=\"likertScaleInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                Do you like movies ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/35395\/applications-multimedia.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                        <ul class=\"likert\"><\/ul>\n                    <\/div>\n                ",
+        "version": "0.0.0",
+        "entryPoint": "likertScaleInteraction\/runtime\/likertScaleInteraction.amd.js",
+        "libraries": ["IMSGlobal\/jquery_2_1_1", "likertScaleInteraction\/runtime\/js\/renderer"],
+        "stylesheets": [],
+        "mediaFiles": [],
+        "properties": {
+          "level": "5",
+          "label-min": "Not at all",
+          "label-max": "Very much"
+        },
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+      },
+      "interaction_portablecustominteraction_5b07da2501556207762223": {
+        "serial": "interaction_portablecustominteraction_5b07da2501556207762223",
+        "qtiClass": "customInteraction",
+        "attributes": {
+          "responseIdentifier": "likert2"
+        },
+        "debug": {
+          "relatedItem": "item_5b07da24f1c5e082350329"
+        },
+        "choices": {},
+        "typeIdentifier": "likertScaleInteraction",
+        "markup": "\n                    <div class=\"likertScaleInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                What about video games ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/4435\/BHSPitMonkey_Old_School_Game_Controller.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                        <ul class=\"likert\"><\/ul>\n                    <\/div>\n                ",
+        "version": "0.0.0",
+        "entryPoint": "likertScaleInteraction\/runtime\/likertScaleInteraction.amd.js",
+        "libraries": ["IMSGlobal\/jquery_2_1_1", "likertScaleInteraction\/runtime\/js\/renderer"],
+        "stylesheets": [],
+        "mediaFiles": [],
+        "properties": {
+          "level": "7",
+          "label-min": "Can't stand it :( ",
+          "label-max": "Absolutely ! :)"
+        },
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+      },
+      "interaction_portablecustominteraction_5b07da2501605590608293": {
+        "serial": "interaction_portablecustominteraction_5b07da2501605590608293",
+        "qtiClass": "customInteraction",
+        "attributes": {
+          "responseIdentifier": "likert3"
+        },
+        "debug": {
+          "relatedItem": "item_5b07da24f1c5e082350329"
+        },
+        "choices": {},
+        "typeIdentifier": "likertScaleInteraction",
+        "markup": "\n                    <div class=\"likertScaleInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                And reading ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/29190\/MajinCline_Book.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                        <ul class=\"likert\"><\/ul>\n                    <\/div>\n                ",
+        "version": "0.0.0",
+        "entryPoint": "likertScaleInteraction\/runtime\/likertScaleInteraction.amd.js",
+        "libraries": ["IMSGlobal\/jquery_2_1_1", "likertScaleInteraction\/runtime\/js\/renderer"],
+        "stylesheets": [],
+        "mediaFiles": [],
+        "properties": {
+          "level": "9",
+          "label-min": "Hate it",
+          "label-max": "Love it"
+        },
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+      }
+    },
+    "debug": {
+      "relatedItem": "item_5b07da24f1c5e082350329"
+    }
+  },
+  "debug": {
+    "relatedItem": "item_5b07da24f1c5e082350329"
+  },
+  "namespaces": {
+    "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
+    "html5": "html5",
+    "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+    "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+  },
+  "schemaLocations": {
+    "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
+  },
+  "stylesheets": {
+    "stylesheet_5b07da24f2d4b625258248": {
+      "serial": "stylesheet_5b07da24f2d4b625258248",
+      "qtiClass": "stylesheet",
+      "attributes": {
+        "href": "css\/likert1.css",
+        "type": "text\/css",
+        "media": "screen",
+        "title": ""
+      },
+      "debug": {
+        "relatedItem": "item_5b07da24f1c5e082350329"
+      }
+    }
+  },
+  "outcomes": {},
+  "responses": {
+    "responsedeclaration_5b07da24f380b808768413": {
+      "identifier": "likert1",
+      "serial": "responsedeclaration_5b07da24f380b808768413",
+      "qtiClass": "responseDeclaration",
+      "attributes": {
+        "identifier": "likert1",
+        "cardinality": "single",
+        "baseType": "integer"
+      },
+      "debug": {
+        "relatedItem": "item_5b07da24f1c5e082350329"
+      },
+      "defaultValue": [],
+      "mapping": [],
+      "areaMapping": [],
+      "howMatch": "no_response_processing",
+      "correctResponses": [],
+      "mappingAttributes": {
+        "defaultValue": 0
+      },
+      "feedbackRules": {}
+    },
+    "responsedeclaration_5b07da24f3d30471534726": {
+      "identifier": "likert2",
+      "serial": "responsedeclaration_5b07da24f3d30471534726",
+      "qtiClass": "responseDeclaration",
+      "attributes": {
+        "identifier": "likert2",
+        "cardinality": "single",
+        "baseType": "integer"
+      },
+      "debug": {
+        "relatedItem": "item_5b07da24f1c5e082350329"
+      },
+      "defaultValue": [],
+      "mapping": [],
+      "areaMapping": [],
+      "howMatch": "no_response_processing",
+      "correctResponses": [],
+      "mappingAttributes": {
+        "defaultValue": 0
+      },
+      "feedbackRules": {}
+    },
+    "responsedeclaration_5b07da24f3d72356881489": {
+      "identifier": "likert3",
+      "serial": "responsedeclaration_5b07da24f3d72356881489",
+      "qtiClass": "responseDeclaration",
+      "attributes": {
+        "identifier": "likert3",
+        "cardinality": "single",
+        "baseType": "integer"
+      },
+      "debug": {
+        "relatedItem": "item_5b07da24f1c5e082350329"
+      },
+      "defaultValue": [],
+      "mapping": [],
+      "areaMapping": [],
+      "howMatch": "no_response_processing",
+      "correctResponses": [],
+      "mappingAttributes": {
+        "defaultValue": 0
+      },
+      "feedbackRules": {}
+    }
+  },
+  "feedbacks": {},
+  "responseProcessing": {
+    "serial": "response_templatesdriven_5b07da2501f68664395390",
+    "qtiClass": "responseProcessing",
+    "attributes": {},
+    "debug": {
+      "relatedItem": "item_5b07da24f1c5e082350329"
+    },
+    "processingType": "templateDriven",
+    "responseRules": []
+  },
+  "apipAccessibility": ""
+}
