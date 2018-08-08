@@ -18,7 +18,9 @@
  *
  */
 
-namespace oat\qtiItemPci\test;
+namespace oat\qtiItemPci\test\integration;
+
+require_once dirname(__FILE__) .'/../../../tao/includes/raw_start.php';
 
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
@@ -84,6 +86,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
      * @expectedException oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException
      */
     public function testInexistingPciLikert(){
+        // @todo fix unstable test case (each time the result can be different)
         $this->portableElementService->retrieve('PCI', 'oatSamplePciLikert');
     }
 
@@ -91,6 +94,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
      * @expectedException oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException
      */
     public function testInexistingPciAudio(){
+        // @todo fix unstable test case (each time the result can be different)
         $this->portableElementService->retrieve('PCI', 'oatSamplePciAudio');
     }
 

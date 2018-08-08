@@ -18,7 +18,9 @@
  *
  *
  */
-namespace oat\qtiItemPci\test;
+namespace oat\qtiItemPci\test\integration;
+
+require_once dirname(__FILE__) .'/../../../tao/includes/raw_start.php';
 
 use oat\qtiItemPci\model\IMSPciModel;
 use oat\qtiItemPci\model\PciModel;

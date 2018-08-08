@@ -1,6 +1,8 @@
 <?php
 
-namespace oat\qtiItemPci\test\model\common\model;
+namespace oat\qtiItemPci\test\unit\model\common\model;
+
+// @todo update test with new classes
 
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;

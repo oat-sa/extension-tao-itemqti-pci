@@ -6,7 +6,9 @@
  * Time: 09:38
  */
 
-namespace oat\qtiItemPci\test;
+namespace oat\qtiItemPci\test\integration;
+
+// @todo update test with new classes
 
 use oat\oatbox\Configurable;
 use oat\oatbox\service\ServiceManager;
