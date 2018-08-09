@@ -17,7 +17,9 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
-namespace oat\qtiItemPci\test;
+namespace oat\qtiItemPci\test\integration;
+
+require_once dirname(__FILE__) .'/../../../tao/includes/raw_start.php';
 
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\qti\Parser;
