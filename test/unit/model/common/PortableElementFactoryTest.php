@@ -19,7 +19,9 @@
  *
  */
 
-namespace oat\qtiItemPci\test\model\common;
+namespace oat\qtiItemPci\test\unit\model\common;
+
+// @todo update test with new classes
 
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\common\model\PortableElementModel;

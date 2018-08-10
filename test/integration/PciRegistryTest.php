@@ -19,7 +19,11 @@
  *
  */
 
-namespace oat\qtiItemPci\test;
+namespace oat\qtiItemPci\test\integration;
+
+// @todo update test with new classes
+
+require_once dirname(__FILE__) .'/../../../tao/includes/raw_start.php';
 
 use oat\oatbox\service\ServiceManager;
 use oat\tao\test\TaoPhpUnitTestRunner;
