@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 3.3.0-sprint86\n"
+"PO-Revision-Date: 2018-09-26T12:04:44\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: nl-NL\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: nl-NL\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook
+msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
+msgid "QTI-PCI-Creator Hooks"
+msgstr "QTI-PCI-Creator Haken"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
+msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
+msgid "typeIdentifier"
+msgstr "typenaam"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
+msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
+msgid "Unique Identifier of the PCI"
+msgstr "Unieke naam van de PCI"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory
+msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
+msgid "directory"
+msgstr "map"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory
+msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
+msgid "the location containing the unzipped source of the PCI creator"
+msgstr "de locatie waar de uitgepakte bron staat van de PCI creator"
+
