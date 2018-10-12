@@ -91,9 +91,14 @@ function finish() {
         }
         postProgress(1);
     }
+
+    var file = encoder.finish(options.wav.mimeType);
+
+    console.log(file);
+
     self.postMessage({
         command: "complete",
-        blob: encoder.finish(options.wav.mimeType)
+        blob: file,
     });
     cleanup();
 };
@@ -107,11 +112,11 @@ function cleanup() {
 self.onmessage = function(event) {
     var data = event.data;
     switch (data.command) {
-        case "init":    init(data);                 break;
-        case "options": setOptions(data.options);   break;
-        case "start":   start(data.bufferSize);     break;
-        case "record":  record(data.buffer);        break;
-        case "finish":  finish();                   break;
+        case "init":    init(data);                           break;
+        case "options": setOptions(data.options);             break;
+        case "start":   start();                              break;
+        case "record":  record(data.buffer, data.bufferSize); break;
+        case "finish":  finish();                             break;
         case "cancel":  cleanup();
     }
 };
