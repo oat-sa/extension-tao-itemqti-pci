@@ -57,6 +57,7 @@ define([
                 maxRecordingTime:   120,
 
                 isCompressed:       true,
+                isLossless:         true,
                 audioBitrate:       20000,
                 isStereo:           false,
 

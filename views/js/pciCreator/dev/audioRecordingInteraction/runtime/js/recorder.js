@@ -182,9 +182,15 @@ define([
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
-                        provider = (config.isCompressed)
-                            ? mediaRecorderProvider(config)
-                            : webAudioProvider(config, assetManager);
+                        switch (true) {
+                            case !config.isCompressed:
+                            case config.isCompressed && config.isLossless:
+                                provider = webAudioProvider(config, assetManager);
+                                break;
+                            case config.isCompressed && !config.isLossless:
+                                provider = mediaRecorderProvider(config);
+                                break;
+                        }
 
                         provider.init(stream);
 

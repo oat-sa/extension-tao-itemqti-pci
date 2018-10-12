@@ -64,6 +64,17 @@
 
 <div data-role="compressedOptions" {{#unless isCompressed}}style="display:none"{{/unless}}>
     <div class="panel">
+        <label for="isLossless">{{__ "Compression"}}</label>
+        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+        <span class="tooltip-content">
+        {{__ "Lorem ipsum dolor sit amet"}}
+    </span>
+        <select name="isLossless">
+            <option value="true"{{#if isLossless}} selected="selected"{{/if}}>{{__ 'Lossless'}}</option>
+            <option value="false"{{#unless isLossless}} selected="selected"{{/unless}}>{{__ 'Lossy'}}</option>
+        </select>
+    </div>
+    <div class="panel">
         <label for="audioBitrate" class="spinner">{{__ "Audio bitrate:"}}</label>
         <input name="audioBitrate" value="{{audioBitrate}}" class="large" data-increment="1000" data-min="8000" type="text" />
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>

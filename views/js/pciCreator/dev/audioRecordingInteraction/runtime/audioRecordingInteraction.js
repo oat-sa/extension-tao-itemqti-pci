@@ -100,6 +100,7 @@ define([
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
          * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
+         * @param {Boolean} config.isLossless
          * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
          * @param {Boolean} config.isStereo - switch the number of channels (1 vs 2) for uncompressed recording
          * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
@@ -114,13 +115,14 @@ define([
                 maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
 
                 isCompressed:           toBoolean(config.isCompressed, true),
+                isLossless:             toBoolean(config.isLossless, true),
                 audioBitrate:           toInteger(config.audioBitrate, 20000),
                 isStereo:               toBoolean(config.isStereo, false),
 
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
                 media:                  config.media || {},
 
-                displayDownloadLink:    toBoolean(config.displayDownloadLink, false)
+                displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
             };
         },
 

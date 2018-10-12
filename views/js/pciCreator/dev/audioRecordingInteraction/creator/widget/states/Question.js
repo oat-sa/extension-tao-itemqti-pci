@@ -87,6 +87,8 @@ define([
             maxRecordingTime:       interaction.prop('maxRecordingTime'),
 
             isCompressed:           typeCaster.strToBool(interaction.prop('isCompressed'), true),
+            isLossless:             typeCaster.strToBool(interaction.prop('isLossless'), true),
+
             audioBitrate:           interaction.prop('audioBitrate'),
             isStereo:               typeCaster.strToBool(interaction.prop('isStereo'), false),
 
@@ -126,6 +128,7 @@ define([
                 }
                 configChangeCallBack(boundInteraction, value, name);
             },
+            isLossless:         configChangeCallBack,
             audioBitrate:       configChangeCallBack,
             isStereo:           configChangeCallBack,
 

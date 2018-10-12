@@ -36,7 +36,9 @@ define([
 
         // todo: it would be nice to use a bundled and minified version of the worker.
         // Leaving it as it is for now as the primary use case for uncompressed recording is offline testing.
-        var recorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js',
+        var wavRecorderWorkerPath  = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js',
+            flacRecorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/FlacWorker.js',
+            recorderWorkerPath,
             recorderWorker;
 
         var audioContext,
@@ -49,6 +51,8 @@ define([
          * Load the worker and configure it
          */
         function initWorker() {
+            recorderWorkerPath = config.isLossless ? flacRecorderWorkerPath : wavRecorderWorkerPath;
+
             recorderWorker = new Worker(assetManager.resolve(recorderWorkerPath));
 
             sendToWorker('init', {
