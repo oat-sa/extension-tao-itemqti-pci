@@ -50,30 +50,21 @@
 </div>
 
 <hr />
+
 <div class="panel">
-    <label for="isCompressed">{{__ "Recording format"}}</label>
+    <label for="recordingFormat">{{__ "Recording format"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
         {{__ "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."}}
     </span>
-    <select name="isCompressed">
-        <option value="true"{{#if isCompressed}} selected="selected"{{/if}}>{{__ 'Compressed'}}</option>
-        <option value="false"{{#unless isCompressed}} selected="selected"{{/unless}}>{{__ 'Uncompressed'}}</option>
+    <select name="recordingFormat">
+        <option value="compressed_lossy" {{#if (eq recordingFormat 'compressed_lossy')}}selected{{/if}}>{{__ 'Compressed (lossy)'}}</option>
+        <option value="compressed_lossless" {{#if (eq recordingFormat 'compressed_lossless')}}selected{{/if}}>{{__ 'Compressed (lossless)'}}</option>
+        <option value="uncompressed" {{#if (eq recordingFormat 'uncompressed')}}selected{{/if}}>{{__ 'Uncompressed'}}</option>
     </select>
 </div>
 
 <div data-role="compressedOptions" {{#unless isCompressed}}style="display:none"{{/unless}}>
-    <div class="panel">
-        <label for="isLossless">{{__ "Compression"}}</label>
-        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-        <span class="tooltip-content">
-        {{__ "Lorem ipsum dolor sit amet"}}
-    </span>
-        <select name="isLossless">
-            <option value="true"{{#if isLossless}} selected="selected"{{/if}}>{{__ 'Lossless'}}</option>
-            <option value="false"{{#unless isLossless}} selected="selected"{{/unless}}>{{__ 'Lossy'}}</option>
-        </select>
-    </div>
     <div class="panel">
         <label for="audioBitrate" class="spinner">{{__ "Audio bitrate:"}}</label>
         <input name="audioBitrate" value="{{audioBitrate}}" class="large" data-increment="1000" data-min="8000" type="text" />

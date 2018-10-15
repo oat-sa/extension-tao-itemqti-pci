@@ -106,6 +106,7 @@ define([
          * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
          * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
+         * @param {String} config.recordingFormat
          */
         initConfig: function init(config) {
             this.config = {
@@ -123,6 +124,9 @@ define([
                 media:                  config.media || {},
 
                 displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
+
+                // TODO: review it, only for demo purpose
+                recordingFormat:        config.recordingFormat || 'compressed_lossy',
             };
         },
 

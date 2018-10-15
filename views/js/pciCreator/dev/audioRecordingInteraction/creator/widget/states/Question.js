@@ -94,7 +94,9 @@ define([
 
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
 
-            displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
+            displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false),
+
+            recordingFormat:        interaction.prop('recordingFormat'),
         }));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
@@ -142,7 +144,38 @@ define([
                 configChangeCallBack(boundInteraction, value, name);
             },
 
-            displayDownloadLink: configChangeCallBack
+            displayDownloadLink: configChangeCallBack,
+
+            // TODO: review it, only for demo purpose
+            recordingFormat: function(boundInteraction, value, name) {
+                switch (value) {
+                    case 'compressed_lossy':
+                        configChangeCallBack(boundInteraction, true, 'isCompressed');
+                        configChangeCallBack(boundInteraction, false, 'isLossless');
+
+                        $uncompressedOptions.hide();
+                        $compressedOptions.show();
+                        break;
+
+                    case 'compressed_lossless':
+                        configChangeCallBack(boundInteraction, true, 'isCompressed');
+                        configChangeCallBack(boundInteraction, true, 'isLossless');
+
+                        $uncompressedOptions.hide();
+                        $compressedOptions.show();
+                        break;
+
+                    case 'uncompressed':
+                        configChangeCallBack(boundInteraction, false, 'isCompressed');
+                        configChangeCallBack(boundInteraction, null, 'isLossless');
+
+                        $uncompressedOptions.show();
+                        $compressedOptions.hide();
+                        break;
+                }
+
+                configChangeCallBack(boundInteraction, value, name);
+            }
 
         }, pciMediaManager.getChangeCallbacks()));
 

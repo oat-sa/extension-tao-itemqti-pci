@@ -68,7 +68,10 @@ define([
                     maxPlays:       2
                 },
 
-                displayDownloadLink: false
+                displayDownloadLink: false,
+
+                // TODO: review it, only for demo purpose
+                recordingFormat: 'compressed_lossy',
             };
         },
         /**
