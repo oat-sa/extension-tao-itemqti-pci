@@ -21,7 +21,8 @@
  *
  * @author Péter Halász <peter@taotesting.com>
  */
-importScripts("../lib/libflac/libflac4-1.3.2.js");
+importScripts("../lib/libflac/libflac4-1.3.2.js", "../lib/xaudiojs/resampler.js");
+
 
 var encoder;
 var flacBuffers  = [];
@@ -30,17 +31,20 @@ var flacLength   = 0;
 
 /* configuration properties */
 var nrOfChannels = 1;
-var sampleRate   = 44100;
+var sampleRate   = 22050;
 var compression  = 5;
 var bps          = 16;
 var verify       = false;
 var blockSize    = 0;
+var audioContextSampleRate;
 
 /**
  * Triggered when the worker get initialized
  */
 function init(data) {
+    console.log(data);
     sampleRate = data.config.sampleRate;
+    audioContextSampleRate = data.config.audioContextSampleRate;
     nrOfChannels = data.config.numChannels;
 
     // TODO: pass other custom configuration properties, like compression, bps, verify and blockSize
@@ -64,6 +68,8 @@ function startRecord() {
         Flac.init_encoder_stream(encoder, function(buffer, bytes) {
             flacBuffers.push(buffer);
             flacLength += bytes;
+        }, function(meta) {
+            console.log('META', meta);
         });
     } else {
         // TODO: handle error properly
@@ -122,6 +128,21 @@ function clear() {
 }
 
 /**
+ * Resamples the buffered data to the desired sample rate
+ *
+ * @param {Float32Array} buffer
+ * @returns {Float32Array}
+ * @private
+ */
+function _resample(buffer) {
+    var resampler = new Resampler(audioContextSampleRate, sampleRate, nrOfChannels, buffer);
+
+    resampler.resampler(buffer.length);
+
+    return resampler.outputBuffer;
+}
+
+/**
  * Submits the buffered data to encoding
  *
  * @param {Float32Array[]} bufferArray
@@ -129,6 +150,11 @@ function clear() {
  */
 function _encode(bufferArray) {
     bufferArray.forEach(function(buffer) {
+        // resample the audio only if the desired sample rate is not equal with the audio context sample rate
+        if (audioContextSampleRate !== sampleRate) {
+            buffer = _resample(buffer);
+        }
+
         var bufferLength = buffer.length;
         var bufferI32    = new Uint32Array(bufferLength);
         var view         = new DataView(bufferI32.buffer);

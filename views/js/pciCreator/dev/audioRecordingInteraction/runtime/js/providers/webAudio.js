@@ -58,7 +58,8 @@ define([
             sendToWorker('init', {
                 config: {
                     numChannels: numChannels,
-                    sampleRate: audioContext.sampleRate
+                    audioContextSampleRate: audioContext.sampleRate,
+                    sampleRate: config.sampleRate,
                 },
                 options: {
                     timeLimit: 0,           // time limit is handled by the provider wrapper

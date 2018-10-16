@@ -118,6 +118,7 @@ define([
                 isCompressed:           toBoolean(config.isCompressed, true),
                 isLossless:             toBoolean(config.isLossless, true),
                 audioBitrate:           toInteger(config.audioBitrate, 20000),
+                sampleRate:             toInteger(config.sampleRate, 22050),
                 isStereo:               toBoolean(config.isStereo, false),
 
                 useMediaStimulus:       toBoolean(config.useMediaStimulus, false),

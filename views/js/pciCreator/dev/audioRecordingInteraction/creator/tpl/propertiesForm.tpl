@@ -73,6 +73,14 @@
             {{__ "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."}}
         </span>
     </div>
+    <div class="panel">
+        <label for="sampleRate" class="spinner">{{__ "Sample Rate:"}}</label>
+        <input name="sampleRate" value="{{sampleRate}}" class="large" data-increment="50" data-min="1000" type="text" />
+        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+        <span class="tooltip-content">
+            {{__ "Lorem ipsum dolor"}}
+        </span>
+    </div>
 </div>
 
 <div data-role="uncompressedOptions"  {{#if isCompressed}}style="display:none"{{/if}}>

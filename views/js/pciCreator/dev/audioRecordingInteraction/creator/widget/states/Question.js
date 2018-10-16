@@ -90,6 +90,7 @@ define([
             isLossless:             typeCaster.strToBool(interaction.prop('isLossless'), true),
 
             audioBitrate:           interaction.prop('audioBitrate'),
+            sampleRate:             interaction.prop('sampleRate'),
             isStereo:               typeCaster.strToBool(interaction.prop('isStereo'), false),
 
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
@@ -132,6 +133,7 @@ define([
             },
             isLossless:         configChangeCallBack,
             audioBitrate:       configChangeCallBack,
+            sampleRate:         configChangeCallBack,
             isStereo:           configChangeCallBack,
 
             useMediaStimulus: function useMediaStimulusCb(boundInteraction, value, name) {

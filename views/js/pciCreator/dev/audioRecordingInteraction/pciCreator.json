@@ -33,7 +33,8 @@
             "./runtime/js/workers/WebAudioRecorderWav.js",
             "./runtime/js/workers/WebAudioRecorderWav.min.js",
             "./runtime/js/workers/FlacWorker.js",
-            "./runtime/js/lib/libflac/libflac4-1.3.2.js"
+            "./runtime/js/lib/libflac/libflac4-1.3.2.js",
+            "./runtime/js/lib/xaudiojs/resampler.js"
         ]
     },
     "creator" : {

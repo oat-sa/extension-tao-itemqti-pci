@@ -59,6 +59,7 @@ define([
                 isCompressed:       true,
                 isLossless:         true,
                 audioBitrate:       20000,
+                sampleRate:         22050,
                 isStereo:           false,
 
                 useMediaStimulus:   false,
