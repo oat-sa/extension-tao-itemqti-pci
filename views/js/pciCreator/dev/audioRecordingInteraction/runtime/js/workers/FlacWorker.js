@@ -16,8 +16,8 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  */
 /**
- * This audio processing provider is based on the Web Audio API and is used for un-compressed audio recording (Wav).
- * It delegates the actual Wav-building process to a worker for background processing and improved performances.
+ * POC for WebWorker implementation of Flac codec
+ * TODO: review it
  *
  * @author Péter Halász <peter@taotesting.com>
  */
@@ -42,7 +42,6 @@ var audioContextSampleRate;
  * Triggered when the worker get initialized
  */
 function init(data) {
-    console.log(data);
     sampleRate = data.config.sampleRate;
     audioContextSampleRate = data.config.audioContextSampleRate;
     nrOfChannels = data.config.numChannels;
@@ -69,7 +68,8 @@ function startRecord() {
             flacBuffers.push(buffer);
             flacLength += bytes;
         }, function(meta) {
-            console.log('META', meta);
+            // for debugging
+            // console.log('[DEBUG] Flac Metadata', meta);
         });
     } else {
         // TODO: handle error properly

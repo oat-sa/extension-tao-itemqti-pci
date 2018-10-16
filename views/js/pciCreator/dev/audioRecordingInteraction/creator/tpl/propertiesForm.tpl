@@ -65,6 +65,7 @@
 </div>
 
 <div data-role="compressedOptions" {{#unless isCompressed}}style="display:none"{{/unless}}>
+    <h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "For demo only"}}</strong></h3>
     <div class="panel">
         <label for="audioBitrate" class="spinner">{{__ "Audio bitrate:"}}</label>
         <input name="audioBitrate" value="{{audioBitrate}}" class="large" data-increment="1000" data-min="8000" type="text" />
@@ -115,8 +116,6 @@
 </div>
 
 <hr />
-
-<h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "For tests only"}}</strong></h3>
 
 <div class="panel">
     <label>
