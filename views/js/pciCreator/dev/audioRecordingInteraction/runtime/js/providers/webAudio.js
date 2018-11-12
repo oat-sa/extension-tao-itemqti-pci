@@ -106,6 +106,11 @@ define([
                     var data = e.data;
                     var blob;
                     switch (data.command) {
+                        case 'partialcomplete':
+                            blob = data.blob;
+                            self.trigger('partialblobavailable', [blob]);
+                            break;
+
                         case 'complete': {
                             blob = data.blob;
                             self.trigger('blobavailable', [blob]);

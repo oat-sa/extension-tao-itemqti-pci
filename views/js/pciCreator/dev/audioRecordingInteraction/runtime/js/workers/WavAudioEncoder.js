@@ -76,6 +76,28 @@
         return blob;
     };
 
+    Encoder.prototype.partialFinish = function(mimeType) {
+        var dataSize = this.numChannels * this.numSamples * 2,
+            view = new DataView(new ArrayBuffer(44));
+        setString(view, 0, 'RIFF');
+        view.setUint32(4, 36 + dataSize, true);
+        setString(view, 8, 'WAVE');
+        setString(view, 12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, this.numChannels, true);
+        view.setUint32(24, this.sampleRate, true);
+        view.setUint32(28, this.sampleRate * 4, true);
+        view.setUint16(32, this.numChannels * 2, true);
+        view.setUint16(34, 16, true);
+        setString(view, 36, 'data');
+        view.setUint32(40, dataSize, true);
+        var newArray = this.dataViews.slice();
+        newArray.unshift(view);
+        var blob = new Blob(newArray, { type: 'audio/wav' });
+        return blob;
+    };
+
     Encoder.prototype.cancel = Encoder.prototype.cleanup = function() {
         delete this.dataViews;
     };

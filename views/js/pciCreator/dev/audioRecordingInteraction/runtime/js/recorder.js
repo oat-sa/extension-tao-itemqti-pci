@@ -192,6 +192,10 @@ define([
                             self.trigger('recordingavailable', [blob, durationMs]);
                         });
 
+                        provider.on('partialblobavailable', function(blob) {
+                            self.trigger('partialrecordingavailable', [blob]);
+                        });
+
                         initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);

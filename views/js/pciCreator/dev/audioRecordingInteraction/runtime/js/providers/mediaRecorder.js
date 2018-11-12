@@ -78,6 +78,9 @@ define([
                 // save chunks of the recording
                 mediaRecorder.ondataavailable = function ondataavailable(e) {
                     chunks.push(e.data);
+
+                    var blob = new Blob(chunks, {type: mimeType});
+                    self.trigger('partialblobavailable', [blob]);
                 };
 
                 // stop record callback

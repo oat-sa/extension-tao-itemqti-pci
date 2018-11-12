@@ -155,6 +155,15 @@ define([
                 self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
             });
 
+            this.recorder.on('partialrecordingavailable', function(blob) {
+                var filename =
+                    self._filePrefix + '_' +
+                    window.Date.now() + '.' +
+                    blob.type.split(';')[0].split('/')[1];
+
+                self.createBase64Recoding(blob, filename);
+            });
+
             this.recorder.on('statechange', function() {
                 self.updateControls();
             });
