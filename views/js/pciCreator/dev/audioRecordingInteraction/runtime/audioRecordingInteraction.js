@@ -56,6 +56,12 @@ define([
         return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
     }
 
+    function getFileName(filePrefix, blob) {
+        return filePrefix + '_' +
+            window.Date.now() + '.' +
+            // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
+            blob.type.split(';')[0].split('/')[1];
+    }
 
     /**
      * The main interaction code
@@ -139,11 +145,7 @@ define([
 
             this.recorder.on('recordingavailable', function(blob, durationMs) {
                 var recordingUrl = window.URL && window.URL.createObjectURL && window.URL.createObjectURL(blob),
-                    filename =
-                        self._filePrefix + '_' +
-                        window.Date.now() + '.' +
-                        // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
-                        blob.type.split(';')[0].split('/')[1],
+                    filename = getFileName(self._filePrefix, blob),
                     filesize = blob.size;
 
                 self._recordsAttempts++;
@@ -156,10 +158,7 @@ define([
             });
 
             this.recorder.on('partialrecordingavailable', function(blob) {
-                var filename =
-                    self._filePrefix + '_' +
-                    window.Date.now() + '.' +
-                    blob.type.split(';')[0].split('/')[1];
+                var filename = getFileName(self._filePrefix, blob);
 
                 self.createBase64Recoding(blob, filename);
             });

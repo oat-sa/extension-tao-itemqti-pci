@@ -42,7 +42,7 @@ define([
 
         var mimeType,               // mime type of the recording
             chunks = [],            // contains the current recording split in chunks
-            chunkSizeMs = 1000;     // size of a chunk
+            chunkSizeMs = 100;      // size of a chunk (reduced from 1000 to 100 to avoid data loss in case of interrupted recording, see TAO-7115)
 
         var codecsByPreferenceOrder = [
             'audio/webm;codecs=opus',
