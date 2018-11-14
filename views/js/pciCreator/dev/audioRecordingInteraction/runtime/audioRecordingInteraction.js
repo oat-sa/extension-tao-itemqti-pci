@@ -19,6 +19,7 @@ define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
@@ -29,6 +30,7 @@ define([
     qtiCustomInteractionContext,
     $,
     _,
+    Promise,
     event,
     html,
     playerFactory,
@@ -669,38 +671,50 @@ define([
          * @param {Object} interaction
          */
         destroy: function destroy() {
-            if (this.recorder && this.recorder.is('recording')) {
-                this.stopRecording();
-            }
-            if (this.player && this.player.is('playing')) {
-                this.stopPlayback();
-            }
+            var self = this;
 
-            this.destroyControls();
+            return new Promise(function(resolve, reject) {
+                var promises = [];
 
-            if (this.inputMeter) {
-                this.inputMeter.destroy();
-                this.inputMeter = null;
-            }
+                if (self.recorder && self.recorder.is('recording')) {
+                    promises.push(self.stopRecording());
+                }
+                if (self.player && self.player.is('playing')) {
+                    promises.push(self.stopPlayback());
+                }
 
-            this.progressBar = null;
+                promises.push(self.destroyControls());
 
-            if (this.mediaStimulus) {
-                this.mediaStimulus.destroy();
-                this.mediaStimulus = null;
-            }
+                if (self.inputMeter) {
+                    promises.push(self.inputMeter.destroy());
+                }
 
-            if (this.player) {
-                this.player.unload();
-                this.player = null;
-            }
+                if (self.mediaStimulus) {
+                    promises.push(self.mediaStimulus.destroy());
+                }
 
-            if (this.recorder) {
-                this.recorder.destroy();
-                this.recorder = null;
-            }
+                if (self.player) {
+                    promises.push(self.player.unload());
+                }
 
-            this.resetResponse();
+                if (self.recorder) {
+                    promises.push(self.recorder.destroy());
+                }
+
+                promises.push(self.resetResponse());
+
+                Promise.all(promises).then(
+                    function() {
+                        self.inputMeter = null;
+                        self.progressBar = null;
+                        self.mediaStimulus = null;
+                        self.player = null;
+                        self.recorder = null;
+                        resolve();
+                    },
+                    reject,
+                )
+            });
         },
         /**
          * Restore the state of the interaction from the serializedState.

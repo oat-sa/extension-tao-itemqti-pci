@@ -23,8 +23,9 @@
  */
 define([
     'lodash',
+    'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event'
-], function(_, event) {
+], function(_, Promise, event) {
     'use strict';
 
     /**
@@ -169,12 +170,27 @@ define([
              * Close the audio context and destroy created assets
              */
             destroy: function destroy() {
+                var promises = [
+                    new Promise(function(resolve) {
+                        recorderWorker.terminate();
+                        recorderWorker = null;
+                        resolve();
+                    }),
+                ];
+
                 if (audioContext) {
-                    audioContext.close();
-                    audioNodes = {};
+                    promises.push(new Promise(function(resolve, reject) {
+                        audioContext.close().then(
+                            function() {
+                                audioNodes = {};
+                                resolve();
+                            },
+                            reject,
+                        );
+                    }));
                 }
-                recorderWorker.terminate();
-                recorderWorker = null;
+
+                return Promise.all(promises);
             }
         };
 
