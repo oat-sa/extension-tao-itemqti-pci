@@ -22,8 +22,8 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'lodash',
-    'jquery',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/OAT/util/event'
 ], function(_, $, event) {
     'use strict';

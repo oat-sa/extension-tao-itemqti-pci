@@ -22,7 +22,7 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'lodash',
+    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event'
 ], function(_, Promise, event) {
