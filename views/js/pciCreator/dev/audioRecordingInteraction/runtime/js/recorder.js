@@ -29,10 +29,11 @@
  */
 define([
     'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
     'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
     'audioRecordingInteraction/runtime/js/providers/webAudio'
-], function(_, event, mediaRecorderProvider, webAudioProvider) {
+], function(_, Promise, event, mediaRecorderProvider, webAudioProvider) {
     'use strict';
 
     /**
@@ -192,6 +193,10 @@ define([
                             self.trigger('recordingavailable', [blob, durationMs]);
                         });
 
+                        provider.on('partialblobavailable', function(blob) {
+                            self.trigger('partialrecordingavailable', [blob]);
+                        });
+
                         initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);
@@ -264,12 +269,16 @@ define([
              * Destroy the recorder instance
              */
             destroy: function destroy() {
-                cancelAnimationFrame(timerId);
-                if (provider) {
-                    provider.destroy();
-                }
-            }
+                var promises = [
+                    cancelAnimationFrame(timerId),
+                ];
 
+                if (provider) {
+                    promises.push(provider.destroy());
+                }
+
+                return Promise.all(promises);
+            }
         };
         event.addEventMgr(recorder);
 
