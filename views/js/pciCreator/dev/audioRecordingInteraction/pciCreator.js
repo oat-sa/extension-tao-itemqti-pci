@@ -16,7 +16,7 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 define([
-    'taoQtiItem/portableLib/lodash',
+    'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'audioRecordingInteraction/creator/widget/Widget',
     'tpl!audioRecordingInteraction/creator/tpl/markup'

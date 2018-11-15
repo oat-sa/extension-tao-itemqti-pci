@@ -672,49 +672,44 @@ define([
          */
         destroy: function destroy() {
             var self = this;
+            var promises = [];
 
-            return new Promise(function(resolve, reject) {
-                var promises = [];
+            if (self.recorder && self.recorder.is('recording')) {
+                promises.push(self.stopRecording());
+            }
+            if (self.player && self.player.is('playing')) {
+                promises.push(self.stopPlayback());
+            }
 
-                if (self.recorder && self.recorder.is('recording')) {
-                    promises.push(self.stopRecording());
+            promises.push(self.destroyControls());
+
+            if (self.inputMeter) {
+                promises.push(self.inputMeter.destroy());
+            }
+
+            if (self.mediaStimulus) {
+                promises.push(self.mediaStimulus.destroy());
+            }
+
+            if (self.player) {
+                promises.push(self.player.unload());
+            }
+
+            if (self.recorder) {
+                promises.push(self.recorder.destroy());
+            }
+
+            promises.push(self.resetResponse());
+
+            return Promise.all(promises).then(
+                function() {
+                    self.inputMeter = null;
+                    self.progressBar = null;
+                    self.mediaStimulus = null;
+                    self.player = null;
+                    self.recorder = null;
                 }
-                if (self.player && self.player.is('playing')) {
-                    promises.push(self.stopPlayback());
-                }
-
-                promises.push(self.destroyControls());
-
-                if (self.inputMeter) {
-                    promises.push(self.inputMeter.destroy());
-                }
-
-                if (self.mediaStimulus) {
-                    promises.push(self.mediaStimulus.destroy());
-                }
-
-                if (self.player) {
-                    promises.push(self.player.unload());
-                }
-
-                if (self.recorder) {
-                    promises.push(self.recorder.destroy());
-                }
-
-                promises.push(self.resetResponse());
-
-                Promise.all(promises).then(
-                    function() {
-                        self.inputMeter = null;
-                        self.progressBar = null;
-                        self.mediaStimulus = null;
-                        self.player = null;
-                        self.recorder = null;
-                        resolve();
-                    },
-                    reject,
-                )
-            });
+            );
         },
         /**
          * Restore the state of the interaction from the serializedState.

@@ -170,27 +170,14 @@ define([
              * Close the audio context and destroy created assets
              */
             destroy: function destroy() {
-                var promises = [
-                    new Promise(function(resolve) {
-                        recorderWorker.terminate();
-                        recorderWorker = null;
-                        resolve();
-                    }),
-                ];
+                recorderWorker.terminate();
+                recorderWorker = null;
 
                 if (audioContext) {
-                    promises.push(new Promise(function(resolve, reject) {
-                        audioContext.close().then(
-                            function() {
-                                audioNodes = {};
-                                resolve();
-                            },
-                            reject,
-                        );
-                    }));
+                    return audioContext.close().then(function() {
+                        audioNodes = {};
+                    });
                 }
-
-                return Promise.all(promises);
             }
         };
 
