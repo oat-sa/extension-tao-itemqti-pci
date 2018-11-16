@@ -19,6 +19,7 @@ define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
@@ -29,6 +30,7 @@ define([
     qtiCustomInteractionContext,
     $,
     _,
+    Promise,
     event,
     html,
     playerFactory,
@@ -56,6 +58,12 @@ define([
         return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
     }
 
+    function getFileName(filePrefix, blob) {
+        return filePrefix + '_' +
+            window.Date.now() + '.' +
+            // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
+            blob.type.split(';')[0].split('/')[1];
+    }
 
     /**
      * The main interaction code
@@ -139,11 +147,7 @@ define([
 
             this.recorder.on('recordingavailable', function(blob, durationMs) {
                 var recordingUrl = window.URL && window.URL.createObjectURL && window.URL.createObjectURL(blob),
-                    filename =
-                        self._filePrefix + '_' +
-                        window.Date.now() + '.' +
-                        // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
-                        blob.type.split(';')[0].split('/')[1],
+                    filename = getFileName(self._filePrefix, blob),
                     filesize = blob.size;
 
                 self._recordsAttempts++;
@@ -153,6 +157,12 @@ define([
                 self.createBase64Recoding(blob, filename);
 
                 self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
+            });
+
+            this.recorder.on('partialrecordingavailable', function(blob) {
+                var filename = getFileName(self._filePrefix, blob);
+
+                self.createBase64Recoding(blob, filename);
             });
 
             this.recorder.on('statechange', function() {
@@ -661,38 +671,45 @@ define([
          * @param {Object} interaction
          */
         destroy: function destroy() {
-            if (this.recorder && this.recorder.is('recording')) {
-                this.stopRecording();
-            }
-            if (this.player && this.player.is('playing')) {
-                this.stopPlayback();
-            }
+            var self = this;
+            var promises = [];
 
-            this.destroyControls();
-
-            if (this.inputMeter) {
-                this.inputMeter.destroy();
-                this.inputMeter = null;
+            if (self.recorder && self.recorder.is('recording')) {
+                promises.push(self.stopRecording());
+            }
+            if (self.player && self.player.is('playing')) {
+                promises.push(self.stopPlayback());
             }
 
-            this.progressBar = null;
+            promises.push(self.destroyControls());
 
-            if (this.mediaStimulus) {
-                this.mediaStimulus.destroy();
-                this.mediaStimulus = null;
+            if (self.inputMeter) {
+                promises.push(self.inputMeter.destroy());
             }
 
-            if (this.player) {
-                this.player.unload();
-                this.player = null;
+            if (self.mediaStimulus) {
+                promises.push(self.mediaStimulus.destroy());
             }
 
-            if (this.recorder) {
-                this.recorder.destroy();
-                this.recorder = null;
+            if (self.player) {
+                promises.push(self.player.unload());
             }
 
-            this.resetResponse();
+            if (self.recorder) {
+                promises.push(self.recorder.destroy());
+            }
+
+            promises.push(self.resetResponse());
+
+            return Promise.all(promises).then(
+                function() {
+                    self.inputMeter = null;
+                    self.progressBar = null;
+                    self.mediaStimulus = null;
+                    self.player = null;
+                    self.recorder = null;
+                }
+            );
         },
         /**
          * Restore the state of the interaction from the serializedState.
