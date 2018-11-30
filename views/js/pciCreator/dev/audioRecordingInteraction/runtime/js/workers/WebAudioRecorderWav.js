@@ -27,7 +27,7 @@
  * - record(): do not timeout if maxBuffers (= timeLimit option) is equal to zero
  * - cleanup(): removed chaining assignment that might result in a TypeError
  */
-importScripts("WavAudioEncoder.min.js");
+importScripts("WavAudioEncoder.js");
 
 var sampleRate = 44100,
     numChannels = 2,
@@ -63,13 +63,21 @@ function start(bufferSize) {
 }
 
 function record(buffer) {
-    if (!maxBuffers || bufferCount++ < maxBuffers)
-        if (encoder)
+    if (!maxBuffers || bufferCount++ < maxBuffers) {
+        if (encoder) {
             encoder.encode(buffer);
-        else
+
+            self.postMessage({
+                command: "partialcomplete",
+                blob: encoder.partialFinish(options.wav.mimeType),
+            });
+
+        } else {
             recBuffers.push(buffer);
-    else
-        self.postMessage({ command: "timeout" });
+        }
+    } else {
+        self.postMessage({command: "timeout"});
+    }
 };
 
 function postProgress(progress) {

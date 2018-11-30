@@ -22,9 +22,10 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'lodash',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event'
-], function(_, event) {
+], function(_, Promise, event) {
     'use strict';
 
     /**
@@ -111,6 +112,11 @@ define([
                     var data = e.data;
                     var blob;
                     switch (data.command) {
+                        case 'partialcomplete':
+                            blob = data.blob;
+                            self.trigger('partialblobavailable', [blob]);
+                            break;
+
                         case 'complete': {
                             blob = data.blob;
                             self.trigger('blobavailable', [blob]);
@@ -169,12 +175,14 @@ define([
              * Close the audio context and destroy created assets
              */
             destroy: function destroy() {
-                if (audioContext) {
-                    audioContext.close();
-                    audioNodes = {};
-                }
                 recorderWorker.terminate();
                 recorderWorker = null;
+
+                if (audioContext) {
+                    return audioContext.close().then(function() {
+                        audioNodes = {};
+                    });
+                }
             }
         };
 

@@ -22,7 +22,7 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'lodash',
+    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event'
 ], function(_, event) {
     'use strict';
@@ -42,7 +42,7 @@ define([
 
         var mimeType,               // mime type of the recording
             chunks = [],            // contains the current recording split in chunks
-            chunkSizeMs = 1000;     // size of a chunk
+            chunkSizeMs = 100;      // size of a chunk (reduced from 1000ms to 100ms to avoid data loss in case of interrupted recording)
 
         var codecsByPreferenceOrder = [
             'audio/webm;codecs=opus',
@@ -77,7 +77,12 @@ define([
 
                 // save chunks of the recording
                 mediaRecorder.ondataavailable = function ondataavailable(e) {
+                    var blob;
+
                     chunks.push(e.data);
+
+                    blob = new Blob(chunks, {type: mimeType});
+                    self.trigger('partialblobavailable', [blob]);
                 };
 
                 // stop record callback
