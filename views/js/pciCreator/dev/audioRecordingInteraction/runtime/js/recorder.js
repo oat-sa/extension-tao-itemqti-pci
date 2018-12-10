@@ -181,32 +181,35 @@ define([
             init: function init() {
                 var self = this;
 
-                return navigator.mediaDevices.getUserMedia({ audio: true })
-                    .then(function(stream) {
-                        switch (true) {
-                            case !config.isCompressed:
-                            case config.isCompressed && config.isLossless:
-                                provider = webAudioProvider(config, assetManager);
-                                break;
-                            case config.isCompressed && !config.isLossless:
-                                provider = mediaRecorderProvider(config);
-                                break;
-                        }
+                return navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+                    switch (true) {
+                        case !config.isCompressed:
+                        case config.isCompressed && config.isLossless:
+                            provider = webAudioProvider(config, assetManager);
+                            break;
+                        case config.isCompressed && !config.isLossless:
+                            provider = mediaRecorderProvider(config);
+                            break;
+                    }
 
-                        provider.init(stream);
+                    provider.init(stream);
 
-                        provider.on('blobavailable', function(blob) {
-                            self.trigger('recordingavailable', [blob, durationMs]);
-                        });
-
-                        provider.on('partialblobavailable', function(blob) {
-                            self.trigger('partialrecordingavailable', [blob]);
-                        });
-
-                        initAnalyser(stream);
-
-                        setState(recorder, recorderStates.IDLE);
+                    provider.on('blobavailable', function(blob) {
+                        self.trigger('recordingavailable', [blob, durationMs]);
                     });
+
+                    provider.on('partialblobavailable', function(blob) {
+                        self.trigger('partialrecordingavailable', [blob]);
+                    });
+
+                    provider.on('error', function(errorMessage) {
+                        self.trigger('error', [errorMessage]);
+                    });
+
+                    initAnalyser(stream);
+
+                    setState(recorder, recorderStates.IDLE);
+                });
             },
             /**
              * Start the recording

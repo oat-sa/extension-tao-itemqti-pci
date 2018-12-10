@@ -16,27 +16,33 @@
  * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
  */
 /**
- * POC for WebWorker implementation of Flac codec
- * TODO: review it
+ * WebWorker implementation of Flac encoder
  *
  * @author Péter Halász <peter@taotesting.com>
  */
+
+/* eslint vars-on-top: 0 */
+/* eslint strict: [ error, global ] */
+
+'use strict';
+
+var Flac,
+    Resampler;
+
+/* eslint-disable-next-line */
 importScripts("../lib/libflac/libflac4-1.3.2.js", "../lib/xaudiojs/resampler.js");
 
-
-var encoder;
-var flacBuffers  = [];
-var audioBuffers = [];
-var flacLength   = 0;
-
-/* configuration properties */
-var nrOfChannels = 1;
-var sampleRate   = 22050;
-var compression  = 5;
-var bps          = 16;
-var verify       = false;
-var blockSize    = 0;
-var audioContextSampleRate;
+var encoder,
+    nrOfChannels = 1,
+    flacBuffers  = [],
+    audioBuffers = [],
+    flacLength   = 0,
+    sampleRate,
+    compression,
+    bps,
+    verify,
+    blockSize,
+    audioContextSampleRate;
 
 /**
  * Triggered when the worker get initialized
@@ -44,9 +50,10 @@ var audioContextSampleRate;
 function init(data) {
     sampleRate = data.config.sampleRate;
     audioContextSampleRate = data.config.audioContextSampleRate;
-    nrOfChannels = data.config.numChannels;
-
-    // TODO: pass other custom configuration properties, like compression, bps, verify and blockSize
+    compression = data.config.compressionLevel;
+    bps = data.config.bps;
+    verify = data.config.verify;
+    blockSize = data.config.blockSize;
 }
 
 /**
@@ -67,20 +74,17 @@ function startRecord() {
         Flac.init_encoder_stream(encoder, function(buffer, bytes) {
             flacBuffers.push(buffer);
             flacLength += bytes;
-        }, function(meta) {
-            // for debugging
-            // console.log('[DEBUG] Flac Metadata', meta);
         });
     } else {
-        // TODO: handle error properly
-        console.error("Error initializing the encoder");
+        self.postMessage({
+            command: 'error',
+            errorMessage: 'Failed to initialize the Flac Encoder',
+        });
     }
 }
 
 /**
  * Triggered during the record process
- *
- * TODO: implement { command: "progress" } event
  */
 function doRecord(buffer) {
     if (!Flac.isReady() || encoder === 0) {
@@ -104,8 +108,16 @@ function doRecord(buffer) {
  */
 function finishRecord() {
     if (!Flac.isReady()) {
-        // TODO: handle error properly
+        self.postMessage({
+            command: 'error',
+            errorMessage: 'Failed to finish the encoding',
+        });
     } else {
+        self.postMessage({
+            command: "progress",
+            progress: 0,
+        });
+
         Flac.FLAC__stream_encoder_finish(encoder);
 
         self.postMessage({
@@ -114,6 +126,11 @@ function finishRecord() {
         });
 
         Flac.FLAC__stream_encoder_delete(encoder);
+
+        self.postMessage({
+            command: "progress",
+            progress: 1,
+        });
 
         clear();
     }
@@ -184,9 +201,8 @@ function _encode(bufferArray) {
  */
 function _getFlacFile(recBuffers, recLength) {
     var samples = _mergeBuffersUint8(recBuffers, recLength);
-    var blob    = new Blob([samples], { type: 'audio/flac' });
 
-    return blob;
+    return new Blob([samples], { type: 'audio/flac' });
 }
 
 /**
@@ -224,7 +240,10 @@ self.onmessage = function(event) {
         case 'finish': finishRecord();        break;
         case 'cancel': clear();               break;
         default:
-            // TODO: handle error properly
+            self.postMessage({
+                command: 'error',
+                errorMessage: 'Invalid command sent to Flac WebWorker: ' + data.command,
+            });
     }
 };
 

@@ -22,7 +22,6 @@ define([
 ], function(Handlebars, Widget, states){
     'use strict';
 
-    // TODO: review it, only for demo purpose
     Handlebars.registerHelper('eq', function(arg1, arg2) {
         return arg1 === arg2;
     });

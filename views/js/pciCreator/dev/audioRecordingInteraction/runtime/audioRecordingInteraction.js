@@ -114,29 +114,14 @@ define([
          * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
          * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
-         * @param {String} config.recordingFormat
+         * @param {String}  config.recordingFormat
+         * @param {Number}  config.compressionLevel
+         * @param {Number}  config.bps
+         * @param {Boolean} config.verify
+         * @param {Number}  config.blockSize
          */
         initConfig: function init(config) {
-            this.config = {
-                allowPlayback:          toBoolean(config.allowPlayback, true),
-                autoStart:              toBoolean(config.autoStart, false),
-                maxRecords:             toInteger(config.maxRecords, 3),
-                maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
-
-                isCompressed:           toBoolean(config.isCompressed, true),
-                isLossless:             toBoolean(config.isLossless, true),
-                audioBitrate:           toInteger(config.audioBitrate, 20000),
-                sampleRate:             toInteger(config.sampleRate, 22050),
-                isStereo:               toBoolean(config.isStereo, false),
-
-                useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
-                media:                  config.media || {},
-
-                displayDownloadLink:    toBoolean(config.displayDownloadLink, false),
-
-                // TODO: review it, only for demo purpose
-                recordingFormat:        config.recordingFormat || 'compressed_lossy',
-            };
+            this.config = config;
         },
 
         /**
@@ -182,6 +167,10 @@ define([
 
             this.recorder.on('levelUpdate', function(level) {
                 self.inputMeter.draw(level);
+            });
+
+            this.recorder.on('error', function(errorMessage) {
+                window.console.error(errorMessage);
             });
         },
 

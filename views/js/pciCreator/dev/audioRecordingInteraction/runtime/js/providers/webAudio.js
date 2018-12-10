@@ -45,7 +45,8 @@ define([
         var audioContext,
             audioNodes = {};
 
-        var numChannels = (config.isStereo) ? 2 : 1,
+        // The stereo is supported only for wav as it doesn't work in case of resampled flac audio
+        var numChannels = (config.isStereo && !config.isLossless) ? 2 : 1,
             buffer = [];
 
         /**
@@ -61,6 +62,10 @@ define([
                     numChannels: numChannels,
                     audioContextSampleRate: audioContext.sampleRate,
                     sampleRate: config.sampleRate,
+                    bps: config.bps,
+                    compressionLevel: config.compressionLevel,
+                    verify: config.verify,
+                    blockSize: config.blockSize,
                 },
                 options: {
                     timeLimit: 0,           // time limit is handled by the provider wrapper
@@ -110,16 +115,18 @@ define([
 
                 recorderWorker.onmessage = function(e) {
                     var data = e.data;
-                    var blob;
+
                     switch (data.command) {
+                        case 'error':
+                            self.trigger('error', [data.errorMessage]);
+                            break;
+
                         case 'partialcomplete':
-                            blob = data.blob;
-                            self.trigger('partialblobavailable', [blob]);
+                            self.trigger('partialblobavailable', [data.blob]);
                             break;
 
                         case 'complete': {
-                            blob = data.blob;
-                            self.trigger('blobavailable', [blob]);
+                            self.trigger('blobavailable', [data.blob]);
                             break;
                         }
                     }

@@ -55,23 +55,22 @@ define([
                 autoStart:          false,
                 maxRecords:         2,
                 maxRecordingTime:   120,
-
                 isCompressed:       true,
                 isLossless:         true,
                 audioBitrate:       20000,
                 sampleRate:         22050,
                 isStereo:           false,
-
+                compressionLevel:   5,
+                bps:                16,
+                verify:             false,
+                blockSize:          0,
                 useMediaStimulus:   false,
                 media: {
                     autostart:      true,
                     replayTimeout:  5,
                     maxPlays:       2
                 },
-
                 displayDownloadLink: false,
-
-                // TODO: review it, only for demo purpose
                 recordingFormat: 'compressed_lossy',
             };
         },

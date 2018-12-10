@@ -36,13 +36,19 @@
                 "mediaFiles": [],
                 "properties": {
                     "allowPlayback": "true",
-                    "autoStart": "",
+                    "autoStart": "false",
                     "maxRecords": "0",
                     "maxRecordingTime": "400",
                     "audioBitrate": "20000",
-                    "isStereo": "",
-                    "pcmSampleRate": "44100",
-                    "displayDownloadLink": "true"
+                    "isStereo": "false",
+                    "displayDownloadLink": "true",
+                    "isCompressed": "true",
+                    "isLossless": "true",
+                    "bps": "16",
+                    "sampleRate": "22050",
+                    "compressionLevel": "5",
+                    "verify": "false",
+                    "blockSize": "0"
                 },
                 "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
             }

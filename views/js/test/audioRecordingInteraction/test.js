@@ -265,7 +265,8 @@ define([
             var $target = $(e.target),
                 newConfig = {};
             if (interaction) {
-                newConfig[$target.attr('name')] = $target.is(':checked');
+                newConfig[$target.attr('name')] = $target.is('[type="checkbox"]') ? $target.is(':checked') : $target.val();
+                console.log(newConfig);
                 interaction.triggerPci('configChange', [_.assign(interaction.properties, newConfig)]);
             }
         });
