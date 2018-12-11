@@ -102,8 +102,6 @@ function finish() {
 
     var file = encoder.finish(options.wav.mimeType);
 
-    console.log(file);
-
     self.postMessage({
         command: "complete",
         blob: file,
