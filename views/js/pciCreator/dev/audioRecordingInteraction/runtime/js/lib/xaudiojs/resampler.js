@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use strict";
 //JavaScript Audio Resampler
 //Copyright (C) 2011-2015 Grant Galitz

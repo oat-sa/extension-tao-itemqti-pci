@@ -62,10 +62,10 @@ define([
                     numChannels: numChannels,
                     audioContextSampleRate: audioContext.sampleRate,
                     sampleRate: config.sampleRate,
-                    bps: config.bps,
-                    compressionLevel: config.compressionLevel,
-                    verify: config.verify,
-                    blockSize: config.blockSize,
+                    flacBps: config.flacBps,
+                    flacCompressionLevel: config.flacCompressionLevel,
+                    flacVerify: config.flacVerify,
+                    flacBlockSize: config.flacBlockSize,
                 },
                 options: {
                     timeLimit: 0,           // time limit is handled by the provider wrapper

@@ -55,12 +55,12 @@
     <label for="recordingFormat">{{__ "Recording format"}}</label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."}}
+        {{__ "With compressed (lossy), the audio is saved as a webm or ogg file (small size) and with the compressed (lossless) it will ge saved in flac format (medium size). With uncompressed, as a lossless Wav file (bigger size)."}}
     </span>
     <select name="recordingFormat">
-        <option value="compressed_lossy" {{#if (eq recordingFormat 'compressed_lossy')}}selected{{/if}}>{{__ 'Compressed (lossy)'}}</option>
-        <option value="compressed_lossless" {{#if (eq recordingFormat 'compressed_lossless')}}selected{{/if}}>{{__ 'Compressed (lossless)'}}</option>
-        <option value="uncompressed" {{#if (eq recordingFormat 'uncompressed')}}selected{{/if}}>{{__ 'Uncompressed'}}</option>
+        <option value="compressed_lossy" {{#equal recordingFormat 'compressed_lossy'}}selected{{/equal}}>{{__ 'Compressed (lossy)'}}</option>
+        <option value="compressed_lossless" {{#equal recordingFormat 'compressed_lossless'}}selected{{/equal}}>{{__ 'Compressed (lossless)'}}</option>
+        <option value="uncompressed" {{#equal recordingFormat 'uncompressed'}}selected{{/equal}}>{{__ 'Uncompressed'}}</option>
     </select>
 </div>
 
@@ -78,31 +78,39 @@
 <div data-role="compressedLosslessOptions" style="display: none">
     <div class="panel">
         <label for="sampleRate" class="spinner">{{__ "Sample Rate:"}}</label>
-        <input name="sampleRate" value="{{sampleRate}}" class="large" data-increment="50" data-min="1000" data-max="48000" type="text" />
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
-            {{__ "Audio sample rate in Hz"}}
+            {{__ "Audio sample rate"}}
         </span>
+        <select name="sampleRate">
+            <option value="8000"  {{#equal sampleRate 8000}}selected{{/equal}}>{{__ '8000 Hz'}}</option>
+            <option value="11000" {{#equal sampleRate 11000}}selected{{/equal}}>{{__ '11000 Hz'}}</option>
+            <option value="22000" {{#equal sampleRate 22000}}selected{{/equal}}>{{__ '22000 Hz'}}</option>
+            <option value="22050" {{#equal sampleRate 22050}}selected{{/equal}}>{{__ '22050 Hz'}}</option>
+            <option value="44100" {{#equal sampleRate 44100}}selected{{/equal}}>{{__ '44100 Hz'}}</option>
+            <option value="48000" {{#equal sampleRate 48000}}selected{{/equal}}>{{__ '48000 Hz'}}</option>
+        </select>
+
     </div>
     <div class="panel">
-        <label for="compressionLevel" class="spinner">{{__ "Compression level"}}</label>
-        <input name="compressionLevel" value="{{compressionLevel}}" class="large" data-increment="1" data-min="0" data-max="8" type="text" />
+        <label for="flacCompressionLevel" class="spinner">{{__ "Compression level"}}</label>
+        <input name="flacCompressionLevel" value="{{flacCompressionLevel}}" class="large" data-increment="1" data-min="0" data-max="8" type="text" />
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
             {{__ "The desired Flac compression level"}}
         </span>
     </div>
     <div class="panel">
-        <label for="bps" class="spinner">{{__ "Bps"}}</label>
-        <input name="bps" value="{{bps}}" class="large" data-increment="1" data-min="1" data-max="32" type="text" />
+        <label for="flacBps" class="spinner">{{__ "Bits per sample"}}</label>
+        <input name="flacBps" value="{{flacBps}}" class="large" data-increment="1" data-min="1" data-max="32" type="text" />
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
             {{__ "Bits per sample"}}
         </span>
     </div>
     <div class="panel">
-        <label for="blockSize" class="spinner">{{__ "Block size"}}</label>
-        <input name="blockSize" value="{{blockSize}}" class="large" data-increment="1" data-min="0" type="text" />
+        <label for="flacBlockSize" class="spinner">{{__ "Block size"}}</label>
+        <input name="flacBlockSize" value="{{flacBlockSize}}" class="large" data-increment="1" data-min="0" type="text" />
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
             {{__ "The number of samples to user per frame"}}
@@ -110,7 +118,7 @@
     </div>
     <div class="panel">
         <label>
-            <input name="verify" type="checkbox" {{#if verify}}checked="checked"{{/if}}/>
+            <input name="flacVerify" type="checkbox" {{#if flacVerify}}checked="checked"{{/if}}/>
             <span class="icon-checkbox"></span>
             {{__ "Verify"}}
         </label>
@@ -153,6 +161,8 @@
 </div>
 
 <hr />
+
+<h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "For tests only"}}</strong></h3>
 
 <div class="panel">
     <label>

@@ -16,15 +16,10 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 define([
-    'handlebars',
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
     'audioRecordingInteraction/creator/widget/states/states'
-], function(Handlebars, Widget, states){
+], function(Widget, states){
     'use strict';
-
-    Handlebars.registerHelper('eq', function(arg1, arg2) {
-        return arg1 === arg2;
-    });
 
     var AudioRecordingInteractionWidget = Widget.clone();
 

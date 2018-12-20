@@ -26,8 +26,21 @@
 
 'use strict';
 
-var Flac,
-    Resampler;
+/**
+ * @param {Object} Flac
+ * @param {Function} Flac.create_libflac_encoder
+ * @param {Function} Flac.init_encoder_stream
+ * @param {Function} Flac.FLAC__stream_encoder_finish
+ * @param {Function} Flac.FLAC__stream_encoder_delete
+ * @param {Function} Flac.FLAC__stream_encoder_process_interleaved
+ */
+var Flac;
+
+/**
+ * @param {Object} Resampler
+ * @param {Function} Resampler.resampler
+ */
+var Resampler;
 
 /* eslint-disable-next-line */
 importScripts("../lib/libflac/libflac4-1.3.2.js", "../lib/xaudiojs/resampler.js");
@@ -46,14 +59,22 @@ var encoder,
 
 /**
  * Triggered when the worker get initialized
+ * @param {Object}  data
+ * @param {Object}  data.config
+ * @param {Number}  data.config.sampleRate             The sample rate of the input data
+ * @param {Number}  data.config.audioContextSampleRate The sample rate of the browser's Audio Context API
+ * @param {Number}  data.config.flacCompressionLevel   The desired Flac compression level (between 0 and 8)
+ * @param {Number}  data.config.flacBps                Bits per sample of the input data
+ * @param {Boolean} data.config.flacVerify             Enable/disable checksum verification during encoding
+ * @param {Number}  data.config.flacBlockSize          The number of samples to use per frame
  */
 function init(data) {
     sampleRate = data.config.sampleRate;
     audioContextSampleRate = data.config.audioContextSampleRate;
-    compression = data.config.compressionLevel;
-    bps = data.config.bps;
-    verify = data.config.verify;
-    blockSize = data.config.blockSize;
+    compression = data.config.flacCompressionLevel;
+    bps = data.config.flacBps;
+    verify = data.config.flacVerify;
+    blockSize = data.config.flacBlockSize;
 }
 
 /**

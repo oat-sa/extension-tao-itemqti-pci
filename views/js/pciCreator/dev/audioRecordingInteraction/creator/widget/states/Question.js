@@ -94,10 +94,10 @@ define([
             recordingFormat:        interaction.prop('recordingFormat'),
             isCompressed:           typeCaster.strToBool(interaction.prop('isCompressed'), true),
             isLossless:             typeCaster.strToBool(interaction.prop('isLossless'), false),
-            compressionLevel:       interaction.prop('compressionLevel'),
-            bps:                    interaction.prop('bps'),
-            verify:                 typeCaster.strToBool(interaction.prop('verify'), false),
-            blockSize:              interaction.prop('blockSize'),
+            flacCompressionLevel:   interaction.prop('flacCompressionLevel'),
+            flacBps:                interaction.prop('flacBps'),
+            flacVerify:             typeCaster.strToBool(interaction.prop('flacVerify'), false),
+            flacBlockSize:          interaction.prop('flacBlockSize'),
         }));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
@@ -111,40 +111,52 @@ define([
         formElement.initWidget($form);
 
         //display the proper blocks
-        switch (interaction.prop('recordingFormat')) {
-            case 'compressed_lossy':
-                $uncompressedOptions.hide();
-                $compressedLossyOptions.show();
-                $compressedLosslessOptions.hide();
-                break;
+        toggleEncodingOptions(interaction.prop('recordingFormat'));
 
-            case 'compressed_lossless':
-                $uncompressedOptions.hide();
-                $compressedLossyOptions.hide();
-                $compressedLosslessOptions.show();
-                break;
+        /**
+         * Toggles the proper block which belongs to the given recording format
+         *
+         * @param {String}   recordingFormat supported values: compressed_lossy, compressed_lossless, uncompressed
+         * @param {Function} [callback]      callback function (optional)
+         */
+        function toggleEncodingOptions(recordingFormat, callback) {
+            switch (recordingFormat) {
+                case 'compressed_lossy':
+                    $uncompressedOptions.hide();
+                    $compressedLossyOptions.show();
+                    $compressedLosslessOptions.hide();
+                    break;
 
-            case 'uncompressed':
-                $uncompressedOptions.show();
-                $compressedLossyOptions.hide();
-                $compressedLosslessOptions.hide();
-                break;
+                case 'compressed_lossless':
+                    $uncompressedOptions.hide();
+                    $compressedLossyOptions.hide();
+                    $compressedLosslessOptions.show();
+                    break;
+
+                case 'uncompressed':
+                    $uncompressedOptions.show();
+                    $compressedLossyOptions.hide();
+                    $compressedLosslessOptions.hide();
+                    break;
+            }
+
+            typeof callback === 'function' && callback(recordingFormat);
         }
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, _.assign({
-            allowPlayback:       configChangeCallBack,
-            autoStart:           configChangeCallBack,
-            maxRecords:          configChangeCallBack,
-            maxRecordingTime:    configChangeCallBack,
-            audioBitrate:        configChangeCallBack,
-            sampleRate:          configChangeCallBack,
-            isStereo:            configChangeCallBack,
-            displayDownloadLink: configChangeCallBack,
-            compressionLevel:    configChangeCallBack,
-            bps:                 configChangeCallBack,
-            verify:              configChangeCallBack,
-            blockSize:           configChangeCallBack,
+            allowPlayback:        configChangeCallBack,
+            autoStart:            configChangeCallBack,
+            maxRecords:           configChangeCallBack,
+            maxRecordingTime:     configChangeCallBack,
+            audioBitrate:         configChangeCallBack,
+            sampleRate:           configChangeCallBack,
+            isStereo:             configChangeCallBack,
+            displayDownloadLink:  configChangeCallBack,
+            flacCompressionLevel: configChangeCallBack,
+            flacBps:              configChangeCallBack,
+            flacVerify:           configChangeCallBack,
+            flacBlockSize:        configChangeCallBack,
 
             identifier: function identifier(i, value){
                 response.id(value);
@@ -161,36 +173,25 @@ define([
                 configChangeCallBack(boundInteraction, value, name);
             },
 
-
             recordingFormat: function(boundInteraction, value, name) {
-                switch (value) {
-                    case 'compressed_lossy':
-                        configChangeCallBack(boundInteraction, true, 'isCompressed');
-                        configChangeCallBack(boundInteraction, false, 'isLossless');
+                toggleEncodingOptions(value, function(recordingFormat) {
+                    switch (recordingFormat) {
+                        case 'compressed_lossy':
+                            configChangeCallBack(boundInteraction, true, 'isCompressed');
+                            configChangeCallBack(boundInteraction, false, 'isLossless');
+                            break;
 
-                        $uncompressedOptions.hide();
-                        $compressedLossyOptions.show();
-                        $compressedLosslessOptions.hide();
-                        break;
+                        case 'compressed_lossless':
+                            configChangeCallBack(boundInteraction, true, 'isCompressed');
+                            configChangeCallBack(boundInteraction, true, 'isLossless');
+                            break;
 
-                    case 'compressed_lossless':
-                        configChangeCallBack(boundInteraction, true, 'isCompressed');
-                        configChangeCallBack(boundInteraction, true, 'isLossless');
-
-                        $uncompressedOptions.hide();
-                        $compressedLossyOptions.hide();
-                        $compressedLosslessOptions.show();
-                        break;
-
-                    case 'uncompressed':
-                        configChangeCallBack(boundInteraction, false, 'isCompressed');
-                        configChangeCallBack(boundInteraction, null, 'isLossless');
-
-                        $uncompressedOptions.show();
-                        $compressedLossyOptions.hide();
-                        $compressedLosslessOptions.hide();
-                        break;
-                }
+                        case 'uncompressed':
+                            configChangeCallBack(boundInteraction, false, 'isCompressed');
+                            configChangeCallBack(boundInteraction, null, 'isLossless');
+                            break;
+                    }
+                });
 
                 configChangeCallBack(boundInteraction, value, name);
             },
