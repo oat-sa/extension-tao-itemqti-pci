@@ -103,33 +103,25 @@ define([
         /**
          * Initialize the PCI configuration
          * @param {Object}  config
-         * @param {Boolean} config.allowPlayback - display the play button
-         * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
-         * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
-         * @param {Number}  config.maxRecordingTime - in seconds
-         * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
-         * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
-         * @param {Boolean} config.isStereo - switch the number of channels (1 vs 2) for uncompressed recording
-         * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
-         * @param {Object}  config.media - media object (handled by the PCI media manager helper)
-         * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
+         * @param {Boolean} config.allowPlayback        display the play button
+         * @param {Boolean} config.autoStart            start recording immediately after interaction is loaded
+         * @param {Number}  config.maxRecords           0 = unlimited / 1 = no retry / x = x attempts
+         * @param {Number}  config.maxRecordingTime     in seconds
+         * @param {Boolean} config.isCompressed         set the recording format between compressed and uncompressed
+         * @param {Boolean} config.isLossless           set the recording format between lossless or lossy
+         * @param {Number}  config.audioBitrate         number of bits per seconds for audio encoding
+         * @param {Boolean} config.isStereo             switch the number of channels (1 vs 2) for uncompressed recording
+         * @param {Boolean} config.useMediaStimulus     will display a media stimulus to the test taker
+         * @param {Object}  config.media                media object (handled by the PCI media manager helper)
+         * @param {Boolean} config.displayDownloadLink  for testing purposes only: allow to download the recorded file
+         * @param {String}  config.recordingFormat      the desired recording format
+         * @param {Number}  config.flacCompressionLevel the desired Flac compression level [0, 8]
+         * @param {Number}  config.flacBps              Bits per sample of the input data
+         * @param {Boolean} config.flacVerify           Enable/disable the checksum verification during encoding
+         * @param {Number}  config.flacBlockSize        The number of samples to use per frame
          */
         initConfig: function init(config) {
-            this.config = {
-                allowPlayback:          toBoolean(config.allowPlayback, true),
-                autoStart:              toBoolean(config.autoStart, false),
-                maxRecords:             toInteger(config.maxRecords, 3),
-                maxRecordingTime:       toInteger(config.maxRecordingTime, 120),
-
-                isCompressed:           toBoolean(config.isCompressed, true),
-                audioBitrate:           toInteger(config.audioBitrate, 20000),
-                isStereo:               toBoolean(config.isStereo, false),
-
-                useMediaStimulus:       toBoolean(config.useMediaStimulus, false),
-                media:                  config.media || {},
-
-                displayDownloadLink:    toBoolean(config.displayDownloadLink, false)
-            };
+            this.config = config;
         },
 
         /**
@@ -175,6 +167,10 @@ define([
 
             this.recorder.on('levelUpdate', function(level) {
                 self.inputMeter.draw(level);
+            });
+
+            this.recorder.on('error', function(errorMessage) {
+                window.console.error(errorMessage);
             });
         },
 

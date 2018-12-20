@@ -71,8 +71,9 @@ define([
             interaction = _widget.element,
             response = interaction.getResponseDeclaration(),
             $mediaStimulusForm,
-            $compressedOptions,
-            $uncompressedOptions;
+            $uncompressedOptions,
+            $compressedLossyOptions,
+            $compressedLosslessOptions;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
@@ -85,49 +86,82 @@ define([
             autoStart:              typeCaster.strToBool(interaction.prop('autoStart'), false),
             maxRecords:             interaction.prop('maxRecords'),
             maxRecordingTime:       interaction.prop('maxRecordingTime'),
-
-            isCompressed:           typeCaster.strToBool(interaction.prop('isCompressed'), true),
             audioBitrate:           interaction.prop('audioBitrate'),
+            sampleRate:             interaction.prop('sampleRate'),
             isStereo:               typeCaster.strToBool(interaction.prop('isStereo'), false),
-
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
-
-            displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
+            displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false),
+            recordingFormat:        interaction.prop('recordingFormat'),
+            isCompressed:           typeCaster.strToBool(interaction.prop('isCompressed'), true),
+            isLossless:             typeCaster.strToBool(interaction.prop('isLossless'), false),
+            flacCompressionLevel:   interaction.prop('flacCompressionLevel'),
+            flacBps:                interaction.prop('flacBps'),
+            flacVerify:             typeCaster.strToBool(interaction.prop('flacVerify'), false),
+            flacBlockSize:          interaction.prop('flacBlockSize'),
         }));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
         $mediaStimulusForm.append(pciMediaManager.getForm());
 
-        $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
+        $compressedLossyOptions = $form.find('[data-role="compressedLossyOptions"]');
+        $compressedLosslessOptions = $form.find('[data-role="compressedLosslessOptions"]');
 
         //init form javascript
         formElement.initWidget($form);
 
+        //display the proper blocks
+        toggleEncodingOptions(interaction.prop('recordingFormat'));
+
+        /**
+         * Toggles the proper block which belongs to the given recording format
+         *
+         * @param {String}   recordingFormat supported values: compressed_lossy, compressed_lossless, uncompressed
+         * @param {Function} [callback]      callback function (optional)
+         */
+        function toggleEncodingOptions(recordingFormat, callback) {
+            switch (recordingFormat) {
+                case 'compressed_lossy':
+                    $uncompressedOptions.hide();
+                    $compressedLossyOptions.show();
+                    $compressedLosslessOptions.hide();
+                    break;
+
+                case 'compressed_lossless':
+                    $uncompressedOptions.hide();
+                    $compressedLossyOptions.hide();
+                    $compressedLosslessOptions.show();
+                    break;
+
+                case 'uncompressed':
+                    $uncompressedOptions.show();
+                    $compressedLossyOptions.hide();
+                    $compressedLosslessOptions.hide();
+                    break;
+            }
+
+            typeof callback === 'function' && callback(recordingFormat);
+        }
+
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, _.assign({
-            identifier : function identifier(i, value){
+            allowPlayback:        configChangeCallBack,
+            autoStart:            configChangeCallBack,
+            maxRecords:           configChangeCallBack,
+            maxRecordingTime:     configChangeCallBack,
+            audioBitrate:         configChangeCallBack,
+            sampleRate:           configChangeCallBack,
+            isStereo:             configChangeCallBack,
+            displayDownloadLink:  configChangeCallBack,
+            flacCompressionLevel: configChangeCallBack,
+            flacBps:              configChangeCallBack,
+            flacVerify:           configChangeCallBack,
+            flacBlockSize:        configChangeCallBack,
+
+            identifier: function identifier(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
-
-            allowPlayback:      configChangeCallBack,
-            autoStart:          configChangeCallBack,
-            maxRecords:         configChangeCallBack,
-            maxRecordingTime:   configChangeCallBack,
-
-            isCompressed: function isCompressed(boundInteraction, value, name) {
-                if (value === 'true') {
-                    $uncompressedOptions.hide();
-                    $compressedOptions.show();
-                } else {
-                    $uncompressedOptions.show();
-                    $compressedOptions.hide();
-                }
-                configChangeCallBack(boundInteraction, value, name);
-            },
-            audioBitrate:       configChangeCallBack,
-            isStereo:           configChangeCallBack,
 
             useMediaStimulus: function useMediaStimulusCb(boundInteraction, value, name) {
                 if (value) {
@@ -139,7 +173,29 @@ define([
                 configChangeCallBack(boundInteraction, value, name);
             },
 
-            displayDownloadLink: configChangeCallBack
+            recordingFormat: function(boundInteraction, value, name) {
+                toggleEncodingOptions(value, function(recordingFormat) {
+                    switch (recordingFormat) {
+                        case 'compressed_lossy':
+                            configChangeCallBack(boundInteraction, true, 'isCompressed');
+                            configChangeCallBack(boundInteraction, false, 'isLossless');
+                            break;
+
+                        case 'compressed_lossless':
+                            configChangeCallBack(boundInteraction, true, 'isCompressed');
+                            configChangeCallBack(boundInteraction, true, 'isLossless');
+                            break;
+
+                        case 'uncompressed':
+                            configChangeCallBack(boundInteraction, false, 'isCompressed');
+                            configChangeCallBack(boundInteraction, null, 'isLossless');
+                            break;
+                    }
+                });
+
+                configChangeCallBack(boundInteraction, value, name);
+            },
+
 
         }, pciMediaManager.getChangeCallbacks()));
 

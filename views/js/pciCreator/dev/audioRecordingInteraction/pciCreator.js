@@ -16,11 +16,9 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 define([
-    'lodash',
-    'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'audioRecordingInteraction/creator/widget/Widget',
     'tpl!audioRecordingInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+], function(Widget, markupTpl){
     'use strict';
 
     var _typeIdentifier = 'audioRecordingInteraction';
@@ -51,23 +49,27 @@ define([
          */
         getDefaultProperties : function getDefaultProperties(){
             return {
-                allowPlayback:      true,
-                autoStart:          false,
-                maxRecords:         2,
-                maxRecordingTime:   120,
-
-                isCompressed:       true,
-                audioBitrate:       20000,
-                isStereo:           false,
-
-                useMediaStimulus:   false,
+                allowPlayback:        true,
+                autoStart:            false,
+                maxRecords:           2,
+                maxRecordingTime:     120,
+                isCompressed:         true,
+                isLossless:           true,
+                audioBitrate:         20000,
+                sampleRate:           22050,
+                isStereo:             false,
+                flacCompressionLevel: 5,
+                flacBps:              16,
+                flacVerify:           false,
+                flacBlockSize:        0,
+                useMediaStimulus:     false,
                 media: {
-                    autostart:      true,
-                    replayTimeout:  5,
-                    maxPlays:       2
+                    autostart:        true,
+                    replayTimeout:    5,
+                    maxPlays:         2
                 },
-
-                displayDownloadLink: false
+                displayDownloadLink: false,
+                recordingFormat: 'compressed_lossy',
             };
         },
         /**

@@ -37,25 +37,35 @@ define([
 
         // todo: it would be nice to use a bundled and minified version of the worker.
         // Leaving it as it is for now as the primary use case for uncompressed recording is offline testing.
-        var recorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js',
+        var wavRecorderWorkerPath  = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js',
+            flacRecorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/FlacWorker.js',
+            recorderWorkerPath,
             recorderWorker;
 
         var audioContext,
             audioNodes = {};
 
-        var numChannels = (config.isStereo) ? 2 : 1,
+        // The stereo is supported only for wav as it doesn't work in case of resampled flac audio
+        var numChannels = (config.isStereo && !config.isLossless) ? 2 : 1,
             buffer = [];
 
         /**
          * Load the worker and configure it
          */
         function initWorker() {
+            recorderWorkerPath = config.isLossless ? flacRecorderWorkerPath : wavRecorderWorkerPath;
+
             recorderWorker = new Worker(assetManager.resolve(recorderWorkerPath));
 
             sendToWorker('init', {
                 config: {
                     numChannels: numChannels,
-                    sampleRate: audioContext.sampleRate
+                    audioContextSampleRate: audioContext.sampleRate,
+                    sampleRate: config.sampleRate,
+                    flacBps: config.flacBps,
+                    flacCompressionLevel: config.flacCompressionLevel,
+                    flacVerify: config.flacVerify,
+                    flacBlockSize: config.flacBlockSize,
                 },
                 options: {
                     timeLimit: 0,           // time limit is handled by the provider wrapper
@@ -105,16 +115,18 @@ define([
 
                 recorderWorker.onmessage = function(e) {
                     var data = e.data;
-                    var blob;
+
                     switch (data.command) {
+                        case 'error':
+                            self.trigger('error', [data.errorMessage]);
+                            break;
+
                         case 'partialcomplete':
-                            blob = data.blob;
-                            self.trigger('partialblobavailable', [blob]);
+                            self.trigger('partialblobavailable', [data.blob]);
                             break;
 
                         case 'complete': {
-                            blob = data.blob;
-                            self.trigger('blobavailable', [blob]);
+                            self.trigger('blobavailable', [data.blob]);
                             break;
                         }
                     }
