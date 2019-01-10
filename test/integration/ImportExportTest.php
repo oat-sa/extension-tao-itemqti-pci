@@ -20,15 +20,15 @@
 
 namespace oat\qtiItemPci\test\integration;
 
-require_once dirname(__FILE__) .'/../../../tao/includes/raw_start.php';
+require_once dirname(__FILE__) . '/../../../tao/includes/raw_start.php';
 
+// FIXME
+
+use oat\oatbox\service\ServiceManager;
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
-use oat\taoQtiItem\model\qti\asset\handler\PortableAssetHandler;
 use oat\taoQtiItem\model\qti\ImportService;
-use oat\taoQtiItem\model\qti\Parser;
-use oat\taoQtiItem\model\portableElement\parser\itemParser\PortableElementItemParser;
 use oat\taoQtiItem\model\Export\QTIPackedItemExporter;
 use oat\taoQtiItem\model\QtiItemCompiler;
 use \RecursiveDirectoryIterator;
@@ -36,7 +36,6 @@ use \RecursiveIteratorIterator;
 use \taoItems_models_classes_ItemsService;
 use \tao_models_classes_service_FileStorage;
 use \ZipArchive;
-use oat\taoItems\model\media\LocalItemSource;
 use oat\taoQtiItem\model\ItemModel;
 use common_report_Report as Report;
 use oat\taoQtiItem\model\qti\Service as QtiService;
@@ -79,30 +78,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
      */
     protected function getSamplePath($relPath)
     {
-        return dirname(__FILE__).DIRECTORY_SEPARATOR.str_replace('/',DIRECTORY_SEPARATOR, $relPath);
-    }
-
-    /**
-     * @expectedException oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException
-     */
-    public function testInexistingPciLikert(){
-        // @todo fix unstable test case (each time the result can be different)
-        $this->portableElementService->retrieve('PCI', 'oatSamplePciLikert');
-    }
-
-    /**
-     * @expectedException oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException
-     */
-    public function testInexistingPciAudio(){
-        // @todo fix unstable test case (each time the result can be different)
-        $this->portableElementService->retrieve('PCI', 'oatSamplePciAudio');
-    }
-
-    /**
-     * @expectedException oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException
-     */
-    public function testInexistingPciImsLikert(){
-        $this->portableElementService->retrieve('IMSPCI', 'imsSamplePciLikert');
+        return dirname(__FILE__) . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relPath);
     }
 
     public function testImportOatPci()
@@ -123,6 +99,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             }
         }
         $this->assertEquals(1, count($items));
+
         $item = QtiService::singleton()->getDataItemByRdfItem($items[0], DEFAULT_LANG, false);
 
         $itemData = $item->toArray();
@@ -225,7 +202,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
     {
         $storage = tao_models_classes_service_FileStorage::singleton();
         $compiler = new QtiItemCompiler($item, $storage);
-        $compiler->setServiceLocator($this->getServiceLocator());
+        $compiler->setServiceLocator(ServiceManager::getServiceManager());
         $report = $compiler->compile();
         $this->assertEquals($report->getType(), Report::TYPE_SUCCESS);
         $serviceCall = $report->getData();
@@ -251,22 +228,22 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $itemFolder = $this->getItemFolder($item);
 
         $this->assertEquals([
-            $itemFolder.'/oatSamplePciLikert/runtime/oatSamplePciLikert.min.js',
-            $itemFolder.'/oatSamplePciLikert/runtime/css/base.css',
-            $itemFolder.'/oatSamplePciLikert/runtime/css/oatSamplePciLikert.css',
-            $itemFolder.'/oatSamplePciLikert/runtime/assets/ThumbDown.png',
-            $itemFolder.'/oatSamplePciLikert/runtime/assets/ThumbUp.png',
-            $itemFolder.'/oatSamplePciLikert/runtime/css/img/bg.png',
-            $itemFolder.'/oatSamplePciAudio/runtime/oatSamplePciAudio.js',
-            $itemFolder.'/oatSamplePciAudio/runtime/js/player.js',
-            $itemFolder.'/oatSamplePciAudio/runtime/js/recorder.js',
-            $itemFolder.'/oatSamplePciAudio/runtime/js/uiElements.js',
-            $itemFolder.'/oatSamplePciAudio/runtime/css/oatSamplePciAudio.css',
-            $itemFolder.'/oatSamplePciAudio/runtime/img/controls.svg',
-            $itemFolder.'/oatSamplePciAudio/runtime/img/mic.svg',
-            $itemFolder.'/who02.jpg',
-            $itemFolder.'/style/custom/tao-user-styles.css',
-            $itemFolder.'/qti.xml',
+            $itemFolder . '/oatSamplePciLikert/runtime/oatSamplePciLikert.min.js',
+            $itemFolder . '/oatSamplePciLikert/runtime/css/base.css',
+            $itemFolder . '/oatSamplePciLikert/runtime/css/oatSamplePciLikert.css',
+            $itemFolder . '/oatSamplePciLikert/runtime/assets/ThumbDown.png',
+            $itemFolder . '/oatSamplePciLikert/runtime/assets/ThumbUp.png',
+            $itemFolder . '/oatSamplePciLikert/runtime/css/img/bg.png',
+            $itemFolder . '/oatSamplePciAudio/runtime/oatSamplePciAudio.js',
+            $itemFolder . '/oatSamplePciAudio/runtime/js/player.js',
+            $itemFolder . '/oatSamplePciAudio/runtime/js/recorder.js',
+            $itemFolder . '/oatSamplePciAudio/runtime/js/uiElements.js',
+            $itemFolder . '/oatSamplePciAudio/runtime/css/oatSamplePciAudio.css',
+            $itemFolder . '/oatSamplePciAudio/runtime/img/controls.svg',
+            $itemFolder . '/oatSamplePciAudio/runtime/img/mic.svg',
+            $itemFolder . '/who02.jpg',
+            $itemFolder . '/style/custom/tao-user-styles.css',
+            $itemFolder . '/qti.xml',
             'imsmanifest.xml'
         ], $zipContent['files']);
 
@@ -275,7 +252,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertEquals(16, $manifestDoc->getElementsByTagName('file')->length);
 
         $report = $this->importService->importQTIPACKFile($path, $itemClass);
-        if($report->getType() !== Report::TYPE_SUCCESS){
+        if ($report->getType() !== Report::TYPE_SUCCESS) {
             echo \helpers_Report::renderToCommandLine($report);
         }
         $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
@@ -321,14 +298,14 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             'imsSamplePciLikert/runtime/js/imsSamplePciLikert.js',
             'imsSamplePciLikert/runtime/js/renderer.js',
             'portableLib/jquery_2_1_1.js',
-            $itemFolder.'/imsSamplePciLikert/runtime/assets/ThumbDown.png',
-            $itemFolder.'/imsSamplePciLikert/runtime/assets/ThumbUp.png',
-            $itemFolder.'/imsSamplePciLikert/runtime/css/img/bg.png',
-            $itemFolder.'/style/custom/tao-user-styles.css',
-            $itemFolder.'/imsSamplePciLikert/runtime/css/base.css',
-            $itemFolder.'/imsSamplePciLikert/runtime/css/imsSamplePciLikert.css',
+            $itemFolder . '/imsSamplePciLikert/runtime/assets/ThumbDown.png',
+            $itemFolder . '/imsSamplePciLikert/runtime/assets/ThumbUp.png',
+            $itemFolder . '/imsSamplePciLikert/runtime/css/img/bg.png',
+            $itemFolder . '/style/custom/tao-user-styles.css',
+            $itemFolder . '/imsSamplePciLikert/runtime/css/base.css',
+            $itemFolder . '/imsSamplePciLikert/runtime/css/imsSamplePciLikert.css',
             'oat-pci.json',
-            $itemFolder.'/qti.xml',
+            $itemFolder . '/qti.xml',
             'imsmanifest.xml'
         ], $zipContent['files']);
 
@@ -338,7 +315,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertEquals(11, $manifestDoc->getElementsByTagName('file')->length);
 
         $report = $this->importService->importQTIPACKFile($path, $itemClass);
-        if($report->getType() !== Report::TYPE_SUCCESS){
+        if ($report->getType() !== Report::TYPE_SUCCESS) {
             echo \helpers_Report::renderToCommandLine($report);
         }
         $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
@@ -373,7 +350,8 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         }
     }
 
-    public function testRemovePci(){
+    public function testRemovePci()
+    {
 
         $pciLikert = $this->portableElementService->retrieve('PCI', 'oatSamplePciLikert');
         $this->assertInstanceOf('oat\qtiItemPci\model\portableElement\dataObject\PciDataObject', $pciLikert);
@@ -404,11 +382,12 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         }
     }
 
-    private function createZipFromDir($dir){
+    private function createZipFromDir($dir)
+    {
 
         $rootPath = realpath($dir);
 
-        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR. uniqid('item_') . '.zip';
+        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('item_') . '.zip';
 
         $zip = new ZipArchive();
         $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -418,8 +397,8 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        foreach ($files as $name => $file){
-            if (!$file->isDir()){
+        foreach ($files as $name => $file) {
+            if (!$file->isDir()) {
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
                 $zip->addFile($filePath, $relativePath);
@@ -427,7 +406,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         }
 
         $zip->close();
-        $this->assertTrue(file_exists($path), 'could not find create zip from dir ' . $dir . ' to '.$path);
+        $this->assertTrue(file_exists($path), 'could not find create zip from dir ' . $dir . ' to ' . $path);
 
         $this->exportedZips[] = $path;
 
@@ -442,7 +421,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
      */
     private function exportItemZip($item, $manifest = null)
     {
-        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR. uniqid('test_') . '.zip';
+        $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('test_') . '.zip';
         $zipArchive = new ZipArchive();
         if ($zipArchive->open($path, ZipArchive::CREATE) !== true) {
             throw new \common_Exception('Unable to create archive at ' . $path);
@@ -461,24 +440,26 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertEquals(ZipArchive::ER_OK, $zipArchive->status, $zipArchive->getStatusString());
 
         $zipArchive->close();
-        $this->assertTrue(file_exists($path),'could not find path ' . $path);
+        $this->assertTrue(file_exists($path), 'could not find path ' . $path);
         $this->exportedZips[] = $path;
 
         return array($path, $manifest);
     }
 
-    private function getItemFolder($item){
+    private function getItemFolder($item)
+    {
         return \tao_helpers_Uri::getUniqueId($item->getUri());
     }
 
-    private function readZipArchive($source, \core_kernel_classes_Resource $item){
+    private function readZipArchive($source, \core_kernel_classes_Resource $item)
+    {
 
         $manifestFile = 'imsmanifest.xml';
         $this->assertTrue(file_exists($source), 'could not find path ' . $source);
         $zip = new ZipArchive();
         $this->assertNotFalse($zip->open($source), 'cannot open item zip package');
 
-        $qtiXml = $this->getItemFolder($item).'/qti.xml';
+        $qtiXml = $this->getItemFolder($item) . '/qti.xml';
         $this->assertNotFalse($zip->locateName($qtiXml), 'cannot find qti xml');
         $this->assertNotFalse($zip->locateName($manifestFile), 'cannot find manifest xml');
 
@@ -495,8 +476,8 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             $files[] = $zip->getNameIndex($i);
         }
 
-        if($zip->locateName('oat-pci.json')){
-            \common_Logger::d('portable element manifest: '.$zip->getFromName('oat-pci.json'));
+        if ($zip->locateName('oat-pci.json')) {
+            \common_Logger::d('portable element manifest: ' . $zip->getFromName('oat-pci.json'));
         }
 
         return [
@@ -505,7 +486,6 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             'manifest' => $manifest
         ];
     }
-
 
 
 }
