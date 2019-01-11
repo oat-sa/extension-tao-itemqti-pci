@@ -21,9 +21,11 @@
             "./runtime/js/renderer.js"
         ],
         "stylesheets" : [
-            "./runtime/css/likertScaleInteraction.css"
+            "./runtime/css/likertScaleInteraction.css",
+            "./runtime/css/base.css"
         ]
     },
+    "enabled": true,
     "creator" : {
         "icon": "./creator/img/icon.svg",
         "hook": "./pciCreator.js",
