@@ -21,6 +21,8 @@
 
 namespace oat\qtiItemPci\test\integration;
 
+require_once dirname(__FILE__) . '/../../../tao/includes/raw_start.php';
+
 use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;

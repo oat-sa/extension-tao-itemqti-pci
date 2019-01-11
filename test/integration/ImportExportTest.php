@@ -20,6 +20,8 @@
 
 namespace oat\qtiItemPci\test\integration;
 
+require_once dirname(__FILE__) . '/../../../tao/includes/raw_start.php';
+
 use oat\oatbox\service\ServiceManager;
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
