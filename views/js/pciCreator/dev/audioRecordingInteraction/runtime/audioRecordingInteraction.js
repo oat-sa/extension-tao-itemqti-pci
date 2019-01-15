@@ -290,15 +290,9 @@ define([
         startRecording: function startRecording() {
             var self = this;
 
-            if (this.recorder.is('created')) {
-                this.recorder.init().then(function() {
-                    startForReal();
-                });
-                // We don't catch anything here as this is not a reliable way to determine if the user has accepted or not.
-                // Clicking outside the auth request dialog closes the dialog but doesn't reject the Promise...
-            } else {
+            this.recorder.init().then(function() {
                 startForReal();
-            }
+            });
 
             function startForReal() {
                 self.resetRecording();
@@ -326,6 +320,22 @@ define([
         stopPlayback: function stopPlayback() {
             this.player.stop();
             this.updateControls();
+        },
+
+        /**
+         * Set recording data
+         * @param {Object} data
+         */
+        setRecording: function setRecording(data) {
+            this._recording = data;
+        },
+
+        /**
+         * Get recording data
+         * @returns {Object|null} _recording
+         */
+        getRecording: function getRecording() {
+            return this._recording;
         },
 
         /**
@@ -385,7 +395,7 @@ define([
          * @param {String} recording.data - base64 encoded file
          */
         updateResponse: function updateResponse(recording) {
-            this._recording = recording;
+            this.setRecording(recording);
             if (typeof this.trigger === 'function') {
                 this.trigger('responseChange'); // this has to be camelcase
             }
@@ -463,6 +473,7 @@ define([
                         self.hasMediaStimulus() && self.mediaStimulusHasPlayed()
                         || ! self.hasMediaStimulus()
                     )
+                    && !self.getRecording()
                 ) {
                     this.enable();
                 } else {
@@ -512,7 +523,7 @@ define([
                     }
                 }.bind(play));
                 play.on('updatestate', function() {
-                    if (self.player.is('idle')) {
+                    if (self.player.is('idle') || self.getRecording()) {
                         this.enable();
                     } else {
                         this.disable();
@@ -647,8 +658,8 @@ define([
         getResponse: function getResponse() {
             var response;
 
-            if (this._recording) {
-                response = { file: this._recording };
+            if (this.getRecording()) {
+                response = { file: this.getRecording() };
             }
             return {
                 base: response

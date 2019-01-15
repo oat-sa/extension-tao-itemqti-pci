@@ -80,12 +80,36 @@ define([
          * The provider
          */
         webAudioProvider = {
+
+            /**
+             * Create the Audio context
+             * @returns {AudioContext}
+             */
+            createAudioContext: function createAudioContext() {
+                var context = window.audioContext;
+
+                if (context) {
+                    audioContext = context;
+                } else {
+                    var AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioContext = new AudioContext();
+                }
+
+                if (audioContext && (audioContext.state !== 'running')) {
+                    audioContext.resume();
+                }
+
+                window.audioContext = audioContext;
+
+                return audioContext;
+            },
+
             /**
              * Expose the Audio context so consumers can use it instead of creating a new one
              * @returns {AudioContext}
              */
             getAudioContext: function getAudioContext() {
-                return audioContext;
+                return audioContext || window.audioContext;
             },
 
             /**
@@ -95,9 +119,9 @@ define([
             init: function init(stream) {
                 var self = this;
 
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                audioNodes.source = audioContext.createMediaStreamSource(stream);
-                audioNodes.inputGain = audioContext.createGain();
+                this.createAudioContext();
+                audioNodes.source = this.getAudioContext().createMediaStreamSource(stream);
+                audioNodes.inputGain = this.getAudioContext().createGain();
 
                 audioNodes.source.connect(audioNodes.inputGain);
 

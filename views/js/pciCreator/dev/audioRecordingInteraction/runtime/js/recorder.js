@@ -103,7 +103,8 @@ define([
             durationMs,             // duration of the recording
             timerId;                // a place to store the requestAnimationFrame return value
 
-        var analyser,               // the WebAudio node use to read the input level
+        var audioContext,
+            analyser,               // the WebAudio node use to read the input level
             frequencyArray;         // used to compute the input level from the current array of frequencies
 
         /**
@@ -111,17 +112,9 @@ define([
          * @param {MediaStream} stream - incoming audio stream from the microphone
          */
         function initAnalyser(stream) {
-            var audioContext,
-                source,
+            var source,
                 bufferLength;
 
-            // Try to re-use the provider's audioContext, if it has one
-            if (_.isFunction(provider.getAudioContext)) {
-                audioContext = provider.getAudioContext();
-            }
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
             source = audioContext.createMediaStreamSource(stream);
 
             analyser = audioContext.createAnalyser();
@@ -181,11 +174,24 @@ define([
             init: function init() {
                 var self = this;
 
+                provider = (config.isCompressed)
+                    ? mediaRecorderProvider(config)
+                    : webAudioProvider(config, assetManager);
+
+                // Try to re-use the provider's audioContext, if it has one
+                if (_.isFunction(provider.getAudioContext)) {
+                    audioContext = provider.getAudioContext();
+                }
+
+                if (!audioContext && _.isFunction(provider.createAudioContext)) {
+                    audioContext = provider.createAudioContext();
+                }
+
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
-                        provider = (config.isCompressed)
-                            ? mediaRecorderProvider(config)
-                            : webAudioProvider(config, assetManager);
+                        if (audioContext && (audioContext.state !== 'running')) {
+                            audioContext.resume();
+                        }
 
                         provider.init(stream);
 
@@ -200,8 +206,12 @@ define([
                         initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);
+                    })
+                    .catch(function(err) {
+                        alert(err);
                     });
             },
+
             /**
              * Start the recording
              */

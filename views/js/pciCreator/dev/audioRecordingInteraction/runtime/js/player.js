@@ -180,6 +180,7 @@ define([
             stop: function stop() {
                 audioEl.pause();
                 audioEl.currentTime = 0;
+                setState(player, playerStates.IDLE);
                 // state change is triggered by the oncanplay listener
             },
 
