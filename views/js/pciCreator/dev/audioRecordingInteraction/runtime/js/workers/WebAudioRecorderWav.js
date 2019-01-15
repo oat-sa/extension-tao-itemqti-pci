@@ -47,7 +47,7 @@ function init(data) {
     numChannels = data.config.numChannels;
     options = data.options;
     updateResponsePartially = data.config.updateResponsePartially;
-};
+}
 
 function setOptions(opt) {
     if (encoder || recBuffers)

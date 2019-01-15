@@ -46,6 +46,8 @@ define([
         var numChannels = (config.isStereo) ? 2 : 1,
             buffer = [];
 
+        var updateResponsePartially = config.updateResponsePartially;
+
         /**
          * Load the worker and configure it
          */
@@ -55,7 +57,8 @@ define([
             sendToWorker('init', {
                 config: {
                     numChannels: numChannels,
-                    sampleRate: audioContext.sampleRate
+                    sampleRate: audioContext.sampleRate,
+                    updateResponsePartially: updateResponsePartially,
                 },
                 options: {
                     timeLimit: 0,           // time limit is handled by the provider wrapper
