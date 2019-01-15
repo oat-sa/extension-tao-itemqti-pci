@@ -51,23 +51,24 @@ define([
          */
         getDefaultProperties : function getDefaultProperties(){
             return {
-                allowPlayback:      true,
-                autoStart:          false,
-                maxRecords:         2,
-                maxRecordingTime:   120,
+                allowPlayback:           true,
+                autoStart:               false,
+                maxRecords:              2,
+                maxRecordingTime:        120,
 
-                isCompressed:       true,
-                audioBitrate:       20000,
-                isStereo:           false,
+                isCompressed:            true,
+                audioBitrate:            20000,
+                isStereo:                false,
 
-                useMediaStimulus:   false,
+                useMediaStimulus:        false,
                 media: {
-                    autostart:      true,
-                    replayTimeout:  5,
-                    maxPlays:       2
+                    autostart:           true,
+                    replayTimeout:       5,
+                    maxPlays:            2
                 },
 
-                displayDownloadLink: false
+                displayDownloadLink:     false,
+                updateResponsePartially: false,
             };
         },
         /**

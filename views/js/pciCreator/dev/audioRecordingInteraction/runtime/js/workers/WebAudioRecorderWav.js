@@ -35,7 +35,8 @@ var sampleRate = 44100,
     maxBuffers = undefined,
     encoder = undefined,
     recBuffers = undefined,
-    bufferCount = 0;
+    bufferCount = 0,
+    updateResponsePartially;
 
 function error(message) {
     self.postMessage({ command: "error", message: "wav: " + message });
@@ -45,7 +46,8 @@ function init(data) {
     sampleRate = data.config.sampleRate;
     numChannels = data.config.numChannels;
     options = data.options;
-};
+    updateResponsePartially = data.config.updateResponsePartially;
+}
 
 function setOptions(opt) {
     if (encoder || recBuffers)
@@ -67,10 +69,12 @@ function record(buffer) {
         if (encoder) {
             encoder.encode(buffer);
 
-            self.postMessage({
-                command: "partialcomplete",
-                blob: encoder.partialFinish(options.wav.mimeType),
-            });
+            if (updateResponsePartially) {
+                self.postMessage({
+                    command: "partialcomplete",
+                    blob: encoder.partialFinish(options.wav.mimeType),
+                });
+            }
 
         } else {
             recBuffers.push(buffer);

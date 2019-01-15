@@ -81,8 +81,10 @@ define([
 
                     chunks.push(e.data);
 
-                    blob = new Blob(chunks, {type: mimeType});
-                    self.trigger('partialblobavailable', [blob]);
+                    if (config.updateResponsePartially) {
+                        blob = new Blob(chunks, {type: mimeType});
+                        self.trigger('partialblobavailable', [blob]);
+                    }
                 };
 
                 // stop record callback
