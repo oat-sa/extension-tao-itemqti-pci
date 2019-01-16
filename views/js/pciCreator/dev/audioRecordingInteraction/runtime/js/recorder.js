@@ -178,14 +178,7 @@ define([
                     ? mediaRecorderProvider(config)
                     : webAudioProvider(config, assetManager);
 
-                // Try to re-use the provider's audioContext, if it has one
-                if (_.isFunction(provider.getAudioContext)) {
-                    audioContext = provider.getAudioContext();
-                }
-
-                if (!audioContext && _.isFunction(provider.createAudioContext)) {
-                    audioContext = provider.createAudioContext();
-                }
+                this.initAudioContext();
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
@@ -210,6 +203,29 @@ define([
                     .catch(function(err) {
                         alert(err);
                     });
+            },
+
+            /**
+             * Create the Audio context
+             * @returns {AudioContext}
+             */
+            initAudioContext: function initAudioContext() {
+                var context = window.audioContext;
+
+                if (context) {
+                    audioContext = context;
+                } else {
+                    var AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioContext = new AudioContext();
+                }
+
+                if (audioContext && (audioContext.state !== 'running')) {
+                    audioContext.resume();
+                }
+
+                window.audioContext = audioContext;
+
+                return audioContext;
             },
 
             /**

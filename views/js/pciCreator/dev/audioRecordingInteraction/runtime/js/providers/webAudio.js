@@ -57,7 +57,7 @@ define([
             sendToWorker('init', {
                 config: {
                     numChannels: numChannels,
-                    sampleRate: audioContext.sampleRate,
+                    sampleRate: window.audioContext.sampleRate,
                     updateResponsePartially: updateResponsePartially,
                 },
                 options: {
@@ -85,29 +85,6 @@ define([
         webAudioProvider = {
 
             /**
-             * Create the Audio context
-             * @returns {AudioContext}
-             */
-            createAudioContext: function createAudioContext() {
-                var context = window.audioContext;
-
-                if (context) {
-                    audioContext = context;
-                } else {
-                    var AudioContext = window.AudioContext || window.webkitAudioContext;
-                    audioContext = new AudioContext();
-                }
-
-                if (audioContext && (audioContext.state !== 'running')) {
-                    audioContext.resume();
-                }
-
-                window.audioContext = audioContext;
-
-                return audioContext;
-            },
-
-            /**
              * Expose the Audio context so consumers can use it instead of creating a new one
              * @returns {AudioContext}
              */
@@ -122,7 +99,6 @@ define([
             init: function init(stream) {
                 var self = this;
 
-                this.createAudioContext();
                 audioNodes.source = this.getAudioContext().createMediaStreamSource(stream);
                 audioNodes.inputGain = this.getAudioContext().createGain();
 
@@ -153,7 +129,7 @@ define([
              * We then forward the buffer data to the Worker for actual processing.
              */
             start: function start() {
-                audioNodes.processor = audioContext.createScriptProcessor(0, numChannels, numChannels);
+                audioNodes.processor = this.getAudioContext().createScriptProcessor(0, numChannels, numChannels);
                 audioNodes.processor.onaudioprocess = function(e) {
                     var ch;
                     for (ch = 0; ch < numChannels; ++ch) {
@@ -163,7 +139,7 @@ define([
                 };
                 audioNodes.inputGain.connect(audioNodes.processor);
                 // the scriptProcessor node does not work under Chrome without the following connexion:
-                audioNodes.processor.connect(audioContext.destination);
+                audioNodes.processor.connect(this.getAudioContext().destination);
 
                 sendToWorker('start', { bufferSize: audioNodes.processor.bufferSize });
             },
