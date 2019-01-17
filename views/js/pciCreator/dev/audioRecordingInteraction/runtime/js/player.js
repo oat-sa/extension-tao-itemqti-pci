@@ -152,6 +152,8 @@ define([
                         audioEl.onloadedmetadata = null;
                     }
                 };
+
+                setState(player, playerStates.IDLE);
             },
 
             /**
