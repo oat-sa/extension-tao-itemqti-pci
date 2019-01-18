@@ -294,7 +294,10 @@ define([
 
             this.recorder.init().then(function() {
                 startForReal();
-            });
+            })
+                .catch(function(err) {
+                    console.log(err);
+                });
 
             function startForReal() {
                 self.resetRecording();

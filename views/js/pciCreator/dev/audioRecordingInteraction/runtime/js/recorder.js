@@ -182,10 +182,6 @@ define([
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
-                        if (audioContext && (audioContext.state !== 'running')) {
-                            audioContext.resume();
-                        }
-
                         provider.init(stream);
 
                         provider.on('blobavailable', function(blob) {
@@ -199,9 +195,6 @@ define([
                         initAnalyser(stream);
 
                         setState(recorder, recorderStates.IDLE);
-                    })
-                    .catch(function(err) {
-                        alert(err);
                     });
             },
 
@@ -215,12 +208,7 @@ define([
                 if (context) {
                     audioContext = context;
                 } else {
-                    var AudioContext = window.AudioContext || window.webkitAudioContext;
-                    audioContext = new AudioContext();
-                }
-
-                if (audioContext && (audioContext.state !== 'running')) {
-                    audioContext.resume();
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 }
 
                 window.audioContext = audioContext;

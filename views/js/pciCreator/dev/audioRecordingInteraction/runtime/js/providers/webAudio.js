@@ -40,8 +40,7 @@ define([
         var recorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js',
             recorderWorker;
 
-        var audioContext,
-            audioNodes = {};
+        var audioNodes = {};
 
         var numChannels = (config.isStereo) ? 2 : 1,
             buffer = [];
@@ -57,7 +56,7 @@ define([
             sendToWorker('init', {
                 config: {
                     numChannels: numChannels,
-                    sampleRate: window.audioContext.sampleRate,
+                    sampleRate: getAudioContext().sampleRate,
                     updateResponsePartially: updateResponsePartially,
                 },
                 options: {
@@ -80,17 +79,17 @@ define([
         }
 
         /**
+         * Expose the Audio context so consumers can use it instead of creating a new one
+         * @returns {AudioContext}
+         */
+        function getAudioContext() {
+            return window.audioContext;
+        }
+
+        /**
          * The provider
          */
         webAudioProvider = {
-
-            /**
-             * Expose the Audio context so consumers can use it instead of creating a new one
-             * @returns {AudioContext}
-             */
-            getAudioContext: function getAudioContext() {
-                return audioContext || window.audioContext;
-            },
 
             /**
              * Create the base audio nodes and add listeners for worker commands
@@ -99,8 +98,8 @@ define([
             init: function init(stream) {
                 var self = this;
 
-                audioNodes.source = this.getAudioContext().createMediaStreamSource(stream);
-                audioNodes.inputGain = this.getAudioContext().createGain();
+                audioNodes.source = getAudioContext().createMediaStreamSource(stream);
+                audioNodes.inputGain = getAudioContext().createGain();
 
                 audioNodes.source.connect(audioNodes.inputGain);
 
@@ -129,7 +128,7 @@ define([
              * We then forward the buffer data to the Worker for actual processing.
              */
             start: function start() {
-                audioNodes.processor = this.getAudioContext().createScriptProcessor(0, numChannels, numChannels);
+                audioNodes.processor = getAudioContext().createScriptProcessor(0, numChannels, numChannels);
                 audioNodes.processor.onaudioprocess = function(e) {
                     var ch;
                     for (ch = 0; ch < numChannels; ++ch) {
@@ -139,7 +138,7 @@ define([
                 };
                 audioNodes.inputGain.connect(audioNodes.processor);
                 // the scriptProcessor node does not work under Chrome without the following connexion:
-                audioNodes.processor.connect(this.getAudioContext().destination);
+                audioNodes.processor.connect(getAudioContext().destination);
 
                 sendToWorker('start', { bufferSize: audioNodes.processor.bufferSize });
             },
@@ -176,8 +175,8 @@ define([
                 recorderWorker.terminate();
                 recorderWorker = null;
 
-                if (audioContext) {
-                    return audioContext.close().then(function() {
+                if (getAudioContext()) {
+                    return getAudioContext().close().then(function() {
                         audioNodes = {};
                     });
                 }
