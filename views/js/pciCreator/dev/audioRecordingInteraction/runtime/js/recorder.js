@@ -103,7 +103,8 @@ define([
             durationMs,             // duration of the recording
             timerId;                // a place to store the requestAnimationFrame return value
 
-        var analyser,               // the WebAudio node use to read the input level
+        var audioContext,
+            analyser,               // the WebAudio node use to read the input level
             frequencyArray;         // used to compute the input level from the current array of frequencies
 
         /**
@@ -111,17 +112,9 @@ define([
          * @param {MediaStream} stream - incoming audio stream from the microphone
          */
         function initAnalyser(stream) {
-            var audioContext,
-                source,
+            var source,
                 bufferLength;
 
-            // Try to re-use the provider's audioContext, if it has one
-            if (_.isFunction(provider.getAudioContext)) {
-                audioContext = provider.getAudioContext();
-            }
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
             source = audioContext.createMediaStreamSource(stream);
 
             analyser = audioContext.createAnalyser();
@@ -181,12 +174,14 @@ define([
             init: function init() {
                 var self = this;
 
+                provider = (config.isCompressed)
+                    ? mediaRecorderProvider(config)
+                    : webAudioProvider(config, assetManager);
+
+                this.initAudioContext();
+
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
-                        provider = (config.isCompressed)
-                            ? mediaRecorderProvider(config)
-                            : webAudioProvider(config, assetManager);
-
                         provider.init(stream);
 
                         provider.on('blobavailable', function(blob) {
@@ -202,6 +197,25 @@ define([
                         setState(recorder, recorderStates.IDLE);
                     });
             },
+
+            /**
+             * Create the Audio context
+             * @returns {AudioContext}
+             */
+            initAudioContext: function initAudioContext() {
+                var context = window.audioContext;
+
+                if (context) {
+                    audioContext = context;
+                } else {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                window.audioContext = audioContext;
+
+                return audioContext;
+            },
+
             /**
              * Start the recording
              */
