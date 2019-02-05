@@ -294,10 +294,7 @@ define([
 
             this.recorder.init().then(function() {
                 startForReal();
-            })
-                .catch(function(err) {
-                    console.log(err);
-                });
+            });
 
             function startForReal() {
                 self.resetRecording();
@@ -632,7 +629,11 @@ define([
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
 
-            if (this.config.autoStart === true && this.config.useMediaStimulus === false) {
+            // prevent auto start recording in preview
+            if (this.config.autoStart === true &&
+                this.config.useMediaStimulus === false &&
+                this.$container.parents('.tao-preview-scope').length === 0
+            ) {
                 self.startRecording();
             }
         },
