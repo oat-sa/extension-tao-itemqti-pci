@@ -294,6 +294,9 @@ define([
 
             this.recorder.init().then(function() {
                 startForReal();
+            })
+            .catch(function(err) {
+                console.error(err);
             });
 
             function startForReal() {
