@@ -44,6 +44,11 @@ return array(
         array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
         array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
         array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'unregister')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'enable')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'disable')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'export')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'import')),
     ),
     'install' => array(
         'rdf' => array(
@@ -62,8 +67,7 @@ return array(
             RegisterPciAudioRecording::class,
         )
     ),
-    'uninstall' => array(
-    ),
+    'uninstall' => array(),
     'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
     'routes' => array(
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
