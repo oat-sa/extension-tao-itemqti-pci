@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\controller;
 
+use oat\qtiItemPci\model\ItemsScannerService;
 use oat\qtiItemPci\model\PciModel;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
@@ -30,9 +31,30 @@ use oat\taoQtiItem\model\portableElement\exception\PortableElementVersionIncompa
 use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
+use oat\taoQtiItem\model\qti\Service as QtiService;
+
 
 class PciManager extends \tao_actions_CommonModule
 {
+    /**
+     * @var ItemsScannerService|null
+     */
+    private $itemsScannerService;
+
+    /**
+     * PciManager constructor.
+     * @param ItemsScannerService|null $itemsScannerService
+     */
+    public function __construct(ItemsScannerService $itemsScannerService = null)
+    {
+        parent::__construct();
+        if (!$itemsScannerService) {
+            $this->itemsScannerService = new ItemsScannerService(QtiService::singleton());
+        } else {
+            $this->itemsScannerService = $itemsScannerService;
+        }
+    }
+
     /**
      * @var PortableElementRegistry
      */
@@ -86,7 +108,7 @@ class PciManager extends \tao_actions_CommonModule
      * Return the list of registered PCI php subclasses
      * @return array
      */
-    private function getPciModels()
+    protected function getPciModels()
     {
         $pciModels = [];
         foreach (PortableModelRegistry::getRegistry()->getModels() as $model) {
@@ -99,10 +121,10 @@ class PciManager extends \tao_actions_CommonModule
 
     /**
      * Service to check if the uploaded file archive is a valid and non-existing one
-     * 
+     *
      * JSON structure:
      * {
-     *     "valid" : true/false (if is a valid package) 
+     *     "valid" : true/false (if is a valid package)
      *     "exists" : true/false (if the package is valid, check if the typeIdentifier is already used in the registry)
      * }
      *
@@ -257,15 +279,20 @@ class PciManager extends \tao_actions_CommonModule
     }
 
 
-
     /**
      * @throws PortableElementException
      * @throws PortableElementVersionIncompatibilityException
+     * @throws \common_Exception
+     * @throws \common_exception_Error
      */
     public function unregister()
     {
-        $portableElementService = new PortableElementService();
         $pci = $this->getRequestPciDataObject();
+        $this->itemsScannerService->isPciUsedInItems(
+            $this->getRequestParameter('typeIdentifier'),
+            \taoTests_models_classes_TestsService::singleton()->getAllItems()
+        );
+        $portableElementService = new PortableElementService();
         $portableElementService->unregisterModel($pci);
     }
 
@@ -290,5 +317,4 @@ class PciManager extends \tao_actions_CommonModule
             'interactionHook' => $this->getMinifiedModel($pci)
         ]);
     }
-
 }
