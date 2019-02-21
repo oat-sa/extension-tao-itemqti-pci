@@ -15,101 +15,104 @@
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA ;
  */
-define([
-    'jquery',
-    'lodash',
-    'qtiItemPci/pciManager/pciManager',
-    'css!qtiItemPciCss/pci-manager'
-], function($, _, pciManager){
-    'use strict';
+define( [
+    
+    "jquery",
+    "lodash",
+    "qtiItemPci/pciManager/pciManager",
+    "css!qtiItemPciCss/pci-manager"
+], function(  $, _, pciManager ) {
+    "use strict";
 
     var pluginApi = [
-        { name : 'init', title : 'init' },
-        { name : 'render', title : 'render' },
-        { name : 'destroy', title : 'destroy' },
-        { name : 'on', title : 'on' },
-        { name : 'off', title : 'off' },
-        { name : 'trigger', title : 'trigger' },
-        { name : 'open', title : 'open' }
+        { name: "init", title: "init" },
+        { name: "render", title: "render" },
+        { name: "destroy", title: "destroy" },
+        { name: "on", title: "on" },
+        { name: "off", title: "off" },
+        { name: "trigger", title: "trigger" },
+        { name: "open", title: "open" }
     ];
 
-    QUnit.module('API');
+    QUnit.module( "API" );
 
-    QUnit.test('factory', function(assert) {
-        QUnit.expect(3);
-        assert.equal(typeof pciManager, 'function', "The module exposes a function");
-        assert.equal(typeof pciManager(), 'object', 'The factory creates an object');
-        assert.notDeepEqual(pciManager(), pciManager(), 'The factory creates new objects');
-    });
+    QUnit.test( "factory", function( assert ) {
+        assert.expect( 3 );
+        assert.equal( typeof pciManager, "function", "The module exposes a function" );
+        assert.equal( typeof pciManager(), "object", "The factory creates an object" );
+        assert.notDeepEqual( pciManager(), pciManager(), "The factory creates new objects" );
+    } );
 
     QUnit
-        .cases(pluginApi)
-        .test('component method ', function(data, assert) {
+        .cases.init( pluginApi )
+        .test( "component method ", function( data, assert ) {
             var pciMgr;
-            QUnit.expect(1);
+            assert.expect( 1 );
             pciMgr = pciManager();
-            assert.equal(typeof pciMgr[data.name], 'function', 'The component exposes a "' + data.name + '" function');
-        });
+            assert.equal( typeof pciMgr[ data.name ], "function", 'The component exposes a "' + data.name + '" function' );
+        } );
 
-    QUnit.module('Behavior');
+    QUnit.module( "Behavior" );
 
-    QUnit.asyncTest('listing', function(assert){
-        var $fixture = $('#qunit-fixture');
-        pciManager({
-            renderTo : $fixture,
-            loadUrl : '/qtiItemPci/views/js/test/pciManager/data/pciList.json',
-            disableUrl : '/qtiItemPci/views/js/test/pciManager/data/pciLiquidDisabled.json',
-            enableUrl : '/qtiItemPci/views/js/test/pciManager/data/pciLiquidEnabled.json',
-        }).on('loaded', function(){
+    QUnit.test( "listing", function( assert ) {
+        var ready = assert.async();
+        var $fixture = $( "#qunit-fixture" );
+        pciManager( {
+            renderTo: $fixture,
+            loadUrl: "/qtiItemPci/views/js/test/pciManager/data/pciList.json",
+            disableUrl: "/qtiItemPci/views/js/test/pciManager/data/pciLiquidDisabled.json",
+            enableUrl: "/qtiItemPci/views/js/test/pciManager/data/pciLiquidEnabled.json"
+        } ).on( "loaded", function() {
 
-            assert.equal($fixture.children('.pcimgr').length, 1, 'pcimanager main container found');
-            assert.equal($fixture.find('.pcimgr .files').length, 1, 'pcimanager file list found');
-            assert.equal($fixture.find('.pcimgr .files .pci-list-element').length, 11, 'pci list elements all there');
+            assert.equal( $fixture.children( ".pcimgr" ).length, 1, "pcimanager main container found" );
+            assert.equal( $fixture.find( ".pcimgr .files" ).length, 1, "pcimanager file list found" );
+            assert.equal( $fixture.find( ".pcimgr .files .pci-list-element" ).length, 11, "pci list elements all there" );
 
-            assert.equal($fixture.find('.pcimgr .files .pci-list-element.pci-disabled').length, 7, '7 pcis are initially disabled');
-            assert.equal($fixture.find('.pcimgr .files .pci-list-element:not(.pci-disabled)').length, 4, '4 pcis are initially enabled');
+            assert.equal( $fixture.find( ".pcimgr .files .pci-list-element.pci-disabled" ).length, 7, "7 pcis are initially disabled" );
+            assert.equal( $fixture.find( ".pcimgr .files .pci-list-element:not(.pci-disabled)" ).length, 4, "4 pcis are initially enabled" );
 
-            assert.ok($fixture.find('.pcimgr a.upload').is(':visible'), 'add button is visible');
-            assert.ok(!$fixture.find('.pcimgr a.listing').is(':visible'), 'add button is hidden');
-            assert.ok($fixture.find('.pcimgr .files').is(':visible'), 'listing panel visible');
-            assert.ok(!$fixture.find('.pcimgr .file-upload-container').is(':visible'), 'upload panel hidden');
+            assert.ok( $fixture.find( ".pcimgr a.upload" ).is( ":visible" ), "add button is visible" );
+            assert.ok( !$fixture.find( ".pcimgr a.listing" ).is( ":visible" ), "add button is hidden" );
+            assert.ok( $fixture.find( ".pcimgr .files" ).is( ":visible" ), "listing panel visible" );
+            assert.ok( !$fixture.find( ".pcimgr .file-upload-container" ).is( ":visible" ), "upload panel hidden" );
 
-            $fixture.find('.pcimgr a.upload').click();
+            $fixture.find( ".pcimgr a.upload" ).click();
 
-        }).on('hideListing', function(){
+        } ).on( "hideListing", function() {
 
-            assert.ok(!$fixture.find('.pcimgr a.upload').is(':visible'), 'add button is hidden');
-            assert.ok($fixture.find('.pcimgr a.listing').is(':visible'), 'add button is visible');
-            assert.ok(!$fixture.find('.pcimgr .files').is(':visible'), 'listing panel is hidden');
-            assert.ok($fixture.find('.pcimgr .file-upload-container').is(':visible'), 'upload panel is visible');
+            assert.ok( !$fixture.find( ".pcimgr a.upload" ).is( ":visible" ), "add button is hidden" );
+            assert.ok( $fixture.find( ".pcimgr a.listing" ).is( ":visible" ), "add button is visible" );
+            assert.ok( !$fixture.find( ".pcimgr .files" ).is( ":visible" ), "listing panel is hidden" );
+            assert.ok( $fixture.find( ".pcimgr .file-upload-container" ).is( ":visible" ), "upload panel is visible" );
 
-            $fixture.find('.pcimgr a.listing').click();
+            $fixture.find( ".pcimgr a.listing" ).click();
 
-        }).on('showListing', function(){
+        } ).on( "showListing", function() {
 
-            assert.ok($fixture.find('.pcimgr a.upload').is(':visible'), 'add button is visible');
-            assert.ok(!$fixture.find('.pcimgr a.listing').is(':visible'), 'add button is hidden');
-            assert.ok($fixture.find('.pcimgr .files').is(':visible'), 'listing panel visible');
-            assert.ok(!$fixture.find('.pcimgr .file-upload-container').is(':visible'), 'upload panel hidden');
+            assert.ok( $fixture.find( ".pcimgr a.upload" ).is( ":visible" ), "add button is visible" );
+            assert.ok( !$fixture.find( ".pcimgr a.listing" ).is( ":visible" ), "add button is hidden" );
+            assert.ok( $fixture.find( ".pcimgr .files" ).is( ":visible" ), "listing panel visible" );
+            assert.ok( !$fixture.find( ".pcimgr .file-upload-container" ).is( ":visible" ), "upload panel hidden" );
 
-            QUnit.start();
+            ready();
 
-        });
-    });
+        } );
+    } );
 
-    QUnit.module('visual');
+    QUnit.module( "visual" );
 
-    QUnit.asyncTest('render and play', function(assert){
-        var $fixture = $('#qunit-fixture-external');
-        pciManager({
-            renderTo : $fixture,
-            loadUrl : '/qtiItemPci/views/js/test/pciManager/data/pciList.json',
-            disableUrl : '/qtiItemPci/views/js/test/pciManager/data/pciLiquidDisabled.json',
-            enableUrl : '/qtiItemPci/views/js/test/pciManager/data/pciLiquidEnabled.json',
-        }).on('loaded', function(){
-            assert.ok(true, 'rendered');
+    QUnit.test( "render and play", function( assert ) {
+        var ready = assert.async();
+        var $fixture = $( "#qunit-fixture-external" );
+        pciManager( {
+            renderTo: $fixture,
+            loadUrl: "/qtiItemPci/views/js/test/pciManager/data/pciList.json",
+            disableUrl: "/qtiItemPci/views/js/test/pciManager/data/pciLiquidDisabled.json",
+            enableUrl: "/qtiItemPci/views/js/test/pciManager/data/pciLiquidEnabled.json"
+        } ).on( "loaded", function() {
+            assert.ok( true, "rendered" );
             this.open();
-            QUnit.start();
-        });
-    });
-});
+            ready();
+        } );
+    } );
+} );
