@@ -71,15 +71,28 @@ class ItemsScannerServiceTest extends GenerisTestCase
 
 class ItemsScannerServiceForTest extends ItemsScannerService
 {
+    /**
+     * @var \core_kernel_classes_Resource
+     */
     private $itemResourceMock;
 
+    /**
+     * ItemsScannerServiceForTest constructor.
+     * @param QtiService $qtiServiceSingleton
+     * @param null $itemResourceMock
+     */
     public function __construct(QtiService $qtiServiceSingleton, $itemResourceMock = null)
     {
-
         parent::__construct($qtiServiceSingleton);
         $this->itemResourceMock = $itemResourceMock;
     }
 
+    /**
+     * Replace method in origin class with mock resource
+     *
+     * @param $key
+     * @return \core_kernel_classes_Resource|null
+     */
     protected function getItemResource($key)
     {
         return $this->itemResourceMock;

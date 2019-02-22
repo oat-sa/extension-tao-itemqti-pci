@@ -33,7 +33,11 @@ use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use oat\taoQtiItem\model\qti\Service as QtiService;
 
-
+/**
+ * Actions for pci portable custom elements management
+ * Class PciManager
+ * @package oat\qtiItemPci\controller
+ */
 class PciManager extends \tao_actions_CommonModule
 {
     /**
@@ -48,7 +52,7 @@ class PciManager extends \tao_actions_CommonModule
     public function __construct(ItemsScannerService $itemsScannerService = null)
     {
         parent::__construct();
-        if (!$itemsScannerService) {
+        if ($itemsScannerService === null) {
             $this->itemsScannerService = new ItemsScannerService(QtiService::singleton());
         } else {
             $this->itemsScannerService = $itemsScannerService;
@@ -257,6 +261,10 @@ class PciManager extends \tao_actions_CommonModule
         return $data;
     }
 
+    /**
+     * @return |null
+     * @throws PortableElementException
+     */
     protected function getRequestPciDataObject()
     {
         if (!$this->hasRequestParameter('typeIdentifier')) {
@@ -284,10 +292,14 @@ class PciManager extends \tao_actions_CommonModule
      * @throws PortableElementVersionIncompatibilityException
      * @throws \common_Exception
      * @throws \common_exception_Error
+     * @throws \HttpRequestException
      */
     public function unregister()
     {
         $pci = $this->getRequestPciDataObject();
+        if (empty($this->getRequestParameter('typeIdentifier'))) {
+            throw new \HttpRequestException('missing type identifier');
+        }
         $this->itemsScannerService->isPciUsedInItems(
             $this->getRequestParameter('typeIdentifier'),
             \taoTests_models_classes_TestsService::singleton()->getAllItems()
@@ -296,6 +308,10 @@ class PciManager extends \tao_actions_CommonModule
         $portableElementService->unregisterModel($pci);
     }
 
+    /**
+     * ENable pci object
+     * @throws PortableElementException
+     */
     public function enable()
     {
         $pci = $this->getRequestPciDataObject();
@@ -307,6 +323,10 @@ class PciManager extends \tao_actions_CommonModule
         ]);
     }
 
+    /**
+     * disable pci data object
+     * @throws PortableElementException
+     */
     public function disable()
     {
         $pci = $this->getRequestPciDataObject();

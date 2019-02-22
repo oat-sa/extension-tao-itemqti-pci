@@ -6,6 +6,11 @@ use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction;
 use oat\taoQtiItem\model\qti\Service as QtiService;
 
+/**
+ * Scan items for desire content
+ * Class ItemsScannerService
+ * @package oat\qtiItemPci\model
+ */
 class ItemsScannerService
 {
     /**
@@ -28,7 +33,7 @@ class ItemsScannerService
      * @throws \common_Exception
      * @throws \common_exception_Error
      */
-    public function isPciUsedInItems(string $requestTypeIndentifier, array $allItems)
+    public function isPciUsedInItems($requestTypeIndentifier, array $allItems)
     {
         foreach ($allItems as $key => $item) {
             if ($this->qtiService->getDataItemByRdfItem($this->getItemResource($key)) !== null) {
