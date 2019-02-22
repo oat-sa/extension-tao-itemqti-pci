@@ -9,7 +9,7 @@ use oat\taoQtiItem\model\qti\Service as QtiService;
 /**
  * Scan items for desire content
  * Class ItemsScannerService
- * @package oat\qtiItemPci\model
+ * @author Bartlomiej Marszal
  */
 class ItemsScannerService
 {

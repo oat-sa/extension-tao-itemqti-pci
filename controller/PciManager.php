@@ -36,18 +36,18 @@ use oat\taoQtiItem\model\qti\Service as QtiService;
 /**
  * Actions for pci portable custom elements management
  * Class PciManager
- * @package oat\qtiItemPci\controller
+ * @author Bartlomiej Marszal
  */
 class PciManager extends \tao_actions_CommonModule
 {
     /**
-     * @var ItemsScannerService|null
+     * @var ItemsScannerService
      */
     private $itemsScannerService;
 
     /**
      * PciManager constructor.
-     * @param ItemsScannerService|null $itemsScannerService
+     * @param ItemsScannerService $itemsScannerService
      */
     public function __construct(ItemsScannerService $itemsScannerService = null)
     {
