@@ -24,6 +24,7 @@ define([
     'ui/component',
     'ui/hider',
     'ui/switch/switch',
+    'ui/button',
     'tpl!qtiItemPci/pciManager/tpl/layout',
     'tpl!qtiItemPci/pciManager/tpl/listing',
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
@@ -33,22 +34,22 @@ define([
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function($, __, _, helpers, component, hider, switchFactory, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, feedback){
+], function ($, __, _, helpers, component, hider, switchFactory, buttonFactory, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, feedback) {
     'use strict';
 
     var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
         _fileExtFilter = /.+\.(zip)$/;
 
     var _defaults = {
-        loadUrl : null,
-        disableUrl : null,
-        enableUrl : null,
-        verifyUrl : null,
-        addUrl : null
+        loadUrl: null,
+        disableUrl: null,
+        enableUrl: null,
+        verifyUrl: null,
+        addUrl: null
     };
 
     var pciManager = {
-        open: function open(){
+        open: function open() {
             this.trigger('showListing');
             this.getElement().modal('open');
         }
@@ -65,7 +66,7 @@ define([
      * @param {String} config.disableUrl - the service be called to disable the pcis
      * @returns {*}
      */
-    return function pciManagerFactory(config){
+    return function pciManagerFactory(config) {
 
         var listing = {};
 
@@ -82,7 +83,7 @@ define([
          */
         return component(pciManager, _defaults)
             .setTemplate(layoutTpl)
-            .on('showListing', function(){
+            .on('showListing', function () {
                 var $fileSelector = this.getElement().find('.file-selector'),
                     $title = $fileSelector.find('.title'),
                     $uploader = $fileSelector.find('.file-upload-container'),
@@ -96,7 +97,7 @@ define([
 
                 this.trigger('updateListing');
             })
-            .on('hideListing', function(){
+            .on('hideListing', function () {
                 var $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty'),
@@ -106,7 +107,7 @@ define([
 
                 hider.show($switcher.filter('.listing'));
                 hider.hide($switcher.filter('.upload'));
-                $switcher.filter('.listing').css({display : 'inline-block'});
+                $switcher.filter('.listing').css({display: 'inline-block'});
 
                 hider.hide($fileContainer);
                 hider.hide($placeholder);
@@ -115,46 +116,45 @@ define([
                 $uploader.uploader('reset');
                 hider.show($uploader);
             })
-            .on('updateListing', function(){
+            .on('updateListing', function () {
                 var self = this,
-                    urls = _.pick(this.config, ['disableUrl', 'enableUrl']),
+                    urls = _.pick(this.config, ['disableUrl', 'enableUrl', 'unregisterUrl', 'exportPciUrl']),
                     $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty');
-
-                if(_.size(listing)){
+                if (_.size(listing)) {
 
                     hider.hide($placeholder);
 
                     $fileContainer
                         .empty()
                         .html(listingTpl({
-                            interactions : listing
+                            interactions: listing
                         }));
 
-                    $fileContainer.find('.switch-box').each(function(){
+                    $fileContainer.find('.switch-box').each(function () {
                         var $switch = $(this);
                         var $li = $switch.closest('.pci-list-element');
                         var typeIdentifier = $li.data('type-identifier');
                         switchFactory($switch, {
-                            on : {
-                                active : !$li.hasClass('pci-disabled')
+                            on: {
+                                active: !$li.hasClass('pci-disabled')
                             },
-                            off : {
-                                active : $li.hasClass('pci-disabled')
+                            off: {
+                                active: $li.hasClass('pci-disabled')
                             }
-                        }).on('on', function(){
+                        }).on('on', function () {
                             $li.removeClass('pci-disabled');
-                            $.getJSON(urls.enableUrl, {typeIdentifier : typeIdentifier}, function(data){
-                                if(data.success){
+                            $.getJSON(urls.enableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                if (data.success) {
                                     listing[typeIdentifier].enabled = true;
                                     self.trigger('pciEnabled', typeIdentifier);
                                 }
                             });
-                        }).on('off', function(){
+                        }).on('off', function () {
                             $li.addClass('pci-disabled');
-                            $.getJSON(urls.disableUrl, {typeIdentifier : typeIdentifier}, function(data){
-                                if(data.success){
+                            $.getJSON(urls.disableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                if (data.success) {
                                     listing[typeIdentifier].enabled = false;
                                     self.trigger('pciDisabled', typeIdentifier);
                                 }
@@ -162,21 +162,59 @@ define([
                         });
                     });
 
+                    $fileContainer.find('.actions').each(function () {
+                        var $unregister = $(this).find('.unregister');
+                        var $listElem = $(this).closest('.pci-list-element');
+                        var typeIdentifier = $listElem.data('type-identifier');
+                        buttonFactory({
+                            id: 'unregister',
+                            type: 'warning',
+                            icon: 'bin',
+                            renderTo: $unregister
+                        }).on('click', function () {
+                            $.getJSON(urls.unregisterUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                if (data.success) {
+                                    delete listing[typeIdentifier];
+                                    self.trigger('pciDisabled', typeIdentifier);
+                                } else {
+                                    console.log(data);
+                                }
+                            })
+                        })
+                    });
+
+                    $fileContainer.find('.actions').each(function () {
+                        var $exportPci = $(this).find('.export-pci');
+                        var $listElem = $(this).closest('.pci-list-element');
+                        var typeIdentifier = $listElem.data('type-identifier');
+                        buttonFactory({
+                            id: 'exportPci',
+                            type: 'info',
+                            icon: 'export',
+                            renderTo: $exportPci
+                        }).on('click', function () {
+                            $.getJSON(urls.exportPciUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                if (data.success) {
+                                    console.log('saving file');
+                                } else {
+                                    console.log('error: ' + data.item);
+                                }
+                            })
+                        })
+                    });
                     hider.show($fileContainer);
-
-                }else{
-
+                } else {
                     hider.hide($fileContainer);
                     hider.show($placeholder);
                 }
             })
-            .on('pciEnabled', function(){
+            .on('pciEnabled', function () {
                 this.trigger('updateListing');
             })
-            .on('pciDisabled', function(){
+            .on('pciDisabled', function () {
                 this.trigger('updateListing');
             })
-            .on('render', function() {
+            .on('render', function () {
 
                 //init variables:
                 var self = this,
@@ -190,8 +228,8 @@ define([
 
                 //init modal box
                 $container.modal({
-                    startClosed : true,
-                    minWidth : 450
+                    startClosed: true,
+                    minWidth: 450
                 });
 
                 //init event listeners
@@ -199,63 +237,63 @@ define([
                 initUploader();
 
                 //load list of custom interactions from server
-                $.getJSON(urls.loadUrl, function(data){
+                $.getJSON(urls.loadUrl, function (data) {
                     //note : init as empty object and not array otherwise _.size will fail later
                     listing = _.size(data) ? data : {};
                     self.trigger('updateListing', data);
                     self.trigger('loaded', data);
                 });
 
-                function initEventListeners(){
+                function initEventListeners() {
                     //switch to upload mode
-                    $switcher.on('click', function(e){
+                    $switcher.on('click', function (e) {
                         e.preventDefault();
-                        if(hider.isHidden($uploader)){
+                        if (hider.isHidden($uploader)) {
                             self.trigger('hideListing');
-                        }else{
+                        } else {
                             self.trigger('showListing');
                         }
                     });
                 }
 
-                function initUploader(){
+                function initUploader() {
 
                     var errors = [],
                         selectedFiles = {};
 
-                    $uploader.on('upload.uploader', function(e, file, interactionHook){
+                    $uploader.on('upload.uploader', function (e, file, interactionHook) {
 
                         listing[interactionHook.typeIdentifier] = interactionHook;
                         self.trigger('pciAdded', interactionHook.typeIdentifier);
 
-                    }).on('fail.uploader', function(e, file, err){
+                    }).on('fail.uploader', function (e, file, err) {
 
                         errors.push(__('Unable to upload file %s : %s', file.name, err));
 
-                    }).on('end.uploader', function(){
+                    }).on('end.uploader', function () {
 
-                        if(errors.length === 0){
+                        if (errors.length === 0) {
                             self.trigger('showListing');
-                        }else{
+                        } else {
                             feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>", {encodeHtml: false});
                         }
                         //reset errors
                         errors = [];
 
-                    }).on('create.uploader', function(){
+                    }).on('create.uploader', function () {
 
                         //get ref to the uploadForm for later verification usage
                         $uploadForm = $uploader.parent('form');
 
-                    }).on('fileselect.uploader', function(){
+                    }).on('fileselect.uploader', function () {
 
-                        $uploadForm.find('li[data-file-name]').each(function(){
+                        $uploadForm.find('li[data-file-name]').each(function () {
 
                             var $li = $(this),
                                 filename = $li.data('file-name'),
                                 packageMeta = selectedFiles[filename];
 
-                            if(packageMeta){
+                            if (packageMeta) {
                                 //update label:
                                 $li.prepend(packageMetaTpl(packageMeta));
                             }
@@ -264,21 +302,21 @@ define([
                     });
 
                     $uploader.uploader({
-                        upload : true,
-                        multiple : true,
-                        uploadUrl : urls.addUrl,
-                        fileSelect : function fileSelect(files, done){
+                        upload: true,
+                        multiple: true,
+                        uploadUrl: urls.addUrl,
+                        fileSelect: function fileSelect(files, done) {
 
                             var givenLength = files.length;
 
                             //check the mime-type
-                            files = _.filter(files, function(file){
+                            files = _.filter(files, function (file) {
                                 // for some weird reasons some browsers have quotes around the file type
                                 var checkType = file.type.replace(/("|')/g, '');
                                 return _.contains(_fileTypeFilters, checkType) || (checkType === '' && _fileExtFilter.test(file.name));
                             });
 
-                            if(files.length !== givenLength){
+                            if (files.length !== givenLength) {
                                 feedback().error('Invalid files have been removed');
                             }
 
@@ -290,42 +328,42 @@ define([
                         }
                     });
 
-                    function verify(file, cb){
+                    function verify(file, cb) {
 
                         $uploadForm.sendfile({
-                            url : urls.verifyUrl,
-                            file : file,
-                            loaded : function(r){
+                            url: urls.verifyUrl,
+                            file: file,
+                            loaded: function (r) {
 
-                                function done(ok){
-                                    if(ok){
+                                function done(ok) {
+                                    if (ok) {
                                         selectedFiles[file.name] = {
-                                            typeIdentifier : r.typeIdentifier,
-                                            label : r.label,
-                                            version : r.version,
-                                            model : r.model
+                                            typeIdentifier: r.typeIdentifier,
+                                            label: r.label,
+                                            version: r.version,
+                                            model: r.model
                                         };
                                     }
                                     cb(ok);
                                 }
 
-                                if(r.valid){
-                                    if(r.exists){
+                                if (r.valid) {
+                                    if (r.exists) {
                                         confirmBox(
                                             __('There is already one interaction with the same identifier "%s" (label : "%s") and same version : %s. Do you want to override the existing one ?', r.typeIdentifier, r.label, r.version),
-                                            function(){
+                                            function () {
                                                 done(true);
-                                            },function(){
+                                            }, function () {
                                                 done(false);
                                             });
-                                    }else{
+                                    } else {
                                         done(true);
                                     }
-                                }else{
-                                    if(_.isArray(r.package)){
-                                        _.each(r.package, function(report){
-                                            if(_.isArray(report.messages)){
-                                                _.forEach(report.messages, function(msg){
+                                } else {
+                                    if (_.isArray(r.package)) {
+                                        _.each(r.package, function (report) {
+                                            if (_.isArray(report.messages)) {
+                                                _.forEach(report.messages, function (msg) {
                                                     feedback().error(msg.message);
                                                 });
                                             }
@@ -334,7 +372,7 @@ define([
                                     done(false);
                                 }
                             },
-                            failed : function(message){
+                            failed: function (message) {
                                 cb(new Error(message));
                             }
                         });

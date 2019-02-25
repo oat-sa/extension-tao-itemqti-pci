@@ -78,5 +78,6 @@ return array(
 
         #BASE URL (usually the domain root)
         'BASE_URL' => ROOT_URL.'qtiItemPci/',
-    )
+    ),
+    'extra' => dirname(__FILE__).DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR.'structures.xml'
 );

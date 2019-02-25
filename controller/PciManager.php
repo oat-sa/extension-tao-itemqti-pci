@@ -244,8 +244,11 @@ class PciManager extends \tao_actions_CommonModule
 
             $identifier = $this->getRequestParameter('typeIdentifier');
             $path = $this->getService()->export(PciModel::PCI_IDENTIFIER, $identifier);
-            $object = $this->getService()->getPortableElementByIdentifier(PciModel::PCI_IDENTIFIER, $identifier);
-            $this->returnJson($this->getMinifiedModel($object));
+//            $object = $this->getService()->getPortableElementByIdentifier(PciModel::PCI_IDENTIFIER, $identifier);
+            $this->returnJson([
+                'success' => true,
+                'item' => readfile($path)
+            ]);
 
         } catch (\common_Exception $e) {
             $this->returnJson(array('error' => $e->getMessage()));
@@ -306,6 +309,10 @@ class PciManager extends \tao_actions_CommonModule
         );
         $portableElementService = new PortableElementService();
         $portableElementService->unregisterModel($pci);
+
+        $this->returnJson([
+            'success' => true
+        ]);
     }
 
     /**

@@ -52,7 +52,9 @@ define([
                     disableUrl : url.route('disable', 'PciManager', 'qtiItemPci'),
                     enableUrl : url.route('enable', 'PciManager', 'qtiItemPci'),
                     verifyUrl : url.route('verify', 'PciManager', 'qtiItemPci'),
-                    addUrl : url.route('add', 'PciManager', 'qtiItemPci')
+                    addUrl : url.route('add', 'PciManager', 'qtiItemPci'),
+                    unregisterUrl: url.route('unregister', 'PciManager', 'qtiItemPci'),
+                    exportPciUrl: url.route('export', 'PciManager', 'qtiItemPci')
                 }).on('pciAdded', function(typeIdentifier){
                     this.trigger('pciEnabled', typeIdentifier);
                 }).on('pciEnabled', function(typeIdentifier){

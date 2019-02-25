@@ -7,6 +7,8 @@
 
     <div class="actions">
         <div class="switch-box"></div>
+        <div class="unregister"></div>
+        <div class="export-pci"></div>
     </div>
 </li>
 {{/each}}
