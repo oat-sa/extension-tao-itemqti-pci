@@ -49,6 +49,7 @@ return array(
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'disable')),
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'export')),
         array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'import')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'index')),
     ),
     'install' => array(
         'rdf' => array(
@@ -79,5 +80,7 @@ return array(
         #BASE URL (usually the domain root)
         'BASE_URL' => ROOT_URL.'qtiItemPci/',
     ),
-    'extra' => dirname(__FILE__).DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR.'structures.xml'
+    'extra' => [
+        'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR .'structures.xml'
+    ]
 );

@@ -80,6 +80,11 @@ class PciManager extends \tao_actions_CommonModule
         }
     }
 
+    public function index()
+    {
+        $this->setView('pci-manager/index.tpl');
+    }
+
     protected function getService()
     {
         if (!$this->service) {

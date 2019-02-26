@@ -3,7 +3,7 @@
 <structures>
     <structure id="settings" name="Settings" level="8" group="settings">
         <sections>
-            <section id="settings_ext_mng__" name="Extensions manager__" url="/tao/Users/index"/>
+            <section id="pci-manager" name="Portable Custom Interactions" url="/qtiItemPci/PciManager/index" />
         </sections>
     </structure>
 </structures>

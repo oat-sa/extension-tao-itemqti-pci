@@ -1,9 +1,9 @@
-<div class="pcimgr resourcemgr modal">
+<div class="pcimgr resourcemgr">
 
     <section class="file-selector">
         <h1>
             <div class="title-container lft">
-                <span class="title"></span>
+                <span class="title">Manage custom interactions</span>
                 <span class="note">*</span>
             </div>
             <div class="upload-switcher rgt">

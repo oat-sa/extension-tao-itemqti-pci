@@ -1,4 +1,14 @@
 @import "inc/bootstrap";
+.pci-manager {
+    margin: auto auto;
+    width: 80%;
+    .pcimgr {
+        max-width: 100%;
+    }
+    .resourcemgr {
+        width: 100%;
+    }
+}
 
 .pci-manager-trigger{
     &:before{
@@ -41,9 +51,20 @@
                 height:auto !important;
                 line-height: 1.4;
                 .switch-box{
+                    display: inline;
                     position: relative;
                     top: 5px;
                     right:7px;
+                }
+                .unregister {
+                    top: 5px;
+                    position: relative;
+                    display: inline;
+                }
+                .export-pci {
+                    position: relative;
+                    display: inline;
+                    top: 5px;
                 }
             }
             .button-disable{

@@ -51,7 +51,7 @@ define([
     var pciManager = {
         open: function open() {
             this.trigger('showListing');
-            this.getElement().modal('open');
+            this.getElement().appendTo('.pci-manager');
         }
     };
 
@@ -168,18 +168,24 @@ define([
                         var typeIdentifier = $listElem.data('type-identifier');
                         buttonFactory({
                             id: 'unregister',
-                            type: 'warning',
+                            type: 'info',
                             icon: 'bin',
+                            label: 'Delete',
                             renderTo: $unregister
                         }).on('click', function () {
-                            $.getJSON(urls.unregisterUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                if (data.success) {
-                                    delete listing[typeIdentifier];
-                                    self.trigger('pciDisabled', typeIdentifier);
-                                } else {
-                                    console.log(data);
+                            confirmBox(
+                                __('You are about to delete the portable Custom Interaction %s from the system. ', typeIdentifier),
+                                function () {
+                                    $.getJSON(urls.unregisterUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                        if (data.success) {
+                                            delete listing[typeIdentifier];
+                                            self.trigger('pciDisabled', typeIdentifier);
+                                        } else {
+                                            console.log(data);
+                                        }
+                                    })
                                 }
-                            })
+                            )
                         })
                     });
 
@@ -190,7 +196,8 @@ define([
                         buttonFactory({
                             id: 'exportPci',
                             type: 'info',
-                            icon: 'export',
+                            icon: 'import',
+                            label: 'Download',
                             renderTo: $exportPci
                         }).on('click', function () {
                             $.getJSON(urls.exportPciUrl, {typeIdentifier: typeIdentifier}, function (data) {
@@ -225,12 +232,6 @@ define([
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $switcher = $fileSelector.find('.upload-switcher a'),
                     $uploadForm;
-
-                //init modal box
-                $container.modal({
-                    startClosed: true,
-                    minWidth: 450
-                });
 
                 //init event listeners
                 initEventListeners();
