@@ -256,10 +256,7 @@ define([
             }
 
             // no delay and no media stimulus, start recording now
-            if (delayInSeconds === 0
-                && !this.hasMediaStimulus()
-                && this.$container.parents('.tao-preview-scope').length === 0)
-            {
+            if (delayInSeconds === 0 && !this.hasMediaStimulus()) {
                 this.startRecording();
                 return;
             }
@@ -287,9 +284,7 @@ define([
                     }
                 }
 
-                if (self.$container.parents('.tao-preview-scope').length === 0
-                    && (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()))
-                {
+                if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
                     self.startRecording();
                 } else {
                     self.updateControls();
@@ -330,7 +325,7 @@ define([
 
                 this.mediaStimulus.on('ended', function() {
                     console.log('mediaStimulus ended: ', self.config.autoStart,  self._delayCallback);
-                    if (self.$container.parents('.tao-preview-scope').length === 0 && self.config.autoStart && !self._delayCallback) {
+                    if (self.config.autoStart && !self._delayCallback) {
                         self.startRecording();
                     }
                 });
