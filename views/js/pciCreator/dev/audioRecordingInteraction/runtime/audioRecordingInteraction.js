@@ -108,6 +108,7 @@ define([
             this.initMediaStimulus();
             this.initControls();
             this.updateResetCount();
+            this.initRecording();
         },
 
         /**
@@ -704,8 +705,6 @@ define([
 
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
-
-            this.initRecording();
         },
         /**
          * Programmatically set the response following the json schema described in
