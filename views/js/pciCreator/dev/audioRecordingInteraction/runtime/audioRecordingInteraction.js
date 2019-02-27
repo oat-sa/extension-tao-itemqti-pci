@@ -74,6 +74,14 @@ define([
         _recordsAttempts: 0,
         _delayCallback: null,
 
+        _cleanDelayCallback: function _cleanDelayCallback() {
+            if (this._delayCallback) {
+                console.log('cleaning existing callback!?');
+                clearTimeout(this._delayCallback);
+                this._delayCallback = null;
+            }
+        },
+
         /**
          * Render the PCI
          * @param {Object} config
@@ -264,11 +272,15 @@ define([
                 }
             }
 
+            // cleaning up delay callback
+            this._cleanDelayCallback();
+
             console.log('set delay callback in ' + delayInSeconds +  ' seconds...');
             // adding a delay before start recording...
             this._delayCallback = setTimeout(function() {
                 console.log('running delay callback');
 
+                // restore controls states
                 for (ctr in ctrCache) {
                     if (ctrCache.hasOwnProperty(ctr) && self.controls[ctr]) {
                         self.controls[ctr].setState(ctrCache[ctr]);
@@ -283,10 +295,7 @@ define([
                     self.updateControls();
                 }
 
-                if (self._delayCallback) {
-                    clearTimeout(self._delayCallback);
-                    self._delayCallback = null;
-                }
+                self._cleanDelayCallback();
             }, delayInSeconds * 1000);
         },
 
@@ -635,6 +644,10 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
+            // dont't change controls state, waiting for delay callback
+            if (this._delayCallback) {
+                return;
+            }
             _.invoke(this.controls, 'updateState');
         },
 
@@ -779,10 +792,7 @@ define([
             }
 
             if (self._delayCallback) {
-                promises.push(function() {
-                    clearTimeout(self._delayCallback);
-                    self._delayCallback = null;
-                });
+                promises.push(self._cleanDelayCallback);
             }
 
             promises.push(self.resetResponse());
