@@ -61,7 +61,7 @@ define([
     function getFileName(filePrefix, blob) {
         return filePrefix + '_' +
             window.Date.now() + '.' +
-            // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
+            // extract extension (ex: 'webm') from s trings like: 'audio/webm;codecs=opus' or 'audio/webm'
             blob.type.split(';')[0].split('/')[1];
     }
 
@@ -72,6 +72,7 @@ define([
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
+        _delayCallback: null,
 
         /**
          * Render the PCI
@@ -91,6 +92,7 @@ define([
             this.iconsFileUrl       = this.assetManager.resolve(ICON_CONTROLS);
 
             this.initConfig(config);
+
             this.initRecorder();
             this.initPlayer();
             this.initProgressBar();
@@ -105,6 +107,8 @@ define([
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+         * @param {Number}  config.delaySeconds - seconds delay before start recording
+         * @param {Number}  config.delayMinutes - minutes delay before start recording
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
          * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
@@ -119,6 +123,10 @@ define([
             this.config = {
                 allowPlayback:           toBoolean(config.allowPlayback, true),
                 autoStart:               toBoolean(config.autoStart, false),
+
+                delaySeconds:            toInteger(config.delaySeconds, 0),
+                delayMinutes:            toInteger(config.delayMinutes, 0),
+
                 maxRecords:              toInteger(config.maxRecords, 3),
                 maxRecordingTime:        toInteger(config.maxRecordingTime, 120),
 
@@ -228,6 +236,60 @@ define([
             });
         },
 
+        initRecording: function initRecording() {
+            var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
+            var ctrCache = {};
+            var ctr;
+            var self = this;
+
+            // no auto start, don't start recording
+            if (this.config.autoStart !== true) {
+                return;
+            }
+
+            // no delay and no media stimulus, start recording now
+            if (delayInSeconds === 0
+                && !this.hasMediaStimulus()
+                && this.$container.parents('.tao-preview-scope').length === 0)
+            {
+                this.startRecording();
+                return;
+            }
+
+            // cache controls states
+            for (ctr in this.controls) {
+                if (this.controls.hasOwnProperty(ctr)) {
+                    ctrCache[ctr] = this.controls[ctr].getState();
+                    this.controls[ctr].disable();
+                }
+            }
+
+            console.log('set delay callback in ' + delayInSeconds +  ' seconds...');
+            // adding a delay before start recording...
+            this._delayCallback = setTimeout(function() {
+                console.log('running delay callback');
+
+                for (ctr in ctrCache) {
+                    if (ctrCache.hasOwnProperty(ctr) && self.controls[ctr]) {
+                        self.controls[ctr].setState(ctrCache[ctr]);
+                    }
+                }
+
+                if (self.$container.parents('.tao-preview-scope').length === 0
+                    && (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()))
+                {
+                    self.startRecording();
+                } else {
+                    self.updateControls();
+                }
+
+                if (self._delayCallback) {
+                    clearTimeout(self._delayCallback);
+                    self._delayCallback = null;
+                }
+            }, delayInSeconds * 1000);
+        },
+
         /**
          * Instanciate the media stimulus player and its event listeners
          * This player is only for the playback of the stimulus. The recorded audio uses its own player.
@@ -258,7 +320,8 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function() {
-                    if (self.config.autoStart) {
+                    console.log('mediaStimulus ended: ', self.config.autoStart,  self._delayCallback);
+                    if (self.$container.parents('.tao-preview-scope').length === 0 && self.config.autoStart && !self._delayCallback) {
                         self.startRecording();
                     }
                 });
@@ -290,13 +353,14 @@ define([
          * Starts the recording if has permission to access the mic. If not, ask for it.
          */
         startRecording: function startRecording() {
+            console.log('RECORDING AUDIO');
             var self = this;
 
             this.recorder.init().then(function() {
                 startForReal();
             })
             .catch(function(err) {
-                console.error(err);
+                console.error(err.message);
             });
 
             function startForReal() {
@@ -467,6 +531,7 @@ define([
                 container: this.$controlsContainer
             });
             record.on('click', function() {
+                console.log('record click');
                 if (this.is('enabled')) {
                     self.startRecording();
                 }
@@ -592,9 +657,6 @@ define([
                 '</svg>';
         },
 
-
-
-
         /**
          * PCI public interface
          */
@@ -604,6 +666,8 @@ define([
         getTypeIdentifier: function getTypeIdentifier() {
             return 'audioRecordingInteraction';
         },
+
+
         /**
          * Render the PCI :
          * @param {String} id
@@ -612,6 +676,7 @@ define([
          * @param {Object} assetManager
          */
         initialize: function initialize(id, dom, config, assetManager) {
+            console.log('... initialize ...');
             var self = this;
 
             event.addEventMgr(this);
@@ -632,13 +697,7 @@ define([
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
 
-            // prevent auto start recording in preview
-            if (this.config.autoStart === true &&
-                this.config.useMediaStimulus === false &&
-                this.$container.parents('.tao-preview-scope').length === 0
-            ) {
-                self.startRecording();
-            }
+            this.initRecording();
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -717,6 +776,13 @@ define([
 
             if (self.recorder) {
                 promises.push(self.recorder.destroy());
+            }
+
+            if (self._delayCallback) {
+                promises.push(function() {
+                    clearTimeout(self._delayCallback);
+                    self._delayCallback = null;
+                });
             }
 
             promises.push(self.resetResponse());

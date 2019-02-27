@@ -71,19 +71,15 @@ define([
                 html: config.label
             });
 
-        $control.appendTo(config.container);
-
-        setState(config.defaultState || controlStates.DISABLED);
-
-        /**
-         * Set the state of the control
-         * @param {String} newState
-         */
-        function setState(newState) {
+        function _setState(newState) {
             $control.removeClass(state);
             state = newState;
             $control.addClass(state);
         }
+
+        $control.appendTo(config.container);
+
+        _setState(config.defaultState || controlStates.DISABLED);
 
         /**
          * The control instance
@@ -102,21 +98,37 @@ define([
              * Enable the control
              */
             enable: function enable() {
-                setState(controlStates.ENABLED);
+                _setState(controlStates.ENABLED);
             },
 
             /**
              * Disable the control
              */
             disable: function disable() {
-                setState(controlStates.DISABLED);
+                _setState(controlStates.DISABLED);
             },
 
             /**
              * Activate the control
              */
             activate: function activate() {
-                setState(controlStates.ACTIVE);
+                _setState(controlStates.ACTIVE);
+            },
+
+            /**
+             * Get current state
+             * @returns {string} state - the current state
+             */
+            getState: function getState() {
+                return state;
+            },
+
+            /**
+             * Set the state of the control
+             * @param {String} newState
+             */
+            setState: function setState(newState) {
+                _setState(newState);
             },
 
             /**
