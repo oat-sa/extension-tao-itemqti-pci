@@ -200,13 +200,7 @@ define([
                             label: 'Download',
                             renderTo: $exportPci
                         }).on('click', function () {
-                            $.getJSON(urls.exportPciUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                if (data.success) {
-                                    console.log('saving file');
-                                } else {
-                                    console.log('error: ' + data.item);
-                                }
-                            })
+                            window.location = (urls.exportPciUrl + '?typeIdentifier=' + typeIdentifier );
                         })
                     });
                     hider.show($fileContainer);

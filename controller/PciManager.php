@@ -246,15 +246,10 @@ class PciManager extends \tao_actions_CommonModule
             if (!$this->hasRequestParameter('typeIdentifier')) {
                 throw new PortableElementException('Type identifier parameter missing.');
             }
-
             $identifier = $this->getRequestParameter('typeIdentifier');
             $path = $this->getService()->export(PciModel::PCI_IDENTIFIER, $identifier);
-//            $object = $this->getService()->getPortableElementByIdentifier(PciModel::PCI_IDENTIFIER, $identifier);
-            $this->returnJson([
-                'success' => true,
-                'item' => readfile($path)
-            ]);
-
+            header('Content-Type: application/zip');
+            \tao_helpers_Http::returnFile($path);
         } catch (\common_Exception $e) {
             $this->returnJson(array('error' => $e->getMessage()));
         }
