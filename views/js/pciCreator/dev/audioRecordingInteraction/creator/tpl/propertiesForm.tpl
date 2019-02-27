@@ -32,6 +32,15 @@
     </span>
 </div>
 
+<div data-role="delayOptions" {{#unless autoStart}}style="display:none"{{/unless}}>
+    <div class="panel" style="margin-top:-15px;margin-bottom:15px;padding-left:2px;">
+        <label for="delayMinutes" class="spinner" style="min-width: 0;">{{__ "Min:"}}</label>
+        <input name="delayMinutes" value="{{delayMinutes}}" data-increment="1" data-min="0" data-max="20" type="text" />
+        <label for="delaySeconds" class="spinner" style="min-width: 0; padding-left: 18px;">{{__ "Sec:"}}</label>
+        <input name="delaySeconds" value="{{delaySeconds}}" data-increment="15" data-min="0" data-max="45" type="text" />
+    </div>
+</div>
+
 <div class="panel">
     <label for="maxRecords" class="spinner">{{__ "Max attempts:"}}</label>
     <input name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" />
@@ -40,6 +49,7 @@
         {{__ "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."}}
     </span>
 </div>
+
 <div class="panel">
     <label for="maxRecordingTime" class="spinner">{{__ "Time limit:"}}</label>
     <input name="maxRecordingTime" value="{{maxRecordingTime}}" class="large" data-increment="10" data-min="10" type="text" />

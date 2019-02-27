@@ -72,7 +72,8 @@ define([
             response = interaction.getResponseDeclaration(),
             $mediaStimulusForm,
             $compressedOptions,
-            $uncompressedOptions;
+            $uncompressedOptions,
+            $delayOptions;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
@@ -83,6 +84,10 @@ define([
 
             allowPlayback:          typeCaster.strToBool(interaction.prop('allowPlayback'), true),
             autoStart:              typeCaster.strToBool(interaction.prop('autoStart'), false),
+
+            delayMinutes:           interaction.prop('delayMinutes'),
+            delaySeconds:           interaction.prop('delaySeconds'),
+
             maxRecords:             interaction.prop('maxRecords'),
             maxRecordingTime:       interaction.prop('maxRecordingTime'),
 
@@ -101,6 +106,8 @@ define([
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
 
+        $delayOptions = $form.find('[data-role="delayOptions"]');
+
         //init form javascript
         formElement.initWidget($form);
 
@@ -112,7 +119,19 @@ define([
             },
 
             allowPlayback:      configChangeCallBack,
-            autoStart:          configChangeCallBack,
+
+            autoStart: function autoStart(boundInteraction, value, name) {
+                if (value) {
+                    $delayOptions.show();
+                } else {
+                    $delayOptions.hide();
+                }
+                configChangeCallBack(boundInteraction, value, name);
+            },
+
+            delayMinutes:       configChangeCallBack,
+            delaySeconds:       configChangeCallBack,
+
             maxRecords:         configChangeCallBack,
             maxRecordingTime:   configChangeCallBack,
 
