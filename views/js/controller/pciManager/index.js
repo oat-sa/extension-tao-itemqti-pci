@@ -8,7 +8,7 @@ define([
 
     var $container = $('.pci-manager');
 
-    var indexController = {
+    return {
         start: function start() {
 
             var pciMgr = pciManager({
@@ -23,6 +23,4 @@ define([
             })
         }
     };
-
-    return indexController;
 });

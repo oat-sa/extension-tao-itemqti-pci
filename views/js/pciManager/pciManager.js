@@ -138,7 +138,6 @@ define([
                         var pcibuttons = $(this).find('.pci-buttons');
                         var $li = $(this).closest('li');
                         var typeIdentifier = $li.data('typeIdentifier');
-                        console.log($(this).find('.pci-switch'));
                         switchFactory(pciswitch, {
                             on: {
                                 active: !$li.hasClass('pci-disabled')
