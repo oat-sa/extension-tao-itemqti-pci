@@ -76,7 +76,6 @@ define([
 
         _cleanDelayCallback: function _cleanDelayCallback() {
             if (this._delayCallback) {
-                console.log('cleaning existing callback!?');
                 clearTimeout(this._delayCallback);
                 this._delayCallback = null;
             }
@@ -147,7 +146,7 @@ define([
                 media:                   config.media || {},
 
                 displayDownloadLink:     toBoolean(config.displayDownloadLink, false),
-                updateResponsePartially: toBoolean(config.updateResponsePartially, false),
+                updateResponsePartially: toBoolean(config.updateResponsePartially, false)
             };
         },
 
@@ -273,10 +272,8 @@ define([
             // cleaning up delay callback
             this._cleanDelayCallback();
 
-            console.log('set delay callback in ' + delayInSeconds +  ' seconds...');
             // adding a delay before start recording...
             this._delayCallback = setTimeout(function() {
-                console.log('running delay callback');
 
                 // restore controls states
                 for (ctr in ctrCache) {
@@ -325,7 +322,6 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function() {
-                    console.log('mediaStimulus ended: ', self.config.autoStart,  self._delayCallback);
                     if (self.config.autoStart && !self._delayCallback) {
                         self.startRecording();
                     }
@@ -358,7 +354,6 @@ define([
          * Starts the recording if has permission to access the mic. If not, ask for it.
          */
         startRecording: function startRecording() {
-            console.log('RECORDING AUDIO');
             var self = this;
 
             this.recorder.init().then(function() {
@@ -536,7 +531,6 @@ define([
                 container: this.$controlsContainer
             });
             record.on('click', function() {
-                console.log('record click');
                 if (this.is('enabled')) {
                     self.startRecording();
                 }
@@ -685,7 +679,6 @@ define([
          * @param {Object} assetManager
          */
         initialize: function initialize(id, dom, config, assetManager) {
-            console.log('... initialize ...');
             var self = this;
 
             event.addEventMgr(this);
