@@ -20,7 +20,6 @@
 
 namespace oat\qtiItemPci\controller;
 
-use oat\qtiItemPci\model\ItemsScannerService;
 use oat\qtiItemPci\model\PciModel;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
@@ -31,7 +30,6 @@ use oat\taoQtiItem\model\portableElement\exception\PortableElementVersionIncompa
 use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
-use oat\taoQtiItem\model\qti\Service as QtiService;
 
 /**
  * Actions for pci portable custom elements management
@@ -281,12 +279,8 @@ class PciManager extends \tao_actions_CommonModule
     public function unregister()
     {
         $pci = $this->getRequestPciDataObject();
-        if (empty($this->getRequestParameter('typeIdentifier'))) {
-            throw new \HttpRequestException('missing type identifier');
-        }
-        $portableElementService = new PortableElementService();
-        $portableElementService->unregisterModel($pci);
-
+        $registry = $pci->getModel()->getRegistry();
+        $registry->removeAllVersions($pci->getTypeIdentifier());
         $this->returnJson([
             'success' => true
         ]);
