@@ -47,24 +47,19 @@
         .pci-list-element{
             cursor: default !important;
             div.actions{
+                top: 5px !important;
                 width:auto !important;
                 height:auto !important;
                 line-height: 1.4;
-                .switch-box{
-                    display: inline;
+                .pci-switch {
                     position: relative;
-                    top: 5px;
-                    right:7px;
-                }
-                .unregister {
-                    top: 5px;
-                    position: relative;
+                    left: 0;
+                    top: 1px;
                     display: inline;
                 }
-                .export-pci {
+                .pci-buttons {
                     position: relative;
                     display: inline;
-                    top: 5px;
                 }
             }
             .button-disable{

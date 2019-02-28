@@ -30,11 +30,12 @@ define([
     'tpl!qtiItemPci/pciManager/tpl/packageMeta',
     'async',
     'ui/dialog/confirm',
+    'ui/dialog',
     'ui/feedback',
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function ($, __, _, helpers, component, hider, switchFactory, buttonFactory, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, feedback) {
+], function ($, __, _, helpers, component, hider, switchFactory, buttonFactory, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, dialog, feedback) {
     'use strict';
 
     var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
@@ -131,78 +132,91 @@ define([
                         .html(listingTpl({
                             interactions: listing
                         }));
-
-                    $fileContainer.find('.switch-box').each(function () {
-                        var $switch = $(this);
-                        var $li = $switch.closest('.pci-list-element');
-                        var typeIdentifier = $li.data('type-identifier');
-                        switchFactory($switch, {
+                    $fileContainer.find('.actions').each(function () {
+                        var $actions = $(this);
+                        var pciswitch = $(this).find('.pci-switch');
+                        var pcibuttons = $(this).find('.pci-buttons');
+                        var $li = $(this).closest('li');
+                        var typeIdentifier = $li.data('typeIdentifier');
+                        console.log($(this).find('.pci-switch'));
+                        switchFactory(pciswitch, {
                             on: {
                                 active: !$li.hasClass('pci-disabled')
                             },
                             off: {
                                 active: $li.hasClass('pci-disabled')
                             }
-                        }).on('on', function () {
-                            $li.removeClass('pci-disabled');
-                            $.getJSON(urls.enableUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                if (data.success) {
-                                    listing[typeIdentifier].enabled = true;
-                                    self.trigger('pciEnabled', typeIdentifier);
-                                }
+                        })
+                            .on('on', function () {
+                                $li.removeClass('pci-disabled');
+                                $.getJSON(urls.enableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                    if (data.success) {
+                                        listing[typeIdentifier].enabled = true;
+                                        self.trigger('pciEnabled', typeIdentifier);
+                                    }
+                                });
+                            })
+                            .on('off', function () {
+                                $li.addClass('pci-disabled');
+                                $.getJSON(urls.disableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                    if (data.success) {
+                                        listing[typeIdentifier].enabled = false;
+                                        self.trigger('pciDisabled', typeIdentifier);
+                                    }
+                                });
                             });
-                        }).on('off', function () {
-                            $li.addClass('pci-disabled');
-                            $.getJSON(urls.disableUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                if (data.success) {
-                                    listing[typeIdentifier].enabled = false;
-                                    self.trigger('pciDisabled', typeIdentifier);
-                                }
-                            });
-                        });
-                    });
 
-                    $fileContainer.find('.actions').each(function () {
-                        var $unregister = $(this).find('.unregister');
-                        var $listElem = $(this).closest('.pci-list-element');
-                        var typeIdentifier = $listElem.data('type-identifier');
                         buttonFactory({
                             id: 'unregister',
                             type: 'info',
                             icon: 'bin',
                             label: 'Delete',
-                            renderTo: $unregister
-                        }).on('click', function () {
-                            confirmBox(
-                                __('You are about to delete the portable Custom Interaction %s from the system. ', typeIdentifier),
-                                function () {
-                                    $.getJSON(urls.unregisterUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                        if (data.success) {
-                                            delete listing[typeIdentifier];
-                                            self.trigger('pciDisabled', typeIdentifier);
-                                        } else {
-                                            console.log(data);
-                                        }
-                                    })
-                                }
-                            )
+                            class: 'unregister',
+                            renderTo: pcibuttons
                         })
-                    });
+                            .on('click', function confirmDialog() {
+                                dialog({
+                                    heading: __('Warning'),
+                                    message: __('You are about to delete the Portable Custom Interaction %s from the system.', typeIdentifier),
+                                    content: __('This action will affect all items that may be using it and cannot be undone. Please confirm your choice.'),
+                                    autoRender: true,
+                                    autoDestroy: true,
+                                    buttons: [
+                                        {
+                                            id: 'cancel',
+                                            type: 'info',
+                                            label: __('Cancel'),
+                                            close: true
+                                        },
+                                        {
+                                            id: 'delete',
+                                            type: 'error',
+                                            label: __('Delete'),
+                                            close: true
+                                        }],
+                                    onDeleteBtn: function onDeleteBtn() {
+                                        $.getJSON(urls.unregisterUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                            if (data.success) {
+                                                delete listing[typeIdentifier];
+                                                self.trigger('pciDisabled', typeIdentifier);
+                                            }
+                                        });
+                                    }
+                                });
+                            });
 
-                    $fileContainer.find('.actions').each(function () {
-                        var $exportPci = $(this).find('.export-pci');
-                        var $listElem = $(this).closest('.pci-list-element');
-                        var typeIdentifier = $listElem.data('type-identifier');
                         buttonFactory({
                             id: 'exportPci',
                             type: 'info',
                             icon: 'import',
                             label: 'Download',
-                            renderTo: $exportPci
-                        }).on('click', function () {
-                            window.location = (urls.exportPciUrl + '?typeIdentifier=' + typeIdentifier );
+                            renderTo: pcibuttons
                         })
+                            .on('click', function () {
+                                window.location = (urls.exportPciUrl + '?typeIdentifier=' + typeIdentifier);
+                            })
                     });
+
                     hider.show($fileContainer);
                 } else {
                     hider.hide($fileContainer);
