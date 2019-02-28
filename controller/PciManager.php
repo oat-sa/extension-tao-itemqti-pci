@@ -21,6 +21,7 @@
 namespace oat\qtiItemPci\controller;
 
 use oat\qtiItemPci\model\PciModel;
+use oat\tao\model\routing\AnnotationReader\security;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
@@ -42,6 +43,11 @@ class PciManager extends \tao_actions_CommonModule
      */
     protected $service;
 
+    /**
+     * @param $method
+     * @param $arguments
+     * @security("hide");
+     */
     public function __call($method, $arguments)
     {
         try {
