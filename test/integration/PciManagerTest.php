@@ -1,4 +1,5 @@
 <?php
+
 namespace oat\qtiItemPci\test\integration;
 
 use oat\qtiItemPci\controller\PciManager;
@@ -44,11 +45,8 @@ class PciManagerTest extends GenerisTestCase
     private $importService;
 
     /**
-     * @var ItemsScannerService|\PHPUnit_Framework_MockObject_MockObject
+     * @throws \common_ext_ExtensionException
      */
-    private $itemsScannerServiceMock;
-
-
     public function setUp()
     {
         $this->ontologyMock = $this->getOntologyMock();
@@ -59,7 +57,6 @@ class PciManagerTest extends GenerisTestCase
         $this->testService = \taoTests_models_classes_TestsService::singleton();
         $this->importService = ImportService::singleton();
         \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
-        $this->itemsScannerServiceMock = $this->createMock(ItemsScannerService::class);
     }
 
     /**
@@ -93,6 +90,7 @@ class PciManagerTest extends GenerisTestCase
     }
 
     /**
+     * @runInSeparateProcess
      * @test
      */
     public function unregisterTest()
@@ -106,7 +104,6 @@ class PciManagerTest extends GenerisTestCase
         $pciDataObjectMock->method('getModel')->willReturn($portableElementModelMock);
         $portableElementModelMock->method('getRegistry')->willReturn($portableElementRegistryMock);
         $portableElementRegistryMock->method('delete');
-        $this->itemsScannerServiceMock->method('isPciUsedInItems')->willReturn(false);
 
         $pciRegistryMock = $this->createMock(PciRegistry::class);
         $pciRegistryMock

@@ -41,25 +41,6 @@ use oat\taoQtiItem\model\qti\Service as QtiService;
 class PciManager extends \tao_actions_CommonModule
 {
     /**
-     * @var ItemsScannerService
-     */
-    private $itemsScannerService;
-
-    /**
-     * PciManager constructor.
-     * @param ItemsScannerService $itemsScannerService
-     */
-    public function __construct(ItemsScannerService $itemsScannerService = null)
-    {
-        parent::__construct();
-        if ($itemsScannerService === null) {
-            $this->itemsScannerService = new ItemsScannerService(QtiService::singleton());
-        } else {
-            $this->itemsScannerService = $itemsScannerService;
-        }
-    }
-
-    /**
      * @var PortableElementRegistry
      */
     protected $registry;
@@ -303,10 +284,6 @@ class PciManager extends \tao_actions_CommonModule
         if (empty($this->getRequestParameter('typeIdentifier'))) {
             throw new \HttpRequestException('missing type identifier');
         }
-        $this->itemsScannerService->isPciUsedInItems(
-            $this->getRequestParameter('typeIdentifier'),
-            \taoTests_models_classes_TestsService::singleton()->getAllItems()
-        );
         $portableElementService = new PortableElementService();
         $portableElementService->unregisterModel($pci);
 
