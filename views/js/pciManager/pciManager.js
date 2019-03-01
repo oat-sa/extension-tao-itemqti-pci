@@ -133,7 +133,6 @@ define([
                             interactions: listing
                         }));
                     $fileContainer.find('.actions').each(function () {
-                        var $actions = $(this);
                         var pciswitch = $(this).find('.pci-switch');
                         var pcibuttons = $(this).find('.pci-buttons');
                         var $li = $(this).closest('li');
@@ -235,7 +234,6 @@ define([
                     urls = _.pick(this.config, ['loadUrl', 'disableUrl', 'enableUrl', 'verifyUrl', 'addUrl']),
                     $container = this.getElement(),
                     $fileSelector = $container.find('.file-selector'),
-                    $fileContainer = $fileSelector.find('.files'),
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $switcher = $fileSelector.find('.upload-switcher a'),
                     $uploadForm;
