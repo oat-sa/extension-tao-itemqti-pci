@@ -71,15 +71,19 @@ define([
                 html: config.label
             });
 
-        function _setState(newState) {
+        $control.appendTo(config.container);
+
+        setState(config.defaultState || controlStates.DISABLED);
+
+        /**
+         * Set the state of the control
+         * @param {String} newState
+         */
+        function setState(newState) {
             $control.removeClass(state);
             state = newState;
             $control.addClass(state);
         }
-
-        $control.appendTo(config.container);
-
-        _setState(config.defaultState || controlStates.DISABLED);
 
         /**
          * The control instance
@@ -98,21 +102,21 @@ define([
              * Enable the control
              */
             enable: function enable() {
-                _setState(controlStates.ENABLED);
+                setState(controlStates.ENABLED);
             },
 
             /**
              * Disable the control
              */
             disable: function disable() {
-                _setState(controlStates.DISABLED);
+                setState(controlStates.DISABLED);
             },
 
             /**
              * Activate the control
              */
             activate: function activate() {
-                _setState(controlStates.ACTIVE);
+                setState(controlStates.ACTIVE);
             },
 
             /**
@@ -127,9 +131,7 @@ define([
              * Set the state of the control
              * @param {String} newState
              */
-            setState: function setState(newState) {
-                _setState(newState);
-            },
+            setState: setState,
 
             /**
              * Trigger the update state callback
@@ -336,7 +338,7 @@ define([
              * @param {String} newState
              * @private
              */
-            _setState: function setState(newState) {
+            setState: function setState(newState) {
                 state = newState;
                 this.trigger('statechange');
                 this.trigger(state);
@@ -376,16 +378,16 @@ define([
                     if (mediaElement) {
                         mediaElement
                             .on('ready pause stop', function() {
-                                self._setState(mediaStimulusStates.IDLE);
+                                self.setState(mediaStimulusStates.IDLE);
                             })
                             .on('play', function() {
-                                self._setState(mediaStimulusStates.PLAYING);
+                                self.setState(mediaStimulusStates.PLAYING);
                             })
                             .on('ended', function() {
-                                self._setState(mediaStimulusStates.ENDED);
+                                self.setState(mediaStimulusStates.ENDED);
                             })
                             .on('disabled', function() {
-                                self._setState(mediaStimulusStates.DISABLED);
+                                self.setState(mediaStimulusStates.DISABLED);
                             });
                     }
                 }
