@@ -61,7 +61,7 @@ define([
     function getFileName(filePrefix, blob) {
         return filePrefix + '_' +
             window.Date.now() + '.' +
-            // extract extension (ex: 'webm') from s trings like: 'audio/webm;codecs=opus' or 'audio/webm'
+            // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
             blob.type.split(';')[0].split('/')[1];
     }
 
@@ -262,12 +262,10 @@ define([
             }
 
             // cache controls states
-            for (ctr in this.controls) {
-                if (this.controls.hasOwnProperty(ctr)) {
-                    ctrCache[ctr] = this.controls[ctr].getState();
-                    this.controls[ctr].disable();
-                }
-            }
+            _.forEach(this.controls, function(ctr) {
+                ctrCache[ctr] = ctr.getState();
+                ctr.disable();
+            });
 
             // cleaning up delay callback
             this._cleanDelayCallback();
@@ -276,11 +274,9 @@ define([
             this._delayCallback = setTimeout(function() {
 
                 // restore controls states
-                for (ctr in ctrCache) {
-                    if (ctrCache.hasOwnProperty(ctr) && self.controls[ctr]) {
-                        self.controls[ctr].setState(ctrCache[ctr]);
-                    }
-                }
+                _.forEach(self.controls, function(ctr) {
+                    ctr.setState(ctrCache[ctr]);
+                });
 
                 if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
                     self.startRecording();
@@ -360,7 +356,7 @@ define([
                 startForReal();
             })
             .catch(function(err) {
-                console.error(err.message);
+                console.error(err);
             });
 
             function startForReal() {
@@ -778,11 +774,9 @@ define([
                 promises.push(self.recorder.destroy());
             }
 
-            if (self._delayCallback) {
-                promises.push(self._cleanDelayCallback);
-            }
-
             promises.push(self.resetResponse());
+
+            self._cleanDelayCallback();
 
             return Promise.all(promises).then(
                 function() {
