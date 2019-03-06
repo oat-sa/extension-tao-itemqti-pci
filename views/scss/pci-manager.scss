@@ -48,7 +48,7 @@
               height: 2rem;
               span.switch-header {
                 position: absolute;
-                right: 20rem;
+                right: 23rem;
               }
             }
         }
@@ -60,6 +60,7 @@
                 height:auto !important;
                 line-height: 1.4;
                 .pci-switch {
+                    margin-right: 2rem;
                     position: relative;
                     left: 0;
                     top: 1px;
@@ -68,6 +69,9 @@
                 .pci-buttons {
                     position: relative;
                     display: inline;
+                  button:first-child{
+                    margin-right: 2rem;
+                  }
                 }
             }
             .button-disable{

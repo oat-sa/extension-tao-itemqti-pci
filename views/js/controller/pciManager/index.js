@@ -1,9 +1,10 @@
 define([
+    'jquery',
     'util/url',
     'qtiItemPci/pciManager/pciManager',
     'css!qtiItemPciCss/pci-manager'
 
-], function (url, pciManager) {
+], function ($, url, pciManager) {
     'use strict';
 
     var $container = $('.pci-manager');
@@ -11,7 +12,7 @@ define([
     return {
         start: function start() {
 
-            var pciMgr = pciManager({
+            pciManager({
                 renderTo: $container,
                 loadUrl : url.route('getRegisteredImplementations', 'PciManager', 'qtiItemPci'),
                 disableUrl : url.route('disable', 'PciManager', 'qtiItemPci'),
