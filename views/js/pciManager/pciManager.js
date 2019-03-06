@@ -88,11 +88,12 @@ define([
                 var $fileSelector = this.getElement().find('.file-selector'),
                     $title = $fileSelector.find('.title'),
                     $uploader = $fileSelector.find('.file-upload-container'),
+                    $uploadForm = $uploader.parent('form'),
                     $switcher = $fileSelector.find('.upload-switcher a');
 
                 hider.show($switcher.filter('.upload'));
                 hider.hide($switcher.filter('.listing'));
-
+                $uploadForm.hide();
                 hider.hide($uploader);
                 $title.text(__('Manage custom interactions'));
 
@@ -104,12 +105,13 @@ define([
                     $placeholder = $fileSelector.find('.empty'),
                     $title = $fileSelector.find('.title'),
                     $uploader = $fileSelector.find('.file-upload-container'),
+                    $uploadForm = $uploader.parent('form'),
                     $switcher = $fileSelector.find('.upload-switcher a');
 
                 hider.show($switcher.filter('.listing'));
                 hider.hide($switcher.filter('.upload'));
                 $switcher.filter('.listing').css({display: 'inline-block'});
-
+                $uploadForm.show();
                 hider.hide($fileContainer);
                 hider.hide($placeholder);
                 $title.text(__('Upload new custom interaction (zip package)'));
@@ -174,6 +176,7 @@ define([
                         })
                             .on('click', function confirmDialog() {
                                 dialog({
+                                    class: 'icon-warning',
                                     heading: __('Warning'),
                                     message: __('You are about to delete the Portable Custom Interaction %s from the system.', typeIdentifier),
                                     content: __('This action will affect all items that may be using it and cannot be undone. Please confirm your choice.'),
@@ -182,7 +185,7 @@ define([
                                     buttons: [
                                         {
                                             id: 'cancel',
-                                            type: 'info',
+                                            type: 'regular',
                                             label: __('Cancel'),
                                             close: true
                                         },
@@ -272,11 +275,13 @@ define([
                         listing[interactionHook.typeIdentifier] = interactionHook;
                         self.trigger('pciAdded', interactionHook.typeIdentifier);
 
-                    }).on('fail.uploader', function (e, file, err) {
+                    })
+                        .on('fail.uploader', function (e, file, err) {
 
                         errors.push(__('Unable to upload file %s : %s', file.name, err));
 
-                    }).on('end.uploader', function () {
+                    })
+                        .on('end.uploader', function () {
 
                         if (errors.length === 0) {
                             self.trigger('showListing');
@@ -286,13 +291,15 @@ define([
                         //reset errors
                         errors = [];
 
-                    }).on('create.uploader', function () {
+                    })
+                        .on('create.uploader', function () {
 
                         //get ref to the uploadForm for later verification usage
                         $uploadForm = $uploader.parent('form');
+                        $uploadForm.hide();
 
-                    }).on('fileselect.uploader', function () {
-
+                    })
+                        .on('fileselect.uploader', function () {
                         $uploadForm.find('li[data-file-name]').each(function () {
 
                             var $li = $(this),

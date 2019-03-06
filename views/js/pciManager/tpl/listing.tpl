@@ -1,3 +1,6 @@
+    <div class="action-header">
+        <span class="switch-header">Enabled to item, author</span>
+    </div>
 {{#each interactions}}
 <li data-type-identifier="{{typeIdentifier}}" class="pci-list-element{{#unless enabled}} pci-disabled"{{/unless}}">
     <span class="desc truncate">

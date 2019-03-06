@@ -43,6 +43,14 @@
         ul.files{
             overflow-y:auto;
             min-height: 300px;
+            div.action-header{
+              position: relative;
+              height: 2rem;
+              span.switch-header {
+                position: absolute;
+                right: 20rem;
+              }
+            }
         }
         .pci-list-element{
             cursor: default !important;
