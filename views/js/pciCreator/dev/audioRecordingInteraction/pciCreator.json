@@ -3,7 +3,7 @@
     "label": "Audio recording",
     "short": "Audio",
     "description": "Allow test taker to record audio",
-    "version": "0.7.1",
+    "version": "0.8.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -42,6 +42,9 @@
             "./creator/widget/Widget.js",
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js"
+        ],
+        "stylesheets" : [
+            "./creator/css/audioRecordingInteraction.css"
         ]
     }
 }
