@@ -33,10 +33,10 @@
 </div>
 
 <div data-role="delayOptions" {{#unless autoStart}}style="display:none"{{/unless}}>
-    <div class="panel" style="margin-top:-15px;margin-bottom:15px;padding-left:2px;">
-        <label for="delayMinutes" class="spinner" style="min-width: 0;">{{__ "Min:"}}</label>
+    <div class="panel">
+        <label for="delayMinutes" class="spinner">{{__ "Min:"}}</label>
         <input name="delayMinutes" value="{{delayMinutes}}" data-increment="1" data-min="0" data-max="20" type="text" />
-        <label for="delaySeconds" class="spinner" style="min-width: 0; padding-left: 18px;">{{__ "Sec:"}}</label>
+        <label for="delaySeconds" class="spinner">{{__ "Sec:"}}</label>
         <input name="delaySeconds" value="{{delaySeconds}}" data-increment="15" data-min="0" data-max="45" type="text" />
     </div>
 </div>
