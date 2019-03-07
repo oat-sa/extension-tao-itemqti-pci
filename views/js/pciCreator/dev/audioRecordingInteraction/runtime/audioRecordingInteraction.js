@@ -247,7 +247,6 @@ define([
         initRecording: function initRecording() {
             var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
             var ctrCache = {};
-            var ctr;
             var self = this;
 
             // no auto start, don't start recording
@@ -262,8 +261,8 @@ define([
             }
 
             // cache controls states
-            _.forEach(this.controls, function(ctr) {
-                ctrCache[ctr] = ctr.getState();
+            _.forEach(this.controls, function(ctr, id) {
+                ctrCache[id] = ctr.getState();
                 ctr.disable();
             });
 
@@ -274,8 +273,8 @@ define([
             this._delayCallback = setTimeout(function() {
 
                 // restore controls states
-                _.forEach(self.controls, function(ctr) {
-                    ctr.setState(ctrCache[ctr]);
+                _.forEach(self.controls, function(ctr, id) {
+                    ctr.setState(ctrCache[id]);
                 });
 
                 if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
