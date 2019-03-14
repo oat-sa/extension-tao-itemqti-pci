@@ -9,8 +9,9 @@
     </span>
 
     <div class="actions">
-        <div class="pci-switch"></div>
-        <div class="pci-buttons"></div>
+        {{#unless runtimeOnly}}<div class="pci-switch"></div>{{/unless}}
+        {{#unless runtimeOnly}}<div class="pci-download-button"></div>{{/unless}}
+        <div class="pci-unregister-button"></div>
     </div>
 </li>
 {{/each}}

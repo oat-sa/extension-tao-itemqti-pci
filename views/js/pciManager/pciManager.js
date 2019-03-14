@@ -136,7 +136,8 @@ define([
                         }));
                     $fileContainer.find('.actions').each(function () {
                         var pciswitch = $(this).find('.pci-switch');
-                        var pcibuttons = $(this).find('.pci-buttons');
+                        var pciUnregisterButton = $(this).find('.pci-unregister-button');
+                        var pciDownloadButton = $(this).find('.pci-download-button');
                         var $li = $(this).closest('li');
                         var typeIdentifier = $li.data('typeIdentifier');
                         switchFactory(pciswitch, {
@@ -172,7 +173,7 @@ define([
                             icon: 'bin',
                             label: 'Delete',
                             class: 'unregister',
-                            renderTo: pcibuttons
+                            renderTo: pciUnregisterButton
                         })
                             .on('click', function confirmDialog() {
                                 dialog({
@@ -211,7 +212,7 @@ define([
                             type: 'info',
                             icon: 'import',
                             label: 'Download',
-                            renderTo: pcibuttons
+                            renderTo: pciDownloadButton
                         })
                             .on('click', function () {
                                 window.location = (urls.exportPciUrl + '?typeIdentifier=' + typeIdentifier);
@@ -247,6 +248,7 @@ define([
 
                 //load list of custom interactions from server
                 $.getJSON(urls.loadUrl, function (data) {
+                    console.log(data);
                     //note : init as empty object and not array otherwise _.size will fail later
                     listing = _.size(data) ? data : {};
                     self.trigger('updateListing', data);

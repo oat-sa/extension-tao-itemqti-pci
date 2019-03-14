@@ -66,12 +66,14 @@
                     top: 1px;
                     display: inline;
                 }
-                .pci-buttons {
+                .pci-unregister-button {
                     position: relative;
                     display: inline;
-                  button:first-child{
-                    margin-right: 2rem;
-                  }
+                    margin-right: 2rem
+                }
+                .pci-download-button {
+                    position: relative;
+                    display: inline;
                 }
             }
             .button-disable{

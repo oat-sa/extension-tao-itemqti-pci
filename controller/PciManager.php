@@ -83,7 +83,7 @@ class PciManager extends \tao_actions_CommonModule
 
         $pciModels = $this->getPciModels();
         foreach ($pciModels as $pciModel) {
-            $all = $pciModel->getRegistry()->getLatestCreators();
+            $all = $pciModel->getRegistry()->getLatest();
             foreach ($all as $portableElement) {
                 $returnValue[$portableElement->getTypeIdentifier()] = $this->getMinifiedModel($portableElement);
             }
@@ -237,6 +237,7 @@ class PciManager extends \tao_actions_CommonModule
     protected function getMinifiedModel(PortableElementObject $object)
     {
         $data = $object->toArray(array('typeIdentifier', 'label'));
+        $data['runtimeOnly'] = empty($object->getCreator());
         $data['version'] = $object->getVersion();
         $data['enabled'] = $object->isEnabled();
         $data['model'] = $object->getModelLabel();
