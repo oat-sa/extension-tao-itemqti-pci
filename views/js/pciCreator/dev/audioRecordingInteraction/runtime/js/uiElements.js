@@ -120,6 +120,20 @@ define([
             },
 
             /**
+             * Get current state
+             * @returns {string} state - the current state
+             */
+            getState: function getState() {
+                return state;
+            },
+
+            /**
+             * Set the state of the control
+             * @param {String} newState
+             */
+            setState: setState,
+
+            /**
              * Trigger the update state callback
              */
             updateState: function updateState() {
@@ -324,7 +338,7 @@ define([
              * @param {String} newState
              * @private
              */
-            _setState: function setState(newState) {
+            setState: function setState(newState) {
                 state = newState;
                 this.trigger('statechange');
                 this.trigger(state);
@@ -364,16 +378,16 @@ define([
                     if (mediaElement) {
                         mediaElement
                             .on('ready pause stop', function() {
-                                self._setState(mediaStimulusStates.IDLE);
+                                self.setState(mediaStimulusStates.IDLE);
                             })
                             .on('play', function() {
-                                self._setState(mediaStimulusStates.PLAYING);
+                                self.setState(mediaStimulusStates.PLAYING);
                             })
                             .on('ended', function() {
-                                self._setState(mediaStimulusStates.ENDED);
+                                self.setState(mediaStimulusStates.ENDED);
                             })
                             .on('disabled', function() {
-                                self._setState(mediaStimulusStates.DISABLED);
+                                self.setState(mediaStimulusStates.DISABLED);
                             });
                     }
                 }

@@ -53,6 +53,10 @@ define([
             return {
                 allowPlayback:           true,
                 autoStart:               false,
+
+                delayMinutes:            0,
+                delaySeconds:            0,
+
                 maxRecords:              2,
                 maxRecordingTime:        120,
 
