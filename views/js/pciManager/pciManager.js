@@ -179,7 +179,7 @@ define([
                                 dialog({
                                     class: 'icon-warning',
                                     heading: __('Warning'),
-                                    message: __('You are about to delete the Portable Custom Interaction %s from the system.', typeIdentifier),
+                                    message: __('You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system.', typeIdentifier),
                                     content: __('This action will affect all items that may be using it and cannot be undone. Please confirm your choice.'),
                                     autoRender: true,
                                     autoDestroy: true,

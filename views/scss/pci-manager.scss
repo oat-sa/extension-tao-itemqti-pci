@@ -54,6 +54,9 @@
         }
         .pci-list-element{
             cursor: default !important;
+            span.runtime {
+              color: $info;
+            }
             div.actions{
                 top: 5px !important;
                 width:auto !important;
