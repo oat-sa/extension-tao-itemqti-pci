@@ -339,6 +339,12 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('4.9.1');
         }
 
-        $this->skip('4.9.1', '4.10.0');
+        if ($this->isVersion('4.9.1')) {
+            $extension = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById('tao');
+            $config = $extension->getConfig('client_lib_config_registry');
+            unset($config['taoQtiItem/controller/creator/index']['plugins'][1]);
+            $extension->setConfig('client_lib_config_registry', $config);
+            $this->setVersion('4.10.0');
+        }
     }
 }

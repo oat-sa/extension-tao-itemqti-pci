@@ -135,38 +135,40 @@ define([
                             interactions: listing
                         }));
                     $fileContainer.find('.actions').each(function () {
+                        var pciDownloadButton = $(this).find('.pci-download-button');
                         var pciswitch = $(this).find('.pci-switch');
                         var pciUnregisterButton = $(this).find('.pci-unregister-button');
-                        var pciDownloadButton = $(this).find('.pci-download-button');
                         var $li = $(this).closest('li');
                         var typeIdentifier = $li.data('typeIdentifier');
-                        switchFactory(pciswitch, {
-                            on: {
-                                active: !$li.hasClass('pci-disabled')
-                            },
-                            off: {
-                                active: $li.hasClass('pci-disabled')
-                            }
-                        })
-                            .on('on', function () {
-                                $li.removeClass('pci-disabled');
-                                $.getJSON(urls.enableUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                    if (data.success) {
-                                        listing[typeIdentifier].enabled = true;
-                                        self.trigger('pciEnabled', typeIdentifier);
-                                    }
-                                });
+                        var runtimeOnly = listing[typeIdentifier].runtimeOnly;
+                        if (!runtimeOnly) {
+                            switchFactory(pciswitch, {
+                                on: {
+                                    active: !$li.hasClass('pci-disabled')
+                                },
+                                off: {
+                                    active: $li.hasClass('pci-disabled')
+                                }
                             })
-                            .on('off', function () {
-                                $li.addClass('pci-disabled');
-                                $.getJSON(urls.disableUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                    if (data.success) {
-                                        listing[typeIdentifier].enabled = false;
-                                        self.trigger('pciDisabled', typeIdentifier);
-                                    }
+                                .on('on', function () {
+                                    $li.removeClass('pci-disabled');
+                                    $.getJSON(urls.enableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                        if (data.success) {
+                                            listing[typeIdentifier].enabled = true;
+                                            self.trigger('pciEnabled', typeIdentifier);
+                                        }
+                                    });
+                                })
+                                .on('off', function () {
+                                    $li.addClass('pci-disabled');
+                                    $.getJSON(urls.disableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                        if (data.success) {
+                                            listing[typeIdentifier].enabled = false;
+                                            self.trigger('pciDisabled', typeIdentifier);
+                                        }
+                                    });
                                 });
-                            });
-
+                        }
                         buttonFactory({
                             id: 'unregister',
                             type: 'info',
@@ -207,16 +209,18 @@ define([
                                 });
                             });
 
-                        buttonFactory({
-                            id: 'exportPci',
-                            type: 'info',
-                            icon: 'import',
-                            label: 'Download',
-                            renderTo: pciDownloadButton
-                        })
-                            .on('click', function () {
-                                window.location = (urls.exportPciUrl + '?typeIdentifier=' + typeIdentifier);
+                        if(!runtimeOnly) {
+                            buttonFactory({
+                                id: 'exportPci',
+                                type: 'info',
+                                icon: 'import',
+                                label: 'Download',
+                                renderTo: pciDownloadButton
                             })
+                                .on('click', function () {
+                                    window.location = (urls.exportPciUrl + '?typeIdentifier=' + typeIdentifier);
+                                })
+                        }
                     });
 
                     hider.show($fileContainer);
@@ -248,7 +252,6 @@ define([
 
                 //load list of custom interactions from server
                 $.getJSON(urls.loadUrl, function (data) {
-                    console.log(data);
                     //note : init as empty object and not array otherwise _.size will fail later
                     listing = _.size(data) ? data : {};
                     self.trigger('updateListing', data);

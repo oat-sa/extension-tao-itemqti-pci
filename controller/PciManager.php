@@ -88,7 +88,9 @@ class PciManager extends \tao_actions_CommonModule
                 $returnValue[$portableElement->getTypeIdentifier()] = $this->getMinifiedModel($portableElement);
             }
         }
-
+        uasort($returnValue, function ($a, $b) {
+            return $a['runtimeOnly'] > $b['runtimeOnly'];
+        });
         $this->returnJson($returnValue);
     }
 
