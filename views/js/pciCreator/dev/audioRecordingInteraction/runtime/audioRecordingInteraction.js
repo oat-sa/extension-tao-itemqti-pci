@@ -72,6 +72,14 @@ define([
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
+        _delayCallback: null,
+
+        _cleanDelayCallback: function _cleanDelayCallback() {
+            if (this._delayCallback) {
+                clearTimeout(this._delayCallback);
+                this._delayCallback = null;
+            }
+        },
 
         /**
          * Render the PCI
@@ -91,6 +99,7 @@ define([
             this.iconsFileUrl       = this.assetManager.resolve(ICON_CONTROLS);
 
             this.initConfig(config);
+
             this.initRecorder();
             this.initPlayer();
             this.initProgressBar();
@@ -98,6 +107,7 @@ define([
             this.initMediaStimulus();
             this.initControls();
             this.updateResetCount();
+            this.initRecording();
         },
 
         /**
@@ -105,6 +115,8 @@ define([
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+         * @param {Number}  config.delaySeconds - seconds delay before start recording
+         * @param {Number}  config.delayMinutes - minutes delay before start recording
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
          * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
@@ -119,6 +131,10 @@ define([
             this.config = {
                 allowPlayback:           toBoolean(config.allowPlayback, true),
                 autoStart:               toBoolean(config.autoStart, false),
+
+                delaySeconds:            toInteger(config.delaySeconds, 0),
+                delayMinutes:            toInteger(config.delayMinutes, 0),
+
                 maxRecords:              toInteger(config.maxRecords, 3),
                 maxRecordingTime:        toInteger(config.maxRecordingTime, 120),
 
@@ -130,7 +146,7 @@ define([
                 media:                   config.media || {},
 
                 displayDownloadLink:     toBoolean(config.displayDownloadLink, false),
-                updateResponsePartially: toBoolean(config.updateResponsePartially, false),
+                updateResponsePartially: toBoolean(config.updateResponsePartially, false)
             };
         },
 
@@ -228,6 +244,49 @@ define([
             });
         },
 
+        initRecording: function initRecording() {
+            var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
+            var ctrCache = {};
+            var self = this;
+
+            // no auto start, don't start recording
+            if (this.config.autoStart !== true) {
+                return;
+            }
+
+            // no delay and no media stimulus, start recording now
+            if (delayInSeconds === 0 && !this.hasMediaStimulus()) {
+                this.startRecording();
+                return;
+            }
+
+            // cache controls states
+            _.forEach(this.controls, function(ctr, id) {
+                ctrCache[id] = ctr.getState();
+                ctr.disable();
+            });
+
+            // cleaning up delay callback
+            this._cleanDelayCallback();
+
+            // adding a delay before start recording...
+            this._delayCallback = setTimeout(function() {
+
+                // restore controls states
+                _.forEach(self.controls, function(ctr, id) {
+                    ctr.setState(ctrCache[id]);
+                });
+
+                if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
+                    self.startRecording();
+                } else {
+                    self.updateControls();
+                }
+
+                self._cleanDelayCallback();
+            }, delayInSeconds * 1000);
+        },
+
         /**
          * Instanciate the media stimulus player and its event listeners
          * This player is only for the playback of the stimulus. The recorded audio uses its own player.
@@ -258,7 +317,7 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function() {
-                    if (self.config.autoStart) {
+                    if (self.config.autoStart && !self._delayCallback) {
                         self.startRecording();
                     }
                 });
@@ -570,6 +629,10 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
+            // dont't change controls state, waiting for delay callback
+            if (this._delayCallback) {
+                return;
+            }
             _.invoke(this.controls, 'updateState');
         },
 
@@ -592,9 +655,6 @@ define([
                 '</svg>';
         },
 
-
-
-
         /**
          * PCI public interface
          */
@@ -604,6 +664,8 @@ define([
         getTypeIdentifier: function getTypeIdentifier() {
             return 'audioRecordingInteraction';
         },
+
+
         /**
          * Render the PCI :
          * @param {String} id
@@ -631,14 +693,6 @@ define([
 
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
-
-            // prevent auto start recording in preview
-            if (this.config.autoStart === true &&
-                this.config.useMediaStimulus === false &&
-                this.$container.parents('.tao-preview-scope').length === 0
-            ) {
-                self.startRecording();
-            }
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -720,6 +774,8 @@ define([
             }
 
             promises.push(self.resetResponse());
+
+            self._cleanDelayCallback();
 
             return Promise.all(promises).then(
                 function() {

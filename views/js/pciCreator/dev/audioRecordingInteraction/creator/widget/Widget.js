@@ -17,7 +17,8 @@
  */
 define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
-    'audioRecordingInteraction/creator/widget/states/states'
+    'audioRecordingInteraction/creator/widget/states/states',
+    'css!audioRecordingInteraction/creator/css/audioRecordingInteraction'
 ], function(Widget, states){
     'use strict';
 
