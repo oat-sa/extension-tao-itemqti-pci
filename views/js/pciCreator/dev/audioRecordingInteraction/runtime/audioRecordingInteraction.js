@@ -287,13 +287,14 @@ define([
                         ctr.setState(ctrCache[id]);
                     });
 
+                    self._cleanDelayCallback();
+
                     if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
                         self.startRecording();
                     } else {
                         self.updateControls();
                     }
-
-                    self._cleanDelayCallback();
+                    
                 }, delayInSeconds * 1000);
             });
         },
