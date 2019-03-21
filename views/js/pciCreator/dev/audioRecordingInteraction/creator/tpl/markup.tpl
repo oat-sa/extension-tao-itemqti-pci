@@ -3,6 +3,7 @@
     <div class="audio-rec">
         <div class="media-stimulus"> </div>
         <div class="input-meter">
+            <div class="countdown"> </div>
             <div class="leds"> </div>
             <div class="mic"> </div>
         </div>

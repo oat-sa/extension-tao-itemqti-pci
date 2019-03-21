@@ -404,12 +404,56 @@ define([
         return mediaStimulus;
     }
 
+    /**
+     * Creates a countdown timer as a pie chart
+     * @param {Object} config
+     * @param {Object} config.$container - jQuery element that the countdown timer will be appended to
+     * @param {Number} config.delayInSeconds - delay in seconds
+     */
+    function countdownPieChartFactory(config) {
+        var countdownPieChart,
+            $container   = config.$container,
+            delay = config.delayInSeconds - 1,
+            $countdownPieChart = $(
+                '<div class="container animated">' +
+                    '<div class="circle">' +
+                        '<div class="pie spinner animated"></div>' +
+                        '<div class="pie filler animated"></div>' +
+                        '<div class="mask animated"></div>' +
+                    '</div>' +
+                '</div>');
+
+        var displayed = true;
+
+        countdownPieChart = {
+            isDisplayed: function isDisplayed() {
+                return displayed;
+            },
+            start: function start() {
+                $countdownPieChart.css('animation-play-state', 'running');
+                $countdownPieChart.find('.animated').css('animation-play-state', 'running');
+            },
+            destroy: function destroy() {
+                displayed = false;
+                $container.empty();
+            }
+        };
+
+        $countdownPieChart.css('animation-duration', delay + 's');
+        $countdownPieChart.find('.animated').css('animation-duration', delay + 's');
+        
+        $container.empty();
+        $container.append($countdownPieChart);
+
+        return countdownPieChart;
+    }
 
     return {
         controlFactory:         controlFactory,
         progressBarFactory:     progressBarFactory,
         inputMeterFactory:      inputMeterFactory,
-        mediaStimulusFactory:   mediaStimulusFactory
+        mediaStimulusFactory:   mediaStimulusFactory,
+        countdownPieChartFactory: countdownPieChartFactory
     };
 
 });
