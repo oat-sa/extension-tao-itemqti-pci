@@ -269,22 +269,33 @@ define([
             // cleaning up delay callback
             this._cleanDelayCallback();
 
-            // adding a delay before start recording...
-            this._delayCallback = setTimeout(function() {
+            // init countdown
+            this.initCountdown();
 
-                // restore controls states
-                _.forEach(self.controls, function(ctr, id) {
-                    ctr.setState(ctrCache[id]);
-                });
+            // waiting for permission
+            this.askPermissionAccessMic(function() {
+                
+                self.countdown.start();
 
-                if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
-                    self.startRecording();
-                } else {
-                    self.updateControls();
-                }
+                // adding a delay before start recording...
+                self._delayCallback = setTimeout(function() {
 
-                self._cleanDelayCallback();
-            }, delayInSeconds * 1000);
+                    self.countdown.destroy();
+
+                    // restore controls states
+                    _.forEach(self.controls, function(ctr, id) {
+                        ctr.setState(ctrCache[id]);
+                    });
+
+                    if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
+                        self.startRecording();
+                    } else {
+                        self.updateControls();
+                    }
+
+                    self._cleanDelayCallback();
+                }, delayInSeconds * 1000);
+            });
         },
 
         /**
@@ -328,6 +339,18 @@ define([
                 this.$mediaStimulusContainer.removeClass('active');
             }
         },
+        /**
+         * Create countdown timer
+         */
+        initCountdown: function initCountdown() {
+            if (this.config.autoStart === true) {
+                var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
+                this.countdown = uiElements.countdownPieChartFactory({
+                    $container: this.$meterContainer.find('.countdown'),
+                    delayInSeconds: delayInSeconds
+                });
+            }
+        },
 
         /**
          * Check if the item has a media stimulus defined
@@ -346,17 +369,36 @@ define([
         },
 
         /**
+         *  Init recording if no permission to access the mic, ask for it.
+         */
+        askPermissionAccessMic: function askPermissionAccessMic(callback) {
+            if(this.recorder && this.recorder.is('created')) {
+                this.recorder.init()
+                    .then(function() {
+                        callback();
+                    })
+                    .catch(function(err) {
+                        console.error(err);
+                    });
+            }
+        },
+
+        /**
          * Starts the recording if has permission to access the mic. If not, ask for it.
          */
         startRecording: function startRecording() {
             var self = this;
 
-            this.recorder.init().then(function() {
+            if (this.recorder.is('created')) { // if recorder is not initialised yet
+                this.recorder.init().then(function() {
+                    startForReal();
+                })
+                .catch(function(err) {
+                    console.error(err);
+                });
+            } else {
                 startForReal();
-            })
-            .catch(function(err) {
-                console.error(err);
-            });
+            }
 
             function startForReal() {
                 self.resetRecording();
@@ -369,6 +411,7 @@ define([
                 self.updateControls();
             }
         },
+
 
         /**
          * Stop the current recording
@@ -630,7 +673,7 @@ define([
          */
         updateControls: function updateControls() {
             // dont't change controls state, waiting for delay callback
-            if (this._delayCallback) {
+            if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
                 return;
             }
             _.invoke(this.controls, 'updateState');
