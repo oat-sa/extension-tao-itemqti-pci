@@ -411,10 +411,10 @@ define([
      * @param {Number} config.delayInSeconds - delay in seconds
      */
     function countdownPieChartFactory(config) {
-        var countdownPieChart,
-            $container   = config.$container,
-            delay = config.delayInSeconds - 1,
-            $countdownPieChart = $(
+        var countdownPieChart;
+        var $container   = config.$container;
+        var delay = config.delayInSeconds - 1;
+        var $countdownPieChart = $(
                 '<div class="container animated">' +
                     '<div class="circle">' +
                         '<div class="pie spinner animated"></div>' +
