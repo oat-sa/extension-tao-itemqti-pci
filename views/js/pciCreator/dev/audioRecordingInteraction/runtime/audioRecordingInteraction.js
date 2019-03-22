@@ -347,7 +347,7 @@ define([
             if (this.config.autoStart === true) {
                 var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
                 this.countdown = uiElements.countdownPieChartFactory({
-                    $container: this.$meterContainer.find('.countdown'),
+                    $container: this.$meterContainer.find('.countdown-pie-chart'),
                     delayInSeconds: delayInSeconds
                 });
             }

@@ -415,11 +415,11 @@ define([
         var $container   = config.$container;
         var delay = config.delayInSeconds - 1;
         var $countdownPieChart = $(
-                '<div class="container animated">' +
-                    '<div class="circle">' +
-                        '<div class="pie spinner animated"></div>' +
-                        '<div class="pie filler animated"></div>' +
-                        '<div class="mask animated"></div>' +
+                '<div class="countdown-pie-container countdown-pie-animated">' +
+                    '<div class="countdown-pie-circle">' +
+                        '<div class="countdown-pie countdown-pie-spinner countdown-pie-animated"></div>' +
+                        '<div class="countdown-pie countdown-pie-filler countdown-pie-animated"></div>' +
+                        '<div class="countdown-pie-mask countdown-pie-animated"></div>' +
                     '</div>' +
                 '</div>');
 
@@ -431,7 +431,7 @@ define([
             },
             start: function start() {
                 $countdownPieChart.css('animation-play-state', 'running');
-                $countdownPieChart.find('.animated').css('animation-play-state', 'running');
+                $countdownPieChart.find('.countdown-pie-animated').css('animation-play-state', 'running');
             },
             destroy: function destroy() {
                 displayed = false;
@@ -440,7 +440,7 @@ define([
         };
 
         $countdownPieChart.css('animation-duration', delay + 's');
-        $countdownPieChart.find('.animated').css('animation-duration', delay + 's');
+        $countdownPieChart.find('.countdown-pie-animated').css('animation-duration', delay + 's');
         
         $container.empty();
         $container.append($countdownPieChart);
