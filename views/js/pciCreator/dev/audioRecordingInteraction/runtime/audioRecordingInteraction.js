@@ -246,8 +246,8 @@ define([
 
         initRecording: function initRecording() {
             var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
-            var ctrCache = {};
             var self = this;
+            this.ctrCache = {};
 
             // no auto start, don't start recording
             if (this.config.autoStart !== true) {
@@ -262,15 +262,29 @@ define([
 
             // cache controls states
             _.forEach(this.controls, function(ctr, id) {
-                ctrCache[id] = ctr.getState();
+                self.ctrCache[id] = ctr.getState();
                 ctr.disable();
             });
 
+            if (delayInSeconds > 0) {
+                // init countdown
+                this.initCountdown();
+            }
+
+            if(this.hasMediaStimulus()) {
+                return;
+            }
+
+            this.initDelay();
+        },
+
+        initDelay: function initDelay() {
+            var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
+            
+            var self = this;
+
             // cleaning up delay callback
             this._cleanDelayCallback();
-
-            // init countdown
-            this.initCountdown();
 
             // waiting for permission
             this.askPermissionAccessMic(function() {
@@ -284,7 +298,7 @@ define([
 
                     // restore controls states
                     _.forEach(self.controls, function(ctr, id) {
-                        ctr.setState(ctrCache[id]);
+                        ctr.setState(self.ctrCache[id]);
                     });
 
                     self._cleanDelayCallback();
@@ -329,8 +343,12 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function() {
-                    if (self.config.autoStart && !self._delayCallback) {
+                    // if set autoStart recording without delay - startRecording
+                    // if set autoStart recording with delay and countdown is displayed - initDelay
+                    if (self.config.autoStart && !self.config.delayMinutes && !self.config.delaySeconds) {
                         self.startRecording();
+                    } else if(self.config.autoStart && self.countdown && self.countdown.isDisplayed()) {
+                        self.initDelay();
                     }
                 });
                 this.mediaStimulus.render();
@@ -373,6 +391,7 @@ define([
          *  Init recording if no permission to access the mic, ask for it.
          */
         askPermissionAccessMic: function askPermissionAccessMic(callback) {
+            // recorder instance created, but microphone access not granted
             if(this.recorder && this.recorder.is('created')) {
                 this.recorder.init()
                     .then(function() {
@@ -381,6 +400,10 @@ define([
                     .catch(function(err) {
                         console.error(err);
                     });
+            }
+            // ready to record, microphone access is granted
+            if(this.recorder && this.recorder.is('idle')) { 
+                callback();
             }
         },
 
