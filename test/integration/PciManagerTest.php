@@ -60,10 +60,9 @@ class PciManagerTest extends GenerisTestCase
     }
 
     /**
-     * @test
      * @expectedException \oat\taoQtiItem\model\portableElement\exception\PortableElementException
      */
-    public function unregisterRequestWithoutParameterTest()
+    public function testUnregisterRequestWithoutParameter()
     {
         $this->requestMock
             ->expects($this->once())
@@ -91,9 +90,8 @@ class PciManagerTest extends GenerisTestCase
 
     /**
      * @runInSeparateProcess
-     * @test
      */
-    public function unregisterTest()
+    public function testUnregister()
     {
         $this->createRequestMockWithTypeIdentifier();
         $pciModelMock = $this->createMock(PciModel::class);

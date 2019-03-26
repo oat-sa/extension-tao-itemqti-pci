@@ -229,7 +229,6 @@ class PciManager extends \tao_actions_CommonModule
             }
             $identifier = $this->getRequestParameter('typeIdentifier');
             $path = $this->getService()->export(PciModel::PCI_IDENTIFIER, $identifier);
-            header('Content-Type: application/zip');
             \tao_helpers_Http::returnFile($path);
         } catch (\common_Exception $e) {
             $this->returnJson(array('error' => $e->getMessage()));
@@ -281,9 +280,18 @@ class PciManager extends \tao_actions_CommonModule
      */
     public function unregister()
     {
-        $pci = $this->getRequestPciDataObject();
-        $registry = $pci->getModel()->getRegistry();
-        $registry->removeAllVersions($pci->getTypeIdentifier());
+        try {
+
+            $pci = $this->getRequestPciDataObject();
+            $registry = $pci->getModel()->getRegistry();
+            $registry->removeAllVersions($pci->getTypeIdentifier());
+        } catch (\Exception $e) {
+            $this->returnJson([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
         $this->returnJson([
             'success' => true
         ]);
