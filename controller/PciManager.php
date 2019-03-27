@@ -21,6 +21,7 @@
 namespace oat\qtiItemPci\controller;
 
 use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\tao\model\routing\AnnotationReader\security;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
@@ -252,7 +253,7 @@ class PciManager extends \tao_actions_CommonModule
     }
 
     /**
-     * @return null
+     * @return PciDataObject
      * @throws PortableElementException
      */
     protected function getRequestPciDataObject()
