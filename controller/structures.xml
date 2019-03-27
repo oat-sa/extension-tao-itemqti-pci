@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE structures SYSTEM "../../tao/doc/structures.dtd">
+<structures>
+    <structure id="settings" name="Settings" level="8" group="settings">
+        <sections>
+            <section id="pci-manager" name="Portable Custom Interactions" url="/qtiItemPci/PciManager/index" />
+        </sections>
+    </structure>
+</structures>
+

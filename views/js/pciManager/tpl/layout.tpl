@@ -1,10 +1,9 @@
-<div class="pcimgr resourcemgr modal">
+<div class="pcimgr resourcemgr">
 
     <section class="file-selector">
         <h1>
             <div class="title-container lft">
-                <span class="title"></span>
-                <span class="note">*</span>
+                <span class="title">Manage custom interactions</span>
             </div>
             <div class="upload-switcher rgt">
                 <a href="#" class="btn-info small upload"><span class="icon-add"></span>{{__ 'Add Interaction'}}</a>
@@ -19,8 +18,6 @@
         <ul class="files"></ul>
 
         <div class="file-upload-container hidden"></div>
-        
-        <div class="note-container"><span class="note">*</span>{{__ "warning : changes affect all users of the item creator"}}</div>
     </section>   
 
 </div>
