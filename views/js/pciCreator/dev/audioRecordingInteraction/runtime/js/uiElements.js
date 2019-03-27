@@ -415,13 +415,14 @@ define([
         var $container   = config.$container;
         var delay = config.delayInSeconds - 1;
         var $countdownPieChart = $(
-                '<div class="countdown-pie-container countdown-pie-animated">' +
-                    '<div class="countdown-pie-circle">' +
-                        '<div class="countdown-pie countdown-pie-spinner countdown-pie-animated"></div>' +
-                        '<div class="countdown-pie countdown-pie-filler countdown-pie-animated"></div>' +
-                        '<div class="countdown-pie-mask countdown-pie-animated"></div>' +
-                    '</div>' +
-                '</div>');
+            '<div class="countdown-pie-container countdown-pie-animated">' +
+                '<div class="countdown-pie-circle">' +
+                    '<div class="countdown-pie countdown-pie-spinner countdown-pie-animated"></div>' +
+                    '<div class="countdown-pie countdown-pie-filler countdown-pie-animated"></div>' +
+                    '<div class="countdown-pie-mask countdown-pie-animated"></div>' +
+                '</div>' +
+            '</div>'
+        );
 
         var displayed = true;
 
@@ -441,7 +442,7 @@ define([
 
         $countdownPieChart.css('animation-duration', delay + 's');
         $countdownPieChart.find('.countdown-pie-animated').css('animation-duration', delay + 's');
-        
+
         $container.empty();
         $container.append($countdownPieChart);
 
