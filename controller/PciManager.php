@@ -273,7 +273,7 @@ class PciManager extends \tao_actions_CommonModule
             }
         }
 
-        return null;
+        throw new PortableElementException('Element not found');
     }
 
 
@@ -291,7 +291,7 @@ class PciManager extends \tao_actions_CommonModule
             $registry = $pci->getModel()->getRegistry();
             $registry->removeAllVersions($pci->getTypeIdentifier());
         } catch (\Exception $e) {
-            throw new PortableElementException();
+            throw new PortableElementException('Could not unregister element');
         }
 
         $this->returnJson([
