@@ -252,7 +252,7 @@ class PciManager extends \tao_actions_CommonModule
     }
 
     /**
-     * @return |null
+     * @return null
      * @throws PortableElementException
      */
     protected function getRequestPciDataObject()
@@ -287,15 +287,11 @@ class PciManager extends \tao_actions_CommonModule
     public function unregister()
     {
         try {
-
             $pci = $this->getRequestPciDataObject();
             $registry = $pci->getModel()->getRegistry();
             $registry->removeAllVersions($pci->getTypeIdentifier());
         } catch (\Exception $e) {
-            $this->returnJson([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+            throw new PortableElementException();
         }
 
         $this->returnJson([
@@ -304,7 +300,7 @@ class PciManager extends \tao_actions_CommonModule
     }
 
     /**
-     * ENable pci object
+     * Enable pci object
      * @throws PortableElementException
      */
     public function enable()

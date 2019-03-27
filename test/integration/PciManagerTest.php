@@ -123,7 +123,7 @@ class PciManagerTest extends GenerisTestCase
 
 class PciManagerForTest extends PciManager
 {
-    private $request;
+    protected $request;
     /**
      * @var array
      */

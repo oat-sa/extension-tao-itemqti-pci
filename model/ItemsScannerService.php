@@ -50,7 +50,7 @@ class ItemsScannerService
     }
 
     /**
-     * @param $key
+     * @param string|\core_kernel_classes_Container $key
      * @return \core_kernel_classes_Resource
      * @throws \common_exception_Error
      */
