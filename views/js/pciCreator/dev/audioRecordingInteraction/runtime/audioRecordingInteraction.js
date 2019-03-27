@@ -82,6 +82,14 @@ define([
         },
 
         /**
+         * Gets the delay before auto-start of recording, in seconds
+         * @returns {Number}
+         */
+        getDelayInSeconds: function getDelayInSeconds() {
+            return this.config.delayMinutes * 60 + this.config.delaySeconds;
+        },
+
+        /**
          * Render the PCI
          * @param {Object} config
          */
@@ -245,7 +253,7 @@ define([
         },
 
         initRecording: function initRecording() {
-            var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
+            var delayInSeconds = this.getDelayInSeconds();
             var self = this;
             this.ctrCache = {};
 
@@ -279,8 +287,6 @@ define([
         },
 
         initDelay: function initDelay() {
-            var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
-            
             var self = this;
 
             // cleaning up delay callback
@@ -288,7 +294,7 @@ define([
 
             // waiting for permission
             this.askPermissionAccessMic(function() {
-                
+
                 self.countdown.start();
 
                 // adding a delay before start recording...
@@ -308,8 +314,8 @@ define([
                     } else {
                         self.updateControls();
                     }
-                    
-                }, delayInSeconds * 1000);
+
+                }, self.getDelayInSeconds() * 1000);
             });
         },
 
@@ -363,10 +369,9 @@ define([
          */
         initCountdown: function initCountdown() {
             if (this.config.autoStart === true) {
-                var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
                 this.countdown = uiElements.countdownPieChartFactory({
                     $container: this.$meterContainer.find('.countdown-pie-chart'),
-                    delayInSeconds: delayInSeconds
+                    delayInSeconds: this.getDelayInSeconds()
                 });
             }
         },
@@ -388,7 +393,7 @@ define([
         },
 
         /**
-         *  Init recording if no permission to access the mic, ask for it.
+         * Init recording if no permission to access the mic, ask for it.
          */
         askPermissionAccessMic: function askPermissionAccessMic(callback) {
             // recorder instance created, but microphone access not granted
@@ -398,11 +403,12 @@ define([
                         callback();
                     })
                     .catch(function(err) {
+                        // eslint-disable-next-line no-console
                         console.error(err);
                     });
             }
             // ready to record, microphone access is granted
-            if(this.recorder && this.recorder.is('idle')) { 
+            if(this.recorder && this.recorder.is('idle')) {
                 callback();
             }
         },
@@ -414,12 +420,14 @@ define([
             var self = this;
 
             if (this.recorder.is('created')) { // if recorder is not initialised yet
-                this.recorder.init().then(function() {
-                    startForReal();
-                })
-                .catch(function(err) {
-                    console.error(err);
-                });
+                this.recorder.init()
+                    .then(function() {
+                        startForReal();
+                    })
+                    .catch(function(err) {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    });
             } else {
                 startForReal();
             }
