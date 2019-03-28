@@ -1,4 +1,14 @@
 @import "inc/bootstrap";
+.pci-manager {
+    margin: auto auto;
+    width: 80%;
+    .pcimgr {
+        max-width: 100%;
+    }
+    .resourcemgr {
+        width: 100%;
+    }
+}
 
 .pci-manager-trigger{
     &:before{
@@ -33,17 +43,40 @@
         ul.files{
             overflow-y:auto;
             min-height: 300px;
+            div.action-header{
+              position: relative;
+              height: 2rem;
+              span.switch-header {
+                position: absolute;
+                right: 23rem;
+              }
+            }
         }
         .pci-list-element{
             cursor: default !important;
+            span.runtime {
+              color: $info;
+            }
             div.actions{
+                top: 5px !important;
                 width:auto !important;
                 height:auto !important;
                 line-height: 1.4;
-                .switch-box{
+                .pci-switch {
+                    margin-right: 2rem;
                     position: relative;
-                    top: 5px;
-                    right:7px;
+                    left: 0;
+                    top: 1px;
+                    display: inline;
+                }
+                .pci-unregister-button {
+                    position: relative;
+                    display: inline;
+                    margin-right: 2rem
+                }
+                .pci-download-button {
+                    position: relative;
+                    display: inline;
                 }
             }
             .button-disable{

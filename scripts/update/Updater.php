@@ -348,6 +348,14 @@ class Updater extends \common_ext_ExtensionUpdater
         $this->skip('5.1.0', '5.2.0');
 
         if ($this->isVersion('5.2.0')) {
+            $extension = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById('tao');
+            $config = $extension->getConfig('client_lib_config_registry');
+            unset($config['taoQtiItem/controller/creator/index']['plugins'][1]);
+            $extension->setConfig('client_lib_config_registry', $config);
+            $this->setVersion('5.2.1');
+        }
+
+        if ($this->isVersion('5.2.1')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.9.0']);
             $this->setVersion('5.3.0');
         }

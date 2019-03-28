@@ -24,13 +24,15 @@ namespace oat\qtiItemPci\scripts\install;
 use common_ext_action_InstallAction;
 use oat\taoQtiItem\model\QtiCreatorClientConfigRegistry;
 
+/**
+ * @deprecated plugin register in this class is no longer used
+ * Class SetQtiCreatorConfig
+ * @author Bartlomiej Marszal
+ *
+ */
 class SetQtiCreatorConfig extends common_ext_action_InstallAction
 {
     public function __invoke($params)
     {
-        $registry = QtiCreatorClientConfigRegistry::getRegistry();
-        $registry->registerPlugin('pciManager', 'qtiItemPci/qtiCreator/plugins/panel/pciManager', 'panel');
-
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, 'Portable Element Plugins for Qti Creator added to Tao Qti Item extension');
     }
 }
