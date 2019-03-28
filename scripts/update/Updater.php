@@ -354,5 +354,10 @@ class Updater extends \common_ext_ExtensionUpdater
             $extension->setConfig('client_lib_config_registry', $config);
             $this->setVersion('5.2.1');
         }
+
+        if ($this->isVersion('5.2.1')) {
+            call_user_func(new RegisterPciAudioRecording(), ['0.9.0']);
+            $this->setVersion('5.3.0');
+        }
     }
 }

@@ -82,6 +82,14 @@ define([
         },
 
         /**
+         * Gets the delay before auto-start of recording, in seconds
+         * @returns {Number}
+         */
+        getDelayInSeconds: function getDelayInSeconds() {
+            return this.config.delayMinutes * 60 + this.config.delaySeconds;
+        },
+
+        /**
          * Render the PCI
          * @param {Object} config
          */
@@ -245,9 +253,9 @@ define([
         },
 
         initRecording: function initRecording() {
-            var delayInSeconds = this.config.delayMinutes * 60 + this.config.delaySeconds;
-            var ctrCache = {};
+            var delayInSeconds = this.getDelayInSeconds();
             var self = this;
+            this.ctrCache = {};
 
             // no auto start, don't start recording
             if (this.config.autoStart !== true) {
@@ -262,29 +270,53 @@ define([
 
             // cache controls states
             _.forEach(this.controls, function(ctr, id) {
-                ctrCache[id] = ctr.getState();
+                self.ctrCache[id] = ctr.getState();
                 ctr.disable();
             });
+
+            if (delayInSeconds > 0) {
+                // init countdown
+                this.initCountdown();
+            }
+
+            if(this.hasMediaStimulus()) {
+                return;
+            }
+
+            this.initDelay();
+        },
+
+        initDelay: function initDelay() {
+            var self = this;
 
             // cleaning up delay callback
             this._cleanDelayCallback();
 
-            // adding a delay before start recording...
-            this._delayCallback = setTimeout(function() {
+            // waiting for permission
+            this.askPermissionAccessMic(function() {
 
-                // restore controls states
-                _.forEach(self.controls, function(ctr, id) {
-                    ctr.setState(ctrCache[id]);
-                });
+                self.countdown.start();
 
-                if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
-                    self.startRecording();
-                } else {
-                    self.updateControls();
-                }
+                // adding a delay before start recording...
+                self._delayCallback = setTimeout(function() {
 
-                self._cleanDelayCallback();
-            }, delayInSeconds * 1000);
+                    self.countdown.destroy();
+
+                    // restore controls states
+                    _.forEach(self.controls, function(ctr, id) {
+                        ctr.setState(self.ctrCache[id]);
+                    });
+
+                    self._cleanDelayCallback();
+
+                    if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
+                        self.startRecording();
+                    } else {
+                        self.updateControls();
+                    }
+
+                }, self.getDelayInSeconds() * 1000);
+            });
         },
 
         /**
@@ -317,8 +349,12 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function() {
-                    if (self.config.autoStart && !self._delayCallback) {
+                    // if set autoStart recording without delay - startRecording
+                    // if set autoStart recording with delay and countdown is displayed - initDelay
+                    if (self.config.autoStart && !self.config.delayMinutes && !self.config.delaySeconds) {
                         self.startRecording();
+                    } else if(self.config.autoStart && self.countdown && self.countdown.isDisplayed()) {
+                        self.initDelay();
                     }
                 });
                 this.mediaStimulus.render();
@@ -326,6 +362,17 @@ define([
             } else {
                 this.$mediaStimulusContainer.empty();
                 this.$mediaStimulusContainer.removeClass('active');
+            }
+        },
+        /**
+         * Create countdown timer
+         */
+        initCountdown: function initCountdown() {
+            if (this.config.autoStart === true) {
+                this.countdown = uiElements.countdownPieChartFactory({
+                    $container: this.$meterContainer.find('.countdown-pie-chart'),
+                    delayInSeconds: this.getDelayInSeconds()
+                });
             }
         },
 
@@ -346,17 +393,44 @@ define([
         },
 
         /**
+         * Init recording if no permission to access the mic, ask for it.
+         */
+        askPermissionAccessMic: function askPermissionAccessMic(callback) {
+            // recorder instance created, but microphone access not granted
+            if(this.recorder && this.recorder.is('created')) {
+                this.recorder.init()
+                    .then(function() {
+                        callback();
+                    })
+                    .catch(function(err) {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    });
+            }
+            // ready to record, microphone access is granted
+            if(this.recorder && this.recorder.is('idle')) {
+                callback();
+            }
+        },
+
+        /**
          * Starts the recording if has permission to access the mic. If not, ask for it.
          */
         startRecording: function startRecording() {
             var self = this;
 
-            this.recorder.init().then(function() {
+            if (this.recorder.is('created')) { // if recorder is not initialised yet
+                this.recorder.init()
+                    .then(function() {
+                        startForReal();
+                    })
+                    .catch(function(err) {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    });
+            } else {
                 startForReal();
-            })
-            .catch(function(err) {
-                console.error(err);
-            });
+            }
 
             function startForReal() {
                 self.resetRecording();
@@ -369,6 +443,7 @@ define([
                 self.updateControls();
             }
         },
+
 
         /**
          * Stop the current recording
@@ -630,7 +705,7 @@ define([
          */
         updateControls: function updateControls() {
             // dont't change controls state, waiting for delay callback
-            if (this._delayCallback) {
+            if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
                 return;
             }
             _.invoke(this.controls, 'updateState');

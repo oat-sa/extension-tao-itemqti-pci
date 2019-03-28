@@ -404,12 +404,57 @@ define([
         return mediaStimulus;
     }
 
+    /**
+     * Creates a countdown timer as a pie chart
+     * @param {Object} config
+     * @param {Object} config.$container - jQuery element that the countdown timer will be appended to
+     * @param {Number} config.delayInSeconds - delay in seconds
+     */
+    function countdownPieChartFactory(config) {
+        var countdownPieChart;
+        var $container   = config.$container;
+        var delay = config.delayInSeconds - 1;
+        var $countdownPieChart = $(
+            '<div class="countdown-pie-container countdown-pie-animated">' +
+                '<div class="countdown-pie-circle">' +
+                    '<div class="countdown-pie countdown-pie-spinner countdown-pie-animated"></div>' +
+                    '<div class="countdown-pie countdown-pie-filler countdown-pie-animated"></div>' +
+                    '<div class="countdown-pie-mask countdown-pie-animated"></div>' +
+                '</div>' +
+            '</div>'
+        );
+
+        var displayed = true;
+
+        countdownPieChart = {
+            isDisplayed: function isDisplayed() {
+                return displayed;
+            },
+            start: function start() {
+                $countdownPieChart.css('animation-play-state', 'running');
+                $countdownPieChart.find('.countdown-pie-animated').css('animation-play-state', 'running');
+            },
+            destroy: function destroy() {
+                displayed = false;
+                $container.empty();
+            }
+        };
+
+        $countdownPieChart.css('animation-duration', delay + 's');
+        $countdownPieChart.find('.countdown-pie-animated').css('animation-duration', delay + 's');
+
+        $container.empty();
+        $container.append($countdownPieChart);
+
+        return countdownPieChart;
+    }
 
     return {
         controlFactory:         controlFactory,
         progressBarFactory:     progressBarFactory,
         inputMeterFactory:      inputMeterFactory,
-        mediaStimulusFactory:   mediaStimulusFactory
+        mediaStimulusFactory:   mediaStimulusFactory,
+        countdownPieChartFactory: countdownPieChartFactory
     };
 
 });
