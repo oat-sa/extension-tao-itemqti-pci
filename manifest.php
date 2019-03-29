@@ -18,7 +18,6 @@
  *
  *
  */
-use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
@@ -33,10 +32,10 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '5.1.0',
+    'version' => '5.3.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
-        'tao' => '>=27.2.0',
+        'tao' => '>=30.0.0',
         'taoQtiItem' => '>=13.8.0'
     ),
     'acl' => array(
@@ -44,6 +43,12 @@ return array(
         array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
         array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
         array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'unregister')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'enable')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'disable')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'export')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'import')),
+        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'index')),
     ),
     'install' => array(
         'rdf' => array(
@@ -54,7 +59,6 @@ return array(
             RegisterPciFilesystem::class,
             SetupPortableElementFileStorage::class,
             RegisterPciModel::class,
-            SetQtiCreatorConfig::class,
             RegisterClientProvider::class,
             RegisterPciLiquid::class,
             RegisterPciLikertScale::class,
@@ -74,5 +78,8 @@ return array(
 
         #BASE URL (usually the domain root)
         'BASE_URL' => ROOT_URL.'qtiItemPci/',
-    )
+    ),
+    'extra' => [
+        'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR .'structures.xml'
+    ]
 );

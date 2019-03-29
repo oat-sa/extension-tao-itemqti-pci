@@ -43,6 +43,7 @@ $playback: whiten($info, .3);
       float: left;
 
       display: flex;
+      position: relative;
 
       &.record {
         .mic {
@@ -181,6 +182,95 @@ $playback: whiten($info, .3);
 
     }
 
+    // Countdown timer as a pie chart
+    $sizeCountdown: 52px;
+
+    .countdown-pie-chart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      margin: -2px;
+
+      .countdown-pie-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        background-color: transparentize($disabledBg, 0.55);
+        @include animation(disable);
+        animation: disable 15s steps(1,end) 1 forwards paused;
+
+        .countdown-pie-circle {
+          width: $sizeCountdown;
+          height: $sizeCountdown;
+          position: relative;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: $enabledBg;
+          border-radius: 50%;
+
+          .countdown-pie {
+            width: 50%;
+            height: 100%;
+            transform-origin: 100% 50%;
+            position: absolute;
+            background: $uiGeneralContentBg;
+          }
+        
+          .countdown-pie-spinner {
+            border-radius: 100% 0 0 100% / 50% 0 0 50%;
+            z-index: 20;
+            border-right: none;
+            animation: rota 15s linear 1 forwards paused;
+          }
+        
+          &:hover .countdown-pie-spinner,
+          &:hover .countdown-pie-filler, 
+          &:hover .countdown-pie-mask {
+            cursor: not-allowed;   
+          }
+        
+          .countdown-pie-filler {
+            border-radius: 0 100% 100% 0 / 0 50% 50% 0; 
+            left: 50%;
+            opacity: 0;
+            z-index: 100;
+            border-left: none;
+            animation: opa 15s steps(1,end) 1 reverse forwards paused;
+          }
+        
+          .countdown-pie-mask {
+            width: 50%;
+            height: 100%;
+            position: absolute;
+            background: inherit;
+            opacity: 1;
+            z-index: 300;
+            border-bottom-left-radius: $sizeCountdown * 2;
+            border-top-left-radius: $sizeCountdown * 2;
+            border-right: 0;
+            animation: opa 15s steps(1,end) 1 forwards paused;
+          }
+        
+          @keyframes rota {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        
+          @keyframes opa {
+            0% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+          }
+
+          @keyframes disable {
+            0%, 99% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+        }
+      }
+    }
   }
 }
 
