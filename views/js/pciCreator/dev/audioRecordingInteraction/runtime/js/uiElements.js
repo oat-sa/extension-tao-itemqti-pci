@@ -120,6 +120,20 @@ define([
             },
 
             /**
+             * Get current state
+             * @returns {string} state - the current state
+             */
+            getState: function getState() {
+                return state;
+            },
+
+            /**
+             * Set the state of the control
+             * @param {String} newState
+             */
+            setState: setState,
+
+            /**
              * Trigger the update state callback
              */
             updateState: function updateState() {
@@ -324,7 +338,7 @@ define([
              * @param {String} newState
              * @private
              */
-            _setState: function setState(newState) {
+            setState: function setState(newState) {
                 state = newState;
                 this.trigger('statechange');
                 this.trigger(state);
@@ -364,16 +378,16 @@ define([
                     if (mediaElement) {
                         mediaElement
                             .on('ready pause stop', function() {
-                                self._setState(mediaStimulusStates.IDLE);
+                                self.setState(mediaStimulusStates.IDLE);
                             })
                             .on('play', function() {
-                                self._setState(mediaStimulusStates.PLAYING);
+                                self.setState(mediaStimulusStates.PLAYING);
                             })
                             .on('ended', function() {
-                                self._setState(mediaStimulusStates.ENDED);
+                                self.setState(mediaStimulusStates.ENDED);
                             })
                             .on('disabled', function() {
-                                self._setState(mediaStimulusStates.DISABLED);
+                                self.setState(mediaStimulusStates.DISABLED);
                             });
                     }
                 }
@@ -390,12 +404,57 @@ define([
         return mediaStimulus;
     }
 
+    /**
+     * Creates a countdown timer as a pie chart
+     * @param {Object} config
+     * @param {Object} config.$container - jQuery element that the countdown timer will be appended to
+     * @param {Number} config.delayInSeconds - delay in seconds
+     */
+    function countdownPieChartFactory(config) {
+        var countdownPieChart;
+        var $container   = config.$container;
+        var delay = config.delayInSeconds - 1;
+        var $countdownPieChart = $(
+            '<div class="countdown-pie-container countdown-pie-animated">' +
+                '<div class="countdown-pie-circle">' +
+                    '<div class="countdown-pie countdown-pie-spinner countdown-pie-animated"></div>' +
+                    '<div class="countdown-pie countdown-pie-filler countdown-pie-animated"></div>' +
+                    '<div class="countdown-pie-mask countdown-pie-animated"></div>' +
+                '</div>' +
+            '</div>'
+        );
+
+        var displayed = true;
+
+        countdownPieChart = {
+            isDisplayed: function isDisplayed() {
+                return displayed;
+            },
+            start: function start() {
+                $countdownPieChart.css('animation-play-state', 'running');
+                $countdownPieChart.find('.countdown-pie-animated').css('animation-play-state', 'running');
+            },
+            destroy: function destroy() {
+                displayed = false;
+                $container.empty();
+            }
+        };
+
+        $countdownPieChart.css('animation-duration', delay + 's');
+        $countdownPieChart.find('.countdown-pie-animated').css('animation-duration', delay + 's');
+
+        $container.empty();
+        $container.append($countdownPieChart);
+
+        return countdownPieChart;
+    }
 
     return {
         controlFactory:         controlFactory,
         progressBarFactory:     progressBarFactory,
         inputMeterFactory:      inputMeterFactory,
-        mediaStimulusFactory:   mediaStimulusFactory
+        mediaStimulusFactory:   mediaStimulusFactory,
+        countdownPieChartFactory: countdownPieChartFactory
     };
 
 });

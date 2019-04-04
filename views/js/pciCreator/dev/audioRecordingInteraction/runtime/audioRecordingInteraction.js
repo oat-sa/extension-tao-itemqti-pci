@@ -72,6 +72,22 @@ define([
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
+        _delayCallback: null,
+
+        _cleanDelayCallback: function _cleanDelayCallback() {
+            if (this._delayCallback) {
+                clearTimeout(this._delayCallback);
+                this._delayCallback = null;
+            }
+        },
+
+        /**
+         * Gets the delay before auto-start of recording, in seconds
+         * @returns {Number}
+         */
+        getDelayInSeconds: function getDelayInSeconds() {
+            return this.config.delayMinutes * 60 + this.config.delaySeconds;
+        },
 
         /**
          * Render the PCI
@@ -91,6 +107,7 @@ define([
             this.iconsFileUrl       = this.assetManager.resolve(ICON_CONTROLS);
 
             this.initConfig(config);
+
             this.initRecorder();
             this.initPlayer();
             this.initProgressBar();
@@ -98,6 +115,7 @@ define([
             this.initMediaStimulus();
             this.initControls();
             this.updateResetCount();
+            this.initRecording();
         },
 
         /**
@@ -105,6 +123,8 @@ define([
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+         * @param {Number}  config.delaySeconds - seconds delay before start recording
+         * @param {Number}  config.delayMinutes - minutes delay before start recording
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
          * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
@@ -119,6 +139,10 @@ define([
             this.config = {
                 allowPlayback:           toBoolean(config.allowPlayback, true),
                 autoStart:               toBoolean(config.autoStart, false),
+
+                delaySeconds:            toInteger(config.delaySeconds, 0),
+                delayMinutes:            toInteger(config.delayMinutes, 0),
+
                 maxRecords:              toInteger(config.maxRecords, 3),
                 maxRecordingTime:        toInteger(config.maxRecordingTime, 120),
 
@@ -130,7 +154,7 @@ define([
                 media:                   config.media || {},
 
                 displayDownloadLink:     toBoolean(config.displayDownloadLink, false),
-                updateResponsePartially: toBoolean(config.updateResponsePartially, false),
+                updateResponsePartially: toBoolean(config.updateResponsePartially, false)
             };
         },
 
@@ -228,6 +252,73 @@ define([
             });
         },
 
+        initRecording: function initRecording() {
+            var delayInSeconds = this.getDelayInSeconds();
+            var self = this;
+            this.ctrCache = {};
+
+            // no auto start, don't start recording
+            if (this.config.autoStart !== true) {
+                return;
+            }
+
+            // no delay and no media stimulus, start recording now
+            if (delayInSeconds === 0 && !this.hasMediaStimulus()) {
+                this.startRecording();
+                return;
+            }
+
+            // cache controls states
+            _.forEach(this.controls, function(ctr, id) {
+                self.ctrCache[id] = ctr.getState();
+                ctr.disable();
+            });
+
+            if (delayInSeconds > 0) {
+                // init countdown
+                this.initCountdown();
+            }
+
+            if(this.hasMediaStimulus()) {
+                return;
+            }
+
+            this.initDelay();
+        },
+
+        initDelay: function initDelay() {
+            var self = this;
+
+            // cleaning up delay callback
+            this._cleanDelayCallback();
+
+            // waiting for permission
+            this.askPermissionAccessMic(function() {
+
+                self.countdown.start();
+
+                // adding a delay before start recording...
+                self._delayCallback = setTimeout(function() {
+
+                    self.countdown.destroy();
+
+                    // restore controls states
+                    _.forEach(self.controls, function(ctr, id) {
+                        ctr.setState(self.ctrCache[id]);
+                    });
+
+                    self._cleanDelayCallback();
+
+                    if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
+                        self.startRecording();
+                    } else {
+                        self.updateControls();
+                    }
+
+                }, self.getDelayInSeconds() * 1000);
+            });
+        },
+
         /**
          * Instanciate the media stimulus player and its event listeners
          * This player is only for the playback of the stimulus. The recorded audio uses its own player.
@@ -258,8 +349,12 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function() {
-                    if (self.config.autoStart) {
+                    // if set autoStart recording without delay - startRecording
+                    // if set autoStart recording with delay and countdown is displayed - initDelay
+                    if (self.config.autoStart && !self.config.delayMinutes && !self.config.delaySeconds) {
                         self.startRecording();
+                    } else if(self.config.autoStart && self.countdown && self.countdown.isDisplayed()) {
+                        self.initDelay();
                     }
                 });
                 this.mediaStimulus.render();
@@ -267,6 +362,17 @@ define([
             } else {
                 this.$mediaStimulusContainer.empty();
                 this.$mediaStimulusContainer.removeClass('active');
+            }
+        },
+        /**
+         * Create countdown timer
+         */
+        initCountdown: function initCountdown() {
+            if (this.config.autoStart === true) {
+                this.countdown = uiElements.countdownPieChartFactory({
+                    $container: this.$meterContainer.find('.countdown-pie-chart'),
+                    delayInSeconds: this.getDelayInSeconds()
+                });
             }
         },
 
@@ -287,17 +393,44 @@ define([
         },
 
         /**
+         * Init recording if no permission to access the mic, ask for it.
+         */
+        askPermissionAccessMic: function askPermissionAccessMic(callback) {
+            // recorder instance created, but microphone access not granted
+            if(this.recorder && this.recorder.is('created')) {
+                this.recorder.init()
+                    .then(function() {
+                        callback();
+                    })
+                    .catch(function(err) {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    });
+            }
+            // ready to record, microphone access is granted
+            if(this.recorder && this.recorder.is('idle')) {
+                callback();
+            }
+        },
+
+        /**
          * Starts the recording if has permission to access the mic. If not, ask for it.
          */
         startRecording: function startRecording() {
             var self = this;
 
-            this.recorder.init().then(function() {
+            if (this.recorder.is('created')) { // if recorder is not initialised yet
+                this.recorder.init()
+                    .then(function() {
+                        startForReal();
+                    })
+                    .catch(function(err) {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    });
+            } else {
                 startForReal();
-            })
-            .catch(function(err) {
-                console.error(err);
-            });
+            }
 
             function startForReal() {
                 self.resetRecording();
@@ -310,6 +443,7 @@ define([
                 self.updateControls();
             }
         },
+
 
         /**
          * Stop the current recording
@@ -570,6 +704,10 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
+            // dont't change controls state, waiting for delay callback
+            if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
+                return;
+            }
             _.invoke(this.controls, 'updateState');
         },
 
@@ -592,9 +730,6 @@ define([
                 '</svg>';
         },
 
-
-
-
         /**
          * PCI public interface
          */
@@ -604,6 +739,8 @@ define([
         getTypeIdentifier: function getTypeIdentifier() {
             return 'audioRecordingInteraction';
         },
+
+
         /**
          * Render the PCI :
          * @param {String} id
@@ -631,14 +768,6 @@ define([
 
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
-
-            // prevent auto start recording in preview
-            if (this.config.autoStart === true &&
-                this.config.useMediaStimulus === false &&
-                this.$container.parents('.tao-preview-scope').length === 0
-            ) {
-                self.startRecording();
-            }
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -720,6 +849,8 @@ define([
             }
 
             promises.push(self.resetResponse());
+
+            self._cleanDelayCallback();
 
             return Promise.all(promises).then(
                 function() {
