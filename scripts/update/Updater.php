@@ -354,5 +354,7 @@ class Updater extends \common_ext_ExtensionUpdater
             $extension->setConfig('client_lib_config_registry', $config);
             $this->setVersion('5.2.1');
         }
+
+        $this->skip('5.2.0', '5.2.1');
     }
 }
