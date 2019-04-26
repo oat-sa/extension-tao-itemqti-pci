@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2019 (original work) Open Assessment Technologies SA;
  */
 /**
  * This module wraps an audio processor provider which depends on the requested recording format:
@@ -123,7 +123,6 @@ define([
             analyser.fftSize = 32;
 
             source.connect(analyser);
-
             bufferLength = analyser.frequencyBinCount;
             frequencyArray = new Uint8Array(bufferLength);
         }
@@ -134,8 +133,26 @@ define([
          */
         function getInputLevel() {
             var sum;
+            var frequencyLength;
+            var getRndInteger;
 
             analyser.getByteFrequencyData(frequencyArray);
+            frequencyLength = frequencyArray.length;
+
+            if (frequencyArray.length && /(iPhone|iPad)/i.test(navigator.userAgent)) {
+                getRndInteger = function(min, max) {
+                    return Math.floor(Math.random() * (max - min) ) + min;
+                };
+
+                frequencyArray[0] = getRndInteger(0, frequencyLength * frequencyLength);
+
+                _.forEach(frequencyArray, function(level, index) {
+                    frequencyArray[index] = frequencyArray[0];
+                    if (frequencyLength / 2 < index) {
+                        return false;
+                    }
+                });
+            }
 
             sum = frequencyArray.reduce(function(a, b) {
                 return a + b;
