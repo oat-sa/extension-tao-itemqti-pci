@@ -48,6 +48,17 @@ define([
     };
 
     /**
+     * Get a random number between the specified values
+     *
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    function getRndInteger(min, max) {
+        return Math.floor(Math.random() * (max - min) ) + min;
+    }
+
+    /**
      * MediaDevices.getUserMedia polyfill
      * https://github.com/mozdevs/mediaDevices-getUserMedia-polyfill/
      * Mozilla Public License, version 2.0 - https://www.mozilla.org/en-US/MPL/
@@ -108,6 +119,34 @@ define([
             frequencyArray;         // used to compute the input level from the current array of frequencies
 
         /**
+         * Check if client uses the iOS device.
+         *
+         * @param {Array} frequencyArray
+         * @returns {*|boolean}
+         */
+        function isIOSDevice(frequencyArray) {
+            return frequencyArray.length && /(iPhone|iPad)/i.test(navigator.userAgent)
+        }
+
+        /**
+         * Fill the frequencyArray with fake data
+         *
+         * @param {Array} frequencyArray
+         */
+        function fillFakeEmitter(frequencyArray) {
+            var frequencyLength = frequencyArray.length;
+
+            frequencyArray[0] = getRndInteger(0, frequencyLength * frequencyLength);
+
+            _.forEach(frequencyArray, function(level, index) {
+                frequencyArray[index] = frequencyArray[0];
+                if (frequencyLength / 2 < index) {
+                    return false;
+                }
+            });
+        }
+
+        /**
          * Create the Web Audio node that will be used to analyse the input stream
          * @param {MediaStream} stream - incoming audio stream from the microphone
          */
@@ -133,25 +172,11 @@ define([
          */
         function getInputLevel() {
             var sum;
-            var frequencyLength;
-            var getRndInteger;
 
             analyser.getByteFrequencyData(frequencyArray);
-            frequencyLength = frequencyArray.length;
 
-            if (frequencyArray.length && /(iPhone|iPad)/i.test(navigator.userAgent)) {
-                getRndInteger = function(min, max) {
-                    return Math.floor(Math.random() * (max - min) ) + min;
-                };
-
-                frequencyArray[0] = getRndInteger(0, frequencyLength * frequencyLength);
-
-                _.forEach(frequencyArray, function(level, index) {
-                    frequencyArray[index] = frequencyArray[0];
-                    if (frequencyLength / 2 < index) {
-                        return false;
-                    }
-                });
+            if (isIOSDevice(frequencyArray)) {
+                fillFakeEmitter(frequencyArray);
             }
 
             sum = frequencyArray.reduce(function(a, b) {
