@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint95\n"
-"PO-Revision-Date: 2019-02-01T10:38:53\n"
+"Project-Id-Version: TAO 3.3.0-sprint96\n"
+"PO-Revision-Date: 2019-04-25T01:04:23\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: it-IT\n"
@@ -14,13 +14,13 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "A newer version of the pci \"%s\" already exists (current version: %s, target version: %s)"
-msgstr ""
+msgstr "Esiste già una versione più recente del PCI \"%s\" (versione corrente: %s, versione di destinazione: %s)"
 
 msgid "Add gap"
-msgstr "Aggiungi spazio"
+msgstr ""
 
 msgid "Add Interaction"
-msgstr ""
+msgstr "Aggiungi interazione"
 
 msgid "Allow download"
 msgstr ""
@@ -29,37 +29,37 @@ msgid "allow line break"
 msgstr ""
 
 msgid "Allow playback"
-msgstr ""
+msgstr "Consenti riproduzione"
 
 msgid "Audio bitrate:"
-msgstr ""
+msgstr "Bitrate audio:"
 
 msgid "authorize white space"
-msgstr ""
+msgstr "autorizzare lo spazio bianco"
 
 msgid "Auto start recording"
-msgstr ""
+msgstr "Avvio automatico della registrazione"
 
 msgid "Back to listing"
-msgstr ""
+msgstr "Torna all'elenco"
 
 msgid "Channels"
 msgstr ""
 
 msgid "Comparison"
-msgstr ""
+msgstr "Confronto"
 
 msgid "Compressed"
 msgstr ""
 
 msgid "cosinus"
-msgstr ""
+msgstr "coseno"
 
 msgid "disabled"
 msgstr ""
 
 msgid "divide"
-msgstr ""
+msgstr "dividere"
 
 msgid "enable auto wrap"
 msgstr ""
@@ -68,151 +68,157 @@ msgid "Experimental only"
 msgstr ""
 
 msgid "exponent"
-msgstr ""
+msgstr "esponente"
 
 msgid "For tests only"
 msgstr ""
 
 msgid "fraction"
-msgstr ""
+msgstr "frazione"
 
 msgid "Functions"
-msgstr ""
+msgstr "Funzioni"
 
 msgid "Gap size"
-msgstr "Dimensione dello spazio"
+msgstr ""
 
 msgid "Give the possibility to the test taker to playback its own recording."
-msgstr ""
+msgstr "Dare la possibilità al partecipante di riprodurre la propria registrazione."
 
 msgid "greater than or equal"
-msgstr ""
+msgstr "maggiore o uguale"
 
 msgid "id : "
-msgstr ""
+msgstr "id : "
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
 msgstr ""
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
-msgstr ""
+msgstr "In secondi. Tempo di registrazione massimo consentito (non può essere inferiore a 10 secondi). La registrazione si fermerà automaticamente una volta raggiunto."
 
 msgid "Large"
-msgstr "Grande"
+msgstr ""
 
 msgid "Level"
-msgstr ""
+msgstr "Livello"
 
 msgid "ln"
-msgstr ""
+msgstr "ln"
 
 msgid "log"
-msgstr ""
+msgstr "registro"
 
 msgid "lower than or equal"
-msgstr ""
+msgstr "inferiore o uguale"
 
 msgid "Manage custom interactions"
-msgstr ""
+msgstr "Gestisci interazioni personalizzate"
 
 msgid "Max attempts:"
-msgstr ""
+msgstr "Max tentativi:"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr ""
+msgstr "Numero massimo di tentativi di registrazione consentiti al partecipante al test. Impostare su 0 per consentire tentativi illimitati. Con un limite di 3, il candidato alla prova sarà in grado di fare clic 2 volte sul pulsante di reset."
 
 msgid "Medium"
-msgstr "Medio"
+msgstr ""
+
+msgid "Min:"
+msgstr ""
 
 msgid "Mono"
 msgstr ""
 
 msgid "No Custom Interaction"
-msgstr ""
+msgstr "Nessuna Interazione Personalizzata"
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
 msgstr ""
 
 msgid "Operands"
-msgstr ""
+msgstr "Operandi"
 
 msgid "Options"
 msgstr ""
 
 msgid "Plus/minus"
-msgstr ""
+msgstr "Più/meno"
 
 msgid "Recording format"
 msgstr ""
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
-msgstr ""
+msgstr "La registrazione inizia automaticamente una volta che l'esaminatore ha dato l'autorizzazione all'uso del microfono. Se si utilizza uno impulso multimediale, la registrazione inizia automaticamente dopo che l'impulso è stato riprodotto."
 
 msgid "Response identifier"
-msgstr ""
+msgstr "Identificatore di risposta"
 
 msgid "Scale size"
+msgstr "Dimensione scala"
+
+msgid "Sec:"
 msgstr ""
 
 msgid "sinus"
-msgstr ""
+msgstr "seno"
 
 msgid "Small"
-msgstr "Piccolo"
+msgstr ""
 
 msgid "square root"
-msgstr ""
+msgstr "radice quadrata"
 
 msgid "Stereo"
 msgstr ""
 
 msgid "Symbols"
-msgstr ""
+msgstr "Simboli"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr ""
+msgstr "L'identificativo della scelta. Questo identificatore non deve essere utilizzato da altre risposte o variabili oggetto. Un identificatore è una stringa di caratteri che deve iniziare con una lettera o una sottolineatura (\"_\") e contenere solo Lettere, caratteri di sottolineatura, trattini (\"-\"), punto (\".\", anche pieno), Cifre, Combinazioni di Caratteri ed Estensori."
 
 msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
-msgstr ""
+msgstr "Esiste già un'interazione con lo stesso identificativo \"%s\" (label : \"%s\") e la stessa versione : %s. Vuoi ignorare quello esistente?"
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr ""
+msgstr "Questo è solo a scopo di test. Visualizza un collegamento per scaricare il file registrato una volta interrotta la registrazione. Questo non dovrebbe essere usato in un contesto di somministrazione, in quanto consentirebbe al partecipante di scaricare la propria registrazione."
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr ""
+msgstr "Queste opzioni consentono di inserire un'impulso multimediale che dovrà essere riprodotto prima che possa avvenire la registrazione."
 
 msgid "Time limit:"
-msgstr ""
+msgstr "Limite di tempo:"
 
 msgid "times"
-msgstr ""
+msgstr "volte"
 
 msgid "Trigonometry"
-msgstr ""
+msgstr "Trigonometria"
 
 msgid "type : "
 msgstr ""
 
 msgid "Unable to upload file %s : %s"
-msgstr ""
+msgstr "Impossibile caricare il file %s : %s"
 
 msgid "Uncompressed"
 msgstr ""
 
 msgid "Upload new custom interaction (zip package)"
-msgstr ""
+msgstr "Carica una nuova interazione personalizzata (pacchetto zip)"
 
 msgid "use expression with gaps"
-msgstr "usa espressione con spazi"
+msgstr ""
 
 msgid "Use media stimulus"
-msgstr ""
+msgstr "Utilizzare impulso multimediale"
 
 msgid "version : "
-msgstr ""
+msgstr "versione : "
 
 msgid "warning : changes affect all users of the item creator"
-msgstr ""
+msgstr "avviso : le modifiche riguardano tutti gli utenti del creatore dell'elemento"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr ""

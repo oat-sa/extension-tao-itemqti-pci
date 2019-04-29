@@ -1,0 +1,225 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 3.3.0-sprint96\n"
+"PO-Revision-Date: 2019-04-25T01:10:56\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: ca-ES-valencia\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: ca-ES-valencia\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "A newer version of the pci \"%s\" already exists (current version: %s, target version: %s)"
+msgstr "Ja existeix una nova versió del PCI \"%s\" (versió actual: %s, versió de destinació: %s)"
+
+msgid "Add gap"
+msgstr ""
+
+msgid "Add Interaction"
+msgstr "Afig una interacció"
+
+msgid "Allow download"
+msgstr ""
+
+msgid "allow line break"
+msgstr ""
+
+msgid "Allow playback"
+msgstr "Permet la reproducció"
+
+msgid "Audio bitrate:"
+msgstr "Taxa de bits d'àudio:"
+
+msgid "authorize white space"
+msgstr "autoritza els espais"
+
+msgid "Auto start recording"
+msgstr "Inici automàtic de la gravació"
+
+msgid "Back to listing"
+msgstr "Torna a la llista"
+
+msgid "Channels"
+msgstr ""
+
+msgid "Comparison"
+msgstr "Comparació"
+
+msgid "Compressed"
+msgstr ""
+
+msgid "cosinus"
+msgstr "cosinus"
+
+msgid "disabled"
+msgstr ""
+
+msgid "divide"
+msgstr "divideix"
+
+msgid "enable auto wrap"
+msgstr ""
+
+msgid "Experimental only"
+msgstr ""
+
+msgid "exponent"
+msgstr "exponent"
+
+msgid "For tests only"
+msgstr ""
+
+msgid "fraction"
+msgstr "fracció"
+
+msgid "Functions"
+msgstr "Funcions"
+
+msgid "Gap size"
+msgstr ""
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr "Dóna la possibilitat al participant de reproduir la seua gravació"
+
+msgid "greater than or equal"
+msgstr "superior o igual"
+
+msgid "id : "
+msgstr "id : "
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr ""
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr "En segons. El temps màxim de gravació permés (no pot ser inferior a 10 segons; la gravació es para automàticament quan s'arriba a aquest valor."
+
+msgid "Large"
+msgstr ""
+
+msgid "Level"
+msgstr "Nivell"
+
+msgid "ln"
+msgstr "ln"
+
+msgid "log"
+msgstr "log"
+
+msgid "lower than or equal"
+msgstr "inferior o igual"
+
+msgid "Manage custom interactions"
+msgstr "Gestiona interaccions personalitzades"
+
+msgid "Max attempts:"
+msgstr "Nre. màxim d'intents"
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr "Nombre màxim d'intents de gravació permés al participant. Establiu-ho a 0 per a un nombre il·limitat d'intents. Amb un límit de 3, el participant podrà fer clic 2 vegades al botó de reinicialitzar."
+
+msgid "Medium"
+msgstr ""
+
+msgid "Min:"
+msgstr ""
+
+msgid "Mono"
+msgstr ""
+
+msgid "No Custom Interaction"
+msgstr "Sense interacció personalitzada"
+
+msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
+msgstr ""
+
+msgid "Operands"
+msgstr "Operands"
+
+msgid "Options"
+msgstr ""
+
+msgid "Plus/minus"
+msgstr "Més/menys"
+
+msgid "Recording format"
+msgstr ""
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr "La gravació comença automàticament una vegada el participant autoritza l'ús del micròfon. Si s'utilitza un estímul multimèdia, aleshores la gravació comença automàticament després de la reproducció de l'estímul."
+
+msgid "Response identifier"
+msgstr "Identificador de la resposta"
+
+msgid "Scale size"
+msgstr "Mida de l'escala"
+
+msgid "Sec:"
+msgstr ""
+
+msgid "sinus"
+msgstr "sinus"
+
+msgid "Small"
+msgstr ""
+
+msgid "square root"
+msgstr "arrel quadrada"
+
+msgid "Stereo"
+msgstr ""
+
+msgid "Symbols"
+msgstr "Símbols"
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "L'identificador de l'elecció. Aquest identificador no s'ha d'utilitzar en cap altra resposta ni variable d'element. Un identificador és una cadena de caràcters que ha de començar amb una lletra o una ratlla baixa (\"_\") i conté només lletres, ratlles baixes, guions (\"-\"), punts (\".\"), xifres, combinacions de caràcters i extensions."
+
+msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
+msgstr "Ja hi ha una interacció amb el mateix identificador \"%s\" (etiqueta: \"%s\") i la mateixa versió: %s. Voleu sobreescriure la que ja existeix?"
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr "Això és només per a proves. Mostra un enllaç per a baixar el fitxer gravat una vegada para la gravació. Això no s'ha d'utilitzar en un context d'aplicació, ja que permetria al participant baixar la seua pròpia gravació."
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr "Aquestes opcions permeten inserir un estímul multimèdia que s'haurà de reproduir abans que es produïsca la gravació."
+
+msgid "Time limit:"
+msgstr "Límit de temps:"
+
+msgid "times"
+msgstr "vegades"
+
+msgid "Trigonometry"
+msgstr "Trigonometria"
+
+msgid "type : "
+msgstr ""
+
+msgid "Unable to upload file %s : %s"
+msgstr "No es pot carregar el fitxer %s: %s"
+
+msgid "Uncompressed"
+msgstr ""
+
+msgid "Upload new custom interaction (zip package)"
+msgstr "Carrega una nova interacció personalitzada (paquet zip)"
+
+msgid "use expression with gaps"
+msgstr ""
+
+msgid "Use media stimulus"
+msgstr "Utilitza un estímul multimèdia"
+
+msgid "version : "
+msgstr "versió: "
+
+msgid "warning : changes affect all users of the item creator"
+msgstr "Avís: Aquests canvis afecten tots els usuaris del creador d'elements"
+
+msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+

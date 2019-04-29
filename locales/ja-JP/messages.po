@@ -1,0 +1,225 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 3.3.0-sprint96\n"
+"PO-Revision-Date: 2019-04-25T01:06:31\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: ja-JP\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: ja-JP\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "A newer version of the pci \"%s\" already exists (current version: %s, target version: %s)"
+msgstr "新しいバージョンのpci \"%s\" はすでに存在します（現在バージョン：%s、ターゲットバージョン：%s）"
+
+msgid "Add gap"
+msgstr ""
+
+msgid "Add Interaction"
+msgstr "インタラクション追加"
+
+msgid "Allow download"
+msgstr ""
+
+msgid "allow line break"
+msgstr ""
+
+msgid "Allow playback"
+msgstr "再生を許可"
+
+msgid "Audio bitrate:"
+msgstr "オーディオビットレート:"
+
+msgid "authorize white space"
+msgstr "ホワイトスペースを承認"
+
+msgid "Auto start recording"
+msgstr "自動記録開始"
+
+msgid "Back to listing"
+msgstr "リストに戻る"
+
+msgid "Channels"
+msgstr ""
+
+msgid "Comparison"
+msgstr "比較"
+
+msgid "Compressed"
+msgstr ""
+
+msgid "cosinus"
+msgstr "コサイン"
+
+msgid "disabled"
+msgstr ""
+
+msgid "divide"
+msgstr "除算"
+
+msgid "enable auto wrap"
+msgstr ""
+
+msgid "Experimental only"
+msgstr ""
+
+msgid "exponent"
+msgstr "指数"
+
+msgid "For tests only"
+msgstr ""
+
+msgid "fraction"
+msgstr "分数"
+
+msgid "Functions"
+msgstr "機能"
+
+msgid "Gap size"
+msgstr ""
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr "受験者に自分の録音を再生する権限を与えます。"
+
+msgid "greater than or equal"
+msgstr "大なりイコール"
+
+msgid "id : "
+msgstr "ID : "
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr ""
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr "秒単位。最大記録時間(10秒以上)に達すると録音は自動的に停止します。"
+
+msgid "Large"
+msgstr ""
+
+msgid "Level"
+msgstr "レベル"
+
+msgid "ln"
+msgstr "ln"
+
+msgid "log"
+msgstr "ログ"
+
+msgid "lower than or equal"
+msgstr "小なりイコール"
+
+msgid "Manage custom interactions"
+msgstr "カスタム操作の管理"
+
+msgid "Max attempts:"
+msgstr "最大試行回数:"
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr "受験者に許可される試行回数の最大数。0に設定すると、無制限の試行が可能になります。3回に設定すると2回リセットボタンを押せます。"
+
+msgid "Medium"
+msgstr ""
+
+msgid "Min:"
+msgstr ""
+
+msgid "Mono"
+msgstr ""
+
+msgid "No Custom Interaction"
+msgstr "カスタム操作はありません"
+
+msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
+msgstr ""
+
+msgid "Operands"
+msgstr "オペランド"
+
+msgid "Options"
+msgstr ""
+
+msgid "Plus/minus"
+msgstr "プラス/マイナス"
+
+msgid "Recording format"
+msgstr ""
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr "受験者がマイクの使用許諾を与えると、自動的に録音が開始されます。メディアスティミュラスを使用すると、スティミュラスが再生されたら自動的に記録が開始されます。"
+
+msgid "Response identifier"
+msgstr "レスポンス識別子"
+
+msgid "Scale size"
+msgstr "縮尺"
+
+msgid "Sec:"
+msgstr ""
+
+msgid "sinus"
+msgstr "サイン"
+
+msgid "Small"
+msgstr ""
+
+msgid "square root"
+msgstr "平方根"
+
+msgid "Stereo"
+msgstr ""
+
+msgid "Symbols"
+msgstr "シンボル"
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "選択の識別子。この識別子は、他の応答または項目変数で使用してはなりません。識別子は文字列で、文字列またはアンダースコア(\"_\")で始まり、文字列、アンダースコア、ハイフン(\"-\")のみを含む必要があります。"
+
+msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
+msgstr "同じ識別子 \"%s\" (ラベル \"%s\")と同じバージョンの \"%s\" のインタラクションがすでにあります。既存のものを上書きしますか?"
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr "これはテスト目的のみです。記録が停止した後、記録されたファイルをダウンロードするリンクを表示します。これは、受験者が独自の記録をダウンロードできるようにするため、配信コンテキストでは使用されません。"
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr "このオプションは、録音する前に再生されなければならないメディアスティミュラスを挿入することができます。"
+
+msgid "Time limit:"
+msgstr "時間制限:"
+
+msgid "times"
+msgstr "回数"
+
+msgid "Trigonometry"
+msgstr "三角関数"
+
+msgid "type : "
+msgstr ""
+
+msgid "Unable to upload file %s : %s"
+msgstr "アップロードができません %s : %s"
+
+msgid "Uncompressed"
+msgstr ""
+
+msgid "Upload new custom interaction (zip package)"
+msgstr "新しいカスタム操作をアップロード（ZIPパッケージ）"
+
+msgid "use expression with gaps"
+msgstr ""
+
+msgid "Use media stimulus"
+msgstr "メディアスティミュラスの使用"
+
+msgid "version : "
+msgstr "バージョン : "
+
+msgid "warning : changes affect all users of the item creator"
+msgstr "警告：変更はアイテムの作成者全員に影響を与えます"
+
+msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+

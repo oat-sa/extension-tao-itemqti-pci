@@ -1,0 +1,225 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 3.3.0-sprint96\n"
+"PO-Revision-Date: 2019-04-25T01:12:45\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: ru-RU\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: ru-RU\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "A newer version of the pci \"%s\" already exists (current version: %s, target version: %s)"
+msgstr "Более новая версия pci \"%s\" уже существует (текущая версия: %s, целевая версия: %s)"
+
+msgid "Add gap"
+msgstr ""
+
+msgid "Add Interaction"
+msgstr "Добавить взаимодействие"
+
+msgid "Allow download"
+msgstr ""
+
+msgid "allow line break"
+msgstr ""
+
+msgid "Allow playback"
+msgstr "Разрешить воспроизведение"
+
+msgid "Audio bitrate:"
+msgstr "Битрейт аудио:"
+
+msgid "authorize white space"
+msgstr "авторизировать пробел"
+
+msgid "Auto start recording"
+msgstr "Автоматический запуск записи"
+
+msgid "Back to listing"
+msgstr "Вернуться к списку"
+
+msgid "Channels"
+msgstr ""
+
+msgid "Comparison"
+msgstr "Сравнение"
+
+msgid "Compressed"
+msgstr ""
+
+msgid "cosinus"
+msgstr "косинус"
+
+msgid "disabled"
+msgstr ""
+
+msgid "divide"
+msgstr "разделить"
+
+msgid "enable auto wrap"
+msgstr ""
+
+msgid "Experimental only"
+msgstr ""
+
+msgid "exponent"
+msgstr "показатель степени"
+
+msgid "For tests only"
+msgstr ""
+
+msgid "fraction"
+msgstr "доля"
+
+msgid "Functions"
+msgstr "Функции"
+
+msgid "Gap size"
+msgstr ""
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr "Дайте возможность тестируемому воспроизвести собственную запись."
+
+msgid "greater than or equal"
+msgstr "больше или равно"
+
+msgid "id : "
+msgstr "идентификатор : "
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr ""
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr "В секундах. Максимальное допустимое время записи (не менее 10 секунд). Затем запись будет автоматически остановлена."
+
+msgid "Large"
+msgstr ""
+
+msgid "Level"
+msgstr "Уровень"
+
+msgid "ln"
+msgstr "В"
+
+msgid "log"
+msgstr "журнал"
+
+msgid "lower than or equal"
+msgstr "меньше или равно"
+
+msgid "Manage custom interactions"
+msgstr "Управлять взаимодействиями пользователя"
+
+msgid "Max attempts:"
+msgstr "Максимальные попытки:"
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr "Максимальное количество попыток записи разрешенное тестируемому. Установите значение 0, чтобы разрешить неограниченное количество попыток. С лимитом в 3 раза, тестируемый сможет нажать на конпку сброса 2 раза."
+
+msgid "Medium"
+msgstr ""
+
+msgid "Min:"
+msgstr ""
+
+msgid "Mono"
+msgstr ""
+
+msgid "No Custom Interaction"
+msgstr "Нет взаимодействия с пользователем"
+
+msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
+msgstr ""
+
+msgid "Operands"
+msgstr "объекты действия"
+
+msgid "Options"
+msgstr ""
+
+msgid "Plus/minus"
+msgstr "Плюс/минус"
+
+msgid "Recording format"
+msgstr ""
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr "Запись начинается автоматически после того, как тестируемый дает разрешение на использование микрофона. Если используется медиа-стимул, запись начинается автоматически после воспроизведения стимула."
+
+msgid "Response identifier"
+msgstr "Идентификатор ответа"
+
+msgid "Scale size"
+msgstr "Размер шкалы"
+
+msgid "Sec:"
+msgstr ""
+
+msgid "sinus"
+msgstr "синус"
+
+msgid "Small"
+msgstr ""
+
+msgid "square root"
+msgstr "квадратный корень"
+
+msgid "Stereo"
+msgstr ""
+
+msgid "Symbols"
+msgstr "Символы"
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "Идентификатор выбора. Этот идентификатор не должен использоваться какой-либо другой переменной ответа или элемента. Идентификатор - это строка символов, которая должна начинаться с буквы или подчеркивания («_») и содержать только буквы, знак подчеркивания, дефисы («-»), точку («.»), цифры, комбинацию символов и расширения."
+
+msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
+msgstr "Уже существует одно взаимодействие с тем же идентификатором «%s» (ярлык: «%s») и той же версией: %s. Вы хотите перезаписать существующее?"
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr "Это предназначено только для тестирования. Отображает ссылку для загрузки записанного файла после остановки записи. Это не должно использоваться в контексте доставки, так как это позволит тестируемому загружать собственную запись."
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr "Эти параметры позволяют вставить медиа-стимул, который нужно будет воспроизвести до начала записи."
+
+msgid "Time limit:"
+msgstr "Лимит времени:"
+
+msgid "times"
+msgstr "раз"
+
+msgid "Trigonometry"
+msgstr "Тригонометрия"
+
+msgid "type : "
+msgstr ""
+
+msgid "Unable to upload file %s : %s"
+msgstr "Не удалось загрузить файл %s: %s"
+
+msgid "Uncompressed"
+msgstr ""
+
+msgid "Upload new custom interaction (zip package)"
+msgstr "Загрузить новое взаимодействие с пользователем (пакет zip)"
+
+msgid "use expression with gaps"
+msgstr ""
+
+msgid "Use media stimulus"
+msgstr "Использовать медиа-стимул"
+
+msgid "version : "
+msgstr "версия:"
+
+msgid "warning : changes affect all users of the item creator"
+msgstr "предупреждение: изменения коснутся всех пользователей создателя элемента"
+
+msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint95\n"
-"PO-Revision-Date: 2019-02-01T10:38:53\n"
+"Project-Id-Version: TAO 3.3.0-sprint96\n"
+"PO-Revision-Date: 2019-04-25T01:04:44\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: nl-NL\n"
@@ -124,6 +124,9 @@ msgstr "Maximaal aan de kandidate toegestane opname pogingen. Stel in op 0 voor 
 msgid "Medium"
 msgstr ""
 
+msgid "Min:"
+msgstr ""
+
 msgid "Mono"
 msgstr ""
 
@@ -153,6 +156,9 @@ msgstr "Antwoord identificatie"
 
 msgid "Scale size"
 msgstr "Schaalgrootte"
+
+msgid "Sec:"
+msgstr ""
 
 msgid "sinus"
 msgstr "sinus"
