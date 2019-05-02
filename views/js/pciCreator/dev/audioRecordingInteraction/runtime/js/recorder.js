@@ -125,7 +125,7 @@ define([
          * @returns {*|boolean}
          */
         function isIOSDevice(frequencyArray) {
-            return frequencyArray.length && /(iPhone|iPad)/i.test(navigator.userAgent)
+            return /(iPhone|iPad)/i.test(navigator.userAgent)
         }
 
         /**
@@ -135,15 +135,20 @@ define([
          */
         function fillFakeEmitter(frequencyArray) {
             var frequencyLength = frequencyArray.length;
+            var level = getRndInteger(0, frequencyLength * frequencyLength);
+            var levelIndex = 0;
 
-            frequencyArray[0] = getRndInteger(0, frequencyLength * frequencyLength);
-
-            _.forEach(frequencyArray, function(level, index) {
-                frequencyArray[index] = frequencyArray[0];
-                if (frequencyLength / 2 < index) {
-                    return false;
+            while (levelIndex++ < frequencyLength) {
+                frequencyArray[levelIndex] = level;
+                if (frequencyLength / 2 < levelIndex) {
+                    /**
+                     * As far as we're imitating a fake icon with bouncing sound levels, so it would be better
+                     * to fill only the half of `frequencyArray`, which represents the scale for levels of our icon.
+                     * If we fill the whole array, then it will seem that sound is too loud and levels almost maximal.
+                     */
+                    break;
                 }
-            });
+            }
         }
 
         /**
@@ -175,7 +180,7 @@ define([
 
             analyser.getByteFrequencyData(frequencyArray);
 
-            if (isIOSDevice(frequencyArray)) {
+            if (frequencyArray.length && isIOSDevice(frequencyArray)) {
                 fillFakeEmitter(frequencyArray);
             }
 
