@@ -134,7 +134,7 @@ define([
          */
         function fillFakeEmitter(frequencyArray) {
             var frequencyLength = frequencyArray.length;
-            var level = 0
+            var level = 0;
             var levelIndex = 0;
 
             if (frequencyLength) {
