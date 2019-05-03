@@ -183,7 +183,7 @@ define([
 
             analyser.getByteFrequencyData(frequencyArray);
 
-            if (frequencyArray.length && !isIOSDevice()) {
+            if (frequencyArray.length && isIOSDevice()) {
                 fillFakeEmitter(frequencyArray);
             }
 
