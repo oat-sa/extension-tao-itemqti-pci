@@ -121,10 +121,9 @@ define([
         /**
          * Check if client uses the iOS device.
          *
-         * @param {Array} frequencyArray
          * @returns {*|boolean}
          */
-        function isIOSDevice(frequencyArray) {
+        function isIOSDevice() {
             return /(iPhone|iPad)/i.test(navigator.userAgent)
         }
 
@@ -135,8 +134,12 @@ define([
          */
         function fillFakeEmitter(frequencyArray) {
             var frequencyLength = frequencyArray.length;
-            var level = getRndInteger(0, frequencyLength * frequencyLength);
+            var level = 0
             var levelIndex = 0;
+
+            if (frequencyLength) {
+                level = getRndInteger(frequencyLength * (frequencyLength / 2), frequencyLength * frequencyLength);
+            }
 
             while (levelIndex++ < frequencyLength) {
                 frequencyArray[levelIndex] = level;
@@ -180,7 +183,7 @@ define([
 
             analyser.getByteFrequencyData(frequencyArray);
 
-            if (frequencyArray.length && isIOSDevice(frequencyArray)) {
+            if (frequencyArray.length && !isIOSDevice()) {
                 fillFakeEmitter(frequencyArray);
             }
 
