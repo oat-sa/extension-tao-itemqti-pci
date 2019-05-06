@@ -141,17 +141,14 @@ define([
                 level = getRndInteger(frequencyLength * (frequencyLength / 2), frequencyLength * frequencyLength);
             }
 
-            while (levelIndex++ < frequencyLength) {
-                frequencyArray[levelIndex] = level;
-                if (frequencyLength / 2 < levelIndex) {
-                    /**
-                     * As far as we're imitating a fake icon with bouncing sound levels, so it would be better
-                     * to fill only the half of `frequencyArray`, which represents the scale for levels of our icon.
-                     * If we fill the whole array, then it will seem that sound is too loud and levels almost maximal.
-                     */
-                    break;
-                }
-            }
+            do {
+                frequencyArray[levelIndex++] = level;
+                /**
+                 * As far as we're imitating a fake icon with bouncing sound levels, so it would be better
+                 * to fill only the half of `frequencyArray`, which represents the scale for levels of our icon.
+                 * If we fill the whole array, then it will seem that sound is too loud and levels almost maximal.
+                 */
+            } while (levelIndex < frequencyLength / 2);
         }
 
         /**
