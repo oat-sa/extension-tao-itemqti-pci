@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2019 (original work) Open Assessment Technologies SA;
  */
 /**
  * This module wraps an audio processor provider which depends on the requested recording format:
@@ -46,6 +46,17 @@ define([
         IDLE:       'idle',
         RECORDING:  'recording'
     };
+
+    /**
+     * Get a random number between the specified values
+     *
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    function getRndInteger(min, max) {
+        return Math.floor(Math.random() * (max - min) ) + min;
+    }
 
     /**
      * MediaDevices.getUserMedia polyfill
@@ -108,6 +119,39 @@ define([
             frequencyArray;         // used to compute the input level from the current array of frequencies
 
         /**
+         * Check if client uses the iOS device.
+         *
+         * @returns {*|boolean}
+         */
+        function isIOSDevice() {
+            return /(iPhone|iPad)/i.test(navigator.userAgent)
+        }
+
+        /**
+         * Fill the frequencyArray with fake data
+         *
+         * @param {Array} frequencyArray
+         */
+        function fillFakeEmitter(frequencyArray) {
+            var frequencyLength = frequencyArray.length;
+            var level = 0;
+            var levelIndex = 0;
+
+            if (frequencyLength) {
+                level = getRndInteger(frequencyLength * (frequencyLength / 2), frequencyLength * frequencyLength);
+            }
+
+            do {
+                frequencyArray[levelIndex++] = level;
+                /**
+                 * As far as we're imitating a fake icon with bouncing sound levels, so it would be better
+                 * to fill only the half of `frequencyArray`, which represents the scale for levels of our icon.
+                 * If we fill the whole array, then it will seem that sound is too loud and levels almost maximal.
+                 */
+            } while (levelIndex < frequencyLength / 2);
+        }
+
+        /**
          * Create the Web Audio node that will be used to analyse the input stream
          * @param {MediaStream} stream - incoming audio stream from the microphone
          */
@@ -123,7 +167,6 @@ define([
             analyser.fftSize = 32;
 
             source.connect(analyser);
-
             bufferLength = analyser.frequencyBinCount;
             frequencyArray = new Uint8Array(bufferLength);
         }
@@ -136,6 +179,10 @@ define([
             var sum;
 
             analyser.getByteFrequencyData(frequencyArray);
+
+            if (frequencyArray.length && isIOSDevice()) {
+                fillFakeEmitter(frequencyArray);
+            }
 
             sum = frequencyArray.reduce(function(a, b) {
                 return a + b;
