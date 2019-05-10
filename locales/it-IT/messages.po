@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint95\n"
-"PO-Revision-Date: 2019-02-01T10:38:53\n"
+"Project-Id-Version: TAO 3.3.0-sprint101\n"
+"PO-Revision-Date: 2019-05-10T12:31:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: it-IT\n"
@@ -43,6 +43,9 @@ msgstr ""
 msgid "Back to listing"
 msgstr ""
 
+msgid "Cancel"
+msgstr ""
+
 msgid "Channels"
 msgstr ""
 
@@ -53,6 +56,9 @@ msgid "Compressed"
 msgstr ""
 
 msgid "cosinus"
+msgstr ""
+
+msgid "Delete"
 msgstr ""
 
 msgid "disabled"
@@ -124,6 +130,9 @@ msgstr ""
 msgid "Medium"
 msgstr "Medio"
 
+msgid "Min:"
+msgstr ""
+
 msgid "Mono"
 msgstr ""
 
@@ -142,6 +151,10 @@ msgstr ""
 msgid "Plus/minus"
 msgstr ""
 
+#, tao-public
+msgid "Portable Custom Interactions"
+msgstr ""
+
 msgid "Recording format"
 msgstr ""
 
@@ -152,6 +165,13 @@ msgid "Response identifier"
 msgstr ""
 
 msgid "Scale size"
+msgstr ""
+
+msgid "Sec:"
+msgstr ""
+
+#, tao-public
+msgid "Settings"
 msgstr ""
 
 msgid "sinus"
@@ -173,6 +193,9 @@ msgid "The identifier of the choice. This identifier must not be used by any oth
 msgstr ""
 
 msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
+msgstr ""
+
+msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
 msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
@@ -211,9 +234,12 @@ msgstr ""
 msgid "version : "
 msgstr ""
 
-msgid "warning : changes affect all users of the item creator"
+msgid "Warning"
 msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+
+msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
 msgstr ""
 

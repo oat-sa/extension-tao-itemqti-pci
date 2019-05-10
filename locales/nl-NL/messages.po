@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint95\n"
-"PO-Revision-Date: 2019-02-01T10:38:53\n"
+"Project-Id-Version: TAO 3.3.0-sprint101\n"
+"PO-Revision-Date: 2019-05-10T12:31:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: nl-NL\n"
@@ -43,6 +43,9 @@ msgstr "Autostart opname"
 msgid "Back to listing"
 msgstr "Terig naar lijst"
 
+msgid "Cancel"
+msgstr ""
+
 msgid "Channels"
 msgstr ""
 
@@ -54,6 +57,9 @@ msgstr ""
 
 msgid "cosinus"
 msgstr "cosinus"
+
+msgid "Delete"
+msgstr ""
 
 msgid "disabled"
 msgstr ""
@@ -124,6 +130,9 @@ msgstr "Maximaal aan de kandidate toegestane opname pogingen. Stel in op 0 voor 
 msgid "Medium"
 msgstr ""
 
+msgid "Min:"
+msgstr ""
+
 msgid "Mono"
 msgstr ""
 
@@ -142,6 +151,10 @@ msgstr ""
 msgid "Plus/minus"
 msgstr "Plus/min"
 
+#, tao-public
+msgid "Portable Custom Interactions"
+msgstr ""
+
 msgid "Recording format"
 msgstr ""
 
@@ -153,6 +166,13 @@ msgstr "Antwoord identificatie"
 
 msgid "Scale size"
 msgstr "Schaalgrootte"
+
+msgid "Sec:"
+msgstr ""
+
+#, tao-public
+msgid "Settings"
+msgstr ""
 
 msgid "sinus"
 msgstr "sinus"
@@ -174,6 +194,9 @@ msgstr "The identificatie van de keuze. Deze identificatie mag niet gebruikt wor
 
 msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
 msgstr "Er bestaat al een interactie met dezelfde naam \"%s\" (label : \"%s\") en dezelfde versie : %s. Wilt u de bestaande overschrijven ?"
+
+msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
+msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Dit is alleen voor testdoeleinden. Laat een link zien om het opgenomen bestand te downloaden op het moment dat de opname stopt. Dit moet niet worden gebruikt in een actieve toets, aangezien het de kandidaat de mogelijkheid geeft om zijn eigen opname te downloaden."
@@ -211,9 +234,12 @@ msgstr "Gebruik een media stimulus"
 msgid "version : "
 msgstr "Versie: "
 
-msgid "warning : changes affect all users of the item creator"
-msgstr "waarschuwing: veranderingen hebben effect op alle gebruikers van de item creator"
+msgid "Warning"
+msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+
+msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
 msgstr ""
 
