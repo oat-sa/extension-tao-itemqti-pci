@@ -44,7 +44,9 @@ define([
     var recorderStates = {
         CREATED:    'created',
         IDLE:       'idle',
-        RECORDING:  'recording'
+        RECORDING:  'recording',
+        STOP:  'stop',
+        CANCEL:  'cancel'
     };
 
     /**
@@ -107,6 +109,7 @@ define([
      */
     return function recorderFactory(config, assetManager) {
         var recorder,                       // Return value of the present factory
+            mediaStream,                    // The MediaStream instance
             provider,                       // provider for audio processing/encoding
             state = recorderStates.CREATED; // recorder inner state
 
@@ -215,6 +218,16 @@ define([
             },
 
             /**
+             * Check is need to be initialised
+             * @returns {Boolean}
+             */
+            isNeedInit: function isNeedInit() {
+                return this.is(recorderStates.CREATED) ||
+                    this.is(recorderStates.STOP) ||
+                    this.is(recorderStates.CANCEL);
+            },
+
+            /**
              * Initialise the MediaRecorder stream
              * @returns {Promise}
              */
@@ -225,14 +238,16 @@ define([
                     ? mediaRecorderProvider(config)
                     : webAudioProvider(config, assetManager);
 
-                this.initAudioContext();
+                    this.initAudioContext();
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
+                        mediaStream = stream;
                         provider.init(stream);
 
                         provider.on('blobavailable', function(blob) {
                             self.trigger('recordingavailable', [blob, durationMs]);
+                            self.releaseResourses(); // release resources after provider send data
                         });
 
                         provider.on('partialblobavailable', function(blob) {
@@ -284,6 +299,8 @@ define([
                 this._interruptRecording();
 
                 provider.stop();
+                setState(recorder, recorderStates.STOP);
+            
                 this.trigger('stop');
             },
 
@@ -294,7 +311,26 @@ define([
                 this._interruptRecording();
 
                 provider.cancel();
+                setState(recorder, recorderStates.CANCEL);
+
+                this.releaseResourses(); // can release resources because provider don't send data
+
                 this.trigger('cancel');
+            },
+
+            /**
+             * Release resourses after stop recording
+             */
+            releaseResourses: function releaseResourses() {
+                if (mediaStream) {
+                    _.forEach(mediaStream.getTracks(), function(track) {
+                        track.stop();
+                    });
+                }
+                audioContext.close();
+                window.audioContext = null;
+                provider.destroy();
+                provider = null;
             },
 
             /**
