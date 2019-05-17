@@ -327,7 +327,9 @@ define([
                         track.stop();
                     });
                 }
-                audioContext.close();
+                audioContext.close().then(function() {
+                    audioContext = null;
+                });
                 window.audioContext = null;
                 provider.destroy();
                 provider = null;
