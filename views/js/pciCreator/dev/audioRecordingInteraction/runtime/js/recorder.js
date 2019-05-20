@@ -45,8 +45,8 @@ define([
         CREATED:    'created',
         IDLE:       'idle',
         RECORDING:  'recording',
-        STOP:  'stop',
-        CANCEL:  'cancel'
+        STOPED:  'stoped',
+        CANCELED:  'canceled'
     };
 
     /**
@@ -223,8 +223,8 @@ define([
              */
             isNeedInit: function isNeedInit() {
                 return this.is(recorderStates.CREATED) ||
-                    this.is(recorderStates.STOP) ||
-                    this.is(recorderStates.CANCEL);
+                    this.is(recorderStates.STOPED) ||
+                    this.is(recorderStates.CANCELED);
             },
 
             /**
@@ -299,7 +299,7 @@ define([
                 this._interruptRecording();
 
                 provider.stop();
-                setState(recorder, recorderStates.STOP);
+                setState(recorder, recorderStates.STOPED);
             
                 this.trigger('stop');
             },
@@ -311,7 +311,7 @@ define([
                 this._interruptRecording();
 
                 provider.cancel();
-                setState(recorder, recorderStates.CANCEL);
+                setState(recorder, recorderStates.CANCELED);
 
                 this.releaseResourses(); // can release resources because provider don't send data
 
