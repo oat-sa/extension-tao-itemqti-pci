@@ -419,7 +419,7 @@ define([
         startRecording: function startRecording() {
             var self = this;
 
-            if (this.recorder.is('created')) { // if recorder is not initialised yet
+            if (this.recorder.isNeedInit()) { // if recorder is not initialised yet or need create new stream
                 this.recorder.init()
                     .then(function() {
                         startForReal();
