@@ -203,7 +203,7 @@ define([
                 file: {
                     name: 'myFileToBeReseted',
                     mime: 'audio/wav',
-                    data: 'base64encodedData'
+                    data: 'YmFzZTY0ZW5jb2RlZERhdGE='
                 }
             }
         };
@@ -259,7 +259,7 @@ define([
                     file: {
                         name: 'myFileToBeReseted',
                         mime: 'audio/wav',
-                        data: 'base64encodedData'
+                        data: 'YmFzZTY0ZW5jb2RlZERhdGE='
                     }
                 }
             }
