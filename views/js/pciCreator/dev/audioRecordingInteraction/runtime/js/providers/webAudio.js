@@ -169,17 +169,14 @@ define([
             },
 
             /**
-             * Close the audio context and destroy created assets
+             * Destroy created assets
              */
             destroy: function destroy() {
-                recorderWorker.terminate();
-                recorderWorker = null;
-
-                if (getAudioContext()) {
-                    return getAudioContext().close().then(function() {
-                        audioNodes = {};
-                    });
+                if (recorderWorker) {
+                    recorderWorker.terminate();
+                    recorderWorker = null;
                 }
+                audioNodes = {};
             }
         };
 
