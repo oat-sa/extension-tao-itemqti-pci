@@ -68,6 +68,7 @@ $defaultGapWidth: 30;
 @mixin text-input() {
     background-color: white;
     border: 1px solid #ddd;
+    color: #222;
 }
 
 .qti-customInteraction {
