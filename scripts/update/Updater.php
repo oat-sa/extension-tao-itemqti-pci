@@ -373,5 +373,10 @@ class Updater extends \common_ext_ExtensionUpdater
         }
 
         $this->skip('5.3.3', '5.3.4');
+
+        if ($this->isVersion('5.3.4')) {
+            call_user_func(new RegisterPciMathEntry(), ['0.8.1']);
+            $this->setVersion('5.3.5');
+        }
     }
 }
