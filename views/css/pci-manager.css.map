@@ -3,10 +3,10 @@
 	"file": "pci-manager.css",
 	"sources": [
 		"../scss/pci-manager.scss",
-		"../../../tao/views/scss/inc/_bootstrap.scss",
-		"../../../tao/views/scss/inc/_variables.scss",
-		"../../../tao/views/scss/inc/_functions.scss",
-		"../../../tao/views/scss/inc/_colors.scss",
+		"../../../tao/views/node_modules/@oat-sa/tao-core-ui/scss/inc/_bootstrap.scss",
+		"../../../tao/views/node_modules/@oat-sa/tao-core-ui/scss/inc/_variables.scss",
+		"../../../tao/views/node_modules/@oat-sa/tao-core-ui/scss/inc/_functions.scss",
+		"../../../tao/views/node_modules/@oat-sa/tao-core-ui/scss/inc/_colors.scss",
 		"../../../tao/views/scss/inc/fonts/_tao-icon-vars.scss"
 	],
 	"names": [],
