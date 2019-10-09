@@ -32,7 +32,7 @@ return array(
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '5.3.5',
+    'version' => '5.4.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => array(
         'tao' => '>=30.0.0',
