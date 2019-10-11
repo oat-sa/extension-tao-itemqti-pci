@@ -12,7 +12,7 @@ use oat\generis\test\GenerisTestCase;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use oat\generis\test\MockObject;
 use oat\taoQtiItem\model\qti\ImportService;
 
 class PciManagerTest extends GenerisTestCase
@@ -20,7 +20,7 @@ class PciManagerTest extends GenerisTestCase
     const PRODUCT_NAME = 'TAO';
 
     /**
-     * @var \Request|Mock
+     * @var \Request|MockObject
      */
     private $requestMock;
     private $ontologyMock;
