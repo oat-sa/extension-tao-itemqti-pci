@@ -110,7 +110,7 @@ msgid "Level"
 msgstr "Lygis"
 
 msgid "ln"
-msgstr ""
+msgstr "ln"
 
 msgid "log"
 msgstr "log"
