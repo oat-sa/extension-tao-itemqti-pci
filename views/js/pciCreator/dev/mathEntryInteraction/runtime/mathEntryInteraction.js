@@ -201,7 +201,20 @@ define([
                     gte:      toBoolean(config.tool_gte,      true),
                     times:    toBoolean(config.tool_times,    true),
                     divide:   toBoolean(config.tool_divide,   true),
-                    plusminus:toBoolean(config.tool_plusminus,true)
+                    plusminus:toBoolean(config.tool_plusminus,true),
+                    angle:    toBoolean(config.tool_angle,    true),
+                    minus:    toBoolean(config.tool_minus,    true),
+                    plus:     toBoolean(config.tool_plus,     true),
+                    equal:    toBoolean(config.tool_equal,    true),
+                    lower:    toBoolean(config.tool_lower,    true),
+                    greater:  toBoolean(config.tool_greater,  true),
+                    subscript:toBoolean(config.tool_subscript,true),
+                    lbrace:   toBoolean(config.tool_lbrace,   true),
+                    rbrace:   toBoolean(config.tool_rbrace,   true),
+                    lparen:   toBoolean(config.tool_lparen,   true),
+                    rparen:   toBoolean(config.tool_rparen,   true),
+                    integral: toBoolean(config.tool_integral, true),
+                    timesdot: toBoolean(config.tool_timesdot, true)
                 },
 
                 allowNewLine: toBoolean(config.allowNewLine, false),
@@ -505,7 +518,7 @@ define([
         createToolbar: function createToolbar() {
             var self = this,
                 availableTools = {
-                    frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
+                    frac:   { label: '<sup>x</sup>&frasl;<sub>y</sub>',latex: '\\frac',fn: 'cmd',desc: 'Fraction' },
                     sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
                     exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
                     log:    { label: 'log',         latex: '\\log',     fn: 'cmd',      desc: 'Log' },
@@ -521,14 +534,27 @@ define([
                     gte:    { label: '&ge;',        latex: '\\ge',      fn: 'cmd',      desc: 'Greater than or equal' },
                     times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
                     divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' },
-                    plusminus: { label: '&#177;',   latex: '\\pm',      fn: 'cmd',      desc: 'Plus/minus' }
+                    plusminus: { label: '&#177;',   latex: '\\pm',      fn: 'cmd',      desc: 'Plus/minus' },
+                    angle:  { label: '&ang;',       latex: '\\angle',   fn: 'cmd',      desc: 'Angle'},
+                    minus:  { label: '–',           latex: '-',         fn: 'write',    desc: 'Minus'},
+                    plus:   { label: '+',           latex: '+',         fn: 'write',    desc: 'Plus'},
+                    equal:  { label: '=',           latex: '=',         fn: 'write',    desc: 'Equal'},
+                    lower:  { label: '<',           latex: '<',         fn: 'write',    desc: 'Lower than'},
+                    greater: { label: '>',          latex: '>',         fn: 'write',    desc: 'Greater than'},
+                    subscript: { label: 'x&#8345;', latex: '_',         fn: 'cmd',      desc: 'Subscript'},
+                    lbrace: { label: '{',           latex: '{',   fn: 'cmd',      desc: 'Left brace/curly bracket'},
+                    rbrace: { label: '}',           latex: '}',  fn: 'cmd',      desc: 'Right brace/curly bracket'},
+                    lparen: { label: '(',           latex: '(',   fn: 'cmd',      desc: 'Left parenthese/round bracket'},
+                    rparen: { label: ')',           latex: ')',  fn: 'cmd',      desc: 'Right parenthese/round bracket'},
+                    integral: { label: '&#x222b;',  latex: '\\int',     fn: 'cmd',      desc: 'Indefinitve integral'},
+                    timesdot: { label: '·',         latex: '\\cdot',    fn: 'cmd',      desc: 'Times dot'},
                 },
                 availableToolGroups = [ // we use an array to maintain order
-                    { id: 'functions',  tools: ['sqrt', 'frac', 'exp', 'log', 'ln'] },
-                    { id: 'symbols',    tools: ['e', 'infinity', 'lbrack', 'rbrack'] },
+                    { id: 'functions',  tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln'] },
+                    { id: 'symbols',    tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'angle', 'integral'] },
                     { id: 'trigo',      tools: ['pi', 'sin', 'cos'] },
-                    { id: 'comparison', tools: ['lte', 'gte'] },
-                    { id: 'operands',   tools: ['times', 'divide', 'plusminus'] }
+                    { id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte'] },
+                    { id: 'operands',   tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus'] }
                 ];
 
             // create buttons
