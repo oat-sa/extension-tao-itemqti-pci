@@ -20,7 +20,7 @@ msgid "Add gap"
 msgstr "Pridėti tarpą"
 
 msgid "Add Interaction"
-msgstr "Pridėti Užduotį"
+msgstr "Pridėti interakciją"
 
 msgid "Allow download"
 msgstr "Leisti atsisiuntimą"
@@ -35,7 +35,7 @@ msgid "Audio bitrate:"
 msgstr "Garso perdavimo greitis:"
 
 msgid "authorize white space"
-msgstr "Leisti palikti tuščią tarpą"
+msgstr "lesti palikti tuščią vietą"
 
 msgid "Auto start recording"
 msgstr "Garso įrašą paleisti automatiškai"
@@ -119,7 +119,7 @@ msgid "lower than or equal"
 msgstr "mažiau negu arba lygu"
 
 msgid "Manage custom interactions"
-msgstr "Tvarkyti pasirinktines užduotis"
+msgstr "Tvarkyti pasirinktines sąveikas"
 
 msgid "Max attempts:"
 msgstr "Maks. bandymų:"
@@ -137,7 +137,7 @@ msgid "Mono"
 msgstr "Mono"
 
 msgid "No Custom Interaction"
-msgstr "Nėra Pasirinktinės Užduoties"
+msgstr "Nėra Pasirinktinės Sąveikos"
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
 msgstr "Kanalų kiekis įrašymui. Leidžia sumažinti įrašo dydį per pusę, jeigu naudojamas mono (vienas kanalas)."
