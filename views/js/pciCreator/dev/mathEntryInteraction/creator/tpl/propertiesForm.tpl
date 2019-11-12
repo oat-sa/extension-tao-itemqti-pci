@@ -103,35 +103,35 @@
     <label class="panel">
         <input name="roundbkts" type="checkbox" {{#if roundbkts}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        ( ) parentheses/round brackets
+        ( ) {{__ "parentheses/round brackets"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="curlybkts" type="checkbox" {{#if curlybkts}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        { } braces/curly brackets
+        { } {{__ "braces/curly brackets"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="squarebkts" type="checkbox" {{#if squarebkts}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        [ ] square brackets
+        [ ] {{__ "square brackets"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="tool_angle" type="checkbox" {{#if tool_angle}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &ang;
+        &ang; {{__ "angle" }}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="tool_integral" type="checkbox" {{#if tool_integral}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "Indefinitve integral"}}
+        {{__ "Indefinite integral"}}
     </label>
 </div>
 
