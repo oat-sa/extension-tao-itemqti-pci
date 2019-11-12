@@ -116,8 +116,19 @@ define([
             tool_times:     toBoolean(interaction.prop('tool_times'),   true),
             tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
             tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
+            roundbkts:      toBoolean(interaction.prop('tool_rparen'),  true) && toBoolean(interaction.prop('tool_lparen'), true),
+            curlybkts:      toBoolean(interaction.prop('tool_rbrace'),  true) && toBoolean(interaction.prop('tool_lbrace'), true),
+            tool_angle:     toBoolean(interaction.prop('tool_angle'),   true),
+            tool_minus:     toBoolean(interaction.prop('tool_minus'),   true),
+            tool_plus:      toBoolean(interaction.prop('tool_plus'),    true),
+            tool_equal:     toBoolean(interaction.prop('tool_equal'),   true),
+            tool_lower:     toBoolean(interaction.prop('tool_lower'),   true),
+            tool_greater:   toBoolean(interaction.prop('tool_greater'), true),
+            tool_subscript: toBoolean(interaction.prop('tool_subscript'),true),
+            tool_integral:  toBoolean(interaction.prop('tool_integral'),true),
+            tool_timesdot:  toBoolean(interaction.prop('tool_timesdot'),true),
 
-            allowNewLine: toBoolean(interaction.prop('allowNewLine'), false),
+            allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false),
             enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
         }));
 
@@ -166,10 +177,29 @@ define([
             tool_times:     configChangeCallBack,
             tool_divide:    configChangeCallBack,
             tool_plusminus: configChangeCallBack,
+            tool_angle:     configChangeCallBack,
+            tool_minus:     configChangeCallBack,
+            tool_plus:      configChangeCallBack,
+            tool_equal:     configChangeCallBack,
+            tool_lower:     configChangeCallBack,
+            tool_greater:   configChangeCallBack,
+            tool_subscript: configChangeCallBack,
+            tool_integral:  configChangeCallBack,
+            tool_timesdot:  configChangeCallBack,
 
             squarebkts: function squarebktsChangeCallBack(i, value) {
                 i.prop('tool_lbrack', value);
                 i.prop('tool_rbrack', value);
+                i.triggerPci('configChange', [i.getProperties()]);
+            },
+            roundbkts: function roundbktsChangeCallBack(i, value) {
+                i.prop('tool_lparen', value);
+                i.prop('tool_rparen', value);
+                i.triggerPci('configChange', [i.getProperties()]);
+            },
+            curlybkts: function curlybktsChangeCallBack(i, value) {
+                i.prop('tool_lbrace', value);
+                i.prop('tool_rbrace', value);
                 i.triggerPci('configChange', [i.getProperties()]);
             },
 
