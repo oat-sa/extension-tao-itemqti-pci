@@ -338,5 +338,10 @@ class Updater extends \common_ext_ExtensionUpdater
             call_user_func(new RegisterPciAudioRecording(), ['0.7.1']);
             $this->setVersion('4.9.1');
         }
+
+        if ($this->isVersion('4.9.1')) {
+            call_user_func(new RegisterPciAudioRecording(), ['0.7.2']);
+            $this->setVersion('4.9.2');
+        }
     }
 }
