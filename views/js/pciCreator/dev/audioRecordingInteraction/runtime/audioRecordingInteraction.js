@@ -647,7 +647,7 @@ define([
          * @returns {Object}
          */
         getResponse: function getResponse() {
-            var response;
+            var response = null;
 
             if (this._recording) {
                 response = { file: this._recording };
