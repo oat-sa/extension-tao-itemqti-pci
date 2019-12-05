@@ -794,7 +794,7 @@ define([
          * @returns {Object}
          */
         getResponse: function getResponse() {
-            var response;
+            var response = null;
 
             if (this.getRecording()) {
                 response = { file: this.getRecording() };
