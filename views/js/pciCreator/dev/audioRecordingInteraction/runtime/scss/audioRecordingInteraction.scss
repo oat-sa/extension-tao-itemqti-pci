@@ -75,6 +75,10 @@ $playback: whiten($info, .3);
 
     // Controls
 
+    .controls-icons {
+        display: none;
+    }
+
     .audiorec-control {
       margin: 10px 10px 10px 0;
       border-radius: 3px;

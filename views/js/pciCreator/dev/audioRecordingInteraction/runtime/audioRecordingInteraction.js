@@ -25,7 +25,8 @@ define([
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
     'audioRecordingInteraction/runtime/js/uiElements',
-    'text!audioRecordingInteraction/runtime/img/mic.svg'
+    'text!audioRecordingInteraction/runtime/img/mic.svg',
+    'text!audioRecordingInteraction/runtime/img/controls.svg'
 ], function(
     qtiCustomInteractionContext,
     $,
@@ -36,11 +37,10 @@ define([
     playerFactory,
     recorderFactory,
     uiElements,
-    micIcon
+    micIcon,
+    controlIcons
 ){
     'use strict';
-
-    var ICON_CONTROLS = 'audioRecordingInteraction/runtime/img/controls.svg';
 
     var audioRecordingInteraction;
 
@@ -88,7 +88,6 @@ define([
 
             this.config             = {};
             this.controls           = {};
-            this.iconsFileUrl       = this.assetManager.resolve(ICON_CONTROLS);
 
             this.initConfig(config);
             this.initRecorder();
@@ -444,9 +443,12 @@ define([
                 record,
                 stop,
                 play,
-                reset;
+                reset,
+                $controlsIconsContainer = $('<div>', { 'class': 'controls-icons' }).append(controlIcons);
 
             this.$controlsContainer.empty();
+            this.$controlsContainer.append($controlsIconsContainer);
+
             this.controls = {};
 
             // Record button
@@ -576,7 +578,7 @@ define([
          */
         getControlIcon: function getControlIcon(iconId) {
             return '<svg title="' + iconId + '">' +
-                '<use xlink:href="' + this.iconsFileUrl + '#' + iconId + '"/>' +
+                '<use xlink:href="#' + iconId + '"/>' +
                 '</svg>';
         },
 
