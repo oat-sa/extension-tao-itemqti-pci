@@ -84,6 +84,7 @@ define([
 
             allowPlayback:          typeCaster.strToBool(interaction.prop('allowPlayback'), true),
             autoStart:              typeCaster.strToBool(interaction.prop('autoStart'), false),
+            autoPlayback:           typeCaster.strToBool(interaction.prop('autoPlayback'), false),
 
             delayMinutes:           interaction.prop('delayMinutes'),
             delaySeconds:           interaction.prop('delaySeconds'),
@@ -128,6 +129,7 @@ define([
                 }
                 configChangeCallBack(boundInteraction, value, name);
             },
+			autoPlayback:       configChangeCallBack,
 
             delayMinutes:       configChangeCallBack,
             delaySeconds:       configChangeCallBack,

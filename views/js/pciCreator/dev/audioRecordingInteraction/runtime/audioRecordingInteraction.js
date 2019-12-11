@@ -123,6 +123,7 @@ define([
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+         * @param {Boolean} config.autoPlayback - immediately playback recording after recording stops
          * @param {Number}  config.delaySeconds - seconds delay before start recording
          * @param {Number}  config.delayMinutes - minutes delay before start recording
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
@@ -139,6 +140,7 @@ define([
             this.config = {
                 allowPlayback:           toBoolean(config.allowPlayback, true),
                 autoStart:               toBoolean(config.autoStart, false),
+                autoPlayback:            toBoolean(config.autoPlayback, false),
 
                 delaySeconds:            toInteger(config.delaySeconds, 0),
                 delayMinutes:            toInteger(config.delayMinutes, 0),
