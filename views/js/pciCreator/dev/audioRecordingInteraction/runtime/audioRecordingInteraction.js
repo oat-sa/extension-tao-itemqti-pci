@@ -105,6 +105,7 @@ define([
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+         * @param {Boolean} config.autoPlayback - immediately playback recording after recording stops
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
          * @param {Number}  config.maxRecordingTime - in seconds
          * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
@@ -119,6 +120,7 @@ define([
             this.config = {
                 allowPlayback:           toBoolean(config.allowPlayback, true),
                 autoStart:               toBoolean(config.autoStart, false),
+                autoPlayback:            toBoolean(config.autoPlayback, false),
                 maxRecords:              toInteger(config.maxRecords, 3),
                 maxRecordingTime:        toInteger(config.maxRecordingTime, 120),
 

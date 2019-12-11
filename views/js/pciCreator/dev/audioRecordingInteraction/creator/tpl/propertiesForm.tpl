@@ -33,6 +33,17 @@
 </div>
 
 <div class="panel">
+    <label>
+        <input name="autoPlayback" type="checkbox" {{#if autoPlayback}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span> {{__ "Auto playback recording"}}
+    </label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."}}
+    </span>
+</div>
+
+<div class="panel">
     <label for="maxRecords" class="spinner">{{__ "Max attempts:"}}</label>
     <input name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" />
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>

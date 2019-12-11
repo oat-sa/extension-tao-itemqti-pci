@@ -83,6 +83,7 @@ define([
 
             allowPlayback:          typeCaster.strToBool(interaction.prop('allowPlayback'), true),
             autoStart:              typeCaster.strToBool(interaction.prop('autoStart'), false),
+            autoPlayback:           typeCaster.strToBool(interaction.prop('autoPlayback'), false),
             maxRecords:             interaction.prop('maxRecords'),
             maxRecordingTime:       interaction.prop('maxRecordingTime'),
 
@@ -113,6 +114,7 @@ define([
 
             allowPlayback:      configChangeCallBack,
             autoStart:          configChangeCallBack,
+            autoPlayback:       configChangeCallBack,
             maxRecords:         configChangeCallBack,
             maxRecordingTime:   configChangeCallBack,
 
