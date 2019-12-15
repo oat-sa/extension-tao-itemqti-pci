@@ -45,8 +45,8 @@ define([
             chunkSizeMs = 100;      // size of a chunk (reduced from 1000ms to 100ms to avoid data loss in case of interrupted recording)
 
         var codecsByPreferenceOrder = [
-            'audio/webm;codecs=opus',
             'audio/ogg;codecs=opus',
+            'audio/webm;codecs=opus',
             'audio/webm',
             'audio/ogg'
         ];
