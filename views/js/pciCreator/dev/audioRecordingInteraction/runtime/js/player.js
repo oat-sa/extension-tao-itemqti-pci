@@ -127,6 +127,7 @@ define([
                     setState(player, playerStates.IDLE);
                     audioEl.currentTime = 0;
                     self.trigger('timeupdate', [0]);
+                    self.trigger('playbackend');
                 };
 
                 audioEl.onplaying = function onplaying() {
@@ -183,6 +184,7 @@ define([
                 audioEl.pause();
                 audioEl.currentTime = 0;
                 setState(player, playerStates.IDLE);
+                this.trigger('playbackend');
                 // state change is triggered by the oncanplay listener
             },
 

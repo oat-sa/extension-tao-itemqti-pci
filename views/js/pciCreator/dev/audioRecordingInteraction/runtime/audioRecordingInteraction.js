@@ -72,6 +72,7 @@ define([
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
+        _isAutoPlayingBack: false,
         _delayCallback: null,
 
         _cleanDelayCallback: function _cleanDelayCallback() {
@@ -219,8 +220,9 @@ define([
                 self.updateControls();
             });
 
-            this.player.on('idle', function() {
+            this.player.on('playbackend', function() {
                 self.progressBar.setStyle('');
+                self._isAutoPlayingBack = false;
             });
 
             this.player.on('timeupdate', function(currentTime) {
@@ -525,6 +527,11 @@ define([
                 // and that he should not leave the item yet. In most case, this little delay should go completely unnoticed.
                 self.progressBar.reset();
                 self.$meterContainer.removeClass('record');
+
+                if (self.config.autoPlayback) {
+                    self._isAutoPlayingBack = true;
+                    self.playRecording();
+                }
             };
         },
 
@@ -641,7 +648,7 @@ define([
                 }
             }.bind(stop));
             stop.on('updatestate', function() {
-                if (self.player.is('playing')
+                if ((self.player.is('playing') && !self._isAutoPlayingBack)
                     || self.recorder.is('recording')) {
                     this.enable();
                 } else {
