@@ -120,6 +120,7 @@ define([
                 // when playback is stopped by user or when the media is loaded:
                 audioEl.oncanplay = function oncanplay() {
                     setState(player, playerStates.IDLE);
+                    self.trigger('oncanplay');
                 };
 
                 // when playbacks ends on its own:

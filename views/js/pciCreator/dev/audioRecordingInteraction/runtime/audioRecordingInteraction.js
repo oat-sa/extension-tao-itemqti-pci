@@ -194,8 +194,8 @@ define([
                         // load recording in the player
                         self.player.unload();
                         if (self.config.autoPlayback) {
-                            self.player.on('idle', function() {
-                                self.player.off('idle');
+                            self.player.on('oncanplay', function() {
+                                self.player.off('oncanplay');
                                 self._isAutoPlayingBack = true;
                                 self.playRecording();
                             });
@@ -694,7 +694,7 @@ define([
                     }
                 }.bind(play));
                 play.on('updatestate', function() {
-                    if (self.player.is('idle') || self.getRecording()) {
+                    if (self.player.is('idle') || (self.getRecording() && !self._isAutoPlayingBack)) {
                         this.enable();
                     } else {
                         this.disable();
