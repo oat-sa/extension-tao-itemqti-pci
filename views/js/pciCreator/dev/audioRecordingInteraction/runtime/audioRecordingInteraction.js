@@ -75,6 +75,16 @@ define([
         _isAutoPlayingBack: false,
         _delayCallback: null,
 
+        /**
+         * return {Boolean} - Are we in a TAO QTI Creator context?
+         */
+        inQtiCreator: function isInCreator() {
+            if (_.isUndefined(this._inQtiCreator) && this.$container) {
+                this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
+            }
+            return this._inQtiCreator;
+        },
+
         _cleanDelayCallback: function _cleanDelayCallback() {
             if (this._delayCallback) {
                 clearTimeout(this._delayCallback);
@@ -294,7 +304,7 @@ define([
             }
 
             // no delay and no media stimulus, start recording now
-            if (delayInSeconds === 0 && !this.hasMediaStimulus()) {
+            if (delayInSeconds === 0 && !this.hasMediaStimulus() && !this.inQtiCreator()) {
                 this.startRecording();
                 return;
             }
@@ -305,7 +315,7 @@ define([
                 ctr.disable();
             });
 
-            if (delayInSeconds > 0) {
+            if (delayInSeconds > 0 && !this.inQtiCreator()) {
                 // init countdown
                 this.initCountdown();
             }
@@ -314,7 +324,9 @@ define([
                 return;
             }
 
-            this.initDelay();
+            if (!this.inQtiCreator()) {
+                this.initDelay();
+            }
         },
 
         initDelay: function initDelay() {
