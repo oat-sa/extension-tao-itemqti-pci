@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,7 +94,7 @@ class Updater extends \common_ext_ExtensionUpdater
             // Grants access on PciLoader for TestTaker role.
             AclProxy::applyRule(new AccessRule(
                 AccessRule::GRANT,
-				TaoOntology::PROPERTY_INSTANCE_ROLE_DELIVERY,
+                TaoOntology::PROPERTY_INSTANCE_ROLE_DELIVERY,
                 ['ext' => 'qtiItemPci' , 'mod' => 'PciLoader']
             ));
 
@@ -104,66 +105,66 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('1.0.0', '1.1.0');
 
-        if($this->isVersion('1.1.0')){
+        if ($this->isVersion('1.1.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.1.0']);
             $this->setVersion('1.2.0');
         }
 
-        if($this->isVersion('1.2.0')){
+        if ($this->isVersion('1.2.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.2.0']);
             $this->setVersion('1.3.0');
         }
 
-        if($this->isVersion('1.3.0')){
+        if ($this->isVersion('1.3.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.3.0']);
             $this->setVersion('1.4.0');
         }
 
-        if($this->isVersion('1.4.0')){
+        if ($this->isVersion('1.4.0')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.1.0']);
             $this->setVersion('1.5.0');
         }
 
-        if($this->isVersion('1.5.0')){
+        if ($this->isVersion('1.5.0')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.1.1']);
             $this->setVersion('1.5.1');
         }
 
-        if($this->isVersion('1.5.1')){
+        if ($this->isVersion('1.5.1')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.1.2']);
             $this->setVersion('1.5.2');
         }
 
-        if($this->isVersion('1.5.2')){
+        if ($this->isVersion('1.5.2')) {
             call_user_func(new RegisterPciMathEntry(), ['0.4.0']);
             $this->setVersion('1.6.0');
         }
 
-        if($this->isVersion('1.6.0')){
+        if ($this->isVersion('1.6.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.4.1']);
             $this->setVersion('1.6.1');
         }
 
-        if($this->isVersion('1.6.1')){
+        if ($this->isVersion('1.6.1')) {
             call_user_func(new RegisterPciMathEntry(), ['0.4.2']);
             $this->setVersion('1.6.2');
         }
 
         $this->skip('1.6.2', '2.0.2');
 
-        if($this->isVersion('2.0.2')){
+        if ($this->isVersion('2.0.2')) {
             call_user_func(new RegisterPciLikertScale(), ['0.3.0']);
             $this->setVersion('2.1.0');
         }
 
         $this->skip('2.1.0', '2.2.1');
 
-        if($this->isVersion('2.2.1')){
+        if ($this->isVersion('2.2.1')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.1.3']);
             $this->setVersion('2.2.2');
         }
 
-        if($this->isVersion('2.2.2')){
+        if ($this->isVersion('2.2.2')) {
             $this->runExtensionScript(RegisterPciFilesystem::class);
 
             $model = new PciModel();
@@ -174,12 +175,12 @@ class Updater extends \common_ext_ExtensionUpdater
             /** @var \common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
 
-            if($extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->hasConfig(PciRegistry::REGISTRY_ID)){
+            if ($extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->hasConfig(PciRegistry::REGISTRY_ID)) {
                 $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
 
-                if(is_array($map)){
-                    foreach ($map as $key => $value){
-                        uksort($value, function($a, $b) {
+                if (is_array($map)) {
+                    foreach ($map as $key => $value) {
+                        uksort($value, function ($a, $b) {
                             return version_compare($a, $b, '<');
                         });
                         $portableElementObject = $model->createDataObject(reset($value));
@@ -195,12 +196,12 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('3.0.0', '3.0.1');
 
-        if($this->isVersion('3.0.1')) {
+        if ($this->isVersion('3.0.1')) {
             //automatically enable all current installed portable elements
             $model = PortableModelRegistry::getRegistry()->getModel(PciModel::PCI_IDENTIFIER);
             $portableElementRegistry = $model->getRegistry();
             $registeredPortableElements = array_keys($portableElementRegistry->getLatestRuntimes());
-            foreach($registeredPortableElements as $typeIdentifier){
+            foreach ($registeredPortableElements as $typeIdentifier) {
                 $portableElement = $portableElementRegistry->fetch($typeIdentifier);
                 if (! $portableElement->hasEnabled()) {
                     $portableElement->enable();
@@ -212,7 +213,7 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('3.0.2', '3.0.4');
 
-        if($this->isVersion('3.0.4')){
+        if ($this->isVersion('3.0.4')) {
             call_user_func(new RegisterPciLikertScale(), ['0.3.1']);
             PortableModelRegistry::getRegistry()->register(new IMSPciModel());
             $this->setVersion('3.1.0');
@@ -220,12 +221,12 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('3.1.0', '3.1.1');
 
-        if($this->isVersion('3.1.1')){
+        if ($this->isVersion('3.1.1')) {
             call_user_func(new RegisterPciMathEntry(), ['0.5.0']);
             $this->setVersion('3.2.0');
         }
 
-        if($this->isVersion('3.2.0')){
+        if ($this->isVersion('3.2.0')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.2.0']);
             call_user_func(new RegisterPciLikertScale(), ['0.4.0']);
             call_user_func(new RegisterPciLiquid(), ['0.3.0']);
@@ -233,25 +234,25 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('3.3.0');
         }
 
-        if($this->isVersion('3.3.0')){
+        if ($this->isVersion('3.3.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.6.0']);
             $this->setVersion('3.4.0');
         }
 
         $this->skip('3.4.0', '3.5.0');
 
-        if($this->isVersion('3.5.0')){
+        if ($this->isVersion('3.5.0')) {
             $registry = (new IMSPciModel())->getRegistry();
-            if($registry->has('likertScaleInteraction')){
+            if ($registry->has('likertScaleInteraction')) {
                 $registry->removeAllVersions('likertScaleInteraction');
             }
-            if($registry->has('liquidsInteraction')){
+            if ($registry->has('liquidsInteraction')) {
                 $registry->removeAllVersions('liquidsInteraction');
             }
-            if($registry->has('mathEntryInteraction')){
+            if ($registry->has('mathEntryInteraction')) {
                 $registry->removeAllVersions('mathEntryInteraction');
             }
-            if($registry->has('audioRecordingInteraction')){
+            if ($registry->has('audioRecordingInteraction')) {
                 $registry->removeAllVersions('audioRecordingInteraction');
             }
             call_user_func(new RegisterPciAudioRecording(), ['0.2.0']);
@@ -261,29 +262,29 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('3.5.1');
         }
 
-        if($this->isVersion('3.5.1')){
+        if ($this->isVersion('3.5.1')) {
             call_user_func(new RegisterPciMathEntry(), ['0.6.1']);
             $this->setVersion('3.5.2');
         }
 
-        if($this->isVersion('3.5.2')){
+        if ($this->isVersion('3.5.2')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.2.1']);
             $this->setVersion('3.5.3');
         }
 
-        if($this->isVersion('3.5.3')){
+        if ($this->isVersion('3.5.3')) {
             call_user_func(new RegisterPciMathEntry(), ['0.7.0']);
             $this->setVersion('3.6.0');
         }
 
-        if($this->isVersion('3.6.0')){
+        if ($this->isVersion('3.6.0')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.2.2']);
             $this->setVersion('3.6.1');
         }
 
         $this->skip('3.6.1', '4.0.0');
 
-        if($this->isVersion('4.0.0')){
+        if ($this->isVersion('4.0.0')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.2.3']);
             call_user_func(new RegisterPciLikertScale(), ['0.4.1']);
             call_user_func(new RegisterPciLiquid(), ['0.3.1']);
@@ -293,22 +294,22 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('4.0.1', '4.4.1');
 
-        if($this->isVersion('4.4.1')){
+        if ($this->isVersion('4.4.1')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.3.0']);
             $this->setVersion('4.5.0');
         }
 
-        if($this->isVersion('4.5.0')){
+        if ($this->isVersion('4.5.0')) {
             call_user_func(new RegisterPciAudioRecording(), ['0.3.1']);
             $this->setVersion('4.5.1');
         }
 
-        if($this->isVersion('4.5.1')){
+        if ($this->isVersion('4.5.1')) {
             call_user_func(new RegisterPciMathEntry(), ['0.7.2']);
             $this->setVersion('4.5.2');
         }
 
-        if($this->isVersion('4.5.2')){
+        if ($this->isVersion('4.5.2')) {
             call_user_func(new RegisterPciLikertScale(), ['0.5.0']);
             call_user_func(new RegisterPciMathEntry(), ['0.8.0']);
             call_user_func(new RegisterPciLiquid(), ['0.4.0']);
@@ -395,6 +396,6 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('6.1.1');
         }
 
-        $this->skip('6.1.1', '6.1.2');
+        $this->skip('6.1.1', '6.1.3');
     }
 }

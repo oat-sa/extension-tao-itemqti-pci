@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,6 +19,7 @@
  *
  *
  */
+
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
@@ -27,36 +29,36 @@ use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
-return array(
+return [
     'name' => 'qtiItemPci',
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '6.1.2',
+    'version' => '6.1.3',
     'author' => 'Open Assessment Technologies SA',
-    'requires' => array(
+    'requires' => [
         'generis' => '>=12.5.0',
         'tao' => '>=30.0.0',
         'taoQtiItem' => '>=13.8.0'
-    ),
-    'acl' => array(
-        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci')),
-        array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
-        array('grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
-        array('grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', array('ext'=>'qtiItemPci', 'mod' => 'PciLoader')),
-        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'unregister')),
-        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'enable')),
-        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'disable')),
-        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'export')),
-        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'import')),
-        array('grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', array('ext'=>'qtiItemPci', 'mod' => 'PciManager', 'act' => 'index')),
-    ),
-    'install' => array(
-        'rdf' => array(
-            dirname(__FILE__). '/install/ontology/registry.rdf',
-            dirname(__FILE__). '/install/ontology/role.rdf'
-        ),
-        'php' => array(
+    ],
+    'acl' => [
+        ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci']],
+        ['grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', ['ext' => 'qtiItemPci', 'mod' => 'PciLoader']],
+        ['grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemsManagerRole', ['ext' => 'qtiItemPci', 'mod' => 'PciLoader']],
+        ['grant', 'http://www.tao.lu/Ontologies/TAO.rdf#DeliveryRole', ['ext' => 'qtiItemPci', 'mod' => 'PciLoader']],
+        ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'unregister']],
+        ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'enable']],
+        ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'disable']],
+        ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'export']],
+        ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'import']],
+        ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'index']],
+    ],
+    'install' => [
+        'rdf' => [
+            __DIR__ . '/install/ontology/registry.rdf',
+            __DIR__ . '/install/ontology/role.rdf'
+        ],
+        'php' => [
             RegisterPciFilesystem::class,
             SetupPortableElementFileStorage::class,
             RegisterPciModel::class,
@@ -65,22 +67,22 @@ return array(
             RegisterPciLikertScale::class,
             RegisterPciMathEntry::class,
             RegisterPciAudioRecording::class,
-        )
-    ),
-    'uninstall' => array(
-    ),
+        ]
+    ],
+    'uninstall' => [
+    ],
     'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
-    'routes' => array(
+    'routes' => [
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
-    ),
-    'constants' => array(
+    ],
+    'constants' => [
         # views directory
-        "DIR_VIEWS" => dirname(__FILE__).DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR,
+        "DIR_VIEWS" => __DIR__ . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR,
 
         #BASE URL (usually the domain root)
-        'BASE_URL' => ROOT_URL.'qtiItemPci/',
-    ),
+        'BASE_URL' => ROOT_URL . 'qtiItemPci/',
+    ],
     'extra' => [
-        'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR .'structures.xml'
+        'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml'
     ]
-);
+];
