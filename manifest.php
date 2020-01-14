@@ -34,7 +34,7 @@ return [
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '6.1.2',
+    'version' => '6.1.3',
     'author' => 'Open Assessment Technologies SA',
     'requires' => [
         'generis' => '>=12.5.0',
@@ -55,8 +55,8 @@ return [
     ],
     'install' => [
         'rdf' => [
-            dirname(__FILE__) . '/install/ontology/registry.rdf',
-            dirname(__FILE__) . '/install/ontology/role.rdf'
+            __DIR__ . '/install/ontology/registry.rdf',
+            __DIR__ . '/install/ontology/role.rdf'
         ],
         'php' => [
             RegisterPciFilesystem::class,
@@ -77,7 +77,7 @@ return [
     ],
     'constants' => [
         # views directory
-        "DIR_VIEWS" => dirname(__FILE__) . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR,
+        "DIR_VIEWS" => __DIR__ . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR,
 
         #BASE URL (usually the domain root)
         'BASE_URL' => ROOT_URL . 'qtiItemPci/',
