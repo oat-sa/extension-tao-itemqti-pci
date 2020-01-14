@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +28,8 @@ use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 use \DOMDocument;
 use \DOMXPath;
 
-class ImsPciExporter extends PortableElementExporter{
+class ImsPciExporter extends PortableElementExporter
+{
 
     /**
      * Cope the asset files of the PCI to the item exporter and return the list of copied assets
@@ -35,7 +37,8 @@ class ImsPciExporter extends PortableElementExporter{
      * @return array
      * @throws \oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidAssetException
      */
-    public function copyAssetFiles(&$replacementList){
+    public function copyAssetFiles(&$replacementList)
+    {
         $object = $this->object;
         $portableAssetsToExport = [];
         $service = new PortableElementService();
@@ -51,22 +54,26 @@ class ImsPciExporter extends PortableElementExporter{
         return $this->portableAssetsToExport = $portableAssetsToExport;
     }
 
-    public function getNodeName(){
+    public function getNodeName()
+    {
         return 'portableCustomInteraction';
     }
 
-    public function getTypeIdentifierAttributeName(){
+    public function getTypeIdentifierAttributeName()
+    {
         return 'customInteractionTypeIdentifier';
     }
 
-    public function getXmlnsName(){
+    public function getXmlnsName()
+    {
         return 'pci';
     }
 
-    public function exportDom(DOMDocument $dom){
+    public function exportDom(DOMDocument $dom)
+    {
 
         // If asset files list is empty for current identifier skip
-        if (empty($this->portableAssetsToExport)){
+        if (empty($this->portableAssetsToExport)) {
             return;
         }
 
@@ -78,18 +85,18 @@ class ImsPciExporter extends PortableElementExporter{
         /** @var PortableElementObject $portableElement */
         $portableElement = $this->object;
 
-        for ($i=0; $i<$portableElementNodes->length; $i++) {
+        for ($i = 0; $i < $portableElementNodes->length; $i++) {
 
             /** @var \DOMElement $currentPortableNode */
             $currentPortableNode = $portableElementNodes->item($i);
 
             //get the local namespace prefix to be used in new node creation
-            $localNs = $currentPortableNode->hasAttribute('xmlns') ? '' : $this->getXmlnsName().':';
+            $localNs = $currentPortableNode->hasAttribute('xmlns') ? '' : $this->getXmlnsName() . ':';
 
             //get the portable element type identifier
             $identifier = $currentPortableNode->getAttribute($this->getTypeIdentifierAttributeName());
 
-            if($identifier != $portableElement->getTypeIdentifier()){
+            if ($identifier != $portableElement->getTypeIdentifier()) {
                 continue;
             }
 
@@ -105,22 +112,22 @@ class ImsPciExporter extends PortableElementExporter{
             $this->removeOldNode($modulesNode, 'module');
 
             $runtime = $portableElement->getRuntime();
-            if(isset($runtime['config'])){
+            if (isset($runtime['config'])) {
                 $configs = $runtime['config'];
 
-                if(isset($configs[0])){
+                if (isset($configs[0])) {
                     $file = $configs[0]['file'];
                     $finalRelPath = $this->getImsPciExportPath($itemRelPath, $file);
                     //make this path relative to the item !
                     $modulesNode->setAttribute('primaryConfiguration', $finalRelPath);
 
-                    if(isset($configs[0]['data']) && isset($configs[0]['data']['paths'])){
-                        foreach($configs[0]['data']['paths'] as $id => $paths){
-                            if(is_string($paths)){
+                    if (isset($configs[0]['data']) && isset($configs[0]['data']['paths'])) {
+                        foreach ($configs[0]['data']['paths'] as $id => $paths) {
+                            if (is_string($paths)) {
                                 $adaptedPath = $this->getRawExportPath($paths);
                                 $paths = $this->getRelPath($file, $adaptedPath);
-                            }else if(is_array($paths)){
-                                for($i = 0; $i< count($paths) ; $i ++){
+                            } elseif (is_array($paths)) {
+                                for ($i = 0; $i < count($paths); $i++) {
                                     $paths[$i] = $this->getRawExportPath($paths[$i]);
                                 }
                             }
@@ -130,7 +137,7 @@ class ImsPciExporter extends PortableElementExporter{
                         $this->replaceFile(json_encode($configs[0]['data'], JSON_UNESCAPED_SLASHES), $this->getRawExportPath($file));
                     }
                 }
-                if(isset($configs[1])){
+                if (isset($configs[1])) {
                     $file = $configs[1]['file'];
                     $modulesNode->setAttribute('fallbackConfiguration', $this->getImsPciExportPath($itemRelPath, $file));
                 }
@@ -139,39 +146,41 @@ class ImsPciExporter extends PortableElementExporter{
             foreach ($portableElement->getRuntimeKey('modules') as $id => $modules) {
                 $moduleNode = $dom->createElement($localNs . 'module');
                 $moduleNode->setAttribute('id', $id);
-                if(isset($modules[0])){
+                if (isset($modules[0])) {
                     $file = $modules[0];
                     $moduleNode->setAttribute('primaryPath', $this->getImsPciExportPath($itemRelPath, $file));
                 }
-                if(isset($modules[1])){
+                if (isset($modules[1])) {
                     $file = $modules[1];
                     $moduleNode->setAttribute('fallbackPath', $this->getImsPciExportPath($itemRelPath, $file));
                 }
                 $modulesNode->appendChild($moduleNode);
             }
-
         }
 
         unset($xpath);
     }
 
-    private function getImsPciExportPath($itemRelPath, $file){
-        return $itemRelPath.$this->portableAssetsToExport[$file];
+    private function getImsPciExportPath($itemRelPath, $file)
+    {
+        return $itemRelPath . $this->portableAssetsToExport[$file];
     }
 
-    private function replaceFile($dataString, $fileToReplace){
-        $stream = fopen('php://memory','r+');
+    private function replaceFile($dataString, $fileToReplace)
+    {
+        $stream = fopen('php://memory', 'r+');
         fwrite($stream, $dataString);
         rewind($stream);
         $this->qtiItemExporter->addFile($stream, $fileToReplace);
         fclose($stream);
     }
 
-    private function getItemRelativePath($itemBasePath){
+    private function getItemRelativePath($itemBasePath)
+    {
         $returnValue = '';
         $arrDir = explode(DIRECTORY_SEPARATOR, rtrim($itemBasePath, DIRECTORY_SEPARATOR));
-        for($i = 0 ; $i < count($arrDir); $i++){
-            $returnValue .= '..'.DIRECTORY_SEPARATOR;
+        for ($i = 0; $i < count($arrDir); $i++) {
+            $returnValue .= '..' . DIRECTORY_SEPARATOR;
         }
         return $returnValue;
     }

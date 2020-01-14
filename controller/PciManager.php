@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +87,7 @@ class PciManager extends \tao_actions_CommonModule
     public function getRegisteredImplementations()
     {
 
-        $returnValue = array();
+        $returnValue = [];
 
         $pciModels = $this->getPciModels();
         foreach ($pciModels as $pciModel) {
@@ -130,10 +131,10 @@ class PciManager extends \tao_actions_CommonModule
      */
     public function verify()
     {
-        $result = array(
+        $result = [
             'valid' => false,
             'exists' => false
-        );
+        ];
 
         try {
             $file = \tao_helpers_Http::getUploadedFile('content');
@@ -178,8 +179,12 @@ class PciManager extends \tao_actions_CommonModule
             $currentVersion = $all[$pciObject->getTypeIdentifier()]->getVersion();
             if (version_compare($pciObject->getVersion(), $currentVersion, '<')) {
                 $result['package'] = [['message' =>
-                    __('A newer version of the pci "%s" already exists (current version: %s, target version: %s)',
-                        $pciObject->getTypeIdentifier(), $currentVersion, $pciObject->getVersion())
+                    __(
+                        'A newer version of the pci "%s" already exists (current version: %s, target version: %s)',
+                        $pciObject->getTypeIdentifier(),
+                        $currentVersion,
+                        $pciObject->getVersion()
+                    )
                 ]];
                 $result['valid'] = false;
                 $this->returnJson($result);
@@ -238,13 +243,13 @@ class PciManager extends \tao_actions_CommonModule
             $path = $this->getService()->export(PciModel::PCI_IDENTIFIER, $identifier);
             \tao_helpers_Http::returnFile($path);
         } catch (\common_Exception $e) {
-            $this->returnJson(array('error' => $e->getMessage()));
+            $this->returnJson(['error' => $e->getMessage()]);
         }
     }
 
     protected function getMinifiedModel(PortableElementObject $object)
     {
-        $data = $object->toArray(array('typeIdentifier', 'label'));
+        $data = $object->toArray(['typeIdentifier', 'label']);
         $data['runtimeOnly'] = empty($object->getCreator());
         $data['version'] = $object->getVersion();
         $data['enabled'] = $object->isEnabled();

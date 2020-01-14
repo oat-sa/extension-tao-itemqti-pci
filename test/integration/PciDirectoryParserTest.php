@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,15 +31,17 @@ class PciDirectoryParserTest extends TaoPhpUnitTestRunner
      * tests initialization
      * load registry service
      */
-    public function setUp(){
+    public function setUp()
+    {
         TaoPhpUnitTestRunner::initTest();
         \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
     }
 
-    public function testParsePciDirectory(){
+    public function testParsePciDirectory()
+    {
 
-        $oatPciDir = dirname(__FILE__).'/samples/directoryParser/oat';
-        $imsPciDir = dirname(__FILE__).'/samples/directoryParser/ims';
+        $oatPciDir = dirname(__FILE__) . '/samples/directoryParser/oat';
+        $imsPciDir = dirname(__FILE__) . '/samples/directoryParser/ims';
 
         $oatPciDirectoryParser = new PciDirectoryParser();
         $oatPciDirectoryParser->setModel(new PciModel());

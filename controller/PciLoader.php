@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,13 +36,13 @@ class PciLoader extends tao_actions_CommonModule
         $customInteractionDirs = \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem')->getConfig('debug_portable_element');
 
         try {
-            $this->returnJson(array_reduce($this->getRegistries(), function($acc, $registry) use ($customInteractionDirs){
+            $this->returnJson(array_reduce($this->getRegistries(), function ($acc, $registry) use ($customInteractionDirs) {
                 $latestRuntimes = $registry->getLatestRuntimes();
-                if(is_array($customInteractionDirs)){
-                    foreach($latestRuntimes as $id => &$versions){
-                        if(isset($customInteractionDirs[$id])){
+                if (is_array($customInteractionDirs)) {
+                    foreach ($latestRuntimes as $id => &$versions) {
+                        if (isset($customInteractionDirs[$id])) {
                             //add option to load from source (as opposed to from the default min.js files)
-                            foreach($versions as &$version){
+                            foreach ($versions as &$version) {
                                 // IMS PCI
                                 if (isset($version['model']) && $version['model'] == 'IMSPCI') {
                                     $modules = (isset($version['runtime']) && isset($version['runtime']['modules'])) ? $version['runtime']['modules'] : [];
@@ -50,9 +51,9 @@ class PciLoader extends tao_actions_CommonModule
                                     // in case of a TAO bundled PCI (= we have a "src" entry),
                                     // we redirect the module to the entry point of the PCI instead of its minified version
                                     if (count($src) > 0) {
-                                        foreach($modules as $moduleKey => &$allModulesFiles) {
+                                        foreach ($modules as $moduleKey => &$allModulesFiles) {
                                             if (strpos($moduleKey, '.min') == (strlen($moduleKey) - strlen('.min'))) {
-                                                foreach($allModulesFiles as &$moduleFile) {
+                                                foreach ($allModulesFiles as &$moduleFile) {
                                                     $moduleFile = str_replace('.min.js', '.js', $moduleFile);
                                                 }
                                             }
@@ -62,21 +63,21 @@ class PciLoader extends tao_actions_CommonModule
                                     if (isset($version['runtime']) && isset($version['runtime']['modules'])) {
                                         $version['runtime']['modules'] = $modules;
                                     }
-                                    if(isset($version['creator']) && isset($version['creator']['src'])){
+                                    if (isset($version['creator']) && isset($version['creator']['src'])) {
                                         //the first entry of the src array is always the entrypoint (PCI hook)
                                         $version['creator']['hook'] = array_shift($version['creator']['src']);
                                         $version['creator']['modules'] = $version['creator']['src'];
                                         unset($version['creator']['src']);
                                     }
 
-                                // TAO PCI
+                                    // TAO PCI
                                 } else {
-                                    if(isset($version['runtime']) && isset($version['runtime']['src'])){
+                                    if (isset($version['runtime']) && isset($version['runtime']['src'])) {
                                         $version['runtime']['libraries'] = $version['runtime']['src'];
                                         unset($version['runtime']['hook']);
                                         unset($version['runtime']['src']);
                                     }
-                                    if(isset($version['creator']) && isset($version['creator']['src'])){
+                                    if (isset($version['creator']) && isset($version['creator']['src'])) {
                                         //the first entry of the src array is always the entrypoint (PCI hook)
                                         $version['creator']['hook'] = array_shift($version['creator']['src']);
                                         $version['creator']['modules'] = $version['creator']['src'];
@@ -94,7 +95,8 @@ class PciLoader extends tao_actions_CommonModule
         }
     }
 
-    protected function getRegistries(){
+    protected function getRegistries()
+    {
         return [(new PciModel())->getRegistry(), (new IMSPciModel())->getRegistry()];
     }
 }

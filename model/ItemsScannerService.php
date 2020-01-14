@@ -39,7 +39,8 @@ class ItemsScannerService
             if ($this->qtiService->getDataItemByRdfItem($this->getItemResource($key)) !== null) {
                 $interactions = $this->qtiService->getDataItemByRdfItem($this->getItemResource($key))->getInteractions();
                 foreach ($interactions as $interaction) {
-                    if ($interaction instanceof PortableCustomInteraction
+                    if (
+                        $interaction instanceof PortableCustomInteraction
                         && $requestTypeIndentifier === $interaction->getTypeIdentifier()
                     ) {
                         throw new PortableElementException('Portable element is used in one of items');

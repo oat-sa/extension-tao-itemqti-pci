@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +155,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
 
     function fillArrayWithFileNodes(\DirectoryIterator $dir)
     {
-        $data = array();
+        $data = [];
         foreach ($dir as $node) {
             if ($node->isDir() && !$node->isDot()) {
                 $data[$node->getFilename()] = $this->fillArrayWithFileNodes(new \DirectoryIterator($node->getPathname()));
@@ -167,7 +168,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
 
     protected function array_diff_assoc_recursive($array1, $array2)
     {
-        $difference = array();
+        $difference = [];
         foreach ($array1 as $key => $value) {
             if (is_array($value)) {
                 if (!isset($array2[$key]) || !is_array($array2[$key])) {
