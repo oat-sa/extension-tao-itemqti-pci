@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +87,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         );
         $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
 
-        $items = array();
+        $items = [];
         foreach ($report as $itemReport) {
             $this->assertEquals(Report::TYPE_SUCCESS, $itemReport->getType());
             $data = $itemReport->getData();
@@ -162,7 +163,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         );
         $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
 
-        $items = array();
+        $items = [];
         foreach ($report as $itemReport) {
             $this->assertEquals(Report::TYPE_SUCCESS, $itemReport->getType());
             $data = $itemReport->getData();
@@ -253,7 +254,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         }
         $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
 
-        $items = array();
+        $items = [];
         foreach ($report as $itemReport) {
             $data = $itemReport->getData();
             if (!is_null($data)) {
@@ -316,7 +317,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         }
         $this->assertEquals(Report::TYPE_SUCCESS, $report->getType());
 
-        $items = array();
+        $items = [];
         foreach ($report as $itemReport) {
             $data = $itemReport->getData();
             if (!is_null($data)) {
@@ -423,13 +424,13 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             throw new \common_Exception('Unable to create archive at ' . $path);
         }
 
-        if ($this->itemService->hasItemModel($item, array(ItemModel::MODEL_URI))) {
+        if ($this->itemService->hasItemModel($item, [ItemModel::MODEL_URI])) {
             $exporter = new QTIPackedItemExporter($item, $zipArchive, $manifest);
             $exporter->export();
             $manifest = $exporter->getManifest();
         }
 
-        $this->assertTrue($this->itemService->hasItemModel($item, array(ItemModel::MODEL_URI)));
+        $this->assertTrue($this->itemService->hasItemModel($item, [ItemModel::MODEL_URI]));
 
         $this->assertNotNull($manifest);
 
@@ -439,7 +440,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertTrue(file_exists($path), 'could not find path ' . $path);
         $this->exportedZips[] = $path;
 
-        return array($path, $manifest);
+        return [$path, $manifest];
     }
 
     private function getItemFolder($item)
@@ -482,6 +483,4 @@ class ImportExportTest extends TaoPhpUnitTestRunner
             'manifest' => $manifest
         ];
     }
-
-
 }

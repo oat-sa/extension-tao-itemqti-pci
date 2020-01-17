@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,22 +29,24 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
      * tests initialization
      * load registry service
      */
-    public function setUp(){
+    public function setUp()
+    {
         TaoPhpUnitTestRunner::initTest();
         \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
     }
 
 
-    public function testParseOatPci(){
-        $qtiParser = new Parser(dirname(__FILE__).'/samples/xml/oat/version_and_assets.xml');
+    public function testParseOatPci()
+    {
+        $qtiParser = new Parser(dirname(__FILE__) . '/samples/xml/oat/version_and_assets.xml');
 
         $qtiParser->validate();
-        if(!$qtiParser->isValid()){
+        if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
 
         $item = $qtiParser->load();
-        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item', $item);
 
         $pcis = $item->getComposingElements('\\oat\\taoQtiItem\\model\\qti\\interaction\\PortableCustomInteraction');
         $this->assertEquals(1, count($pcis));
@@ -66,24 +69,25 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     public function imsPciPovider()
     {
         return [
-            [dirname(__FILE__).'/samples/xml/ims/likert-global-ns.xml'],
-            [dirname(__FILE__).'/samples/xml/ims/likert-inline-ns.xml']
+            [dirname(__FILE__) . '/samples/xml/ims/likert-global-ns.xml'],
+            [dirname(__FILE__) . '/samples/xml/ims/likert-inline-ns.xml']
         ];
     }
 
     /**
      * @dataProvider imsPciPovider
      */
-    public function testParseImsPci($file){
+    public function testParseImsPci($file)
+    {
 
         $qtiParser = new Parser($file);
         $qtiParser->validate();
-        if(!$qtiParser->isValid()){
+        if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
 
         $item = $qtiParser->load();
-        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item', $item);
 
         $pcis = $item->getComposingElements('\\oat\\taoQtiItem\\model\\qti\\interaction\\ImsPortableCustomInteraction');
         $this->assertEquals(1, count($pcis));
@@ -107,16 +111,17 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $pci->getProperties());
     }
 
-    public function testParseImsPciWithConfig(){
-        $qtiParser = new Parser(dirname(__FILE__).'/samples/xml/ims/likert-v1.xml');
+    public function testParseImsPciWithConfig()
+    {
+        $qtiParser = new Parser(dirname(__FILE__) . '/samples/xml/ims/likert-v1.xml');
 
         $qtiParser->validate();
-        if(!$qtiParser->isValid()){
+        if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
 
         $item = $qtiParser->load();
-        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item', $item);
 
         $pcis = $item->getComposingElements('\\oat\\taoQtiItem\\model\\qti\\interaction\\ImsPortableCustomInteraction');
         $this->assertEquals(1, count($pcis));
@@ -143,25 +148,26 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     public function compositeOatImsPciPovider()
     {
         return [
-            [dirname(__FILE__).'/samples/xml/multi/likert-oat-ims.xml'],
-            [dirname(__FILE__).'/samples/xml/multi/likert-oat-ims-ns.xml']
+            [dirname(__FILE__) . '/samples/xml/multi/likert-oat-ims.xml'],
+            [dirname(__FILE__) . '/samples/xml/multi/likert-oat-ims-ns.xml']
         ];
     }
 
     /**
      * @dataProvider compositeOatImsPciPovider
      */
-    public function testParseOatAndImsPciWithConfig($file){
+    public function testParseOatAndImsPciWithConfig($file)
+    {
 
         $qtiParser = new Parser($file);
 
         $qtiParser->validate();
-        if(!$qtiParser->isValid()){
+        if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
 
         $item = $qtiParser->load();
-        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item', $item);
 
         $this->assertEquals(2, count($item->getInteractions()));
 
@@ -177,17 +183,18 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $imsPci->getNamespace()->getUri());
     }
 
-    public function testParseOatMulti(){
+    public function testParseOatMulti()
+    {
 
-        $qtiParser = new Parser(dirname(__FILE__).'/samples/xml/oat/likert_audio.xml');
+        $qtiParser = new Parser(dirname(__FILE__) . '/samples/xml/oat/likert_audio.xml');
 
         $qtiParser->validate();
-        if(!$qtiParser->isValid()){
+        if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
 
         $item = $qtiParser->load();
-        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item',$item);
+        $this->assertInstanceOf('\\oat\\taoQtiItem\\model\\qti\\Item', $item);
 
         $this->assertEquals(2, count($item->getInteractions()));
 

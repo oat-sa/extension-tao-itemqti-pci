@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +41,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
 
     public function testValidatePci()
     {
-        $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
+        $packageValid = dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip';
         $parser = new PciPackagerParser();
         $parser->setModel(new PciModel());
         $this->assertTrue($parser->validate($packageValid));
@@ -48,7 +49,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
 
     public function testExtractFromManifest()
     {
-        $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
+        $packageValid = dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip';
 
         $parser = new PciPackagerParser();
         $parser->setModel(new PciModel());
@@ -63,7 +64,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
     public function testValidateWrongModel()
     {
         $this->setExpectedException(PortableElementParserException::class);
-        $packageValid = dirname(__FILE__).'/samples/package/likertScaleInteraction_v1.0.0.zip';
+        $packageValid = dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip';
         $parser = new PciPackagerParser();
         $parser->setModel(new IMSPciModel());
         $this->assertFalse($parser->validate($packageValid));
@@ -71,7 +72,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
 
     public function testValidateIms()
     {
-        $packageValid = dirname(__FILE__).'/samples/package/imsLikert_v0.1.0.zip';
+        $packageValid = dirname(__FILE__) . '/samples/package/imsLikert_v0.1.0.zip';
         $parser = new PciPackagerParser();
         $parser->setModel(new IMSPciModel());
         $this->assertTrue($parser->validate($packageValid));
@@ -79,7 +80,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
 
     public function testExtractFromManifestIms()
     {
-        $packageValid = dirname(__FILE__).'/samples/package/imsLikert_v0.1.0.zip';
+        $packageValid = dirname(__FILE__) . '/samples/package/imsLikert_v0.1.0.zip';
 
         $parser = new PciPackagerParser();
         $parser->setModel(new IMSPciModel());
@@ -94,7 +95,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
     public function testValidateWrongModelIms()
     {
         $this->setExpectedException(PortableElementParserException::class);
-        $packageValid = dirname(__FILE__).'/samples/package/imsLikert_v0.1.0.zip';
+        $packageValid = dirname(__FILE__) . '/samples/package/imsLikert_v0.1.0.zip';
         $parser = new PciPackagerParser();
         $parser->setModel(new PciModel());
         $this->assertFalse($parser->validate($packageValid));
