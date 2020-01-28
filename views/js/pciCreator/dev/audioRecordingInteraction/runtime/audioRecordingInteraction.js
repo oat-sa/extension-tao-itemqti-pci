@@ -77,7 +77,7 @@ define([
         /**
          * return {Boolean} - Are we in a TAO QTI Creator context?
          */
-        inQtiCreator: function isInCreator() {
+        inQtiCreator: function inQtiCreator() {
             if (_.isUndefined(this._inQtiCreator) && this.$container) {
                 this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
             }
