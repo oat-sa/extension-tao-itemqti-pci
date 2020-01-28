@@ -75,6 +75,16 @@ define([
         _isAutoPlayingBack: false,
 
         /**
+         * return {Boolean} - Are we in a TAO QTI Creator context?
+         */
+        inQtiCreator: function isInCreator() {
+            if (_.isUndefined(this._inQtiCreator) && this.$container) {
+                this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
+            }
+            return this._inQtiCreator;
+        },
+
+        /**
          * Render the PCI
          * @param {Object} config
          */
@@ -658,7 +668,7 @@ define([
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
 
-            if (this.config.autoStart === true && this.config.useMediaStimulus === false) {
+            if (this.config.autoStart === true && this.config.useMediaStimulus === false && !this.inQtiCreator()) {
                 self.startRecording();
             }
         },
