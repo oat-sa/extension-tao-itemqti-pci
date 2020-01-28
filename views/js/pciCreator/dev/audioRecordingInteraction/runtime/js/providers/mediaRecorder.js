@@ -45,6 +45,17 @@ define([
             chunkSizeMs = 100;      // size of a chunk (reduced from 1000ms to 100ms to avoid data loss in case of interrupted recording)
 
         var codecsByPreferenceOrder = [
+            // !!! Do not change this order without careful consideration and regression testing !!!
+            // Firefox recently (more or less) implemented the use of WebM as the default
+            // container for the media produced by the mediaRecorder API.
+            // This is fine except that by default, recorded audio is non seekable, eg
+            // it does not have a duration property, which is needed among other things
+            // to properly scale the player progress bar.
+            // This was already the case for Chrome, but there is a known workaround for
+            // that (documented in PCI runtime source code). This workaround DOES NOT
+            // work with Firefox. As a result, I haven't found a way of easily setting
+            // the duration of the recorded WebM audio. As a new workaround, I chose
+            // to increase priority of the ogg container to restore previous behavior.
             'audio/ogg;codecs=opus',
             'audio/webm;codecs=opus',
             'audio/webm',
