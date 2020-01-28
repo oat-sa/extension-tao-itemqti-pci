@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +64,7 @@ class PciValidator extends PortableElementModelValidator
 
     /**
      * Return optional constraints
-     * 
+     *
      * @param $key
      * @param $constraint
      * @return bool
@@ -80,5 +81,4 @@ class PciValidator extends PortableElementModelValidator
         $this->optional = array_merge($optional, $this->optional);
         return parent::isOptionalConstraint($key, $constraint);
     }
-
 }

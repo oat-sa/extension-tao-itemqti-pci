@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,9 +26,9 @@ use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 class PciDataObject extends PortableElementObject
 {
     /** @var array */
-    protected $response = array();
+    protected $response = [];
     /** @var array */
-    protected $creator = array();
+    protected $creator = [];
 
     /**
      * @return array
