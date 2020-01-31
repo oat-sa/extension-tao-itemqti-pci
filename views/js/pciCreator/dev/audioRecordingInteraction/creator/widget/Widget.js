@@ -25,10 +25,16 @@ define([
     var AudioRecordingInteractionWidget = Widget.clone();
 
     AudioRecordingInteractionWidget.initCreator = function(){
+        var $interaction;
 
         this.registerStates(states);
 
         Widget.initCreator.call(this);
+
+        $interaction = this.$container.find('.audioRecordingInteraction');
+        if ($interaction.length) {
+            $interaction.addClass('tao-qti-creator-context');
+        }
     };
 
     return AudioRecordingInteractionWidget;

@@ -72,7 +72,18 @@ define([
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
+        _isAutoPlayingBack: false,
         _delayCallback: null,
+
+        /**
+         * return {Boolean} - Are we in a TAO QTI Creator context?
+         */
+        inQtiCreator: function inQtiCreator() {
+            if (_.isUndefined(this._inQtiCreator) && this.$container) {
+                this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
+            }
+            return this._inQtiCreator;
+        },
 
         _cleanDelayCallback: function _cleanDelayCallback() {
             if (this._delayCallback) {
@@ -123,6 +134,7 @@ define([
          * @param {Object}  config
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+         * @param {Boolean} config.autoPlayback - immediately playback recording after recording stops
          * @param {Number}  config.delaySeconds - seconds delay before start recording
          * @param {Number}  config.delayMinutes - minutes delay before start recording
          * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
@@ -139,6 +151,7 @@ define([
             this.config = {
                 allowPlayback:           toBoolean(config.allowPlayback, true),
                 autoStart:               toBoolean(config.autoStart, false),
+                autoPlayback:            toBoolean(config.autoPlayback, false),
 
                 delaySeconds:            toInteger(config.delaySeconds, 0),
                 delayMinutes:            toInteger(config.delayMinutes, 0),
@@ -176,19 +189,46 @@ define([
                     filename = getFileName(self._filePrefix, blob),
                     filesize = blob.size;
 
-                self._recordsAttempts++;
+                self.getBase64Recoding(blob, filename)
+                    .then(function (recording) {
+                        self._recordsAttempts++;
 
-                self.player.load(recordingUrl);
+                        self.updateResponse(recording);
 
-                self.createBase64Recoding(blob, filename);
+                        // now that the response is ready, we can turn off the visual recording feedback that we had had let
+                        // "turned on" as a hint to the test taker that the recording was not completely over,
+                        // and that he should not leave the item yet. In most case, this little delay should go completely unnoticed.
+                        self.progressBar.reset();
+                        self.$meterContainer.removeClass('record');
 
-                self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
+                        // load recording in the player
+                        self.player.unload();
+                        if (self.config.autoPlayback) {
+                            self.player.on('oncanplay', function() {
+                                self.player.off('oncanplay');
+                                self._isAutoPlayingBack = true;
+                                self.playRecording();
+                            });
+                        }
+                        self.player.loadFromBase64(recording.data, recording.mime);
+
+                        self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
+                    })
+                    .catch(function() {
+                        self.resetRecording();
+                    });
             });
 
             this.recorder.on('partialrecordingavailable', function(blob) {
                 var filename = getFileName(self._filePrefix, blob);
 
-                self.createBase64Recoding(blob, filename);
+                self.getBase64Recoding(blob, filename)
+                    .then(function(recording) {
+                        self.updateResponse(recording);
+                    })
+                    .catch(function() {
+                        self.resetRecording();
+                    });
             });
 
             this.recorder.on('statechange', function() {
@@ -217,8 +257,9 @@ define([
                 self.updateControls();
             });
 
-            this.player.on('idle', function() {
+            this.player.on('playbackend', function() {
                 self.progressBar.setStyle('');
+                self._isAutoPlayingBack = false;
             });
 
             this.player.on('timeupdate', function(currentTime) {
@@ -263,7 +304,7 @@ define([
             }
 
             // no delay and no media stimulus, start recording now
-            if (delayInSeconds === 0 && !this.hasMediaStimulus()) {
+            if (delayInSeconds === 0 && !this.hasMediaStimulus() && !this.inQtiCreator()) {
                 this.startRecording();
                 return;
             }
@@ -274,7 +315,7 @@ define([
                 ctr.disable();
             });
 
-            if (delayInSeconds > 0) {
+            if (delayInSeconds > 0 && !this.inQtiCreator()) {
                 // init countdown
                 this.initCountdown();
             }
@@ -283,7 +324,9 @@ define([
                 return;
             }
 
-            this.initDelay();
+            if (!this.inQtiCreator()) {
+                this.initDelay();
+            }
         },
 
         initDelay: function initDelay() {
@@ -487,43 +530,44 @@ define([
         },
 
         /**
-         * Clear the PCI response and reset the player
+         * Clear the PCI response, reset the player as well as the UI elements
          */
         resetRecording: function resetRecording() {
             this.player.unload();
             this.updateResponse(null);
             this.updateControls();
+
+            this.progressBar.reset();
+            this.$meterContainer.removeClass('record');
+            if (this.recorder.is('recording')) {
+                this.recorder.cancel();
+            }
         },
 
         /**
          * This function is called when the recordings ends.
-         * It creates a base64 encoded file from the output of the recorder and stores it as the PCI response.
+         * It creates a base64 encoded file from the output of the recorder and resolves when it's done
          * @param {Blob} blob - the recording
          * @param {String} filename - will be part of the QTI response
+         * @returns {Object} recording data structure ready to be stored as the QTI response
          */
-        createBase64Recoding: function createBase64Recoding(blob, filename) {
-            var self = this;
+        getBase64Recoding: function getBase64Recoding(blob, filename) {
+            return new Promise(function (resolve) {
+                var reader = new FileReader();
+                reader.readAsDataURL(blob);
 
-            var reader = new FileReader();
-            reader.readAsDataURL(blob);
-
-            reader.onloadend = function onLoadEnd(e) {
-                var base64Raw = e.target.result,
-                    commaPosition = base64Raw.indexOf(','),
-                    base64Data = base64Raw.substring(commaPosition + 1),
-                    recording = {
-                        mime: blob.type,
-                        name: filename,
-                        data: base64Data
-                    };
-                self.updateResponse(recording);
-
-                // now that the response is ready, we can turn off the visual recording feedback that we had had let
-                // "turned on" as a hint to the test taker that the recording was not completely over,
-                // and that he should not leave the item yet. In most case, this little delay should go completely unnoticed.
-                self.progressBar.reset();
-                self.$meterContainer.removeClass('record');
-            };
+                reader.onloadend = function onLoadEnd(e) {
+                    var base64Raw = e.target.result,
+                        commaPosition = base64Raw.indexOf(','),
+                        base64Data = base64Raw.substring(commaPosition + 1),
+                        recording = {
+                            mime: blob.type,
+                            name: filename,
+                            data: base64Data
+                        };
+                    resolve(recording);
+                };
+            });
         },
 
         /**
@@ -639,7 +683,7 @@ define([
                 }
             }.bind(stop));
             stop.on('updatestate', function() {
-                if (self.player.is('playing')
+                if ((self.player.is('playing') && !self._isAutoPlayingBack)
                     || self.recorder.is('recording')) {
                     this.enable();
                 } else {
@@ -662,7 +706,7 @@ define([
                     }
                 }.bind(play));
                 play.on('updatestate', function() {
-                    if (self.player.is('idle') || self.getRecording()) {
+                    if (self.player.is('idle') || (self.getRecording() && !self._isAutoPlayingBack)) {
                         this.enable();
                     } else {
                         this.disable();

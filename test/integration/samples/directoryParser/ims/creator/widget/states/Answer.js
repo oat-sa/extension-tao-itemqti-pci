@@ -7,9 +7,9 @@ define([
     'use strict';
 
     var InteractionStateAnswer = stateFactory.extend(Answer, function initAnswerState(){
-        this.widget.$original.find('.likert input').prop('disabled', 'disabled');
+        this.widget.$original.find('.likert input').prop('disabled', true);
     }, function exitAnswerState(){
-        this.widget.$original.find('.likert input').removeProp('disabled');
+        this.widget.$original.find('.likert input').prop('disabled', false);
     });
 
     InteractionStateAnswer.prototype.initResponseForm = function initResponseForm(){
