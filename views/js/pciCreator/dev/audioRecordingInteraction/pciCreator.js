@@ -53,6 +53,7 @@ define([
             return {
                 allowPlayback:           true,
                 autoStart:               false,
+                autoPlayback:            false,
 
                 delayMinutes:            0,
                 delaySeconds:            0,
