@@ -120,6 +120,7 @@ define([
                 // when playback is stopped by user or when the media is loaded:
                 audioEl.oncanplay = function oncanplay() {
                     setState(player, playerStates.IDLE);
+                    self.trigger('oncanplay');
                 };
 
                 // when playbacks ends on its own:
@@ -127,6 +128,7 @@ define([
                     setState(player, playerStates.IDLE);
                     audioEl.currentTime = 0;
                     self.trigger('timeupdate', [0]);
+                    self.trigger('playbackend');
                 };
 
                 audioEl.onplaying = function onplaying() {
@@ -141,6 +143,10 @@ define([
                     var ontimeupdateBackup = audioEl.ontimeupdate;
 
                     // Chrome workaround for bug https://bugs.chromium.org/p/chromium/issues/detail?id=642012
+                    // This is a known issue where created WebM files are not seekable, meaning they don't have a proper duration,
+                    // which we need to size the player progress bar.
+                    // Unfortunately, this workaround does not work with Firefox that now support WebM as well,
+                    // but suffers the same issue. So for Firefox, current workaround is to stick to Ogg files.
                     // source: https://stackoverflow.com/questions/38443084/how-can-i-add-predefined-length-to-audio-recorded-from-mediarecorder-in-chrome/39971175#39971175
                     if (audioEl.duration === Infinity) {
                         audioEl.ontimeupdate = function() {
@@ -148,6 +154,9 @@ define([
                             audioEl.currentTime = 0;
                             audioEl.load();
                         };
+                        // setting currentTime to a huge value does 2 things:
+                        // - it fixes the duration value of the audio element
+                        // - it triggers the 'ontimeupdate' listener (defined above)
                         audioEl.currentTime = 1e101;
                         audioEl.onloadedmetadata = null;
                     }
@@ -180,6 +189,7 @@ define([
             stop: function stop() {
                 audioEl.pause();
                 audioEl.currentTime = 0;
+                this.trigger('playbackend');
                 // state change is triggered by the oncanplay listener
             },
 
