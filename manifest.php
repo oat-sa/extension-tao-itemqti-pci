@@ -34,7 +34,7 @@ return [
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '6.2.0',
+    'version' => '6.2.1',
     'author' => 'Open Assessment Technologies SA',
     'requires' => [
         'generis' => '>=12.5.0',
