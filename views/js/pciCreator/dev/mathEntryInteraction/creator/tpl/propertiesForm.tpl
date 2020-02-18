@@ -43,7 +43,7 @@
     <label class="panel">
         <input name="tool_sqrt" type="checkbox" {{#if tool_sqrt}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "square root"}}
+        &radic; {{__ "square root"}}
     </label>
 </div>
 <div>
@@ -57,7 +57,14 @@
     <label class="panel">
         <input name="tool_exp" type="checkbox" {{#if tool_exp}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "exponent"}}
+        x&#8319; {{__ "exponent"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_subscript" type="checkbox" {{#if tool_subscript}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        x&#8345; {{__ "subscript"}}
     </label>
 </div>
 <div>
@@ -94,9 +101,69 @@
 </div>
 <div>
     <label class="panel">
+        <input name="roundbkts" type="checkbox" {{#if roundbkts}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        ( ) {{__ "parentheses/round brackets"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="curlybkts" type="checkbox" {{#if curlybkts}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        { } {{__ "braces/curly brackets"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
         <input name="squarebkts" type="checkbox" {{#if squarebkts}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        [ ] square brackets
+        [ ] {{__ "square brackets"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_integral" type="checkbox" {{#if tool_integral}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Indefinite integral"}}
+    </label>
+</div>
+
+<hr />
+<h3>{{__ "Geometry"}}</h3>
+
+<div>
+    <label class="panel">
+        <input name="tool_angle" type="checkbox" {{#if tool_angle}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &ang; {{__ "angle" }}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_triangle" type="checkbox" {{#if tool_triangle}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#9651; {{__ "triangle" }}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_similar" type="checkbox" {{#if tool_similar}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &sim; {{__ "similar"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_paral" type="checkbox" {{#if tool_paral}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#8741; {{__ "is parallel with"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_perp" type="checkbox" {{#if tool_perp}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#8869; {{__ "is perpendicular to"}}
     </label>
 </div>
 
@@ -130,16 +197,30 @@
 
 <div>
     <label class="panel">
+        <input name="tool_lower" type="checkbox" {{#if tool_lower}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &lt; {{__ "lower than"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_greater" type="checkbox" {{#if tool_greater}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &gt; {{__ "greater than"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
         <input name="tool_lte" type="checkbox" {{#if tool_lte}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "lower than or equal"}}
+        &le; {{__ "lower than or equal"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="tool_gte" type="checkbox" {{#if tool_gte}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "greater than or equal"}}
+        &ge; {{__ "greater than or equal"}}
     </label>
 </div>
 
@@ -148,23 +229,79 @@
 
 <div>
     <label class="panel">
+        <input name="tool_equal" type="checkbox" {{#if tool_equal}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        = {{__ "equal"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_plus" type="checkbox" {{#if tool_plus}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        + {{__ "plus"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_minus" type="checkbox" {{#if tool_minus}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        – {{__ "minus"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
         <input name="tool_times" type="checkbox" {{#if tool_times}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "times"}}
+        &times; {{__ "times"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_timesdot" type="checkbox" {{#if tool_timesdot}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        · {{__ "times dot"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="tool_divide" type="checkbox" {{#if tool_divide}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "divide"}}
+        &divide; {{__ "divide"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="tool_plusminus" type="checkbox" {{#if tool_plusminus}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "Plus/minus"}}
+        &#177; {{__ "Plus/minus"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_inmem" type="checkbox" {{#if tool_inmem}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "is member of"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_ninmem" type="checkbox" {{#if tool_ninmem}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "is not member of"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_union" type="checkbox" {{#if tool_union}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "set union"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_intersec" type="checkbox" {{#if tool_intersec}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "set intersection"}}
     </label>
 </div>
 
