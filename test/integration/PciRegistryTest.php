@@ -42,7 +42,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
      * tests initialization
      * load registry service
      */
-    public function setUp()
+    public function setUp(): void
     {
         TaoPhpUnitTestRunner::initTest();
         $this->registry = PciRegistry::getRegistry();
@@ -52,7 +52,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
     /**
      * remove all created instances
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->registry === null) {
             $this->fail('registry should not be null');
