@@ -31,7 +31,7 @@ class PciDirectoryParserTest extends TaoPhpUnitTestRunner
      * tests initialization
      * load registry service
      */
-    public function setUp()
+    public function setUp(): void
     {
         TaoPhpUnitTestRunner::initTest();
         \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
