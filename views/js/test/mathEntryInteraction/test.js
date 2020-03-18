@@ -305,11 +305,12 @@ define([
 
     QUnit.test('set and get state', function(assert) {
         var ready = assert.async();
-        var changeCounter = 0;
         var state = {
             RESPONSE: {
-                base: {
-                    string: '\\frac{12}{\\pi}'
+                response: {
+                    base: {
+                        string: '\\frac{12}{\\pi}'
+                    }
                 }
             }
         };
@@ -322,16 +323,7 @@ define([
 
                 this.setState(state);
                 assert.deepEqual(this.getState(), state, 'state set/get ok');
-            })
-            .on('responsechange', function(res) {
-                changeCounter++;
-                if (changeCounter === 1) { // So it runs only once
-                    assert.ok(_.isPlainObject(res), 'response changed');
-                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                    assert.deepEqual(res, state, 'response set/get ok');
-
-                    ready();
-                }
+                ready()
             })
             .init()
             .render($container);
@@ -341,14 +333,15 @@ define([
 
     QUnit.test('set and get state with gap expression', function(assert) {
         var ready = assert.async();
-        var changeCounter = 0;
         var state = {
             RESPONSE: {
-                list: {
-                    string: [
-                        '\\frac{1}{2}',
-                        '\\frac{1}{4}'
-                    ]
+                response: {
+                    list: {
+                        string: [
+                            '\\frac{1}{2}',
+                            '\\frac{1}{4}'
+                        ]
+                    }
                 }
             }
         };
@@ -364,16 +357,7 @@ define([
 
                 this.setState(state);
                 assert.deepEqual(this.getState(), state, 'state set/get ok');
-            })
-            .on('responsechange', function(res) {
-                changeCounter++;
-                if (changeCounter === 3) { // So it runs only once
-                    assert.ok(_.isPlainObject(res), 'response changed');
-                    assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                    assert.deepEqual(res, state, 'response set/get ok');
-
-                    ready();
-                }
+                ready()
             })
             .init()
             .render($container);
