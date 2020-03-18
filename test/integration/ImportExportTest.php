@@ -62,7 +62,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
      * tests initialization
      * load qti service
      */
-    public function setUp()
+    public function setUp(): void
     {
         TaoPhpUnitTestRunner::initTest();
         $this->importService = ImportService::singleton();
@@ -370,7 +370,7 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertFalse($item->exists());
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach ($this->exportedZips as $path) {
             if (file_exists($path)) {

@@ -778,7 +778,9 @@ define([
          * @param {Object} state - json format
          */
         setSerializedState: function setSerializedState(state) {
-            this.setResponse(state);
+            if(state && state.response){
+                this.setResponse(state.response);
+            }
         },
 
         /**
@@ -789,7 +791,7 @@ define([
          * @returns {Object} json format
          */
         getSerializedState: function getSerializedState() {
-            return this.getResponse();
+            return {response : this.getResponse()};
         }
     };
 
