@@ -9,6 +9,7 @@ use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\generis\test\GenerisTestCase;
+use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
@@ -47,7 +48,7 @@ class PciManagerTest extends GenerisTestCase
     /**
      * @throws \common_ext_ExtensionException
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->ontologyMock = $this->getOntologyMock();
         $this->requestMock = $this->createMock(\Request::class);
@@ -59,11 +60,9 @@ class PciManagerTest extends GenerisTestCase
         \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
     }
 
-    /**
-     * @expectedException \oat\taoQtiItem\model\portableElement\exception\PortableElementException
-     */
     public function testUnregisterRequestWithoutParameter()
     {
+        $this->expectException(PortableElementException::class);
         $this->requestMock
             ->expects($this->once())
             ->method('hasParameter')

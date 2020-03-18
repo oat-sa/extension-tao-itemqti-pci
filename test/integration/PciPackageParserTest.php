@@ -34,7 +34,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
      * tests initialization
      * load qti service
      */
-    public function setUp()
+    public function setUp(): void
     {
         TaoPhpUnitTestRunner::initTest();
     }
@@ -63,7 +63,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
 
     public function testValidateWrongModel()
     {
-        $this->setExpectedException(PortableElementParserException::class);
+        $this->expectException(PortableElementParserException::class);
         $packageValid = dirname(__FILE__) . '/samples/package/likertScaleInteraction_v1.0.0.zip';
         $parser = new PciPackagerParser();
         $parser->setModel(new IMSPciModel());
@@ -94,7 +94,7 @@ class PciPackageParserTest extends TaoPhpUnitTestRunner
 
     public function testValidateWrongModelIms()
     {
-        $this->setExpectedException(PortableElementParserException::class);
+        $this->expectException(PortableElementParserException::class);
         $packageValid = dirname(__FILE__) . '/samples/package/imsLikert_v0.1.0.zip';
         $parser = new PciPackagerParser();
         $parser->setModel(new PciModel());
