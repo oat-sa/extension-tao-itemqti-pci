@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.4.0-sprint120\n"
-"PO-Revision-Date: 2020-01-31T09:34:34\n"
+"Project-Id-Version: TAO 3.4.0-sprint124\n"
+"PO-Revision-Date: 2020-03-20T11:17:04\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: nl-NL\n"
@@ -20,10 +20,10 @@ msgid "Add Interaction"
 msgstr "Voeg interactie toe"
 
 msgid "Allow download"
-msgstr ""
+msgstr "Download toestaan"
 
 msgid "allow line break"
-msgstr ""
+msgstr "regeleinde toestaan"
 
 msgid "Allow playback"
 msgstr "Sta afspelen toe"
@@ -50,13 +50,13 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Channels"
-msgstr ""
+msgstr "Kanalen"
 
 msgid "Comparison"
 msgstr "Vergelijking"
 
 msgid "Compressed"
-msgstr ""
+msgstr "Gecomprimeerd"
 
 msgid "cosinus"
 msgstr "cosinus"
@@ -65,7 +65,7 @@ msgid "Delete"
 msgstr ""
 
 msgid "disabled"
-msgstr ""
+msgstr "uitgeschakeld"
 
 msgid "divide"
 msgstr "delen"
@@ -77,13 +77,13 @@ msgid "equal"
 msgstr ""
 
 msgid "Experimental only"
-msgstr ""
+msgstr "Alleen experimenteel"
 
 msgid "exponent"
 msgstr "Exponent"
 
 msgid "For tests only"
-msgstr ""
+msgstr "Alleen voor tests"
 
 msgid "fraction"
 msgstr "breuk"
@@ -107,7 +107,7 @@ msgid "id : "
 msgstr "id :"
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
-msgstr ""
+msgstr "In bps (bits per seconde). Stel de afweging in tussen audiokwaliteit en bestandsgrootte. Met de standaardwaarde (20.000bps) bedraagt het gewicht van een opname van 2 minuten ongeveer 300KB."
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "In seconden. Maximum toegestane opname tijd (kan niet korter zijn dan 10 seconden). De opname zal automatisch stoppen wanneer de tijd wordt bereikt."
@@ -116,7 +116,7 @@ msgid "Indefinite integral"
 msgstr ""
 
 msgid "Large"
-msgstr ""
+msgstr "Groot"
 
 msgid "Level"
 msgstr "Niveau"
@@ -143,7 +143,7 @@ msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 
 msgstr "Maximaal aan de kandidate toegestane opname pogingen. Stel in op 0 voor oneindig. Met een limiet van 3 kan de kandidaat tweemaal de resetbutton klikken."
 
 msgid "Medium"
-msgstr ""
+msgstr "Gemiddeld"
 
 msgid "Min:"
 msgstr ""
@@ -158,13 +158,13 @@ msgid "No Custom Interaction"
 msgstr "Geen aangepaste interactie"
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
-msgstr ""
+msgstr "Aantal kanalen voor de opname. Maakt het mogelijk om het recordformaat te halveren als het in mono wordt gebruikt."
 
 msgid "Operands"
 msgstr "operanden"
 
 msgid "Options"
-msgstr ""
+msgstr "Opties"
 
 msgid "parentheses/round brackets"
 msgstr ""
@@ -183,7 +183,7 @@ msgid "Recorded audio is automatically played back after recording stops. During
 msgstr ""
 
 msgid "Recording format"
-msgstr ""
+msgstr "Opname formaat"
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "Opname start automatisch zodra de kandidaat de microfoon autoriseert. Indien een media stimulus gebruikt is, zal de opname automatisch starten nadat deze is afgespeeld."
@@ -205,7 +205,7 @@ msgid "sinus"
 msgstr "sinus"
 
 msgid "Small"
-msgstr ""
+msgstr "Klein"
 
 msgid "square brackets"
 msgstr ""
@@ -256,7 +256,7 @@ msgid "Unable to upload file %s : %s"
 msgstr "Kan bestand %s : %s niet uplodaen"
 
 msgid "Uncompressed"
-msgstr ""
+msgstr "Niet-gecomprimeerde"
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "Upload een nieuwe aangepaste interactie (zip pakket)"
@@ -274,7 +274,7 @@ msgid "Warning"
 msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
-msgstr ""
+msgstr "Bij gecomprimeerde opname wordt de audio opgeslagen als een webm- of ogg-bestand (kleiner formaat). Bij niet-gecomprimeerd opname, als een lossless Wav-bestand (veel groter formaat)."
 
 msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
 msgstr ""
