@@ -415,9 +415,6 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('6.3.1');
         }
 
-        if($this->isVersion('6.3.1')){
-            call_user_func(new RegisterPciLiquid(), ['0.4.1']);
-            $this->setVersion('6.3.2');
-        }
+        $this->skip('6.3.1', '6.5.0');
     }
 }
