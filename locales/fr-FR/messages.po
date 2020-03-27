@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.4.0-sprint124\n"
-"PO-Revision-Date: 2020-03-20T11:17:04\n"
+"PO-Revision-Date: 2020-03-23T16:05:31\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: fr-FR\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
+"targetLanguage: fr-FR\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
@@ -14,34 +14,34 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Add gap"
-msgstr ""
+msgstr "Ajouter un espace"
 
 msgid "Add Interaction"
-msgstr "Voeg interactie toe"
+msgstr "Ajouter une interaction"
 
 msgid "Allow download"
-msgstr "Download toestaan"
+msgstr "Permettre le téléchargement"
 
 msgid "allow line break"
-msgstr "regeleinde toestaan"
+msgstr "permettre le saut de ligne"
 
 msgid "Allow playback"
-msgstr "Sta afspelen toe"
+msgstr "Permettre la lecture"
 
 msgid "Audio bitrate:"
-msgstr "Audio-bitrate:"
+msgstr "Débit binaire audio :"
 
 msgid "authorize white space"
-msgstr "sta witruimte toe"
+msgstr "autoriser les espaces"
 
 msgid "Auto playback recording"
 msgstr ""
 
 msgid "Auto start recording"
-msgstr "Autostart opname"
+msgstr "Démarrage automatique de l'enregistrement"
 
 msgid "Back to listing"
-msgstr "Terig naar lijst"
+msgstr "Retour à la liste"
 
 msgid "braces/curly brackets"
 msgstr ""
@@ -50,13 +50,13 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Channels"
-msgstr "Kanalen"
+msgstr "Canaux"
 
 msgid "Comparison"
-msgstr "Vergelijking"
+msgstr "Comparaison"
 
 msgid "Compressed"
-msgstr "Gecomprimeerd"
+msgstr "Compressé"
 
 msgid "cosinus"
 msgstr "cosinus"
@@ -65,106 +65,106 @@ msgid "Delete"
 msgstr ""
 
 msgid "disabled"
-msgstr "uitgeschakeld"
+msgstr "désactivé"
 
 msgid "divide"
-msgstr "delen"
+msgstr "diviser"
 
 msgid "enable auto wrap"
-msgstr ""
+msgstr "activer retour à la ligne automatique"
 
 msgid "equal"
 msgstr ""
 
 msgid "Experimental only"
-msgstr "Alleen experimenteel"
+msgstr "Uniquement expérimental"
 
 msgid "exponent"
-msgstr "Exponent"
+msgstr "exposant"
 
 msgid "For tests only"
-msgstr "Alleen voor tests"
+msgstr "Uniquement pour des tests"
 
 msgid "fraction"
-msgstr "breuk"
+msgstr "fraction"
 
 msgid "Functions"
-msgstr "Functies"
+msgstr "Fonctions"
 
 msgid "Gap size"
-msgstr ""
+msgstr "Taille de l'écart"
 
 msgid "Give the possibility to the test taker to playback its own recording."
-msgstr "Geef de mogelijkheid aan de kandidaat om zijn eigen afname af te spelen."
+msgstr "Donner la possibilité au participant de relire son propre enregistrement."
 
 msgid "greater than"
 msgstr ""
 
 msgid "greater than or equal"
-msgstr "Groter dan of gelijk aan"
+msgstr "supérieur ou égal"
 
 msgid "id : "
-msgstr "id :"
+msgstr "id : "
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
-msgstr "In bps (bits per seconde). Stel de afweging in tussen audiokwaliteit en bestandsgrootte. Met de standaardwaarde (20.000bps) bedraagt het gewicht van een opname van 2 minuten ongeveer 300KB."
+msgstr "En bps (bits par seconde). Définissez le compromis entre la qualité audio et la taille du fichier. Avec la valeur par défaut (20.000bps), la taille d'un enregistrement de 2 minutes est d'environ 300 Ko."
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
-msgstr "In seconden. Maximum toegestane opname tijd (kan niet korter zijn dan 10 seconden). De opname zal automatisch stoppen wanneer de tijd wordt bereikt."
+msgstr "En secondes. Temps d'enregistrement maximal permis (n'est jamais inférieur à 10 secondes). L'enregistrement s'arrête automatiquement quand ce maximum est atteint."
 
 msgid "Indefinite integral"
 msgstr ""
 
 msgid "Large"
-msgstr "Groot"
+msgstr "Large"
 
 msgid "Level"
 msgstr "Niveau"
 
 msgid "ln"
-msgstr "In"
+msgstr "Dans"
 
 msgid "log"
-msgstr "log"
+msgstr "journal"
 
 msgid "lower than"
 msgstr ""
 
 msgid "lower than or equal"
-msgstr "kleiner dan of gelijk aan"
+msgstr "inférieur ou égal"
 
 msgid "Manage custom interactions"
-msgstr "Beheer aangepaste interactie"
+msgstr "Gérer les interactions personnalisées"
 
 msgid "Max attempts:"
-msgstr "Maximum aantal pogingen"
+msgstr "Nombre maximal de tentatives :"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr "Maximaal aan de kandidate toegestane opname pogingen. Stel in op 0 voor oneindig. Met een limiet van 3 kan de kandidaat tweemaal de resetbutton klikken."
+msgstr "Nombre maximal d'essais d'enregistrement permis pour le participant. Mettre à 0 pour un nombre illimité d'essais. Avec une limite de 3, le participant pourra cliquer 2 fois sur le bouton de remise à zéro."
 
 msgid "Medium"
-msgstr "Gemiddeld"
+msgstr "Moyen"
 
 msgid "Min:"
-msgstr ""
+msgstr "Min :"
 
 msgid "minus"
 msgstr ""
 
 msgid "Mono"
-msgstr ""
+msgstr "Mono"
 
 msgid "No Custom Interaction"
-msgstr "Geen aangepaste interactie"
+msgstr "Pas d'interaction personnalisée"
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
-msgstr "Aantal kanalen voor de opname. Maakt het mogelijk om het recordformaat te halveren als het in mono wordt gebruikt."
+msgstr "Nombre de canaux pour l'enregistrement. Permet de diviser la taille de l'enregistrement par deux si utilisé en mono."
 
 msgid "Operands"
-msgstr "operanden"
+msgstr "Opérandes"
 
 msgid "Options"
-msgstr "Opties"
+msgstr "Options"
 
 msgid "parentheses/round brackets"
 msgstr ""
@@ -173,7 +173,7 @@ msgid "plus"
 msgstr ""
 
 msgid "Plus/minus"
-msgstr "Plus/min"
+msgstr "Plus/moins"
 
 #, tao-public
 msgid "Portable Custom Interactions"
@@ -183,19 +183,19 @@ msgid "Recorded audio is automatically played back after recording stops. During
 msgstr ""
 
 msgid "Recording format"
-msgstr "Opname formaat"
+msgstr "Format d’enregistrement"
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
-msgstr "Opname start automatisch zodra de kandidaat de microfoon autoriseert. Indien een media stimulus gebruikt is, zal de opname automatisch starten nadat deze is afgespeeld."
+msgstr "L'enregistrement démarre automatiquement dès que le participant autorise l'utilisation du microphone. Si un média de type stimulus est utilisé, alors l'enregistrement démarre automatiquement après la lecture de ce stimulus."
 
 msgid "Response identifier"
-msgstr "Antwoord identificatie"
+msgstr "Identifiant de la réponse"
 
 msgid "Scale size"
-msgstr "Schaalgrootte"
+msgstr "taille de redimentionnement"
 
 msgid "Sec:"
-msgstr ""
+msgstr "Sec :"
 
 #, tao-public
 msgid "Settings"
@@ -205,76 +205,76 @@ msgid "sinus"
 msgstr "sinus"
 
 msgid "Small"
-msgstr "Klein"
+msgstr "Petit"
 
 msgid "square brackets"
 msgstr ""
 
 msgid "square root"
-msgstr "wortel"
+msgstr "racine carrée"
 
 msgid "Stereo"
-msgstr ""
+msgstr "Stéréo"
 
 msgid "subscript"
 msgstr ""
 
 msgid "Symbols"
-msgstr "Symbolen"
+msgstr "Symboles"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr "The identificatie van de keuze. Deze identificatie mag niet gebruikt worden in enig andere keuze of item variabele. Een identificatie is een string van karakters die moet starten met een letter of een liggend streepje (\"_\") en mag alleen letters, liggende streepjes, hyphens (\"-\"), punten (\".\", ook wel full-stop genoemd), getallen, gecombineerde tekens en extended karakters."
+msgstr "L'identifiant du choix. Cet identifiant ne doit être utilisé par aucune autre réponse ou variable d'item. Un identifiant est une chaîne de caractères qui doit commencer par une lettre ou un sous-tiret (\"_\") et contient seulement des lettres, des sous-tirets, des traits d'union (\"-\"), des points (\".\"), des chiffres, des combinaisons de caractères et des extensions."
 
 msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
-msgstr "Er bestaat al een interactie met dezelfde naam \"%s\" (label : \"%s\") en dezelfde versie : %s. Wilt u de bestaande overschrijven ?"
+msgstr "Il existe déjà une interaction avec le même identifiant \"%s\" (label : \"%s\") et la même version : %s. Voulez-vous surcharger celle existante ?"
 
 msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
 msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr "Dit is alleen voor testdoeleinden. Laat een link zien om het opgenomen bestand te downloaden op het moment dat de opname stopt. Dit moet niet worden gebruikt in een actieve toets, aangezien het de kandidaat de mogelijkheid geeft om zijn eigen opname te downloaden."
+msgstr "Uniquement à des fins de test. Affiche un lien pour télécharger le fichier enregistré une fois que l'enregistrement s'arrête. Ceci ne devrait pas être utilisé dans le contexte d'une passation, étant donné que cela permettrait au participant de télécharger son propre enregistrement."
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr "Deze optie geeft de mogelijkheid om media in te voegen die afgespeeld moet worden voor er opgenomen kan worden."
+msgstr "Cette option permet d'insérer un stimulus média à jouer avant que l'enregistrement ne se produise."
 
 msgid "Time limit:"
-msgstr "Tijdslimiet:"
+msgstr "Limite de temps :"
 
 msgid "times"
-msgstr "keer"
+msgstr "fois"
 
 msgid "times dot"
 msgstr ""
 
 msgid "Trigonometry"
-msgstr "Trigonometrie"
+msgstr "Trigonométrie"
 
 msgid "type : "
-msgstr ""
+msgstr "type : "
 
 msgid "Unable to upload file %s : %s"
-msgstr "Kan bestand %s : %s niet uplodaen"
+msgstr "Impossible de charger le fichier %s : %s"
 
 msgid "Uncompressed"
-msgstr "Niet-gecomprimeerde"
+msgstr "Non compressé"
 
 msgid "Upload new custom interaction (zip package)"
-msgstr "Upload een nieuwe aangepaste interactie (zip pakket)"
+msgstr "Charger une nouvelle interaction personnalisée (paquet zip)"
 
 msgid "use expression with gaps"
-msgstr ""
+msgstr "utiliser des expressions avec des espaces"
 
 msgid "Use media stimulus"
-msgstr "Gebruik een media stimulus"
+msgstr "Utiliser le stimulus média"
 
 msgid "version : "
-msgstr "Versie: "
+msgstr "version : "
 
 msgid "Warning"
 msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
-msgstr "Bij gecomprimeerde opname wordt de audio opgeslagen als een webm- of ogg-bestand (kleiner formaat). Bij niet-gecomprimeerd opname, als een lossless Wav-bestand (veel groter formaat)."
+msgstr "Avec un enregistrement compressé, l'audio est sauvegardé en tant que fichier webm ou ogg (plus petite taille). Si non compressé, en tant que fichier sans perte Wav (beaucoup plus grosse taille)."
 
 msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
 msgstr ""
