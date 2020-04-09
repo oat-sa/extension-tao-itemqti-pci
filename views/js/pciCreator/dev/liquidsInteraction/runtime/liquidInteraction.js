@@ -124,7 +124,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'qtiCustomInteractionContext', 't
          * @param {Object} serializedState - json format
          */
         setSerializedState : function(state){
-
+            if (state && state.response) {
+                this.setResponse(state.response);
+            }
         },
         
         /**
@@ -135,7 +137,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'qtiCustomInteractionContext', 't
          * @returns {Object} json format
          */
         getSerializedState : function(){
-            return {};
+            return { response: this.getResponse() };
         },
         
         _currentResponse: { base : null },
