@@ -127,7 +127,14 @@ define([
             tool_subscript: toBoolean(interaction.prop('tool_subscript'),true),
             tool_integral:  toBoolean(interaction.prop('tool_integral'),true),
             tool_timesdot:  toBoolean(interaction.prop('tool_timesdot'),true),
-
+            tool_triangle:  toBoolean(interaction.prop('tool_triangle'),true),
+            tool_similar:   toBoolean(interaction.prop('tool_similar'), true),
+            tool_paral:     toBoolean(interaction.prop('tool_paral'),   true),
+            tool_perp:      toBoolean(interaction.prop('tool_perp'),    true),
+            tool_inmem:     toBoolean(interaction.prop('tool_inmem'),   true),
+            tool_ninmem:    toBoolean(interaction.prop('tool_ninmem'),  true),
+            tool_union:     toBoolean(interaction.prop('tool_union'),   true),
+            tool_intersec:  toBoolean(interaction.prop('tool_intersec'),true),
             allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false),
             enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
         }));
@@ -186,6 +193,14 @@ define([
             tool_subscript: configChangeCallBack,
             tool_integral:  configChangeCallBack,
             tool_timesdot:  configChangeCallBack,
+            tool_triangle:  configChangeCallBack,
+            tool_similar:   configChangeCallBack,
+            tool_paral:     configChangeCallBack,
+            tool_perp:      configChangeCallBack,
+            tool_inmem:     configChangeCallBack,
+            tool_ninmem:    configChangeCallBack,
+            tool_union:     configChangeCallBack,
+            tool_intersec:  configChangeCallBack,
 
             squarebkts: function squarebktsChangeCallBack(i, value) {
                 i.prop('tool_lbrack', value);
