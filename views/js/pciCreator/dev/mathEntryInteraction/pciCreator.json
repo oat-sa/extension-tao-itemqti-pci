@@ -3,24 +3,11 @@
         "baseType": "string",
         "cardinality": "single"
     },
-    "creator": {
-        "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.min.js",
-        "src": [
-            "./pciCreator.js",
-            "./creator/tpl/markup.tpl",
-            "./creator/tpl/propertiesForm.tpl",
-            "./creator/tpl/addGapBtn.tpl",
-            "./creator/widget/Widget.js",
-            "./creator/widget/states/Question.js",
-            "./creator/widget/states/states.js"
-        ]
-    },
     "typeIdentifier": "mathEntryInteraction",
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "0.9.1",
+    "version": "0.10.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
