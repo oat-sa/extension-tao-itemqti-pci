@@ -122,6 +122,17 @@
 </div>
 <div>
     <label class="panel">
+        <input name="tool_integral" type="checkbox" {{#if tool_integral}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "Indefinite integral"}}
+    </label>
+</div>
+
+<hr />
+<h3>{{__ "Geometry"}}</h3>
+
+<div>
+    <label class="panel">
         <input name="tool_angle" type="checkbox" {{#if tool_angle}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         &ang; {{__ "angle" }}
@@ -132,6 +143,34 @@
         <input name="tool_integral" type="checkbox" {{#if tool_integral}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         {{__ "Indefinite integral"}}
+        </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_triangle" type="checkbox" {{#if tool_triangle}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#9651; {{__ "triangle" }}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_similar" type="checkbox" {{#if tool_similar}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &sim; {{__ "similar"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_paral" type="checkbox" {{#if tool_paral}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#8741; {{__ "is parallel with"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_perp" type="checkbox" {{#if tool_perp}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#8869; {{__ "is perpendicular to"}}
     </label>
 </div>
 
@@ -242,6 +281,34 @@
         <input name="tool_plusminus" type="checkbox" {{#if tool_plusminus}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         &#177; {{__ "Plus/minus"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_inmem" type="checkbox" {{#if tool_inmem}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "is member of"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_ninmem" type="checkbox" {{#if tool_ninmem}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "is not member of"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_union" type="checkbox" {{#if tool_union}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "set union"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_intersec" type="checkbox" {{#if tool_intersec}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "set intersection"}}
     </label>
 </div>
 

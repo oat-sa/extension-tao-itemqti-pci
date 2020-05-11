@@ -23,7 +23,7 @@ define([
     'lodash',
     'mathEntryInteraction/creator/widget/Widget',
     'tpl!mathEntryInteraction/creator/tpl/markup'
-], function(_, Widget, markupTpl){
+], function (_, Widget, markupTpl) {
     'use strict';
 
     var _typeIdentifier = 'mathEntryInteraction';
@@ -34,7 +34,7 @@ define([
          *
          * @returns {String}
          */
-        getTypeIdentifier : function getTypeIdentifier(){
+        getTypeIdentifier: function getTypeIdentifier() {
             return _typeIdentifier;
         },
         /**
@@ -43,7 +43,7 @@ define([
          *
          * @returns {Object} Widget
          */
-        getWidget : function getWidget(){
+        getWidget: function getWidget() {
             return Widget;
         },
         /**
@@ -52,46 +52,53 @@ define([
          *
          * @returns {Object}
          */
-        getDefaultProperties : function getDefaultProperties(){
+        getDefaultProperties: function getDefaultProperties() {
             return {
                 authorizeWhiteSpace: 'false',
                 useGapExpression: 'false',
                 gapExpression: '',
                 gapStyle: '',
 
-                tool_frac:      'true',
-                tool_sqrt:      'true',
-                tool_exp:       'true',
-                tool_log:       'true',
-                tool_ln:        'true',
-                tool_e:         'true',
-                tool_infinity:  'true',
-                tool_lbrack:    'true',
-                tool_rbrack:    'true',
-                tool_pi:        'true',
-                tool_cos:       'true',
-                tool_sin:       'true',
-                tool_lte:       'true',
-                tool_gte:       'true',
-                tool_times:     'true',
-                tool_divide:    'true',
+                tool_frac: 'true',
+                tool_sqrt: 'true',
+                tool_exp: 'true',
+                tool_log: 'true',
+                tool_ln: 'true',
+                tool_e: 'true',
+                tool_infinity: 'true',
+                tool_lbrack: 'true',
+                tool_rbrack: 'true',
+                tool_pi: 'true',
+                tool_cos: 'true',
+                tool_sin: 'true',
+                tool_lte: 'true',
+                tool_gte: 'true',
+                tool_times: 'true',
+                tool_divide: 'true',
                 tool_plusminus: 'true',
-                tool_angle:     'true',
-                tool_minus:     'true',
-                tool_plus:      'true',
-                tool_equal:     'true',
-                tool_lower:     'true',
-                tool_greater:   'true',
+                tool_angle: 'true',
+                tool_minus: 'true',
+                tool_plus: 'true',
+                tool_equal: 'true',
+                tool_lower: 'true',
+                tool_greater: 'true',
                 tool_subscript: 'true',
-                tool_lbrace:    'true',
-                tool_rbrace:    'true',
-                tool_lparen:    'true',
-                tool_rparen:    'true',
-                tool_integral:  'true',
-                tool_timesdot:  'true',
-
-                allowNewLine:   'false',
-                enableAutoWrap:  'false'
+                tool_lbrace: 'true',
+                tool_rbrace: 'true',
+                tool_lparen: 'true',
+                tool_rparen: 'true',
+                tool_integral: 'true',
+                tool_timesdot: 'true',
+                tool_triangle: 'true',
+                tool_similar: 'true',
+                tool_paral: 'true',
+                tool_perp: 'true',
+                tool_inmem: 'true',
+                tool_ninmem: 'true',
+                tool_union: 'true',
+                tool_intersec: 'true',
+                allowNewLine: 'false',
+                enableAutoWrap: 'false'
             };
         },
         /**
@@ -100,7 +107,7 @@ define([
          *
          * @returns {Object}
          */
-        afterCreate : function afterCreate(pci){
+        afterCreate: function afterCreate(pci) {
             //do some stuff
         },
         /**
@@ -108,7 +115,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupTemplate : function getMarkupTemplate(){
+        getMarkupTemplate: function getMarkupTemplate() {
             return markupTpl;
         },
         /**
@@ -116,7 +123,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupData : function getMarkupData(pci, defaultData){
+        getMarkupData: function getMarkupData(pci, defaultData) {
             defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
