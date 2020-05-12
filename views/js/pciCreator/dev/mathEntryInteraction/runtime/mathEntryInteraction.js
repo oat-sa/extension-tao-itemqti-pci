@@ -554,7 +554,7 @@ define([
                     rbrace: { label: '}',           latex: '}',         fn: 'cmd',      desc: 'Right brace/curly bracket'},
                     lparen: { label: '(',           latex: '(',         fn: 'write',    desc: 'Left parenthesis/round bracket'},
                     rparen: { label: ')',           latex: ')',         fn: 'write',    desc: 'Right parenthesis/round bracket'},
-                    integral: { label: '&#x222b;',  latex: '\\int',     fn: 'cmd',      desc: 'Indefinitve integral'},
+                    integral: { label: '&#x222b;',  latex: '\\int',     fn: 'cmd',      desc: 'Indefinite integral'},
                     timesdot: { label: '·',         latex: '\\cdot',    fn: 'cmd',      desc: 'Times dot'},
                     triangle: { label: '&#9651;',   latex: '\\triangle',fn: 'cmd',      desc: 'Triangle'},
                     similar: { label: '&sim;',      latex: '\\sim',     fn: 'cmd',      desc: 'Similar'},
