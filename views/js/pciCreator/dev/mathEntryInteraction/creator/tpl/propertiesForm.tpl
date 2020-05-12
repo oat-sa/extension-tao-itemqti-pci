@@ -124,7 +124,7 @@
     <label class="panel">
         <input name="tool_integral" type="checkbox" {{#if tool_integral}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "Indefinite integral"}}
+        &#x222b; {{__ "Indefinite integral"}}
     </label>
 </div>
 
