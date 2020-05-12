@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.4.0-sprint124\n"
-"PO-Revision-Date: 2020-03-23T16:05:31\n"
+"Project-Id-Version: TAO 3.4.0-sprint128\n"
+"PO-Revision-Date: 2020-05-12T18:28:46\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: fr-FR\n"
@@ -94,6 +94,9 @@ msgstr "Fonctions"
 msgid "Gap size"
 msgstr "Taille de l'écart"
 
+msgid "Geometry"
+msgstr ""
+
 msgid "Give the possibility to the test taker to playback its own recording."
 msgstr "Donner la possibilité au participant de relire son propre enregistrement."
 
@@ -113,6 +116,18 @@ msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds
 msgstr "En secondes. Temps d'enregistrement maximal permis (n'est jamais inférieur à 10 secondes). L'enregistrement s'arrête automatiquement quand ce maximum est atteint."
 
 msgid "Indefinite integral"
+msgstr ""
+
+msgid "is a member of"
+msgstr ""
+
+msgid "is not a member of"
+msgstr ""
+
+msgid "is parallel with"
+msgstr ""
+
+msgid "is perpendicular to"
 msgstr ""
 
 msgid "Large"
@@ -197,8 +212,17 @@ msgstr "taille de redimentionnement"
 msgid "Sec:"
 msgstr "Sec :"
 
+msgid "set intersection"
+msgstr ""
+
+msgid "set union"
+msgstr ""
+
 #, tao-public
 msgid "Settings"
+msgstr ""
+
+msgid "similar"
 msgstr ""
 
 msgid "sinus"
