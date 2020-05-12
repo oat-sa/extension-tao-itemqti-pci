@@ -214,7 +214,15 @@ define([
                     lparen:   toBoolean(config.tool_lparen,   true),
                     rparen:   toBoolean(config.tool_rparen,   true),
                     integral: toBoolean(config.tool_integral, true),
-                    timesdot: toBoolean(config.tool_timesdot, true)
+                    timesdot: toBoolean(config.tool_timesdot, true),
+                    triangle: toBoolean(config.tool_triangle, true),
+                    similar:  toBoolean(config.tool_similar,  true),
+                    paral:    toBoolean(config.tool_paral,    true),
+                    perp:     toBoolean(config.tool_perp,     true),
+                    inmem:    toBoolean(config.tool_inmem,    true),
+                    ninmem:   toBoolean(config.tool_ninmem,   true),
+                    union:    toBoolean(config.tool_union,    true),
+                    intersec: toBoolean(config.tool_intersec, true)
                 },
 
                 allowNewLine: toBoolean(config.allowNewLine, false),
@@ -518,13 +526,13 @@ define([
         createToolbar: function createToolbar() {
             var self = this,
                 availableTools = {
-                    frac:   { label: '<sup>x</sup>&frasl;<sub>y</sub>',latex: '\\frac',fn: 'cmd',desc: 'Fraction' },
+                    frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
                     sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
                     exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
                     log:    { label: 'log',         latex: '\\log',     fn: 'cmd',      desc: 'Log' },
                     ln:     { label: 'ln',          latex: '\\ln',      fn: 'cmd',      desc: 'Ln' },
-                    e:      { label: '&#8494;',     latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
-                    infinity: { label: '&#8734;',   latex: '\\infty',   fn: 'cmd',      desc: 'Infinity' },
+                    e:      { label: 'e',           latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
+                    infinity: { label: '&#8734;',    latex: '\\infty',   fn: 'cmd',      desc: 'Infinity' },
                     lbrack: { label: '[',           latex: '\\lbrack',  fn: 'cmd',      desc: 'Left bracket' },
                     rbrack: { label: ']',           latex: '\\rbrack',  fn: 'cmd',      desc: 'Right bracket' },
                     pi:     { label: '&pi;',        latex: '\\pi',      fn: 'cmd',      desc: 'Pi' },
@@ -541,20 +549,29 @@ define([
                     equal:  { label: '=',           latex: '=',         fn: 'write',    desc: 'Equal'},
                     lower:  { label: '<',           latex: '<',         fn: 'write',    desc: 'Lower than'},
                     greater: { label: '>',          latex: '>',         fn: 'write',    desc: 'Greater than'},
-                    subscript: { label: 'x&#8345;', latex: '_',         fn: 'cmd',      desc: 'Subscript'},
-                    lbrace: { label: '{',           latex: '{',   fn: 'cmd',      desc: 'Left brace/curly bracket'},
-                    rbrace: { label: '}',           latex: '}',  fn: 'cmd',      desc: 'Right brace/curly bracket'},
-                    lparen: { label: '(',           latex: '(',   fn: 'cmd',      desc: 'Left parenthese/round bracket'},
-                    rparen: { label: ')',           latex: ')',  fn: 'cmd',      desc: 'Right parenthese/round bracket'},
-                    integral: { label: '&#x222b;',  latex: '\\int',     fn: 'cmd',      desc: 'Indefinitve integral'},
+                    subscript: { label: 'x&#8336;', latex: '_',         fn: 'cmd',      desc: 'Subscript'},
+                    lbrace: { label: '{',           latex: '{',         fn: 'cmd',      desc: 'Left brace/curly bracket'},
+                    rbrace: { label: '}',           latex: '}',         fn: 'cmd',      desc: 'Right brace/curly bracket'},
+                    lparen: { label: '(',           latex: '(',         fn: 'write',    desc: 'Left parenthesis/round bracket'},
+                    rparen: { label: ')',           latex: ')',         fn: 'write',    desc: 'Right parenthesis/round bracket'},
+                    integral: { label: '&#x222b;',  latex: '\\int',     fn: 'cmd',      desc: 'Indefinite integral'},
                     timesdot: { label: '·',         latex: '\\cdot',    fn: 'cmd',      desc: 'Times dot'},
+                    triangle: { label: '&#9651;',   latex: '\\triangle',fn: 'cmd',      desc: 'Triangle'},
+                    similar: { label: '&sim;',      latex: '\\sim',     fn: 'cmd',      desc: 'Similar'},
+                    paral:   { label: '&#8741;',    latex: '\\parallel',fn: 'cmd',      desc: 'Is parallel with'},
+                    perp:    { label: '&#8869;',    latex: '\\perp',    fn: 'cmd',      desc: 'Is perpendicular to'},
+                    inmem:   { label: '&isin;',     latex: '\\in',      fn: 'cmd',      desc: 'Is a member of'},
+                    ninmem:  { label: '&notin;',    latex: '\\notin',   fn: 'cmd',      desc: 'Is not a member of'},
+                    union:   { label: '&cup;',      latex: '\\cup',     fn: 'cmd',      desc: 'Set union'},
+                    intersec:{ label: '&cap;',      latex: '\\cap',     fn: 'cmd',      desc: 'Set intersection'}
                 },
                 availableToolGroups = [ // we use an array to maintain order
                     { id: 'functions',  tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln'] },
-                    { id: 'symbols',    tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'angle', 'integral'] },
+                    { id: 'symbols',    tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral'] },
+                    { id: 'geometry',   tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
                     { id: 'trigo',      tools: ['pi', 'sin', 'cos'] },
                     { id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte'] },
-                    { id: 'operands',   tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus'] }
+                    { id: 'operands',   tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec'] }
                 ];
 
             // create buttons
