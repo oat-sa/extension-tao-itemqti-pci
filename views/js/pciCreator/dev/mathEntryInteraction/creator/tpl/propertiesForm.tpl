@@ -89,7 +89,7 @@
     <label class="panel">
         <input name="tool_e" type="checkbox" {{#if tool_e}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &#8494;
+        e
     </label>
 </div>
 <div>

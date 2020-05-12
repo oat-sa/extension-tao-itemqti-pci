@@ -531,7 +531,7 @@ define([
                     exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
                     log:    { label: 'log',         latex: '\\log',     fn: 'cmd',      desc: 'Log' },
                     ln:     { label: 'ln',          latex: '\\ln',      fn: 'cmd',      desc: 'Ln' },
-                    e:      { label: '&#8494;',     latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
+                    e:      { label: 'e',           latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
                     infinity: { label: '&#8734;',    latex: '\\infty',   fn: 'cmd',      desc: 'Infinity' },
                     lbrack: { label: '[',           latex: '\\lbrack',  fn: 'cmd',      desc: 'Left bracket' },
                     rbrack: { label: ']',           latex: '\\rbrack',  fn: 'cmd',      desc: 'Right bracket' },
