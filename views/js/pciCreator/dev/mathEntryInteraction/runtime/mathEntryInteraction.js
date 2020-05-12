@@ -549,7 +549,7 @@ define([
                     equal:  { label: '=',           latex: '=',         fn: 'write',    desc: 'Equal'},
                     lower:  { label: '<',           latex: '<',         fn: 'write',    desc: 'Lower than'},
                     greater: { label: '>',          latex: '>',         fn: 'write',    desc: 'Greater than'},
-                    subscript: { label: '_',        latex: '_',         fn: 'cmd',      desc: 'Subscript'},
+                    subscript: { label: 'x&#8336;', latex: '_',         fn: 'cmd',      desc: 'Subscript'},
                     lbrace: { label: '{',           latex: '{',         fn: 'cmd',      desc: 'Left brace/curly bracket'},
                     rbrace: { label: '}',           latex: '}',         fn: 'cmd',      desc: 'Right brace/curly bracket'},
                     lparen: { label: '(',           latex: '(',         fn: 'write',    desc: 'Left parenthese/round bracket'},

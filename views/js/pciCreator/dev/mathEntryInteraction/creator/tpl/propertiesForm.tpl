@@ -64,7 +64,7 @@
     <label class="panel">
         <input name="tool_subscript" type="checkbox" {{#if tool_subscript}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        _ {{__ "subscript"}}
+        x&#8336; {{__ "subscript"}}
     </label>
 </div>
 <div>
