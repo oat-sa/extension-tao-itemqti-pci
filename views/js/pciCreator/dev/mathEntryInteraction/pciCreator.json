@@ -1,26 +1,26 @@
 {
+    "response": {
+        "baseType": "string",
+        "cardinality": "single"
+    },
     "typeIdentifier": "mathEntryInteraction",
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "0.9.1",
+    "version": "0.10.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
         "math"
     ],
-    "response": {
-        "baseType": "string",
-        "cardinality": "single"
-    },
-    "runtime" : {
-        "hook" : "./runtime/mathEntryInteraction.min.js",
-        "libraries" : [],
-        "stylesheets" : [
+    "runtime": {
+        "hook": "./runtime/mathEntryInteraction.min.js",
+        "libraries": [],
+        "stylesheets": [
             "./runtime/mathquill/mathquill.css",
             "./runtime/css/mathEntryInteraction.css"
         ],
-        "mediaFiles" : [
+        "mediaFiles": [
             "./runtime/mathquill/font/Symbola.eot",
             "./runtime/mathquill/font/Symbola.otf",
             "./runtime/mathquill/font/Symbola.svg",
@@ -32,7 +32,7 @@
             "./runtime/mathquill/font/Symbola-basic.woff",
             "./runtime/mathquill/font/Symbola-basic.woff2"
         ],
-        "src" : [
+        "src": [
             "./runtime/mathEntryInteraction.js",
             "./runtime/mathquill/mathquill.js",
             "./runtime/polyfill/es6-collections.js"
