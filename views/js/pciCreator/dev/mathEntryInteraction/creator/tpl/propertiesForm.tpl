@@ -294,7 +294,7 @@
     <label class="panel">
         <input name="tool_ninmem" type="checkbox" {{#if tool_ninmem}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "is not member of"}}
+        {{__ "is not a member of"}}
     </label>
 </div>
 <div>
