@@ -560,7 +560,7 @@ define([
                     similar: { label: '&sim;',      latex: '\\sim',     fn: 'cmd',      desc: 'Similar'},
                     paral:   { label: '&#8741;',    latex: '\\parallel',fn: 'cmd',      desc: 'Is parallel with'},
                     perp:    { label: '&#8869;',    latex: '\\perp',    fn: 'cmd',      desc: 'Is perpendicular to'},
-                    inmem:   { label: '&isin;',     latex: '\\in',      fn: 'cmd',      desc: 'Is member of'},
+                    inmem:   { label: '&isin;',     latex: '\\in',      fn: 'cmd',      desc: 'Is a member of'},
                     ninmem:  { label: '&notin;',    latex: '\\notin',   fn: 'cmd',      desc: 'Is not a member of'},
                     union:   { label: '&cup;',      latex: '\\cup',     fn: 'cmd',      desc: 'Set union'},
                     intersec:{ label: '&cap;',      latex: '\\cap',     fn: 'cmd',      desc: 'Set intersection'}
