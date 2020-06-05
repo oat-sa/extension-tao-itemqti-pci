@@ -81,7 +81,7 @@ mkdir -p tao/views/locales/en-US/
                         dir('build'){
                             sh(
                                 label: 'Run backend tests',
-                                script: './vendor/bin/phpunit qtiItemPci/test/unit'
+                                script: '[ -d "qtiItemPci/test/unit" ] && ./vendor/bin/phpunit qtiItemPci/test/unit'
                             )
                         }
                     }
