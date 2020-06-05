@@ -74,7 +74,7 @@ msgid "enable auto wrap"
 msgstr "activer retour à la ligne automatique"
 
 msgid "Enabled in item authoring"
-msgstr "Activé dans la création d'items"
+msgstr "Activé dans la création d'articles"
 
 msgid "equal"
 msgstr ""
