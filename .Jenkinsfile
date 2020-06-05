@@ -77,11 +77,16 @@ mkdir -p tao/views/locales/en-US/
                     options {
                         skipDefaultCheckout()
                     }
+                    when {
+                        expression {
+                            fileExists('build/qtiItemPci/test/unit')
+                        }
+                    }
                     steps {
                         dir('build'){
                             sh(
                                 label: 'Run backend tests',
-                                script: '[ -d "qtiItemPci/test/unit" ] && ./vendor/bin/phpunit qtiItemPci/test/unit'
+                                script: './vendor/bin/phpunit qtiItemPci/test/unit'
                             )
                         }
                     }
