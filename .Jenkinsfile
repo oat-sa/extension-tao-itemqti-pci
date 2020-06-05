@@ -24,7 +24,7 @@ echo "select branch : ${TEST_BRANCH}"
 docker run --rm  \\
 -e "GITHUB_ORGANIZATION=${GITHUB_ORGANIZATION}" \\
 -e "GITHUB_SECRET=${GIT_TOKEN}"  \\
-registry.service.consul:4444/tao/dependency-resolver oat:dependencies:resolve --main-branch ${TEST_BRANCH} --repository-name ${REPO_NAME} > build/composer.json
+tao/dependency-resolver oat:dependencies:resolve --main-branch ${TEST_BRANCH} --repository-name ${REPO_NAME} > build/composer.json
                         '''
                     )
                 }
@@ -81,7 +81,7 @@ mkdir -p tao/views/locales/en-US/
                         dir('build'){
                             sh(
                                 label: 'Run backend tests',
-                                script: './vendor/bin/phpunit tao/test/unit'
+                                script: './vendor/bin/phpunit qtiItemPci/test/unit'
                             )
                         }
                     }
