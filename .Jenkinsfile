@@ -123,7 +123,7 @@ mkdir -p tao/views/locales/en-US/
                             )
                             sh (
                                 label : 'Run frontend tests',
-                                script: 'npx grunt connect:test qtiitempcitest'
+                                script: 'npx grunt qtiitempcitest'
                             )
                         }
                     }
