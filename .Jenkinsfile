@@ -110,20 +110,14 @@ mkdir -p tao/views/locales/en-US/
                         skipDefaultCheckout()
                     }
                     steps {
-                        dir('build/qtiItemPci/views'){
+                        dir('build/tao/views/build') {
                             sh(
-                                label: 'Ensure FE resource are available',
-                                script: 'npm install --production'
-                            )
-                        }
-                        dir('build/qtiItemPci/views/build') {
-                            sh(
-                                label: 'Setup frontend toolchain',
+                                label: 'Install tao-core frontend extensions'
                                 script: 'npm install'
                             )
                             sh (
                                 label : 'Run frontend tests',
-                                script: 'npx grunt qtiitempcitest'
+                                script: 'npx grunt connect:test qtiitempcitest'
                             )
                         }
                     }
