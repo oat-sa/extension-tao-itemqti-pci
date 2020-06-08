@@ -112,7 +112,7 @@ mkdir -p tao/views/locales/en-US/
                     steps {
                         dir('build/tao/views/build') {
                             sh(
-                                label: 'Install tao-core frontend extensions'
+                                label: 'Install tao-core frontend extensions',
                                 script: 'npm install'
                             )
                             sh (
