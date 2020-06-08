@@ -92,6 +92,11 @@ mkdir -p tao/views/locales/en-US/
                     }
                 }
                 stage('Frontend Tests') {
+                    when {
+                        expression {
+                            fileExists('build/qtiItemPci/views/build/grunt/test.js')
+                        }
+                    }
                     agent {
                         docker {
                             image 'btamas/puppeteer-git'
@@ -105,20 +110,20 @@ mkdir -p tao/views/locales/en-US/
                         skipDefaultCheckout()
                     }
                     steps {
-                        dir('build/tao/views'){
+                        dir('build/qtiItemPci/views'){
                             sh(
                                 label: 'Ensure FE resource are available',
                                 script: 'npm install --production'
                             )
                         }
-                        dir('build/tao/views/build') {
+                        dir('build/qtiItemPci/views/build') {
                             sh(
                                 label: 'Setup frontend toolchain',
                                 script: 'npm install'
                             )
                             sh (
                                 label : 'Run frontend tests',
-                                script: 'npx grunt connect:test taotest'
+                                script: 'npx grunt connect:test qtiitempcitest'
                             )
                         }
                     }
