@@ -124,5 +124,10 @@ mkdir -p tao/views/locales/en-US/
                 }
             }
         }
+        stage('Cleanup') {
+            steps {
+                cleanWs disableDeferredWipeout: true
+            }
+        }
     }
 }
