@@ -195,7 +195,7 @@ msgstr "Plus/moins"
 
 #, tao-public
 msgid "Portable Custom Interactions"
-msgstr ""
+msgstr "Interactions personnalisées portables"
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
 msgstr ""
