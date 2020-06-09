@@ -1,5 +1,5 @@
     <div class="action-header">
-        <span class="switch-header">Enabled in item authoring</span>
+        <span class="switch-header">{{__ 'Enabled in item authoring'}}</span>
     </div>
 {{#each interactions}}
 <li data-type-identifier="{{typeIdentifier}}" class="pci-list-element{{#unless enabled}} pci-disabled"{{/unless}}">

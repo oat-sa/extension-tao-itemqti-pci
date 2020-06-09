@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.4.0-sprint128\n"
-"PO-Revision-Date: 2020-05-12T18:28:46\n"
+"Project-Id-Version: TAO 3.4.0-sprint129\n"
+"PO-Revision-Date: 2020-06-05T10:58:54\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: fr-FR\n"
@@ -72,6 +72,9 @@ msgstr "diviser"
 
 msgid "enable auto wrap"
 msgstr "activer retour à la ligne automatique"
+
+msgid "Enabled in item authoring"
+msgstr "Activé dans la création d'articles"
 
 msgid "equal"
 msgstr ""
