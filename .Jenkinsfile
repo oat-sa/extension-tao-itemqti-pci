@@ -68,6 +68,11 @@ mkdir -p tao/views/locales/en-US/
         stage('Tests') {
             parallel {
                 stage('Backend Tests') {
+                    when {
+                        expression {
+                            fileExists('build/qtiItemPci/test/unit')
+                        }
+                    }
                     agent {
                         docker {
                             image 'alexwijn/docker-git-php-composer'
@@ -76,11 +81,6 @@ mkdir -p tao/views/locales/en-US/
                     }
                     options {
                         skipDefaultCheckout()
-                    }
-                    when {
-                        expression {
-                            fileExists('build/qtiItemPci/test/unit')
-                        }
                     }
                     steps {
                         dir('build'){
