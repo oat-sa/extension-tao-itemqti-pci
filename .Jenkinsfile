@@ -127,7 +127,7 @@ mkdir -p tao/views/locales/en-US/
     }
     post {
         always {
-            deleteDir()
+            cleanWs disableDeferredWipeout: true
         }
     }
 }
