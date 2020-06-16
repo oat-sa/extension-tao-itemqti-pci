@@ -173,7 +173,7 @@ define([
                             id: 'unregister',
                             type: 'info',
                             icon: 'bin',
-                            label: 'Delete',
+                            label: __('Delete'),
                             class: 'unregister',
                             renderTo: pciUnregisterButton
                         })
@@ -214,7 +214,7 @@ define([
                                 id: 'exportPci',
                                 type: 'info',
                                 icon: 'import',
-                                label: 'Download',
+                                label: __('Download'),
                                 renderTo: pciDownloadButton
                             })
                                 .on('click', function () {
