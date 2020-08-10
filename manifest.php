@@ -22,11 +22,13 @@
 
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
-use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
+use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
+use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
-use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
+use oat\qtiItemPci\scripts\install\SetupAudioRecordingInteractionCreatorConfigurationRegistry;
+use oat\qtiItemPci\scripts\update\Updater;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 return [
@@ -34,7 +36,7 @@ return [
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '6.8.2',
+    'version' => '6.9.0',
     'author' => 'Open Assessment Technologies SA',
     'requires' => [
         'generis' => '>=12.15.0',
@@ -67,20 +69,21 @@ return [
             RegisterPciLikertScale::class,
             RegisterPciMathEntry::class,
             RegisterPciAudioRecording::class,
+            SetupAudioRecordingInteractionCreatorConfigurationRegistry::class,
         ]
     ],
     'uninstall' => [
     ],
-    'update' => 'oat\\qtiItemPci\\scripts\\update\\Updater',
+    'update' => Updater::class,
     'routes' => [
         '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
     ],
     'constants' => [
         # views directory
-        "DIR_VIEWS" => __DIR__ . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR,
+        'DIR_VIEWS' => __DIR__ . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR,
 
         #BASE URL (usually the domain root)
-        'BASE_URL' => ROOT_URL . 'qtiItemPci/',
+        'BASE_URL'  => ROOT_URL . 'qtiItemPci/',
     ],
     'extra' => [
         'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml'

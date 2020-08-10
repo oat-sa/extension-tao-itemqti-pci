@@ -28,7 +28,7 @@ use oat\tao\model\ClientLibConfigRegistry;
 
 class AudioRecordingInteractionCreatorConfigurationRegistry extends ClientLibConfigRegistry
 {
-    private const ID = 'audioRecordingInteraction/creator/widget/states/Question';
+    public const ID = 'audioRecordingInteraction/creator/widget/states/Question';
 
     public function setMaximumRecordingTimeLimit(int $seconds): void
     {
