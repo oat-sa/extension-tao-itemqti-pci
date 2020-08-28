@@ -19,6 +19,7 @@ define([
     'lodash',
     'i18n',
     'jquery',
+    'module',
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
@@ -27,7 +28,7 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
     'util/typeCaster'
-], function( _, __, $, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, containerEditor, formTpl, typeCaster){
+], function (_, __, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, containerEditor, formTpl, typeCaster) {
     'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(Question, function create(){
@@ -78,7 +79,7 @@ define([
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
         //render the form using the form template
-        $form.html(formTpl({
+        $form.html(formTpl(_.defaults({}, module.config(), {
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
 
@@ -99,7 +100,7 @@ define([
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
 
             displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
-        }));
+        })));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
         $mediaStimulusForm.append(pciMediaManager.getForm());
