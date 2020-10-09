@@ -5,13 +5,22 @@ define([
 ], function(stateFactory, Answer, answerStateHelper){
 
     var LiquidsInteractionStateAnswer = stateFactory.extend(Answer, function(){
-        
+
         //forward to one of the available sub state, according to the response processing template
         answerStateHelper.forward(this.widget);
-        
+
     }, function(){
-        
+
     });
-    
+
+    LiquidsInteractionStateAnswer.prototype.initResponseForm = function initResponseForm() {
+        answerStateHelper.initResponseForm(
+            this.widget,
+            {
+                rpTemplates: ['CUSTOM', 'MATCH_CORRECT', 'NONE'],
+            }
+        );
+    };
+
     return  LiquidsInteractionStateAnswer;
 });
