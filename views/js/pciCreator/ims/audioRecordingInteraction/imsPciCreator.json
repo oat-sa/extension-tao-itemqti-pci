@@ -1,4 +1,5 @@
 {
+    "model" : "IMSPCI",
     "typeIdentifier": "audioRecordingInteraction",
     "label": "Audio recording",
     "short": "Audio",
@@ -14,7 +15,10 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/audioRecordingInteraction.js",
+        "hook" : "./runtime/audioRecordingInteraction.min.js",
+        "src" : [
+            "./runtime/audioRecordingInteraction.js"
+        ],
         "libraries" : [
             "./runtime/js/player.js",
             "./runtime/js/recorder.js",
@@ -34,9 +38,9 @@
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.min.js",
+        "hook": "./imsPciCreator.min.js",
         "src" : [
-            "./pciCreator.js",
+            "./imsPciCreator.js",
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/widget/Widget.js",

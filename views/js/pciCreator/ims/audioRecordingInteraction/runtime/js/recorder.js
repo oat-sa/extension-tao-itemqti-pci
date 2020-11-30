@@ -29,11 +29,10 @@
  */
 define([
     'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
     'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
     'audioRecordingInteraction/runtime/js/providers/webAudio'
-], function(_, Promise, event, mediaRecorderProvider, webAudioProvider) {
+], function(_, event, mediaRecorderProvider, webAudioProvider) {
     'use strict';
 
     /**
