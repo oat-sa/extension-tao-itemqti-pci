@@ -1,4 +1,5 @@
 {
+    "model": "IMSPCI",
     "response": {
         "baseType": "string",
         "cardinality": "single"
@@ -40,9 +41,9 @@
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.min.js",
+        "hook": "./imsPciCreator.min.js",
         "src" : [
-            "./pciCreator.js",
+            "./imsPciCreator.js",
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/tpl/addGapBtn.tpl",
