@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2021 (original work) Open Assessment Technologies SA;
  *
  * @author Christophe Noël <christophe@taotesting.com>
  *
@@ -23,15 +23,17 @@ define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
-    'taoQtiItem/portableLib/OAT/util/html',
+    // 'taoQtiItem/portableLib/OAT/util/html',
     'mathEntryInteraction/runtime/mathquill/mathquill',
-    'mathEntryInteraction/runtime/polyfill/es6-collections'
+    'mathEntryInteraction/runtime/polyfill/es6-collections',
+    'css!mathEntryInteraction/runtime/mathquill/mathquill',
+    'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
 ], function(
     qtiCustomInteractionContext,
     $,
     _,
     event,
-    html,
+    // html,
     MathQuill
 ){
     'use strict';
@@ -665,52 +667,6 @@ define([
         },
 
         /**
-         * ====================
-         * PCI public interface
-         * ====================
-         */
-
-        id: -1,
-
-        getTypeIdentifier: function getTypeIdentifier() {
-            return 'mathEntryInteraction';
-        },
-        /**
-         * Render the PCI :
-         * @param {String} id
-         * @param {Node} dom
-         * @param {Object} config - json
-         */
-        initialize: function initialize(id, dom, config) {
-            var self = this;
-
-            event.addEventMgr(this);
-
-            this.id = id;
-            this.dom = dom;
-
-            this.$container         = $(dom);
-            this.$toolbar           = this.$container.find('.toolbar');
-            this.$input             = this.$container.find('.math-entry-input');
-
-            this.render(config);
-
-            this.on('configChange', function (newConfig) {
-                self.render(newConfig);
-            });
-
-            // we need this event for communication with the Qti Creator
-            this.on('addGap', function () {
-                self.addGap();
-            });
-
-            // render rich text content in prompt
-            html.render(this.$container.find('.prompt'));
-
-            //tell the rendering engine that I am ready
-            qtiCustomInteractionContext.notifyReady(this);
-        },
-        /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
          *
@@ -728,6 +684,80 @@ define([
                     this.setLatex(response.base.string);
                 }
             }
+        },
+
+        /**
+         * Remove the current response set in the interaction
+         * The state may not be restored at this point.
+         *
+         * @param {Object} interaction
+         */
+        resetResponse: function resetResponse() {
+            var gapFields = this.getGapFields();
+            if (this.inGapMode()) {
+                gapFields.forEach(function(gapField) {
+                    gapField.latex('');
+                });
+            } else {
+                this.setLatex('');
+            }
+        },
+
+        /**
+         * Restore the state of the interaction from the serializedState.
+         *
+         * @param {Object} interaction
+         * @param {Object} state - json format
+         */
+        setState: function setState(state) {
+            if(state && state.response){
+                this.setResponse(state.response);
+            }
+        },
+
+        /**
+         * ====================
+         * PCI public interface
+         * ====================
+         */
+
+        typeIdentifier: 'mathEntryInteraction',
+        /**
+         * Render the PCI :
+         * @param {String} id
+         * @param {Node} dom
+         * @param {Object} config - json
+         */
+        getInstance: function getInstance(dom, config, state) {
+            console.log('getInstance');
+            var self = _.cloneDeep(this);
+
+            event.addEventMgr(self);
+
+            self.dom = dom;
+
+            self.$container         = $(dom);
+            self.$toolbar           = self.$container.find('.toolbar');
+            self.$input             = self.$container.find('.math-entry-input');
+
+            self.render(config.properties);
+
+            self.on('configChange', function (newConfig) {
+                self.render(newConfig);
+            });
+
+            // we need this event for communication with the Qti Creator
+            self.on('addGap', function () {
+                self.addGap();
+            });
+
+            // render rich text content in prompt
+            // html.render(this.$container.find('.prompt'));
+
+            self.setState(state);
+
+            //tell the rendering engine that I am ready
+            config.onready(self);
         },
         /**
          * Get the response in the json format described in
@@ -757,46 +787,19 @@ define([
             return response;
         },
         /**
-         * Remove the current response set in the interaction
-         * The state may not be restored at this point.
-         *
-         * @param {Object} interaction
-         */
-        resetResponse: function resetResponse() {
-            var gapFields = this.getGapFields();
-            if (this.inGapMode()) {
-                gapFields.forEach(function(gapField) {
-                    gapField.latex('');
-                });
-            } else {
-                this.setLatex('');
-            }
-        },
-        /**
          * Reverse operation performed by render()
          * After this function is executed, only the inital naked markup remains
          * Event listeners are removed and the state and the response are reset
          *
          * @param {Object} interaction
          */
-        destroy: function destroy() {
+        oncompleted: function oncompleted() {
             this.$input.find('.mq-editable-field').off(ns);
             this.$input.off(ns);
             this.$toolbar.off(ns);
             this.resetResponse();
             if (this.mathField instanceof MathQuill) {
                 this.mathField.revert();
-            }
-        },
-        /**
-         * Restore the state of the interaction from the serializedState.
-         *
-         * @param {Object} interaction
-         * @param {Object} state - json format
-         */
-        setSerializedState: function setSerializedState(state) {
-            if(state && state.response){
-                this.setResponse(state.response);
             }
         },
 
@@ -807,7 +810,7 @@ define([
          * @param {Object} interaction
          * @returns {Object} json format
          */
-        getSerializedState: function getSerializedState() {
+        getState: function getState() {
             return {response : this.getResponse()};
         }
     };
