@@ -663,28 +663,11 @@ define('mathEntryInteractionFactory', [
             },
 
             /**
-             * ====================
-             * PCI public interface
-             * ====================
-             */
-
-            id: -1,
-
-            getTypeIdentifier: function getTypeIdentifier() {
-                return 'mathEntryInteraction';
-            },
-            /**
-             * Render the PCI :
-             * @param {String} id
+             * Initialize the PCI :
              * @param {Node} dom
              * @param {Object} config - json
              */
-            initialize: function initialize(id, dom, config) {
-                var self = this;
-
-                
-
-                this.id = id;
+            initialize: function initialize(dom, config) {
                 this.dom = dom;
 
                 this.$container         = $(dom);
@@ -693,20 +676,8 @@ define('mathEntryInteractionFactory', [
 
                 this.render(config);
 
-                // this.on('configChange', function (newConfig) {
-                //     self.render(newConfig);
-                // });
-
-                // // we need this event for communication with the Qti Creator
-                // this.on('addGap', function () {
-                //     self.addGap();
-                // });
-
                 // render rich text content in prompt
                 // html.render(this.$container.find('.prompt'));
-
-                //tell the rendering engine that I am ready
-                // qtiCustomInteractionContext.notifyReady(this);
             },
             /**
              * Programmatically set the response following the json schema described in
@@ -821,15 +792,15 @@ define([
         typeIdentifier: 'mathEntryInteraction',
         getInstance: function getInstance(dom, config, state) {
             var mathEntryInteraction = mathEntryInteractionFactory();
-            mathEntryInteraction.initialize('id', dom, config.properties);
+
+            // initialize and set previous response/state
+            mathEntryInteraction.initialize(dom, config.properties);
             mathEntryInteraction.setResponse(config.boundTo);
             mathEntryInteraction.setSerializedState(state);
 
-            var onready = config.onready;
-
+            // create a IMS PCI instance object that will be provided in onready
             var pciInstance = {
                 getResponse: function getResponse() {
-                    console.log('getResponse', mathEntryInteraction.getResponse());
                     return mathEntryInteraction.getResponse();
                 },
 
@@ -837,25 +808,29 @@ define([
                     return mathEntryInteraction.getSerializedState();
                 },
 
+                // destroy function
                 oncompleted: function oncompleted() {
+                    // remove listeners
                     pciInstance.off('configChange');
                     pciInstance.off('addGap');
+
                     mathEntryInteraction.destroy();
                 }
             };
 
+            // event manager is necessary only for creator part
             event.addEventMgr(pciInstance);
 
             pciInstance.on('configChange', function (properties) {
                 mathEntryInteraction.render(properties);
             });
 
-            // we need this event for communication with the Qti Creator
             pciInstance.on('addGap', function () {
                 mathEntryInteraction.addGap();
             });
 
-            onready(pciInstance);
+            // PCI instance is ready to run
+            config.onready(pciInstance);
         }
     });
 });
