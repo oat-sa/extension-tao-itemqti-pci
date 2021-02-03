@@ -21,7 +21,6 @@
 define('mathEntryInteractionFactory', [
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/util/event',
     // 'taoQtiItem/portableLib/OAT/util/html',
     'mathEntryInteraction/runtime/mathquill/mathquill',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
@@ -30,7 +29,6 @@ define('mathEntryInteractionFactory', [
 ], function(
     $,
     _,
-    event,
     // html,
     MathQuill
 ){
@@ -684,7 +682,7 @@ define('mathEntryInteractionFactory', [
             initialize: function initialize(id, dom, config) {
                 var self = this;
 
-                event.addEventMgr(this);
+                
 
                 this.id = id;
                 this.dom = dom;
@@ -695,14 +693,14 @@ define('mathEntryInteractionFactory', [
 
                 this.render(config);
 
-                this.on('configChange', function (newConfig) {
-                    self.render(newConfig);
-                });
+                // this.on('configChange', function (newConfig) {
+                //     self.render(newConfig);
+                // });
 
-                // we need this event for communication with the Qti Creator
-                this.on('addGap', function () {
-                    self.addGap();
-                });
+                // // we need this event for communication with the Qti Creator
+                // this.on('addGap', function () {
+                //     self.addGap();
+                // });
 
                 // render rich text content in prompt
                 // html.render(this.$container.find('.prompt'));
@@ -816,20 +814,20 @@ define('mathEntryInteractionFactory', [
 
 define([
     'qtiCustomInteractionContext',
-    'mathEntryInteractionFactory'
-], function(qtiCustomInteractionContext, mathEntryInteractionFactory) {
+    'mathEntryInteractionFactory',
+    'taoQtiItem/portableLib/OAT/util/event'
+], function(qtiCustomInteractionContext, mathEntryInteractionFactory, event) {
     qtiCustomInteractionContext.register({
         typeIdentifier: 'mathEntryInteraction',
         getInstance: function getInstance(dom, config, state) {
             var mathEntryInteraction = mathEntryInteractionFactory();
             mathEntryInteraction.initialize('id', dom, config.properties);
-            console.log(config);
             mathEntryInteraction.setResponse(config.boundTo);
             mathEntryInteraction.setSerializedState(state);
 
             var onready = config.onready;
 
-            onready({
+            var pciInstance = {
                 getResponse: function getResponse() {
                     console.log('getResponse', mathEntryInteraction.getResponse());
                     return mathEntryInteraction.getResponse();
@@ -840,9 +838,24 @@ define([
                 },
 
                 oncompleted: function oncompleted() {
+                    pciInstance.off('configChange');
+                    pciInstance.off('addGap');
                     mathEntryInteraction.destroy();
                 }
+            };
+
+            event.addEventMgr(pciInstance);
+
+            pciInstance.on('configChange', function (properties) {
+                mathEntryInteraction.render(properties);
             });
+
+            // we need this event for communication with the Qti Creator
+            pciInstance.on('addGap', function () {
+                mathEntryInteraction.addGap();
+            });
+
+            onready(pciInstance);
         }
     });
 });
