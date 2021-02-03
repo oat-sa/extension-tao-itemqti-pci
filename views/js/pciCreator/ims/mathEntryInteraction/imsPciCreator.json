@@ -16,6 +16,11 @@
     ],
     "runtime": {
         "hook": "./runtime/mathEntryInteraction.min.js",
+        "modules" : {
+            "mathEntryInteraction/runtime/mathEntryInteraction.min" : [
+                "runtime/mathEntryInteraction.min.js"
+            ]
+        },
         "libraries": [],
         "mediaFiles": [
             "./runtime/mathquill/font/Symbola.eot",
