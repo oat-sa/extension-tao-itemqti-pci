@@ -21,7 +21,6 @@
 define('mathEntryInteractionFactory', [
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
-    // 'taoQtiItem/portableLib/OAT/util/html',
     'mathEntryInteraction/runtime/mathquill/mathquill',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
@@ -29,7 +28,6 @@ define('mathEntryInteractionFactory', [
 ], function(
     $,
     _,
-    // html,
     MathQuill
 ){
     'use strict';
@@ -236,8 +234,7 @@ define('mathEntryInteractionFactory', [
                 return {
                     spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                     handlers: {
-                        edit: function onChange(mathField) {
-                            self.trigger('responseChange', [mathField.latex()]);
+                        edit: function onChange() {
                             self.autoWrapContent();
                         },
                         enter: function onEnter(mathField) {
@@ -675,9 +672,6 @@ define('mathEntryInteractionFactory', [
                 this.$input             = this.$container.find('.math-entry-input');
 
                 this.render(config);
-
-                // render rich text content in prompt
-                // html.render(this.$container.find('.prompt'));
             },
             /**
              * Programmatically set the response following the json schema described in
