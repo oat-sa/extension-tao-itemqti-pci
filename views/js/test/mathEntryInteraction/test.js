@@ -158,8 +158,8 @@ define([
 
         runner = qtiItemRunner('qti', itemData)
             .on('render', function() {
-                var interaction,
-                    interactions = this._item.getInteractions();
+                var interaction;
+                var interactions = this._item.getInteractions();
 
                 assert.equal(_.size(interactions), 1, 'one interaction');
                 interaction = interactions[0];

@@ -789,7 +789,12 @@ define([
 
             // initialize and set previous response/state
             mathEntryInteraction.initialize(dom, config.properties);
-            mathEntryInteraction.setResponse(config.boundTo);
+
+            var boundTo = config.boundTo;
+            var responseIdentifier = Object.keys(boundTo)[0];
+            let response = boundTo[responseIdentifier];
+
+            mathEntryInteraction.setResponse(response);
             mathEntryInteraction.setSerializedState(state);
 
             // create a IMS PCI instance object that will be provided in onready
