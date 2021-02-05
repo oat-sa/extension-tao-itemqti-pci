@@ -41,7 +41,7 @@ return [
     'requires' => [
         'generis' => '>=12.15.0',
         'tao' => '>=30.0.0',
-        'taoQtiItem' => '>=13.8.0'
+        'taoQtiItem' => '>=25.25.0'
     ],
     'acl' => [
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci']],
