@@ -18,16 +18,20 @@
  * @author Christophe Noël <christophe@taotesting.com>
  *
  */
-define('mathEntryInteractionFactory', [
+define([
+    'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/OAT/util/event',
     'mathEntryInteraction/runtime/mathquill/mathquill',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
 ], function(
+    qtiCustomInteractionContext,
     $,
     _,
+    event,
     MathQuill
 ){
     'use strict';
@@ -97,7 +101,7 @@ define('mathEntryInteractionFactory', [
         };
     });
 
-    return function() {
+    var mathEntryInteractionFactory = function() {
         return {
 
             /**
@@ -775,13 +779,7 @@ define('mathEntryInteractionFactory', [
             }
         };
     };
-});
 
-define([
-    'qtiCustomInteractionContext',
-    'mathEntryInteractionFactory',
-    'taoQtiItem/portableLib/OAT/util/event'
-], function(qtiCustomInteractionContext, mathEntryInteractionFactory, event) {
     qtiCustomInteractionContext.register({
         typeIdentifier: 'mathEntryInteraction',
         getInstance: function getInstance(dom, config, state) {
