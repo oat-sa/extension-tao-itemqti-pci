@@ -1,4 +1,5 @@
 {
+    "model": "IMSPCI",
     "response": {
         "baseType": "string",
         "cardinality": "single"
@@ -7,7 +8,7 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "0.10.0",
+    "version": "1.0.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -15,11 +16,12 @@
     ],
     "runtime": {
         "hook": "./runtime/mathEntryInteraction.min.js",
+        "modules" : {
+            "mathEntryInteraction/runtime/mathEntryInteraction.min" : [
+                "runtime/mathEntryInteraction.min.js"
+            ]
+        },
         "libraries": [],
-        "stylesheets": [
-            "./runtime/mathquill/mathquill.css",
-            "./runtime/css/mathEntryInteraction.css"
-        ],
         "mediaFiles": [
             "./runtime/mathquill/font/Symbola.eot",
             "./runtime/mathquill/font/Symbola.otf",
@@ -40,9 +42,9 @@
     },
     "creator" : {
         "icon": "./creator/img/icon.svg",
-        "hook": "./pciCreator.min.js",
+        "hook": "./imsPciCreator.min.js",
         "src" : [
-            "./pciCreator.js",
+            "./imsPciCreator.js",
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/tpl/addGapBtn.tpl",
