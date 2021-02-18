@@ -36,13 +36,7 @@ return [
     'label' => 'QTI Portable Custom Interaction',
     'description' => '',
     'license' => 'GPL-2.0',
-    'version' => '6.10.0',
     'author' => 'Open Assessment Technologies SA',
-    'requires' => [
-        'generis' => '>=12.15.0',
-        'tao' => '>=30.0.0',
-        'taoQtiItem' => '>=25.25.0'
-    ],
     'acl' => [
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci']],
         ['grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#QTIManagerRole', ['ext' => 'qtiItemPci', 'mod' => 'PciLoader']],
