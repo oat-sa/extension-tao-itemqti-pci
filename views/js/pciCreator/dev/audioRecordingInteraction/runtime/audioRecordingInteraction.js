@@ -913,7 +913,7 @@ define([
          * @param {Object} state - json format
          */
         setSerializedState: function setSerializedState(state) {
-            this.setResponse(state);
+            this.setResponse(state && state.response || state);
         },
 
         /**
