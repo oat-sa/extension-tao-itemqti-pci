@@ -18,7 +18,7 @@ final class Version202103181527241465_qtiItemPci extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Update Liquids interaction';
+        return 'Update Audio Recording interaction';
     }
 
     public function up(Schema $schema): void
