@@ -250,10 +250,9 @@ define([
 
     /* */
 
-    QUnit.test('set and get state', function(assert) {
-        var ready = assert.async();
-        var changeCounter = 0;
-        var state = {
+    QUnit.cases.init([{
+        title: 'state as a response',
+        state: {
             RESPONSE: {
                 base: {
                     file: {
@@ -263,7 +262,47 @@ define([
                     }
                 }
             }
-        };
+        },
+        response: {
+            RESPONSE: {
+                base: {
+                    file: {
+                        name: 'myFileToBeReseted',
+                        mime: 'audio/wav',
+                        data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                    }
+                }
+            }
+        }
+    }, {
+        title: 'state as a serialized response',
+        state: {
+            RESPONSE: {
+                response: {
+                    base: {
+                        file: {
+                            name: 'myFileToBeReseted',
+                            mime: 'audio/wav',
+                            data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                        }
+                    }
+                }
+            }
+        },
+        response: {
+            RESPONSE: {
+                base: {
+                    file: {
+                        name: 'myFileToBeReseted',
+                        mime: 'audio/wav',
+                        data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                    }
+                }
+            }
+        }
+    }]).test('set and get state ', function(data, assert) {
+        var ready = assert.async();
+        var changeCounter = 0;
         var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
@@ -272,15 +311,15 @@ define([
             runner = qtiItemRunner('qti', itemData)
                 .on('render', function() {
 
-                    this.setState(state);
-                    assert.deepEqual(this.getState(), state, 'state set/get ok');
+                    this.setState(data.state);
+                    assert.deepEqual(this.getState(), data.response, 'state set/get ok');
                 })
                 .on('responsechange', function(res) {
                     changeCounter++;
                     if (changeCounter === 1) { // So it runs only once
                         assert.ok(_.isPlainObject(res), 'response changed');
                         assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                        assert.deepEqual(res, state, 'response set/get ok');
+                        assert.deepEqual(res, data.response, 'response set/get ok');
 
                         ready();
                     }
