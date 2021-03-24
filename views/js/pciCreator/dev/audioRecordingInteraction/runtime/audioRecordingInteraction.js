@@ -789,7 +789,7 @@ define([
          */
         updateControls: function updateControls() {
             // dont't change controls state, waiting for delay callback
-            if (this._delayCallback || (this.countdown && this.countdown.isDisplayed())) {
+            if (this._delayCallback || (his.countdown && this.countdown.isDisplayed()) {
                 return;
             }
             _.invoke(this.controls, 'updateState');
@@ -958,7 +958,7 @@ define([
          * @param {Object} state - json format
          */
         setSerializedState: function setSerializedState(state) {
-            this.setResponse((state && state.response) || state);
+            this.setResponse(state && state.response || state);
         },
 
         /**
