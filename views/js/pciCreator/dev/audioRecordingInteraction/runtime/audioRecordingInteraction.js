@@ -356,7 +356,7 @@ define([
 
                     self._cleanDelayCallback();
 
-                    if (!self.hasMediaStimulus() || (self.hasMediaStimulus() && self.mediaStimulusHasPlayed())) {
+                    if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
                         self.startRecording();
                     } else {
                         self.updateControls();
@@ -395,12 +395,15 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function () {
-                    // if set autoStart recording without delay - startRecording
-                    // if set autoStart recording with delay and countdown is displayed - initDelay
-                    if (self.config.autoStart && !self.config.delayMinutes && !self.config.delaySeconds) {
-                        self.startRecording();
-                    } else if (self.config.autoStart && self.countdown && self.countdown.isDisplayed()) {
-                        self.initDelay();
+                    // If auto start recording is set and PCI is not in review mode
+                    if (self.config.autoStart && !this.config.isReviewMode) {
+                        if (!self.config.delayMinutes && !self.config.delaySeconds) {
+                            // without delay - startRecording
+                            self.startRecording();
+                        } else if (self.countdown && self.countdown.isDisplayed()) {
+                            // with delay and countdown is displayed - initDelay
+                            self.initDelay();
+                        }
                     }
                 });
                 this.mediaStimulus.render();
@@ -530,6 +533,14 @@ define([
         playRecording: function playRecording() {
             this.player.play();
             this.progressBar.setStyle('playback');
+            this.updateControls();
+        },
+
+        /**
+         * Pause the playback of the recording
+         */
+         pausePlayback: function pausePlayback() {
+            this.player.pause();
             this.updateControls();
         },
 
@@ -678,70 +689,40 @@ define([
                 );
                 this.controls.record = record;
 
-                // Stop button
-                stop = uiElements.controlFactory({
-                    id: 'stop',
-                    label: this.getControlIcon('stop'),
-                    container: this.$controlsContainer
-                });
-                stop.on(
-                    'click',
-                    function () {
-                        if (this.is('enabled')) {
-                            if (self.recorder.is('recording')) {
-                                self.stopRecording();
-                            } else if (self.player.is('playing')) {
-                                self.stopPlayback();
-                            }
-                        }
-                    }.bind(stop)
-                );
-                stop.on(
-                    'updatestate',
-                    function () {
-                        if ((self.player.is('playing') && !self._isAutoPlayingBack) || self.recorder.is('recording')) {
-                            this.enable();
-                        } else {
-                            this.disable();
-                        }
-                    }.bind(stop)
-                );
-                this.controls.stop = stop;
-
-                // Reset button
-                if (this.config.maxRecords !== 1) {
-                    reset = uiElements.controlFactory({
-                        id: 'reset',
-                        label: this.getControlIcon('reset'),
-                        container: this.$controlsContainer
-                    });
-                    reset.on(
-                        'click',
-                        function () {
-                            if (this.is('enabled')) {
-                                self.resetRecording();
-                                self.updateResetCount();
-                            }
-                        }.bind(reset)
-                    );
-                    reset.on(
-                        'updatestate',
-                        function () {
-                            if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
-                                this.disable();
-                            } else if (self.player.is('idle')) {
-                                this.enable();
-                            } else {
-                                this.disable();
-                            }
-                        }.bind(reset)
-                    );
-                    this.controls.reset = reset;
-                }
             }
 
+            // Stop button
+            stop = uiElements.controlFactory({
+                id: 'stop',
+                label: this.getControlIcon('stop'),
+                container: this.$controlsContainer
+            });
+            stop.on(
+                'click',
+                function () {
+                    if (this.is('enabled')) {
+                        if (self.recorder.is('recording')) {
+                            self.stopRecording();
+                        } else if (self.player.is('playing')) {
+                            self.stopPlayback();
+                        }
+                    }
+                }.bind(stop)
+            );
+            stop.on(
+                'updatestate',
+                function () {
+                    if ((self.player.is('playing') && !self._isAutoPlayingBack) || self.recorder.is('recording')) {
+                        this.enable();
+                    } else {
+                        this.disable();
+                    }
+                }.bind(stop)
+            );
+            this.controls.stop = stop;
+
             // Play button
-            if (this.config.allowPlayback === true) {
+            if (this.config.allowPlayback === true || this.config.isReviewMode === true) {
                 play = uiElements.controlFactory({
                     id: 'play',
                     label: this.getControlIcon('play'),
@@ -750,7 +731,7 @@ define([
                 play.on(
                     'click',
                     function () {
-                        if (this.is('enabled')) {
+                        if (this.is('enabled')) {                        
                             self.playRecording();
                         }
                     }.bind(play)
@@ -766,6 +747,38 @@ define([
                     }.bind(play)
                 );
                 this.controls.play = play;
+            }
+
+
+            // Reset button
+            if (this.config.maxRecords !== 1 && this.config.isReviewMode !== true) {
+                reset = uiElements.controlFactory({
+                    id: 'reset',
+                    label: this.getControlIcon('reset'),
+                    container: this.$controlsContainer
+                });
+                reset.on(
+                    'click',
+                    function () {
+                        if (this.is('enabled')) {
+                            self.resetRecording();
+                            self.updateResetCount();
+                        }
+                    }.bind(reset)
+                );
+                reset.on(
+                    'updatestate',
+                    function () {
+                        if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
+                            this.disable();
+                        } else if (self.player.is('idle')) {
+                            this.enable();
+                        } else {
+                            this.disable();
+                        }
+                    }.bind(reset)
+                );
+                this.controls.reset = reset;
             }
 
             self.updateControls();

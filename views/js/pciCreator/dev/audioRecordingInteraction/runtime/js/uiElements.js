@@ -43,6 +43,7 @@ define([
      * @property {String} CREATED   - mediaStimulus instance created, but no media loaded
      * @property {String} IDLE      - stimulus loaded, ready to be played
      * @property {String} PLAYING   - stimulus is being played
+     * @property {String} PAUSED    - stimulus is paused
      * @property {String} ENDED     - playing is over
      * @property {String} DISABLED  - no more playing is possible
      */
@@ -50,6 +51,7 @@ define([
         CREATED:    'created',
         IDLE:       'idle',
         PLAYING:    'playing',
+        PAUSED:     'paused',
         ENDED:      'ended',
         DISABLED:   'disabled'
     };
