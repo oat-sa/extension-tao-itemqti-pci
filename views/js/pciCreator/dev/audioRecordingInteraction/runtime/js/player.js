@@ -36,7 +36,7 @@ define([
     var playerStates = {
         CREATED:    'created',
         IDLE:       'idle',
-        PLAYING:    'playing'
+        PLAYING:    'playing',
     };
 
     /**
