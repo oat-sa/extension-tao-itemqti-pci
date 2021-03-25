@@ -6,6 +6,9 @@ namespace oat\qtiItemPci\migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
+use Doctrine\Migrations\Exception\IrreversibleMigration;
+use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 
 final class Version202103240929581465_qtiItemPci extends AbstractMigration
 {
