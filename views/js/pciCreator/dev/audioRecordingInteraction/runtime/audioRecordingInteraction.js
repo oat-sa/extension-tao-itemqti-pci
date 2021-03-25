@@ -305,7 +305,7 @@ define([
             this.ctrCache = {};
 
             // no auto start, don't start recording
-            if (this.config.autoStart !== true) {
+            if (this.config.autoStart !== true || this.config.isReviewMode === true) {
                 return;
             }
 
