@@ -396,7 +396,7 @@ define([
 
                 this.mediaStimulus.on('ended', function () {
                     // If auto start recording is set and PCI is not in review mode
-                    if (self.config.autoStart && !this.config.isReviewMode) {
+                    if (self.config.autoStart && !self.config.isReviewMode) {
                         if (!self.config.delayMinutes && !self.config.delaySeconds) {
                             // without delay - startRecording
                             self.startRecording();
