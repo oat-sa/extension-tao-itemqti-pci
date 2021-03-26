@@ -68,9 +68,53 @@ define([
                     assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
                     assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
                     assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
-                    assert.equal($container.find('.qti-customInteraction .audioRecordingInteraction').length, 1, 'the container contains a Point Line Graph interaction');
+                    assert.equal($container.find('.qti-customInteraction .audioRecordingInteraction').length, 1, 'the container contains an audio recording interaction');
                     assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
+                    assert.equal($container.find('[data-identifier=\'record\']').length, 1, 'the interaction contains record button');
+                    assert.equal($container.find('[data-identifier=\'reset\']').length, 1, 'the interaction contains reset button');
+                    assert.equal($container.find('[data-identifier=\'play\']').length, 1, 'the interaction contains play button');
+                    assert.equal($container.find('[data-identifier=\'stop\']').length, 1, 'the interaction contains stop button');
 
+                    ready();
+                })
+                .init()
+                .render($container);
+        }
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    QUnit.test('renders correctly in review mode', function(assert) {
+        var ready = assert.async();
+
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            var newItemData = _.cloneDeep(itemData);
+            newItemData.body.elements.interaction_portablecustominteraction_5a61fdb9cb6a7534654927.properties.isReviewMode = 'true';
+
+            runner = qtiItemRunner('qti', newItemData)
+                .on('render', function() {
+
+                    assert.equal($container.children().length, 1, 'the container a elements');
+                    assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
+                    assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
+                    assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
+                    assert.equal($container.find('.qti-customInteraction .audioRecordingInteraction').length, 1, 'the container contains an audio recording interaction in review mode');
+                    assert.equal($container.find('.qti-customInteraction .prompt').length, 1, 'the interaction contains a prompt');
+                    assert.equal($container.find('.qti-customInteraction .controls').length, 1, 'the interaction contains controls');
+                    assert.equal($container.find('[data-identifier=\'record\']').length, 0, 'the interaction does not contain record button');
+                    assert.equal($container.find('[data-identifier=\'reset\']').length, 0, 'the interaction does not contain reset button');
+                    assert.equal($container.find('[data-identifier=\'play\']').length, 1, 'the interaction does contain play button');
+                    assert.equal($container.find('[data-identifier=\'stop\']').length, 1, 'the interaction does contain stop button');
                     ready();
                 })
                 .init()
