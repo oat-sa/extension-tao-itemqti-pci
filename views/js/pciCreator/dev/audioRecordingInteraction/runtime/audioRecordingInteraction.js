@@ -26,7 +26,7 @@ define([
     'audioRecordingInteraction/runtime/js/recorder',
     'audioRecordingInteraction/runtime/js/uiElements',
     'text!audioRecordingInteraction/runtime/img/mic.svg'
-], function(
+], function (
     qtiCustomInteractionContext,
     $,
     _,
@@ -37,7 +37,7 @@ define([
     recorderFactory,
     uiElements,
     micIcon
-){
+) {
     'use strict';
 
     var ICON_CONTROLS = 'audioRecordingInteraction/runtime/img/controls.svg';
@@ -48,21 +48,25 @@ define([
      * Type casting helpers for PCI parameters
      */
     function toBoolean(value, defaultValue) {
-        if (typeof(value) === "undefined") {
+        if (typeof value === 'undefined') {
             return defaultValue;
         } else {
-            return (value === true || value === "true");
+            return value === true || value === 'true';
         }
     }
     function toInteger(value, defaultValue) {
-        return (typeof(value) === "undefined") ? defaultValue : parseInt(value, 10);
+        return typeof value === 'undefined' ? defaultValue : parseInt(value, 10);
     }
 
     function getFileName(filePrefix, blob) {
-        return filePrefix + '_' +
-            window.Date.now() + '.' +
+        return (
+            filePrefix +
+            '_' +
+            window.Date.now() +
+            '.' +
             // extract extension (ex: 'webm') from strings like: 'audio/webm;codecs=opus' or 'audio/webm'
-            blob.type.split(';')[0].split('/')[1];
+            blob.type.split(';')[0].split('/')[1]
+        );
     }
 
     /**
@@ -105,17 +109,17 @@ define([
          * @param {Object} config
          */
         render: function render(config) {
-            this.$mediaStimulusContainer    = this.$container.find('.audio-rec > .media-stimulus');
-            this.$controlsContainer         = this.$container.find('.audio-rec > .controls');
-            this.$progressContainer         = this.$container.find('.audio-rec > .progress');
-            this.$meterContainer            = this.$container.find('.audio-rec > .input-meter');
+            this.$mediaStimulusContainer = this.$container.find('.audio-rec > .media-stimulus');
+            this.$controlsContainer = this.$container.find('.audio-rec > .controls');
+            this.$progressContainer = this.$container.find('.audio-rec > .progress');
+            this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
 
-            this._recording         = null;
-            this._recordsAttempts   = 0;
+            this._recording = null;
+            this._recordsAttempts = 0;
 
-            this.config             = {};
-            this.controls           = {};
-            this.iconsFileUrl       = this.assetManager.resolve(ICON_CONTROLS);
+            this.config = {};
+            this.controls = {};
+            this.iconsFileUrl = this.assetManager.resolve(ICON_CONTROLS);
 
             this.initConfig(config);
 
@@ -132,6 +136,7 @@ define([
         /**
          * Initialize the PCI configuration
          * @param {Object}  config
+         * @param {Boolean} config.isReviewMode - Is in review mode
          * @param {Boolean} config.allowPlayback - display the play button
          * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
          * @param {Boolean} config.autoPlayback - immediately playback recording after recording stops
@@ -149,24 +154,25 @@ define([
          */
         initConfig: function init(config) {
             this.config = {
-                allowPlayback:           toBoolean(config.allowPlayback, true),
-                autoStart:               toBoolean(config.autoStart, false),
-                autoPlayback:            toBoolean(config.autoPlayback, false),
+                isReviewMode: toBoolean(config.isReviewMode, false),
+                allowPlayback: toBoolean(config.allowPlayback, true),
+                autoStart: toBoolean(config.autoStart, false),
+                autoPlayback: toBoolean(config.autoPlayback, false),
 
-                delaySeconds:            toInteger(config.delaySeconds, 0),
-                delayMinutes:            toInteger(config.delayMinutes, 0),
+                delaySeconds: toInteger(config.delaySeconds, 0),
+                delayMinutes: toInteger(config.delayMinutes, 0),
 
-                maxRecords:              toInteger(config.maxRecords, 3),
-                maxRecordingTime:        toInteger(config.maxRecordingTime, 120),
+                maxRecords: toInteger(config.maxRecords, 3),
+                maxRecordingTime: toInteger(config.maxRecordingTime, 120),
 
-                isCompressed:            toBoolean(config.isCompressed, true),
-                audioBitrate:            toInteger(config.audioBitrate, 20000),
-                isStereo:                toBoolean(config.isStereo, false),
+                isCompressed: toBoolean(config.isCompressed, true),
+                audioBitrate: toInteger(config.audioBitrate, 20000),
+                isStereo: toBoolean(config.isStereo, false),
 
-                useMediaStimulus:        toBoolean(config.useMediaStimulus, false),
-                media:                   config.media || {},
+                useMediaStimulus: toBoolean(config.useMediaStimulus, false),
+                media: config.media || {},
 
-                displayDownloadLink:     toBoolean(config.displayDownloadLink, false),
+                displayDownloadLink: toBoolean(config.displayDownloadLink, false),
                 updateResponsePartially: toBoolean(config.updateResponsePartially, false)
             };
         },
@@ -179,12 +185,12 @@ define([
 
             this.recorder = recorderFactory(this.config, this.assetManager);
 
-            this.recorder.on('cancel', function() {
+            this.recorder.on('cancel', function () {
                 self.progressBar.reset();
                 self.$meterContainer.removeClass('record');
             });
 
-            this.recorder.on('recordingavailable', function(blob, durationMs) {
+            this.recorder.on('recordingavailable', function (blob, durationMs) {
                 var recordingUrl = window.URL && window.URL.createObjectURL && window.URL.createObjectURL(blob),
                     filename = getFileName(self._filePrefix, blob),
                     filesize = blob.size;
@@ -204,7 +210,7 @@ define([
                         // load recording in the player
                         self.player.unload();
                         if (self.config.autoPlayback) {
-                            self.player.on('oncanplay', function() {
+                            self.player.on('oncanplay', function () {
                                 self.player.off('oncanplay');
                                 self._isAutoPlayingBack = true;
                                 self.playRecording();
@@ -214,32 +220,32 @@ define([
 
                         self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
                     })
-                    .catch(function() {
+                    .catch(function () {
                         self.resetRecording();
                     });
             });
 
-            this.recorder.on('partialrecordingavailable', function(blob) {
+            this.recorder.on('partialrecordingavailable', function (blob) {
                 var filename = getFileName(self._filePrefix, blob);
 
                 self.getBase64Recoding(blob, filename)
-                    .then(function(recording) {
+                    .then(function (recording) {
                         self.updateResponse(recording);
                     })
-                    .catch(function() {
+                    .catch(function () {
                         self.resetRecording();
                     });
             });
 
-            this.recorder.on('statechange', function() {
+            this.recorder.on('statechange', function () {
                 self.updateControls();
             });
 
-            this.recorder.on('timeupdate', function(currentTime) {
+            this.recorder.on('timeupdate', function (currentTime) {
                 self.progressBar.setValue(currentTime);
             });
 
-            this.recorder.on('levelUpdate', function(level) {
+            this.recorder.on('levelUpdate', function (level) {
                 self.inputMeter.draw(level);
             });
         },
@@ -253,20 +259,20 @@ define([
 
             this.player = playerFactory();
 
-            this.player.on('statechange', function() {
+            this.player.on('statechange', function () {
                 self.updateControls();
             });
 
-            this.player.on('playbackend', function() {
+            this.player.on('playbackend', function () {
                 self.progressBar.setStyle('');
                 self._isAutoPlayingBack = false;
             });
 
-            this.player.on('timeupdate', function(currentTime) {
+            this.player.on('timeupdate', function (currentTime) {
                 self.progressBar.setValue(currentTime);
             });
 
-            this.player.on('durationchange', function(durationSeconds) {
+            this.player.on('durationchange', function (durationSeconds) {
                 self.progressBar.setMax(durationSeconds);
             });
         },
@@ -299,7 +305,7 @@ define([
             this.ctrCache = {};
 
             // no auto start, don't start recording
-            if (this.config.autoStart !== true) {
+            if (this.config.autoStart !== true || this.config.isReviewMode === true) {
                 return;
             }
 
@@ -310,7 +316,7 @@ define([
             }
 
             // cache controls states
-            _.forEach(this.controls, function(ctr, id) {
+            _.forEach(this.controls, function (ctr, id) {
                 self.ctrCache[id] = ctr.getState();
                 ctr.disable();
             });
@@ -320,7 +326,7 @@ define([
                 this.initCountdown();
             }
 
-            if(this.hasMediaStimulus()) {
+            if (this.hasMediaStimulus()) {
                 return;
             }
 
@@ -336,17 +342,15 @@ define([
             this._cleanDelayCallback();
 
             // waiting for permission
-            this.askPermissionAccessMic(function() {
-
+            this.askPermissionAccessMic(function () {
                 self.countdown.start();
 
                 // adding a delay before start recording...
-                self._delayCallback = setTimeout(function() {
-
+                self._delayCallback = setTimeout(function () {
                     self.countdown.destroy();
 
                     // restore controls states
-                    _.forEach(self.controls, function(ctr, id) {
+                    _.forEach(self.controls, function (ctr, id) {
                         ctr.setState(self.ctrCache[id]);
                     });
 
@@ -357,7 +361,6 @@ define([
                     } else {
                         self.updateControls();
                     }
-
                 }, self.getDelayInSeconds() * 1000);
             });
         },
@@ -373,16 +376,16 @@ define([
                 this.$mediaStimulusContainer.addClass('active');
 
                 this.mediaStimulus = uiElements.mediaStimulusFactory({
-                    $container:   this.$mediaStimulusContainer,
+                    $container: this.$mediaStimulusContainer,
                     assetManager: this.assetManager,
-                    media:        this.config.media
+                    media: this.config.media
                 });
 
-                this.mediaStimulus.on('statechange', function() {
+                this.mediaStimulus.on('statechange', function () {
                     self.updateControls();
                 });
 
-                this.mediaStimulus.on('playing', function() {
+                this.mediaStimulus.on('playing', function () {
                     if (self.recorder.is('recording')) {
                         self.recorder.cancel();
                     }
@@ -391,17 +394,19 @@ define([
                     }
                 });
 
-                this.mediaStimulus.on('ended', function() {
-                    // if set autoStart recording without delay - startRecording
-                    // if set autoStart recording with delay and countdown is displayed - initDelay
-                    if (self.config.autoStart && !self.config.delayMinutes && !self.config.delaySeconds) {
-                        self.startRecording();
-                    } else if(self.config.autoStart && self.countdown && self.countdown.isDisplayed()) {
-                        self.initDelay();
+                this.mediaStimulus.on('ended', function () {
+                    // If auto start recording is set and PCI is not in review mode
+                    if (self.config.autoStart && !self.config.isReviewMode) {
+                        if (!self.config.delayMinutes && !self.config.delaySeconds) {
+                            // without delay - startRecording
+                            self.startRecording();
+                        } else if (self.countdown && self.countdown.isDisplayed()) {
+                            // with delay and countdown is displayed - initDelay
+                            self.initDelay();
+                        }
                     }
                 });
                 this.mediaStimulus.render();
-
             } else {
                 this.$mediaStimulusContainer.empty();
                 this.$mediaStimulusContainer.removeClass('active');
@@ -424,7 +429,7 @@ define([
          * @returns {Boolean}
          */
         hasMediaStimulus: function hasMediaStimulus() {
-            return (this.config.useMediaStimulus && this.config.media && this.config.media.uri);
+            return this.config.useMediaStimulus && this.config.media && this.config.media.uri;
         },
 
         /**
@@ -440,18 +445,19 @@ define([
          */
         askPermissionAccessMic: function askPermissionAccessMic(callback) {
             // recorder instance created, but microphone access not granted
-            if(this.recorder && this.recorder.is('created')) {
-                this.recorder.init()
-                    .then(function() {
+            if (this.recorder && this.recorder.is('created')) {
+                this.recorder
+                    .init()
+                    .then(function () {
                         callback();
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         // eslint-disable-next-line no-console
                         console.error(err);
                     });
             }
             // ready to record, microphone access is granted
-            if(this.recorder && this.recorder.is('idle')) {
+            if (this.recorder && this.recorder.is('idle')) {
                 callback();
             }
         },
@@ -462,12 +468,14 @@ define([
         startRecording: function startRecording() {
             var self = this;
 
-            if (this.recorder.isNeedInit()) { // if recorder is not initialised yet or need create new stream
-                this.recorder.init()
-                    .then(function() {
+            if (this.recorder.isNeedInit()) {
+                // if recorder is not initialised yet or need create new stream
+                this.recorder
+                    .init()
+                    .then(function () {
                         startForReal();
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         // eslint-disable-next-line no-console
                         console.error(err);
                     });
@@ -486,7 +494,6 @@ define([
                 self.updateControls();
             }
         },
-
 
         /**
          * Stop the current recording
@@ -526,6 +533,14 @@ define([
         playRecording: function playRecording() {
             this.player.play();
             this.progressBar.setStyle('playback');
+            this.updateControls();
+        },
+
+        /**
+         * Pause the playback of the recording
+         */
+         pausePlayback: function pausePlayback() {
+            this.player.pause();
             this.updateControls();
         },
 
@@ -617,9 +632,13 @@ define([
                 document.body.appendChild(downloadLink); // but this works !!!
                 document.body.appendChild(document.createElement('br'));
                 downloadLink.text =
-                    'download ' + this._recordsAttempts + ' - ' +
-                    Math.round(filesize / 1000) + 'KB - ' +
-                    Math.round(durationMs / 1000) + 's';
+                    'download ' +
+                    this._recordsAttempts +
+                    ' - ' +
+                    Math.round(filesize / 1000) +
+                    'KB - ' +
+                    Math.round(durationMs / 1000) +
+                    's';
                 downloadLink.download = filename;
                 downloadLink.href = url;
             }
@@ -638,33 +657,39 @@ define([
             this.$controlsContainer.empty();
             this.controls = {};
 
-            // Record button
-            record = uiElements.controlFactory({
-                id: 'record',
-                label: this.getControlIcon('record'),
-                container: this.$controlsContainer
-            });
-            record.on('click', function() {
-                if (this.is('enabled')) {
-                    self.startRecording();
-                }
-            }.bind(record));
-            record.on('updatestate', function() {
-                if (self.player.is('created')
-                    && !self.recorder.is('recording')
-                    && (
-                        self.hasMediaStimulus() && self.mediaStimulusHasPlayed()
-                        || ! self.hasMediaStimulus()
-                    )
-                    && !self.getRecording()
-                ) {
-                    this.enable();
-                } else {
-                    this.disable();
-                }
-            }.bind(record));
-            this.controls.record = record;
+            if (this.config.isReviewMode !== true) {
+                // Record button
+                record = uiElements.controlFactory({
+                    id: 'record',
+                    label: this.getControlIcon('record'),
+                    container: this.$controlsContainer
+                });
+                record.on(
+                    'click',
+                    function () {
+                        if (this.is('enabled')) {
+                            self.startRecording();
+                        }
+                    }.bind(record)
+                );
+                record.on(
+                    'updatestate',
+                    function () {
+                        if (
+                            self.player.is('created') &&
+                            !self.recorder.is('recording') &&
+                            ((self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) || !self.hasMediaStimulus()) &&
+                            !self.getRecording()
+                        ) {
+                            this.enable();
+                        } else {
+                            this.disable();
+                        }
+                    }.bind(record)
+                );
+                this.controls.record = record;
 
+            }
 
             // Stop button
             stop = uiElements.controlFactory({
@@ -672,72 +697,87 @@ define([
                 label: this.getControlIcon('stop'),
                 container: this.$controlsContainer
             });
-            stop.on('click', function() {
-                if (this.is('enabled')) {
-                    if (self.recorder.is('recording')) {
-                        self.stopRecording();
-
-                    } else if (self.player.is('playing')) {
-                        self.stopPlayback();
+            stop.on(
+                'click',
+                function () {
+                    if (this.is('enabled')) {
+                        if (self.recorder.is('recording')) {
+                            self.stopRecording();
+                        } else if (self.player.is('playing')) {
+                            self.stopPlayback();
+                        }
                     }
-                }
-            }.bind(stop));
-            stop.on('updatestate', function() {
-                if ((self.player.is('playing') && !self._isAutoPlayingBack)
-                    || self.recorder.is('recording')) {
-                    this.enable();
-                } else {
-                    this.disable();
-                }
-            }.bind(stop));
+                }.bind(stop)
+            );
+            stop.on(
+                'updatestate',
+                function () {
+                    if ((self.player.is('playing') && !self._isAutoPlayingBack) || self.recorder.is('recording')) {
+                        this.enable();
+                    } else {
+                        this.disable();
+                    }
+                }.bind(stop)
+            );
             this.controls.stop = stop;
 
-
             // Play button
-            if (this.config.allowPlayback === true) {
+            if (this.config.allowPlayback === true || this.config.isReviewMode === true) {
                 play = uiElements.controlFactory({
                     id: 'play',
                     label: this.getControlIcon('play'),
                     container: this.$controlsContainer
                 });
-                play.on('click', function() {
-                    if (this.is('enabled')) {
-                        self.playRecording();
-                    }
-                }.bind(play));
-                play.on('updatestate', function() {
-                    if (self.player.is('idle') || (self.getRecording() && !self._isAutoPlayingBack)) {
-                        this.enable();
-                    } else {
-                        this.disable();
-                    }
-                }.bind(play));
+                play.on(
+                    'click',
+                    function () {
+                        if (this.is('enabled')) {                        
+                            self.playRecording();
+                        }
+                    }.bind(play)
+                );
+                play.on(
+                    'updatestate',
+                    function () {
+                        if (self.player.is('idle') || (self.getRecording() && !self._isAutoPlayingBack)) {
+                            this.enable();
+                        } else {
+                            this.disable();
+                        }
+                    }.bind(play)
+                );
                 this.controls.play = play;
             }
 
 
             // Reset button
-            if (this.config.maxRecords !== 1) {
+            if (this.config.maxRecords !== 1 && this.config.isReviewMode !== true) {
                 reset = uiElements.controlFactory({
                     id: 'reset',
                     label: this.getControlIcon('reset'),
                     container: this.$controlsContainer
                 });
-                reset.on('click', function() {
-                    if (this.is('enabled')) {
-                        self.resetRecording();
-                        self.updateResetCount();
-                    }
-                }.bind(reset));
-                reset.on('updatestate', function() {
-                    if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
-                        this.disable();
-                    } else if (self.player.is('idle')) {
-                        this.enable();
-                    } else {
-                        this.disable();
-                    }
-                }.bind(reset));
+                reset.on(
+                    'click',
+                    function () {
+                        if (this.is('enabled')) {
+                            self.resetRecording();
+                            self.updateResetCount();
+                        }
+                    }.bind(reset)
+                );
+                reset.on(
+                    'updatestate',
+                    function () {
+                        if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
+                            this.disable();
+                        } else if (self.player.is('idle')) {
+                            this.enable();
+                        } else {
+                            this.disable();
+                        }
+                    }.bind(reset)
+                );
                 this.controls.reset = reset;
             }
 
@@ -769,9 +809,17 @@ define([
          * @returns {string}
          */
         getControlIcon: function getControlIcon(iconId) {
-            return '<svg title="' + iconId + '">' +
-                '<use xlink:href="' + this.iconsFileUrl + '#' + iconId + '"/>' +
-                '</svg>';
+            return (
+                '<svg title="' +
+                iconId +
+                '">' +
+                '<use xlink:href="' +
+                this.iconsFileUrl +
+                '#' +
+                iconId +
+                '"/>' +
+                '</svg>'
+            );
         },
 
         /**
@@ -783,7 +831,6 @@ define([
         getTypeIdentifier: function getTypeIdentifier() {
             return 'audioRecordingInteraction';
         },
-
 
         /**
          * Render the PCI :
@@ -896,15 +943,13 @@ define([
 
             self._cleanDelayCallback();
 
-            return Promise.all(promises).then(
-                function() {
-                    self.inputMeter = null;
-                    self.progressBar = null;
-                    self.mediaStimulus = null;
-                    self.player = null;
-                    self.recorder = null;
-                }
-            );
+            return Promise.all(promises).then(function () {
+                self.inputMeter = null;
+                self.progressBar = null;
+                self.mediaStimulus = null;
+                self.player = null;
+                self.recorder = null;
+            });
         },
         /**
          * Restore the state of the interaction from the serializedState.

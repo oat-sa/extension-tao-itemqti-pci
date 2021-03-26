@@ -20,7 +20,7 @@ define([
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'audioRecordingInteraction/creator/widget/Widget',
     'tpl!audioRecordingInteraction/creator/tpl/markup'
-], function(_, ciRegistry, Widget, markupTpl){
+], function (_, ciRegistry, Widget, markupTpl) {
     'use strict';
 
     var _typeIdentifier = 'audioRecordingInteraction';
@@ -31,7 +31,7 @@ define([
          *
          * @returns {String}
          */
-        getTypeIdentifier : function getTypeIdentifier(){
+        getTypeIdentifier: function getTypeIdentifier() {
             return _typeIdentifier;
         },
         /**
@@ -40,7 +40,7 @@ define([
          *
          * @returns {Object} Widget
          */
-        getWidget : function getWidget(){
+        getWidget: function getWidget() {
             return Widget;
         },
         /**
@@ -49,31 +49,32 @@ define([
          *
          * @returns {Object}
          */
-        getDefaultProperties : function getDefaultProperties(){
+        getDefaultProperties: function getDefaultProperties() {
             return {
-                allowPlayback:           true,
-                autoStart:               false,
-                autoPlayback:            false,
+                isReviewMode: false,
+                allowPlayback: true,
+                autoStart: false,
+                autoPlayback: false,
 
-                delayMinutes:            0,
-                delaySeconds:            0,
+                delayMinutes: 0,
+                delaySeconds: 0,
 
-                maxRecords:              2,
-                maxRecordingTime:        120,
+                maxRecords: 2,
+                maxRecordingTime: 120,
 
-                isCompressed:            true,
-                audioBitrate:            20000,
-                isStereo:                false,
+                isCompressed: true,
+                audioBitrate: 20000,
+                isStereo: false,
 
-                useMediaStimulus:        false,
+                useMediaStimulus: false,
                 media: {
-                    autostart:           true,
-                    replayTimeout:       5,
-                    maxPlays:            2
+                    autostart: true,
+                    replayTimeout: 5,
+                    maxPlays: 2
                 },
 
-                displayDownloadLink:     false,
-                updateResponsePartially: false,
+                displayDownloadLink: false,
+                updateResponsePartially: false
             };
         },
         /**
@@ -82,7 +83,7 @@ define([
          *
          * @returns {Object}
          */
-        afterCreate : function afterCreate(){
+        afterCreate: function afterCreate() {
             //do some stuff
         },
         /**
@@ -90,7 +91,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupTemplate : function getMarkupTemplate(){
+        getMarkupTemplate: function getMarkupTemplate() {
             return markupTpl;
         },
         /**
@@ -98,7 +99,7 @@ define([
          *
          * @returns {function} handlebar template
          */
-        getMarkupData : function getMarkupData(pci, defaultData){
+        getMarkupData: function getMarkupData(pci, defaultData) {
             defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
