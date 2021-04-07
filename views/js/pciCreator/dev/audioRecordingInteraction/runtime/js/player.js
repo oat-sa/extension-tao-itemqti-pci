@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 /**
  * This is an audio player for the sole purpose of playing back the recorded media.
@@ -200,6 +200,10 @@ define([
              * Reinitialise the audio element. Can be used as a destroy() function
              */
             unload: function unload() {
+                if (audioEl) {
+                    // prevent runtime error when the player is destroyed while the audio was playing
+                    audioEl.ontimeupdate = null;
+                }
                 audioEl = null;
                 setState(player, playerStates.CREATED);
             }
