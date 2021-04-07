@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
     'qtiCustomInteractionContext',
@@ -54,6 +54,7 @@ define([
             return value === true || value === 'true';
         }
     }
+
     function toInteger(value, defaultValue) {
         return typeof value === 'undefined' ? defaultValue : parseInt(value, 10);
     }
@@ -200,6 +201,11 @@ define([
                         self._recordsAttempts++;
 
                         self.updateResponse(recording);
+
+                        // shortcut if the PCI is being destroyed, as in this case some internal properties would be unreachable.
+                        if (!self.progressBar || !self.player) {
+                            return;
+                        }
 
                         // now that the response is ready, we can turn off the visual recording feedback that we had had let
                         // "turned on" as a hint to the test taker that the recording was not completely over,
@@ -539,7 +545,7 @@ define([
         /**
          * Pause the playback of the recording
          */
-         pausePlayback: function pausePlayback() {
+        pausePlayback: function pausePlayback() {
             this.player.pause();
             this.updateControls();
         },
@@ -731,7 +737,7 @@ define([
                 play.on(
                     'click',
                     function () {
-                        if (this.is('enabled')) {                        
+                        if (this.is('enabled')) {
                             self.playRecording();
                         }
                     }.bind(play)
