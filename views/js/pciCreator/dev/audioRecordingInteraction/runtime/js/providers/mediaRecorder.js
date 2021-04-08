@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA;
  */
 /**
  * This audio processing provider is based on the mediaRecorder API.
@@ -28,11 +28,32 @@ define([
     'use strict';
 
     /**
+     * Default time interval for the partial update throttling
+     * @type {Number}
+     */
+    var defaultPartialUpdateInterval = 500;
+
+    /**
      * @param {Object} config
      * @param {Number} config.audioBitrate - in bits per second, quality of the recording
      */
     return function mediaRecorderProviderFactory(config) {
         var mediaRecorderProvider;
+
+        // context to manage the partial update throttling
+        var partialUpdateInterval = config.partialUpdateInterval || defaultPartialUpdateInterval;
+        var partialUpdateTimeout = null;
+        var partialUpdateAllowed = true;
+        var partialSize = 0;
+        var recordSize = 0;
+
+        // make sure the timeout context for the partial update throttling has been cleaned up
+        var cleanupPartialUpdateTimeout = function cleanupPartialUpdateTimeout() {
+            if (partialUpdateTimeout) {
+                clearTimeout(partialUpdateTimeout);
+            }
+            partialUpdateTimeout = null;
+        };
 
         var MediaRecorder = window.MediaRecorder,       // The MediaRecorder API
             mediaRecorder,                              // The MediaRecorder instance
@@ -91,16 +112,28 @@ define([
                     var blob;
 
                     chunks.push(e.data);
+                    recordSize += e.data.size;
 
-                    if (config.updateResponsePartially) {
-                        blob = new Blob(chunks, {type: mimeType});
+                    // partial update processed with a throttling, and only if data is actually available
+                    if (config.updateResponsePartially && partialUpdateAllowed && recordSize > partialSize) {
+                        partialUpdateAllowed = false;
+                        partialSize = recordSize;
+
+                        blob = new Blob(chunks, { type: mimeType });
                         self.trigger('partialblobavailable', [blob]);
+
+                        partialUpdateTimeout = setTimeout(function allowPartialUpdate() {
+                            partialUpdateAllowed = true;
+                            partialUpdateTimeout = null;
+                        }, partialUpdateInterval);
                     }
                 };
 
                 // stop record callback
                 mediaRecorder.onstop = function onstop() {
                     var blob;
+
+                    cleanupPartialUpdateTimeout();
 
                     if (! self.cancelled) {
                         blob = new Blob(chunks, { type: mimeType });
@@ -118,6 +151,9 @@ define([
              * Start the recording
              */
             start: function start() {
+                partialUpdateAllowed = true;
+                partialSize = 0;
+                recordSize = 0
                 mediaRecorder.start(chunkSizeMs);
             },
 
@@ -141,6 +177,10 @@ define([
              * Destroy the mediaRecorder
              */
             destroy: function destroy() {
+                cleanupPartialUpdateTimeout();
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                }
                 mediaRecorder = null;
             }
         };

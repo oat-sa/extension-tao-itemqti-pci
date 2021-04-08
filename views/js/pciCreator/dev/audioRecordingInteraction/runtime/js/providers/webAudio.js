@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA;
  */
 /**
  * This audio processing provider is based on the Web Audio API and is used for un-compressed audio recording (Wav).
@@ -46,6 +46,7 @@ define([
             buffer = [];
 
         var updateResponsePartially = config.updateResponsePartially;
+        var partialUpdateInterval = config.partialUpdateInterval;
 
         /**
          * Load the worker and configure it
@@ -58,6 +59,7 @@ define([
                     numChannels: numChannels,
                     sampleRate: getAudioContext().sampleRate,
                     updateResponsePartially: updateResponsePartially,
+                    partialUpdateInterval: partialUpdateInterval
                 },
                 options: {
                     timeLimit: 0,           // time limit is handled by the provider wrapper
