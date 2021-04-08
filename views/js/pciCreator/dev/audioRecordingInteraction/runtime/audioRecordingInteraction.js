@@ -174,7 +174,8 @@ define([
                 media: config.media || {},
 
                 displayDownloadLink: toBoolean(config.displayDownloadLink, false),
-                updateResponsePartially: toBoolean(config.updateResponsePartially, false)
+                updateResponsePartially: toBoolean(config.updateResponsePartially, false),
+                partialUpdateInterval: toInteger(config.partialUpdateInterval, 500)
             };
         },
 
