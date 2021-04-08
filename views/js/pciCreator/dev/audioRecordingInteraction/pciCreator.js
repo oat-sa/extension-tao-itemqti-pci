@@ -41,6 +41,18 @@ define([
          * @returns {Object} Widget
          */
         getWidget: function getWidget() {
+            var defaultProperties;
+            Widget.beforeStateInit(function (event, pci) {
+                if (pci.typeIdentifier && pci.typeIdentifier === _typeIdentifier) {
+                    // ensure all the properties get a default value
+                    defaultProperties = audioRecordingInteractionCreator.getDefaultProperties();
+                    _.forEach(defaultProperties, function(value, name) {
+                        if (typeof pci.properties[name] === 'undefined') {
+                            pci.properties[name] = value;
+                        }
+                    });
+                }
+            });
             return Widget;
         },
         /**
