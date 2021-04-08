@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
     'lodash',
@@ -74,6 +74,7 @@ define([
             $mediaStimulusForm,
             $compressedOptions,
             $uncompressedOptions,
+            $updateResponsePartiallyOptions,
             $delayOptions;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
@@ -99,6 +100,9 @@ define([
 
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
 
+            updateResponsePartially: typeCaster.strToBool(interaction.prop('updateResponsePartially'), false),
+            partialUpdateInterval: interaction.prop('partialUpdateInterval'),
+
             displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
         })));
 
@@ -107,6 +111,8 @@ define([
 
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
+
+        $updateResponsePartiallyOptions = $form.find('[data-role="updateResponsePartiallyOptions"]');
 
         $delayOptions = $form.find('[data-role="delayOptions"]');
 
@@ -160,6 +166,16 @@ define([
                 }
                 configChangeCallBack(boundInteraction, value, name);
             },
+
+            updateResponsePartially: function updateResponsePartially(boundInteraction, value, name) {
+                if (value) {
+                    $updateResponsePartiallyOptions.show();
+                } else {
+                    $updateResponsePartiallyOptions.hide();
+                }
+                configChangeCallBack(boundInteraction, value, name);
+            },
+            partialUpdateInterval: configChangeCallBack,
 
             displayDownloadLink: configChangeCallBack
 
