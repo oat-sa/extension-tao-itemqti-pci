@@ -144,10 +144,10 @@
 <div data-role="updateResponsePartiallyOptions" {{#unless updateResponsePartially}}style="display:none"{{/unless}}>
     <div class="panel">
         <label for="partial-update-interval" class="spinner">{{__ "Update interval:"}}</label>
-        <input id="partial-update-interval" name="partialUpdateInterval" value="{{partialUpdateInterval}}" class="large" data-increment="10" data-min="100" data-max="5000" type="text" />
+        <input id="partial-update-interval" name="partialUpdateInterval" value="{{partialUpdateInterval}}" class="large" data-increment=".1" data-min=".1" data-max="5" type="text" />
         <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
         <span class="tooltip-content">
-            {{__ "In milliseconds. The time interval between partial updates of the recording."}}
+            {{__ "In seconds. The time interval between partial updates of the recording."}}
         </span>
     </div>
 </div>

@@ -101,7 +101,7 @@ define([
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
 
             updateResponsePartially: typeCaster.strToBool(interaction.prop('updateResponsePartially'), false),
-            partialUpdateInterval: interaction.prop('partialUpdateInterval'),
+            partialUpdateInterval: parseInt(interaction.prop('partialUpdateInterval'), 10) / 1000,
 
             displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
         })));
@@ -175,7 +175,10 @@ define([
                 }
                 configChangeCallBack(boundInteraction, value, name);
             },
-            partialUpdateInterval: configChangeCallBack,
+            partialUpdateInterval: function partialUpdateInterval(boundInteraction, value, name) {
+                value = parseFloat(value) * 1000
+                configChangeCallBack(boundInteraction, value, name);
+            },
 
             displayDownloadLink: configChangeCallBack
 
