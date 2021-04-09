@@ -31,7 +31,7 @@ define([
      * Default time interval for the partial update throttling
      * @type {Number}
      */
-    var defaultPartialUpdateInterval = 500;
+    var defaultPartialUpdateInterval = 1000;
 
     /**
      * @param {Object} config

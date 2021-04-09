@@ -152,6 +152,7 @@ define([
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
          * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          * @param {Boolean} config.updateResponsePartially - enable/disable the partial response update (may affect the performance)
+         * @param {Number} config.partialUpdateInterval - number of milliseconds to wait between each recording update
          */
         initConfig: function init(config) {
             this.config = {
@@ -175,7 +176,7 @@ define([
 
                 displayDownloadLink: toBoolean(config.displayDownloadLink, false),
                 updateResponsePartially: toBoolean(config.updateResponsePartially, false),
-                partialUpdateInterval: toInteger(config.partialUpdateInterval, 500)
+                partialUpdateInterval: toInteger(config.partialUpdateInterval, 1000)
             };
         },
 
