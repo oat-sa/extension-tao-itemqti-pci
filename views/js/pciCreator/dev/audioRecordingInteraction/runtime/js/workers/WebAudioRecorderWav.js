@@ -42,7 +42,7 @@ var sampleRate = 44100,
     partialUpdateTimeout = null,
     partialUpdateAllowed = true;
 
-var defaultPartialUpdateInterval = 500;
+var defaultPartialUpdateInterval = 1000;
 
 function error(message) {
     self.postMessage({ command: "error", message: "wav: " + message });
