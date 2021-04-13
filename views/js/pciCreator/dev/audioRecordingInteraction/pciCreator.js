@@ -47,7 +47,8 @@ define([
                     // ensure all the properties get a default value
                     defaultProperties = audioRecordingInteractionCreator.getDefaultProperties();
                     _.forEach(defaultProperties, function(value, name) {
-                        if (typeof pci.properties[name] === 'undefined') {
+                        if ((typeof pci.properties[name] === 'undefined') ||
+                            (typeof pci.properties[name] === 'string' && !pci.properties[name] && typeof value !== 'string')) {
                             pci.properties[name] = value;
                         }
                     });
