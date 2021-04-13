@@ -48,7 +48,7 @@ define([
      * Type casting helpers for PCI parameters
      */
     function toBoolean(value, defaultValue) {
-        if (typeof value === 'undefined') {
+        if (typeof value === 'undefined' || value === '') {
             return defaultValue;
         } else {
             return value === true || value === 'true';
@@ -56,7 +56,7 @@ define([
     }
 
     function toInteger(value, defaultValue) {
-        return typeof value === 'undefined' ? defaultValue : parseInt(value, 10);
+        return typeof value === 'undefined' || value === '' ? defaultValue : parseInt(value, 10);
     }
 
     function getFileName(filePrefix, blob) {
