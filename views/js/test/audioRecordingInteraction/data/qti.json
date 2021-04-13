@@ -10,7 +10,7 @@
         "adaptive": false,
         "timeDependent": false,
         "toolName": "TAO",
-        "toolVersion": "3.3.0-sprint68",
+        "toolVersion": "3.4.0-sprint152",
         "class": ""
     },
     "body": {
@@ -26,25 +26,42 @@
                 "debug": {
                     "relatedItem": "item_5a61fdb9c8af2398059611"
                 },
-                "choices": {},
+                "choices": [],
                 "typeIdentifier": "audioRecordingInteraction",
-                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"> <\/div>\n                <div class=\"audio-rec\">\n                  <div class=\"input-meter\">\n                    <div class=\"leds\"> <\/div>\n                    <div class=\"mic\"> <\/div>\n                  <\/div>\n                  <div class=\"progress\"> <\/div>\n                  <div class=\"controls\"> <\/div>\n                  <div class=\"instructions\"> <\/div>\n                <\/div>\n              <\/div>\n            ",
+                "markup": "<div class=\"audioRecordingInteraction\">\n                <div class=\"prompt\"> </div>\n                <div class=\"audio-rec\">\n                  <div class=\"media-stimulus\"> </div>\n                  <div class=\"input-meter\">\n                    <div class=\"countdown-pie-chart\"> </div>\n                    <div class=\"leds\"> </div>\n                    <div class=\"mic\"> </div>\n                  </div>\n                  <div class=\"progress\"> </div>\n                  <div class=\"controls\"> </div>\n                </div>\n              </div>",
                 "version": "0.0.0",
-                "entryPoint": "something",
+                "entryPoint": "",
                 "libraries": [],
                 "stylesheets": [],
                 "mediaFiles": [],
                 "properties": {
+                    "isReviewMode": "",
                     "allowPlayback": "true",
                     "autoStart": "",
+                    "autoPlayback": "",
+                    "delayMinutes": "0",
+                    "delaySeconds": "0",
                     "maxRecords": "0",
                     "maxRecordingTime": "400",
+                    "isCompressed": "true",
                     "audioBitrate": "20000",
                     "isStereo": "",
-                    "pcmSampleRate": "44100",
-                    "displayDownloadLink": "true"
+                    "useMediaStimulus": "",
+                    "media": {
+                        "autostart": "true",
+                        "replayTimeout": "5",
+                        "maxPlays": "2",
+                        "loop": "",
+                        "pause": "",
+                        "uri": "",
+                        "type": "",
+                        "height": "270",
+                        "width": "480"
+                    },
+                    "displayDownloadLink": "true",
+                    "updateResponsePartially": ""
                 },
-                "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+                "xmlns": "http://www.imsglobal.org/xsd/portableCustomInteraction"
             }
         },
         "debug": {
@@ -55,14 +72,13 @@
         "relatedItem": "item_5a61fdb9c8af2398059611"
     },
     "namespaces": {
-        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
+        "": "http://www.imsglobal.org/xsd/imsqti_v2p2",
         "html5": "html5",
-        "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
-        "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
-        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+        "m": "http://www.w3.org/1998/Math/MathML",
+        "xsi": "http://www.w3.org/2001/XMLSchema-instance"
     },
     "schemaLocations": {
-        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
+        "http://www.imsglobal.org/xsd/imsqti_v2p2": "http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd"
     },
     "stylesheets": {},
     "outcomes": {
@@ -88,89 +104,15 @@
             "qtiClass": "responseDeclaration",
             "attributes": {
                 "identifier": "RESPONSE",
-                "cardinality": "record"
+                "cardinality": "single",
+                "baseType": "file"
             },
             "debug": {
                 "relatedItem": "item_5a61fdb9c8af2398059611"
             },
-            "defaultValue": [],
-            "mapping": [],
-            "areaMapping": [],
-            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
-            "correctResponses": [],
-            "mappingAttributes": {
-                "defaultValue": 0
-            },
-            "feedbackRules": {}
+            "defaultValue": []
         }
     },
-    "feedbacks": {},
-    "responseProcessing": {
-        "serial": "response_templatesdriven_5a61fdb9cbedc526565652",
-        "qtiClass": "responseProcessing",
-        "attributes": {},
-        "debug": {
-            "relatedItem": "item_5a61fdb9c8af2398059611"
-        },
-        "processingType": "templateDriven",
-        "responseRules": [
-            {
-                "qtiClass": "responseCondition",
-                "responseIf": {
-                    "qtiClass": "responseIf",
-                    "expression": {
-                        "qtiClass": "match",
-                        "expressions": [
-                            {
-                                "qtiClass": "variable",
-                                "attributes": {
-                                    "identifier": "RESPONSE"
-                                }
-                            },
-                            {
-                                "qtiClass": "correct",
-                                "attributes": {
-                                    "identifier": "RESPONSE"
-                                }
-                            }
-                        ]
-                    },
-                    "responseRules": [
-                        {
-                            "qtiClass": "setOutcomeValue",
-                            "attributes": {
-                                "identifier": "SCORE"
-                            },
-                            "expression": {
-                                "qtiClass": "baseValue",
-                                "attributes": {
-                                    "baseType": "float"
-                                },
-                                "value": "1"
-                            }
-                        }
-                    ]
-                },
-                "responseElse": {
-                    "qtiClass": "responseElse",
-                    "responseRules": [
-                        {
-                            "qtiClass": "setOutcomeValue",
-                            "attributes": {
-                                "identifier": "SCORE"
-                            },
-                            "expression": {
-                                "qtiClass": "baseValue",
-                                "attributes": {
-                                    "baseType": "float"
-                                },
-                                "value": "0"
-                            }
-                        }
-                    ]
-                }
-            }
-        ]
-    },
+    "feedbacks": [],
     "apipAccessibility": ""
 }
