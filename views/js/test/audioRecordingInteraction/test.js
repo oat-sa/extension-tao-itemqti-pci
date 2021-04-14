@@ -84,7 +84,7 @@ define([
                             'width': '480'
                         },
                         'displayDownloadLink': true,
-                        'updateResponsePartially': false,
+                        'updateResponsePartially': true,
                         'partialUpdateInterval': 1000
                     };
 
