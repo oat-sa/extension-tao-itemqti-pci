@@ -128,32 +128,6 @@
 
 <hr />
 
-<div class="panel">
-    <label>
-        <input name="updateResponsePartially" type="checkbox" {{#if updateResponsePartially}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "Partial update"}}
-    </label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">
-        <span class="icon-warning"></span>
-        {{__ "Caution, this feature may impact performance. Updates the response with the audio recording at a regular interval."}}
-    </span>
-</div>
-
-<div data-role="updateResponsePartiallyOptions" {{#unless updateResponsePartially}}style="display:none"{{/unless}}>
-    <div class="panel">
-        <label for="partial-update-interval" class="spinner">{{__ "Update interval:"}}</label>
-        <input id="partial-update-interval" name="partialUpdateInterval" value="{{partialUpdateInterval}}" class="large" data-increment=".1" data-min=".1" data-max="5" type="text" />
-        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-        <span class="tooltip-content">
-            {{__ "In seconds. The time interval between partial updates of the recording."}}
-        </span>
-    </div>
-</div>
-
-<hr />
-
 <h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "For tests only"}}</strong></h3>
 
 <div class="panel">
@@ -165,5 +139,14 @@
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
         {{__ "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."}}
+    </span>
+</div>
+
+<div class="panel">
+    <label for="partial-update-interval" class="spinner">{{__ "Update interval:"}}</label>
+    <input id="partial-update-interval" name="partialUpdateInterval" value="{{partialUpdateInterval}}" class="large" data-increment="1" data-min="1" data-max="60" type="text" />
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "In seconds. The time interval between partial updates of the recording."}}
     </span>
 </div>
