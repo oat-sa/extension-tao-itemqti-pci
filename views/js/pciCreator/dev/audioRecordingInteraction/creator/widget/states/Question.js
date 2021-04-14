@@ -74,7 +74,6 @@ define([
             $mediaStimulusForm,
             $compressedOptions,
             $uncompressedOptions,
-            $updateResponsePartiallyOptions,
             $delayOptions;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
@@ -100,7 +99,7 @@ define([
 
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
 
-            updateResponsePartially: typeCaster.strToBool(interaction.prop('updateResponsePartially'), false),
+            updateResponsePartially: typeCaster.strToBool(interaction.prop('updateResponsePartially'), true),
             partialUpdateInterval: parseInt(interaction.prop('partialUpdateInterval'), 10) / 1000,
 
             displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
@@ -111,8 +110,6 @@ define([
 
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
-
-        $updateResponsePartiallyOptions = $form.find('[data-role="updateResponsePartiallyOptions"]');
 
         $delayOptions = $form.find('[data-role="delayOptions"]');
 
@@ -167,14 +164,6 @@ define([
                 configChangeCallBack(boundInteraction, value, name);
             },
 
-            updateResponsePartially: function updateResponsePartially(boundInteraction, value, name) {
-                if (value) {
-                    $updateResponsePartiallyOptions.show();
-                } else {
-                    $updateResponsePartiallyOptions.hide();
-                }
-                configChangeCallBack(boundInteraction, value, name);
-            },
             partialUpdateInterval: function partialUpdateInterval(boundInteraction, value, name) {
                 value = parseFloat(value) * 1000
                 configChangeCallBack(boundInteraction, value, name);
