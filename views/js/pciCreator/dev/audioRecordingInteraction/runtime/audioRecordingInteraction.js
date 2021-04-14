@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
     'qtiCustomInteractionContext',
@@ -48,14 +48,15 @@ define([
      * Type casting helpers for PCI parameters
      */
     function toBoolean(value, defaultValue) {
-        if (typeof value === 'undefined') {
+        if (typeof value === 'undefined' || value === '') {
             return defaultValue;
         } else {
             return value === true || value === 'true';
         }
     }
+
     function toInteger(value, defaultValue) {
-        return typeof value === 'undefined' ? defaultValue : parseInt(value, 10);
+        return typeof value === 'undefined' || value === '' ? defaultValue : parseInt(value, 10);
     }
 
     function getFileName(filePrefix, blob) {
@@ -151,6 +152,7 @@ define([
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
          * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          * @param {Boolean} config.updateResponsePartially - enable/disable the partial response update (may affect the performance)
+         * @param {Number} config.partialUpdateInterval - number of milliseconds to wait between each recording update
          */
         initConfig: function init(config) {
             this.config = {
@@ -173,7 +175,8 @@ define([
                 media: config.media || {},
 
                 displayDownloadLink: toBoolean(config.displayDownloadLink, false),
-                updateResponsePartially: toBoolean(config.updateResponsePartially, false)
+                updateResponsePartially: toBoolean(config.updateResponsePartially, true),
+                partialUpdateInterval: toInteger(config.partialUpdateInterval, 1000)
             };
         },
 
@@ -200,6 +203,11 @@ define([
                         self._recordsAttempts++;
 
                         self.updateResponse(recording);
+
+                        // shortcut if the PCI is being destroyed, as in this case some internal properties would be unreachable.
+                        if (!self.progressBar || !self.player) {
+                            return;
+                        }
 
                         // now that the response is ready, we can turn off the visual recording feedback that we had had let
                         // "turned on" as a hint to the test taker that the recording was not completely over,
@@ -539,7 +547,7 @@ define([
         /**
          * Pause the playback of the recording
          */
-         pausePlayback: function pausePlayback() {
+        pausePlayback: function pausePlayback() {
             this.player.pause();
             this.updateControls();
         },
@@ -731,7 +739,7 @@ define([
                 play.on(
                     'click',
                     function () {
-                        if (this.is('enabled')) {                        
+                        if (this.is('enabled')) {
                             self.playRecording();
                         }
                     }.bind(play)

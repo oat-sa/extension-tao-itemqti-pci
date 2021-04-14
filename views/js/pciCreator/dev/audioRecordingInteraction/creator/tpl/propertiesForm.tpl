@@ -141,3 +141,12 @@
         {{__ "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."}}
     </span>
 </div>
+
+<div class="panel">
+    <label for="partial-update-interval" class="spinner">{{__ "Update interval:"}}</label>
+    <input id="partial-update-interval" name="partialUpdateInterval" value="{{partialUpdateInterval}}" class="large" data-increment="1" data-min="1" data-max="60" type="text" />
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "In seconds. The time interval between partial updates of the recording."}}
+    </span>
+</div>

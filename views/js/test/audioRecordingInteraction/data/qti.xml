@@ -1,49 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" xmlns:html5="html5" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 http://www.imsglobal.org/xsd/qti/qtiv2p1/imsqti_v2p1.xsd" identifier="i1477301008217489" title="AudioSample" label="AudioSample" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.2.0-sprint37">
-  <responseDeclaration identifier="RESPONSE" cardinality="record"/>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:html5="html5" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i1477301008217489" title="AudioSample" label="AudioSample" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="3.4.0-sprint152">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="file"/>
   <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>
   <itemBody>
     <div class="grid-row">
       <div class="col-12">
         <customInteraction responseIdentifier="RESPONSE">
-          <pci:portableCustomInteraction customInteractionTypeIdentifier="audioRecordingInteraction" hook="something" version="">
-            <pci:responseSchema href="http://imsglobal.org/schema/json/v1.0/response.json"/>
-            <pci:resources location="http://imsglobal.org/pci/1.0.15/sharedLibraries.xml">
-              <pci:libraries>
-              </pci:libraries>
-              <pci:stylesheets>
-              </pci:stylesheets>
-              <pci:mediaFiles>
-              </pci:mediaFiles>
-            </pci:resources>
-            <pci:properties xmlns:pci="http://www.imsglobal.org/xsd/portableCustomInteraction">
-              <pci:entry key="allowPlayback">true</pci:entry>
-              <pci:entry key="autoStart"/>
-              <pci:entry key="maxRecords">0</pci:entry>
-              <pci:entry key="maxRecordingTime">120</pci:entry>
-              <pci:entry key="audioBitrate">20000</pci:entry>
-              <pci:entry key="pcmSampleRate">44100</pci:entry>
-              <pci:entry key="isStereo">false</pci:entry>
-              <pci:entry key="displayDownloadLink">true</pci:entry>
-            </pci:properties>
-            <pci:markup>
-              <html5:div class="audioRecordingInteraction">
-                <html5:div class="prompt"> </html5:div>
-                <html5:div class="audio-rec">
-                  <html5:div class="input-meter">
-                    <html5:div class="leds"> </html5:div>
-                    <html5:div class="mic"> </html5:div>
-                  </html5:div>
-                  <html5:div class="progress"> </html5:div>
-                  <html5:div class="controls"> </html5:div>
-                  <html5:div class="instructions"> </html5:div>
-                </html5:div>
-              </html5:div>
-            </pci:markup>
-          </pci:portableCustomInteraction>
+          <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction" customInteractionTypeIdentifier="audioRecordingInteraction" hook="audioRecordingInteraction/runtime/audioRecordingInteraction.js" version="0.13.1">
+            <resources>
+              <libraries><lib id="audioRecordingInteraction/runtime/js/player"/><lib id="audioRecordingInteraction/runtime/js/recorder"/><lib id="audioRecordingInteraction/runtime/js/uiElements"/><lib id="audioRecordingInteraction/runtime/js/providers/mediaRecorder"/><lib id="audioRecordingInteraction/runtime/js/providers/webAudio"/></libraries><stylesheets><link href="audioRecordingInteraction/runtime/css/audioRecordingInteraction.css" type="text/css" title="audioRecordingInteraction"/></stylesheets><mediaFiles><file src="audioRecordingInteraction/runtime/img/controls.svg" type="image/svg+xml"/><file src="audioRecordingInteraction/runtime/img/mic.svg" type="image/svg+xml"/><file src="audioRecordingInteraction/runtime/js/workers/WavAudioEncoder.js" type="application/javascript"/><file src="audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js" type="application/javascript"/></mediaFiles></resources>
+            <properties>
+              <property key="isReviewMode"></property>
+              <property key="allowPlayback">true</property>
+              <property key="autoStart"></property>
+              <property key="autoPlayback"></property>
+              <property key="delayMinutes">0</property>
+              <property key="delaySeconds">0</property>
+              <property key="maxRecords">0</property>
+              <property key="maxRecordingTime">400</property>
+              <property key="isCompressed">true</property>
+              <property key="audioBitrate">20000</property>
+              <property key="isStereo"></property>
+              <property key="useMediaStimulus"></property>
+              <properties key="media">
+                <property key="autostart">true</property>
+                <property key="replayTimeout">5</property>
+                <property key="maxPlays">2</property>
+                <property key="loop"></property>
+                <property key="pause"></property>
+                <property key="uri"></property>
+                <property key="type"></property>
+                <property key="height">270</property>
+                <property key="width">480</property>
+              </properties>
+              <property key="displayDownloadLink">true</property>
+              <property key="updateResponsePartially"></property>
+            </properties>
+            <markup xmlns="http://www.w3.org/1999/xhtml">
+              <div class="audioRecordingInteraction">
+                <div class="prompt"> </div>
+                <div class="audio-rec">
+                  <div class="media-stimulus"> </div>
+                  <div class="input-meter">
+                    <div class="countdown-pie-chart"> </div>
+                    <div class="leds"> </div>
+                    <div class="mic"> </div>
+                  </div>
+                  <div class="progress"> </div>
+                  <div class="controls"> </div>
+                </div>
+              </div>
+            </markup>
+          </portableCustomInteraction>
         </customInteraction>
       </div>
     </div>
   </itemBody>
-  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p2/rptemplates/match_correct"/>
 </assessmentItem>

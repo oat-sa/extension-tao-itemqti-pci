@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
     'lodash',
@@ -99,6 +99,9 @@ define([
 
             useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
 
+            updateResponsePartially: typeCaster.strToBool(interaction.prop('updateResponsePartially'), true),
+            partialUpdateInterval: parseInt(interaction.prop('partialUpdateInterval'), 10) / 1000,
+
             displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
         })));
 
@@ -158,6 +161,11 @@ define([
                 } else {
                     $mediaStimulusForm.hide(250);
                 }
+                configChangeCallBack(boundInteraction, value, name);
+            },
+
+            partialUpdateInterval: function partialUpdateInterval(boundInteraction, value, name) {
+                value = parseFloat(value) * 1000
                 configChangeCallBack(boundInteraction, value, name);
             },
 
