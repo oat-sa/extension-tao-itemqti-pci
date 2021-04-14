@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
     'lodash',
@@ -41,6 +41,19 @@ define([
          * @returns {Object} Widget
          */
         getWidget: function getWidget() {
+            var defaultProperties;
+            Widget.beforeStateInit(function (event, pci) {
+                if (pci.typeIdentifier && pci.typeIdentifier === _typeIdentifier) {
+                    // ensure all the properties get a default value
+                    defaultProperties = audioRecordingInteractionCreator.getDefaultProperties();
+                    _.forEach(defaultProperties, function(value, name) {
+                        if ((typeof pci.properties[name] === 'undefined') ||
+                            (typeof pci.properties[name] === 'string' && !pci.properties[name] && typeof value !== 'string')) {
+                            pci.properties[name] = value;
+                        }
+                    });
+                }
+            });
             return Widget;
         },
         /**
@@ -74,7 +87,8 @@ define([
                 },
 
                 displayDownloadLink: false,
-                updateResponsePartially: false
+                updateResponsePartially: true,
+                partialUpdateInterval: 1000
             };
         },
         /**
