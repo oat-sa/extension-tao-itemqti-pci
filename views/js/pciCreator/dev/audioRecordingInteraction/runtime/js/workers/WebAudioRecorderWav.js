@@ -24,6 +24,7 @@
  */
 /**
  * OAT version with the following changes:
+ * - init(), record(), cleanup(): allow partial update of the recording, throttled by the given interval
  * - record(): do not timeout if maxBuffers (= timeLimit option) is equal to zero
  * - cleanup(): removed chaining assignment that might result in a TypeError
  */
@@ -36,7 +37,12 @@ var sampleRate = 44100,
     encoder = undefined,
     recBuffers = undefined,
     bufferCount = 0,
-    updateResponsePartially;
+    updateResponsePartially,
+    partialUpdateInterval,
+    partialUpdateTimeout = null,
+    partialUpdateAllowed = true;
+
+var defaultPartialUpdateInterval = 1000;
 
 function error(message) {
     self.postMessage({ command: "error", message: "wav: " + message });
@@ -47,6 +53,8 @@ function init(data) {
     numChannels = data.config.numChannels;
     options = data.options;
     updateResponsePartially = data.config.updateResponsePartially;
+    partialUpdateInterval = data.config.partialUpdateInterval || defaultPartialUpdateInterval;
+    partialUpdateAllowed = true;
 }
 
 function setOptions(opt) {
@@ -69,11 +77,18 @@ function record(buffer) {
         if (encoder) {
             encoder.encode(buffer);
 
-            if (updateResponsePartially) {
+            if (updateResponsePartially && partialUpdateAllowed) {
+                partialUpdateAllowed = false;
+
                 self.postMessage({
                     command: "partialcomplete",
                     blob: encoder.partialFinish(options.wav.mimeType),
                 });
+
+                partialUpdateTimeout = setTimeout(function allowPartialUpdate() {
+                    partialUpdateAllowed = true;
+                    partialUpdateTimeout = null;
+                }, partialUpdateInterval);
             }
 
         } else {
@@ -111,6 +126,10 @@ function finish() {
 };
 
 function cleanup() {
+    if (partialUpdateTimeout) {
+        clearTimeout(partialUpdateTimeout);
+    }
+    partialUpdateTimeout = null;
     encoder = undefined;
     recBuffers = undefined;
     bufferCount = 0;
