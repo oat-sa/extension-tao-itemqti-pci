@@ -178,7 +178,7 @@ class ImsPciExporter extends PortableElementExporter
     private function getItemRelativePath($itemBasePath)
     {
         $returnValue = '';
-        $arrDir = explode(DIRECTORY_SEPARATOR, rtrim($itemBasePath, DIRECTORY_SEPARATOR));
+        $arrDir = explode('/', rtrim($itemBasePath, '/'));
         for ($i = 0, $iMax = count($arrDir); $i < $iMax; $i++) {
             $returnValue .= '../';
         }
