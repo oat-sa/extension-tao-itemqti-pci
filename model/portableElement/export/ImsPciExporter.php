@@ -21,12 +21,12 @@
 
 namespace oat\qtiItemPci\model\portableElement\export;
 
+use DOMDocument;
+use DOMXPath;
 use oat\oatbox\service\ServiceManager;
-use oat\taoQtiItem\model\portableElement\PortableElementService;
-use oat\taoQtiItem\model\portableElement\export\PortableElementExporter;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
-use \DOMDocument;
-use \DOMXPath;
+use oat\taoQtiItem\model\portableElement\export\PortableElementExporter;
+use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 class ImsPciExporter extends PortableElementExporter
 {
@@ -179,8 +179,8 @@ class ImsPciExporter extends PortableElementExporter
     {
         $returnValue = '';
         $arrDir = explode(DIRECTORY_SEPARATOR, rtrim($itemBasePath, DIRECTORY_SEPARATOR));
-        for ($i = 0; $i < count($arrDir); $i++) {
-            $returnValue .= '..' . DIRECTORY_SEPARATOR;
+        for ($i = 0, $iMax = count($arrDir); $i < $iMax; $i++) {
+            $returnValue .= '../';
         }
         return $returnValue;
     }
