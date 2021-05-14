@@ -30,7 +30,7 @@ use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 class ImsPciExporter extends PortableElementExporter
 {
-    const EXPORTER_PATH_SEPARATOR = '/';
+    private const EXPORTER_PATH_SEPARATOR = '/';
 
     /**
      * Cope the asset files of the PCI to the item exporter and return the list of copied assets
@@ -176,7 +176,7 @@ class ImsPciExporter extends PortableElementExporter
         fclose($stream);
     }
 
-    private function getItemRelativePath($itemBasePath)
+    private function getItemRelativePath(string $itemBasePath): string
     {
         $returnValue = '';
         $arrDir = explode(self::EXPORTER_PATH_SEPARATOR, rtrim($itemBasePath, self::EXPORTER_PATH_SEPARATOR));
