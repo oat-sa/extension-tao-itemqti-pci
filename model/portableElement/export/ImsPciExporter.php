@@ -21,15 +21,16 @@
 
 namespace oat\qtiItemPci\model\portableElement\export;
 
+use DOMDocument;
+use DOMXPath;
 use oat\oatbox\service\ServiceManager;
-use oat\taoQtiItem\model\portableElement\PortableElementService;
-use oat\taoQtiItem\model\portableElement\export\PortableElementExporter;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
-use \DOMDocument;
-use \DOMXPath;
+use oat\taoQtiItem\model\portableElement\export\PortableElementExporter;
+use oat\taoQtiItem\model\portableElement\PortableElementService;
 
 class ImsPciExporter extends PortableElementExporter
 {
+    private const EXPORTER_PATH_SEPARATOR = '/';
 
     /**
      * Cope the asset files of the PCI to the item exporter and return the list of copied assets
@@ -175,12 +176,12 @@ class ImsPciExporter extends PortableElementExporter
         fclose($stream);
     }
 
-    private function getItemRelativePath($itemBasePath)
+    private function getItemRelativePath(string $itemBasePath): string
     {
         $returnValue = '';
-        $arrDir = explode(DIRECTORY_SEPARATOR, rtrim($itemBasePath, DIRECTORY_SEPARATOR));
-        for ($i = 0; $i < count($arrDir); $i++) {
-            $returnValue .= '..' . DIRECTORY_SEPARATOR;
+        $arrDir = explode(self::EXPORTER_PATH_SEPARATOR, rtrim($itemBasePath, self::EXPORTER_PATH_SEPARATOR));
+        for ($i = 0, $iMax = count($arrDir); $i < $iMax; $i++) {
+            $returnValue .= '..' . self::EXPORTER_PATH_SEPARATOR;
         }
         return $returnValue;
     }
