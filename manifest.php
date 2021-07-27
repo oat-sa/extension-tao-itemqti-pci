@@ -48,6 +48,7 @@ return [
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'export']],
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'import']],
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'index']],
+        ['grant', 'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContentCreatorRole', ['ext' => 'qtiItemPci', 'mod' => 'PciLoader', 'act' => 'load']],
     ],
     'install' => [
         'rdf' => [
