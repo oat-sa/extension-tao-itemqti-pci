@@ -7,6 +7,7 @@ namespace oat\qtiItemPci\migrations;
 use Doctrine\DBAL\Schema\Schema;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 use oat\tao\scripts\tools\accessControl\SetRolesAccess;
+use oat\taoItems\model\user\TaoItemsRoles;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -16,7 +17,7 @@ final class Version202107271111381465_qtiItemPci extends AbstractMigration
 
     private const CONFIG = [
         SetRolesAccess::CONFIG_RULES => [
-            'http://www.tao.lu/Ontologies/TAOItem.rdf#ItemContentCreatorRole' => [
+            TaoItemsRoles::ITEM_CONTENT_CREATOR => [
                 ['ext' => 'qtiItemPci', 'mod' => 'PciLoader', 'act' => 'load']
             ],
         ]
