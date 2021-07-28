@@ -9,9 +9,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
 use oat\tao\scripts\tools\accessControl\SetRolesAccess;
 use oat\taoItems\model\user\TaoItemsRoles;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version202107271111381465_qtiItemPci extends AbstractMigration
 {
 
