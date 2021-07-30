@@ -30,6 +30,7 @@ use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\SetupAudioRecordingInteractionCreatorConfigurationRegistry;
 use oat\qtiItemPci\scripts\update\Updater;
 use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
+use oat\taoItems\model\user\TaoItemsRoles;
 
 return [
     'name' => 'qtiItemPci',
@@ -48,6 +49,7 @@ return [
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'export']],
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'import']],
         ['grant', 'http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager', ['ext' => 'qtiItemPci', 'mod' => 'PciManager', 'act' => 'index']],
+        ['grant', TaoItemsRoles::ITEM_CONTENT_CREATOR, ['ext' => 'qtiItemPci', 'mod' => 'PciLoader', 'act' => 'load']],
     ],
     'install' => [
         'rdf' => [
