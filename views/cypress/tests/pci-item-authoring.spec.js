@@ -94,7 +94,7 @@ describe('Item Authoring', () => {
                 selectors.addSubClassUrl
             );
             cy.addNode(selectors.itemForm, selectors.addItem);
-            cy.renameSelectedItem(selectors.itemForm, selectors.editItemUrl, itemName);
+            cy.renameSelectedNode(selectors.itemForm, selectors.editItemUrl, itemName);
 
             cy.get(selectors.authoring).click();
             cy.location().should(loc => {
