@@ -30,6 +30,9 @@ describe('Item Authoring', () => {
         mathPCI: 'mathEntryInteraction'
     };
     const dropSelector = 'div.qti-itemBody.item-editor-drop-area';
+    const undoSelector = '.feedback-info.popup a.undo';
+    const closeUndoSelector = '.feedback-info.popup .icon-close';
+
     /**
      * Log in
      * Visit the page
@@ -125,5 +128,36 @@ describe('Item Authoring', () => {
             cy.wait('@saveItem').its('response.body').its('success').should('eq', true);
         });
 
+        it('can remove PCI interactions from canvas', () => {
+            for (const interaction in pciInteractions) {
+                cy.log('REMOVING INTERACTION', interaction);
+
+                const interactionSelector = `[data-qti-class="customInteraction"]`;
+                const deleteSelector = `${interactionSelector} .tlb [data-role="delete"]`;
+
+                cy.get(interactionSelector).first().click({ force: true });
+                cy.get(deleteSelector).first().click({ force: true });
+                cy.log(interaction, 'IS REMOVED');
+
+                cy.get(undoSelector).should('exist');
+                cy.get(undoSelector).click();
+                cy.log(interaction, 'UNDO REMOVE');
+                cy.get(interactionSelector).first().should('exist');
+                cy.get(undoSelector).should('not.exist');
+
+                cy.get(deleteSelector).first().click({ force: true });
+                cy.log(interaction, 'IS REMOVED');
+                cy.get(undoSelector).should('exist');
+                cy.get(closeUndoSelector).click();
+            }
+            // close common interactions panel
+            cy.get('#sidebar-left-section-common-interactions ._accordion').click();
+        });
+
+        it('can save item with removed interactions', () => {
+            cy.intercept('POST', '**/saveItem*').as('saveItem');
+            cy.get('[data-testid="save-the-item"]').click();
+            cy.wait('@saveItem').its('response.body').its('success').should('eq', true);
+        });
     });
 });
