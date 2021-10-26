@@ -1,0 +1,317 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 2021.10\n"
+"PO-Revision-Date: 2021-10-26T12:57:59\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: nb-NO\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: nb-NO\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "Add gap"
+msgstr "Legg til mellomrom"
+
+msgid "Add Interaction"
+msgstr "Legg til oppgavetype"
+
+msgid "Allow download"
+msgstr "Tillat nedlasting"
+
+msgid "allow line break"
+msgstr "tillat linjeskift"
+
+msgid "Allow playback"
+msgstr "Tillat avspilling"
+
+msgid "Audio bitrate:"
+msgstr "Lydhastighet:"
+
+msgid "authorize white space"
+msgstr "godkjenn mellomrom"
+
+msgid "Auto playback recording"
+msgstr "Automatisk avspilling"
+
+msgid "Auto start recording"
+msgstr "Automatisk opptak"
+
+msgid "Back to listing"
+msgstr "Tilbake til oversikt"
+
+msgid "braces/curly brackets"
+msgstr "klammeparenteser"
+
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgid "Channels"
+msgstr "Kanaler"
+
+msgid "Comparison"
+msgstr "Sammenligning"
+
+msgid "Compressed"
+msgstr "Komprimert"
+
+msgid "cosinus"
+msgstr "cosinus"
+
+msgid "Delete"
+msgstr "Slett"
+
+msgid "disabled"
+msgstr "deaktivert"
+
+msgid "divide"
+msgstr "dele opp"
+
+msgid "Download"
+msgstr "Last ned"
+
+msgid "enable auto wrap"
+msgstr "tillat automatisk innpakning"
+
+msgid "Enabled in item authoring"
+msgstr "Aktivert i oppgaveredigering"
+
+msgid "equal"
+msgstr "lik"
+
+msgid "Experimental only"
+msgstr "Bare eksperimentelt"
+
+msgid "exponent"
+msgstr "eksponent"
+
+msgid "For tests only"
+msgstr "Kun for testing"
+
+msgid "fraction"
+msgstr "brøk"
+
+msgid "Functions"
+msgstr "Funksjoner"
+
+msgid "Gap size"
+msgstr "Mellomromstørrelse"
+
+msgid "Geometry"
+msgstr "Geometri"
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr "Gi kandidaten mulighet til å spille av eget opptak."
+
+msgid "greater than"
+msgstr "større enn"
+
+msgid "greater than or equal"
+msgstr "større enn eller lik"
+
+msgid "id : "
+msgstr "id : "
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr "I bps (bits per sekund). Sett en avveining mellom lydkvalitet og filstørrelse. Med standardverdien (20.000bps) utgjør et opptak på 2 minutter omtrent 300KB."
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr "I sekunder. Maksimal tillatt opptakstid (kan ikke være mindre enn 10 sekunder). Innspillingen stopper automatisk ved oppnådd tid."
+
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr "I sekunder. Tidsintervallet mellom delvise oppdateringer av innspillingen."
+
+msgid "Indefinite integral"
+msgstr "Ubestemt integral"
+
+msgid "is a member of"
+msgstr "er del av"
+
+msgid "is not a member of"
+msgstr "er ikke del av"
+
+msgid "is parallel with"
+msgstr "er parallell med"
+
+msgid "is perpendicular to"
+msgstr "er vinkelrett på"
+
+msgid "Large"
+msgstr "Stor"
+
+msgid "Level"
+msgstr "Nivå"
+
+msgid "ln"
+msgstr "ln"
+
+msgid "log"
+msgstr "logg"
+
+msgid "lower than"
+msgstr "lavere enn"
+
+msgid "lower than or equal"
+msgstr "lavere enn eller lik"
+
+msgid "Manage custom interactions"
+msgstr "Administrer PCI'er"
+
+msgid "Max attempts:"
+msgstr "Maks forsøk:"
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr "Maksimalt antall opptak kandidaten kan gjøre. Sett til 0 for å tillate ubegrensede forsøk. Med en øvre grense på 3 vil kandidaten kunne klikke 2 ganger på tilbakeknappen."
+
+msgid "Medium"
+msgstr "Medium"
+
+msgid "Min:"
+msgstr "Min:"
+
+msgid "minus"
+msgstr "minus"
+
+msgid "Mono"
+msgstr "Mono"
+
+msgid "No Custom Interaction"
+msgstr "Ingen PCI'er"
+
+msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
+msgstr "Antall kanaler for innspillingen. Tillat å kutte opptaksstørrelsen i to hvis det gjøres i mono."
+
+msgid "Operands"
+msgstr "Operander"
+
+msgid "Options"
+msgstr "Alternativer"
+
+msgid "parentheses/round brackets"
+msgstr "parenteser"
+
+msgid "plus"
+msgstr "plus"
+
+msgid "Plus/minus"
+msgstr "Plus/minus"
+
+#, tao-public
+msgid "Portable Custom Interactions"
+msgstr "PCI'er"
+
+msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
+msgstr "Innspilt lyd spoles automatisk tilbake etter at opptaket stopper. Under avspilling er ingen brukerinteraksjon mulig, og alle knappene er deaktivert."
+
+msgid "Recording format"
+msgstr "Opptaksformat"
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr "Opptaket starter automatisk når kandidaten tillater bruk av mikrofon. Hvis en mediefil brukes, starter opptaket automatisk etter at teksten er spilt av."
+
+msgid "Response identifier"
+msgstr "Svaridentifikator"
+
+msgid "Scale size"
+msgstr "Skalastørrelse"
+
+msgid "Sec:"
+msgstr "Sek:"
+
+msgid "set intersection"
+msgstr "sett kryss"
+
+msgid "set union"
+msgstr "sett kombinasjon"
+
+#, tao-public
+msgid "Settings"
+msgstr "Instillinger"
+
+msgid "similar"
+msgstr "lignende"
+
+msgid "sinus"
+msgstr "sinus"
+
+msgid "Small"
+msgstr "Liten"
+
+msgid "square brackets"
+msgstr "firkantede parenteser"
+
+msgid "square root"
+msgstr "kvadratrot"
+
+msgid "Stereo"
+msgstr "Stereo"
+
+msgid "subscript"
+msgstr "abonnement"
+
+msgid "Symbols"
+msgstr "Symboler"
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "Identifikatoren for valget. Denne identifikatoren må ikke brukes av andre svar- eller oppgavevariabler. En identifikator er en tegnrekke som må begynne med en bokstav eller en understreking (\"_\") og inneholde kun bokstaver, understreker, bindestreker (\"-\"), punktum (\".\", Aka punktum), sifre, kombinerttegn og forlengere."
+
+msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
+msgstr "Det finnes allerede en oppgave med samme identifikator \"%s\" (etikett: \"%s\") og samme versjon:%s. Vil du overskrive denne?"
+
+msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
+msgstr "Denne handlingen vil påvirke alle oppgavene som kan bruke den og kan ikke angres. Bekreft valget ditt."
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr "Dette er kun for testformål. Viser en kobling for å laste ned den innspilte filen når innspillingen stopper. Dette bør ikke brukes i en svarfil, da dette vil tillate kandidaten å laste ned sitt eget opptak."
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr "Disse valgene gjør det mulig å sette inn en mediefil som må spilles av før opptak kan skje."
+
+msgid "Time limit:"
+msgstr "Tidsbegrensning:"
+
+msgid "times"
+msgstr "ganger"
+
+msgid "times dot"
+msgstr "ganger punkt"
+
+msgid "Trigonometry"
+msgstr "Trigonometri"
+
+msgid "type : "
+msgstr "type: "
+
+msgid "Unable to upload file %s : %s"
+msgstr "Kan ikke laste opp filen %s: %s"
+
+msgid "Uncompressed"
+msgstr "Ukomprimert"
+
+msgid "Update interval:"
+msgstr "Oppdater intervall:"
+
+msgid "Upload new custom interaction (zip package)"
+msgstr "Last opp ny PCI (zip pakke)"
+
+msgid "use expression with gaps"
+msgstr "bruk uttrykk med mellomrom"
+
+msgid "Use media stimulus"
+msgstr "Bruk mediafiler"
+
+msgid "version : "
+msgstr "versjon: "
+
+msgid "Warning"
+msgstr "Advarsel"
+
+msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr "Ved komprimert innspilling lagres lyden som en webm- eller ogg -fil (mindre størrelse). Som ikke-komprimert, lagres den som en tapsfri Wav -fil (mye større størrelse)."
+
+msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
+msgstr "Du er i ferd med å slette PCI'en <strong>%s </strong> fra systemet."
+
