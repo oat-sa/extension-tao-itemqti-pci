@@ -1,7 +1,7 @@
 /*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
 @import url("base.css");
 
-.qti-customInteraction .likertScaleInteraction ul.likert{
+.qti-customInteraction .likertScaleInteraction ul.likert {
     list-style-type: none;
     margin: 0 5px;
     padding: 0;
@@ -11,16 +11,17 @@
     flex-shrink: 0;
 }
 
-.qti-customInteraction .likertScaleInteraction ul.likert li{
+.qti-customInteraction .likertScaleInteraction ul.likert li,
+body [dir=ltr] .qti-customInteraction .likertScaleInteraction ul.likert li {
     float: left;
     text-align: left;
     list-style-type: none;
 }
-.grid-row[dir=rtl] .qti-customInteraction .likertScaleInteraction ul.likert li{
+[dir=rtl] .qti-customInteraction .likertScaleInteraction ul.likert li {
     float: right;
 }
 
-.qti-customInteraction .likertScaleInteraction ul.likert li input{
+.qti-customInteraction .likertScaleInteraction ul.likert li input {
     margin: 0 3px;
     cursor: pointer;
 }
@@ -31,21 +32,22 @@
     justify-content: flex-start;
 }
 
-.qti-customInteraction .likertScaleInteraction .likert-image-prepend {
+.qti-customInteraction .likertScaleInteraction .likert-image-prepend,
+body [dir=ltr] .qti-customInteraction .likertScaleInteraction .likert-image-prepend {
     top: 2px;
     margin-right: 12px;
 }
-.grid-row[dir=rtl] .likertScaleInteraction .likert-image-prepend {
+[dir=rtl] .likertScaleInteraction .likert-image-prepend {
     margin-right: 0;
     margin-left: 12px;
 }
 
-.qti-customInteraction .likertScaleInteraction .likert-image-append {
+.qti-customInteraction .likertScaleInteraction .likert-image-append,
+body [dir=ltr] .qti-customInteraction .likertScaleInteraction .likert-image-append {
     top: 6px;
     margin-left: 12px;
 }
-
-.grid-row[dir=rtl] .qti-customInteraction .likertScaleInteraction .likert-image-append {
+[dir=rtl] .qti-customInteraction .likertScaleInteraction .likert-image-append {
     margin-left: 0;
     margin-right: 12px;
 }
