@@ -21,6 +21,19 @@ $activeTxtShadow: blacken($activeInteraction, .2);
 $record: $activeInteraction;
 $playback: whiten($info, .3);
 
+@mixin ltr() {
+  &,
+  body [dir=ltr] & {
+      @content;
+  }
+}
+
+@mixin rtl() {
+  [dir=rtl] & {
+      @content;
+  }
+}
+
 
 // =============
 // Interaction
@@ -38,12 +51,22 @@ $playback: whiten($info, .3);
       border-radius: 10px;
       width: 58px;
       padding: 10px;
-      margin-right: 10px;
-      margin-top: 2px;
-      float: left;
 
+      margin-top: 2px;
       display: flex;
       position: relative;
+
+      @include ltr {
+        float: left;
+        margin-right: 10px;
+        margin-left: 0;
+      }
+
+      @include rtl {
+        float: right;
+        margin-right: 0;
+        margin-left: 10px;
+      }
 
       &.record {
         .mic {
@@ -77,7 +100,6 @@ $playback: whiten($info, .3);
     // Controls
 
     .audiorec-control {
-      margin: 10px 10px 10px 0;
       border-radius: 3px;
       font-size: 14px !important;
       cursor: pointer;
@@ -93,6 +115,13 @@ $playback: whiten($info, .3);
       font-style: normal;
       text-align: center;
       height: auto;
+
+      @include ltr {
+        margin: 10px 10px 10px 0;
+      }
+      @include rtl {
+        margin: 10px 0 10px 10px;
+      }
 
       &.disabled {
         background-color: $disabledBg;
@@ -130,6 +159,19 @@ $playback: whiten($info, .3);
       }
     }
 
+    .controls {
+      display: flex;
+
+      @include ltr {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      @include rtl {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+      }
+    }
+
     // Progress bar
 
     @mixin progressBarColor($borderColor, $valueColor, $bgColor) {
@@ -157,6 +199,14 @@ $playback: whiten($info, .3);
       width: 75%;
       height: 10px;
       border-radius: 5px;
+
+      @include ltr {
+        transform: scaleX(1);
+      }
+
+      @include rtl {
+        transform: scaleX(-1);
+      }
 
       @include progressBarColor(darken($disabledBg, .2), $disabledBg, $disabledBg);
 
