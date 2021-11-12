@@ -1,4 +1,6 @@
 <div class="likertScaleInteraction">
     <div class="prompt">{{{prompt}}}</div>
-    <ul class="likert"></ul>
+    <div class="scale">
+        <ul class="likert"></ul>
+    </div>
 </div>
