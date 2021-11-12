@@ -1,26 +1,74 @@
 /*add some style, need to scope (using the typeIdentifier as class prefix) every style declaration to prevent collision */
 @import url("base.css");
 
-.qti-customInteraction .likertScaleInteraction ul.likert{
+.qti-customInteraction .likertScaleInteraction ul.likert {
     list-style-type: none;
     margin: 0 5px;
     padding: 0;
-    display:inline-block;
+    display: inline-block;
     position: relative;
-    top:7px;
+    top: 7px;
+    flex-shrink: 0;
 }
 
-.qti-customInteraction .likertScaleInteraction ul.likert li{
+.qti-customInteraction .likertScaleInteraction ul.likert li,
+body [dir=ltr] .qti-customInteraction .likertScaleInteraction ul.likert li {
     float: left;
     text-align: left;
     list-style-type: none;
 }
+[dir=rtl] .qti-customInteraction .likertScaleInteraction ul.likert li {
+    float: right;
+}
 
-.qti-customInteraction .likertScaleInteraction ul.likert li input{margin: 0 3px; cursor: pointer;}
+.qti-customInteraction .likertScaleInteraction ul.likert li input {
+    margin: 0 3px;
+    cursor: pointer;
+}
 
-.qti-customInteraction .likertScaleInteraction .prompt {position:relative;}
+.qti-customInteraction .likertScaleInteraction .scale {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+}
 
-.qti-customInteraction .likertScaleInteraction .likert-label {min-width:90px; color: #444;}
-.qti-customInteraction .likertScaleInteraction .likert-label-min {text-align: right;}
-.qti-customInteraction .likertScaleInteraction .likert-label-max {text-align: left;}
-.qti-customInteraction .likertScaleInteraction .likert-label img {position:relative; width:16px;}
+.qti-customInteraction .likertScaleInteraction .likert-image-prepend,
+body [dir=ltr] .qti-customInteraction .likertScaleInteraction .likert-image-prepend {
+    top: 2px;
+    margin-right: 12px;
+}
+[dir=rtl] .likertScaleInteraction .likert-image-prepend {
+    margin-right: 0;
+    margin-left: 12px;
+}
+
+.qti-customInteraction .likertScaleInteraction .likert-image-append,
+body [dir=ltr] .qti-customInteraction .likertScaleInteraction .likert-image-append {
+    top: 6px;
+    margin-left: 12px;
+}
+[dir=rtl] .qti-customInteraction .likertScaleInteraction .likert-image-append {
+    margin-left: 0;
+    margin-right: 12px;
+}
+
+.qti-customInteraction .likertScaleInteraction .prompt {
+    position: relative;
+}
+
+.qti-customInteraction .likertScaleInteraction .likert-label {
+    color: #444;
+}
+
+.qti-customInteraction .likertScaleInteraction .likert-label-min {
+    text-align: right;
+}
+
+.qti-customInteraction .likertScaleInteraction .likert-label-max {
+    text-align: left;
+}
+
+.qti-customInteraction .likertScaleInteraction .likert-label img {
+    position: relative;
+    width: 16px;
+}
