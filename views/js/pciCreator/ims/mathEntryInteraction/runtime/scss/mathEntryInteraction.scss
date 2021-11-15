@@ -159,24 +159,6 @@ $defaultGapWidth: 30;
                 border-radius: $buttonRadius;
                 border: 1px solid $borderColor;
 
-                .math-entry-tool {
-                    &:first-child {
-                        @include ltr {
-                            border-top-left-radius: $buttonRadius;
-                            border-bottom-left-radius: $buttonRadius;
-                            border-top-right-radius: 0;
-                            border-bottom-right-radius: 0;
-                            border-right: 1px solid $borderColor;
-                        }
-                        @include rtl {
-                            border-top-left-radius: 0;
-                            border-bottom-left-radius: 0;
-                            border-top-right-radius: $buttonRadius;
-                            border-bottom-right-radius: $buttonRadius;
-                            border-right: none;
-                        }
-                    }
-                }
                 &:last-child {
                     @include rtl {
                         border-right: 1px solid $borderColor;
@@ -214,10 +196,30 @@ $defaultGapWidth: 30;
                     color: $buttonTxtHover;
                 }
 
+                &:first-child {
+                    @include ltr {
+                        border-top-left-radius: $buttonRadius;
+                        border-bottom-left-radius: $buttonRadius;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                        border-right: 1px solid $borderColor;
+                    }
+
+                    @include rtl {
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                        border-top-right-radius: $buttonRadius;
+                        border-bottom-right-radius: $buttonRadius;
+                        border-right: none;
+                    }
+                }
+
                 &:last-child {
                     @include ltr {
                         border-top-right-radius: $buttonRadius;
                         border-bottom-right-radius: $buttonRadius;
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
                         border-right: 0;
                     }
                     @include rtl {
