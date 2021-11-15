@@ -161,8 +161,13 @@ $defaultGapWidth: 30;
 
                 .math-entry-tool {
                     &:first-child {
-                        border-top-left-radius: $buttonRadius;
-                        border-bottom-left-radius: $buttonRadius;
+                        @include ltr {
+                            border-top-left-radius: $buttonRadius;
+                            border-bottom-left-radius: $buttonRadius;
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
+                            border-right: 1px solid $borderColor;
+                        }
                         @include rtl {
                             border-top-left-radius: 0;
                             border-bottom-left-radius: 0;
