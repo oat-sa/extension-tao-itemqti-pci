@@ -153,7 +153,12 @@ $defaultGapWidth: 30;
 
             // Buttons
             .math-entry-toolgroup {
-                margin: 8px 8px 8px 0;
+                @include ltr {
+                    margin: 8px 8px 8px 0;
+                }
+                @include rtl {
+                    margin: 8px 0 8px 8px;
+                }
                 display: inline-block;
 
                 border-radius: $buttonRadius;
