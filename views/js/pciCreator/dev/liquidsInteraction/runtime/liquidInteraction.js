@@ -153,6 +153,8 @@ define(['taoQtiItem/portableLib/jquery_2_1_1', 'qtiCustomInteractionContext', 't
             var zLabel = '4 in'
 
             ctx.lineWidth = lineWidth;
+            ctx.direction = "ltr";
+
             ctx.strokeStyle = 'black';
             ctx.fillStyle = 'white';
 
