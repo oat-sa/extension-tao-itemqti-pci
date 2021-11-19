@@ -18,9 +18,10 @@
 
 import urls from '../../../../taoQtiItem/views/cypress/utils/urls';
 import selectors from '../../../../taoQtiItem/views/cypress/utils/selectors';
+import { getRandomNumber } from '../../../../tao/views/cypress/utils/helpers';
 
 describe('Item Authoring', () => {
-    const className = 'Test E2E class';
+    const className = `Test E2E class ${getRandomNumber()}`;
     const itemName = 'Test E2E item 1';
     const qtiClass = 'customInteraction';
     const pciInteractions = {
@@ -38,50 +39,27 @@ describe('Item Authoring', () => {
      * Visit the page
      */
     before(() => {
-        cy.loginAsAdmin();
-
-        cy.intercept('POST', '**/edit*').as('edit');
-        cy.intercept('POST', `**/${selectors.editClassLabelUrl}`).as('editClassLabel');
-        cy.viewport(1000, 660);
-        cy.visit(urls.items);
-        cy.wait('@edit');
-
-        cy.get(selectors.root).then(root => {
-            if (root.find(`li[title="${className}"] a`).length) {
-                cy.deleteClassFromRoot(
-                    selectors.root,
-                    selectors.itemClassForm,
-                    selectors.deleteClass,
-                    selectors.deleteConfirm,
-                    className,
-                    selectors.deleteClassUrl,
-                    selectors.resourceRelations,
-                    false,
-                    true
-                );
-            }
-        });
+        cy.setup(
+            selectors.treeRenderUrl,
+            selectors.editClassLabelUrl,
+            urls.items,
+            selectors.root
+        );
     });
     after(() => {
         cy.intercept('POST', '**/edit*').as('edit');
         cy.visit(urls.items);
         cy.wait('@edit');
 
-        cy.get(selectors.root).then(root => {
-            if (root.find(`li[title="${className}"] a`).length) {
-                cy.deleteClassFromRoot(
-                    selectors.root,
-                    selectors.itemClassForm,
-                    selectors.deleteClass,
-                    selectors.deleteConfirm,
-                    className,
-                    selectors.deleteClassUrl,
-                    selectors.resourceRelations,
-                    false,
-                    true
-                );
-            }
-        });
+        cy.deleteClassFromRoot(
+            selectors.root,
+            selectors.itemClassForm,
+            selectors.deleteClass,
+            selectors.deleteConfirm,
+            className,
+            selectors.deleteClassUrl,
+            true
+        );
     });
     /**
      * Tests
