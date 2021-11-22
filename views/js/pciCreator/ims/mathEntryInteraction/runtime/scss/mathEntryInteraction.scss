@@ -47,6 +47,18 @@
 
 }
 
+@mixin ltr() {
+    &,
+    body [dir=ltr] & {
+        @content;
+    }
+}
+
+@mixin rtl() {
+    [dir=rtl] & {
+        @content;
+    }
+}
 
 // =============
 // PCI
@@ -115,6 +127,13 @@ $defaultGapWidth: 30;
                 width: 100%;
                 border: 0;
                 min-height: 23px;
+                direction: ltr;
+                @include ltr {
+                    text-align: left;
+                }
+                @include rtl {
+                    text-align: right;
+                }
             }
 
             .mq-editable-field {
@@ -141,21 +160,23 @@ $defaultGapWidth: 30;
 
             // Buttons
             .math-entry-toolgroup {
-                margin: 8px 8px 8px 0;
+                @include ltr {
+                    margin: 8px 8px 8px 0;
+                }
+                @include rtl {
+                    margin: 8px 0 8px 8px;
+                }
                 display: inline-block;
 
                 border-radius: $buttonRadius;
                 border: 1px solid $borderColor;
 
-                .math-entry-tool {
-                    &:first-child {
-                        border-top-left-radius: $buttonRadius;
-                        border-bottom-left-radius: $buttonRadius;
+                &:last-child {
+                    @include rtl {
+                        border-right: 1px solid $borderColor;
                     }
-                    &:last-child {
-                        border-top-right-radius: $buttonRadius;
-                        border-bottom-right-radius: $buttonRadius;
-                    }
+                    border-top-right-radius: $buttonRadius;
+                    border-bottom-right-radius: $buttonRadius;
                 }
             }
 
@@ -187,12 +208,42 @@ $defaultGapWidth: 30;
                     color: $buttonTxtHover;
                 }
 
+                &:first-child {
+                    @include ltr {
+                        border-top-left-radius: $buttonRadius;
+                        border-bottom-left-radius: $buttonRadius;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                        border-right: 1px solid $borderColor;
+                    }
+
+                    @include rtl {
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                        border-top-right-radius: $buttonRadius;
+                        border-bottom-right-radius: $buttonRadius;
+                        border-right: none;
+                    }
+                }
+
                 &:last-child {
-                    border-right: none;
+                    @include ltr {
+                        border-top-right-radius: $buttonRadius;
+                        border-bottom-right-radius: $buttonRadius;
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                        border-right: 0;
+                    }
+                    @include rtl {
+                        border-right: 1px solid blacken($borderColor, 0.2);
+                        border-top-left-radius: $buttonRadius;
+                        border-bottom-left-radius: $buttonRadius;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                    }
                 }
 
             }
-
         }
     }
 }
