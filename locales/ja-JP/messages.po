@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.4.0-sprint117\n"
-"PO-Revision-Date: 2020-09-22T16:02:16\n"
+"Project-Id-Version: TAO 2021.10\n"
+"PO-Revision-Date: 2021-11-29T18:11:10\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja-JP\n"
@@ -12,9 +12,6 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-
-msgid "A newer version of the pci \"%s\" already exists (current version: %s, target version: %s)"
-msgstr "新しいバージョンのpci \"%s\" はすでに存在します（現在バージョン：%s、ターゲットバージョン：%s）"
 
 msgid "Add gap"
 msgstr "穴埋め追加"
@@ -36,6 +33,9 @@ msgstr "音声ビットレート:"
 
 msgid "authorize white space"
 msgstr "スペースの入力許可"
+
+msgid "Auto playback recording"
+msgstr ""
 
 msgid "Auto start recording"
 msgstr "自動録音開始"
@@ -70,8 +70,14 @@ msgstr "無効"
 msgid "divide"
 msgstr "÷ 除算"
 
+msgid "Download"
+msgstr ""
+
 msgid "enable auto wrap"
 msgstr "自動改行有効"
+
+msgid "Enabled in item authoring"
+msgstr ""
 
 msgid "equal"
 msgstr "= イコール"
@@ -94,6 +100,9 @@ msgstr "関数"
 msgid "Gap size"
 msgstr "穴埋めのサイズ"
 
+msgid "Geometry"
+msgstr ""
+
 msgid "Give the possibility to the test taker to playback its own recording."
 msgstr "受検者は自分が録音した声を，再生して聞くことができます"
 
@@ -112,8 +121,26 @@ msgstr "オーディオ品質とファイルサイズのバランスを設定し
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "秒単位で設定。設定時間に達すると録音は自動的に停止します。10秒未満は設定できません。"
 
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr ""
+
 msgid "Indefinite integral"
 msgstr "不定積分"
+
+msgid "Invalid files have been removed"
+msgstr ""
+
+msgid "is a member of"
+msgstr ""
+
+msgid "is not a member of"
+msgstr ""
+
+msgid "is parallel with"
+msgstr ""
+
+msgid "is perpendicular to"
+msgstr ""
 
 msgid "Large"
 msgstr "大"
@@ -179,6 +206,9 @@ msgstr "± プラス/マイナス"
 msgid "Portable Custom Interactions"
 msgstr "PCI（Portable Custom Interactions）"
 
+msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
+msgstr ""
+
 msgid "Recording format"
 msgstr "録音フォーマット"
 
@@ -194,9 +224,18 @@ msgstr "縮尺"
 msgid "Sec:"
 msgstr "秒："
 
+msgid "set intersection"
+msgstr ""
+
+msgid "set union"
+msgstr ""
+
 #, tao-public
 msgid "Settings"
 msgstr "設定"
+
+msgid "similar"
+msgstr ""
 
 msgid "sinus"
 msgstr "sin"
@@ -254,6 +293,9 @@ msgstr "アップロードができません %s : %s"
 
 msgid "Uncompressed"
 msgstr "非圧縮"
+
+msgid "Update interval:"
+msgstr ""
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "新規カスタムインタラクションをアップロード（ZIPパッケージ）"

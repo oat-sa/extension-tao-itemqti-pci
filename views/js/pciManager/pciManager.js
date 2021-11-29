@@ -335,7 +335,7 @@ define([
                             });
 
                             if (files.length !== givenLength) {
-                                feedback().error('Invalid files have been removed');
+                                feedback().error(__('Invalid files have been removed'));
                             }
 
                             //reset selectedFiles list
