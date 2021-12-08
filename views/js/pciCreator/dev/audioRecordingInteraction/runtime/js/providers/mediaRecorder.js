@@ -80,7 +80,8 @@ define([
             'audio/ogg;codecs=opus',
             'audio/webm;codecs=opus',
             'audio/webm',
-            'audio/ogg'
+            'audio/ogg',
+            'audio/mp4'
         ];
 
         // set the prefered encoding format, if we are able to detect what is supported
