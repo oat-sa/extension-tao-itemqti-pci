@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace oat\qtiItemPci\migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\Exception\IrreversibleMigration;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\model\PciModel;
