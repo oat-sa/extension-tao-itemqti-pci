@@ -140,10 +140,10 @@ msgid "Level"
 msgstr "مستوى"
 
 msgid "ln"
-msgstr "لوغارتم طبيعي (النبري)"
+msgstr ""
 
 msgid "log"
-msgstr "لوغارتيم عشري"
+msgstr ""
 
 msgid "lower than"
 msgstr "أقل من"
