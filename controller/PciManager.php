@@ -15,15 +15,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2014-2022 (original work) Open Assessment Technologies SA;
  *
  */
 
 namespace oat\qtiItemPci\controller;
 
-use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
-use oat\tao\model\routing\AnnotationReader\security;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
@@ -86,7 +84,6 @@ class PciManager extends \tao_actions_CommonModule
      */
     public function getRegisteredImplementations()
     {
-
         $returnValue = [];
 
         $pciModels = $this->getPciModels();
@@ -227,20 +224,17 @@ class PciManager extends \tao_actions_CommonModule
 
     /**
      * Export PCI zip package with all runtime, creator & manifest files
-     * Not used yet
-     * @todo Download path e.q. $path
      */
     public function export()
     {
         //as upload may be called multiple times, we remove the session lock as soon as possible
         session_write_close();
-
+        $requestPayload = $this->getPsrRequest()->getQueryParams();
         try {
-            if (!$this->hasRequestParameter('typeIdentifier')) {
-                throw new PortableElementException('Type identifier parameter missing.');
+            if (!isset($requestPayload['typeIdentifier'], $requestPayload['pciIdentifier'])) {
+                throw new PortableElementException('PCI parameter missing.');
             }
-            $identifier = $this->getRequestParameter('typeIdentifier');
-            $path = $this->getService()->export(PciModel::PCI_IDENTIFIER, $identifier);
+            $path = $this->getService()->export($requestPayload['pciIdentifier'], $requestPayload['typeIdentifier']);
             \tao_helpers_Http::returnFile($path);
         } catch (\common_Exception $e) {
             $this->returnJson(['error' => $e->getMessage()]);
