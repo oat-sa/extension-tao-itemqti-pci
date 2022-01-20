@@ -254,6 +254,7 @@ class PciManager extends \tao_actions_CommonModule
         $data['version'] = $object->getVersion();
         $data['enabled'] = $object->isEnabled();
         $data['model'] = $object->getModelLabel();
+        $data['pci_identifier'] = $object->getModelId();
         return $data;
     }
 
