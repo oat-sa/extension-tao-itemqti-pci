@@ -109,7 +109,8 @@ define([
              */
             inQtiCreator: function isInCreator() {
                 if (_.isUndefined(this._inQtiCreator) && this.$container) {
-                    this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
+                    this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context') || 
+                        this.$container.find('.tao-qti-creator-context').length > 0;
                 }
                 return this._inQtiCreator;
             },
@@ -240,6 +241,7 @@ define([
                     handlers: {
                         edit: function onChange() {
                             self.autoWrapContent();
+                            self.instance.trigger('responseChange', [ self.mathField.latex() ]);
                         },
                         enter: function onEnter(mathField) {
                             // The "allow new line" option works under the following conditions:
@@ -668,8 +670,9 @@ define([
              * @param {Node} dom
              * @param {Object} config - json
              */
-            initialize: function initialize(dom, config) {
+            initialize: function initialize(dom, config, instance) {
                 this.dom = dom;
+                this.instance = instance;
 
                 this.$container         = $(dom);
                 this.$toolbar           = this.$container.find('.toolbar');
@@ -785,16 +788,6 @@ define([
         getInstance: function getInstance(dom, config, state) {
             var mathEntryInteraction = mathEntryInteractionFactory();
 
-            // initialize and set previous response/state
-            mathEntryInteraction.initialize(dom, config.properties);
-
-            var boundTo = config.boundTo;
-            var responseIdentifier = Object.keys(boundTo)[0];
-            let response = boundTo[responseIdentifier];
-
-            mathEntryInteraction.setResponse(response);
-            mathEntryInteraction.setSerializedState(state);
-
             // create a IMS PCI instance object that will be provided in onready
             var pciInstance = {
                 getResponse: function getResponse() {
@@ -817,6 +810,16 @@ define([
 
             // event manager is necessary only for creator part
             event.addEventMgr(pciInstance);
+
+            // initialize and set previous response/state
+            mathEntryInteraction.initialize(dom, config.properties, pciInstance);
+
+            var boundTo = config.boundTo;
+            var responseIdentifier = Object.keys(boundTo)[0];
+            let response = boundTo[responseIdentifier];
+
+            mathEntryInteraction.setResponse(response);
+            mathEntryInteraction.setSerializedState(state);
 
             pciInstance.on('configChange', function (properties) {
                 mathEntryInteraction.render(properties);
