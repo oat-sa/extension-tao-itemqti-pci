@@ -13,14 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2022 (original work) Open Assessment Technologies SA;
  *
  */
 define([
     'jquery',
     'i18n',
     'lodash',
-    'helpers',
     'ui/component',
     'ui/hider',
     'ui/switch/switch',
@@ -35,13 +34,28 @@ define([
     'ui/modal',
     'ui/uploader',
     'ui/filesender'
-], function ($, __, _, helpers, component, hider, switchFactory, buttonFactory, layoutTpl, listingTpl, packageMetaTpl, asyncLib, confirmBox, dialog, feedback) {
+], function (
+    $,
+    __,
+    _,
+    component,
+    hider,
+    switchFactory,
+    buttonFactory,
+    layoutTpl,
+    listingTpl,
+    packageMetaTpl,
+    asyncLib,
+    confirmBox,
+    dialog,
+    feedback
+) {
     'use strict';
 
-    var _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
+    const _fileTypeFilters = ['application/zip', 'application/x-zip-compressed', 'application/x-zip'],
         _fileExtFilter = /.+\.(zip)$/;
 
-    var _defaults = {
+    const _defaults = {
         loadUrl: null,
         disableUrl: null,
         enableUrl: null,
@@ -49,7 +63,7 @@ define([
         addUrl: null
     };
 
-    var pciManager = {
+    const pciManager = {
         open: function open() {
             this.trigger('showListing');
             this.getElement().appendTo('.pci-manager');
@@ -68,8 +82,7 @@ define([
      * @returns {*}
      */
     return function pciManagerFactory(config) {
-
-        var listing = {};
+        let listing = {};
 
         /**
          * Create pci manager component
@@ -85,7 +98,7 @@ define([
         return component(pciManager, _defaults)
             .setTemplate(layoutTpl)
             .on('showListing', function () {
-                var $fileSelector = this.getElement().find('.file-selector'),
+                const $fileSelector = this.getElement().find('.file-selector'),
                     $title = $fileSelector.find('.title'),
                     $uploader = $fileSelector.find('.file-upload-container'),
                     $uploadForm = $uploader.parent('form'),
@@ -100,7 +113,7 @@ define([
                 this.trigger('updateListing');
             })
             .on('hideListing', function () {
-                var $fileSelector = this.getElement().find('.file-selector'),
+                const $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty'),
                     $title = $fileSelector.find('.title'),
@@ -110,7 +123,7 @@ define([
 
                 hider.show($switcher.filter('.listing'));
                 hider.hide($switcher.filter('.upload'));
-                $switcher.filter('.listing').css({display: 'inline-block'});
+                $switcher.filter('.listing').css({ display: 'inline-block' });
                 $uploadForm.show();
                 hider.hide($fileContainer);
                 hider.hide($placeholder);
@@ -120,27 +133,27 @@ define([
                 hider.show($uploader);
             })
             .on('updateListing', function () {
-                var self = this,
+                const self = this,
                     urls = _.pick(this.config, ['disableUrl', 'enableUrl', 'unregisterUrl', 'exportPciUrl']),
                     $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty');
                 if (_.size(listing)) {
-
                     hider.hide($placeholder);
 
-                    $fileContainer
-                        .empty()
-                        .html(listingTpl({
+                    $fileContainer.empty().html(
+                        listingTpl({
                             interactions: listing
-                        }));
+                        })
+                    );
                     $fileContainer.find('.actions').each(function () {
-                        var pciDownloadButton = $(this).find('.pci-download-button');
-                        var pciswitch = $(this).find('.pci-switch');
-                        var pciUnregisterButton = $(this).find('.pci-unregister-button');
-                        var $li = $(this).closest('li');
-                        var typeIdentifier = $li.data('typeIdentifier');
-                        var runtimeOnly = listing[typeIdentifier].runtimeOnly;
+                        const pciDownloadButton = $(this).find('.pci-download-button');
+                        const pciswitch = $(this).find('.pci-switch');
+                        const pciUnregisterButton = $(this).find('.pci-unregister-button');
+                        const $li = $(this).closest('li');
+                        const typeIdentifier = $li.data('typeIdentifier');
+                        const pciIdentifier = $li.data('pciIdentifier');
+                        const runtimeOnly = listing[typeIdentifier].runtimeOnly;
                         if (!runtimeOnly) {
                             switchFactory(pciswitch, {
                                 on: {
@@ -152,7 +165,7 @@ define([
                             })
                                 .on('on', function () {
                                     $li.removeClass('pci-disabled');
-                                    $.getJSON(urls.enableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                    $.getJSON(urls.enableUrl, { typeIdentifier: typeIdentifier }, function (data) {
                                         if (data.success) {
                                             listing[typeIdentifier].enabled = true;
                                             self.trigger('pciEnabled', typeIdentifier);
@@ -161,7 +174,7 @@ define([
                                 })
                                 .on('off', function () {
                                     $li.addClass('pci-disabled');
-                                    $.getJSON(urls.disableUrl, {typeIdentifier: typeIdentifier}, function (data) {
+                                    $.getJSON(urls.disableUrl, { typeIdentifier: typeIdentifier }, function (data) {
                                         if (data.success) {
                                             listing[typeIdentifier].enabled = false;
                                             self.trigger('pciDisabled', typeIdentifier);
@@ -176,50 +189,54 @@ define([
                             label: __('Delete'),
                             class: 'unregister',
                             renderTo: pciUnregisterButton
-                        })
-                            .on('click', function confirmDialog() {
-                                dialog({
-                                    class: 'icon-warning',
-                                    heading: __('Warning'),
-                                    message: __('You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system.', typeIdentifier),
-                                    content: __('This action will affect all items that may be using it and cannot be undone. Please confirm your choice.'),
-                                    autoRender: true,
-                                    autoDestroy: true,
-                                    buttons: [
-                                        {
-                                            id: 'cancel',
-                                            type: 'regular',
-                                            label: __('Cancel'),
-                                            close: true
-                                        },
-                                        {
-                                            id: 'delete',
-                                            type: 'error',
-                                            label: __('Delete'),
-                                            close: true
-                                        }],
-                                    onDeleteBtn: function onDeleteBtn() {
-                                        $.getJSON(urls.unregisterUrl, {typeIdentifier: typeIdentifier}, function (data) {
-                                            if (data.success) {
-                                                delete listing[typeIdentifier];
-                                                self.trigger('pciDisabled', typeIdentifier);
-                                            }
-                                        });
+                        }).on('click', function confirmDialog() {
+                            dialog({
+                                class: 'icon-warning',
+                                heading: __('Warning'),
+                                message: __(
+                                    'You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system.',
+                                    typeIdentifier
+                                ),
+                                content: __(
+                                    'This action will affect all items that may be using it and cannot be undone. Please confirm your choice.'
+                                ),
+                                autoRender: true,
+                                autoDestroy: true,
+                                buttons: [
+                                    {
+                                        id: 'cancel',
+                                        type: 'regular',
+                                        label: __('Cancel'),
+                                        close: true
+                                    },
+                                    {
+                                        id: 'delete',
+                                        type: 'error',
+                                        label: __('Delete'),
+                                        close: true
                                     }
-                                });
+                                ],
+                                onDeleteBtn: function onDeleteBtn() {
+                                    $.getJSON(urls.unregisterUrl, { typeIdentifier: typeIdentifier }, function (data) {
+                                        if (data.success) {
+                                            delete listing[typeIdentifier];
+                                            self.trigger('pciDisabled', typeIdentifier);
+                                        }
+                                    });
+                                }
                             });
+                        });
 
-                        if(!runtimeOnly) {
+                        if (!runtimeOnly) {
                             buttonFactory({
                                 id: 'exportPci',
                                 type: 'info',
                                 icon: 'import',
                                 label: __('Download'),
                                 renderTo: pciDownloadButton
-                            })
-                                .on('click', function () {
-                                    window.location = (urls.exportPciUrl + '?typeIdentifier=' + typeIdentifier);
-                                })
+                            }).on('click', function () {
+                                window.location =`${urls.exportPciUrl}?typeIdentifier=${typeIdentifier}&pciIdentifier=${pciIdentifier}`;
+                            });
                         }
                     });
 
@@ -236,15 +253,14 @@ define([
                 this.trigger('updateListing');
             })
             .on('render', function () {
-
                 //init variables:
-                var self = this,
+                const self = this,
                     urls = _.pick(this.config, ['loadUrl', 'disableUrl', 'enableUrl', 'verifyUrl', 'addUrl']),
                     $container = this.getElement(),
                     $fileSelector = $container.find('.file-selector'),
                     $uploader = $fileSelector.find('.file-upload-container'),
-                    $switcher = $fileSelector.find('.upload-switcher a'),
-                    $uploadForm;
+                    $switcher = $fileSelector.find('.upload-switcher a');
+                let $uploadForm;
 
                 //init event listeners
                 initEventListeners();
@@ -271,67 +287,61 @@ define([
                 }
 
                 function initUploader() {
-
-                    var errors = [],
+                    let errors = [],
                         selectedFiles = {};
 
-                    $uploader.on('upload.uploader', function (e, file, interactionHook) {
-
-                        listing[interactionHook.typeIdentifier] = interactionHook;
-                        self.trigger('pciAdded', interactionHook.typeIdentifier);
-
-                    })
+                    $uploader
+                        .on('upload.uploader', function (e, file, interactionHook) {
+                            listing[interactionHook.typeIdentifier] = interactionHook;
+                            self.trigger('pciAdded', interactionHook.typeIdentifier);
+                        })
                         .on('fail.uploader', function (e, file, err) {
-
-                        errors.push(__('Unable to upload file %s : %s', file.name, err));
-
-                    })
+                            errors.push(__('Unable to upload file %s : %s', file.name, err));
+                        })
                         .on('end.uploader', function () {
-
-                        if (errors.length === 0) {
-                            self.trigger('showListing');
-                        } else {
-                            feedback().error("<ul><li>" + errors.join('</li><li>') + "</li></ul>", {encodeHtml: false});
-                        }
-                        //reset errors
-                        errors = [];
-
-                    })
-                        .on('create.uploader', function () {
-
-                        //get ref to the uploadForm for later verification usage
-                        $uploadForm = $uploader.parent('form');
-                        $uploadForm.hide();
-
-                    })
-                        .on('fileselect.uploader', function () {
-                        $uploadForm.find('li[data-file-name]').each(function () {
-
-                            var $li = $(this),
-                                filename = $li.data('file-name'),
-                                packageMeta = selectedFiles[filename];
-
-                            if (packageMeta) {
-                                //update label:
-                                $li.prepend(packageMetaTpl(packageMeta));
+                            if (errors.length === 0) {
+                                self.trigger('showListing');
+                            } else {
+                                feedback().error(`<ul><li>${errors.join('</li><li>')}</li></ul>`, {
+                                    encodeHtml: false
+                                });
                             }
-                        });
+                            //reset errors
+                            errors = [];
+                        })
+                        .on('create.uploader', function () {
+                            //get ref to the uploadForm for later verification usage
+                            $uploadForm = $uploader.parent('form');
+                            $uploadForm.hide();
+                        })
+                        .on('fileselect.uploader', function () {
+                            $uploadForm.find('li[data-file-name]').each(function () {
+                                const $li = $(this),
+                                    filename = $li.data('file-name'),
+                                    packageMeta = selectedFiles[filename];
 
-                    });
+                                if (packageMeta) {
+                                    //update label:
+                                    $li.prepend(packageMetaTpl(packageMeta));
+                                }
+                            });
+                        });
 
                     $uploader.uploader({
                         upload: true,
                         multiple: true,
                         uploadUrl: urls.addUrl,
                         fileSelect: function fileSelect(files, done) {
-
-                            var givenLength = files.length;
+                            const givenLength = files.length;
 
                             //check the mime-type
                             files = _.filter(files, function (file) {
                                 // for some weird reasons some browsers have quotes around the file type
-                                var checkType = file.type.replace(/("|')/g, '');
-                                return _.contains(_fileTypeFilters, checkType) || (checkType === '' && _fileExtFilter.test(file.name));
+                                const checkType = file.type.replace(/("|')/g, '');
+                                return (
+                                    _.contains(_fileTypeFilters, checkType) ||
+                                    (checkType === '' && _fileExtFilter.test(file.name))
+                                );
                             });
 
                             if (files.length !== givenLength) {
@@ -347,12 +357,10 @@ define([
                     });
 
                     function verify(file, cb) {
-
                         $uploadForm.sendfile({
                             url: urls.verifyUrl,
                             file: file,
                             loaded: function (r) {
-
                                 function done(ok) {
                                     if (ok) {
                                         selectedFiles[file.name] = {
@@ -368,12 +376,19 @@ define([
                                 if (r.valid) {
                                     if (r.exists) {
                                         confirmBox(
-                                            __('There is already one interaction with the same identifier "%s" (label : "%s") and same version : %s. Do you want to override the existing one ?', r.typeIdentifier, r.label, r.version),
+                                            __(
+                                                'There is already one interaction with the same identifier "%s" (label : "%s") and same version : %s. Do you want to override the existing one ?',
+                                                r.typeIdentifier,
+                                                r.label,
+                                                r.version
+                                            ),
                                             function () {
                                                 done(true);
-                                            }, function () {
+                                            },
+                                            function () {
                                                 done(false);
-                                            });
+                                            }
+                                        );
                                     } else {
                                         done(true);
                                     }
@@ -396,7 +411,6 @@ define([
                         });
                     }
                 }
-
             })
             .init(config);
     };
