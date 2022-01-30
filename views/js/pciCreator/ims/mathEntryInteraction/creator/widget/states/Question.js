@@ -99,6 +99,7 @@ define([
 
             authorizeWhiteSpace: toBoolean(interaction.prop('authorizeWhiteSpace'), false),
             useGapExpression: toBoolean(interaction.prop('useGapExpression'), false),
+            focusOnDenominator: toBoolean(interaction.prop('focusOnDenominator'), false),
 
             tool_frac:      toBoolean(interaction.prop('tool_frac'),    true),
             tool_sqrt:      toBoolean(interaction.prop('tool_sqrt'),    true),
@@ -168,6 +169,7 @@ define([
                 configChangeCallBack(i, newStyle, 'gapStyle');
             },
             authorizeWhiteSpace: configChangeCallBack,
+            focusOnDenominator: configChangeCallBack,
 
             tool_frac:      configChangeCallBack,
             tool_sqrt:      configChangeCallBack,

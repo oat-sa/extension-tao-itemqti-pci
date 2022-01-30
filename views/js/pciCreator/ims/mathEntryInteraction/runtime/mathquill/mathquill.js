@@ -2463,9 +2463,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         _.placeCursor = function(cursor) {
             //insert the cursor at the right end of the first empty child, searching
             //left-to-right, or if none empty, the right end child
-            cursor.insAtRightEnd(this.foldChildren(this.ends[L], function(leftward, child) {
-                return leftward.isEmpty() ? leftward : child;
-            }));
+            cursor.insAtRightEnd(this.foldChildren(this.ends[cursor.options.focusOnDenominator ? R : L]
+                , function (leftward, child) { return leftward.isEmpty() ? leftward : child; }
+              ));
         };
 
         // editability methods: called by the cursor for editing, cursor movements,
@@ -4094,12 +4094,19 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         ctrlSeqStrict: '<', htmlStrict: '&lt;', textStrict: '<' };
     var greater = { ctrlSeq: '\\ge ', html: '&ge;', text: '\u2265',
         ctrlSeqStrict: '>', htmlStrict: '&gt;', textStrict: '>' };
+    var geq = { ctrlSeq: '\\geq ', html: '\u2267', text: '\u2267',
+        ctrlSeqStrict: '>', htmlStrict: '\u2267', textStrict: '>' };
+    var leq = { ctrlSeq: '\\leq ', html: '\u2266', text: '\u2266',
+        ctrlSeqStrict: '<', htmlStrict: '\u2266', textStrict: '<' };
+
 
     LatexCmds['<'] = LatexCmds.lt = bind(Inequality, less, true);
     LatexCmds['>'] = LatexCmds.gt = bind(Inequality, greater, true);
-    LatexCmds['\u2264'] = LatexCmds.le = LatexCmds.leq = bind(Inequality, less, false);
-    LatexCmds['\u2265'] = LatexCmds.ge = LatexCmds.geq = bind(Inequality, greater, false);
-
+    LatexCmds['\u2264'] = LatexCmds.le = bind(Inequality, less, false);
+    LatexCmds['\u2265'] = LatexCmds.ge = bind(Inequality, greater, false);
+    LatexCmds.leq = bind(Inequality, leq, false);
+    LatexCmds.geq = bind(Inequality, geq, false);
+    
     var Equality = P(BinaryOperator, function(_, super_) {
         _.init = function() {
             super_.init.call(this, '=', '=');

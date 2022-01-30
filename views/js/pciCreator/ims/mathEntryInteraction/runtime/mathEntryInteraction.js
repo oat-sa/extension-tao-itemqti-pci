@@ -181,6 +181,7 @@ define([
 
                 this.config = {
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
+                    focusOnDenominator: toBoolean(config.focusOnDenominator, false),
                     useGapExpression:    toBoolean(config.useGapExpression, false),
                     gapExpression:       config.gapExpression || '',
                     gapStyle:            config.gapStyle,
@@ -238,6 +239,7 @@ define([
                 var self = this;
                 return {
                     spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
+                    focusOnDenominator: this.config.focusOnDenominator,
                     handlers: {
                         edit: function onChange() {
                             self.autoWrapContent();
@@ -528,7 +530,8 @@ define([
                 var self = this,
                     availableTools = {
                         frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
-                        sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
+                        sqrt:   { label: '&radic;<span style="text-decoration:overline;">&nbsp;&nbsp;</span>',
+                            latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
                         exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
                         log:    { label: 'log',         latex: '\\log',     fn: 'cmd',      desc: 'Log' },
                         ln:     { label: 'ln',          latex: '\\ln',      fn: 'cmd',      desc: 'Ln' },
