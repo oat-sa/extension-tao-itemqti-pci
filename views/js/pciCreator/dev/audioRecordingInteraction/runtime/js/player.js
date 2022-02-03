@@ -24,8 +24,9 @@
 define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/OAT/util/event'
-], function(_, $, event) {
+    'taoQtiItem/portableLib/OAT/util/event',
+    'ui/dialog'
+], function (_, $, event, dialog) {
     'use strict';
 
     /**
@@ -90,6 +91,17 @@ define([
             state = newState;
             playerInstance.trigger('statechange');
             playerInstance.trigger(newState);
+        }
+
+        function errorDialog(message) {
+            var dlg = dialog({
+                message: message,
+                autoRender: true,
+                autoDestroy: true,
+                buttons: ''
+            });
+            $('.preview-modal-feedback').addClass('icon-info');
+            return dlg;
         }
 
         player = {
@@ -181,7 +193,11 @@ define([
              * Start the playback
              */
             play: function play() {
-                audioEl.play();
+                return Promise.reject(new DOMException('', 'NotSupportedError')).catch((e) => {
+                    console.log('play error', e);
+                    errorDialog('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.');
+                });
+                // audioEl.play().catch((e) => console.log('play error', e));
                 // state change has to be triggered by the onplaying listener
             },
 
