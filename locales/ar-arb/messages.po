@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.4.0-sprint160\n"
-"PO-Revision-Date: 2021-07-27T12:35:59\n"
+"PO-Revision-Date: 2021-12-28 10:44+0100\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ar-arb\n"
@@ -9,6 +9,9 @@ msgstr ""
 "targetLanguage: ar-arb\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: \n"
+"X-Generator: Poedit 2.4.3\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 
 msgid "Add gap"
 msgstr "أضف فراغا"
@@ -251,7 +254,7 @@ msgid "The identifier of the choice. This identifier must not be used by any oth
 msgstr "معرّف الاختيار. يجب عدم استخدام هذا المعرف من قبل أي استجابة أخرى أو متغير بند. المعرّف هو سلسلة من الأحرف التي يجب أن تبدأ بحرف أو شرطة سفلية (\"_\") وتحتوي فقط على أحرف ، وشرطات سفلية ، وواصلات (\"-\") ، ونقطة (\".\" ، ويعرف أيضًا باسم النقطة الكاملة) ، وأرقام ، والجمع بين الأحرف والموسعات."
 
 msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
-msgstr "يوجد بالفعل تفاعل واحد مع نفس المعرف \"٪ s\" (التسمية: \"٪ s\") ونفس الإصدار:٪ s. هل تريد تجاوز الموجود؟"
+msgstr "يوجد بالفعل تفاعل واحد مع نفس المعرف  \"%s\" (التسمية: \"%s\") ونفس الصيغة: %s . هل تريد تجاوز الموجود؟"
 
 msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
 msgstr "سيؤثر هذا الإجراء على جميع البنود التي ربما تستخدمه ولا يمكن التراجع عنه. يرجى تأكيد اختيارك."
@@ -266,7 +269,7 @@ msgid "Time limit:"
 msgstr "المهلة الزمنية:"
 
 msgid "times"
-msgstr " المرات"
+msgstr "المرات"
 
 msgid "times dot"
 msgstr "التوقيت"
@@ -278,7 +281,7 @@ msgid "type : "
 msgstr "نمط/طراز "
 
 msgid "Unable to upload file %s : %s"
-msgstr "تعذر تحميل الملف٪ s:٪ s"
+msgstr "تعذر تحميل الملف %s : %s"
 
 msgid "Uncompressed"
 msgstr "غير مضغوط"
@@ -302,4 +305,4 @@ msgid "With compressed recording, the audio is saved as a webm or ogg file (smal
 msgstr "مع التسجيل المضغوط، يتم حفظ الصوت كملف webm أو  ogg ( حجم أصغر) . غير مضغوط، كملف wav  من غير ضاع  ( حجم أكبر بكثير)"
 
 msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
-msgstr "أنت على وشك حذف التفاعل المعتاد المحمول <strong>٪ s </strong> من النظام."
+msgstr "أنت على وشك حذف التفاعل المعتاد المحمول <strong>%s</strong> من النظام."
