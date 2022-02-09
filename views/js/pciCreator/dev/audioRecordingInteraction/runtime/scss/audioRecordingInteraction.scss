@@ -21,6 +21,10 @@ $activeTxtShadow: blacken($activeInteraction, .2);
 $record: $activeInteraction;
 $playback: whiten($info, .3);
 
+$info: rgb(14, 93, 145);
+$infoBgColor: whiten($info, 0.8);
+$infoBorderColor: whiten($info, 0.1);
+
 @mixin ltr() {
   &,
   body [dir=ltr] & {
@@ -268,29 +272,29 @@ $playback: whiten($info, .3);
             position: absolute;
             background: $uiGeneralContentBg;
           }
-        
+
           .countdown-pie-spinner {
             border-radius: 100% 0 0 100% / 50% 0 0 50%;
             z-index: 20;
             border-right: none;
             animation: rota 15s linear 1 forwards paused;
           }
-        
+
           &:hover .countdown-pie-spinner,
-          &:hover .countdown-pie-filler, 
+          &:hover .countdown-pie-filler,
           &:hover .countdown-pie-mask {
-            cursor: not-allowed;   
+            cursor: not-allowed;
           }
-        
+
           .countdown-pie-filler {
-            border-radius: 0 100% 100% 0 / 0 50% 50% 0; 
+            border-radius: 0 100% 100% 0 / 0 50% 50% 0;
             left: 50%;
             opacity: 0;
             z-index: 100;
             border-left: none;
             animation: opa 15s steps(1,end) 1 reverse forwards paused;
           }
-        
+
           .countdown-pie-mask {
             width: 50%;
             height: 100%;
@@ -303,12 +307,12 @@ $playback: whiten($info, .3);
             border-right: 0;
             animation: opa 15s steps(1,end) 1 forwards paused;
           }
-        
+
           @keyframes rota {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
           }
-        
+
           @keyframes opa {
             0% { opacity: 1; }
             50%, 100% { opacity: 0; }
@@ -324,3 +328,116 @@ $playback: whiten($info, .3);
   }
 }
 
+/* Modal styles */
+.modal {
+    background-color: $infoBgColor;
+    border: 1px solid $infoBorderColor;
+    box-shadow: 3px 3px 5px #666666;
+    height: auto;
+    opacity: 0;
+    top: -1000px;
+    padding: 40px;
+    position: fixed;
+    z-index: 105002;
+    margin: auto;
+    left: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 100vw;
+    max-height: calc(100vh - 40px);
+
+    &:focus {
+        outline: none;
+    }
+
+    .modal-close {
+        position: absolute;
+        right: 12px;
+        top: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        color: $textColor;
+
+        [dir="rtl"] & {
+            right: auto;
+            left: 12px;
+        }
+
+        &:hover {
+            opacity: 0.6;
+        }
+
+        .icon-close {
+            @include font-size(20);
+        }
+    }
+
+    // rewrite rules from _buttons.scss
+    button.modal-close {
+        color: $textColor !important;
+        background-color: transparent;
+        padding: 0;
+        height: 20px;
+
+        .icon-close {
+            padding: 0;
+        }
+    }
+
+    .modal-close:focus {
+        outline: 3px solid $actionLinkColor;
+        outline-offset: 3px;
+    }
+
+    .modal-body {
+        h4 {
+            @include font-size(16);
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .content,
+        .message {
+            margin-bottom: 8px;
+        }
+    }
+
+    &[class^="icon-"],
+    &[class*=" icon-"] {
+
+        // supports any TAO icon
+        &:before {
+            @include font-size(30);
+            color: $info;
+            position: absolute;
+        }
+
+        &.info {
+            &:before {
+                color: $info;
+            }
+        }
+
+        .modal-body {
+            font-family: $regularFont !important; // override icon font
+            line-height: 1.4;
+            margin-left: 4.5rem;
+        }
+    }
+}
+
+.modal-bg {
+    background: none repeat scroll 0 0 black();
+    opacity: 0.45;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=45)";
+    filter: alpha(opacity=45);
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 100001;
+    overflow: hidden;
+}

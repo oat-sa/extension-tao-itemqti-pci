@@ -25,8 +25,9 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/OAT/util/event',
-    'ui/dialog'
-], function (_, $, event, dialog) {
+    'audioRecordingInteraction/runtime/js/dialog',
+    'i18n'
+], function (_, $, event, dialogFactory, __) {
     'use strict';
 
     /**
@@ -94,13 +95,12 @@ define([
         }
 
         function errorDialog(message) {
-            var dlg = dialog({
+            var dlg = dialogFactory({
                 message: message,
                 autoRender: true,
                 autoDestroy: true,
-                buttons: ''
+                class: 'icon-info'
             });
-            $('.preview-modal-feedback').addClass('icon-info');
             return dlg;
         }
 
@@ -193,11 +193,7 @@ define([
              * Start the playback
              */
             play: function play() {
-                return Promise.reject(new DOMException('', 'NotSupportedError')).catch((e) => {
-                    console.log('play error', e);
-                    errorDialog('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.');
-                });
-                // audioEl.play().catch((e) => console.log('play error', e));
+                audioEl.play().catch((e) => errorDialog(__('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.')));
                 // state change has to be triggered by the onplaying listener
             },
 

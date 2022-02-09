@@ -12,20 +12,25 @@
         "cardinality": "single"
     },
     "runtime": {
-        "hook": "./runtime/audioRecordingInteraction.js",
+        "hook": "./runtime/audioRecordingInteraction.min.js",
         "libraries": [
             "./runtime/js/player.js",
             "./runtime/js/recorder.js",
             "./runtime/js/uiElements.js",
             "./runtime/js/providers/mediaRecorder.js",
-            "./runtime/js/providers/webAudio.js"
-        ],
+            "./runtime/js/providers/webAudio.js",
+            "./runtime/js/dialog.js",
+            "./runtime/js/modal.js"
+          ],
         "stylesheets": ["./runtime/css/audioRecordingInteraction.css"],
         "mediaFiles": [
             "./runtime/img/controls.svg",
             "./runtime/img/mic.svg",
             "./runtime/js/workers/WavAudioEncoder.js",
             "./runtime/js/workers/WebAudioRecorderWav.js"
+        ],
+        "src": [
+          "./runtime/audioRecordingInteraction.js"
         ]
     },
     "creator": {
