@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
  */
 /**
  * This is an audio player for the sole purpose of playing back the recorded media.
@@ -94,14 +94,19 @@ define([
             playerInstance.trigger(newState);
         }
 
+        /**
+         * Call to dialog factory to trigger a feedback modal for the user
+         * @param {String} message - the message for the user
+         * @returns {dialog}
+         */
         function errorDialog(message) {
-            var dlg = dialogFactory({
+            var dialog = dialogFactory({
                 message: message,
                 autoRender: true,
                 autoDestroy: true,
                 class: 'icon-info'
             });
-            return dlg;
+            return dialog;
         }
 
         player = {
@@ -191,6 +196,7 @@ define([
 
             /**
              * Start the playback
+             * Catch error on media format support problem
              */
             play: function play() {
                 audioEl.play().catch((e) => errorDialog(__('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.')));

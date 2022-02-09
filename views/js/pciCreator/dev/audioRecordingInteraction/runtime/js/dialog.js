@@ -13,18 +13,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015-2019 (original work) Open Assessment Technologies SA ;
+ * Copyright (c) 2022 (original work) Open Assessment Technologies SA ;
  */
-/**
- * Create a modal dialog component
- *
- *
- * TODO move to ui/component
- * TODO use core/eventifier
- *
- *
- * @author Jean-Sébastien Conan <jean-sebastien.conan@vesperiagroup.com>
- */
+/*
+*   This is a dialog component to throw a modal to give feedback to the user
+*/
 define([
     'lodash',
     'jquery',

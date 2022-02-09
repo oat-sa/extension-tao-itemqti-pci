@@ -24,6 +24,7 @@ $playback: whiten($info, .3);
 $info: rgb(14, 93, 145);
 $infoBgColor: whiten($info, 0.8);
 $infoBorderColor: whiten($info, 0.1);
+$modalShadowColor: #666666;
 
 @mixin ltr() {
   &,
@@ -332,10 +333,10 @@ $infoBorderColor: whiten($info, 0.1);
 .modal {
     background-color: $infoBgColor;
     border: 1px solid $infoBorderColor;
-    box-shadow: 3px 3px 5px #666666;
+    box-shadow: 3px 3px 5px $modalShadowColor;
     height: auto;
     opacity: 0;
-    top: -1000px;
+    top: -100%;
     padding: 40px;
     position: fixed;
     z-index: 105002;
@@ -405,8 +406,6 @@ $infoBorderColor: whiten($info, 0.1);
 
     &[class^="icon-"],
     &[class*=" icon-"] {
-
-        // supports any TAO icon
         &:before {
             @include font-size(30);
             color: $info;
@@ -420,7 +419,7 @@ $infoBorderColor: whiten($info, 0.1);
         }
 
         .modal-body {
-            font-family: $regularFont !important; // override icon font
+            font-family: $regularFont;
             line-height: 1.4;
             margin-left: 4.5rem;
         }

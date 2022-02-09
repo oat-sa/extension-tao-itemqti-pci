@@ -13,10 +13,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2014 (original work) Open Assessment Technologies SA ;
+ * Copyright (c) 2022 (original work) Open Assessment Technologies SA ;
  */
-// import $ from 'taoQtiItem/portableLib/jquery_2_1_1';
-// import __ from 'i18n';
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'i18n'
@@ -118,12 +116,6 @@ define([
                 if (!options.startClosed) {
                     modal._open($modal);
                 }
-
-                /**
-                 * The plugin have been created.
-                 * @event modal#create.modal
-                 */
-                // $modal.trigger('create.' + pluginName);
             });
         },
 
@@ -140,12 +132,6 @@ define([
                 $modal.removeData(dataNs);
                 $('#' + options.modalOverlay).remove();
                 $modal.hide();
-
-                /**
-                 * The target has been opened.
-                 * @event modal#opened.modal
-                 */
-                // $element.trigger('destroyed.' + pluginName);
             });
         },
 
@@ -229,12 +215,6 @@ define([
                 onOpen = function () {
                     $element.addClass('opened');
                     modal._bindEvents($element);
-
-                    /**
-                     * The target has been opened.
-                     * @event modal#opened.modal
-                     */
-                    // $element.trigger('opened.' + pluginName);
                 };
 
                 //Calculate the top offset
@@ -323,13 +303,6 @@ define([
         var onClose = function () {
             $element.removeClass('opened');
             $element.css('display', 'none');
-
-            /**
-             * The target has been closed/removed.
-             * @event modal#closed.modal
-             * @param {String} reason The reason to close the modal: 'api', 'overlay', 'close', 'escape'
-             */
-            // $element.trigger('closed.' + pluginName, reason);
         };
 
         modal._unBindEvents($element);
@@ -343,11 +316,6 @@ define([
             onClose();
         }
     }
-
-    // //Register the modal to behave as a jQuery plugin.
-    // Pluginifier.register(pluginName, modal, {
-    //     expose: ['open', 'close', 'destroy']
-    // });
 
     /**
      * The only exposed function is used to start listening on data-attr
