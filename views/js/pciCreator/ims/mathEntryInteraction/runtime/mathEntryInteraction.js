@@ -101,6 +101,16 @@ define([
         };
     });
 
+    const labels = {
+        'ja': {
+           'x/y': '分数',
+           '&le;': '&#8806;',
+           '&ge;': '&#8807;',
+           '\\le':  '\\leq',
+           '\\ge':  '\\geq'
+        }
+    };
+
     var mathEntryInteractionFactory = function() {
         return {
 
@@ -116,9 +126,21 @@ define([
             },
 
             /**
+             * @returns {string} - Localazed label
+             */
+             getLabel: function getLabel(label) {
+
+                var locale = labels[this.config.locale];
+                if (locale) {
+                    return locale[label] || label;
+                }
+                return label;
+            },
+
+            /**
              * @returns {Boolean} - Is the PCI instance configured to use gap expressions?
              */
-            inGapMode: function inGapMode() {
+             inGapMode: function inGapMode() {
                 return this.config.useGapExpression;
             },
 
@@ -185,6 +207,7 @@ define([
                     useGapExpression:    toBoolean(config.useGapExpression, false),
                     gapExpression:       config.gapExpression || '',
                     gapStyle:            config.gapStyle,
+                    locale:              (config.userLanguage || 'en').split('-')[0],
 
                     toolsStatus: {
                         frac:     toBoolean(config.tool_frac,     true),
@@ -529,21 +552,24 @@ define([
             createToolbar: function createToolbar() {
                 var self = this,
                     availableTools = {
-                        frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
+                        frac:   { label: self.getLabel('x/y'),
+                            latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
                         sqrt:   { label: '&radic;<span style="text-decoration:overline;">&nbsp;&nbsp;</span>',
                             latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
                         exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
                         log:    { label: 'log',         latex: '\\log',     fn: 'cmd',      desc: 'Log' },
                         ln:     { label: 'ln',          latex: '\\ln',      fn: 'cmd',      desc: 'Ln' },
                         e:      { label: 'e',           latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
-                        infinity: { label: '&#8734;',    latex: '\\infty',   fn: 'cmd',      desc: 'Infinity' },
+                        infinity: { label: '&#8734;',   latex: '\\infty',   fn: 'cmd',      desc: 'Infinity' },
                         lbrack: { label: '[',           latex: '\\lbrack',  fn: 'cmd',      desc: 'Left bracket' },
                         rbrack: { label: ']',           latex: '\\rbrack',  fn: 'cmd',      desc: 'Right bracket' },
                         pi:     { label: '&pi;',        latex: '\\pi',      fn: 'cmd',      desc: 'Pi' },
                         cos:    { label: 'cos',         latex: '\\cos',     fn: 'cmd',      desc: 'Cosinus' },
                         sin:    { label: 'sin',         latex: '\\sin',     fn: 'cmd',      desc: 'Sinus' },
-                        lte:    { label: '&le;',        latex: '\\le',      fn: 'cmd',      desc: 'Lower than or equal' },
-                        gte:    { label: '&ge;',        latex: '\\ge',      fn: 'cmd',      desc: 'Greater than or equal' },
+                        lte:    { label: self.getLabel('&le;'),
+                            latex: self.getLabel('\\le'),      fn: 'cmd',      desc: 'Lower than or equal' },
+                        gte:    { label: self.getLabel('&ge;'),
+                            latex: self.getLabel('\\ge'),      fn: 'cmd',      desc: 'Greater than or equal' },
                         times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
                         divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' },
                         plusminus: { label: '&#177;',   latex: '\\pm',      fn: 'cmd',      desc: 'Plus/minus' },
