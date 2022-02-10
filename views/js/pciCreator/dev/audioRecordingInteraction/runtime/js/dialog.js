@@ -291,7 +291,7 @@ define([
     /**
      * Builds a dialog box instance
      * @param {Object} options
-     * @returns {dialog}
+     * @returns {Dialog}
      */
     return function dialogFactory(options) {
         const instance = Object.assign({}, dialog);

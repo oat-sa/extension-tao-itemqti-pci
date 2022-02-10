@@ -154,19 +154,19 @@ define([
                 if (!options.disableClosing) {
                     $('.' + options.modalCloseClass, $element).on('click.' + pluginName, function (e) {
                         e.preventDefault();
-                        closeModal($element, 'close');
+                        closeModal($element);
                     });
 
                     $('#' + options.modalOverlay).on('click.' + pluginName, function (e) {
                         e.preventDefault();
-                        closeModal($element, 'overlay');
+                        closeModal($element);
                     });
 
                     if (!options.disableEscape) {
                         $(document).on('keydown.' + pluginName, function (e) {
                             if (e.keyCode === 27) {
                                 e.preventDefault();
-                                closeModal($element, 'escape');
+                                closeModal($element);
                             }
                         });
                     }
@@ -266,7 +266,7 @@ define([
          * @fires modal#closed.modal
          */
         _close: function ($element) {
-            closeModal($element, 'api');
+            closeModal($element);
         },
 
         /**
@@ -294,10 +294,9 @@ define([
     /**
      * Close the modal dialog
      * @param {jQuery} $element
-     * @param {String} reason The reason to close the modal: 'api', 'overlay', 'close', 'escape'
      * @fires modal#closed.modal
      */
-    function closeModal($element, reason) {
+    function closeModal($element) {
         var options = $element.data(dataNs);
         var $overlay = $('#' + options.modalOverlay);
         var onClose = function () {

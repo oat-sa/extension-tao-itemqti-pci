@@ -97,7 +97,7 @@ define([
         /**
          * Call to dialog factory to trigger a feedback modal for the user
          * @param {String} message - the message for the user
-         * @returns {dialog}
+         * @returns {Dialog}
          */
         function errorDialog(message) {
             var dialog = dialogFactory({
