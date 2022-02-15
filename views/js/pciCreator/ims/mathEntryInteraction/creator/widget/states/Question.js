@@ -32,7 +32,6 @@ define([
     var $addGapBtn = $(addGapBtnTpl());
 
     var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
-
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt'),
             interaction = this.widget.element;
@@ -142,9 +141,9 @@ define([
         //init form javascript
         formElement.initWidget($form);
 
-        //init data change callbacks
-        formElement.setChangeCallbacks($form, interaction, {
-            identifier: function(i, value){
+            //init data change callbacks
+            formElement.setChangeCallbacks($form, interaction, {
+                identifier: function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
@@ -152,13 +151,17 @@ define([
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
                     $gapStyleBox.show();
-                    response.attr('cardinality', 'multiple');
+                    // response.attr('cardinality', 'multiple');
+                    response.cardinality = 'multiple';
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
                     $gapStyleBox.hide();
-                    response.attr('cardinality', 'single');
+                    response.cardinality = 'single';
+                    // response.attr('cardinality', 'single');
                 }
+
+                response.attr('cardinality', 'single');
                 configChangeCallBack(i, value, 'useGapExpression');
             },
             gapStyle: function gapStyleChangeCallback(i, newStyle) {
@@ -254,7 +257,7 @@ define([
     /**
      * Display the "Add Gap" button
      */
-    MathEntryInteractionStateQuestion.prototype.createAddGapBtn = function createAddGapBtn() {
+    MathEntryInteractionStateQuestion.prototype.createAddGapBtn = function createAddGapBtn() {7
         var _widget = this.widget,
             $container = _widget.$container,
             $toolbar = $container.find('.toolbar'),

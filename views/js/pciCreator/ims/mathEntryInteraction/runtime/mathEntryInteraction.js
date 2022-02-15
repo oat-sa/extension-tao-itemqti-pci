@@ -27,13 +27,13 @@ define([
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
-], function(
+], function (
     qtiCustomInteractionContext,
     $,
     _,
     event,
     MathQuill
-){
+) {
     'use strict';
 
     var ns = '.mathEntryInteraction';
@@ -43,7 +43,7 @@ define([
         newLine: 'mq-tao-br',
         autoWrap: 'mq-tao-wrap'
     };
-    var cssSelectors = _.mapValues(cssClass, function(cls) {
+    var cssSelectors = _.mapValues(cssClass, function (cls) {
         return '.' + cls;
     });
     var reSpace = /^(\s|&nbsp;)+$/;
@@ -101,7 +101,7 @@ define([
         };
     });
 
-    var mathEntryInteractionFactory = function() {
+    var mathEntryInteractionFactory = function () {
         return {
 
             /**
@@ -109,7 +109,7 @@ define([
              */
             inQtiCreator: function isInCreator() {
                 if (_.isUndefined(this._inQtiCreator) && this.$container) {
-                    this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context') || 
+                    this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context') ||
                         this.$container.find('.tao-qti-creator-context').length > 0;
                 }
                 return this._inQtiCreator;
@@ -123,6 +123,13 @@ define([
             },
 
             /**
+             * @returns {Boolean} - Is the PCI instance in response state?
+             */
+            inResponseState: function inResponseState() {
+                return this.config.inResponseState;
+            },
+
+            /**
              * Render PCI
              */
             render: function render(config) {
@@ -131,29 +138,33 @@ define([
                 this.createToolbar();
                 this.togglePlaceholder(false);
 
-                // QtiCreator rendering of the PCI in Gap Expression mode: display a MathQuill editable field containing the gap expression
-                if (this.inGapMode() && this.inQtiCreator()) {
+                // QtiCreator rendering of the PCI in Gap Expression mode: display a non-editable MathQuill field with editable gap fields
+                if (this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
+                    this.setMathStaticContent(this.config.gapExpression);
+                    this.createMathStatic();
+                    this.monitorActiveGapField();
+                    this.addToolbarListeners();
+                    this.addGapStyle();
+                    this.autoWrapContent();
+
+                    // QtiCreator rendering of the PCI: display an editable MathQuill field with non-editable gap fields (for question construction)
+                } else if (this.inGapMode() && this.inQtiCreator() && !this.inResponseState()) {
                     this.createMathEditable();
                     this.setLatex(this.config.gapExpression);
                     this.addToolbarListeners();
                     this.addGapStyle();
                     this.autoWrapContent();
 
-                // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
-                } else if (!this.inGapMode() && this.inQtiCreator()) {
-                    this.togglePlaceholder(true);
-
-                // Normal rendering of the PCI in Gap Expression mode: render a static MathQuill field with editable gaps
-                } else if (this.inGapMode() && !this.inQtiCreator()) {
+                    // Normal rendering of the PCI in Gap Expression mode: display a non-editable MathQuill field with editable gap fields for a test-taker
+                } else if (this.inGapMode() && !this.inResponseState()) {
                     this.setMathStaticContent(this.config.gapExpression);
                     this.createMathStatic();
-
                     this.monitorActiveGapField();
                     this.addToolbarListeners();
                     this.addGapStyle();
                     this.autoWrapContent();
 
-                // Normal rendering of the PCI: display an empty MathQuill editable field
+                    // Normal rendering of the PCI: display an editable MathQuill field without gaps
                 } else {
                     this.createMathEditable();
                     this.addToolbarListeners();
@@ -164,6 +175,7 @@ define([
              * @param {Object} config
              * @param {Boolean} config.authorizeWhiteSpace - if space key creates a space
              * @param {Boolean} config.useGapExpression - create a math expression with gaps (placeholders)
+             * @param {Boolean} config.inResponseState - if QTI is in response state
              * @param {Boolean} config.gapExpression - content of the math expression
              * @param {('math-gap-small'|'math-gap-medium'|'math-gap-large')} config.gapStyle - size of the gaps
              * @param {Boolean} config.tool_toolId - is the given tool enabled?
@@ -172,7 +184,7 @@ define([
              */
             initConfig: function initConfig(config) {
                 function toBoolean(value, defaultValue) {
-                    if (typeof(value) === "undefined") {
+                    if (typeof (value) === "undefined") {
                         return defaultValue;
                     } else {
                         return (value === true || value === "true");
@@ -181,48 +193,49 @@ define([
 
                 this.config = {
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
-                    useGapExpression:    toBoolean(config.useGapExpression, false),
-                    gapExpression:       config.gapExpression || '',
-                    gapStyle:            config.gapStyle,
+                    useGapExpression: toBoolean(config.useGapExpression, false),
+                    inResponseState: toBoolean(config.inResponseState, false),
+                    gapExpression: config.gapExpression || '',
+                    gapStyle: config.gapStyle,
 
                     toolsStatus: {
-                        frac:     toBoolean(config.tool_frac,     true),
-                        sqrt:     toBoolean(config.tool_sqrt,     true),
-                        exp:      toBoolean(config.tool_exp,      true),
-                        log:      toBoolean(config.tool_log,      true),
-                        ln:       toBoolean(config.tool_ln,       true),
-                        e:        toBoolean(config.tool_e,        true),
+                        frac: toBoolean(config.tool_frac, true),
+                        sqrt: toBoolean(config.tool_sqrt, true),
+                        exp: toBoolean(config.tool_exp, true),
+                        log: toBoolean(config.tool_log, true),
+                        ln: toBoolean(config.tool_ln, true),
+                        e: toBoolean(config.tool_e, true),
                         infinity: toBoolean(config.tool_infinity, true),
-                        lbrack:   toBoolean(config.tool_lbrack,   true),
-                        rbrack:   toBoolean(config.tool_rbrack,   true),
-                        pi:       toBoolean(config.tool_pi,       true),
-                        cos:      toBoolean(config.tool_cos,      true),
-                        sin:      toBoolean(config.tool_sin,      true),
-                        lte:      toBoolean(config.tool_lte,      true),
-                        gte:      toBoolean(config.tool_gte,      true),
-                        times:    toBoolean(config.tool_times,    true),
-                        divide:   toBoolean(config.tool_divide,   true),
-                        plusminus:toBoolean(config.tool_plusminus,true),
-                        angle:    toBoolean(config.tool_angle,    true),
-                        minus:    toBoolean(config.tool_minus,    true),
-                        plus:     toBoolean(config.tool_plus,     true),
-                        equal:    toBoolean(config.tool_equal,    true),
-                        lower:    toBoolean(config.tool_lower,    true),
-                        greater:  toBoolean(config.tool_greater,  true),
-                        subscript:toBoolean(config.tool_subscript,true),
-                        lbrace:   toBoolean(config.tool_lbrace,   true),
-                        rbrace:   toBoolean(config.tool_rbrace,   true),
-                        lparen:   toBoolean(config.tool_lparen,   true),
-                        rparen:   toBoolean(config.tool_rparen,   true),
+                        lbrack: toBoolean(config.tool_lbrack, true),
+                        rbrack: toBoolean(config.tool_rbrack, true),
+                        pi: toBoolean(config.tool_pi, true),
+                        cos: toBoolean(config.tool_cos, true),
+                        sin: toBoolean(config.tool_sin, true),
+                        lte: toBoolean(config.tool_lte, true),
+                        gte: toBoolean(config.tool_gte, true),
+                        times: toBoolean(config.tool_times, true),
+                        divide: toBoolean(config.tool_divide, true),
+                        plusminus: toBoolean(config.tool_plusminus, true),
+                        angle: toBoolean(config.tool_angle, true),
+                        minus: toBoolean(config.tool_minus, true),
+                        plus: toBoolean(config.tool_plus, true),
+                        equal: toBoolean(config.tool_equal, true),
+                        lower: toBoolean(config.tool_lower, true),
+                        greater: toBoolean(config.tool_greater, true),
+                        subscript: toBoolean(config.tool_subscript, true),
+                        lbrace: toBoolean(config.tool_lbrace, true),
+                        rbrace: toBoolean(config.tool_rbrace, true),
+                        lparen: toBoolean(config.tool_lparen, true),
+                        rparen: toBoolean(config.tool_rparen, true),
                         integral: toBoolean(config.tool_integral, true),
                         timesdot: toBoolean(config.tool_timesdot, true),
                         triangle: toBoolean(config.tool_triangle, true),
-                        similar:  toBoolean(config.tool_similar,  true),
-                        paral:    toBoolean(config.tool_paral,    true),
-                        perp:     toBoolean(config.tool_perp,     true),
-                        inmem:    toBoolean(config.tool_inmem,    true),
-                        ninmem:   toBoolean(config.tool_ninmem,   true),
-                        union:    toBoolean(config.tool_union,    true),
+                        similar: toBoolean(config.tool_similar, true),
+                        paral: toBoolean(config.tool_paral, true),
+                        perp: toBoolean(config.tool_perp, true),
+                        inmem: toBoolean(config.tool_inmem, true),
+                        ninmem: toBoolean(config.tool_ninmem, true),
+                        union: toBoolean(config.tool_union, true),
                         intersec: toBoolean(config.tool_intersec, true)
                     },
 
@@ -241,7 +254,7 @@ define([
                     handlers: {
                         edit: function onChange() {
                             self.autoWrapContent();
-                            self.instance.trigger('responseChange', [ self.mathField.latex() ]);
+                            self.instance.trigger('responseChange', [self.mathField.latex()]);
                         },
                         enter: function onEnter(mathField) {
                             // The "allow new line" option works under the following conditions:
@@ -251,9 +264,10 @@ define([
                                 return self.config.allowNewLine
                                     && (
                                         (!self.inGapMode() && !self.inQtiCreator()) // normal && runtime
-                                        || ( self.inGapMode() &&  self.inQtiCreator()) // gap mode && authoring
+                                        || (self.inGapMode() && self.inQtiCreator()) // gap mode && authoring
                                     );
                             }
+
                             if (isBrAllowed()) {
                                 mathField.write('\\embed{br}');
                             }
@@ -266,9 +280,9 @@ define([
              * Create a placeholder that will be displayed instead off the MathQuill field in authoring mode
              */
             togglePlaceholder: function togglePlaceholder(displayPlaceholder) {
-                if (! this.$inputPlaceholder) {
+                if (!this.$inputPlaceholder) {
                     // this is not in the PCI markup for backward-compatibility reasons
-                    this.$inputPlaceholder  = $('<div>', {
+                    this.$inputPlaceholder = $('<div>', {
                         'class': 'math-entry-placeholder'
                     });
                     this.$toolbar.after(this.$inputPlaceholder);
@@ -278,7 +292,7 @@ define([
                     this.$inputPlaceholder.show();
 
                 } else {
-                    this.$input.css({ display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
+                    this.$input.css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
                     this.$inputPlaceholder.hide();
                 }
             },
@@ -311,7 +325,7 @@ define([
 
                     // iterate over each block and insert a line break each time a block is overflowing its container
                     nodes = _.toArray($container.get(0).childNodes);
-                    for (length = nodes.length, index = 0; index < length; index ++) {
+                    for (length = nodes.length, index = 0; index < length; index++) {
                         node = nodes[index];
                         block = cache.get(node);
 
@@ -382,7 +396,7 @@ define([
                 this.mathField = MQ.StaticMath(this.$input.get(0));
 
                 gapFields = this.getGapFields();
-                gapFields.forEach(function(field) {
+                gapFields.forEach(function (field) {
                     field.config(self.getMqConfig());
                 });
             },
@@ -398,10 +412,10 @@ define([
                 this._activeGapFieldIndex = null;
 
                 if ($editableFields.length) {
-                    $editableFields.each(function(index) {
+                    $editableFields.each(function (index) {
                         $(this)
                             .off(ns)
-                            .on('click' + ns + ' keyup' + ns, function() {
+                            .on('click' + ns + ' keyup' + ns, function () {
                                 self._activeGapFieldIndex = index;
                             });
                     });
@@ -414,13 +428,13 @@ define([
             createMathEditable: function createMathEditable() {
                 var config = this.getMqConfig();
 
-                if(this.mathField && this.mathField instanceof MathQuill){
-                    // if the element already exists, update the config
-                    this.mathField.config(config);
-                }else{
-                    // if not create it
-                    this.mathField = MQ.MathField(this.$input.get(0), config);
-                }
+                // if(this.mathField && this.mathField instanceof MathQuill){
+                //     // if the element already exists, update the config
+                //     this.mathField.config(config);
+                // }else{
+                // if not create it
+                this.mathField = MQ.MathField(this.$input.get(0), config);
+                // }
             },
 
             /**
@@ -483,7 +497,7 @@ define([
 
                 if (this.inGapMode() && !this.inQtiCreator()) {
                     // default to the first gap field if none has received the focus yet
-                    if (! _.isFinite(this._activeGapFieldIndex)) {
+                    if (!_.isFinite(this._activeGapFieldIndex)) {
                         this._activeGapFieldIndex = 0;
                     }
                     // access the MQ instances
@@ -492,7 +506,7 @@ define([
                         activeMathField = gapFields[this._activeGapFieldIndex];
                     }
                 } else {
-                    activeMathField =  this.mathField;
+                    activeMathField = this.mathField;
                 }
                 return activeMathField;
             },
@@ -527,52 +541,58 @@ define([
             createToolbar: function createToolbar() {
                 var self = this,
                     availableTools = {
-                        frac:   { label: 'x/y',         latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
-                        sqrt:   { label: '&radic;',     latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
-                        exp:    { label: 'x&#8319;',    latex: '^',         fn: 'cmd',      desc: 'Exponent' },
-                        log:    { label: 'log',         latex: '\\log',     fn: 'cmd',      desc: 'Log' },
-                        ln:     { label: 'ln',          latex: '\\ln',      fn: 'cmd',      desc: 'Ln' },
-                        e:      { label: 'e',           latex: '\\mathrm{e}',fn: 'write',   desc: 'Euler\'s constant' },
-                        infinity: { label: '&#8734;',    latex: '\\infty',   fn: 'cmd',      desc: 'Infinity' },
-                        lbrack: { label: '[',           latex: '\\lbrack',  fn: 'cmd',      desc: 'Left bracket' },
-                        rbrack: { label: ']',           latex: '\\rbrack',  fn: 'cmd',      desc: 'Right bracket' },
-                        pi:     { label: '&pi;',        latex: '\\pi',      fn: 'cmd',      desc: 'Pi' },
-                        cos:    { label: 'cos',         latex: '\\cos',     fn: 'cmd',      desc: 'Cosinus' },
-                        sin:    { label: 'sin',         latex: '\\sin',     fn: 'cmd',      desc: 'Sinus' },
-                        lte:    { label: '&le;',        latex: '\\le',      fn: 'cmd',      desc: 'Lower than or equal' },
-                        gte:    { label: '&ge;',        latex: '\\ge',      fn: 'cmd',      desc: 'Greater than or equal' },
-                        times:  { label: '&times;',     latex: '\\times',   fn: 'cmd',      desc: 'Multiply' },
-                        divide: { label: '&divide;',    latex: '\\div',     fn: 'cmd',      desc: 'Divide' },
-                        plusminus: { label: '&#177;',   latex: '\\pm',      fn: 'cmd',      desc: 'Plus/minus' },
-                        angle:  { label: '&ang;',       latex: '\\angle',   fn: 'cmd',      desc: 'Angle'},
-                        minus:  { label: '–',           latex: '-',         fn: 'write',    desc: 'Minus'},
-                        plus:   { label: '+',           latex: '+',         fn: 'write',    desc: 'Plus'},
-                        equal:  { label: '=',           latex: '=',         fn: 'write',    desc: 'Equal'},
-                        lower:  { label: '<',           latex: '<',         fn: 'write',    desc: 'Lower than'},
-                        greater: { label: '>',          latex: '>',         fn: 'write',    desc: 'Greater than'},
-                        subscript: { label: 'x&#8336;', latex: '_',         fn: 'cmd',      desc: 'Subscript'},
-                        lbrace: { label: '{',           latex: '{',         fn: 'cmd',      desc: 'Left brace/curly bracket'},
-                        rbrace: { label: '}',           latex: '}',         fn: 'cmd',      desc: 'Right brace/curly bracket'},
-                        lparen: { label: '(',           latex: '(',         fn: 'write',    desc: 'Left parenthesis/round bracket'},
-                        rparen: { label: ')',           latex: ')',         fn: 'write',    desc: 'Right parenthesis/round bracket'},
-                        integral: { label: '&#x222b;',  latex: '\\int',     fn: 'cmd',      desc: 'Indefinite integral'},
-                        timesdot: { label: '·',         latex: '\\cdot',    fn: 'cmd',      desc: 'Times dot'},
-                        triangle: { label: '&#9651;',   latex: '\\triangle',fn: 'cmd',      desc: 'Triangle'},
-                        similar: { label: '&sim;',      latex: '\\sim',     fn: 'cmd',      desc: 'Similar'},
-                        paral:   { label: '&#8741;',    latex: '\\parallel',fn: 'cmd',      desc: 'Is parallel with'},
-                        perp:    { label: '&#8869;',    latex: '\\perp',    fn: 'cmd',      desc: 'Is perpendicular to'},
-                        inmem:   { label: '&isin;',     latex: '\\in',      fn: 'cmd',      desc: 'Is a member of'},
-                        ninmem:  { label: '&notin;',    latex: '\\notin',   fn: 'cmd',      desc: 'Is not a member of'},
-                        union:   { label: '&cup;',      latex: '\\cup',     fn: 'cmd',      desc: 'Set union'},
-                        intersec:{ label: '&cap;',      latex: '\\cap',     fn: 'cmd',      desc: 'Set intersection'}
+                        frac: {label: 'x/y', latex: '\\frac', fn: 'cmd', desc: 'Fraction'},
+                        sqrt: {label: '&radic;', latex: '\\sqrt', fn: 'cmd', desc: 'Square root'},
+                        exp: {label: 'x&#8319;', latex: '^', fn: 'cmd', desc: 'Exponent'},
+                        log: {label: 'log', latex: '\\log', fn: 'cmd', desc: 'Log'},
+                        ln: {label: 'ln', latex: '\\ln', fn: 'cmd', desc: 'Ln'},
+                        e: {label: 'e', latex: '\\mathrm{e}', fn: 'write', desc: 'Euler\'s constant'},
+                        infinity: {label: '&#8734;', latex: '\\infty', fn: 'cmd', desc: 'Infinity'},
+                        lbrack: {label: '[', latex: '\\lbrack', fn: 'cmd', desc: 'Left bracket'},
+                        rbrack: {label: ']', latex: '\\rbrack', fn: 'cmd', desc: 'Right bracket'},
+                        pi: {label: '&pi;', latex: '\\pi', fn: 'cmd', desc: 'Pi'},
+                        cos: {label: 'cos', latex: '\\cos', fn: 'cmd', desc: 'Cosinus'},
+                        sin: {label: 'sin', latex: '\\sin', fn: 'cmd', desc: 'Sinus'},
+                        lte: {label: '&le;', latex: '\\le', fn: 'cmd', desc: 'Lower than or equal'},
+                        gte: {label: '&ge;', latex: '\\ge', fn: 'cmd', desc: 'Greater than or equal'},
+                        times: {label: '&times;', latex: '\\times', fn: 'cmd', desc: 'Multiply'},
+                        divide: {label: '&divide;', latex: '\\div', fn: 'cmd', desc: 'Divide'},
+                        plusminus: {label: '&#177;', latex: '\\pm', fn: 'cmd', desc: 'Plus/minus'},
+                        angle: {label: '&ang;', latex: '\\angle', fn: 'cmd', desc: 'Angle'},
+                        minus: {label: '–', latex: '-', fn: 'write', desc: 'Minus'},
+                        plus: {label: '+', latex: '+', fn: 'write', desc: 'Plus'},
+                        equal: {label: '=', latex: '=', fn: 'write', desc: 'Equal'},
+                        lower: {label: '<', latex: '<', fn: 'write', desc: 'Lower than'},
+                        greater: {label: '>', latex: '>', fn: 'write', desc: 'Greater than'},
+                        subscript: {label: 'x&#8336;', latex: '_', fn: 'cmd', desc: 'Subscript'},
+                        lbrace: {label: '{', latex: '{', fn: 'cmd', desc: 'Left brace/curly bracket'},
+                        rbrace: {label: '}', latex: '}', fn: 'cmd', desc: 'Right brace/curly bracket'},
+                        lparen: {label: '(', latex: '(', fn: 'write', desc: 'Left parenthesis/round bracket'},
+                        rparen: {label: ')', latex: ')', fn: 'write', desc: 'Right parenthesis/round bracket'},
+                        integral: {label: '&#x222b;', latex: '\\int', fn: 'cmd', desc: 'Indefinite integral'},
+                        timesdot: {label: '·', latex: '\\cdot', fn: 'cmd', desc: 'Times dot'},
+                        triangle: {label: '&#9651;', latex: '\\triangle', fn: 'cmd', desc: 'Triangle'},
+                        similar: {label: '&sim;', latex: '\\sim', fn: 'cmd', desc: 'Similar'},
+                        paral: {label: '&#8741;', latex: '\\parallel', fn: 'cmd', desc: 'Is parallel with'},
+                        perp: {label: '&#8869;', latex: '\\perp', fn: 'cmd', desc: 'Is perpendicular to'},
+                        inmem: {label: '&isin;', latex: '\\in', fn: 'cmd', desc: 'Is a member of'},
+                        ninmem: {label: '&notin;', latex: '\\notin', fn: 'cmd', desc: 'Is not a member of'},
+                        union: {label: '&cup;', latex: '\\cup', fn: 'cmd', desc: 'Set union'},
+                        intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'}
                     },
                     availableToolGroups = [ // we use an array to maintain order
-                        { id: 'functions',  tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln'] },
-                        { id: 'symbols',    tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral'] },
-                        { id: 'geometry',   tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
-                        { id: 'trigo',      tools: ['pi', 'sin', 'cos'] },
-                        { id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte'] },
-                        { id: 'operands',   tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec'] }
+                        {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln']},
+                        {
+                            id: 'symbols',
+                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral']
+                        },
+                        {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
+                        {id: 'trigo', tools: ['pi', 'sin', 'cos']},
+                        {id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte']},
+                        {
+                            id: 'operands',
+                            tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec']
+                        }
                     ];
 
                 // create buttons
@@ -599,7 +619,7 @@ define([
                     }),
                     activeTools = 0;
 
-                group.tools.forEach(function(toolId) {
+                group.tools.forEach(function (toolId) {
                     var toolConfig = availableTools[toolId];
 
                     toolConfig.id = toolId;
@@ -657,7 +677,7 @@ define([
             addGapStyle: function addGapStyle() {
                 var self = this;
 
-                if(self.config.gapStyle) {
+                if (self.config.gapStyle) {
                     self.$container.removeClass(function (index, className) {
                         return (className.match(/\bmath-gap-[\w]+\b/g) || []).join(' ');
                     });
@@ -674,9 +694,9 @@ define([
                 this.dom = dom;
                 this.instance = instance;
 
-                this.$container         = $(dom);
-                this.$toolbar           = this.$container.find('.toolbar');
-                this.$input             = this.$container.find('.math-entry-input');
+                this.$container = $(dom);
+                this.$toolbar = this.$container.find('.toolbar');
+                this.$input = this.$container.find('.math-entry-input');
 
                 this.render(config);
             },
@@ -711,16 +731,17 @@ define([
 
                 if (this.inGapMode()) {
                     response = {
-                        list: {
-                            string: this.getGapFields().map(function(gapField) {
-                                return gapField.latex();
-                            })
+                        base: {
+                            string: this.getGapFields()
+                                .map(function (gapField) {
+                                    return gapField.latex();
+                                }).toString()
                         }
                     };
                 } else {
                     response = {
                         base: {
-                            string : this.mathField.latex()
+                            string: this.mathField.latex()
                         }
                     };
                 }
@@ -735,7 +756,7 @@ define([
             resetResponse: function resetResponse() {
                 var gapFields = this.getGapFields();
                 if (this.inGapMode()) {
-                    gapFields.forEach(function(gapField) {
+                    gapFields.forEach(function (gapField) {
                         gapField.latex('');
                     });
                 } else {
@@ -765,7 +786,7 @@ define([
              * @param {Object} state - json format
              */
             setSerializedState: function setSerializedState(state) {
-                if(state && state.response){
+                if (state && state.response) {
                     this.setResponse(state.response);
                 }
             },
@@ -778,7 +799,7 @@ define([
              * @returns {Object} json format
              */
             getSerializedState: function getSerializedState() {
-                return {response : this.getResponse()};
+                return {response: this.getResponse()};
             }
         };
     };
@@ -803,6 +824,8 @@ define([
                     // remove listeners
                     pciInstance.off('configChange');
                     pciInstance.off('addGap');
+                    pciInstance.off('latexInput');
+                    pciInstance.off('latexGapInput');
 
                     mathEntryInteraction.destroy();
                 }
@@ -817,12 +840,29 @@ define([
             var boundTo = config.boundTo;
             var responseIdentifier = Object.keys(boundTo)[0];
             let response = boundTo[responseIdentifier];
-
             mathEntryInteraction.setResponse(response);
             mathEntryInteraction.setSerializedState(state);
 
             pciInstance.on('configChange', function (properties) {
                 mathEntryInteraction.render(properties);
+            });
+
+            pciInstance.on('latexInput', function (latex) {
+                mathEntryInteraction.setLatex(latex);
+                mathEntryInteraction.mathField.focus();
+            });
+
+            pciInstance.on('latexGapInput', function (gapLatex) {
+                if (gapLatex.list && _.isArray(gapLatex.list.string)) {
+                    var gaps = mathEntryInteraction.getGapFields();
+                    gaps.forEach(function (gap, index) {
+                        if (gapLatex.list.string[index]) {
+                            gap.latex(gapLatex.list.string[index]);
+                        }
+                    })
+                } else {
+                    mathEntryInteraction.config.gapExpression = gapLatex;
+                }
             });
 
             pciInstance.on('addGap', function () {

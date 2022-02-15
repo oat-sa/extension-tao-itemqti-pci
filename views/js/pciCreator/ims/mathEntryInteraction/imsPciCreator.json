@@ -51,8 +51,12 @@
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/tpl/addGapBtn.tpl",
+            "./creator/tpl/addAnswerOption.tpl",
+            "./creator/tpl/answerForm.tpl",
             "./creator/widget/Widget.js",
             "./creator/widget/states/Question.js",
+            "./creator/widget/states/Map.js",
+            "./creator/widget/states/Correct.js",
             "./runtime/css/mathEntryInteraction.css",
             "./runtime/mathquill/mathquill.css",
             "./creator/widget/states/states.js"
