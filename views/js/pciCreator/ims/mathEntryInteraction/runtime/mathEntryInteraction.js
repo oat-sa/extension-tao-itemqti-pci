@@ -116,9 +116,21 @@ define([
             },
 
             /**
+             * @returns {string} - Localazed label
+             */
+             getLabel: function getLabel(label) {
+
+                var locale = labels[this.config.locale];
+                if (locale) {
+                    return locale[label] || label;
+                }
+                return label;
+            },
+
+            /**
              * @returns {Boolean} - Is the PCI instance configured to use gap expressions?
              */
-            inGapMode: function inGapMode() {
+             inGapMode: function inGapMode() {
                 return this.config.useGapExpression;
             },
 
@@ -251,6 +263,7 @@ define([
                 var self = this;
                 return {
                     spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
+                    focusOnDenominator: this.config.focusOnDenominator,
                     handlers: {
                         edit: function onChange() {
                             self.autoWrapContent();

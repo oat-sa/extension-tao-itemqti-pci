@@ -58,6 +58,7 @@ define([
                 useGapExpression: 'false',
                 gapExpression: '',
                 gapStyle: '',
+                focusOnDenominator: false,
 
                 tool_frac: 'true',
                 tool_sqrt: 'true',
