@@ -259,7 +259,7 @@ define([
     /**
      * Display the "Add Gap" button
      */
-    MathEntryInteractionStateQuestion.prototype.createAddGapBtn = function createAddGapBtn() {7
+    MathEntryInteractionStateQuestion.prototype.createAddGapBtn = function createAddGapBtn() {
         var _widget = this.widget,
             $container = _widget.$container,
             $toolbar = $container.find('.toolbar'),
