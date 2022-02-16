@@ -268,6 +268,7 @@ define([
         if ($toolbar.length) {
             $toolbar.after($addGapBtn);
             $addGapBtn.on('click', function() {
+                interaction.getResponseDeclaration().removeMapEntries();
                 interaction.triggerPci('addGap');
             });
         }

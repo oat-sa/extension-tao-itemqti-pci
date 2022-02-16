@@ -50,12 +50,12 @@ define([
             initForm(this);
         },
         function exit() {
+            emptyGapFields(this);
             saveAnswers(this);
             removeResponseChangeEventListener(this);
             clearMathFieldLatex(this);
             removeEditDeleteListeners(this);
             removeAddButtonListener(this);
-            emptyGapFields(this);
             destroyForm(this);
         }
     );
@@ -65,8 +65,6 @@ define([
             responseDeclaration = interaction.getResponseDeclaration(),
             $responseForm = self.widget.$responseForm;
 
-        interaction.prop('inResponseState', true);
-        interaction.triggerPci('configChange', [interaction.getProperties()]);
         initResponseChangeEventListener(self);
         self.correctResponses = getExistingCorrectAnswerOptions(self);
         $responseForm.html(addAnswerOptionBtn());
@@ -83,6 +81,7 @@ define([
             var newCorrectAnswer;
 
             if (inGapMode(self)) {
+                emptyGapFields(self);
                 var gapExpression = self.widget.element.prop('gapExpression');
                 var gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
                 if (gapCount > 0) {
@@ -137,11 +136,17 @@ define([
             $responseForm = self.widget.$responseForm,
             $entryConfig = $responseForm.find('.entry-config'),
             $editButtons = $entryConfig.find('.answer-edit');
-        
+
         if (inGapMode(self)) {
             $editButtons.click(function (e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
+
+                if (!!interaction.prop('inResponseState') === false) {
+                    interaction.prop('inResponseState', true);
+                    interaction.triggerPci('configChange', [interaction.getProperties()]);
+                }
+
                 self.activeEditId = parseInt(e.currentTarget.id.split('_')[1]);
                 var response = getGapResponseObject(self.correctResponses[self.activeEditId]);
                 interaction.triggerPci('latexGapInput', [response]);
@@ -187,14 +192,8 @@ define([
             var id = parseInt(e.currentTarget.id.split('_')[1]);
 
             if (inGapMode(self)) {
-                var gapExpression = interaction.prop('gapExpression');
-                var gapResponses = self.correctResponses[id].split(',');
-                gapResponses.forEach(function (response) {
-                    gapExpression = gapExpression.replace(response, '\\taoGap');
-                });
-
-                interaction.prop('gapExpression', gapExpression);
-                interaction.triggerPci('configChange', [interaction.getProperties()]);
+                self.activeEditId = id;
+                emptyGapFields(self);
 
             }
             // setting active editing id to null in order to
@@ -237,19 +236,29 @@ define([
         var interaction = self.widget.element;
         var responseDeclaration = interaction.getResponseDeclaration();
         clearMapEntries(self);
+        if (inGapMode(self)){
+            self.correctResponses = self.correctResponses.filter(function (response) {
+                return response.split(',').indexOf('') === -1;
+            });
+        }
+
         self.correctResponses.forEach(function (response) {
             responseDeclaration.setMapEntry(response, CORRECT_ANSWER_VALUE, false);
         });
     }
 
-    // empty all gap fields and change state property
+    /**
+     *   if in gap mode: will empty all the gap fields
+     */
     function emptyGapFields(self) {
         var interaction = self.widget.element;
+
         if (inGapMode(self)){
             var gapTemplateString = interaction.prop('gapExpression');
-
             if (self.activeEditId != null) {
                 var responses = self.correctResponses[self.activeEditId].split(',');
+                self.activeEditId = null;
+
                 responses.forEach(function (responseGap) {
                     gapTemplateString = gapTemplateString.replace(responseGap.toString(), '\\taoGap');
                 });

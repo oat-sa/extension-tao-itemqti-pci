@@ -884,7 +884,7 @@ define([
                 if (gapLatex.list && _.isArray(gapLatex.list.string)) {
                     var gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
-                        if (gapLatex.list.string[index]) {
+                        if (gapLatex.list.string[index] !== undefined) {
                             gap.latex(gapLatex.list.string[index]);
                         }
                     })
