@@ -158,13 +158,13 @@ msgid "lower than or equal"
 msgstr "lavere enn eller lik"
 
 msgid "Manage custom interactions"
-msgstr "Administrer PCI'er"
+msgstr "Administrer spesialdesignede oppgavetyper"
 
 msgid "Max attempts:"
 msgstr "Maks forsøk:"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr "Maksimalt antall opptak kandidaten kan gjøre. Sett til 0 for å tillate ubegrensede forsøk. Med en øvre grense på 3 vil kandidaten kunne klikke 2 ganger på tilbakeknappen."
+msgstr "Maksimalt antall opptak eleven kan gjøre. Sett til 0 for å tillate ubegrensede forsøk. Med en øvre grense på 3 vil eleven kunne klikke 2 ganger på tilbakeknappen."
 
 msgid "Medium"
 msgstr "Medium"
@@ -203,6 +203,7 @@ msgstr "Plus/minus"
 msgid "Portable Custom Interactions"
 msgstr "PCI'er"
 
+# Hva menes egentlig her?
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
 msgstr "Innspilt lyd spoles automatisk tilbake etter at opptaket stopper. Under avspilling er ingen brukerinteraksjon mulig, og alle knappene er deaktivert."
 
