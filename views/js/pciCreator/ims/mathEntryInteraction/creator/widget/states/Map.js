@@ -90,6 +90,8 @@ define([
                     for (var i = 0; i < gapCount; i++) {
                         newCorrectAnswer.push('');
                     }
+
+                    newCorrectAnswer = newCorrectAnswer.join(',');
                 } else {
                     newCorrectAnswer = '';
                 }
