@@ -87,7 +87,7 @@ define([
                 if (gapCount > 0) {
                     newCorrectAnswer = [];
                     for (var i = 0; i < gapCount; i++) {
-                        newCorrectAnswer.push('');
+                        newCorrectAnswer.push(' ');
                     }
 
                     newCorrectAnswer = newCorrectAnswer.join(',');
