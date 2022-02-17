@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 2021.10\n"
-"PO-Revision-Date: 2021-11-29T18:11:10\n"
+"Project-Id-Version: TAO 2022.01\n"
+"PO-Revision-Date: 2022-02-17T14:59:00\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja-JP\n"
@@ -28,14 +28,20 @@ msgstr "改行を許可"
 msgid "Allow playback"
 msgstr "録音確認再生の許可"
 
+msgid "angle"
+msgstr "角"
+
 msgid "Audio bitrate:"
 msgstr "音声ビットレート:"
+
+msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
+msgstr ""
 
 msgid "authorize white space"
 msgstr "スペースの入力許可"
 
 msgid "Auto playback recording"
-msgstr ""
+msgstr "録音後の自動再生"
 
 msgid "Auto start recording"
 msgstr "自動録音開始"
@@ -44,13 +50,16 @@ msgid "Back to listing"
 msgstr "リストに戻る"
 
 msgid "braces/curly brackets"
-msgstr "{} 波括弧"
+msgstr "波括弧"
 
 msgid "Cancel"
 msgstr "キャンセル"
 
 msgid "Channels"
 msgstr "チャンネル"
+
+msgid "Close dialog"
+msgstr ""
 
 msgid "Comparison"
 msgstr "比較"
@@ -68,7 +77,7 @@ msgid "disabled"
 msgstr "無効"
 
 msgid "divide"
-msgstr "÷ 除算"
+msgstr "除算"
 
 msgid "Download"
 msgstr ""
@@ -80,7 +89,7 @@ msgid "Enabled in item authoring"
 msgstr ""
 
 msgid "equal"
-msgstr "= イコール"
+msgstr "イコール"
 
 msgid "Experimental only"
 msgstr "実験用"
@@ -92,7 +101,7 @@ msgid "For tests only"
 msgstr "事前検証用"
 
 msgid "fraction"
-msgstr "分数"
+msgstr "x/y 分数"
 
 msgid "Functions"
 msgstr "関数"
@@ -101,16 +110,16 @@ msgid "Gap size"
 msgstr "穴埋めのサイズ"
 
 msgid "Geometry"
-msgstr ""
+msgstr "ジオメトリ"
 
 msgid "Give the possibility to the test taker to playback its own recording."
 msgstr "受検者は自分が録音した声を，再生して聞くことができます"
 
 msgid "greater than"
-msgstr "> 大なり"
+msgstr "大なり"
 
 msgid "greater than or equal"
-msgstr "≧ 大なりイコール"
+msgstr "大なりイコール"
 
 msgid "id : "
 msgstr "ID : "
@@ -131,16 +140,16 @@ msgid "Invalid files have been removed"
 msgstr ""
 
 msgid "is a member of"
-msgstr ""
+msgstr "属する"
 
 msgid "is not a member of"
-msgstr ""
+msgstr "属さない"
 
 msgid "is parallel with"
-msgstr ""
+msgstr "平行"
 
 msgid "is perpendicular to"
-msgstr ""
+msgstr "垂直"
 
 msgid "Large"
 msgstr "大"
@@ -155,10 +164,10 @@ msgid "log"
 msgstr "log"
 
 msgid "lower than"
-msgstr "< 小なり"
+msgstr "小なり"
 
 msgid "lower than or equal"
-msgstr "≦ 小なりイコール"
+msgstr "小なりイコール"
 
 msgid "Manage custom interactions"
 msgstr "PCI管理"
@@ -176,7 +185,7 @@ msgid "Min:"
 msgstr "秒:"
 
 msgid "minus"
-msgstr "− 減算"
+msgstr "減算"
 
 msgid "Mono"
 msgstr "モノラル"
@@ -194,20 +203,20 @@ msgid "Options"
 msgstr "オプション"
 
 msgid "parentheses/round brackets"
-msgstr "() 丸括弧"
+msgstr "丸括弧"
 
 msgid "plus"
-msgstr "+ 加算"
+msgstr "加算"
 
 msgid "Plus/minus"
-msgstr "± プラス/マイナス"
+msgstr "プラス/マイナス"
 
 #, tao-public
 msgid "Portable Custom Interactions"
 msgstr "PCI（Portable Custom Interactions）"
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr ""
+msgstr "録音した音声は、録音停止後に自動的に再生されます。再生中はユーザーの操作はできず、すべてのボタンが無効になります。"
 
 msgid "Recording format"
 msgstr "録音フォーマット"
@@ -225,17 +234,17 @@ msgid "Sec:"
 msgstr "秒："
 
 msgid "set intersection"
-msgstr ""
+msgstr "積集合"
 
 msgid "set union"
-msgstr ""
+msgstr "和集合"
 
 #, tao-public
 msgid "Settings"
 msgstr "設定"
 
 msgid "similar"
-msgstr ""
+msgstr "相似"
 
 msgid "sinus"
 msgstr "sin"
@@ -244,10 +253,10 @@ msgid "Small"
 msgstr "小"
 
 msgid "square brackets"
-msgstr "[] 角括弧"
+msgstr "角括弧"
 
 msgid "square root"
-msgstr "√ 平方根"
+msgstr "平方根"
 
 msgid "Stereo"
 msgstr "ステレオ"
@@ -261,12 +270,6 @@ msgstr "シンボル"
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "これは受検者の解答（レスポンス）の識別子です。この識別子は、他のレスポンスやアイテム変数で使用しないでください。識別子は、文字列またはアンダースコア(\"_\")で始まり、文字列、アンダースコア、ハイフン(\"-\")、ピリオド(\".\")、10進数値（Digits）、結合文字（CombiningChars）、エクステンダ（Extenders）のみで構成された文字列です。"
 
-msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
-msgstr "同じ識別子 \"%s\" (ラベル \"%s\")と同じバージョンの \"%s\" のインタラクションが既に存在します。既存のものを上書きしますか?"
-
-msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
-msgstr "この操作は、使用している可能性のあるすべてのアイテムに影響を与え、元に戻すことはできません。ご確認をお願いします。"
-
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "録音が停止した後、音声ファイルをダウンロードするためのリンクを表示します。これはテスト実施前の録音状態の事前検証に利用してください。"
 
@@ -277,10 +280,13 @@ msgid "Time limit:"
 msgstr "録音時間制限:"
 
 msgid "times"
-msgstr "× 乗算"
+msgstr "乗算"
 
 msgid "times dot"
-msgstr "・ドット"
+msgstr "ドット"
+
+msgid "triangle"
+msgstr "三角形"
 
 msgid "Trigonometry"
 msgstr "三角関数"
@@ -314,7 +320,4 @@ msgstr "警告"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "圧縮の音声ファイルは，WebMまたはOggファイル（ファイル容量：小）として保存されます。非圧縮の場合は，WAVファイル（ファイル容量：大）として保存されます。"
-
-msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
-msgstr "PCI<strong>%s</strong>をシステムから削除しようとしています。"
 
