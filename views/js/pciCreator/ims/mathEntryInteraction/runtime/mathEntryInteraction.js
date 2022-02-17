@@ -220,7 +220,7 @@ define([
                     inResponseState:     toBoolean(config.inResponseState, false),
                     gapExpression:       config.gapExpression || '',
                     gapStyle:            config.gapStyle,
-                    locale:              (config.userLanguage || 'en').split('-')[0],
+                    locale:              this.userLanguage || 'en',
 
                     toolsStatus: {
                         frac: toBoolean(config.tool_frac, true),
@@ -721,6 +721,7 @@ define([
             initialize: function initialize(dom, config, instance) {
                 this.dom = dom;
                 this.instance = instance;
+                this.userLanguage = (config.userLanguage || 'en').split('-')[0];
 
                 this.$container = $(dom);
                 this.$toolbar = this.$container.find('.toolbar');
