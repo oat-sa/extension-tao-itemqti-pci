@@ -568,7 +568,8 @@ define([
                     availableTools = {
                         frac:   { label: self.getLabel('x/y'),
                             latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
-                        sqrt: {label: '&radic;', latex: '\\sqrt', fn: 'cmd', desc: 'Square root'},
+                        sqrt:   { label: '&radic;<span style="text-decoration:overline;">&nbsp;&nbsp;</span>',
+                            latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
                         exp: {label: 'x&#8319;', latex: '^', fn: 'cmd', desc: 'Exponent'},
                         log: {label: 'log', latex: '\\log', fn: 'cmd', desc: 'Log'},
                         ln: {label: 'ln', latex: '\\ln', fn: 'cmd', desc: 'Ln'},
@@ -886,6 +887,7 @@ define([
                     var gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
                         if (gapLatex.list.string[index] !== undefined) {
+                            console.log("[" + gapLatex.list.string[index]+"]");
                             gap.latex(gapLatex.list.string[index]);
                         }
                     })
