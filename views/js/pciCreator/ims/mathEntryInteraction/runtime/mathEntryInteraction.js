@@ -234,8 +234,9 @@ define([
                 return {
                     spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                     handlers: {
-                        edit: function onChange() {
+                        edit: function onChange(mathField) {
                             self.autoWrapContent();
+                            self.pciInstance.trigger('responseChange', [mathField.latex()]);
                         },
                         enter: function onEnter(mathField) {
                             // The "allow new line" option works under the following conditions:
@@ -824,6 +825,8 @@ define([
 
             // PCI instance is ready to run
             config.onready(pciInstance);
+
+            mathEntryInteraction.pciInstance = pciInstance;
         }
     });
 });
