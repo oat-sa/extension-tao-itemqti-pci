@@ -881,13 +881,12 @@ define([
                 mathEntryInteraction.setLatex(latex);
                 mathEntryInteraction.mathField.focus();
             });
-
+g
             pciInstance.on('latexGapInput', function (gapLatex) {
                 if (gapLatex.list && _.isArray(gapLatex.list.string)) {
                     var gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
                         if (gapLatex.list.string[index] !== undefined) {
-                            console.log("[" + gapLatex.list.string[index]+"]");
                             gap.latex(gapLatex.list.string[index]);
                         }
                     })

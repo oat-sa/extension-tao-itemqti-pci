@@ -45,8 +45,9 @@ define([
     var InteractionStateMap = stateFactory.create(
         Map,
         function init() {
-            this.activeEditId = null;
-            this.correctResponses = [];
+            // this.activeEditId = null;
+            // this.correctResponses = [];
+            initGlobalVariables(this);
             initForm(this);
         },
         function exit() {
@@ -59,6 +60,16 @@ define([
             destroyForm(this);
         }
     );
+
+    function initGlobalVariables(self) {
+        self.activeEditId = null;
+        self.correctResponses = [];
+
+        if (inGapMode(self)) {
+            var interaction = self.widget.element;
+            self.gapTemplate = interaction.prop('gapExpression');
+        }
+    }
 
     function initForm(self) {
         var interaction = self.widget.element,
@@ -254,17 +265,9 @@ define([
         var interaction = self.widget.element;
 
         if (inGapMode(self)){
-            var gapTemplateString = interaction.prop('gapExpression');
-            if (self.activeEditId != null) {
-                var responses = self.correctResponses[self.activeEditId].split(',');
-                self.activeEditId = null;
+            self.activeEditId = null;
 
-                responses.forEach(function (responseGap) {
-                    gapTemplateString = gapTemplateString.replace(responseGap.toString(), '\\taoGap');
-                });
-                interaction.prop('gapExpression', gapTemplateString);
-            }
-
+            interaction.prop('gapExpression', self.gapTemplate);
             interaction.prop('inResponseState', false);
             interaction.triggerPci('configChange', [interaction.getProperties()]);
         }
