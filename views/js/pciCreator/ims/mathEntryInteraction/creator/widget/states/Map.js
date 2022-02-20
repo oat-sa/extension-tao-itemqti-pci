@@ -45,13 +45,12 @@ define([
     var InteractionStateMap = stateFactory.create(
         Map,
         function init() {
-            // this.activeEditId = null;
-            // this.correctResponses = [];
             initGlobalVariables(this);
             initForm(this);
         },
         function exit() {
             emptyGapFields(this);
+            toggleResponseMode(this, false);
             saveAnswers(this);
             removeResponseChangeEventListener(this);
             clearMathFieldLatex(this);
@@ -65,7 +64,7 @@ define([
         self.activeEditId = null;
         self.correctResponses = [];
 
-        if (inGapMode(self)) {
+        if (inGapMode(self) === true) {
             var interaction = self.widget.element;
             self.gapTemplate = interaction.prop('gapExpression');
         }
@@ -91,7 +90,7 @@ define([
         $addAnswerBtn.on('click', function () {
             var newCorrectAnswer;
 
-            if (inGapMode(self)) {
+            if (inGapMode(self) === true) {
                 emptyGapFields(self);
                 var gapExpression = self.widget.element.prop('gapExpression');
                 var gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
@@ -148,28 +147,26 @@ define([
             $entryConfig = $responseForm.find('.entry-config'),
             $editButtons = $entryConfig.find('.answer-edit');
 
-        if (inGapMode(self)) {
-            $editButtons.click(function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
+        $editButtons.click(function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            toggleResponseMode(self, true);
+            var selectedEditId = parseInt(e.currentTarget.id.split('_')[1], 10);
 
-                if (!!interaction.prop('inResponseState') === false) {
-                    interaction.prop('inResponseState', true);
-                    interaction.triggerPci('configChange', [interaction.getProperties()]);
+            if (self.activeEditId !== selectedEditId) {
+
+                if (inGapMode(self) === true) {
+                    self.activeEditId = selectedEditId;
+                    var response = getGapResponseObject(self.correctResponses[self.activeEditId]);
+                    interaction.triggerPci('latexGapInput', [response]);
+                } else {
+                    self.activeEditId = parseInt(e.currentTarget.id.split('_')[1]);
+                    interaction.triggerPci('latexInput', [self.correctResponses[self.activeEditId]]);
                 }
-
-                self.activeEditId = parseInt(e.currentTarget.id.split('_')[1]);
-                var response = getGapResponseObject(self.correctResponses[self.activeEditId]);
-                interaction.triggerPci('latexGapInput', [response]);
-            });
-        } else {
-            $editButtons.click(function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                self.activeEditId = parseInt(e.currentTarget.id.split('_')[1]);
-                interaction.triggerPci('latexInput', [self.correctResponses[self.activeEditId]]);
-            });
-        }
+            } else {
+                emptyGapFields(self);
+            }
+        });
     }
 
     // forming gap response object to be further processed by the latexGapInput event
@@ -202,10 +199,9 @@ define([
             e.stopImmediatePropagation();
             var id = parseInt(e.currentTarget.id.split('_')[1]);
 
-            if (inGapMode(self)) {
+            if (inGapMode(self) === true) {
                 self.activeEditId = id;
                 emptyGapFields(self);
-
             }
             // setting active editing id to null in order to
             // prevent the editing of the next answer option that could take its place
@@ -247,7 +243,7 @@ define([
         var interaction = self.widget.element;
         var responseDeclaration = interaction.getResponseDeclaration();
         clearMapEntries(self);
-        if (inGapMode(self)){
+        if (inGapMode(self) === true) {
             self.correctResponses = self.correctResponses.filter(function (response) {
                 return response.split(',').indexOf('') === -1;
             });
@@ -264,17 +260,24 @@ define([
     function emptyGapFields(self) {
         var interaction = self.widget.element;
 
-        if (inGapMode(self)){
+        if (inGapMode(self) === true) {
             self.activeEditId = null;
 
             interaction.prop('gapExpression', self.gapTemplate);
-            interaction.prop('inResponseState', false);
+            toggleResponseMode(self, false);
+        }
+    }
+
+    function toggleResponseMode(self, value) {
+        var interaction = self.widget.element;
+        if (interaction.prop('inResponseState') !== value) {
+            interaction.prop('inResponseState', value);
             interaction.triggerPci('configChange', [interaction.getProperties()]);
         }
     }
 
     function inGapMode(self) {
-        return !!(self.widget.element.prop('useGapExpression'));
+        return self.widget.element.prop('useGapExpression');
     }
 
     return InteractionStateMap;

@@ -160,7 +160,7 @@ define([
                 this.createToolbar();
                 this.togglePlaceholder(false);
 
-                // QtiCreator rendering of the PCI in Gap Expression mode: display a non-editable MathQuill field with editable gap fields
+                // QtiCreator rendering of the PCI in Gap Expression mode and in response state: display a non-editable MathQuill field with editable gap fields
                 if (this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
                     this.setMathStaticContent(this.config.gapExpression);
                     this.createMathStatic();
@@ -169,7 +169,7 @@ define([
                     this.addGapStyle();
                     this.autoWrapContent();
 
-                    // QtiCreator rendering of the PCI: display an editable MathQuill field with non-editable gap fields (for question construction)
+                // QtiCreator rendering of the PCI in Gap Expression mode and in question state: display an editable MathQuill field with non-editable gap fields
                 } else if (this.inGapMode() && this.inQtiCreator() && !this.inResponseState()) {
                     this.createMathEditable();
                     this.setLatex(this.config.gapExpression);
@@ -177,7 +177,13 @@ define([
                     this.addGapStyle();
                     this.autoWrapContent();
 
-                    // Normal rendering of the PCI in Gap Expression mode: display a non-editable MathQuill field with editable gap fields for a test-taker
+                // QtiCreator rendering of the PCI in Normal mode and in question state: display static a static MathQUillField covered by a placeholder
+                } else if (!this.inGapMode() && this.inQtiCreator() && !this.inResponseState()) {
+                    this.createMathStatic();
+                    this.togglePlaceholder(true);
+                    this.autoWrapContent();
+
+                // Rendering PCI for a test-taker in Gap Expression mode: static MathQuill field with editable gap fields
                 } else if (this.inGapMode() && !this.inResponseState()) {
                     this.setMathStaticContent(this.config.gapExpression);
                     this.createMathStatic();
@@ -881,7 +887,7 @@ define([
                 mathEntryInteraction.setLatex(latex);
                 mathEntryInteraction.mathField.focus();
             });
-g
+
             pciInstance.on('latexGapInput', function (gapLatex) {
                 if (gapLatex.list && _.isArray(gapLatex.list.string)) {
                     var gaps = mathEntryInteraction.getGapFields();
