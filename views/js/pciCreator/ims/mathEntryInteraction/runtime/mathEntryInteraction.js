@@ -138,6 +138,10 @@ define([
                     this.addGapStyle();
                     this.autoWrapContent();
 
+                // QtiCreator rendering of the PCI: display the input field placeholder instead of an actual MathQuill editable field
+                } else if (!this.inGapMode() && this.inQtiCreator()) {
+                    this.togglePlaceholder(true);
+
                 // Normal rendering of the PCI in Gap Expression mode: render a static MathQuill field with editable gaps
                 } else if (this.inGapMode() && !this.inQtiCreator()) {
                     this.setMathStaticContent(this.config.gapExpression);
