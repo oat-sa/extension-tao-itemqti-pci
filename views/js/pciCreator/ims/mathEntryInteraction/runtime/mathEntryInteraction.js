@@ -109,7 +109,7 @@ define([
              */
             inQtiCreator: function isInCreator() {
                 if (_.isUndefined(this._inQtiCreator) && this.$container) {
-                    this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
+                    this._inQtiCreator = this.$container.find('.mathEntryInteraction').hasClass('tao-qti-creator-context');
                 }
                 return this._inQtiCreator;
             },
@@ -238,8 +238,9 @@ define([
                 return {
                     spaceBehavesLikeTab: !this.config.authorizeWhiteSpace,
                     handlers: {
-                        edit: function onChange() {
+                        edit: function onChange(mathField) {
                             self.autoWrapContent();
+                            self.pciInstance.trigger('responseChange', [mathField.latex()]);
                         },
                         enter: function onEnter(mathField) {
                             // The "allow new line" option works under the following conditions:
@@ -828,6 +829,8 @@ define([
 
             // PCI instance is ready to run
             config.onready(pciInstance);
+
+            mathEntryInteraction.pciInstance = pciInstance;
         }
     });
 });
