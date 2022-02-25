@@ -56,6 +56,7 @@ define([
             return {
                 authorizeWhiteSpace: 'false',
                 useGapExpression: 'false',
+                inResponseState: 'false',
                 gapExpression: '',
                 gapStyle: '',
                 focusOnDenominator: false,

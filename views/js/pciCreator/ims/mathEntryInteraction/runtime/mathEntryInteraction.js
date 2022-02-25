@@ -102,8 +102,8 @@ define([
     });
 
     const labels = {
-        'ja': {
-            'x/y': '分数',
+        'en': {
+            'x/y': '<span>x</span><br><span style="text-decoration: overline;">y</span>',
             '&le;': '&#8806;',
             '&ge;': '&#8807;',
             '\\le':  '\\leq',
@@ -129,7 +129,6 @@ define([
              * @returns {string} - Localazed label
              */
              getLabel: function getLabel(label) {
-
                 var locale = labels[this.config.locale];
                 if (locale) {
                     return locale[label] || label;
@@ -142,6 +141,13 @@ define([
              */
              inGapMode: function inGapMode() {
                 return this.config.useGapExpression;
+            },
+
+            /**
+             * @returns {Boolean} - Is the PCI instance using japanese locale?
+             */
+            inJapanese: function inJapanese() {
+                 return this.userLanguage === 'ja';
             },
 
             /**
@@ -171,7 +177,7 @@ define([
 
                 // QtiCreator rendering of the PCI in Gap Expression mode and in question state: display an editable MathQuill field with non-editable gap fields
                 } else if (this.inGapMode() && this.inQtiCreator() && !this.inResponseState()) {
-                    this.createMathEditable();
+                    this.createMathEditable(true);
                     this.setLatex(this.config.gapExpression);
                     this.addToolbarListeners();
                     this.addGapStyle();
@@ -182,6 +188,12 @@ define([
                     this.createMathStatic();
                     this.togglePlaceholder(true);
                     this.autoWrapContent();
+
+                }
+                else if (!this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
+                    this.createMathEditable(true);
+                    this.togglePlaceholder(false);
+                    this.addToolbarListeners();
 
                 // Rendering PCI for a test-taker in Gap Expression mode: static MathQuill field with editable gap fields
                 } else if (this.inGapMode() && !this.inResponseState()) {
@@ -194,7 +206,7 @@ define([
 
                     // Normal rendering of the PCI: display an editable MathQuill field without gaps
                 } else {
-                    this.createMathEditable();
+                    this.createMathEditable(false);
                     this.addToolbarListeners();
                 }
             },
@@ -221,7 +233,7 @@ define([
 
                 this.config = {
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
-                    focusOnDenominator:  toBoolean(config.focusOnDenominator, false),
+                    focusOnDenominator:  toBoolean(this.userLanguage === 'ja', false),
                     useGapExpression:    toBoolean(config.useGapExpression, false),
                     inResponseState:     toBoolean(config.inResponseState, false),
                     gapExpression:       config.gapExpression || '',
@@ -456,16 +468,20 @@ define([
             /**
              * Transform a DOM element into a MathQuill Editable Field
              */
-            createMathEditable: function createMathEditable() {
+            createMathEditable: function createMathEditable(replaceStatic) {
                 var config = this.getMqConfig();
 
-                // if(this.mathField && this.mathField instanceof MathQuill){
-                //     // if the element already exists, update the config
-                //     this.mathField.config(config);
-                // }else{
+                // if the element already exists, update the config
+                if(this.mathField && this.mathField instanceof MathQuill && replaceStatic === false){
+                    this.mathField.config(config);
+                }
                 // if not create it
-                this.mathField = MQ.MathField(this.$input.get(0), config);
-                // }
+                else if (this.mathField && this.mathField instanceof MathQuill && !replaceStatic) {
+                    this.$input.empty();
+                    this.mathField = MQ.MathField(this.$input.get(0), config);
+                } else {
+                    this.mathField = MQ.MathField(this.$input.get(0), config);
+                }
             },
 
             /**
@@ -636,6 +652,13 @@ define([
                 availableToolGroups.forEach(function (toolgroup) {
                     self.$toolbar.append(self.createToolGroup(toolgroup, availableTools));
                 });
+
+                // slightly changing fraction tool styles for a vertical fraction style in japanese locale
+                if (!this.inJapanese()) {
+                    var dataId = 'frac';
+                    var fracTool = this.$toolbar.find(`[data-identifier='${dataId}']`)
+                    fracTool.attr('id', 'horizontal-fraction-tool');
+                }
             },
 
             /**
@@ -691,13 +714,24 @@ define([
              */
             addToolbarListeners: function addToolbarListeners() {
                 var self = this;
-
                 this.$toolbar
                     .off('mousedown' + ns)
                     .on('mousedown' + ns, function (e) {
-                        var $target = $(e.target),
-                            fn = $target.data('fn'),
-                            latex = $target.data('latex');
+
+                        var $target,
+                            fn = '',
+                            latex = ''
+
+                        if ($(e.target).data('fn')) {
+                            $target = $(e.target),
+                                fn = $target.data('fn'),
+                                latex = $target.data('latex');
+                        } else {
+                            $target = $(e.target.parentElement),
+                                fn = $target.data('fn'),
+                                latex = $target.data('latex');
+                        }
+
 
                         e.stopPropagation();
                         e.preventDefault();

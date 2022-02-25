@@ -42,57 +42,60 @@ define([
         return parseInt(value) + 1;
     });
 
-    var InteractionStateMap = stateFactory.create(
+    var MathEntryInteractionStateResponse = stateFactory.create(
         Map,
         function init() {
-            initGlobalVariables(this);
-            initForm(this);
+            this.initGlobalVariables();
+            this.initForm();
         },
         function exit() {
-            emptyGapFields(this);
-            toggleResponseMode(this, false);
-            saveAnswers(this);
-            removeResponseChangeEventListener(this);
-            clearMathFieldLatex(this);
-            removeEditDeleteListeners(this);
-            removeAddButtonListener(this);
-            destroyForm(this);
+            this.emptyGapFields();
+            this.toggleResponseMode(false);
+            this.saveAnswers();
+            this.removeResponseChangeEventListener();
+            this.removeEditDeleteListeners();
+            this.removeAddButtonListener();
+            this.destroyForm();
         }
     );
 
-    function initGlobalVariables(self) {
+
+    MathEntryInteractionStateResponse.prototype.initGlobalVariables = function initGlobalVariables() {
+        var self = this,
+            interaction = self.widget.element;
         self.activeEditId = null;
         self.correctResponses = [];
 
-        if (inGapMode(self) === true) {
-            var interaction = self.widget.element;
+        if (this.inGapMode(self) === true) {
+            interaction = self.widget.element;
             self.gapTemplate = interaction.prop('gapExpression');
         }
     }
 
-    function initForm(self) {
-        var interaction = self.widget.element,
-            responseDeclaration = interaction.getResponseDeclaration(),
+    MathEntryInteractionStateResponse.prototype.initForm = function initForm() {
+        var self = this,
+            interaction = self.widget.element,
             $responseForm = self.widget.$responseForm;
 
-        initResponseChangeEventListener(self);
-        self.correctResponses = getExistingCorrectAnswerOptions(self);
+        this.initResponseChangeEventListener();
+        self.correctResponses = this.getExistingCorrectAnswerOptions();
         $responseForm.html(addAnswerOptionBtn());
-        initAddAnswerButton(self);
-        renderForm(self, self.correctResponses);
+        this.initAddAnswerButton();
+        this.renderForm(self.correctResponses);
     }
 
-    function initAddAnswerButton(self) {
-        var interaction = self.widget.element,
+    MathEntryInteractionStateResponse.prototype.initAddAnswerButton = function initAddAnswerButton() {
+        var self = this,
+            interaction = self.widget.element,
             $responseForm = self.widget.$responseForm,
             $addAnswerBtn = $responseForm.find($('.add-answer-option'));
 
         $addAnswerBtn.on('click', function () {
             var newCorrectAnswer;
 
-            if (inGapMode(self) === true) {
-                emptyGapFields(self);
-                var gapExpression = self.widget.element.prop('gapExpression');
+            if (self.inGapMode() === true) {
+                self.emptyGapFields();
+                var gapExpression = interaction.prop('gapExpression');
                 var gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
                 if (gapCount > 0) {
                     newCorrectAnswer = [];
@@ -109,40 +112,42 @@ define([
             }
 
             self.correctResponses.push(newCorrectAnswer);
-            renderForm(self, self.correctResponses);
+            self.renderForm(self.correctResponses);
         });
     }
 
-    function getExistingCorrectAnswerOptions(self) {
-        var mapEntries = self.widget.element.getResponseDeclaration().getMapEntries();
+    MathEntryInteractionStateResponse.prototype.getExistingCorrectAnswerOptions = function getExistingCorrectAnswerOptions() {
+        var self = this,
+            interaction = self.widget.element;
+
+        var mapEntries = interaction.getResponseDeclaration().getMapEntries();
         return _.keys(mapEntries) || [];
     }
 
-    function initResponseChangeEventListener(self) {
-        var interaction = self.widget.element;
-        self.widget.element.onPci('responseChange', function (latex) {
-            if (!inGapMode(self) && self.activeEditId != null) {
+    MathEntryInteractionStateResponse.prototype.initResponseChangeEventListener = function initResponseChangeEventListener() {
+        var self = this,
+            interaction = self.widget.element;
+
+        interaction.onPci('responseChange', function (latex) {
+            if (!self.inGapMode(self) && self.activeEditId != null) {
                 self.correctResponses[self.activeEditId] = latex;
-            } else if (inGapMode(self) && self.activeEditId != null) {
+            } else if (self.inGapMode(self) && self.activeEditId != null) {
                 var response = interaction.getResponse();
                 self.correctResponses[self.activeEditId] = response.base.string;
             }
         });
     }
 
-    function removeResponseChangeEventListener(self) {
-        self.widget.element.offPci('responseChange');
+    MathEntryInteractionStateResponse.prototype.removeResponseChangeEventListener = function removeResponseChangeEventListener() {
+        var self = this,
+            interaction = self.widget.element;
+
+        interaction.offPci('responseChange');
     }
 
-    function clearMathFieldLatex(self) {
-        var interaction = self.widget.element;
-        if (!inGapMode(self)) {
-            interaction.triggerPci('latexInput', ['']);
-        }
-    }
-
-    function initEditingOptions(self) {
-        var interaction = self.widget.element,
+    MathEntryInteractionStateResponse.prototype.initEditingOptions = function initEditingOptions() {
+        var self = this,
+            interaction = self.widget.element,
             $responseForm = self.widget.$responseForm,
             $entryConfig = $responseForm.find('.entry-config'),
             $editButtons = $entryConfig.find('.answer-edit');
@@ -150,27 +155,28 @@ define([
         $editButtons.click(function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            toggleResponseMode(self, true);
+            self.toggleResponseMode(true);
             var selectedEditId = parseInt(e.currentTarget.id.split('_')[1], 10);
 
             if (self.activeEditId !== selectedEditId) {
 
-                if (inGapMode(self) === true) {
+                if (self.inGapMode() === true) {
                     self.activeEditId = selectedEditId;
-                    var response = getGapResponseObject(self.correctResponses[self.activeEditId]);
+                    var response = self.getGapResponseObject(self.correctResponses[self.activeEditId]);
+                    console.log(interaction, response);
                     interaction.triggerPci('latexGapInput', [response]);
                 } else {
                     self.activeEditId = parseInt(e.currentTarget.id.split('_')[1]);
                     interaction.triggerPci('latexInput', [self.correctResponses[self.activeEditId]]);
                 }
             } else {
-                emptyGapFields(self);
+                self.emptyGapFields();
             }
         });
     }
 
     // forming gap response object to be further processed by the latexGapInput event
-    function getGapResponseObject(response) {
+    MathEntryInteractionStateResponse.prototype.getGapResponseObject = function getGapResponseObject(response) {
         return {
             list: {
                 string: response.split(',')
@@ -179,71 +185,85 @@ define([
     }
 
     // removing all saved map entries
-    function clearMapEntries(self) {
-        var interaction = self.widget.element;
-        var response = interaction.getResponseDeclaration();
-        var mapEntries = response.getMapEntries();
+    MathEntryInteractionStateResponse.prototype.clearMapEntries = function clearMapEntries() {
+        var self = this,
+            interaction = self.widget.element,
+            response = interaction.getResponseDeclaration(),
+            mapEntries = response.getMapEntries();
+
         _.keys(mapEntries).forEach(function (mapKey) {
             response.removeMapEntry(mapKey, true);
         });
     }
 
-    function initDeletingOptions(self) {
-        var interaction = self.widget.element;
-        var $responseForm = self.widget.$responseForm;
-        var $entryConfig = $responseForm.find('.entry-config');
-        var $deleteButtons = $entryConfig.find('.answer-delete');
+    MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
+        var self = this,
+            $responseForm = self.widget.$responseForm,
+            $entryConfig = $responseForm.find('.entry-config'),
+            $deleteButtons = $entryConfig.find('.answer-delete');
 
         $deleteButtons.click(function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = parseInt(e.currentTarget.id.split('_')[1]);
 
-            if (inGapMode(self) === true) {
+            if (self.inGapMode() === true) {
                 self.activeEditId = id;
-                emptyGapFields(self);
+                self.emptyGapFields();
             }
             // setting active editing id to null in order to
             // prevent the editing of the next answer option that could take its place
             self.activeEditId = null;
 
             self.correctResponses.splice(id, 1);
-            renderForm(self, self.correctResponses);
+            self.renderForm(self.correctResponses);
         });
     }
 
-    function renderForm(self, correctAnswerOptions) {
-        removeEditDeleteListeners(self);
-        var $responseForm = self.widget.$responseForm;
+    MathEntryInteractionStateResponse.prototype.renderForm = function renderForm(correctAnswerOptions) {
+        var self = this,
+            $responseForm = self.widget.$responseForm;
+
+        this.removeEditDeleteListeners();
         $responseForm.find('.mathEntryInteraction').remove();
         $responseForm.append(answerFormTpl({correctAnswerEntries: correctAnswerOptions}));
-        initDeletingOptions(self);
-        initEditingOptions(self);
+        this.initDeletingOptions();
+        this.initEditingOptions();
     }
 
     /**
      *   remove all event listeners to avoid any potential memory leaks
      */
-    function removeEditDeleteListeners(self) {
-        var $entryConfig = self.widget.$responseForm.find('.entry-config');
+    MathEntryInteractionStateResponse.prototype.removeEditDeleteListeners = function removeEditDeleteListeners() {
+        var self = this,
+            $entryConfig = self.widget.$responseForm.find('.entry-config');
+
         $entryConfig.find('.answer-edit').off('click');
         $entryConfig.find('.answer-delete').off('click');
     }
 
-    function removeAddButtonListener(self) {
-        var $responseForm = self.widget.$responseForm;
+    MathEntryInteractionStateResponse.prototype.removeAddButtonListener = function removeAddButtonListener() {
+        var self = this,
+            $responseForm = self.widget.$responseForm;
+
         $responseForm.find($('.add-answer-option')).off('click');
     }
 
-    function destroyForm(self) {
-        self.widget.$responseForm.find('.mathEntryInteraction').remove();
+    MathEntryInteractionStateResponse.prototype.destroyForm = function destroyForm() {
+        var self = this,
+            $responseForm = self.widget.$responseForm;
+
+        $responseForm.find('.mathEntryInteraction').remove();
     }
 
-    function saveAnswers(self) {
-        var interaction = self.widget.element;
-        var responseDeclaration = interaction.getResponseDeclaration();
-        clearMapEntries(self);
-        if (inGapMode(self) === true) {
+    MathEntryInteractionStateResponse.prototype.saveAnswers = function saveAnswers() {
+        var self = this,
+            interaction = self.widget.element,
+            responseDeclaration = interaction.getResponseDeclaration();
+
+        this.clearMapEntries();
+
+        if (this.inGapMode() === true) {
             self.correctResponses = self.correctResponses.filter(function (response) {
                 return response.split(',').indexOf('') === -1;
             });
@@ -257,28 +277,34 @@ define([
     /**
      *   if in gap mode: will empty all the gap fields
      */
-    function emptyGapFields(self) {
-        var interaction = self.widget.element;
+    MathEntryInteractionStateResponse.prototype.emptyGapFields = function emptyGapFields() {
+        var self = this,
+            interaction = self.widget.element;
 
-        if (inGapMode(self) === true) {
+        if (this.inGapMode() === true) {
             self.activeEditId = null;
 
             interaction.prop('gapExpression', self.gapTemplate);
-            toggleResponseMode(self, false);
+            this.toggleResponseMode(false);
         }
     }
 
-    function toggleResponseMode(self, value) {
-        var interaction = self.widget.element;
+    MathEntryInteractionStateResponse.prototype.toggleResponseMode = function toggleResponseMode(value) {
+        var self = this,
+            interaction = self.widget.element;
+
         if (interaction.prop('inResponseState') !== value) {
             interaction.prop('inResponseState', value);
             interaction.triggerPci('configChange', [interaction.getProperties()]);
         }
     }
 
-    function inGapMode(self) {
-        return self.widget.element.prop('useGapExpression');
+    MathEntryInteractionStateResponse.prototype.inGapMode = function inGapMode() {
+        var self = this,
+            interaction = self.widget.element;
+
+        return interaction.prop('useGapExpression');
     }
 
-    return InteractionStateMap;
+    return MathEntryInteractionStateResponse;
 });

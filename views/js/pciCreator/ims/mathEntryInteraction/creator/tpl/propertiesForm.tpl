@@ -21,11 +21,6 @@
         {{__ "authorize white space"}}
     </label>
     <label class="panel">
-        <input name="focusOnDenominator" type="checkbox" {{#if focusOnDenominator}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "focus on denominator"}}
-    </label>
-    <label class="panel">
         <input name="useGapExpression" type="checkbox" {{#if useGapExpression}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         {{__ "use expression with gaps"}}

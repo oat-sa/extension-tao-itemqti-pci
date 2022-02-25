@@ -243,7 +243,11 @@ $defaultGapWidth: 30;
                         border-bottom-right-radius: 0;
                     }
                 }
+            }
 
+            #horizontal-fraction-tool{
+                padding: 0 16px;
+                font-size: 12px !important;
             }
         }
     }
