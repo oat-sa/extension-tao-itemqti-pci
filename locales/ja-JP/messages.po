@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 2022.01\n"
-"PO-Revision-Date: 2022-02-17T14:59:00\n"
+"Project-Id-Version: TAO 2021.10\n"
+"PO-Revision-Date: 2022-02-28T10:41:16\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja-JP\n"
@@ -79,12 +79,6 @@ msgstr "削除"
 msgid "delete the answer"
 msgstr ""
 
-msgid "lower than or equal symbol"
-msgstr "≦"
-
-msgid "greater than or equal symbol"
-msgstr "≧"
-
 msgid "disabled"
 msgstr "無効"
 
@@ -136,6 +130,9 @@ msgstr "大なり"
 msgid "greater than or equal"
 msgstr "大なりイコール"
 
+msgid "greater than or equal symbol"
+msgstr "≧"
+
 msgid "id : "
 msgstr "ID : "
 
@@ -183,6 +180,9 @@ msgstr "小なり"
 
 msgid "lower than or equal"
 msgstr "小なりイコール"
+
+msgid "lower than or equal symbol"
+msgstr "≦"
 
 msgid "Manage custom interactions"
 msgstr "PCI管理"
