@@ -220,14 +220,14 @@
     <label class="panel">
         <input name="tool_lte" type="checkbox" {{#if tool_lte}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &le; {{__ "lower than or equal"}}
+        {{__ "lower than or equal symbol"}} {{__ "lower than or equal"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="tool_gte" type="checkbox" {{#if tool_gte}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &ge; {{__ "greater than or equal"}}
+        {{__ "greater than or equal symbol"}} {{__ "greater than or equal"}}
     </label>
 </div>
 

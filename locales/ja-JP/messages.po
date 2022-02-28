@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 2021.10\n"
-"PO-Revision-Date: 2021-11-29T18:11:10\n"
+"PO-Revision-Date: 2022-02-25T12:44:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja-JP\n"
@@ -12,6 +12,9 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+
+msgid "Add an answer option"
+msgstr ""
 
 msgid "Add gap"
 msgstr "穴埋め追加"
@@ -64,13 +67,25 @@ msgstr "cos"
 msgid "Delete"
 msgstr "削除"
 
+msgid "delete the answer"
+msgstr ""
+
+msgid "lower than or equal symbol"
+msgstr "≦"
+
+msgid "greater than or equal symbol"
+msgstr "≧"
+
 msgid "disabled"
 msgstr "無効"
 
 msgid "divide"
-msgstr "÷ 除算"
+msgstr "除算"
 
 msgid "Download"
+msgstr ""
+
+msgid "edit the answer"
 msgstr ""
 
 msgid "enable auto wrap"
@@ -80,7 +95,7 @@ msgid "Enabled in item authoring"
 msgstr ""
 
 msgid "equal"
-msgstr "= イコール"
+msgstr "イコール"
 
 msgid "Experimental only"
 msgstr "実験用"
@@ -107,7 +122,7 @@ msgid "Give the possibility to the test taker to playback its own recording."
 msgstr "受検者は自分が録音した声を，再生して聞くことができます"
 
 msgid "greater than"
-msgstr "> 大なり"
+msgstr "大なり"
 
 msgid "greater than or equal"
 msgstr "≧ 大なりイコール"
@@ -155,10 +170,10 @@ msgid "log"
 msgstr "log"
 
 msgid "lower than"
-msgstr "< 小なり"
+msgstr "小なり"
 
 msgid "lower than or equal"
-msgstr "≦ 小なりイコール"
+msgstr "小なりイコール"
 
 msgid "Manage custom interactions"
 msgstr "PCI管理"
@@ -176,7 +191,7 @@ msgid "Min:"
 msgstr "秒:"
 
 msgid "minus"
-msgstr "− 減算"
+msgstr "減算"
 
 msgid "Mono"
 msgstr "モノラル"
@@ -194,13 +209,13 @@ msgid "Options"
 msgstr "オプション"
 
 msgid "parentheses/round brackets"
-msgstr "() 丸括弧"
+msgstr "丸括弧"
 
 msgid "plus"
-msgstr "+ 加算"
+msgstr "加算"
 
 msgid "Plus/minus"
-msgstr "± プラス/マイナス"
+msgstr "プラス/マイナス"
 
 #, tao-public
 msgid "Portable Custom Interactions"
@@ -244,10 +259,10 @@ msgid "Small"
 msgstr "小"
 
 msgid "square brackets"
-msgstr "[] 角括弧"
+msgstr "角括弧"
 
 msgid "square root"
-msgstr "√ 平方根"
+msgstr "平方根"
 
 msgid "Stereo"
 msgstr "ステレオ"
@@ -277,10 +292,10 @@ msgid "Time limit:"
 msgstr "録音時間制限:"
 
 msgid "times"
-msgstr "× 乗算"
+msgstr "乗算"
 
 msgid "times dot"
-msgstr "・ドット"
+msgstr "ドット"
 
 msgid "Trigonometry"
 msgstr "三角関数"
