@@ -135,7 +135,7 @@
     <label class="panel">
         <input name="tool_angle" type="checkbox" {{#if tool_angle}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &ang; {{__ "angle" }}
+        &ang; {{__ "angle"}}
     </label>
 </div>
 <div>
@@ -149,7 +149,7 @@
     <label class="panel">
         <input name="tool_triangle" type="checkbox" {{#if tool_triangle}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &#9651; {{__ "triangle" }}
+        &#9651; {{__ "triangle"}}
     </label>
 </div>
 <div>
