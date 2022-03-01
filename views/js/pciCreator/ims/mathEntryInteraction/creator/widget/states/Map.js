@@ -163,8 +163,7 @@ define([
                 if (self.inGapMode() === true) {
                     self.activeEditId = selectedEditId;
                     var response = self.getGapResponseObject(self.correctResponses[self.activeEditId]);
-                    console.log(interaction, response);
-                    interaction.triggerPci('latexGapInput', [response]);
+                    interaction.triggerPci('latexGapInpfut', [response]);
                 } else {
                     self.activeEditId = parseInt(e.currentTarget.id.split('_')[1]);
                     interaction.triggerPci('latexInput', [self.correctResponses[self.activeEditId]]);
@@ -198,6 +197,7 @@ define([
 
     MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
         var self = this,
+            interaction = self.widget.element,
             $responseForm = self.widget.$responseForm,
             $entryConfig = $responseForm.find('.entry-config'),
             $deleteButtons = $entryConfig.find('.answer-delete');
@@ -210,10 +210,10 @@ define([
             if (self.inGapMode() === true) {
                 self.activeEditId = id;
                 self.emptyGapFields();
+            } else {
+                self.activeEditId = null;
+                interaction.triggerPci('latexInput', ['']);
             }
-            // setting active editing id to null in order to
-            // prevent the editing of the next answer option that could take its place
-            self.activeEditId = null;
 
             self.correctResponses.splice(id, 1);
             self.renderForm(self.correctResponses);
