@@ -297,7 +297,9 @@ define([
                     handlers: {
                         edit: function onChange(mathField) {
                             self.autoWrapContent();
-                            self.pciInstance.trigger('responseChange', [mathField.latex()]);
+                            if(self.pciInstance) {
+                                self.pciInstance.trigger('responseChange', [mathField.latex()]);
+                            }
                         },
                         enter: function onEnter(mathField) {
                             // The "allow new line" option works under the following conditions:
