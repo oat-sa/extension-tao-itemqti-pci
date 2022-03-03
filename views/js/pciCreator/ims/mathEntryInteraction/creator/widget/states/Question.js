@@ -152,14 +152,10 @@ define([
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
                     $gapStyleBox.show();
-                    // response.attr('cardinality', 'multiple');
-                    response.cardinality = 'multiple';
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
                     $gapStyleBox.hide();
-                    response.cardinality = 'single';
-                    // response.attr('cardinality', 'single');
                 }
 
                 response.attr('cardinality', 'single');
