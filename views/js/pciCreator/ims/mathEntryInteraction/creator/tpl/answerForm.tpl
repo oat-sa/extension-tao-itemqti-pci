@@ -1,6 +1,6 @@
 <div class="panel mathEntryInteraction">
     <hr>
-    <h3>Define correct responses: </h3>
+    <h3>{{__ "Define correct responses"}}:</h3>
     <div class="answer-entries-config" data-config-for-hot-uid="{{@key}}">
         <div class="panel">
             <div class="entry-config">
