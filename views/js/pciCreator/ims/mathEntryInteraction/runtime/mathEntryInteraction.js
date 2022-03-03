@@ -129,9 +129,9 @@ define([
              * @returns {string} - Localazed label
              */
              getLabel: function getLabel(label) {
-                var locale = labels[this.config.locale];
-                if (locale) {
-                    return locale[label] || label;
+                var localizedLabels = labels[this.config.locale];
+                if (localizedLabels) {
+                    return localizedLabels[label] || label;
                 }
                 return label;
             },
