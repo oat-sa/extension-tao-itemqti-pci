@@ -233,7 +233,7 @@ define([
 
                 this.config = {
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
-                    focusOnDenominator:  toBoolean(this.userLanguage === 'ja', false),
+                    focusOnDenominator:  toBoolean(this.inJapanese(), false),
                     useGapExpression:    toBoolean(config.useGapExpression, false),
                     inResponseState:     toBoolean(config.inResponseState, false),
                     gapExpression:       config.gapExpression || '',
