@@ -106,8 +106,8 @@ define([
             'x/y': '<span>x</span><br><span style="text-decoration: overline;">y</span>',
             '&le;': '&#8806;',
             '&ge;': '&#8807;',
-            '\\le':  '\\leq',
-            '\\ge':  '\\geq'
+            '\\le': '\\leq',
+            '\\ge': '\\geq'
         }
     };
 
@@ -128,7 +128,7 @@ define([
             /**
              * @returns {string} - Localazed label
              */
-             getLabel: function getLabel(label) {
+            getLabel: function getLabel(label) {
                 var localizedLabels = labels[this.config.locale];
                 if (localizedLabels) {
                     return localizedLabels[label] || label;
@@ -139,7 +139,7 @@ define([
             /**
              * @returns {Boolean} - Is the PCI instance configured to use gap expressions?
              */
-             inGapMode: function inGapMode() {
+            inGapMode: function inGapMode() {
                 return this.config.useGapExpression;
             },
 
@@ -147,7 +147,7 @@ define([
              * @returns {Boolean} - Is the PCI instance using japanese locale?
              */
             inJapanese: function inJapanese() {
-                 return this.userLanguage === 'ja';
+                return this.userLanguage === 'ja';
             },
 
             /**
@@ -175,7 +175,7 @@ define([
                     this.addGapStyle();
                     this.autoWrapContent();
 
-                // QtiCreator rendering of the PCI in Gap Expression mode and in question state: display an editable MathQuill field with non-editable gap fields
+                    // QtiCreator rendering of the PCI in Gap Expression mode and in question state: display an editable MathQuill field with non-editable gap fields
                 } else if (this.inGapMode() && this.inQtiCreator() && !this.inResponseState()) {
                     this.createMathEditable(true);
                     this.setLatex(this.config.gapExpression);
@@ -183,19 +183,18 @@ define([
                     this.addGapStyle();
                     this.autoWrapContent();
 
-                // QtiCreator rendering of the PCI in Normal mode and in question state: display static a static MathQUillField covered by a placeholder
+                    // QtiCreator rendering of the PCI in Normal mode and in question state: display static a static MathQUillField covered by a placeholder
                 } else if (!this.inGapMode() && this.inQtiCreator() && !this.inResponseState()) {
                     this.createMathStatic();
                     this.togglePlaceholder(true);
                     this.autoWrapContent();
 
-                }
-                else if (!this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
+                } else if (!this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
                     this.createMathEditable(true);
                     this.togglePlaceholder(false);
                     this.addToolbarListeners();
 
-                // Rendering PCI for a test-taker in Gap Expression mode: static MathQuill field with editable gap fields
+                    // Rendering PCI for a test-taker in Gap Expression mode: static MathQuill field with editable gap fields
                 } else if (this.inGapMode() && !this.inResponseState()) {
                     this.setMathStaticContent(this.config.gapExpression);
                     this.createMathStatic();
@@ -233,12 +232,12 @@ define([
 
                 this.config = {
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
-                    focusOnDenominator:  toBoolean(this.inJapanese(), false),
-                    useGapExpression:    toBoolean(config.useGapExpression, false),
-                    inResponseState:     toBoolean(config.inResponseState, false),
-                    gapExpression:       config.gapExpression || '',
-                    gapStyle:            config.gapStyle,
-                    locale:              this.userLanguage || 'en',
+                    focusOnDenominator: toBoolean(this.inJapanese(), false),
+                    useGapExpression: toBoolean(config.useGapExpression, false),
+                    inResponseState: toBoolean(config.inResponseState, false),
+                    gapExpression: config.gapExpression || '',
+                    gapStyle: config.gapStyle,
+                    locale: this.userLanguage || 'en',
 
                     toolsStatus: {
                         frac: toBoolean(config.tool_frac, true),
@@ -297,7 +296,7 @@ define([
                     handlers: {
                         edit: function onChange(mathField) {
                             self.autoWrapContent();
-                            if(self.pciInstance) {
+                            if (self.pciInstance) {
                                 self.pciInstance.trigger('responseChange', [mathField.latex()]);
                             }
                         },
@@ -474,7 +473,7 @@ define([
                 var config = this.getMqConfig();
 
                 // if the element already exists, update the config
-                if(this.mathField && this.mathField instanceof MathQuill && replaceStatic === false){
+                if (this.mathField && this.mathField instanceof MathQuill && replaceStatic === false) {
                     this.mathField.config(config);
                 }
                 // if not create it
@@ -590,24 +589,35 @@ define([
             createToolbar: function createToolbar() {
                 var self = this,
                     availableTools = {
-                        frac:   { label: self.getLabel('x/y'),
-                            latex: '\\frac',    fn: 'cmd',      desc: 'Fraction' },
-                        sqrt:   { label: '&radic;<span style="text-decoration:overline;">&nbsp;&nbsp;</span>',
-                            latex: '\\sqrt',    fn: 'cmd',      desc: 'Square root' },
+                        frac: {label: self.getLabel('x/y'), latex: '\\frac', fn: 'cmd', desc: 'Fraction'},
+                        sqrt: {
+                            label: '&radic;<span style="text-decoration:overline;">&nbsp;&nbsp;</span>',
+                            latex: '\\sqrt',
+                            fn: 'cmd',
+                            desc: 'Square root'
+                        },
                         exp: {label: 'x&#8319;', latex: '^', fn: 'cmd', desc: 'Exponent'},
                         log: {label: 'log', latex: '\\log', fn: 'cmd', desc: 'Log'},
                         ln: {label: 'ln', latex: '\\ln', fn: 'cmd', desc: 'Ln'},
                         e: {label: 'e', latex: '\\mathrm{e}', fn: 'write', desc: 'Euler\'s constant'},
-                        infinity: { label: '&#8734;',   latex: '\\infty',   fn: 'cmd',      desc: 'Infinity' },
+                        infinity: {label: '&#8734;', latex: '\\infty', fn: 'cmd', desc: 'Infinity'},
                         lbrack: {label: '[', latex: '\\lbrack', fn: 'cmd', desc: 'Left bracket'},
                         rbrack: {label: ']', latex: '\\rbrack', fn: 'cmd', desc: 'Right bracket'},
                         pi: {label: '&pi;', latex: '\\pi', fn: 'cmd', desc: 'Pi'},
                         cos: {label: 'cos', latex: '\\cos', fn: 'cmd', desc: 'Cosinus'},
                         sin: {label: 'sin', latex: '\\sin', fn: 'cmd', desc: 'Sinus'},
-                        lte:    { label: self.getLabel('&le;'),
-                            latex: self.getLabel('\\le'),      fn: 'cmd',      desc: 'Lower than or equal' },
-                        gte:    { label: self.getLabel('&ge;'),
-                            latex: self.getLabel('\\ge'),      fn: 'cmd',      desc: 'Greater than or equal' },
+                        lte: {
+                            label: self.getLabel('&le;'),
+                            latex: self.getLabel('\\le'),
+                            fn: 'cmd',
+                            desc: 'Lower than or equal'
+                        },
+                        gte: {
+                            label: self.getLabel('&ge;'),
+                            latex: self.getLabel('\\ge'),
+                            fn: 'cmd',
+                            desc: 'Greater than or equal'
+                        },
                         times: {label: '&times;', latex: '\\times', fn: 'cmd', desc: 'Multiply'},
                         divide: {label: '&divide;', latex: '\\div', fn: 'cmd', desc: 'Divide'},
                         plusminus: {label: '&#177;', latex: '\\pm', fn: 'cmd', desc: 'Plus/minus'},
