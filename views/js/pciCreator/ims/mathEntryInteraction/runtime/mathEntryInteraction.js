@@ -659,7 +659,7 @@ define([
                 if (this.inJapanese()) {
                     var dataId = 'frac';
                     var fracTool = this.$toolbar.find(`[data-identifier='${dataId}']`)
-                    fracTool.attr('id', 'horizontal-fraction-tool');
+                    fracTool.addClass('vertical-fraction-tool');
                 }
             },
 
