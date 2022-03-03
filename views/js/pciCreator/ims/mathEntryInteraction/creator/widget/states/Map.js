@@ -156,7 +156,7 @@ define([
             e.preventDefault();
             e.stopImmediatePropagation();
             self.toggleResponseMode(true);
-            var selectedEditId = parseInt(e.currentTarget.id.split('_')[1], 10);
+            var selectedEditId = parseInt($(e.target).closest('div').attr('data-index'));
 
             if (self.activeEditId !== selectedEditId) {
 
@@ -205,7 +205,7 @@ define([
         $deleteButtons.click(function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            var id = parseInt(e.currentTarget.id.split('_')[1]);
+            var id = parseInt($(e.target).closest('div').attr('data-index'));
 
             if (self.inGapMode() === true) {
                 self.activeEditId = id;
