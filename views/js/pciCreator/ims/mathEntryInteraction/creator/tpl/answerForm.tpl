@@ -6,7 +6,7 @@
             <div class="entry-config">
                 {{#each correctAnswerEntries}}
                 <div class="correct-answer-entry" data-correct-answer="{{this}}">
-                    <p>{{ __ "Correct answer option"}} {{increaseIndex @index}}</p>
+                    <p>{{__ "Correct answer option"}} {{increaseIndex @index}}</p>
                     <a href="#" class="answer-edit" id="edit_{{@index}}">
                         <span class="icon-edit"></span>
                         <span>{{__ "edit the answer"}}</span>
