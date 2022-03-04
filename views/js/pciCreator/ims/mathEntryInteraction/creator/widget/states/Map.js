@@ -163,9 +163,9 @@ define([
                 if (self.inGapMode() === true) {
                     self.activeEditId = selectedEditId;
                     var response = self.getGapResponseObject(self.correctResponses[self.activeEditId]);
-                    interaction.triggerPci('latexGapInpfut', [response]);
+                    interaction.triggerPci('latexGapInput', [response]);
                 } else {
-                    self.activeEditId = parseInt(e.currentTarget.id.split('_')[1]);
+                    self.activeEditId = selectedEditId;
                     interaction.triggerPci('latexInput', [self.correctResponses[self.activeEditId]]);
                 }
             } else {
