@@ -773,12 +773,7 @@ define([
              */
             initialize: function initialize(dom, config) {
                 this.dom = dom;
-
-                if (config.userLanguage.split('-').length > 1) {
-                    this.userLanguage = config.userLanguage.split('-')[0];
-                } else {
-                    this.userLanguage = config.userLanguage.split('_')[0];
-                }
+                this.userLanguage = config.userLanguage ? config.userLanguage.replace(/[-_][A-Z].*$/i, '').toLowerCase() : '';
 
                 this.$container = $(dom);
                 this.$toolbar = this.$container.find('.toolbar');
