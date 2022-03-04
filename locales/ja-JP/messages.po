@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 2021.10\n"
-"PO-Revision-Date: 2022-02-28T10:41:16\n"
+"PO-Revision-Date: 2022-03-04T11:15:55\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja-JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
 
-msgid "Add an answer option"
+msgid "Add answer option"
 msgstr ""
 
 msgid "Add gap"
@@ -70,8 +70,14 @@ msgstr "比較"
 msgid "Compressed"
 msgstr "圧縮"
 
+msgid "Correct answer option"
+msgstr ""
+
 msgid "cosinus"
 msgstr "cos"
+
+msgid "Define correct responses"
+msgstr ""
 
 msgid "Delete"
 msgstr "削除"
@@ -130,9 +136,6 @@ msgstr "大なり"
 msgid "greater than or equal"
 msgstr "大なりイコール"
 
-msgid "greater than or equal symbol"
-msgstr "≧"
-
 msgid "id : "
 msgstr "ID : "
 
@@ -180,9 +183,6 @@ msgstr "小なり"
 
 msgid "lower than or equal"
 msgstr "小なりイコール"
-
-msgid "lower than or equal symbol"
-msgstr "≦"
 
 msgid "Manage custom interactions"
 msgstr "PCI管理"
@@ -335,4 +335,10 @@ msgstr "警告"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "圧縮の音声ファイルは，WebMまたはOggファイル（ファイル容量：小）として保存されます。非圧縮の場合は，WAVファイル（ファイル容量：大）として保存されます。"
+
+msgid "≤"
+msgstr "≦"
+
+msgid "≥"
+msgstr "≧"
 

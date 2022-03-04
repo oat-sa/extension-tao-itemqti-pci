@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 2021.10\n"
-"PO-Revision-Date: 2022-02-28T10:43:08\n"
+"PO-Revision-Date: 2022-03-04T11:08:07\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: en-US\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
 
-msgid "Add an answer option"
+msgid "Add answer option"
 msgstr ""
 
 msgid "Add gap"
@@ -70,7 +70,13 @@ msgstr ""
 msgid "Compressed"
 msgstr ""
 
+msgid "Correct answer option"
+msgstr ""
+
 msgid "cosinus"
+msgstr ""
+
+msgid "Define correct responses"
 msgstr ""
 
 msgid "Delete"
@@ -130,9 +136,6 @@ msgstr ""
 msgid "greater than or equal"
 msgstr ""
 
-msgid "greater than or equal symbol"
-msgstr "≥"
-
 msgid "id : "
 msgstr ""
 
@@ -180,9 +183,6 @@ msgstr ""
 
 msgid "lower than or equal"
 msgstr ""
-
-msgid "lower than or equal symbol"
-msgstr "≤"
 
 msgid "Manage custom interactions"
 msgstr ""
@@ -334,5 +334,11 @@ msgid "Warning"
 msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+
+msgid "≤"
+msgstr ""
+
+msgid "≥"
 msgstr ""
 

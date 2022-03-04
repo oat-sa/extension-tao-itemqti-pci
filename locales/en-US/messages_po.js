@@ -1,1 +1,1 @@
-{"greater than or equal symbol":"\u2265","lower than or equal symbol":"\u2264","Manage test takers":"Manage test-takers","Record and manage test takers.":"Record and manage test-takers.","Test takers library":"Test-takers library","Wrap image left":"Left","Wrap image right":"Right"}
+{"Manage test takers":"Manage test-takers","Record and manage test takers.":"Record and manage test-takers.","Test takers library":"Test-takers library","Wrap image left":"Left","Wrap image right":"Right"}
