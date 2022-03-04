@@ -771,10 +771,14 @@ define([
              * @param {Node} dom
              * @param {Object} config - json
              */
-            initialize: function initialize(dom, config, instance) {
+            initialize: function initialize(dom, config) {
                 this.dom = dom;
-                this.instance = instance;
-                this.userLanguage = (config.userLanguage || 'en').split('-')[0];
+
+                if (config.userLanguage.split('-').length > 1) {
+                    this.userLanguage = config.userLanguage.split('-')[0];
+                } else {
+                    this.userLanguage = config.userLanguage.split('_')[0];
+                }
 
                 this.$container = $(dom);
                 this.$toolbar = this.$container.find('.toolbar');
@@ -917,7 +921,7 @@ define([
             event.addEventMgr(pciInstance);
 
             // initialize and set previous response/state
-            mathEntryInteraction.initialize(dom, config.properties, pciInstance);
+            mathEntryInteraction.initialize(dom, config.properties);
 
             var boundTo = config.boundTo;
             var responseIdentifier = Object.keys(boundTo)[0];
