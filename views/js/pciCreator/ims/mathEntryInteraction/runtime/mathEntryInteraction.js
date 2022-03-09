@@ -790,8 +790,12 @@ define([
              */
             setResponse: function setResponse(response) {
                 if (this.inGapMode()) {
-                    if (response && response.list && _.isArray(response.list.string)) {
-                        this.setLatex(response.list.string);
+                    if (response && response.base && response.base.string) {
+                        var gapFields = this.getGapFields();
+                        var gaps = response.base.string.split(',');
+                        gapFields.forEach(function (gap, index) {
+                            gap.latex(gaps[index]);
+                        })
                     }
 
                 } else {
@@ -934,13 +938,13 @@ define([
             });
 
             pciInstance.on('latexGapInput', function (gapLatex) {
-                if (gapLatex.list && _.isArray(gapLatex.list.string)) {
+                if (gapLatex.base && _.isArray(gapLatex.base.string)) {
                     var gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
-                        if (gapLatex.list.string[index] !== undefined) {
-                            gap.latex(gapLatex.list.string[index]);
+                        if (gapLatex.base.string[index] !== undefined) {
+                            gap.latex(gapLatex.base.string[index]);
                         }
-                    })
+                    });
                 } else {
                     mathEntryInteraction.config.gapExpression = gapLatex;
                 }

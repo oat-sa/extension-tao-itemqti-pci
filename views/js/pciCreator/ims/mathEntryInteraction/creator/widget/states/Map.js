@@ -178,7 +178,7 @@ define([
     // forming gap response object to be further processed by the latexGapInput event
     MathEntryInteractionStateResponse.prototype.getGapResponseObject = function getGapResponseObject(response) {
         return {
-            list: {
+            base: {
                 string: response.split(',')
             }
         }
