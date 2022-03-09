@@ -109,6 +109,7 @@ define([
                 }
             } else {
                 newCorrectAnswer = '';
+                self.toggleResponseMode(false);
             }
 
             self.correctResponses.push(newCorrectAnswer);
@@ -212,7 +213,7 @@ define([
                 self.emptyGapFields();
             } else {
                 self.activeEditId = null;
-                interaction.triggerPci('latexInput', ['']);
+                self.toggleResponseMode(false);
             }
 
             self.correctResponses.splice(id, 1);

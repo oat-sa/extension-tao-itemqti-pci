@@ -930,6 +930,7 @@ define([
 
             pciInstance.on('latexInput', function (latex) {
                 mathEntryInteraction.setLatex(latex);
+                mathEntryInteraction.mathField.focus();
             });
 
             pciInstance.on('latexGapInput', function (gapLatex) {
