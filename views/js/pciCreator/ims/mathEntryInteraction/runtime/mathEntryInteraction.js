@@ -102,7 +102,7 @@ define([
     });
 
     const labels = {
-        'en': {
+        'ja': {
             'x/y': '<span>x</span><br><span>y</span>',
             '&le;': '&#8806;',
             '&ge;': '&#8807;',
@@ -669,7 +669,7 @@ define([
                 });
 
                 // slightly changing fraction tool styles for a vertical fraction style in japanese locale
-                if (!this.inJapanese()) {
+                if (this.inJapanese()) {
                     var dataId = 'frac';
                     var fracTool = this.$toolbar.find(`[data-identifier='${dataId}']`)
                     fracTool.addClass('vertical-fraction-tool');
