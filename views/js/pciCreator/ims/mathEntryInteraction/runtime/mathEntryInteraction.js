@@ -102,8 +102,8 @@ define([
     });
 
     const labels = {
-        'ja': {
-            'x/y': '<span>x</span><br><span style="text-decoration: overline;">y</span>',
+        'en': {
+            'x/y': '<span>x</span><br><span>y</span>',
             '&le;': '&#8806;',
             '&ge;': '&#8807;',
             '\\le': '\\leq',
@@ -591,7 +591,10 @@ define([
                     availableTools = {
                         frac: {label: self.getLabel('x/y'), latex: '\\frac', fn: 'cmd', desc: 'Fraction'},
                         sqrt: {
-                            label: '&radic;<span style="text-decoration:overline;">&nbsp;&nbsp;</span>',
+                            label: '<svg xmlns="http://www.w3.org/2000/svg" height="0.8em" width="0.8em" viewBox="0 0 400 400" version="1.0">\n' +
+                                '<path fill="currentColor" d="m193.39062 4.859375-50.8125 317.375-79.093743-160.71876-58.781256 29.46875l6.6250007 12.5 38.687495-17.75 96.875003 199.40625 58.6875-366.28124h144.71876v-14h-142.46876-10.21874-4.21876z"></path>\n' +
+                                '<text fill="currentColor" class="">√</text>\n' +
+                                '</svg>',
                             latex: '\\sqrt',
                             fn: 'cmd',
                             desc: 'Square root'
@@ -666,7 +669,7 @@ define([
                 });
 
                 // slightly changing fraction tool styles for a vertical fraction style in japanese locale
-                if (this.inJapanese()) {
+                if (!this.inJapanese()) {
                     var dataId = 'frac';
                     var fracTool = this.$toolbar.find(`[data-identifier='${dataId}']`)
                     fracTool.addClass('vertical-fraction-tool');
