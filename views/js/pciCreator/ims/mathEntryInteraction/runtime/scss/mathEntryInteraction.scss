@@ -249,8 +249,12 @@ $defaultGapWidth: 30;
                 padding: 0 16px;
                 line-height: 15.5px;
                 font-size: 12px !important;
+
+                & > *:last-child {
+                    text-decoration: overline;
+                    text-decoration-color: inherit;
+                }
             }
         }
     }
 }
-
