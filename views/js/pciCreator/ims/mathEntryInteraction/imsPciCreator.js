@@ -56,8 +56,10 @@ define([
             return {
                 authorizeWhiteSpace: 'false',
                 useGapExpression: 'false',
+                inResponseState: 'false',
                 gapExpression: '',
                 gapStyle: '',
+                focusOnDenominator: false,
 
                 tool_frac: 'true',
                 tool_sqrt: 'true',
