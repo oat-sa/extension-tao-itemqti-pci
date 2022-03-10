@@ -32,7 +32,6 @@ define([
     var $addGapBtn = $(addGapBtnTpl());
 
     var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
-
         var $container = this.widget.$container,
             $prompt = $container.find('.prompt'),
             interaction = this.widget.element;
@@ -99,6 +98,7 @@ define([
 
             authorizeWhiteSpace: toBoolean(interaction.prop('authorizeWhiteSpace'), false),
             useGapExpression: toBoolean(interaction.prop('useGapExpression'), false),
+            focusOnDenominator: toBoolean(interaction.prop('focusOnDenominator'), false),
 
             tool_frac:      toBoolean(interaction.prop('tool_frac'),    true),
             tool_sqrt:      toBoolean(interaction.prop('tool_sqrt'),    true),
@@ -142,9 +142,9 @@ define([
         //init form javascript
         formElement.initWidget($form);
 
-        //init data change callbacks
-        formElement.setChangeCallbacks($form, interaction, {
-            identifier: function(i, value){
+            //init data change callbacks
+            formElement.setChangeCallbacks($form, interaction, {
+                identifier: function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
@@ -152,13 +152,13 @@ define([
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
                     $gapStyleBox.show();
-                    response.attr('cardinality', 'multiple');
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
                     $gapStyleBox.hide();
-                    response.attr('cardinality', 'single');
                 }
+
+                response.attr('cardinality', 'single');
                 configChangeCallBack(i, value, 'useGapExpression');
             },
             gapStyle: function gapStyleChangeCallback(i, newStyle) {
@@ -168,6 +168,7 @@ define([
                 configChangeCallBack(i, newStyle, 'gapStyle');
             },
             authorizeWhiteSpace: configChangeCallBack,
+            focusOnDenominator: configChangeCallBack,
 
             tool_frac:      configChangeCallBack,
             tool_sqrt:      configChangeCallBack,
@@ -263,6 +264,7 @@ define([
         if ($toolbar.length) {
             $toolbar.after($addGapBtn);
             $addGapBtn.on('click', function() {
+                interaction.getResponseDeclaration().removeMapEntries();
                 interaction.triggerPci('addGap');
             });
         }

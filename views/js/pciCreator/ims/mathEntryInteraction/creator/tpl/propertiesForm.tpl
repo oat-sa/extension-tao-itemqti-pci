@@ -43,7 +43,11 @@
     <label class="panel">
         <input name="tool_sqrt" type="checkbox" {{#if tool_sqrt}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &radic; {{__ "square root"}}
+        <svg xmlns="http://www.w3.org/2000/svg" height="1em" width="1em" viewBox="0 0 400 400" version="1.0">
+            <path d="m193.39062 4.859375-50.8125 317.375-79.093743-160.71876-58.781256 29.46875l6.6250007 12.5 38.687495-17.75 96.875003 199.40625 58.6875-366.28124h144.71876v-14h-142.46876-10.21874-4.21876z"></path>
+            <text class="">√</text>
+        </svg>
+        {{__ "square root"}}
     </label>
 </div>
 <div>
@@ -220,14 +224,14 @@
     <label class="panel">
         <input name="tool_lte" type="checkbox" {{#if tool_lte}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &le; {{__ "lower than or equal"}}
+        {{__ "≤"}} {{__ "lower than or equal"}}
     </label>
 </div>
 <div>
     <label class="panel">
         <input name="tool_gte" type="checkbox" {{#if tool_gte}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &ge; {{__ "greater than or equal"}}
+        {{__ "≥"}} {{__ "greater than or equal"}}
     </label>
 </div>
 

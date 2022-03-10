@@ -13,17 +13,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2021 (original work) Open Assessment Technologies SA;
  */
-
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
-    'mathEntryInteraction/creator/widget/states/Question',
-    'mathEntryInteraction/creator/widget/states/Correct',
-    'mathEntryInteraction/creator/widget/states/Map'
-], function(factory, states){
+    'taoQtiItem/qtiCreator/widgets/states/Correct'
+], function (stateFactory, Correct) {
     'use strict';
 
-    return factory.createBundle(states, arguments);
+    var InteractionStateCorrect = stateFactory.create(
+        Correct,
+        function init() {
+            this.widget.element.getResponseDeclaration().setTemplate('MAP_RESPONSE');
+            this.widget.changeState('map');
+        },
+        function exit() {
+        }
+    );
+
+    return InteractionStateCorrect;
 });

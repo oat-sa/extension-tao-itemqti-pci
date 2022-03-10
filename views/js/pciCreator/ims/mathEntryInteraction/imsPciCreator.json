@@ -8,7 +8,7 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "1.2.2",
+    "version": "1.3.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -38,6 +38,9 @@
             "./runtime/mathEntryInteraction.js",
             "./runtime/mathquill/mathquill.js",
             "./runtime/polyfill/es6-collections.js"
+        ],
+        "stylesheets" : [
+            "./runtime/css/mathEntryInteraction.css"
         ]
     },
     "creator" : {
@@ -48,8 +51,14 @@
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/tpl/addGapBtn.tpl",
+            "./creator/tpl/addAnswerOption.tpl",
+            "./creator/tpl/answerForm.tpl",
             "./creator/widget/Widget.js",
             "./creator/widget/states/Question.js",
+            "./creator/widget/states/Map.js",
+            "./creator/widget/states/Correct.js",
+            "./runtime/css/mathEntryInteraction.css",
+            "./runtime/mathquill/mathquill.css",
             "./creator/widget/states/states.js"
         ]
     }
