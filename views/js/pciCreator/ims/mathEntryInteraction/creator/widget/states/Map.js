@@ -134,7 +134,9 @@ define([
                 self.correctResponses[self.activeEditId] = latex;
             } else if (self.inGapMode(self) === true && self.activeEditId != null) {
                 var response = interaction.getResponse();
-                self.correctResponses[self.activeEditId] = response.base.string;
+                if (response !== null) {
+                    self.correctResponses[self.activeEditId] = response.base.string;
+                }
             }
         });
     }

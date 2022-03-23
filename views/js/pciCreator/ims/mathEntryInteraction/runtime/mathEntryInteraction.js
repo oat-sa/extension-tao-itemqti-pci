@@ -834,7 +834,7 @@ define([
                     };
                 }
 
-                return response.base.string.replace(',', '') !== '' ? response : null;
+                return response.base.string.replace(/,/g, '') !== '' ? response : null;
             },
             /**
              * Remove the current response set in the interaction
