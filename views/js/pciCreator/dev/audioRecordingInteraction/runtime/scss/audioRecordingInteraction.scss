@@ -73,9 +73,6 @@ $modalShadowColor: #666666;
       }
 
       @include rtl {
-        margin-right: 0.7em;
-        margin-left: 0px;
-        flex-wrap: nowrap;
         flex-direction: row-reverse;
       }
 
