@@ -190,11 +190,8 @@ define([
         assert.expect(2);
 
         var response = {
-            list: {
-                string: [
-                    '\\frac{1}{2}',
-                    '\\frac{1}{4}'
-                ]
+            base: {
+                string: '\\frac{1}{2},\\frac{1}{4}'
             }
         };
         var $container = $('#' + fixtureContainerId);
@@ -214,11 +211,8 @@ define([
 
                 assert.propEqual(this.getResponses(), {
                     RESPONSE: {
-                        list: {
-                            string: [
-                              "\\frac{1}{2}",
-                              "\\frac{1}{4}"
-                            ]
+                        base: {
+                            string: '\\frac{1}{2},\\frac{1}{4}'
                         }
                     }
                 }, 'get back set response');
@@ -272,11 +266,8 @@ define([
         var state = {
             RESPONSE: {
                 response: {
-                    list: {
-                        string: [
-                            '\\frac{1}{2}',
-                            '\\frac{1}{4}'
-                        ]
+                    base: {
+                        string: '\\frac{1}{2},\\frac{1}{4}'
                     }
                 }
             }
