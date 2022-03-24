@@ -164,6 +164,9 @@ $modalShadowColor: #666666;
       svg {
         width: 16px;
         height: 16px;
+        @include rtl {
+          margin: 0.06em 0.02em;
+        }
       }
     }
 
