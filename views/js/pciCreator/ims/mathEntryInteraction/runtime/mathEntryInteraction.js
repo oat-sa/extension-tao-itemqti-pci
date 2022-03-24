@@ -543,7 +543,7 @@ define([
                 var activeMathField,
                     gapFields;
 
-                if (this.inGapMode() && !this.inQtiCreator()) {
+                if ((this.inGapMode() && this.inResponseState()) || (this.inGapMode() && !this.inQtiCreator())) {
                     // default to the first gap field if none has received the focus yet
                     if (!_.isFinite(this._activeGapFieldIndex)) {
                         this._activeGapFieldIndex = 0;
