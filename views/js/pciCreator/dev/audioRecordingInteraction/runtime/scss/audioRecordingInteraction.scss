@@ -49,6 +49,11 @@ $modalShadowColor: #666666;
 
     padding: 10px;
 
+    //audio-rec controls and bar always ltr
+    .audio-rec{
+      text-align: left;
+    }
+
     // input meter
 
     .input-meter {
@@ -68,9 +73,10 @@ $modalShadowColor: #666666;
       }
 
       @include rtl {
-        float: right;
-        margin-right: 0;
-        margin-left: 10px;
+        margin-right: 0.7em;
+        margin-left: 0px;
+        flex-wrap: nowrap;
+        flex-direction: row-reverse;
       }
 
       &.record {
@@ -120,13 +126,13 @@ $modalShadowColor: #666666;
       font-style: normal;
       text-align: center;
       height: auto;
+      margin: 10px 10px 10px 0;
 
-      @include ltr {
-        margin: 10px 10px 10px 0;
-      }
       @include rtl {
-        margin: 10px 0 10px 10px;
+        display: flex;
+        flex-direction: row-reverse;
       }
+
 
       &.disabled {
         background-color: $disabledBg;
@@ -173,7 +179,6 @@ $modalShadowColor: #666666;
       }
       @include rtl {
         flex-direction: row-reverse;
-        justify-content: flex-end;
       }
     }
 
