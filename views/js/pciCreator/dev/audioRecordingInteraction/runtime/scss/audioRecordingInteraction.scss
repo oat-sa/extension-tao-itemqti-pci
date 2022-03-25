@@ -66,11 +66,10 @@ $modalShadowColor: #666666;
       display: flex;
       position: relative;
 
-      @include ltr {
+
         float: left;
         margin-right: 10px;
         margin-left: 0;
-      }
 
       @include rtl {
         flex-direction: row-reverse;
@@ -116,7 +115,6 @@ $modalShadowColor: #666666;
       outline: 0;
       overflow: visible;
       border: none;
-      display: inline-block;
       line-height: initial;
       padding: 8px 16px;
       font-weight: normal;
@@ -124,9 +122,9 @@ $modalShadowColor: #666666;
       text-align: center;
       height: auto;
       margin: 10px 10px 10px 0;
+      display: flex;
 
       @include rtl {
-        display: flex;
         flex-direction: row-reverse;
       }
 
@@ -164,9 +162,6 @@ $modalShadowColor: #666666;
       svg {
         width: 16px;
         height: 16px;
-        @include rtl {
-          margin: 0.06em 0.02em;
-        }
       }
     }
 
