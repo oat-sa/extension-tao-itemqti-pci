@@ -24,11 +24,6 @@ final class Version202203221239221465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new IMSPciModel())->getRegistry();
-        if ($registry->has('mathEntryInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
-            $registry->removeAllVersions('mathEntryInteraction');
-        }
-
         $this->addReport(
             $this->propagate(
                 new RegisterPciMathEntry()
