@@ -128,12 +128,7 @@ $defaultGapWidth: 30;
                 border: 0;
                 min-height: 23px;
                 direction: ltr;
-                @include ltr {
-                    text-align: left;
-                }
-                @include rtl {
-                    text-align: right;
-                }
+                text-align: left;
             }
 
             .mq-editable-field {
