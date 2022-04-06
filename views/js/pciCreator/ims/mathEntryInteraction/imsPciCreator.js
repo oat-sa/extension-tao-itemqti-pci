@@ -63,6 +63,7 @@ define([
 
                 tool_frac: 'true',
                 tool_sqrt: 'true',
+                tool_nthroot: 'true',
                 tool_exp: 'true',
                 tool_log: 'true',
                 tool_ln: 'true',
@@ -73,6 +74,8 @@ define([
                 tool_pi: 'true',
                 tool_cos: 'true',
                 tool_sin: 'true',
+                tool_tan: 'true',
+                tool_cot: 'true',
                 tool_lte: 'true',
                 tool_gte: 'true',
                 tool_times: 'true',
@@ -96,9 +99,17 @@ define([
                 tool_paral: 'true',
                 tool_perp: 'true',
                 tool_inmem: 'true',
+                tool_conmem: 'true',
                 tool_ninmem: 'true',
                 tool_union: 'true',
                 tool_intersec: 'true',
+                tool_supset: 'true',
+                tool_subset: 'true',
+                tool_ratio: 'true',
+                tool_congruence: 'true',
+                tool_limit: 'true',
+                tool_sum: 'true',
+
                 allowNewLine: 'false',
                 enableAutoWrap: 'false'
             };

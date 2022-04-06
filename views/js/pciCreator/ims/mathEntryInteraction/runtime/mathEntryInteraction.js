@@ -242,6 +242,7 @@ define([
                     toolsStatus: {
                         frac: toBoolean(config.tool_frac, true),
                         sqrt: toBoolean(config.tool_sqrt, true),
+                        nthroot: toBoolean(config.tool_nthroot, true),
                         exp: toBoolean(config.tool_exp, true),
                         log: toBoolean(config.tool_log, true),
                         ln: toBoolean(config.tool_ln, true),
@@ -252,6 +253,8 @@ define([
                         pi: toBoolean(config.tool_pi, true),
                         cos: toBoolean(config.tool_cos, true),
                         sin: toBoolean(config.tool_sin, true),
+                        tan: toBoolean(config.tool_tan, true),
+                        cot: toBoolean(config.tool_cotan, true),
                         lte: toBoolean(config.tool_lte, true),
                         gte: toBoolean(config.tool_gte, true),
                         times: toBoolean(config.tool_times, true),
@@ -275,9 +278,16 @@ define([
                         paral: toBoolean(config.tool_paral, true),
                         perp: toBoolean(config.tool_perp, true),
                         inmem: toBoolean(config.tool_inmem, true),
+                        conmem: toBoolean(config.tool_conmem, true),
                         ninmem: toBoolean(config.tool_ninmem, true),
                         union: toBoolean(config.tool_union, true),
-                        intersec: toBoolean(config.tool_intersec, true)
+                        intersec: toBoolean(config.tool_intersec, true),
+                        supset: toBoolean(config.tool_supset, true),
+                        subset: toBoolean(config.tool_subset, true),
+                        ratio: toBoolean(config.tool_ratio, true),
+                        congruence: toBoolean(config.tool_congruence, true),
+                        limit: toBoolean(config.tool_limit, true),
+                        sum: toBoolean(config.tool_sum, true)
                     },
 
                     allowNewLine: toBoolean(config.allowNewLine, false),
@@ -599,6 +609,24 @@ define([
                             fn: 'cmd',
                             desc: 'Square root'
                         },
+                        nthroot: {
+                            label: '<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1.5em" height="0.8em" viewBox="0 -800 1406 1295.7" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg">\n' +
+                                '<defs aria-hidden="true">\n' +
+                                '<path stroke-width="1" id="E1-MJMATHI-78" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path>\n' +
+                                '<path stroke-width="1" id="E1-MJMAIN-221A" d="M95 178Q89 178 81 186T72 200T103 230T169 280T207 309Q209 311 212 311H213Q219 311 227 294T281 177Q300 134 312 108L397 -77Q398 -77 501 136T707 565T814 786Q820 800 834 800Q841 800 846 794T853 782V776L620 293L385 -193Q381 -200 366 -200Q357 -200 354 -197Q352 -195 256 15L160 225L144 214Q129 202 113 190T95 178Z"></path>\n' +
+                                '<path stroke-width="1" id="E1-MJMATHI-6E" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path>\n' +
+                                '</defs>\n' +
+                                '<g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)" aria-hidden="true">\n' +
+                                ' <use transform="scale(1.1)" xlink:href="#E1-MJMATHI-6E" x="50" y="310"></use>\n' +
+                                ' <use transform="scale(1.5)" xlink:href="#E1-MJMAIN-221A" x="-100" y="-109"></use>\n' +
+                                '<rect transform="scale(1.5)" stroke="none" width="572" height="60" x="650" y="450"></rect>\n' +
+                                ' <use transform="scale(1.5)" xlink:href="#E1-MJMATHI-78" x="650" y="-100"></use>\n' +
+                                '</g>\n' +
+                                '</svg>',
+                            latex: '\\nthroot',
+                            fn: 'cmd',
+                            desc: 'Nth root'
+                        },
                         exp: {label: 'x&#8319;', latex: '^', fn: 'cmd', desc: 'Exponent'},
                         log: {label: 'log', latex: '\\log', fn: 'cmd', desc: 'Log'},
                         ln: {label: 'ln', latex: '\\ln', fn: 'cmd', desc: 'Ln'},
@@ -609,6 +637,8 @@ define([
                         pi: {label: '&pi;', latex: '\\pi', fn: 'cmd', desc: 'Pi'},
                         cos: {label: 'cos', latex: '\\cos', fn: 'cmd', desc: 'Cosinus'},
                         sin: {label: 'sin', latex: '\\sin', fn: 'cmd', desc: 'Sinus'},
+                        tan: {label: 'tan', latex: '\\tan', fn: 'cmd', desc: 'Tangent'},
+                        cot: {label: 'cot', latex: '\\cot', fn: 'cmd', desc: 'Cotangent'},
                         lte: {
                             label: self.getLabel('&le;'),
                             latex: self.getLabel('\\le'),
@@ -642,22 +672,29 @@ define([
                         paral: {label: '&#8741;', latex: '\\parallel', fn: 'cmd', desc: 'Is parallel with'},
                         perp: {label: '&#8869;', latex: '\\perp', fn: 'cmd', desc: 'Is perpendicular to'},
                         inmem: {label: '&isin;', latex: '\\in', fn: 'cmd', desc: 'Is a member of'},
+                        conmem: {label: '&#8715;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
                         ninmem: {label: '&notin;', latex: '\\notin', fn: 'cmd', desc: 'Is not a member of'},
                         union: {label: '&cup;', latex: '\\cup', fn: 'cmd', desc: 'Set union'},
-                        intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'}
+                        intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'},
+                        supset: {label: '&#8835;', latex: '\\supset', fn: 'cmd', desc: 'Set superset'},
+                        subset: {label: '&#8834;', latex: '\\subset', fn: 'cmd', desc: 'Set subset'},
+                        ratio: {label: '&#8758;', latex: ':', fn: 'cmd', desc: 'Ratio'},
+                        congruence: {label: '&#8801;', latex: '\\equiv', fn: 'cmd', desc: 'Congruence'},
+                        limit: {label: 'lim', latex: '\\lim', fn: 'cmd', desc: 'Limit'},
+                        sum: {label: '&#8721;', latex: '\\sum', fn: 'cmd', desc: 'Sum'},
                     },
                     availableToolGroups = [ // we use an array to maintain order
-                        {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln']},
+                        {id: 'functions', tools: ['sqrt', 'nthroot', 'frac', 'exp', 'subscript', 'log', 'ln']},
                         {
                             id: 'symbols',
                             tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral']
                         },
                         {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
-                        {id: 'trigo', tools: ['pi', 'sin', 'cos']},
+                        {id: 'trigo', tools: ['pi', 'sin', 'cos', 'tan', 'cot']},
                         {id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte']},
                         {
                             id: 'operands',
-                            tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec']
+                            tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'conmem', 'ninmem', 'union', 'intersec', 'supset', 'subset', 'ratio', 'congruence', 'limit', 'sum']
                         }
                     ];
 

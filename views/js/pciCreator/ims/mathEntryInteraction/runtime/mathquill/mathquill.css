@@ -309,7 +309,7 @@
 .mq-math-mode .mq-vector-stem {
   display: block;
 }
-.mq-math-mode .mq-large-operator {
+.mq-math-mode .mq-large-operator, .mq-math-mode .mq-regular-operator {
   text-align: center;
 }
 .mq-math-mode .mq-large-operator .mq-from,
@@ -326,6 +326,19 @@
   /* take out of normal flow to manipulate baseline */
   width: 100%;
 }
+
+.mq-math-mode .mq-regular-operator {
+  vertical-align: -0.4em;
+  padding: 0 .2em;
+}
+
+.mq-math-mode .mq-regular-operator .mq-from {
+  display: block;
+  font-size: 80%;
+  width: 100%;
+  text-align: center;
+}
+
 .mq-math-mode,
 .mq-math-mode .mq-editable-field {
   cursor: text;
