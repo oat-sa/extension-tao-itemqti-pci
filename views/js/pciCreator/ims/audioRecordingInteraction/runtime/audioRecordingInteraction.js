@@ -54,10 +54,14 @@ define([
 ) {
     'use strict';
 
+    var _typeIdentifier = 'audioRecordingInteraction';
     var audioRecordingInteraction;
 
     /**
      * Type casting helpers for PCI parameters
+     * @param {String, boolean} value
+     * @param {String, boolean} defaultValue
+     * @returns {boolean}
      */
     function toBoolean(value, defaultValue) {
         if (typeof value === 'undefined' || value === '') {
@@ -92,8 +96,208 @@ define([
         _isAutoPlayingBack: false,
         _delayCallback: null,
 
+        /*********************************
+         *
+         * IMS specific PCI API property and methods
+         *
+         *********************************/
+
+        typeIdentifier : _typeIdentifier,
+
         /**
-         * return {Boolean} - Are we in a TAO QTI Creator context?
+         * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
+         * @param {DOMELement} dom - the dom element the PCI can use
+         * @param {Object} config - the sandard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
+         */
+        getInstance : function getInstance(dom, config, state){
+            var response = config.boundTo;
+            //simply mapped to existing TAO PCI API
+            this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
+            this.setSerializedState(state);
+
+            //tell the rendering engine that I am ready
+            if (typeof config.onready === 'function') {
+                config.onready(this, this.getState());
+            }
+        },
+
+        /**
+         * Get the current state fo the PCI
+         * @returns {Object}
+         */
+        getState : function getState(){
+            //simply mapped to existing TAO PCI API
+            return this.getSerializedState();
+        },
+
+        /**
+         * Called by delivery engine when PCI is fully completed
+         */
+        oncompleted : function oncompleted(){
+            this.destroy();
+        },
+
+        /*********************************
+         *
+         * TAO and IMS shared PCI API methods
+         *
+         *********************************/
+        /**
+         * Get the response in the json format described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @returns {Object}
+         */
+        getResponse: function getResponse() {
+            var response = null;
+
+            if (this.getRecording()) {
+                response = { file: this.getRecording() };
+            }
+            return {
+                base: response
+            };
+        },
+        /**
+         * Reverse operation performed by render()
+         * After this function is executed, only the inital naked markup remains
+         * Event listeners are removed and the state and the response are reset
+         *
+         * @param {Object} interaction
+         * @returns {Promise}
+         */
+        destroy: function destroy() {
+            var self = this;
+            var promises = [];
+
+            if (self.recorder && self.recorder.is('recording')) {
+                promises.push(self.stopRecording());
+            }
+            if (self.player && self.player.is('playing')) {
+                promises.push(self.stopPlayback());
+            }
+
+            promises.push(self.destroyControls());
+
+            if (self.inputMeter) {
+                promises.push(self.inputMeter.destroy());
+            }
+
+            if (self.mediaStimulus) {
+                promises.push(self.mediaStimulus.destroy());
+            }
+
+            if (self.player) {
+                promises.push(self.player.unload());
+            }
+
+            if (self.recorder) {
+                promises.push(self.recorder.destroy());
+            }
+
+            promises.push(self.resetResponse());
+
+            self._cleanDelayCallback();
+
+            return Promise.all(promises).then(function () {
+                self.inputMeter = null;
+                self.progressBar = null;
+                self.mediaStimulus = null;
+                self.player = null;
+                self.recorder = null;
+            });
+        },
+
+        /*********************************
+         *
+         * TAO specific PCI API methods
+         *
+         *********************************/
+
+        /**
+         * Get the type identifier of a pci
+         * @returns {string}
+         */
+        getTypeIdentifier : function getTypeIdentifier(){
+            return _typeIdentifier;
+        },
+        /**
+         * Render the PCI :
+         * @param {String} id
+         * @param {Node} dom
+         * @param {Object} config - json
+         * @param {Object} assetManager
+         */
+        initialize: function initialize(id, dom, config, assetManager) {
+            var self = this;
+
+            event.addEventMgr(this);
+
+            this.id = id;
+            this.assetManager = assetManager;
+            this.$container = $(dom);
+
+            this.render(config);
+
+            //tell the rendering engine that I am ready
+            qtiCustomInteractionContext.notifyReady(this);
+
+            this.on('configChange', function (newConfig) {
+                self.render(newConfig);
+            });
+
+            // render rich text content in prompt
+            html.render(this.$container.find('.prompt'));
+        },
+        /**
+         * Programmatically set the response following the json schema described in
+         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+         *
+         * @param {Object} response
+         */
+        setResponse: function setResponse(response) {
+            var recording = response.base && response.base.file;
+
+            if (recording) {
+                this.updateResponse(recording);
+
+                // restore interaction state
+                this.player.loadFromBase64(recording.data, recording.mime);
+            }
+        },
+        /**
+         * Remove the current response set in the interaction
+         * The state may not be restored at this point.
+         */
+        resetResponse: function resetResponse() {
+            this.updateResponse(null);
+        },
+        /**
+         * Restore the state of the interaction from the serializedState.
+         *
+         * @param {Object} state - json format
+         */
+        setSerializedState: function setSerializedState(state) {
+            this.setResponse(state && state.response || state);
+        },
+
+        /**
+         * Get the current state of the interaction as a string.
+         * It enables saving the state for later usage.
+         *
+         * @returns {Object} json format
+         */
+        getSerializedState: function getSerializedState() {
+            return this.getResponse();
+        },
+        /*********************************
+         *
+         * The rest methods
+         *
+         *********************************/
+        /**
+         * @returns {Boolean} - Are we in a TAO QTI Creator context?
          */
         inQtiCreator: function inQtiCreator() {
             if (_.isUndefined(this._inQtiCreator) && this.$container) {
@@ -461,6 +665,7 @@ define([
 
         /**
          * Init recording if no permission to access the mic, ask for it.
+         * @param {Function} callback
          */
         askPermissionAccessMic: function askPermissionAccessMic(callback) {
             // recorder instance created, but microphone access not granted
@@ -821,156 +1026,6 @@ define([
             _.invoke(this.controls, 'destroy');
             this.controls = null;
         },
-
-        /**
-         * PCI public interface
-         */
-
-        id: -1,
-
-        getTypeIdentifier: function getTypeIdentifier() {
-            return 'audioRecordingInteraction';
-        },
-
-        /**
-         * Render the PCI :
-         * @param {String} id
-         * @param {Node} dom
-         * @param {Object} config - json
-         * @param {Object} assetManager
-         */
-        initialize: function initialize(id, dom, config, assetManager) {
-            var self = this;
-
-            event.addEventMgr(this);
-
-            this.id = id;
-            this.assetManager = assetManager;
-            this.$container = $(dom);
-
-            this.render(config);
-
-            //tell the rendering engine that I am ready
-            qtiCustomInteractionContext.notifyReady(this);
-
-            this.on('configChange', function (newConfig) {
-                self.render(newConfig);
-            });
-
-            // render rich text content in prompt
-            html.render(this.$container.find('.prompt'));
-        },
-        /**
-         * Programmatically set the response following the json schema described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} interaction
-         * @param {Object} response
-         */
-        setResponse: function setResponse(response) {
-            var recording = response.base && response.base.file;
-
-            if (recording) {
-                this.updateResponse(recording);
-
-                // restore interaction state
-                this.player.loadFromBase64(recording.data, recording.mime);
-            }
-        },
-        /**
-         * Get the response in the json format described in
-         * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
-         *
-         * @param {Object} interaction
-         * @returns {Object}
-         */
-        getResponse: function getResponse() {
-            var response = null;
-
-            if (this.getRecording()) {
-                response = { file: this.getRecording() };
-            }
-            return {
-                base: response
-            };
-        },
-        /**
-         * Remove the current response set in the interaction
-         * The state may not be restored at this point.
-         *
-         * @param {Object} interaction
-         */
-        resetResponse: function resetResponse() {
-            this.updateResponse(null);
-        },
-        /**
-         * Reverse operation performed by render()
-         * After this function is executed, only the inital naked markup remains
-         * Event listeners are removed and the state and the response are reset
-         *
-         * @param {Object} interaction
-         */
-        destroy: function destroy() {
-            var self = this;
-            var promises = [];
-
-            if (self.recorder && self.recorder.is('recording')) {
-                promises.push(self.stopRecording());
-            }
-            if (self.player && self.player.is('playing')) {
-                promises.push(self.stopPlayback());
-            }
-
-            promises.push(self.destroyControls());
-
-            if (self.inputMeter) {
-                promises.push(self.inputMeter.destroy());
-            }
-
-            if (self.mediaStimulus) {
-                promises.push(self.mediaStimulus.destroy());
-            }
-
-            if (self.player) {
-                promises.push(self.player.unload());
-            }
-
-            if (self.recorder) {
-                promises.push(self.recorder.destroy());
-            }
-
-            promises.push(self.resetResponse());
-
-            self._cleanDelayCallback();
-
-            return Promise.all(promises).then(function () {
-                self.inputMeter = null;
-                self.progressBar = null;
-                self.mediaStimulus = null;
-                self.player = null;
-                self.recorder = null;
-            });
-        },
-        /**
-         * Restore the state of the interaction from the serializedState.
-         *
-         * @param {Object} interaction
-         * @param {Object} state - json format
-         */
-        setSerializedState: function setSerializedState(state) {
-            this.setResponse(state && state.response || state);
-        },
-
-        /**
-         * Get the current state of the interaction as a string.
-         * It enables saving the state for later usage.
-         *
-         * @param {Object} interaction
-         * @returns {Object} json format
-         */
-        getSerializedState: function getSerializedState() {
-            return this.getResponse();
-        }
     };
 
     qtiCustomInteractionContext.register(audioRecordingInteraction);

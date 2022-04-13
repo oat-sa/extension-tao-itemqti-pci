@@ -19,8 +19,8 @@
 *   This is a dialog component to throw a modal to give feedback to the user
 */
 define([
-    'lodash',
-    'jquery',
+    'taoQtiItem/portableLib/lodash',
+    'taoQtiItem/portableLib/jquery_2_1_1',
     'audioRecordingInteraction/runtime/js/modal',
     'tpl!audioRecordingInteraction/runtime/js/dialog/tpl/body'
 ], function (_, $, modal, bodyTpl) {
