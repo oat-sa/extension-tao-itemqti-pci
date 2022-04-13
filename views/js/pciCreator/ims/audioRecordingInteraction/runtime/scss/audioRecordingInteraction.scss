@@ -1,0 +1,442 @@
+// =============
+// TAO specific
+// =============
+
+@import "inc/bootstrap";
+
+// Color mapping
+
+$disabledBg: whiten($websiteBorder, .3);
+$disabledTxt: black;
+$disabledTxtShadow: white(.8);
+
+$enabledBg: whiten($info, .1);
+$enabledTxt: white;
+$enabledTxtShadow: blacken($info, .2);
+
+$activeBg: whiten($activeInteraction, .1);
+$activeTxt: white;
+$activeTxtShadow: blacken($activeInteraction, .2);
+
+$record: $activeInteraction;
+$playback: whiten($info, .3);
+
+$info: rgb(14, 93, 145);
+$infoBgColor: whiten($info, 0.8);
+$infoBorderColor: whiten($info, 0.1);
+$modalShadowColor: #666666;
+
+@mixin ltr() {
+  &,
+  body [dir=ltr] & {
+      @content;
+  }
+}
+
+@mixin rtl() {
+  [dir=rtl] & {
+      @content;
+  }
+}
+
+
+// =============
+// Interaction
+// =============
+
+.qti-customInteraction {
+  .audioRecordingInteraction {
+
+    padding: 10px;
+
+    //audio-rec controls and bar always ltr
+    .audio-rec{
+      text-align: left;
+    }
+
+    // input meter
+
+    .input-meter {
+      border: 2px solid whiten($disabledBg, .5);
+      border-radius: 10px;
+      width: 58px;
+      padding: 10px;
+
+      margin-top: 2px;
+      display: flex;
+      position: relative;
+
+
+        float: left;
+        margin-right: 10px;
+        margin-left: 0;
+
+      @include rtl {
+        flex-direction: row-reverse;
+      }
+
+      &.record {
+        .mic {
+          path {
+            fill: $activeBg
+          }
+        }
+        border-color: $activeBg;
+        background-color: whiten($activeBg, 0.9);
+      }
+
+      .leds {
+        flex: 0 0 10px;
+      }
+
+      .mic {
+        flex: 0 0 28px;
+
+        svg {
+          height: 28px;
+          width: 28px;
+          margin-top: 10px;
+        }
+        path {
+          fill: $disabledBg
+        }
+      }
+    }
+
+
+    // Controls
+
+    .audiorec-control {
+      border-radius: 3px;
+      font-size: 14px !important;
+      cursor: pointer;
+      text-decoration: none !important;
+      vertical-align: middle;
+      outline: 0;
+      overflow: visible;
+      border: none;
+      line-height: initial;
+      padding: 8px 16px;
+      font-weight: normal;
+      font-style: normal;
+      text-align: center;
+      height: auto;
+      margin: 10px 10px 10px 0;
+      display: flex;
+
+      @include rtl {
+        flex-direction: row-reverse;
+      }
+
+
+      &.disabled {
+        background-color: $disabledBg;
+        text-shadow: 1px 1px 0 $disabledTxtShadow !important;
+        cursor: not-allowed !important;
+        opacity: .55 !important;
+        color: $disabledTxt !important;
+        fill: $disabledTxt !important;
+      }
+
+      &.enabled {
+        background-color: $enabledBg;
+        color: $enabledTxt;
+        fill: $enabledTxt;
+        text-shadow: 1px 1px 0 $enabledTxtShadow;
+        cursor: pointer !important;
+
+        &:hover {
+          opacity: 0.85;
+        }
+      }
+
+      &:active,
+      &.active {
+        background-color: $activeBg;
+        color: $activeTxt;
+        fill: $activeTxt;
+        text-shadow: 1px 1px 0 $activeTxtShadow;
+        cursor: not-allowed !important;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .controls {
+      display: flex;
+
+      @include ltr {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      @include rtl {
+        flex-direction: row-reverse;
+      }
+    }
+
+    // Progress bar
+
+    @mixin progressBarColor($borderColor, $valueColor, $bgColor) {
+      border: $borderColor 2px solid;
+
+      // progress value color
+      &::-webkit-progress-value {
+        background-color: $valueColor;
+      }
+      &::-moz-progress-bar {
+        background-color: $valueColor;
+      }
+
+      // background color
+      color: $bgColor; // FF
+      &::-webkit-progress-bar {
+        background-color: whiten($bgColor, .5); // Chrome
+      }
+    }
+
+    progress {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+
+      width: 75%;
+      height: 10px;
+      border-radius: 5px;
+
+      @include ltr {
+        transform: scaleX(1);
+      }
+
+      @include rtl {
+        transform: scaleX(-1);
+      }
+
+      @include progressBarColor(darken($disabledBg, .2), $disabledBg, $disabledBg);
+
+      &.record {
+        @include progressBarColor($record, $record, whiten($record, 0.9));
+      }
+
+      &.playback {
+        @include progressBarColor($playback, $playback, whiten($playback, 0.9));
+      }
+    }
+
+    // Media stimulus
+
+    .media-stimulus.active {
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px #bbb solid;
+
+      .mediaplayer {
+        margin: 0 auto;
+      }
+
+    }
+
+    // Countdown timer as a pie chart
+    $sizeCountdown: 52px;
+
+    .countdown-pie-chart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      margin: -2px;
+
+      .countdown-pie-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        background-color: transparentize($disabledBg, 0.55);
+        @include animation(disable);
+        animation: disable 15s steps(1,end) 1 forwards paused;
+
+        .countdown-pie-circle {
+          width: $sizeCountdown;
+          height: $sizeCountdown;
+          position: relative;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: $enabledBg;
+          border-radius: 50%;
+
+          .countdown-pie {
+            width: 50%;
+            height: 100%;
+            transform-origin: 100% 50%;
+            position: absolute;
+            background: $uiGeneralContentBg;
+          }
+
+          .countdown-pie-spinner {
+            border-radius: 100% 0 0 100% / 50% 0 0 50%;
+            z-index: 20;
+            border-right: none;
+            animation: rota 15s linear 1 forwards paused;
+          }
+
+          &:hover .countdown-pie-spinner,
+          &:hover .countdown-pie-filler,
+          &:hover .countdown-pie-mask {
+            cursor: not-allowed;
+          }
+
+          .countdown-pie-filler {
+            border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+            left: 50%;
+            opacity: 0;
+            z-index: 100;
+            border-left: none;
+            animation: opa 15s steps(1,end) 1 reverse forwards paused;
+          }
+
+          .countdown-pie-mask {
+            width: 50%;
+            height: 100%;
+            position: absolute;
+            background: inherit;
+            opacity: 1;
+            z-index: 300;
+            border-bottom-left-radius: $sizeCountdown * 2;
+            border-top-left-radius: $sizeCountdown * 2;
+            border-right: 0;
+            animation: opa 15s steps(1,end) 1 forwards paused;
+          }
+
+          @keyframes rota {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+
+          @keyframes opa {
+            0% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+          }
+
+          @keyframes disable {
+            0%, 99% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Modal styles */
+.modal {
+    background-color: $infoBgColor;
+    border: 1px solid $infoBorderColor;
+    box-shadow: 3px 3px 5px $modalShadowColor;
+    height: auto;
+    opacity: 0;
+    top: -100%;
+    padding: 40px;
+    position: fixed;
+    z-index: 105002;
+    margin: auto;
+    left: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 100vw;
+    max-height: calc(100vh - 40px);
+
+    &:focus {
+        outline: none;
+    }
+
+    .modal-close {
+        position: absolute;
+        right: 12px;
+        top: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        color: $textColor;
+
+        [dir="rtl"] & {
+            right: auto;
+            left: 12px;
+        }
+
+        &:hover {
+            opacity: 0.6;
+        }
+
+        .icon-close {
+            @include font-size(20);
+        }
+    }
+
+    // rewrite rules from _buttons.scss
+    button.modal-close {
+        color: $textColor !important;
+        background-color: transparent;
+        padding: 0;
+        height: 20px;
+
+        .icon-close {
+            padding: 0;
+        }
+    }
+
+    .modal-close:focus {
+        outline: 3px solid $actionLinkColor;
+        outline-offset: 3px;
+    }
+
+    .modal-body {
+        h4 {
+            @include font-size(16);
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .content,
+        .message {
+            margin-bottom: 8px;
+        }
+    }
+
+    &[class^="icon-"],
+    &[class*=" icon-"] {
+        &:before {
+            @include font-size(30);
+            color: $info;
+            position: absolute;
+        }
+
+        &.info {
+            &:before {
+                color: $info;
+            }
+        }
+
+        .modal-body {
+            font-family: $regularFont;
+            line-height: 1.4;
+            margin-left: 4.5rem;
+        }
+    }
+}
+
+.modal-bg {
+    background: none repeat scroll 0 0 black();
+    opacity: 0.45;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=45)";
+    filter: alpha(opacity=45);
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 100001;
+    overflow: hidden;
+}
