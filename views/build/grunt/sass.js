@@ -13,6 +13,8 @@ module.exports = function (grunt) {
     sass.qtiitempci.files[root + 'css/pci-manager.css'] = root + 'scss/pci-manager.scss';
     sass.qtiitempci.files[root + 'js/pciCreator/dev/audioRecordingInteraction/creator/css/audioRecordingInteraction.css'] = root + 'js/pciCreator/dev/audioRecordingInteraction/creator/scss/audioRecordingInteraction.scss';
     sass.qtiitempci.files[root + 'js/pciCreator/dev/audioRecordingInteraction/runtime/css/audioRecordingInteraction.css'] = root + 'js/pciCreator/dev/audioRecordingInteraction/runtime/scss/audioRecordingInteraction.scss';
+    sass.qtiitempci.files[root + 'js/pciCreator/ims/audioRecordingInteraction/creator/css/audioRecordingInteraction.css'] = root + 'js/pciCreator/ims/audioRecordingInteraction/creator/scss/audioRecordingInteraction.scss';
+    sass.qtiitempci.files[root + 'js/pciCreator/ims/audioRecordingInteraction/runtime/css/audioRecordingInteraction.css'] = root + 'js/pciCreator/ims/audioRecordingInteraction/runtime/scss/audioRecordingInteraction.scss';
     sass.qtiitempci.files[root + 'js/pciCreator/ims/mathEntryInteraction/runtime/css/mathEntryInteraction.css'] = root + 'js/pciCreator/ims/mathEntryInteraction/runtime/scss/mathEntryInteraction.scss';
 
     watch.qtiitempcisass = {
