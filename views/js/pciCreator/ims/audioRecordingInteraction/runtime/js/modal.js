@@ -16,9 +16,8 @@
  * Copyright (c) 2022 (original work) Open Assessment Technologies SA ;
  */
 define([
-    'taoQtiItem/portableLib/jquery_2_1_1',
-    'i18n'
-], function ($, __) {
+    'taoQtiItem/portableLib/jquery_2_1_1'
+], function ($) {
 
     /**
      * jQuery modal is an easy to use plugin
@@ -105,7 +104,7 @@ define([
                         `<button
                         id="modal-close-btn"
                         class="${options.modalCloseClass}"
-                        aria-label="${__('Close dialog')}"
+                        aria-label="Close dialog"
                         data-control="close"
                     >
                         <span class="icon-close"></span>

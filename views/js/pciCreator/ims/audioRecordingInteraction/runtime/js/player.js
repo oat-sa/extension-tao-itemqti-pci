@@ -25,9 +25,8 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/OAT/util/event',
-    'audioRecordingInteraction/runtime/js/dialog',
-    'i18n'
-], function (_, $, event, dialogFactory, __) {
+    'audioRecordingInteraction/runtime/js/dialog'
+], function (_, $, event, dialogFactory) {
     'use strict';
 
     /**
@@ -199,7 +198,7 @@ define([
              * Catch error on media format support problem
              */
             play: function play() {
-                audioEl.play().catch((e) => errorDialog(__('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.')));
+                audioEl.play().catch((e) => errorDialog('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.'));
                 // state change has to be triggered by the onplaying listener
             },
 
