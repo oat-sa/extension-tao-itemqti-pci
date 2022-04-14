@@ -25,34 +25,17 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/widgets/helpers/pciMediaManager/pciMediaManager',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
-    'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
     'util/typeCaster'
-], function (_, __, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, containerEditor, formTpl, typeCaster) {
+], function (_, __, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, formTpl, typeCaster) {
     'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(Question, function create(){
-        var $container = this.widget.$container,
-            $prompt = $container.find('.prompt'),
-            interaction = this.widget.element;
-
-        containerEditor.create($prompt, {
-            change : function change(text){
-                interaction.data('prompt', text);
-                interaction.updateMarkup();
-            },
-            markup : interaction.markup,
-            markupSelector : '.prompt',
-            related : interaction,
-            areaBroker: this.widget.getAreaBroker()
-        });
 
     }, function destroy(){
-        var $container = this.widget.$container,
-            $prompt = $container.find('.prompt');
+        var $container = this.widget.$container;
 
         simpleEditor.destroy($container);
-        containerEditor.destroy($prompt);
     });
 
     /**

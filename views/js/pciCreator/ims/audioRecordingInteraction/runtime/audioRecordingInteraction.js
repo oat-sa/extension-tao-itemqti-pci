@@ -21,7 +21,6 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
-    'taoQtiItem/portableLib/OAT/util/html',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
     'audioRecordingInteraction/runtime/js/uiElements',
@@ -29,6 +28,7 @@ define([
     'text!audioRecordingInteraction/runtime/img/play.svg',
     'text!audioRecordingInteraction/runtime/img/record.svg',
     'text!audioRecordingInteraction/runtime/img/reset.svg',
+    'text!audioRecordingInteraction/runtime/img/stop.svg',
     'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
     'audioRecordingInteraction/runtime/js/providers/webAudio',
     'audioRecordingInteraction/runtime/js/dialog',
@@ -42,7 +42,6 @@ define([
     _,
     Promise,
     event,
-    html,
     playerFactory,
     recorderFactory,
     uiElements,
@@ -246,9 +245,6 @@ define([
             this.on('configChange', function (newConfig) {
                 self.render(newConfig);
             });
-
-            // render rich text content in prompt
-            html.render(this.$container.find('.prompt'));
         },
         /**
          * Programmatically set the response following the json schema described in
@@ -257,7 +253,7 @@ define([
          * @param {Object} response
          */
         setResponse: function setResponse(response) {
-            var recording = response.base && response.base.file;
+            var recording = response && response.base && response.base.file;
 
             if (recording) {
                 this.updateResponse(recording);
@@ -828,7 +824,7 @@ define([
          */
         updateResetCount: function updateResetCount() {
             var remaining = this.config.maxRecords - this._recordsAttempts - 1,
-                resetLabel = this.getControlIcon('reset');
+                resetLabel = resetIcon;
 
             if (this.config.maxRecords > 1) {
                 resetLabel += ' (' + remaining + ')';

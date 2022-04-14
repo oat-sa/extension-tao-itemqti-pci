@@ -111,10 +111,11 @@ define([
         /**
          * (optional) Allows passing additional data to xml template
          *
-         * @returns {function} handlebar template
+         * @param {Object} pci
+         * @param {Object} defaultData
+         * @returns {Object} handlebar template
          */
         getMarkupData: function getMarkupData(pci, defaultData) {
-            defaultData.prompt = pci.data('prompt');
             return defaultData;
         }
     };
