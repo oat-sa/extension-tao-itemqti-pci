@@ -22,8 +22,7 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'audioRecordingInteraction/runtime/js/modal',
-    'tpl!audioRecordingInteraction/runtime/js/dialog/tpl/body'
-], function (_, $, modal, bodyTpl) {
+], function (_, $, modal) {
     'use strict';
     /**
      * The scope of events names
@@ -79,7 +78,19 @@ define([
 
             // pre-render the dialog box
             this.dialogId = _.uniqueId('dlg-');
-            this.$html = $(bodyTpl(this));
+            this.$html = $(
+                `<div
+                    class="modal ${this.class}"
+                    role="dialog"
+                    aria-modal="true"
+                    data-control="navigable-modal-body"
+                    aria-describedby="core/ui-dialog-message-${this.dialogId}"
+                >
+                    <div class="modal-body clearfix">
+                        <p id="core/ui-dialog-message-${this.dialogId}" class="message">${this.message}</p>
+                    </div>
+                </div>`);
+
             this.rendered = false;
             this.destroyed = false;
 

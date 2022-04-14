@@ -54,7 +54,6 @@ define([
             $form = _widget.$form,
             interaction = _widget.element,
             response = interaction.getResponseDeclaration(),
-            $mediaStimulusForm,
             $compressedOptions,
             $uncompressedOptions,
             $delayOptions;
@@ -80,16 +79,11 @@ define([
             audioBitrate:           interaction.prop('audioBitrate'),
             isStereo:               typeCaster.strToBool(interaction.prop('isStereo'), false),
 
-            useMediaStimulus:       typeCaster.strToBool(interaction.prop('useMediaStimulus'), false),
-
             updateResponsePartially: typeCaster.strToBool(interaction.prop('updateResponsePartially'), true),
             partialUpdateInterval: parseInt(interaction.prop('partialUpdateInterval'), 10) / 1000,
 
             displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
         })));
-
-        $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
-        $mediaStimulusForm.append(pciMediaManager.getForm());
 
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
@@ -136,16 +130,6 @@ define([
             },
             audioBitrate:       configChangeCallBack,
             isStereo:           configChangeCallBack,
-
-            useMediaStimulus: function useMediaStimulusCb(boundInteraction, value, name) {
-                if (value) {
-                    $mediaStimulusForm.removeClass('hidden');
-                    $mediaStimulusForm.show(250);
-                } else {
-                    $mediaStimulusForm.hide(250);
-                }
-                configChangeCallBack(boundInteraction, value, name);
-            },
 
             partialUpdateInterval: function partialUpdateInterval(boundInteraction, value, name) {
                 value = parseFloat(value) * 1000

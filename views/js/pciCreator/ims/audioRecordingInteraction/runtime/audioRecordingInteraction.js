@@ -29,10 +29,6 @@ define([
     'text!audioRecordingInteraction/runtime/img/record.svg',
     'text!audioRecordingInteraction/runtime/img/reset.svg',
     'text!audioRecordingInteraction/runtime/img/stop.svg',
-    'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
-    'audioRecordingInteraction/runtime/js/providers/webAudio',
-    'audioRecordingInteraction/runtime/js/dialog',
-    'audioRecordingInteraction/runtime/js/modal',
     'css!audioRecordingInteraction/runtime/css/audioRecordingInteraction',
     'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav',
     'audioRecordingInteraction/runtime/js/workers/WavAudioEncoder'
@@ -183,10 +179,6 @@ define([
                 promises.push(self.inputMeter.destroy());
             }
 
-            if (self.mediaStimulus) {
-                promises.push(self.mediaStimulus.destroy());
-            }
-
             if (self.player) {
                 promises.push(self.player.unload());
             }
@@ -202,7 +194,6 @@ define([
             return Promise.all(promises).then(function () {
                 self.inputMeter = null;
                 self.progressBar = null;
-                self.mediaStimulus = null;
                 self.player = null;
                 self.recorder = null;
             });
@@ -238,9 +229,6 @@ define([
             this.$container = $(dom);
 
             this.render(config);
-
-            //tell the rendering engine that I am ready
-            qtiCustomInteractionContext.notifyReady(this);
 
             this.on('configChange', function (newConfig) {
                 self.render(newConfig);
@@ -322,7 +310,6 @@ define([
          * @param {Object} config
          */
         render: function render(config) {
-            this.$mediaStimulusContainer = this.$container.find('.audio-rec > .media-stimulus');
             this.$controlsContainer = this.$container.find('.audio-rec > .controls');
             this.$progressContainer = this.$container.find('.audio-rec > .progress');
             this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
@@ -339,7 +326,6 @@ define([
             this.initPlayer();
             this.initProgressBar();
             this.initMeter();
-            this.initMediaStimulus();
             this.initControls();
             this.updateResetCount();
             this.initRecording();
@@ -359,7 +345,6 @@ define([
          * @param {Boolean} config.isCompressed - set the recording format between compressed and uncompressed
          * @param {Number}  config.audioBitrate - number of bits per seconds for audio encoding
          * @param {Boolean} config.isStereo - switch the number of channels (1 vs 2) for uncompressed recording
-         * @param {Boolean} config.useMediaStimulus - will display a media stimulus to the test taker
          * @param {Object}  config.media - media object (handled by the PCI media manager helper)
          * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
          * @param {Boolean} config.updateResponsePartially - enable/disable the partial response update (may affect the performance)
@@ -382,7 +367,6 @@ define([
                 audioBitrate: toInteger(config.audioBitrate, 20000),
                 isStereo: toBoolean(config.isStereo, false),
 
-                useMediaStimulus: toBoolean(config.useMediaStimulus, false),
                 media: config.media || {},
 
                 displayDownloadLink: toBoolean(config.displayDownloadLink, false),
@@ -471,7 +455,7 @@ define([
 
         /**
          * Instanciate the audio player and its event listeners.
-         * This player is only for the playback of the recording. The stimulus uses its own player.
+         * This player is only for the playback of the recording.
          */
         initPlayer: function initPlayer() {
             var self = this;
@@ -528,8 +512,8 @@ define([
                 return;
             }
 
-            // no delay and no media stimulus, start recording now
-            if (delayInSeconds === 0 && !this.hasMediaStimulus() && !this.inQtiCreator()) {
+            // no delay, start recording now
+            if (delayInSeconds === 0 && !this.inQtiCreator()) {
                 this.startRecording();
                 return;
             }
@@ -543,10 +527,6 @@ define([
             if (delayInSeconds > 0 && !this.inQtiCreator()) {
                 // init countdown
                 this.initCountdown();
-            }
-
-            if (this.hasMediaStimulus()) {
-                return;
             }
 
             if (!this.inQtiCreator()) {
@@ -574,63 +554,11 @@ define([
                     });
 
                     self._cleanDelayCallback();
-
-                    if (!self.hasMediaStimulus() || self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) {
-                        self.startRecording();
-                    } else {
-                        self.updateControls();
-                    }
+                    self.startRecording();
                 }, self.getDelayInSeconds() * 1000);
             });
         },
 
-        /**
-         * Instanciate the media stimulus player and its event listeners
-         * This player is only for the playback of the stimulus. The recorded audio uses its own player.
-         */
-        initMediaStimulus: function initMediaStimulus() {
-            var self = this;
-
-            if (this.hasMediaStimulus()) {
-                this.$mediaStimulusContainer.addClass('active');
-
-                this.mediaStimulus = uiElements.mediaStimulusFactory({
-                    $container: this.$mediaStimulusContainer,
-                    assetManager: this.assetManager,
-                    media: this.config.media
-                });
-
-                this.mediaStimulus.on('statechange', function () {
-                    self.updateControls();
-                });
-
-                this.mediaStimulus.on('playing', function () {
-                    if (self.recorder.is('recording')) {
-                        self.recorder.cancel();
-                    }
-                    if (self.player.is('playing')) {
-                        self.player.stop();
-                    }
-                });
-
-                this.mediaStimulus.on('ended', function () {
-                    // If auto start recording is set and PCI is not in review mode
-                    if (self.config.autoStart && !self.config.isReviewMode) {
-                        if (!self.config.delayMinutes && !self.config.delaySeconds) {
-                            // without delay - startRecording
-                            self.startRecording();
-                        } else if (self.countdown && self.countdown.isDisplayed()) {
-                            // with delay and countdown is displayed - initDelay
-                            self.initDelay();
-                        }
-                    }
-                });
-                this.mediaStimulus.render();
-            } else {
-                this.$mediaStimulusContainer.empty();
-                this.$mediaStimulusContainer.removeClass('active');
-            }
-        },
         /**
          * Create countdown timer
          */
@@ -641,22 +569,6 @@ define([
                     delayInSeconds: this.getDelayInSeconds()
                 });
             }
-        },
-
-        /**
-         * Check if the item has a media stimulus defined
-         * @returns {Boolean}
-         */
-        hasMediaStimulus: function hasMediaStimulus() {
-            return this.config.useMediaStimulus && this.config.media && this.config.media.uri;
-        },
-
-        /**
-         * Check if the media stimulus has been played
-         * @returns {Boolean}
-         */
-        mediaStimulusHasPlayed: function mediaStimulusHasPlayed() {
-            return this.mediaStimulus && (this.mediaStimulus.is('ended') || this.mediaStimulus.is('disabled'));
         },
 
         /**
@@ -898,7 +810,6 @@ define([
                         if (
                             self.player.is('created') &&
                             !self.recorder.is('recording') &&
-                            ((self.hasMediaStimulus() && self.mediaStimulusHasPlayed()) || !self.hasMediaStimulus()) &&
                             !self.getRecording()
                         ) {
                             this.enable();

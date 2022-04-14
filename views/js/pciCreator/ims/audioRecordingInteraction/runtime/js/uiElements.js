@@ -16,7 +16,7 @@
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
  */
 /**
- * Those are the UI elements used by the audio recording PCI: media stimulus, progress bar, input meter and controls
+ * Those are the UI elements used by the audio recording PCI: progress bar, input meter and controls
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
@@ -24,8 +24,7 @@ define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
-    'taoQtiItem/portableLib/OAT/mediaPlayer'
-], function($, _, event, mediaPlayerFactory) {
+], function($, _, event) {
     'use strict';
 
     /**
@@ -37,21 +36,6 @@ define([
         DISABLED:   'disabled',
         ENABLED:    'enabled',
         ACTIVE:     'active'
-    };
-
-    /**
-     * @property {String} CREATED   - mediaStimulus instance created, but no media loaded
-     * @property {String} IDLE      - stimulus loaded, ready to be played
-     * @property {String} PLAYING   - stimulus is being played
-     * @property {String} ENDED     - playing is over
-     * @property {String} DISABLED  - no more playing is possible
-     */
-    var mediaStimulusStates = {
-        CREATED:    'created',
-        IDLE:       'idle',
-        PLAYING:    'playing',
-        ENDED:      'ended',
-        DISABLED:   'disabled'
     };
 
     /**
@@ -312,98 +296,6 @@ define([
         return inputMeter;
     }
 
-
-    /**
-     * This is just a tiny wrapper around the media player instance, for the goal of having a consistent API with the rest of the components
-     * @param {Object} config
-     * @param {Object} config.$container
-     * @param {Object} config.assetManager - the PCI assetmanager used to resolve the media URL
-     * @param {Object} config.media - the media properties as given by the PCI media manager helper
-     */
-    function mediaStimulusFactory(config) {
-        var $container   = config.$container,
-            assetManager = config.assetManager,
-            media        = config.media || {};
-
-        var state = mediaStimulusStates.CREATED;
-
-        var mediaStimulus,
-            mediaPlayer,
-            mediaPlayerOptions,
-            mediaElement;
-
-        mediaStimulus = {
-            /**
-             * Set state of the mediaStimulus
-             * @param {String} newState
-             * @private
-             */
-            setState: function setState(newState) {
-                state = newState;
-                this.trigger('statechange');
-                this.trigger(state);
-            },
-
-            /**
-             * Check current state
-             * @param {String} queriedState
-             * @returns {boolean}
-             */
-            is: function is(queriedState) {
-                return (state === queriedState);
-            },
-
-            /**
-             * Render the media player
-             */
-            render: function render() {
-                var self = this;
-
-                $container.empty();
-                if (mediaPlayer) {
-                    mediaPlayer.destroy();
-                }
-
-                if (media.uri) {
-                    mediaPlayerOptions = _.assign({}, media, {
-                        $container: $container,
-                        url:        assetManager.resolve(media.uri)
-                    });
-
-                    mediaPlayer = mediaPlayerFactory(mediaPlayerOptions);
-                    mediaPlayer.render();
-
-                    mediaElement = mediaPlayer.getMediaElement();
-
-                    if (mediaElement) {
-                        mediaElement
-                            .on('ready pause stop', function() {
-                                self.setState(mediaStimulusStates.IDLE);
-                            })
-                            .on('play', function() {
-                                self.setState(mediaStimulusStates.PLAYING);
-                            })
-                            .on('ended', function() {
-                                self.setState(mediaStimulusStates.ENDED);
-                            })
-                            .on('disabled', function() {
-                                self.setState(mediaStimulusStates.DISABLED);
-                            });
-                    }
-                }
-            },
-
-            destroy: function destroy() {
-                mediaPlayer.destroy();
-                $container.empty();
-            }
-        };
-
-        event.addEventMgr(mediaStimulus);
-
-        return mediaStimulus;
-    }
-
     /**
      * Creates a countdown timer as a pie chart
      * @param {Object} config
@@ -453,7 +345,6 @@ define([
         controlFactory:         controlFactory,
         progressBarFactory:     progressBarFactory,
         inputMeterFactory:      inputMeterFactory,
-        mediaStimulusFactory:   mediaStimulusFactory,
         countdownPieChartFactory: countdownPieChartFactory
     };
 

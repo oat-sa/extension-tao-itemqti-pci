@@ -79,7 +79,6 @@ define([
                 audioBitrate: 20000,
                 isStereo: false,
 
-                useMediaStimulus: false,
                 media: {
                     autostart: true,
                     replayTimeout: 5,

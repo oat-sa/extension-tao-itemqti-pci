@@ -29,7 +29,7 @@
     </label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."}}
+        {{__ "Recording starts automatically once test taker give microphone use authorisation."}}
     </span>
 </div>
 
@@ -107,23 +107,6 @@
             <option value="true"{{#if isStereo}} selected="selected"{{/if}}>{{__ 'Stereo'}}</option>
         </select>
     </div>
-</div>
-
-<hr />
-
-<div class="panel">
-    <label>
-        <input name="useMediaStimulus" type="checkbox" {{#if useMediaStimulus}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span> {{__ "Use media stimulus"}}
-    </label>
-    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-    <span class="tooltip-content">
-        {{__ "This options allow to insert a media stimulus that will have to be played before recording can happen."}}
-    </span>
-</div>
-
-<div class="panel">
-    <div class="media-stimulus-properties-form{{#unless useMediaStimulus}} hidden{{/unless}}"></div>
 </div>
 
 <hr />
