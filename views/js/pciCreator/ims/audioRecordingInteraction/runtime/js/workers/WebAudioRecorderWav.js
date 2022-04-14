@@ -28,8 +28,9 @@
  * - record(): do not timeout if maxBuffers (= timeLimit option) is equal to zero
  * - cleanup(): removed chaining assignment that might result in a TypeError
  */
-importScripts("WavAudioEncoder.js");
-
+if( 'function' === typeof importScripts) {
+    importScripts("WavAudioEncoder.js");
+}
 var sampleRate = 44100,
     numChannels = 2,
     options = undefined,
