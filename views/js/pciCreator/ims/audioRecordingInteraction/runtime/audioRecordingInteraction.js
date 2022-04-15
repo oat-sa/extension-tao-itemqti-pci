@@ -937,6 +937,12 @@ define([
         getInstance : function getInstance(dom, config, state){
             var response = config.boundTo;
             var audioRecordingInteraction = audioRecordingInteractionFactory();
+            // config.properties.media is serialized string
+            // because in tao-item-runner-qti-fe/src/qtiCommonRenderer/renderers/interactions/pci/ims.js:82
+            // property value is serialize if it is array or object
+            if (config.properties && config.properties.media && typeof config.properties.media === 'string') {
+                config.properties.media = JSON.parse(config.properties.media);
+            }
             //simply mapped to existing TAO PCI API
             audioRecordingInteraction.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
             audioRecordingInteraction.setSerializedState(state);
