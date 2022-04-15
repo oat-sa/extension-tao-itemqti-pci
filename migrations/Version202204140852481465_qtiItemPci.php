@@ -28,7 +28,7 @@ final class Version202204140852481465_qtiItemPci extends AbstractMigration
     public function down(Schema $schema): void
     {
         throw new IrreversibleMigration(
-            'In order to undo this migration, please revert the client-side changes and run ' . RegisterYourPCI::class
+            'In order to undo this migration, please revert the client-side changes and run ' . RegisterIMSPciAudioRecording::class
         );
     }
 }
