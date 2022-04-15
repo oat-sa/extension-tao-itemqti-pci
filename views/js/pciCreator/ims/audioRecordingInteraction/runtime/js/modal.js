@@ -49,6 +49,7 @@ define([
     var modal = {
         /**
          * Initialize the modal dialog
+         * @param {jQueryElement} $modal
          * @param {Object} [options] - plugin options
          * @param {String} [options.modalCloseClass = 'modal-close'] - the css class for the modal closer
          * @param {String} [options.modalOverlay = 'modal-bg'] - the css class for the modal overlay element
@@ -61,61 +62,44 @@ define([
          * @param {Boolean}  [options.vCenter = true] - if the modal should be centered vertically
          * @param {jQueryElement}  [options.$context = null] - give the context the modal overlay should be append to, if none give, it would be on the window
          * @param {Number|Boolean}  [options.animate = 400] - display the modal using animation
-         * @returns {jQueryElement} for chaining
          * @fires modal#create.modal
          */
-        init: function (options) {
-            //extend the options using defaults
-            options = $.extend(true, {}, defaults, options);
+        init: function ($modal, options) {
+            options.modalOverlay = '__modal-bg-' + ($modal.attr('id') || new Date().getTime());
 
-            // default animation duration
-            if (options.animate) {
-                if ('number' !== typeof options.animate) {
-                    options.animate = defaults.animate;
+            //add data to the element
+            $modal.data(dataNs, options);
+
+            //Initialize the overlay for the modal dialog
+            if ($('#' + options.modalOverlay).length === 0) {
+                var $overlay = $('<div/>').attr({ id: options.modalOverlay, class: options.modalOverlayClass });
+                if (options.$context instanceof $ && options.$context.length) {
+                    //when a $context is given, position the modal overlay relative to that context
+                    $overlay.css('position', 'absolute');
+                    options.$context.append($overlay);
                 } else {
-                    options.animate = Math.max(animateDiff, options.animate);
+                    //the modal overlay is absolute to the window
+                    $modal.after($overlay);
                 }
             }
 
-            return $(this).each(function () {
-                var $modal = $(this);
+            //Initialize the close button for the modal dialog
+            if ($('.' + options.modalCloseClass, $modal).length === 0 && !options.disableClosing) {
+                $(
+                    `<button
+                    id="modal-close-btn"
+                    class="${options.modalCloseClass}"
+                    aria-label="Close dialog"
+                    data-control="close"
+                >
+                    <span class="icon-close"></span>
+                </button>`
+                ).appendTo($modal);
+            }
 
-                options.modalOverlay = '__modal-bg-' + ($modal.attr('id') || new Date().getTime());
-
-                //add data to the element
-                $modal.data(dataNs, options);
-
-                //Initialize the overlay for the modal dialog
-                if ($('#' + options.modalOverlay).length === 0) {
-                    var $overlay = $('<div/>').attr({ id: options.modalOverlay, class: options.modalOverlayClass });
-                    if (options.$context instanceof $ && options.$context.length) {
-                        //when a $context is given, position the modal overlay relative to that context
-                        $overlay.css('position', 'absolute');
-                        options.$context.append($overlay);
-                    } else {
-                        //the modal overlay is absolute to the window
-                        $modal.after($overlay);
-                    }
-                }
-
-                //Initialize the close button for the modal dialog
-                if ($('.' + options.modalCloseClass, $modal).length === 0 && !options.disableClosing) {
-                    $(
-                        `<button
-                        id="modal-close-btn"
-                        class="${options.modalCloseClass}"
-                        aria-label="Close dialog"
-                        data-control="close"
-                    >
-                        <span class="icon-close"></span>
-                    </button>`
-                    ).appendTo($modal);
-                }
-
-                if (!options.startClosed) {
-                    modal._open($modal);
-                }
-            });
+            if (!options.startClosed) {
+                modal._open($modal);
+            }
         },
 
         /**
@@ -316,19 +300,25 @@ define([
     }
 
     /**
-     * The only exposed function is used to start listening on data-attr
-     *
-     * @public
-     * @example define(['ui/modal'], function(modal){ modal($('rootContainer')); });
-     * @param {jQueryElement} $container - the root context to listen in
+     * Register a plugin
+     * @param {Object} options
+     * @returns {jQueryElement} for chaining
      */
-    return function listenDataAttr($container) {
-        new DataAttrHandler('modal', {
-            container: $container,
-            listenerEvent: 'click',
-            namespace: dataNs
-        }).init(function ($elt, $target) {
-            $target.modal();
+    $.fn.modal = function(options){
+        //extend the options using defaults
+        options = $.extend(true, {}, defaults, options);
+
+        // default animation duration
+        if (options.animate) {
+            if ('number' !== typeof options.animate) {
+                options.animate = defaults.animate;
+            } else {
+                options.animate = Math.max(animateDiff, options.animate);
+            }
+        }
+
+        return this.each(function () {
+            modal.init($(this), options);
         });
-    }
+    };
 });
