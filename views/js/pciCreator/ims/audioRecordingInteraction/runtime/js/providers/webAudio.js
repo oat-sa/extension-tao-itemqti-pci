@@ -31,6 +31,8 @@ define([
     /**
      * @param {Object} config
      * @param {Number} config.isStereo
+     * @param {Object} assetManager
+     * @returns {Object} webAudioProvider
      */
     return function webAudioProviderFactory(config, assetManager) {
         var webAudioProvider;
