@@ -13,18 +13,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
  */
 define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
     'audioRecordingInteraction/creator/widget/states/states',
     'css!audioRecordingInteraction/creator/css/audioRecordingInteraction'
-], function(Widget, states){
+], function (Widget, states) {
     'use strict';
 
     var AudioRecordingInteractionWidget = Widget.clone();
 
-    AudioRecordingInteractionWidget.initCreator = function(){
+    AudioRecordingInteractionWidget.initCreator = function () {
         var $interaction;
 
         this.registerStates(states);

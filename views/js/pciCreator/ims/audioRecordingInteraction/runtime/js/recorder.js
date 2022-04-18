@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2019 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
  */
 /**
  * This module wraps an audio processor provider which depends on the requested recording format:
@@ -33,7 +33,7 @@ define([
     'taoQtiItem/portableLib/OAT/util/event',
     'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
     'audioRecordingInteraction/runtime/js/providers/webAudio'
-], function(_, Promise, event, mediaRecorderProvider, webAudioProvider) {
+], function (_, Promise, event, mediaRecorderProvider, webAudioProvider) {
     'use strict';
 
     /**
@@ -42,11 +42,11 @@ define([
      * @property {String} RECORDING - record is in progress
      */
     var recorderStates = {
-        CREATED:    'created',
-        IDLE:       'idle',
-        RECORDING:  'recording',
-        STOPED:  'stoped',
-        CANCELED:  'canceled'
+        CREATED: 'created',
+        IDLE: 'idle',
+        RECORDING: 'recording',
+        STOPED: 'stoped',
+        CANCELED: 'canceled'
     };
 
     /**
@@ -57,7 +57,7 @@ define([
      * @returns {Number}
      */
     function getRndInteger(min, max) {
-        return Math.floor(Math.random() * (max - min) ) + min;
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 
     /**
@@ -67,39 +67,37 @@ define([
      */
     function setGetUserMedia() {
         var promisifiedOldGUM = function promisifiedOldGUM(constraints) {
-
             // First get ahold of getUserMedia, if present
-            var getUserMedia = (navigator.getUserMedia ||
+            var getUserMedia =
+                navigator.getUserMedia ||
                 navigator.webkitGetUserMedia ||
                 navigator.mozGetUserMedia ||
-                navigator.msGetUserMedia);
+                navigator.msGetUserMedia;
 
             // Some browsers just don't implement it - return a rejected promise with an error
             // to keep a consistent interface
-            if(!getUserMedia) {
+            if (!getUserMedia) {
                 return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
             }
 
             // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-            return new Promise(function(successCallback, errorCallback) {
+            return new Promise(function (successCallback, errorCallback) {
                 getUserMedia.call(navigator, constraints, successCallback, errorCallback);
             });
-
         };
 
         // Older browsers might not implement mediaDevices at all, so we set an empty object first
-        if(typeof navigator.mediaDevices === 'undefined') {
+        if (typeof navigator.mediaDevices === 'undefined') {
             navigator.mediaDevices = {};
         }
 
         // Some browsers partially implement mediaDevices. We can't just assign an object
         // with getUserMedia as it would overwrite existing properties.
         // Here, we will just add the getUserMedia property if it's missing.
-        if(typeof navigator.mediaDevices.getUserMedia === 'undefined') {
+        if (typeof navigator.mediaDevices.getUserMedia === 'undefined') {
             navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
         }
     }
-
 
     /**
      * @param {Object} config
@@ -108,18 +106,18 @@ define([
      * @returns {Object} - The recorder
      */
     return function recorderFactory(config, assetManager) {
-        var recorder,                       // Return value of the present factory
-            mediaStream,                    // The MediaStream instance
-            provider,                       // provider for audio processing/encoding
+        var recorder, // Return value of the present factory
+            mediaStream, // The MediaStream instance
+            provider, // provider for audio processing/encoding
             state = recorderStates.CREATED; // recorder inner state
 
-        var startTimeMs,            // start time of the recording - used for calculating record duration
-            durationMs,             // duration of the recording
-            timerId;                // a place to store the requestAnimationFrame return value
+        var startTimeMs, // start time of the recording - used for calculating record duration
+            durationMs, // duration of the recording
+            timerId; // a place to store the requestAnimationFrame return value
 
         var audioContext,
-            analyser,               // the WebAudio node use to read the input level
-            frequencyArray;         // used to compute the input level from the current array of frequencies
+            analyser, // the WebAudio node use to read the input level
+            frequencyArray; // used to compute the input level from the current array of frequencies
 
         /**
          * Check if client uses the iOS device.
@@ -127,15 +125,13 @@ define([
          * @returns {*|boolean}
          */
         function isIOSDevice() {
-            return /(iPhone|iPad)/i.test(navigator.userAgent)
+            return /(iPhone|iPad)/i.test(navigator.userAgent);
         }
 
         /**
          * Fill the frequencyArray with fake data
-         *
-         * @param {Array} frequencyArray
          */
-        function fillFakeEmitter(frequencyArray) {
+        function fillFakeEmitter() {
             var frequencyLength = frequencyArray.length;
             var level = 0;
             var levelIndex = 0;
@@ -159,8 +155,7 @@ define([
          * @param {MediaStream} stream - incoming audio stream from the microphone
          */
         function initAnalyser(stream) {
-            var source,
-                bufferLength;
+            var source, bufferLength;
 
             source = audioContext.createMediaStreamSource(stream);
 
@@ -184,10 +179,10 @@ define([
             analyser.getByteFrequencyData(frequencyArray);
 
             if (frequencyArray.length && isIOSDevice()) {
-                fillFakeEmitter(frequencyArray);
+                fillFakeEmitter();
             }
 
-            sum = frequencyArray.reduce(function(a, b) {
+            sum = frequencyArray.reduce(function (a, b) {
                 return a + b;
             });
             return Math.floor(sum / frequencyArray.length);
@@ -204,7 +199,6 @@ define([
             recorderInstance.trigger(newState);
         }
 
-
         setGetUserMedia();
 
         recorder = {
@@ -214,7 +208,7 @@ define([
              * @returns {Boolean}
              */
             is: function is(queriedState) {
-                return (state === queriedState);
+                return state === queriedState;
             },
 
             /**
@@ -222,9 +216,11 @@ define([
              * @returns {Boolean}
              */
             isNeedInit: function isNeedInit() {
-                return this.is(recorderStates.CREATED) ||
+                return (
+                    this.is(recorderStates.CREATED) ||
                     this.is(recorderStates.STOPED) ||
-                    this.is(recorderStates.CANCELED);
+                    this.is(recorderStates.CANCELED)
+                );
             },
 
             /**
@@ -234,30 +230,27 @@ define([
             init: function init() {
                 var self = this;
 
-                provider = (config.isCompressed)
-                    ? mediaRecorderProvider(config)
-                    : webAudioProvider(config, assetManager);
+                provider = config.isCompressed ? mediaRecorderProvider(config) : webAudioProvider(config, assetManager);
 
-                    this.initAudioContext();
+                this.initAudioContext();
 
-                return navigator.mediaDevices.getUserMedia({ audio: true })
-                    .then(function(stream) {
-                        mediaStream = stream;
-                        provider.init(stream);
+                return navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+                    mediaStream = stream;
+                    provider.init(stream);
 
-                        provider.on('blobavailable', function(blob) {
-                            self.trigger('recordingavailable', [blob, durationMs]);
-                            self.releaseResourses(); // release resources after provider send data
-                        });
-
-                        provider.on('partialblobavailable', function(blob) {
-                            self.trigger('partialrecordingavailable', [blob]);
-                        });
-
-                        initAnalyser(stream);
-
-                        setState(recorder, recorderStates.IDLE);
+                    provider.on('blobavailable', function (blob) {
+                        self.trigger('recordingavailable', [blob, durationMs]);
+                        self.releaseResourses(); // release resources after provider send data
                     });
+
+                    provider.on('partialblobavailable', function (blob) {
+                        self.trigger('partialrecordingavailable', [blob]);
+                    });
+
+                    initAnalyser(stream);
+
+                    setState(recorder, recorderStates.IDLE);
+                });
             },
 
             /**
@@ -300,7 +293,7 @@ define([
 
                 provider.stop();
                 setState(recorder, recorderStates.STOPED);
-            
+
                 this.trigger('stop');
             },
 
@@ -323,11 +316,11 @@ define([
              */
             releaseResourses: function releaseResourses() {
                 if (mediaStream) {
-                    _.forEach(mediaStream.getTracks(), function(track) {
+                    _.forEach(mediaStream.getTracks(), function (track) {
                         track.stop();
                     });
                 }
-                audioContext.close().then(function() {
+                audioContext.close().then(function () {
                     audioContext = null;
                 });
                 window.audioContext = null;
@@ -366,11 +359,10 @@ define([
 
             /**
              * Destroy the recorder instance
+             * @returns {Promise}
              */
             destroy: function destroy() {
-                var promises = [
-                    cancelAnimationFrame(timerId),
-                ];
+                var promises = [cancelAnimationFrame(timerId)];
 
                 if (provider) {
                     promises.push(provider.destroy());

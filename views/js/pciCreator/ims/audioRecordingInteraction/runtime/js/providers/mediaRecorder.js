@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2018-2022 (original work) Open Assessment Technologies SA;
  */
 /**
  * This audio processing provider is based on the mediaRecorder API.
@@ -21,10 +21,7 @@
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
-define([
-    'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/util/event'
-], function(_, event) {
+define(['taoQtiItem/portableLib/lodash', 'taoQtiItem/portableLib/OAT/util/event'], function (_, event) {
     'use strict';
 
     /**
@@ -36,6 +33,7 @@ define([
     /**
      * @param {Object} config
      * @param {Number} config.audioBitrate - in bits per second, quality of the recording
+     * @returns {Object} mediaRecorderProvider
      */
     return function mediaRecorderProviderFactory(config) {
         var mediaRecorderProvider;
@@ -55,15 +53,16 @@ define([
             partialUpdateTimeout = null;
         };
 
-        var MediaRecorder = window.MediaRecorder,       // The MediaRecorder API
-            mediaRecorder,                              // The MediaRecorder instance
-            recorderOptions = {                         // Options for the MediaRecorder constructor
+        var MediaRecorder = window.MediaRecorder, // The MediaRecorder API
+            mediaRecorder, // The MediaRecorder instance
+            recorderOptions = {
+                // Options for the MediaRecorder constructor
                 audioBitsPerSecond: config.audioBitrate || 20000
             };
 
-        var mimeType,               // mime type of the recording
-            chunks = [],            // contains the current recording split in chunks
-            chunkSizeMs = 100;      // size of a chunk (reduced from 1000ms to 100ms to avoid data loss in case of interrupted recording)
+        var mimeType, // mime type of the recording
+            chunks = [], // contains the current recording split in chunks
+            chunkSizeMs = 100; // size of a chunk (reduced from 1000ms to 100ms to avoid data loss in case of interrupted recording)
 
         var codecsByPreferenceOrder = [
             // !!! Do not change this order without careful consideration and regression testing !!!
@@ -136,14 +135,14 @@ define([
 
                     cleanupPartialUpdateTimeout();
 
-                    if (! self.cancelled) {
+                    if (!self.cancelled) {
                         blob = new Blob(chunks, { type: mimeType });
                         self.trigger('blobavailable', [blob]);
                     }
                     chunks = [];
                 };
 
-                mediaRecorder.onerror = function(error) {
+                mediaRecorder.onerror = function (error) {
                     window.console.error(error);
                 };
             },
@@ -154,7 +153,7 @@ define([
             start: function start() {
                 partialUpdateAllowed = true;
                 partialSize = 0;
-                recordSize = 0
+                recordSize = 0;
                 mediaRecorder.start(chunkSizeMs);
             },
 
@@ -190,5 +189,4 @@ define([
 
         return mediaRecorderProvider;
     };
-
 });

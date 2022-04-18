@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
  */
 /**
  * Those are the UI elements used by the audio recording PCI: progress bar, input meter and controls
@@ -23,8 +23,8 @@
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/util/event',
-], function($, _, event) {
+    'taoQtiItem/portableLib/OAT/util/event'
+], function ($, _, event) {
     'use strict';
 
     /**
@@ -33,9 +33,9 @@ define([
      * @property {String} ACTIVE    - clicked, triggered action is ongoing
      */
     var controlStates = {
-        DISABLED:   'disabled',
-        ENABLED:    'enabled',
-        ACTIVE:     'active'
+        DISABLED: 'disabled',
+        ENABLED: 'enabled',
+        ACTIVE: 'active'
     };
 
     /**
@@ -44,13 +44,14 @@ define([
      * @param {Number}  config.id - control id
      * @param {String}  config.label - text displayed inside the button
      * @param {String}  config.defaultState - state in which the button will be created
-     * @param {$}       config.container - jQuery Dom element that the button will be appended to
+     * @param {jQuery}  config.container - jQuery Dom element that the button will be appended to
+     * @returns {Object} control
      */
     function controlFactory(config) {
         var state,
             control,
             $control = $('<button>', {
-                'class': 'audiorec-control',
+                class: 'audiorec-control',
                 'data-identifier': config.id,
                 html: config.label
             });
@@ -79,7 +80,7 @@ define([
              * @returns {boolean}
              */
             is: function is(queriedState) {
-                return (state === queriedState);
+                return state === queriedState;
             },
 
             /**
@@ -143,7 +144,7 @@ define([
         };
         event.addEventMgr(control);
 
-        $control.on('click.audioPCI', function() {
+        $control.on('click.audioPCI', function () {
             control.trigger('click');
         });
 
@@ -152,13 +153,14 @@ define([
 
     /**
      * Creates a progress bar to display recording or playback progress
-     * @param {$} $container - jQuery element that the progress bar will be appended to
+     * @param {jQuery} $container - jQuery element that the progress bar will be appended to
      * @param {Object} config
-     * @param {Number} config.maxRecordingTime - in seconds
+     * @param {Number} config.maxRecordingTime - in secondsabstract
+     * @returns {jQuery} progressBar
      */
     function progressBarFactory($container, config) {
         var progressBar,
-            $progressBar = $('<progress>',{
+            $progressBar = $('<progress>', {
                 value: '0'
             }),
             currentClass;
@@ -206,36 +208,29 @@ define([
         return progressBar;
     }
 
-
     /**
      * Creates a input meter for microphone input signal. Uses the canvas.
      * The meter is actually composed of multiple "leds" stacked on top of each other.
      * @param {Object} config
      * @param {Integer} config.maxLevel - level for which all meter leds will be lit
-     * @param {$} config.$container - jQuery Dom element that the meter will be appended to
+     * @param {jQuery} config.$container - jQuery Dom element that the meter will be appended to
+     * @returns {jQuery} inputMeter
      */
     function inputMeterFactory(config) {
-        var inputMeter,
-            canvas,
-            canvasCtx;
+        var inputMeter, canvas, canvasCtx;
 
-        var grey    = '#cccccc',
-            green   = '#00aa00',
-            orange  = '#ff9300',
-            red     = '#ff0000';
+        var grey = '#cccccc',
+            green = '#00aa00',
+            orange = '#ff9300',
+            red = '#ff0000';
 
         var ledHeight = 3,
             ledWidth = 10,
             ledPadding = 0,
-            ledColors = [
-                green, green, green, green, green, green,
-                orange, orange, orange, orange,
-                red, red, red
-            ],
+            ledColors = [green, green, green, green, green, green, orange, orange, orange, orange, red, red, red],
             ledNumbers = ledColors.length,
-
             width = ledWidth,
-            height = (ledHeight * ledNumbers) + (ledPadding * (ledNumbers - 1));
+            height = ledHeight * ledNumbers + ledPadding * (ledNumbers - 1);
 
         var scaledLevel;
 
@@ -269,12 +264,11 @@ define([
             draw: function draw(level) {
                 var currentColor, i;
 
-                scaledLevel = Math.floor(level / config.maxLevel * height);
+                scaledLevel = Math.floor((level / config.maxLevel) * height);
 
                 for (i = 0; i < ledNumbers; i += 1) {
                     currentColor = grey;
-                    if ((i === 0 && scaledLevel > 0)
-                        || scaledLevel > (config.maxLevel / ledNumbers * i)) {
+                    if ((i === 0 && scaledLevel > 0) || scaledLevel > (config.maxLevel / ledNumbers) * i) {
                         currentColor = ledColors[i];
                     }
                     drawLed(i, currentColor);
@@ -301,19 +295,20 @@ define([
      * @param {Object} config
      * @param {Object} config.$container - jQuery element that the countdown timer will be appended to
      * @param {Number} config.delayInSeconds - delay in seconds
+     * @returns {jQuery} countdownPieChart
      */
     function countdownPieChartFactory(config) {
         var countdownPieChart;
-        var $container   = config.$container;
+        var $container = config.$container;
         var delay = config.delayInSeconds - 1;
         var $countdownPieChart = $(
             '<div class="countdown-pie-container countdown-pie-animated">' +
                 '<div class="countdown-pie-circle">' +
-                    '<div class="countdown-pie countdown-pie-spinner countdown-pie-animated"></div>' +
-                    '<div class="countdown-pie countdown-pie-filler countdown-pie-animated"></div>' +
-                    '<div class="countdown-pie-mask countdown-pie-animated"></div>' +
+                '<div class="countdown-pie countdown-pie-spinner countdown-pie-animated"></div>' +
+                '<div class="countdown-pie countdown-pie-filler countdown-pie-animated"></div>' +
+                '<div class="countdown-pie-mask countdown-pie-animated"></div>' +
                 '</div>' +
-            '</div>'
+                '</div>'
         );
 
         var displayed = true;
@@ -342,10 +337,9 @@ define([
     }
 
     return {
-        controlFactory:         controlFactory,
-        progressBarFactory:     progressBarFactory,
-        inputMeterFactory:      inputMeterFactory,
+        controlFactory: controlFactory,
+        progressBarFactory: progressBarFactory,
+        inputMeterFactory: inputMeterFactory,
         countdownPieChartFactory: countdownPieChartFactory
     };
-
 });

@@ -13,13 +13,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
  */
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
     'audioRecordingInteraction/creator/widget/states/Question'
-], function(factory, states){
+], function (factory, states) {
     'use strict';
 
     return factory.createBundle(states, arguments, ['answer', 'correct', 'map']);

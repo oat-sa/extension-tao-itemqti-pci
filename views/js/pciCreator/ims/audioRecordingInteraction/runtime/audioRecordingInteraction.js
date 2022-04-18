@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
  */
 define([
     'qtiCustomInteractionContext',
@@ -107,7 +107,7 @@ define([
              * Get the current state fo the PCI
              * @returns {Object}
              */
-            getState : function getState(){
+            getState: function getState() {
                 //simply mapped to existing TAO PCI API
                 return this.getSerializedState();
             },
@@ -115,7 +115,7 @@ define([
             /**
              * Called by delivery engine when PCI is fully completed
              */
-            oncompleted : function oncompleted(){
+            oncompleted: function oncompleted() {
                 this.destroy();
             },
 
@@ -194,7 +194,7 @@ define([
              * Get the type identifier of a pci
              * @returns {string}
              */
-            getTypeIdentifier : function getTypeIdentifier(){
+            getTypeIdentifier: function getTypeIdentifier() {
                 return _typeIdentifier;
             },
             /**
@@ -248,7 +248,7 @@ define([
              * @param {Object} state - json format
              */
             setSerializedState: function setSerializedState(state) {
-                this.setResponse(state && state.response || state);
+                this.setResponse((state && state.response) || state);
             },
 
             /**
@@ -792,11 +792,7 @@ define([
                     record.on(
                         'updatestate',
                         function () {
-                            if (
-                                self.player.is('created') &&
-                                !self.recorder.is('recording') &&
-                                !self.getRecording()
-                            ) {
+                            if (self.player.is('created') && !self.recorder.is('recording') && !self.getRecording()) {
                                 this.enable();
                             } else {
                                 this.disable();
@@ -804,7 +800,6 @@ define([
                         }.bind(record)
                     );
                     this.controls.record = record;
-
                 }
 
                 // Stop button
@@ -865,7 +860,6 @@ define([
                     this.controls.play = play;
                 }
 
-
                 // Reset button
                 if (this.config.maxRecords !== 1 && this.config.isReviewMode !== true) {
                     reset = uiElements.controlFactory({
@@ -905,7 +899,7 @@ define([
              */
             updateControls: function updateControls() {
                 // dont't change controls state, waiting for delay callback
-                if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
+                if (this._delayCallback || (this.countdown && this.countdown.isDisplayed())) {
                     return;
                 }
                 _.invoke(this.controls, 'updateState');
@@ -917,7 +911,7 @@ define([
             destroyControls: function destroyControls() {
                 _.invoke(this.controls, 'destroy');
                 this.controls = null;
-            },
+            }
         };
     };
 
@@ -927,14 +921,14 @@ define([
          * IMS specific PCI API property and methods
          *
          *********************************/
-        typeIdentifier : _typeIdentifier,
+        typeIdentifier: _typeIdentifier,
         /**
          * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
          * @param {DOMELement} dom - the dom element the PCI can use
          * @param {Object} config - the sandard configuration object
          * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
          */
-        getInstance : function getInstance(dom, config, state){
+        getInstance: function getInstance(dom, config, state) {
             var response = config.boundTo;
             var audioRecordingInteraction = audioRecordingInteractionFactory();
             // config.properties.media is serialized string
@@ -944,13 +938,18 @@ define([
                 config.properties.media = JSON.parse(config.properties.media);
             }
             //simply mapped to existing TAO PCI API
-            audioRecordingInteraction.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
+            audioRecordingInteraction.initialize(
+                Object.getOwnPropertyNames(response).pop(),
+                dom,
+                config.properties,
+                config.assetManager
+            );
             audioRecordingInteraction.setSerializedState(state);
 
             //tell the rendering engine that I am ready
             if (typeof config.onready === 'function') {
                 config.onready(audioRecordingInteraction, audioRecordingInteraction.getState());
             }
-        },
+        }
     });
 });

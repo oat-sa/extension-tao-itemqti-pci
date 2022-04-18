@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2018-2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2018-2022 (original work) Open Assessment Technologies SA;
  */
 /**
  * This audio processing provider is based on the Web Audio API and is used for un-compressed audio recording (Wav).
@@ -25,7 +25,7 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event'
-], function(_, Promise, event) {
+], function (_, Promise, event) {
     'use strict';
 
     /**
@@ -44,7 +44,7 @@ define([
 
         var audioNodes = {};
 
-        var numChannels = (config.isStereo) ? 2 : 1,
+        var numChannels = config.isStereo ? 2 : 1,
             buffer = [];
 
         var updateResponsePartially = config.updateResponsePartially;
@@ -64,10 +64,10 @@ define([
                     partialUpdateInterval: partialUpdateInterval
                 },
                 options: {
-                    timeLimit: 0,           // time limit is handled by the provider wrapper
+                    timeLimit: 0, // time limit is handled by the provider wrapper
                     progressInterval: 1000, // encoding progress report interval (millisec)
                     wav: {
-                        mimeType: "audio/wav"
+                        mimeType: 'audio/wav'
                     }
                 }
             });
@@ -94,7 +94,6 @@ define([
          * The provider
          */
         webAudioProvider = {
-
             /**
              * Create the base audio nodes and add listeners for worker commands
              * @param {MediaStream} stream
@@ -109,7 +108,7 @@ define([
 
                 initWorker();
 
-                recorderWorker.onmessage = function(e) {
+                recorderWorker.onmessage = function (e) {
                     var data = e.data;
                     var blob;
                     switch (data.command) {
@@ -133,7 +132,7 @@ define([
              */
             start: function start() {
                 audioNodes.processor = getAudioContext().createScriptProcessor(0, numChannels, numChannels);
-                audioNodes.processor.onaudioprocess = function(e) {
+                audioNodes.processor.onaudioprocess = function (e) {
                     var ch;
                     for (ch = 0; ch < numChannels; ++ch) {
                         buffer[ch] = e.inputBuffer.getChannelData(ch);
@@ -188,5 +187,4 @@ define([
 
         return webAudioProvider;
     };
-
 });

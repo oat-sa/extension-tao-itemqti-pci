@@ -16,13 +16,13 @@
  * Copyright (c) 2022 (original work) Open Assessment Technologies SA ;
  */
 /*
-*   This is a dialog component to throw a modal to give feedback to the user
-*/
+ *   This is a dialog component to throw a modal to give feedback to the user
+ */
 define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'audioRecordingInteraction/runtime/js/modal',
-], function (_, $, modal) {
+    'audioRecordingInteraction/runtime/js/modal'
+], function (_, $) {
     'use strict';
     /**
      * The scope of events names
@@ -79,17 +79,17 @@ define([
             // pre-render the dialog box
             this.dialogId = _.uniqueId('dlg-');
             this.$html = $(
-                `<div
-                    class="modal ${this.class}"
-                    role="dialog"
-                    aria-modal="true"
-                    data-control="navigable-modal-body"
-                    aria-describedby="core/ui-dialog-message-${this.dialogId}"
-                >
-                    <div class="modal-body clearfix">
-                        <p id="core/ui-dialog-message-${this.dialogId}" class="message">${this.message}</p>
-                    </div>
-                </div>`);
+                '<div ' +
+                    'class="modal ' + this.class + '" '+
+                    'role="dialog" '+
+                    'aria-modal="true" '+
+                    'data-control="navigable-modal-body" '+
+                    'aria-describedby="core/ui-dialog-message-' + this.dialogId +'">' +
+                    '<div class="modal-body clearfix">'+
+                        '<p id="core/ui-dialog-message-' + this.dialogId + '" class="message">' + this.message +'</p>'+
+                    '</div>'+
+                '</div>'
+            );
 
             this.rendered = false;
             this.destroyed = false;
@@ -181,10 +181,9 @@ define([
 
         /**
          * Install an event handler on the underlying DOM element
-         * @param {String} eventName
          * @returns {dialog}
          */
-        on(eventName) {
+        on() {
             if (this.$html) {
                 this.$html.on.apply(this.$html, arguments);
             }
@@ -194,10 +193,9 @@ define([
 
         /**
          * Uninstall an event handler from the underlying DOM element
-         * @param {String} eventName
          * @returns {dialog}
          */
-        off(eventName) {
+        off() {
             if (this.$html) {
                 this.$html.off.apply(this.$html, arguments);
             }
@@ -213,7 +211,7 @@ define([
          */
         trigger(eventName, extraParameters) {
             if (this.$html) {
-                if (undefined === extraParameters) {
+                if (typeof extraParameters === 'undefined') {
                     extraParameters = [];
                 }
                 if (!_.isArray(extraParameters)) {
@@ -256,8 +254,7 @@ define([
                             this.destroy();
                         }
                     });
-                const $items = this.getDom()
-                    .add($(_scope).find('input'));
+                const $items = this.getDom().add($(_scope).find('input'));
                 const closeButton = $(_scope).find('#modal-close-btn')[0];
 
                 if (closeButton) {

@@ -15,10 +15,7 @@
  *
  * Copyright (c) 2022 (original work) Open Assessment Technologies SA ;
  */
-define([
-    'taoQtiItem/portableLib/jquery_2_1_1'
-], function ($) {
-
+define(['taoQtiItem/portableLib/jquery_2_1_1'], function ($) {
     /**
      * jQuery modal is an easy to use plugin
      * which allows you to create modal windows
@@ -65,6 +62,7 @@ define([
          * @fires modal#create.modal
          */
         init: function ($modal, options) {
+            var $overlay;
             options.modalOverlay = '__modal-bg-' + ($modal.attr('id') || new Date().getTime());
 
             //add data to the element
@@ -72,7 +70,7 @@ define([
 
             //Initialize the overlay for the modal dialog
             if ($('#' + options.modalOverlay).length === 0) {
-                var $overlay = $('<div/>').attr({ id: options.modalOverlay, class: options.modalOverlayClass });
+                $overlay = $('<div/>').attr({ id: options.modalOverlay, class: options.modalOverlayClass });
                 if (options.$context instanceof $ && options.$context.length) {
                     //when a $context is given, position the modal overlay relative to that context
                     $overlay.css('position', 'absolute');
@@ -86,14 +84,14 @@ define([
             //Initialize the close button for the modal dialog
             if ($('.' + options.modalCloseClass, $modal).length === 0 && !options.disableClosing) {
                 $(
-                    `<button
-                    id="modal-close-btn"
-                    class="${options.modalCloseClass}"
-                    aria-label="Close dialog"
-                    data-control="close"
-                >
-                    <span class="icon-close"></span>
-                </button>`
+                    '<button ' +
+                    'id="modal-close-btn" ' +
+                    'class="' + options.modalCloseClass + '" ' +
+                    'aria-label="Close dialog" ' +
+                    'data-control="close"' +
+                    '>' +
+                        '<span class="icon-close"></span>' +
+                    '</button>'
                 ).appendTo($modal);
             }
 
@@ -106,6 +104,7 @@ define([
          * Destroys the modal
          * @param {jQuery object} $element
          * @fires modal#destroyed.modal
+         * @returns {JQuery object} modal
          */
         _destroy: function ($element) {
             return $element.each(function () {
@@ -181,7 +180,6 @@ define([
         /**
          * Open the modal dialog
          * @param {jQuery object} $element
-         * @returns {jQuery object}
          * @fires modal#opened.modal
          */
         _open: function ($element) {
@@ -304,7 +302,7 @@ define([
      * @param {Object} options
      * @returns {jQueryElement} for chaining
      */
-    $.fn.modal = function(options){
+    $.fn.modal = function (options) {
         //extend the options using defaults
         options = $.extend(true, {}, defaults, options);
 
