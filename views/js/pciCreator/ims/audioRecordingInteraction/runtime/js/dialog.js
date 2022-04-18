@@ -28,13 +28,13 @@ define([
      * The scope of events names
      * @type {string}
      */
-    const _scope = '.modal';
+    var _scope = '.modal';
 
     /**
      * The defaults fields values
      * @type {Object}
      */
-    const _defaults = {
+    var _defaults = {
         message: '',
         width: 500,
         animate: false,
@@ -47,7 +47,7 @@ define([
      * Define a dialog box
      * @type {Object}
      */
-    const dialog = {
+    var dialog = {
         /**
          * Initialise the dialog box.
          * @param {Object} options - A list of options.
@@ -64,8 +64,8 @@ define([
          */
         init(options) {
             // split options to events
-            const events = {};
-            const initOptions = _.omit(options || {}, (value, key) => {
+            var events = {};
+            var initOptions = _.omit(options || {}, function (value, key) {
                 if (key.length > 2 && 'on' === key.substr(0, 2)) {
                     events[key.substr(2)] = value;
                     return true;
@@ -95,7 +95,7 @@ define([
             this.destroyed = false;
 
             // install the events extracted from the options
-            _.forEach(events, (callback, eventName) => {
+            _.forEach(events, function (callback, eventName) {
                 if (eventName.indexOf('.') < 0) {
                     eventName += _scope;
                 }
@@ -249,13 +249,13 @@ define([
                         disableClosing: this.disableClosing,
                         disableEscape: this.disableEscape
                     })
-                    .on('closed' + _scope, () => {
+                    .on('closed' + _scope, function () {
                         if (this.autoDestroy) {
                             this.destroy();
                         }
                     });
-                const $items = this.getDom().add($(_scope).find('input'));
-                const closeButton = $(_scope).find('#modal-close-btn')[0];
+                var $items = this.getDom().add($(_scope).find('input'));
+                var closeButton = $(_scope).find('#modal-close-btn')[0];
 
                 if (closeButton) {
                     $items.push(closeButton);
@@ -302,7 +302,7 @@ define([
      * @returns {Dialog}
      */
     return function dialogFactory(options) {
-        const instance = Object.assign({}, dialog);
+        var instance = Object.assign({}, dialog);
         instance.init(options);
         return instance;
     };
