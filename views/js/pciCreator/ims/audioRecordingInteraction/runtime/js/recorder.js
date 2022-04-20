@@ -102,10 +102,9 @@ define([
     /**
      * @param {Object} config
      * @param {Number} config.maxRecordingTime - in seconds
-     * @param {Object} assetManager - used to resolve static assets, here the worker file
      * @returns {Object} - The recorder
      */
-    return function recorderFactory(config, assetManager) {
+    return function recorderFactory(config) {
         var recorder, // Return value of the present factory
             mediaStream, // The MediaStream instance
             provider, // provider for audio processing/encoding
@@ -230,7 +229,7 @@ define([
             init: function init() {
                 var self = this;
 
-                provider = config.isCompressed ? mediaRecorderProvider(config) : webAudioProvider(config, assetManager);
+                provider = config.isCompressed ? mediaRecorderProvider(config) : webAudioProvider(config);
 
                 this.initAudioContext();
 

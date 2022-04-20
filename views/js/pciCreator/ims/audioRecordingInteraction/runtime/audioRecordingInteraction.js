@@ -29,9 +29,7 @@ define([
     'text!audioRecordingInteraction/runtime/img/record.svg',
     'text!audioRecordingInteraction/runtime/img/reset.svg',
     'text!audioRecordingInteraction/runtime/img/stop.svg',
-    'css!audioRecordingInteraction/runtime/css/audioRecordingInteraction',
-    'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav',
-    'audioRecordingInteraction/runtime/js/workers/WavAudioEncoder'
+    'css!audioRecordingInteraction/runtime/css/audioRecordingInteraction'
 ], function (
     qtiCustomInteractionContext,
     $,
@@ -366,7 +364,7 @@ define([
             initRecorder: function initRecorder() {
                 var self = this;
 
-                this.recorder = recorderFactory(this.config, this.assetManager);
+                this.recorder = recorderFactory(this.config);
 
                 this.recorder.on('cancel', function () {
                     self.progressBar.reset();
