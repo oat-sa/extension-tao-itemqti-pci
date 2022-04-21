@@ -18,8 +18,6 @@
 define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
     'audioRecordingInteraction/runtime/js/player',
     'audioRecordingInteraction/runtime/js/recorder',
@@ -35,8 +33,6 @@ define([
 ], function (
     qtiCustomInteractionContext,
     $,
-    _,
-    Promise,
     event,
     playerFactory,
     recorderFactory,
@@ -269,7 +265,7 @@ define([
              * @returns {Boolean} - Are we in a TAO QTI Creator context?
              */
             inQtiCreator: function inQtiCreator() {
-                if (_.isUndefined(this._inQtiCreator) && this.$container) {
+                if (typeof this._inQtiCreator === 'undefined' && this.$container) {
                     this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
                 }
                 return this._inQtiCreator;
@@ -504,7 +500,8 @@ define([
                 }
 
                 // cache controls states
-                _.forEach(this.controls, function (ctr, id) {
+                Object.keys(this.controls || {}).forEach(function (id) {
+                    var ctr = self.controls[id];
                     self.ctrCache[id] = ctr.getState();
                     ctr.disable();
                 });
@@ -534,7 +531,8 @@ define([
                         self.countdown.destroy();
 
                         // restore controls states
-                        _.forEach(self.controls, function (ctr, id) {
+                        Object.keys(this.controls || {}).forEach(function (id) {
+                            var ctr = self.controls[id];
                             ctr.setState(self.ctrCache[id]);
                         });
 
@@ -898,18 +896,24 @@ define([
              * Update the state of all the controls
              */
             updateControls: function updateControls() {
+                var self = this;
                 // dont't change controls state, waiting for delay callback
                 if (this._delayCallback || (this.countdown && this.countdown.isDisplayed())) {
                     return;
                 }
-                _.invoke(this.controls, 'updateState');
+                Object.keys(this.controls || {}).forEach(function (id) {
+                    self.controls[id].updateState();
+                });
             },
 
             /**
              * Destroy the state of all the controls
              */
             destroyControls: function destroyControls() {
-                _.invoke(this.controls, 'destroy');
+                var self = this;
+                Object.keys(this.controls || {}).forEach(function (id) {
+                    self.controls[id].destroy();
+                });
                 this.controls = null;
             }
         };

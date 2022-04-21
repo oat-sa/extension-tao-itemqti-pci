@@ -21,7 +21,7 @@
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
-define(['taoQtiItem/portableLib/lodash', 'taoQtiItem/portableLib/OAT/util/event'], function (_, event) {
+define(['taoQtiItem/portableLib/OAT/util/event'], function (event) {
     'use strict';
 
     /**
@@ -87,7 +87,7 @@ define(['taoQtiItem/portableLib/lodash', 'taoQtiItem/portableLib/OAT/util/event'
         // if not, the browser default will be used
         if (typeof MediaRecorder.isTypeSupported === 'function') {
             codecsByPreferenceOrder.forEach(function (format) {
-                if (_.isUndefined(recorderOptions.mimeType) && MediaRecorder.isTypeSupported(format)) {
+                if (typeof recorderOptions.mimeType === 'undefined' && MediaRecorder.isTypeSupported(format)) {
                     recorderOptions.mimeType = format;
                 }
             });
