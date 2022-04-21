@@ -21,11 +21,11 @@
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
+
 define([
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'text!audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js'
-], function (_, event, WebAudioRecorderWav) {
+], function (event, WebAudioRecorderWav) {
     'use strict';
 
     /**
@@ -79,7 +79,7 @@ define([
          * @param {Object} payload - command parameters, depends on the actual command
          */
         function sendToWorker(command, payload) {
-            recorderWorker.postMessage(_.merge({ command: command }, payload));
+            recorderWorker.postMessage(Object.assign({ command: command }, payload));
         }
 
         /**

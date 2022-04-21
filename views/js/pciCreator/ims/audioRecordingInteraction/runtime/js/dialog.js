@@ -18,11 +18,7 @@
 /*
  *   This is a dialog component to throw a modal to give feedback to the user
  */
-define([
-    'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/jquery_2_1_1',
-    'audioRecordingInteraction/runtime/js/modal'
-], function (_, $) {
+define(['taoQtiItem/portableLib/jquery_2_1_1', 'audioRecordingInteraction/runtime/js/modal'], function ($) {
     'use strict';
     /**
      * The scope of events names
@@ -65,19 +61,19 @@ define([
         init(options) {
             // split options to events
             var events = {};
-            var initOptions = _.omit(options || {}, function (value, key) {
-                if (key.length > 2 && 'on' === key.substr(0, 2)) {
-                    events[key.substr(2)] = value;
-                    return true;
+            var initOptions = {};
+            Object.keys(options || {}).forEach(function (key) {
+                if (key.length > 2 && 'on' === key.substring(0, 2)) {
+                    events[key.substring(2)] = options[key];
                 }
-                return false;
+                initOptions[key] = options[key];
             });
 
             // assign default values and options
-            _.defaults(this, initOptions, _defaults);
+            Object.assign(this, _defaults, initOptions);
 
             // pre-render the dialog box
-            this.dialogId = _.uniqueId('dlg-');
+            this.dialogId = 'dlg-1';
             this.$html = $(
                 '<div ' +
                     'class="modal ' + this.class + '" '+
@@ -95,7 +91,8 @@ define([
             this.destroyed = false;
 
             // install the events extracted from the options
-            _.forEach(events, function (callback, eventName) {
+            Object.keys(events).forEach(function (eventName) {
+                var callback = events[eventName];
                 if (eventName.indexOf('.') < 0) {
                     eventName += _scope;
                 }
@@ -214,7 +211,7 @@ define([
                 if (typeof extraParameters === 'undefined') {
                     extraParameters = [];
                 }
-                if (!_.isArray(extraParameters)) {
+                if (!Array.isArray(extraParameters)) {
                     extraParameters = [extraParameters];
                 }
 

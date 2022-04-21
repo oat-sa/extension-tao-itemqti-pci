@@ -22,11 +22,10 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/OAT/util/event',
     'audioRecordingInteraction/runtime/js/dialog'
-], function (_, $, event, dialogFactory) {
+], function ($, event, dialogFactory) {
     'use strict';
 
     /**
@@ -35,9 +34,9 @@ define([
      * @property {String} PLAYING   - media is playing
      */
     var playerStates = {
-        CREATED:    'created',
-        IDLE:       'idle',
-        PLAYING:    'playing'
+        CREATED: 'created',
+        IDLE: 'idle',
+        PLAYING: 'playing'
     };
 
     /**
@@ -70,7 +69,7 @@ define([
             byteArrays.push(byteArray);
         }
 
-        blob = new Blob(byteArrays, {type: contentType});
+        blob = new Blob(byteArrays, { type: contentType });
         return blob;
     }
 
@@ -115,7 +114,7 @@ define([
              * @returns {Boolean}
              */
             is: function is(queriedState) {
-                return (state === queriedState);
+                return state === queriedState;
             },
 
             /**
@@ -128,7 +127,7 @@ define([
                 audioEl = new Audio(url);
 
                 audioEl.ondurationchange = function ondurationchange() {
-                    if (_.isFinite(audioEl.duration)) {
+                    if (Number.isFinite(audioEl.duration)) {
                         self.trigger('durationchange', [audioEl.duration]);
                     }
                 };
@@ -155,7 +154,7 @@ define([
                     self.trigger('timeupdate', [audioEl.currentTime]);
                 };
 
-                audioEl.onloadedmetadata = function() {
+                audioEl.onloadedmetadata = function () {
                     var ontimeupdateBackup = audioEl.ontimeupdate;
 
                     // Chrome workaround for bug https://bugs.chromium.org/p/chromium/issues/detail?id=642012
@@ -165,7 +164,7 @@ define([
                     // but suffers the same issue. So for Firefox, current workaround is to stick to Ogg files.
                     // source: https://stackoverflow.com/questions/38443084/how-can-i-add-predefined-length-to-audio-recorded-from-mediarecorder-in-chrome/39971175#39971175
                     if (audioEl.duration === Infinity) {
-                        audioEl.ontimeupdate = function() {
+                        audioEl.ontimeupdate = function () {
                             audioEl.ontimeupdate = ontimeupdateBackup;
                             audioEl.currentTime = 0;
                             audioEl.load();
