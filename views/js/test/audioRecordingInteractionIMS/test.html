@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Audio Recording Interaction IMS Test</title>
+        <base href="../../../../../tao/views/" />
+
+        <link rel="stylesheet" type="text/css" href="js/lib/qunit/qunit.css">
+        <link rel="stylesheet" type="text/css" href="css/tao-main-style.css">
+        <script type="text/javascript" src="js/lib/qunit/qunit.js"></script>
+        <script type="text/javascript" src="js/lib/require.js"></script>
+        <script type="text/javascript" src="js/lib/qunit/qunit-parameterize.js"></script>
+        <script type="text/javascript" src="js/lib/blanket/blanket.min.js" data-cover-only="/qtiItemPci/views/js/pciCreator/dev/audioRecordingInteraction/"></script>
+
+        <script  type="text/javascript">
+
+            //don't start the test now
+            QUnit.config.autostart = false;
+            // test uses fake base64 encoded data to fake audio files
+            // which causes exception when window.atob executed.
+            QUnit.config.notrycatch = true;
+            //load the config
+            require(['/tao/ClientConfig/config'], function(){
+                //load the test
+                require(['qtiItemPci/test/audioRecordingInteractionIMS/test'], function(){
+
+                    //Tests loaded, run tests
+                    QUnit.config.reorder = false;
+                    QUnit.start();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="qunit"></div>
+        <div id="qunit-fixture">
+            <div id="item-container"></div>
+        </div>
+
+        <div id="outside-container">
+            <div id="form" style="padding: 10px 50px">
+                <input type="checkbox" id="isCompressed" name="isCompressed" checked/>
+                <label for="isCompressed"> isCompressed</label>
+            </div>
+            <div id="pci"></div>
+        </div>
+        <div id="response-display"></div>
+        <div id="error-display"></div>
+    </body>
+</html>

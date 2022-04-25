@@ -1,0 +1,206 @@
+{
+    "identifier": "i6259303b644c82021afddff591a5d5e",
+    "serial": "item_6259311e41783898031248",
+    "qtiClass": "assessmentItem",
+    "attributes": {
+        "identifier": "i6259303b644c82021afddff591a5d5e",
+        "title": "Item 7",
+        "label": "Item 7",
+        "xml:lang": "en-US",
+        "adaptive": false,
+        "timeDependent": false,
+        "toolName": "TAO",
+        "toolVersion": "2022.01",
+        "class": ""
+    },
+    "body": {
+        "serial": "container_containeritembody_6259311e41694345759137",
+        "body": "\n    <div class=\"grid-row\">\n      <div class=\"col-12\">\n        {{interaction_imsportablecustominteraction_6259311e76730032931440}}\n      <\/div>\n    <\/div>\n  ",
+        "elements": {
+            "interaction_imsportablecustominteraction_6259311e76730032931440": {
+                "serial": "interaction_imsportablecustominteraction_6259311e76730032931440",
+                "qtiClass": "customInteraction",
+                "attributes": {
+                    "responseIdentifier": "RESPONSE"
+                },
+                "debug": {
+                    "relatedItem": "item_6259311e41783898031248"
+                },
+                "choices": {},
+                "typeIdentifier": "audioRecordingInteraction",
+                "markup": "\n              <div class=\"audioRecordingInteraction\">\n                <div class=\"audio-rec\">\n                  <div class=\"input-meter\">\n                    <div class=\"countdown-pie-chart\"> <\/div>\n                    <div class=\"leds\"> <\/div>\n                    <div class=\"mic\"> <\/div>\n                  <\/div>\n                  <div class=\"progress\"> <\/div>\n                  <div class=\"controls\"> <\/div>\n                <\/div>\n              <\/div>\n            ",
+                "version": "0.0.0",
+                "properties": {
+                    "isReviewMode": "",
+                    "allowPlayback": "true",
+                    "autoStart": "",
+                    "autoPlayback": "",
+                    "delayMinutes": "0",
+                    "delaySeconds": "0",
+                    "maxRecords": "2",
+                    "maxRecordingTime": "120",
+                    "isCompressed": "true",
+                    "audioBitrate": "20000",
+                    "isStereo": "",
+                    "media": {
+                        "autostart": "true",
+                        "replayTimeout": "5",
+                        "maxPlays": "2",
+                        "loop": "",
+                        "pause": "",
+                        "uri": "",
+                        "type": "",
+                        "height": "270",
+                        "width": "480"
+                    },
+                    "displayDownloadLink": "",
+                    "updateResponsePartially": "true",
+                    "partialUpdateInterval": "1000"
+                },
+                "config": [],
+                "modules": {},
+                "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
+            }
+        },
+        "attributes": [],
+        "debug": {
+            "relatedItem": "item_6259311e41783898031248"
+        }
+    },
+    "debug": {
+        "relatedItem": "item_6259311e41783898031248"
+    },
+    "namespaces": {
+        "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2",
+        "m": "http:\/\/www.w3.org\/1998\/Math\/MathML",
+        "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+    },
+    "schemaLocations": {
+        "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p2": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p2\/imsqti_v2p2.xsd"
+    },
+    "stylesheets": {},
+    "outcomes": {
+        "outcomedeclaration_6259311e597b7182837435": {
+            "identifier": "SCORE",
+            "serial": "outcomedeclaration_6259311e597b7182837435",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "SCORE",
+                "cardinality": "single",
+                "baseType": "float",
+                "normalMaximum": 0
+            },
+            "debug": {
+                "relatedItem": "item_6259311e41783898031248"
+            },
+            "defaultValue": null
+        },
+        "outcomedeclaration_6259311e640f5282547610": {
+            "identifier": "MAXSCORE",
+            "serial": "outcomedeclaration_6259311e640f5282547610",
+            "qtiClass": "outcomeDeclaration",
+            "attributes": {
+                "identifier": "MAXSCORE",
+                "cardinality": "single",
+                "baseType": "float"
+            },
+            "debug": {
+                "relatedItem": "item_6259311e41783898031248"
+            },
+            "defaultValue": "0"
+        }
+    },
+    "responses": {
+        "responsedeclaration_6259311e53ec3810320541": {
+            "identifier": "RESPONSE",
+            "serial": "responsedeclaration_6259311e53ec3810320541",
+            "qtiClass": "responseDeclaration",
+            "attributes": {
+                "identifier": "RESPONSE",
+                "cardinality": "single",
+                "baseType": "file"
+            },
+            "debug": {
+                "relatedItem": "item_6259311e41783898031248"
+            },
+            "defaultValue": [],
+            "mapping": [],
+            "areaMapping": [],
+            "howMatch": "http:\/\/www.imsglobal.org\/question\/qti_v2p1\/rptemplates\/match_correct",
+            "correctResponses": [],
+            "mappingAttributes": {
+                "defaultValue": 0
+            },
+            "feedbackRules": {}
+        }
+    },
+    "feedbacks": {},
+    "responseProcessing": {
+        "serial": "response_templatesdriven_6259311e81212723148274",
+        "qtiClass": "responseProcessing",
+        "attributes": {},
+        "debug": {
+            "relatedItem": "item_6259311e41783898031248"
+        },
+        "processingType": "templateDriven",
+        "responseRules": [
+            {
+                "qtiClass": "responseCondition",
+                "responseIf": {
+                    "qtiClass": "responseIf",
+                    "expression": {
+                        "qtiClass": "match",
+                        "expressions": [
+                            {
+                                "qtiClass": "variable",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            },
+                            {
+                                "qtiClass": "correct",
+                                "attributes": {
+                                    "identifier": "RESPONSE"
+                                }
+                            }
+                        ]
+                    },
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                "responseElse": {
+                    "qtiClass": "responseElse",
+                    "responseRules": [
+                        {
+                            "qtiClass": "setOutcomeValue",
+                            "attributes": {
+                                "identifier": "SCORE"
+                            },
+                            "expression": {
+                                "qtiClass": "baseValue",
+                                "attributes": {
+                                    "baseType": "float"
+                                },
+                                "value": "0"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "apipAccessibility": ""
+}

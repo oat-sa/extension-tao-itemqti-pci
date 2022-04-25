@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="i6259303b644c82021afddff591a5d5e" title="Item 7" label="Item 7" xml:lang="en-US" adaptive="false" timeDependent="false" toolName="TAO" toolVersion="2022.01">
+  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="file"/>
+  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" normalMaximum="0"/>
+  <outcomeDeclaration identifier="MAXSCORE" cardinality="single" baseType="float">
+    <defaultValue>
+      <value>0</value>
+    </defaultValue>
+  </outcomeDeclaration>
+  <itemBody>
+    <div class="grid-row">
+      <div class="col-12">
+        <customInteraction responseIdentifier="RESPONSE">
+          <portableCustomInteraction xmlns="http://www.imsglobal.org/xsd/portableCustomInteraction_v1" customInteractionTypeIdentifier="audioRecordingInteraction" data-version="">
+            <properties>
+              <property key="isReviewMode"/>
+              <property key="allowPlayback">true</property>
+              <property key="autoStart"/>
+              <property key="autoPlayback"/>
+              <property key="delayMinutes">0</property>
+              <property key="delaySeconds">0</property>
+              <property key="maxRecords">2</property>
+              <property key="maxRecordingTime">120</property>
+              <property key="isCompressed">true</property>
+              <property key="audioBitrate">20000</property>
+              <property key="isStereo"/>
+              <property key="media">{"autostart":true,"replayTimeout":5,"maxPlays":2,"loop":false,"pause":false,"uri":null,"type":null,"height":270,"width":480}</property>
+              <property key="displayDownloadLink"/>
+              <property key="updateResponsePartially">true</property>
+              <property key="partialUpdateInterval">1000</property>
+            </properties>
+            <modules>
+                    </modules>
+            <markup xmlns="http://www.w3.org/1999/xhtml">
+              <div class="audioRecordingInteraction">
+                <div class="audio-rec">
+                  <div class="input-meter">
+                    <div class="countdown-pie-chart"> </div>
+                    <div class="leds"> </div>
+                    <div class="mic"> </div>
+                  </div>
+                  <div class="progress"> </div>
+                  <div class="controls"> </div>
+                </div>
+              </div>
+            </markup>
+          </portableCustomInteraction>
+        </customInteraction>
+      </div>
+    </div>
+  </itemBody>
+  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/match_correct"/>
+</assessmentItem>
