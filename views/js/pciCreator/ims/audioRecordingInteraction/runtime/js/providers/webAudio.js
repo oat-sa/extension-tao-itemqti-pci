@@ -21,22 +21,25 @@
  *
  * @author Christophe Noël <christophe@taotesting.com>
  */
-define(['taoQtiItem/portableLib/OAT/util/event'], function (event) {
+
+define([
+    'taoQtiItem/portableLib/OAT/util/event',
+    'text!audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js'
+], function (event, WebAudioRecorderWav) {
     'use strict';
 
     /**
      * @param {Object} config
      * @param {Number} config.isStereo
-     * @param {Object} assetManager
      * @returns {Object} webAudioProvider
      */
-    return function webAudioProviderFactory(config, assetManager) {
+    return function webAudioProviderFactory(config) {
         var webAudioProvider;
+        var workerContentBlob = new Blob([WebAudioRecorderWav],  { type: 'text/javascript' });
 
         // todo: it would be nice to use a bundled and minified version of the worker.
         // Leaving it as it is for now as the primary use case for uncompressed recording is offline testing.
-        var recorderWorkerPath = 'audioRecordingInteraction/runtime/js/workers/WebAudioRecorderWav.js',
-            recorderWorker;
+        var recorderWorker;
 
         var audioNodes = {};
 
@@ -50,7 +53,8 @@ define(['taoQtiItem/portableLib/OAT/util/event'], function (event) {
          * Load the worker and configure it
          */
         function initWorker() {
-            recorderWorker = new Worker(assetManager.resolve(recorderWorkerPath));
+            var workerContentUrl = URL.createObjectURL(workerContentBlob);
+            recorderWorker = new Worker(workerContentUrl);
 
             sendToWorker('init', {
                 config: {
@@ -176,6 +180,7 @@ define(['taoQtiItem/portableLib/OAT/util/event'], function (event) {
                     recorderWorker = null;
                 }
                 audioNodes = {};
+                URL.revokeObjectURL(workerContentBlob);
             }
         };
 
