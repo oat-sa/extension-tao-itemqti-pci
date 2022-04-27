@@ -264,14 +264,20 @@ class PciManager extends \tao_actions_CommonModule
         $typeIdentifier = $this->getRequestParameter('typeIdentifier');
 
         $pciModels = $this->getPciModels();
+        $pciDataObjects = [];
         foreach ($pciModels as $pciModel) {
             try {
                 $pciDataObject = $pciModel->getRegistry()->getLatestVersion($typeIdentifier);
                 if (!is_null($pciDataObject)) {
-                    return $pciDataObject;
+                    $pciDataObjects[$typeIdentifier] = $pciDataObject;
                 }
             } catch (PortableElementNotFoundException $e) {
+                continue;
             }
+        }
+
+        if (!empty($pciDataObjects)) {
+            return $pciDataObjects[$typeIdentifier];
         }
 
         throw new PortableElementException('Element not found');
