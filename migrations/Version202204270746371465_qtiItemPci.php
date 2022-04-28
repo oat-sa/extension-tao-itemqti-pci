@@ -23,11 +23,6 @@ final class Version202204270746371465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new PciModel())->getRegistry();
-        if ($registry->has('audioRecordingInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
-            $registry->removeAllVersions('audioRecordingInteraction');
-        }
-
         $this->addReport(
             $this->propagate(
                 new RegisterPciAudioRecording()
