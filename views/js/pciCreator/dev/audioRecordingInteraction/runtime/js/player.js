@@ -104,7 +104,7 @@ define([
                 message: message,
                 autoRender: true,
                 autoDestroy: true,
-                class: 'icon-info'
+                class: 'icon-info audio'
             });
             return dialog;
         }
