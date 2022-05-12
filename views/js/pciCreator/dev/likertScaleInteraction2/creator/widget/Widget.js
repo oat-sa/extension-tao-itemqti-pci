@@ -17,11 +17,22 @@
  *
  */
 define([
-    'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
-    'likerNavigateLock/creator/widget/states/Question',
-    'likerNavigateLock/creator/widget/states/Answer'
-], function(factory, states){
+    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
+    'likertScaleInteraction2/creator/widget/states/states'
+], function(Widget, states){
     'use strict';
-    return factory.createBundle(states, arguments, ['correct', 'map']);
+
+    var LikertScaleInteractionWidget = Widget.clone();
+
+    LikertScaleInteractionWidget.initCreator = function(){
+
+        this.registerStates(states);
+
+        Widget.initCreator.call(this);
+
+        //for existing likert scale PCI, ensure that the rp template is always NONE
+        this.element.getResponseDeclaration().setTemplate('NONE');
+    };
+    
+    return LikertScaleInteractionWidget;
 });

@@ -18,14 +18,14 @@
  */
 define([
     'lodash',
-    'likerNavigateLock/creator/widget/Widget',
-    'tpl!likerNavigateLock/creator/tpl/markup'
+    'likertScaleInteraction2/creator/widget/Widget',
+    'tpl!likertScaleInteraction2/creator/tpl/markup'
 ], function(_, Widget, markupTpl){
     'use strict';
 
-    var _typeIdentifier = 'likerNavigateLock';
+    var _typeIdentifier = 'likertScaleInteraction2';
 
-    var likerNavigateLockCreator = {
+    var likertScaleInteractionCreator = {
         /**
          * (required) Get the typeIdentifier of the custom interaction
          *
@@ -87,5 +87,5 @@ define([
 
     //since we assume we are in a tao context, there is no use to expose the a global object for lib registration
     //all libs should be declared here
-    return likerNavigateLockCreator;
+    return likertScaleInteractionCreator;
 });

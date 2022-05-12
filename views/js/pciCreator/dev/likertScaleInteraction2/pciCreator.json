@@ -1,7 +1,7 @@
 {
-    "typeIdentifier": "likerNavigateLock",
+    "typeIdentifier": "likertScaleInteraction2",
     "label": "Likert Scale",
-    "short": "Likert",
+    "short": "Likert2",
     "description": "A simple implementation of likert scale.",
     "version": "0.6.0",
     "author": "Sam Sipasseuth",
@@ -15,10 +15,10 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/likerNavigateLock.min.js",
+        "hook" : "./runtime/likertScaleInteraction2.min.js",
         "stylesheets" : [
             "./runtime/css/base.css",
-            "./runtime/css/likerNavigateLock.css"
+            "./runtime/css/likertScaleInteraction2.css"
         ],
         "mediaFiles" : [
             "./runtime/assets/ThumbDown.png",
@@ -26,7 +26,7 @@
             "./runtime/css/img/bg.png"
         ],
         "src" : [
-            "./runtime/js/likerNavigateLock.js",
+            "./runtime/js/likertScaleInteraction2.js",
             "./runtime/js/renderer.js"
         ]
     },

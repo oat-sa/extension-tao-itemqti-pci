@@ -6,7 +6,7 @@ namespace oat\qtiItemPci\migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
-use oat\qtiItemPci\scripts\install\RegisterPciLikertNavigationLock;
+use oat\qtiItemPci\scripts\install\RegisterPciLikertScale2;
 use oat\qtiItemPci\model\PciModel;
 
 /**
@@ -17,7 +17,7 @@ final class Version202205121010411465_qtiItemPci extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'register likerNavigateLock';
+        return 'register likertScaleInteraction2';
     }
 
     public function up(Schema $schema): void
@@ -25,9 +25,9 @@ final class Version202205121010411465_qtiItemPci extends AbstractMigration
         $registry = (new PciModel())->getRegistry();
         $this->addReport(
             $this->propagate(
-                new RegisterPciLikertNavigationLock()
+                new RegisterPciLikertScale2()
             )(
-                ['0.14.4']
+                ['0.6.0']
             )
         );
     }
