@@ -1,6 +1,6 @@
 {
     "typeIdentifier": "likertScaleInteraction2",
-    "label": "Likert Scale",
+    "label": "Likert Scale2",
     "short": "Likert2",
     "description": "A simple implementation of likert scale.",
     "version": "0.6.0",
