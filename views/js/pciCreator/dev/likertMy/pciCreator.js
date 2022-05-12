@@ -53,7 +53,8 @@ define([
             return {
                 level : 5,
                 'label-min' : 'min',
-                'label-max' : 'max'
+                'label-max' : 'max',
+                'navigationLock': false
             };
         },
         /**

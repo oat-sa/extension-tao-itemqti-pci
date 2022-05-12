@@ -83,7 +83,8 @@ define([
         //render the form using the form template
         $form.html(formTpl({
             serial : response.serial,
-            levels : levelData
+            levels : levelData,
+            navigationLock: interaction.prop('navigationLock') || false
         }));
 
         //init form javascript
@@ -98,6 +99,10 @@ define([
 
                 //trigger change event:
                 interaction.triggerPci('levelchange', [parseInt(value)]);
+            },
+            navigationLock : function(interaction, value){
+                //update the pci property value:
+                interaction.prop('navigationLock', value);
             }
         });
 
