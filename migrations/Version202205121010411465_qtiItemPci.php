@@ -16,7 +16,7 @@ final class Version202205121010411465_qtiItemPci extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'register likertScaleInteraction2';
+        return 'register likertMy';
     }
 
     public function up(Schema $schema): void

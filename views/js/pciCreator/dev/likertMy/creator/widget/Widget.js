@@ -18,7 +18,7 @@
  */
 define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
-    'likertScaleInteraction2/creator/widget/states/states'
+    'likertMy/creator/widget/states/states'
 ], function(Widget, states){
     'use strict';
 

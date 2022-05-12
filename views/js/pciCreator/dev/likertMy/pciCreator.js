@@ -18,12 +18,12 @@
  */
 define([
     'lodash',
-    'likertScaleInteraction2/creator/widget/Widget',
-    'tpl!likertScaleInteraction2/creator/tpl/markup'
+    'likertMy/creator/widget/Widget',
+    'tpl!likertMy/creator/tpl/markup'
 ], function(_, Widget, markupTpl){
     'use strict';
 
-    var _typeIdentifier = 'likertScaleInteraction2';
+    var _typeIdentifier = 'likertMy';
 
     var likertScaleInteractionCreator = {
         /**

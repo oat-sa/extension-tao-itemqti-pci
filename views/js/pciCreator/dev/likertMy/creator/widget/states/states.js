@@ -19,8 +19,8 @@
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
-    'likertScaleInteraction2/creator/widget/states/Question',
-    'likertScaleInteraction2/creator/widget/states/Answer'
+    'likertMy/creator/widget/states/Question',
+    'likertMy/creator/widget/states/Answer'
 ], function(factory, states){
     'use strict';
     return factory.createBundle(states, arguments, ['correct', 'map']);

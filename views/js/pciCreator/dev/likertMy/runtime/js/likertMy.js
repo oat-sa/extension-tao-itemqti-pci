@@ -20,14 +20,14 @@ define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/OAT/util/event',
-    'likertScaleInteraction2/runtime/js/renderer'
+    'likertMy/runtime/js/renderer'
 ], function(qtiCustomInteractionContext, $, event, renderer){
     'use strict';
 
-    var likertScaleInteraction2 = {
+    var likertMy = {
         id : -1,
         getTypeIdentifier : function getTypeIdentifier(){
-            return 'likertScaleInteraction2';
+            return 'likertMy';
         },
         /**
          * Render the PCI : 
@@ -132,5 +132,5 @@ define([
         }
     };
 
-    qtiCustomInteractionContext.register(likertScaleInteraction2);
+    qtiCustomInteractionContext.register(likertMy);
 });

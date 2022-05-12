@@ -47,8 +47,8 @@ define([
         var $labelMin = $('<span>', {'class' : 'likert-label likert-label-min'}).html(config['label-min']);
         var $labelMax = $('<span>', {'class' : 'likert-label likert-label-max'}).html(config['label-max']);
 
-        $labelMin.append($('<img>', {src: assetManager.resolve('likertScaleInteraction2/runtime/assets/ThumbDown.png'), 'class' : 'likert-image-append'}));
-        $labelMax.prepend($('<img>', {src: assetManager.resolve('likertScaleInteraction2/runtime/assets/ThumbUp.png'), 'class' : 'likert-image-prepend'}));
+        $labelMin.append($('<img>', {src: assetManager.resolve('likertMy/runtime/assets/ThumbDown.png'), 'class' : 'likert-image-append'}));
+        $labelMax.prepend($('<img>', {src: assetManager.resolve('likertMy/runtime/assets/ThumbUp.png'), 'class' : 'likert-image-prepend'}));
 
         $ul.before($labelMin);
         $ul.after($labelMax);
