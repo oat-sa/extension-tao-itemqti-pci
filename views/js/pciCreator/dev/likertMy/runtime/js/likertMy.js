@@ -82,9 +82,9 @@ define([
          * @returns {Object}
          */
         getResponse : function getResponse(){
-
+            // empty answer is null
             var $container = $(this.dom),
-                value = parseInt($container.find('input:checked').val()) || 0;
+                value = parseInt($container.find('input:checked').val()) || null;
 
             return {base : {integer : value}};
         },
