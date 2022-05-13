@@ -55,6 +55,10 @@ define([
                 self.config.level = level;
                 renderer.renderChoices(self.id, self.dom, self.config);
             });
+            $(this.dom).find('input').on('change', function() {
+                // Notify the response has changed
+                self.trigger('responseChange', [self.getResponse()]);
+            });
         },
         /**
          * Programmatically set the response following the json schema described in
