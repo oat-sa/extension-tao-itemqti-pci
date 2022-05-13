@@ -34,6 +34,11 @@ module.exports = function (grunt) {
                             name: 'qtiItemPci',
                             default: true,
                             babel: true
+                        }, {
+                            name : 'testPlugins',
+                            include: ['qtiItemPci/plugins/**/*'],
+                            dependencies : [],
+                            babel: true
                         }
                     ]
                 }
