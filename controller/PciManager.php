@@ -161,7 +161,7 @@ class PciManager extends \tao_actions_CommonModule
                 ['messages' => $invalidModelErrors]
             ];
             $this->returnJson($result);
-            exit();
+            return;
         }
 
         if ($pciObject->hasVersion()) {
@@ -185,7 +185,7 @@ class PciManager extends \tao_actions_CommonModule
                 ]];
                 $result['valid'] = false;
                 $this->returnJson($result);
-                exit();
+                return;
             }
         }
 
