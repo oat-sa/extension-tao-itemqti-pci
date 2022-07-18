@@ -25,8 +25,9 @@ define([
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
-    'tpl!mathEntryInteraction/creator/tpl/addGapBtn'
-], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl){
+    'tpl!mathEntryInteraction/creator/tpl/addGapBtn',
+    'mathJax'
+], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, MathJax){
     'use strict';
 
     var $addGapBtn = $(addGapBtnTpl());
@@ -40,6 +41,24 @@ define([
             change : function(text){
                 interaction.data('prompt', text);
                 interaction.updateMarkup();
+
+
+                //MathJax prompt if needed.
+                //should be done only once
+                if (typeof MathJax !== 'undefined' && MathJax) {
+                    MathJax.Hub.processSectionDelay = 0;
+                }
+                //should be done on each render
+                const $self = $prompt;
+                if (typeof MathJax !== 'undefined' && MathJax) {
+                    if (!window.MathJax) {
+                        window.MathJax = MathJax;
+                    }
+                    if ($self.length) {
+                        console.log('typeset-crearor', $self);
+                        MathJax.Hub.Queue(['Typeset', MathJax.Hub, $self[0]]);
+                    }
+                }
             },
             markup : interaction.markup,
             markupSelector : '.prompt',
