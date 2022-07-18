@@ -24,7 +24,7 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'mathEntryInteraction/runtime/mathquill/mathquill',
-    'mathJax',
+    'mathEntryInteraction/helper/math',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
@@ -34,7 +34,7 @@ define([
     _,
     event,
     MathQuill,
-    MathJax
+    mathRenderer
 ) {
     'use strict';
 
@@ -211,22 +211,8 @@ define([
                     this.addToolbarListeners();
                 }
 
-                //MathJax-postRender prompt if it contains math.
-				//this should be done only once
-				if (typeof MathJax !== 'undefined' && MathJax) {
-					MathJax.Hub.processSectionDelay = 0;
-				}
-				//this should be done on each render
-				const $self = this.$container.find('.prompt');
-				if (typeof MathJax !== 'undefined' && MathJax) {
-					if (!window.MathJax) {
-						window.MathJax = MathJax;
-					}
-					if ($self.length) {
-						console.log('typeset', $self)
-						MathJax.Hub.Queue(['Typeset', MathJax.Hub, $self[0]]);
-					}
-				}
+                const $prompt = this.$container.find('.prompt');
+                mathRenderer.postRender($prompt);
             },
 
             /**
