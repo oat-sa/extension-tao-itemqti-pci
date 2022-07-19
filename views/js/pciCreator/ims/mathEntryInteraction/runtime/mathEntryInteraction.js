@@ -24,7 +24,7 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'mathEntryInteraction/runtime/mathquill/mathquill',
-    'mathEntryInteraction/helper/math',
+    'mathEntryInteraction/helper/mathInPrompt',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
@@ -34,7 +34,7 @@ define([
     _,
     event,
     MathQuill,
-    mathRenderer
+    mathInPrompt
 ) {
     'use strict';
 
@@ -212,7 +212,7 @@ define([
                 }
 
                 const $prompt = this.$container.find('.prompt');
-                mathRenderer.postRender($prompt);
+                mathInPrompt.postRender($prompt);
             },
 
             /**

@@ -26,8 +26,8 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
     'tpl!mathEntryInteraction/creator/tpl/addGapBtn',
-    'mathEntryInteraction/helper/math'
-], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, mathRenderer){
+    'mathEntryInteraction/helper/mathInPrompt'
+], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, mathInPrompt){
     'use strict';
 
     var $addGapBtn = $(addGapBtnTpl());
@@ -41,7 +41,10 @@ define([
             change : function(text){
                 interaction.data('prompt', text);
                 interaction.updateMarkup();
-                mathRenderer.postRender($prompt);
+
+                if (!$prompt.is('[data-html-editable-container="true"]')) {
+                    mathInPrompt.postRender($prompt);
+                }
             },
             markup : interaction.markup,
             markupSelector : '.prompt',
