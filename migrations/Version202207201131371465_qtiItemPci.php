@@ -7,7 +7,6 @@ namespace oat\qtiItemPci\migrations;
 use Doctrine\DBAL\Schema\Schema;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 use Doctrine\Migrations\Exception\IrreversibleMigration;
-use oat\qtiItemPci\model\IMSPciModel;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 
 /**
@@ -23,8 +22,6 @@ final class Version202207201131371465_qtiItemPci extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $registry = (new IMSPciModel())->getRegistry();
-
         $this->addReport(
             $this->propagate(
                 new RegisterPciMathEntry()
