@@ -21,7 +21,7 @@ define(['core/moduleLoader'], function (moduleLoader) {
     let MathJax;
     let loaded = false;
 
-     /***
+    /***
      * lazy-load MathJax dependency
      * @returns {Promise}
      */
@@ -30,26 +30,27 @@ define(['core/moduleLoader'], function (moduleLoader) {
             return Promise.resolve();
         }
         return moduleLoader([], () => true)
-            .add( { module: 'mathJax', category: 'mathEntryInteraction'} )
+            .add({ module: 'mathJax', category: 'mathEntryInteraction' })
             .load()
             .then(loadedModule => {
                 loaded = true;
                 MathJax = loadedModule && loadedModule.length ? loadedModule[0] : void 0;
 
-                // Do not wait between rendering each individual math element
-                // http://docs.mathjax.org/en/latest/api/hub.html
-                // https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
-                if (typeof MathJax !== 'undefined' && MathJax) {
+                /**
+                 * Do not wait between rendering each individual math element
+                 * http://docs.mathjax.org/en/latest/api/hub.html
+                 * @see https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
+                 */
+                if (MathJax && MathJax.Hub) {
                     MathJax.Hub.processSectionDelay = 0;
                 }
             });
-    };
+    }
 
     const mathInPrompt = {
         /**
          * On dom element containing `<math>...</math>` MathML markup,
          * run MathJax renderer ("typeset" it)
-         * @see https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
          * @param {Object} $element
          * @returns {Promise}
          */
@@ -58,7 +59,11 @@ define(['core/moduleLoader'], function (moduleLoader) {
                 return Promise.resolve();
             }
             return load().then(() => {
-                if (typeof MathJax !== 'undefined' && MathJax) {
+                if (MathJax && MathJax.Hub && typeof MathJax.Hub.Queue === 'function') {
+                    /**
+                     * MathJax needs to be exported globally to integrate with tools like TTS, it's weird...
+                     * @see https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
+                     */
                     if (!window.MathJax) {
                         window.MathJax = MathJax;
                     }
@@ -66,7 +71,7 @@ define(['core/moduleLoader'], function (moduleLoader) {
                         MathJax.Hub.Queue(['Typeset', MathJax.Hub, $element[0]]);
                     }
                 }
-            })
+            });
         }
     };
 
