@@ -210,9 +210,15 @@ define([
                     this.createMathEditable(false);
                     this.addToolbarListeners();
                 }
+            },
 
+            /**
+             * Post-Render PCI
+             * @returns {Promise}
+             */
+            postRender: function postRender() {
                 const $prompt = this.$container.find('.prompt');
-                mathInPrompt.postRender($prompt);
+                return mathInPrompt.postRender($prompt);
             },
 
             /**
@@ -929,7 +935,7 @@ define([
             event.addEventMgr(pciInstance);
 
             // initialize and set previous response/state
-            mathEntryInteraction.initialize(dom, config.properties);
+            mathEntryInteraction.initialize(dom, config.properties)
 
             var boundTo = config.boundTo;
             var responseIdentifier = Object.keys(boundTo)[0];
@@ -939,6 +945,7 @@ define([
 
             pciInstance.on('configChange', function (properties) {
                 mathEntryInteraction.render(properties);
+                mathEntryInteraction.postRender();
             });
 
             pciInstance.on('latexInput', function (latex) {
@@ -963,8 +970,10 @@ define([
                 mathEntryInteraction.addGap();
             });
 
-            // PCI instance is ready to run
-            config.onready(pciInstance);
+            mathEntryInteraction.postRender().then(() => {
+                // PCI instance is ready to run
+                config.onready(pciInstance);
+            });
 
             mathEntryInteraction.pciInstance = pciInstance;
         }
