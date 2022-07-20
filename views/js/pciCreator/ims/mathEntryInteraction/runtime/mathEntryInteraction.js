@@ -935,7 +935,7 @@ define([
             event.addEventMgr(pciInstance);
 
             // initialize and set previous response/state
-            mathEntryInteraction.initialize(dom, config.properties)
+            mathEntryInteraction.initialize(dom, config.properties);
 
             var boundTo = config.boundTo;
             var responseIdentifier = Object.keys(boundTo)[0];
