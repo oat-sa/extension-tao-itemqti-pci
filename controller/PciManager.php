@@ -21,7 +21,10 @@
 
 namespace oat\qtiItemPci\controller;
 
+use common_Exception;
+use common_exception_Error;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
+use oat\tao\model\http\formatter\ResponseFormatter;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
@@ -123,75 +126,73 @@ class PciManager extends \tao_actions_CommonModule
      *     "exists" : true/false (if the package is valid, check if the typeIdentifier is already used in the registry)
      * }
      *
-     * @throws PortableElementParserException
-     * @throws PortableElementInvalidModelException
+     * @throws common_Exception
      */
-    public function verify()
+    public function verify(ResponseFormatter $responseFormatter): void
     {
         $result = [
             'valid' => false,
             'exists' => false
         ];
 
+        $formatter = $responseFormatter->withJsonHeader();
+
         try {
-            $file = \tao_helpers_Http::getUploadedFile('content');
-        } catch (\common_exception_Error $e) {
-            throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
-        }
+            $pciObject = $this->createExistingTypePciObjectFromUploadedPackage();
+            $result['valid'] = true;
+        } catch (PortableElementException $e) {
+            $result['messages'] = $e->getReportMessages() ?: [['message' => $e->getMessage()]];
+            $this->setResponse($formatter->withBody($result)->format($this->getPsrResponse()));
 
-        $invalidModelErrors = [];
-        $pciModels = $this->getPciModels();
-        $pciObject = null;
-        foreach ($pciModels as $pciModel) {
-            try {
-                $pciObject = $this->getService()->getValidPortableElementFromZipSource($pciModel->getId(), $file['tmp_name']);
-                if (!is_null($pciObject)) {
-                    break;//stop at the first one
-                }
-            } catch (PortableElementInvalidModelException $e) {
-                $invalidModelErrors = $e->getReportMessages();
-            } catch (PortableElementParserException $e) {
-                $invalidModelErrors[] = ['message' => $e->getMessage()];
-            }
-        }
-
-        if (is_null($pciObject)) {
-            //no valid pci has been found in pacakges so return error messages
-            $result['package'] = [
-                ['messages' => $invalidModelErrors]
-            ];
-            $this->returnJson($result);
             return;
         }
 
-        if ($pciObject->hasVersion()) {
-            $result['exists'] = $pciObject->getModel()->getRegistry()->has($pciObject->getTypeIdentifier(), $pciObject->getVersion());
-        } else {
-            $result['exists'] = $pciObject->getModel()->getRegistry()->has($pciObject->getTypeIdentifier());
-        }
-
-
         $all = $pciObject->getModel()->getRegistry()->getLatestCreators();
         if (isset($all[$pciObject->getTypeIdentifier()])) {
+            $result['exists'] = true;
             $currentVersion = $all[$pciObject->getTypeIdentifier()]->getVersion();
             if (version_compare($pciObject->getVersion(), $currentVersion, '<')) {
-                $result['package'] = [['message' =>
+                $result['valid'] = false;
+                $result['messages'][] = [
+                    'message' =>
                     __(
                         'A newer version of the pci "%s" already exists (current version: %s, target version: %s)',
                         $pciObject->getTypeIdentifier(),
                         $currentVersion,
                         $pciObject->getVersion()
                     )
-                ]];
-                $result['valid'] = false;
-                $this->returnJson($result);
+                ];
+                $this->setResponse($formatter->withBody($result)->format($this->getPsrResponse()));
+
                 return;
             }
         }
 
-        $result['valid'] = true;
+        $this->setResponse($formatter->withBody(
+            array_merge($result, $this->getMinifiedModel($pciObject))
+        )->format($this->getPsrResponse()));
+    }
 
-        $this->returnJson(array_merge($result, $this->getMinifiedModel($pciObject)));
+    /**
+     * @throws PortableElementException
+     * @throws common_Exception
+     */
+    private function createExistingTypePciObjectFromUploadedPackage(): PortableElementObject
+    {
+        $file = \tao_helpers_Http::getUploadedFile('content');
+
+        $errorMessage = 'Unable to find a valid PCI manifest';
+
+        foreach ($this->getPciModels() as $pciModel) {
+            try {
+
+                return $this->getService()->getValidPortableElementFromZipSource($pciModel->getId(), $file['tmp_name']);
+            } catch (PortableElementParserException $e) {
+                $errorMessage = $e->getMessage();
+            }
+        }
+
+        throw new PortableElementInvalidModelException($errorMessage);
     }
 
     /**
@@ -204,7 +205,7 @@ class PciManager extends \tao_actions_CommonModule
 
         try {
             $file = \tao_helpers_Http::getUploadedFile('content');
-        } catch (\common_exception_Error $e) {
+        } catch (common_exception_Error $e) {
             throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
         }
 
@@ -236,7 +237,7 @@ class PciManager extends \tao_actions_CommonModule
             }
             $path = $this->getService()->export($requestPayload['pciIdentifier'], $requestPayload['typeIdentifier']);
             \tao_helpers_Http::returnFile($path);
-        } catch (\common_Exception $e) {
+        } catch (common_Exception $e) {
             $this->returnJson(['error' => $e->getMessage()]);
         }
     }
@@ -287,8 +288,8 @@ class PciManager extends \tao_actions_CommonModule
     /**
      * @throws PortableElementException
      * @throws PortableElementVersionIncompatibilityException
-     * @throws \common_Exception
-     * @throws \common_exception_Error
+     * @throws common_Exception
+     * @throws common_exception_Error
      * @throws \HttpRequestException
      */
     public function unregister()

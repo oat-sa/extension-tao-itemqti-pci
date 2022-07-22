@@ -393,15 +393,12 @@ define([
                                         done(true);
                                     }
                                 } else {
-                                    if (_.isArray(r.package)) {
-                                        _.each(r.package, function (report) {
-                                            if (_.isArray(report.messages)) {
-                                                _.forEach(report.messages, function (msg) {
-                                                    feedback().error(msg.message);
-                                                });
-                                            }
+                                    if (_.isArray(r.messages)) {
+                                        _.forEach(r.messages, function (report) {
+                                            feedback().error(report.message);
                                         });
                                     }
+
                                     done(false);
                                 }
                             },
