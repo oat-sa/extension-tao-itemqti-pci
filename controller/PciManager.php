@@ -34,6 +34,7 @@ use oat\taoQtiItem\model\portableElement\exception\PortableElementVersionIncompa
 use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
+use tao_helpers_Http;
 
 /**
  * Actions for pci portable custom elements management
@@ -179,13 +180,12 @@ class PciManager extends \tao_actions_CommonModule
      */
     private function createExistingTypePciObjectFromUploadedPackage(): PortableElementObject
     {
-        $file = \tao_helpers_Http::getUploadedFile('content');
+        $file = tao_helpers_Http::getUploadedFile('content');
 
         $errorMessage = 'Unable to find a valid PCI manifest';
 
         foreach ($this->getPciModels() as $pciModel) {
             try {
-
                 return $this->getService()->getValidPortableElementFromZipSource($pciModel->getId(), $file['tmp_name']);
             } catch (PortableElementParserException $e) {
                 $errorMessage = $e->getMessage();
@@ -204,7 +204,7 @@ class PciManager extends \tao_actions_CommonModule
         session_write_close();
 
         try {
-            $file = \tao_helpers_Http::getUploadedFile('content');
+            $file = tao_helpers_Http::getUploadedFile('content');
         } catch (common_exception_Error $e) {
             throw new PortableElementParserException('Unable to handle uploaded package.', 0, $e);
         }
@@ -236,7 +236,7 @@ class PciManager extends \tao_actions_CommonModule
                 throw new PortableElementException('PCI parameter missing.');
             }
             $path = $this->getService()->export($requestPayload['pciIdentifier'], $requestPayload['typeIdentifier']);
-            \tao_helpers_Http::returnFile($path);
+            tao_helpers_Http::returnFile($path);
         } catch (common_Exception $e) {
             $this->returnJson(['error' => $e->getMessage()]);
         }
