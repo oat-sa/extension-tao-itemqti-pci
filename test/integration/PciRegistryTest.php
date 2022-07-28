@@ -30,6 +30,7 @@ use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
+use tao_helpers_File;
 
 class PciRegistryTest extends TaoPhpUnitTestRunner
 {
@@ -150,7 +151,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
 
         $this->assertTrue(empty($this->array_diff_assoc_recursive($original, $exported)));
         $service->unregisterModel($pciDataObject);
-        \tao_helpers_File::delTree($source);
+        tao_helpers_File::delTree($source);
     }
 
     function fillArrayWithFileNodes(\DirectoryIterator $dir)
