@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 2021.10\n"
-"PO-Revision-Date: 2022-03-04T11:15:55\n"
+"Project-Id-Version: TAO 2022.09\n"
+"PO-Revision-Date: 2022-08-12T16:45:58\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja-JP\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Add answer option"
-msgstr ""
+msgstr "解答オプション追加"
 
 msgid "Add gap"
 msgstr "穴埋め追加"
@@ -38,7 +38,7 @@ msgid "Audio bitrate:"
 msgstr "音声ビットレート:"
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr ""
+msgstr "音声は以前に録音されたものです。お使いのブラウザは、この録画の再生に対応していません。別のブラウザでお試しください。"
 
 msgid "authorize white space"
 msgstr "スペースの入力許可"
@@ -62,7 +62,7 @@ msgid "Channels"
 msgstr "チャンネル"
 
 msgid "Close dialog"
-msgstr ""
+msgstr "ダイアログを閉じる"
 
 msgid "Comparison"
 msgstr "比較"
@@ -71,19 +71,19 @@ msgid "Compressed"
 msgstr "圧縮"
 
 msgid "Correct answer option"
-msgstr ""
+msgstr "正解オプション"
 
 msgid "cosinus"
 msgstr "cos"
 
 msgid "Define correct responses"
-msgstr ""
+msgstr "正解の設定"
 
 msgid "Delete"
 msgstr "削除"
 
 msgid "delete the answer"
-msgstr ""
+msgstr "解答を削除"
 
 msgid "disabled"
 msgstr "無効"
@@ -92,16 +92,16 @@ msgid "divide"
 msgstr "除算"
 
 msgid "Download"
-msgstr ""
+msgstr "ダウンロード"
 
 msgid "edit the answer"
-msgstr ""
+msgstr "解答を編集"
 
 msgid "enable auto wrap"
 msgstr "自動改行有効"
 
 msgid "Enabled in item authoring"
-msgstr ""
+msgstr "アイテムオーサリングで有効にする"
 
 msgid "equal"
 msgstr "イコール"
@@ -128,7 +128,7 @@ msgid "Geometry"
 msgstr "ジオメトリ"
 
 msgid "Give the possibility to the test taker to playback its own recording."
-msgstr "受検者は自分が録音した声を，再生して聞くことができます"
+msgstr "受験者は自分が録音した声を，再生して聞くことができます"
 
 msgid "greater than"
 msgstr "大なり"
@@ -146,13 +146,13 @@ msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds
 msgstr "秒単位で設定。設定時間に達すると録音は自動的に停止します。10秒未満は設定できません。"
 
 msgid "In seconds. The time interval between partial updates of the recording."
-msgstr ""
+msgstr "単位は秒。録画の部分的な更新の間隔。"
 
 msgid "Indefinite integral"
 msgstr "不定積分"
 
 msgid "Invalid files have been removed"
-msgstr ""
+msgstr "無効なファイルは削除されました"
 
 msgid "is a member of"
 msgstr "属する"
@@ -191,7 +191,7 @@ msgid "Max attempts:"
 msgstr "最大試行回数:"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr "受検者に許可する録音回数の設定です。3回に設定すると2回やり直しボタンを押せます。0に設定すると、何度でも録音のやり直しができます。"
+msgstr "受験者に許可する録音回数の設定です。3回に設定すると2回やり直しボタンを押せます。0に設定すると、何度でも録音のやり直しができます。"
 
 msgid "Medium"
 msgstr "中"
@@ -235,6 +235,9 @@ msgstr "録音した音声は、録音停止後に自動的に再生されます
 
 msgid "Recording format"
 msgstr "録音フォーマット"
+
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr "受験者がマイク使用許可を出すと、自動的に録音が開始されます。"
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "自動的に録音が開始されます。また，音声・動画を挿入すると、これらが再生後に自動的に録音が開始されます。"
@@ -283,13 +286,13 @@ msgid "Symbols"
 msgstr "シンボル"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr "これは受検者の解答（レスポンス）の識別子です。この識別子は、他のレスポンスやアイテム変数で使用しないでください。識別子は、文字列またはアンダースコア(\"_\")で始まり、文字列、アンダースコア、ハイフン(\"-\")、ピリオド(\".\")、10進数値（Digits）、結合文字（CombiningChars）、エクステンダ（Extenders）のみで構成された文字列です。"
+msgstr "これは受験者の解答（レスポンス）の識別子です。この識別子は、他のレスポンスやアイテム変数で使用しないでください。識別子は、文字列またはアンダースコア(\"_\")で始まり、文字列、アンダースコア、ハイフン(\"-\")、ピリオド(\".\")、10進数値（Digits）、結合文字（CombiningChars）、エクステンダ（Extenders）のみで構成された文字列です。"
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "録音が停止した後、音声ファイルをダウンロードするためのリンクを表示します。これはテスト実施前の録音状態の事前検証に利用してください。"
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr "このオプションにより、録音回答する前に受検者が視聴する動画や音声を挿入することができます。"
+msgstr "このオプションにより、録音回答する前に受験者が視聴する動画や音声を挿入することができます。"
 
 msgid "Time limit:"
 msgstr "録音時間制限:"
@@ -316,7 +319,7 @@ msgid "Uncompressed"
 msgstr "非圧縮"
 
 msgid "Update interval:"
-msgstr ""
+msgstr "更新間隔"
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "新規カスタムインタラクションをアップロード（ZIPパッケージ）"
