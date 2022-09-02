@@ -288,7 +288,12 @@ define([
                         inmem: toBoolean(config.tool_inmem, true),
                         ninmem: toBoolean(config.tool_ninmem, true),
                         union: toBoolean(config.tool_union, true),
-                        intersec: toBoolean(config.tool_intersec, true)
+                        intersec: toBoolean(config.tool_intersec, true),
+                        colon: toBoolean(config.tool_colon, true),
+                        congruent: toBoolean(config.tool_congruent, true),
+                        subset: toBoolean(config.tool_subset, true),
+                        superset: toBoolean(config.tool_superset, true),
+                        contains: toBoolean(config.tool_contains, true),
                     },
 
                     allowNewLine: toBoolean(config.allowNewLine, false),
@@ -620,6 +625,7 @@ define([
                         pi: {label: '&pi;', latex: '\\pi', fn: 'cmd', desc: 'Pi'},
                         cos: {label: 'cos', latex: '\\cos', fn: 'cmd', desc: 'Cosinus'},
                         sin: {label: 'sin', latex: '\\sin', fn: 'cmd', desc: 'Sinus'},
+                        tan: {label: 'tan', latex: '\\tan', fn: 'cmd', desc: 'Tangent'},
                         lte: {
                             label: self.getLabel('&le;'),
                             latex: self.getLabel('\\le'),
@@ -655,20 +661,25 @@ define([
                         inmem: {label: '&isin;', latex: '\\in', fn: 'cmd', desc: 'Is a member of'},
                         ninmem: {label: '&notin;', latex: '\\notin', fn: 'cmd', desc: 'Is not a member of'},
                         union: {label: '&cup;', latex: '\\cup', fn: 'cmd', desc: 'Set union'},
-                        intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'}
+                        intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'},
+                        colon: {label: ':', latex: ':', fn: 'write', desc: 'Colon'},
+                        congruent: {label: '&#x2245;', latex: '\\cong', fn: 'cmd', desc: 'Congruent'},
+                        subset: {label: '&#x2282;', latex: '\\subset', fn: 'cmd', desc: 'Subset'},
+                        superset: {label: '&#x2283;', latex: '\\supset', fn: 'cmd', desc: 'Superset'},
+                        contains: {label: '&#x220B;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
                     },
                     availableToolGroups = [ // we use an array to maintain order
                         {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln']},
                         {
                             id: 'symbols',
-                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral']
+                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon']
                         },
                         {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
-                        {id: 'trigo', tools: ['pi', 'sin', 'cos']},
+                        {id: 'trigo', tools: ['pi', 'sin', 'cos','tan']},
                         {id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte']},
                         {
                             id: 'operands',
-                            tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec']
+                            tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec', 'congruent', 'subset', 'superset', 'contains']
                         }
                     ];
 

@@ -73,6 +73,7 @@ define([
                 tool_pi: 'true',
                 tool_cos: 'true',
                 tool_sin: 'true',
+                tool_tan: 'true',
                 tool_lte: 'true',
                 tool_gte: 'true',
                 tool_times: 'true',
@@ -99,6 +100,11 @@ define([
                 tool_ninmem: 'true',
                 tool_union: 'true',
                 tool_intersec: 'true',
+                tool_colon: 'true',
+                tool_congruent: 'true',
+                tool_subset: 'true',
+                tool_superset: 'true',
+                tool_contains: 'true',
                 allowNewLine: 'false',
                 enableAutoWrap: 'false'
             };

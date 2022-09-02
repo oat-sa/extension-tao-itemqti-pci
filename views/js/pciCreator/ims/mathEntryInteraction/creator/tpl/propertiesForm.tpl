@@ -131,6 +131,13 @@
         &#x222b; {{__ "Indefinite integral"}}
     </label>
 </div>
+<div>
+    <label class="panel">
+        <input name="tool_colon" type="checkbox" {{#if tool_colon}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        : {{__ "colon"}}
+    </label>
+</div>
 
 <hr />
 <h3>{{__ "Geometry"}}</h3>
@@ -202,7 +209,13 @@
         {{__ "sinus"}}
     </label>
 </div>
-
+<div>
+    <label class="panel">
+        <input name="tool_tan" type="checkbox" {{#if tool_tan}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "tangent"}}
+    </label>
+</div>
 <hr />
 <h3>{{__ "Comparison"}}</h3>
 
@@ -315,7 +328,34 @@
         {{__ "set intersection"}}
     </label>
 </div>
-
+<div>
+    <label class="panel">
+        <input name="tool_congruent" type="checkbox" {{#if tool_congruent}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#x2245; {{__ "congruent"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_subset" type="checkbox" {{#if tool_subset}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#x2282; {{__ "subset"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_superset" type="checkbox" {{#if tool_superset}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#x2283; {{__ "superset of"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_contains" type="checkbox" {{#if tool_contains}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#x220B; {{__ "contains as member"}}
+    </label>
+</div>
 <hr />
 
 <h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "Experimental only"}}</strong></h3>

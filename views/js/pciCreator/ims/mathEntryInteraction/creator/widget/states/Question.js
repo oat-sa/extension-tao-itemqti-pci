@@ -116,6 +116,7 @@ define([
             tool_pi:        toBoolean(interaction.prop('tool_pi'),      true),
             tool_cos:       toBoolean(interaction.prop('tool_cos'),     true),
             tool_sin:       toBoolean(interaction.prop('tool_sin'),     true),
+            tool_tan:       toBoolean(interaction.prop('tan'),          true),
             tool_lte:       toBoolean(interaction.prop('tool_lte'),     true),
             tool_gte:       toBoolean(interaction.prop('tool_gte'),     true),
             tool_times:     toBoolean(interaction.prop('tool_times'),   true),
@@ -140,6 +141,11 @@ define([
             tool_ninmem:    toBoolean(interaction.prop('tool_ninmem'),  true),
             tool_union:     toBoolean(interaction.prop('tool_union'),   true),
             tool_intersec:  toBoolean(interaction.prop('tool_intersec'),true),
+            tool_colon:     toBoolean(interaction.prop('tool_colon'),   true),
+            tool_congruent: toBoolean(interaction.prop('tool_congruent'),   true),
+            tool_subset: toBoolean(interaction.prop('tool_subset'),     true),
+            tool_superset: toBoolean(interaction.prop('tool_superset'), true),
+            tool_contains: toBoolean(interaction.prop('tool_contains'), true),
             allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false),
             enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
         }));
@@ -185,6 +191,7 @@ define([
             tool_pi:        configChangeCallBack,
             tool_cos:       configChangeCallBack,
             tool_sin:       configChangeCallBack,
+            tool_tan:       configChangeCallBack,
             tool_lte:       configChangeCallBack,
             tool_gte:       configChangeCallBack,
             tool_times:     configChangeCallBack,
@@ -207,6 +214,11 @@ define([
             tool_ninmem:    configChangeCallBack,
             tool_union:     configChangeCallBack,
             tool_intersec:  configChangeCallBack,
+            tool_colon:     configChangeCallBack,
+            tool_congruent: configChangeCallBack,
+            tool_subset:    configChangeCallBack,
+            tool_superset:    configChangeCallBack,
+            tool_contains:    configChangeCallBack,
 
             squarebkts: function squarebktsChangeCallBack(i, value) {
                 i.prop('tool_lbrack', value);
