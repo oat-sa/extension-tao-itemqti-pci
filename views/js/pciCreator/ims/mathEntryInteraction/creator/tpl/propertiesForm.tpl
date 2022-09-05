@@ -85,7 +85,27 @@
         {{__ "ln"}}
     </label>
 </div>
-
+<div>
+    <label class="panel">
+        <input name="tool_limit" type="checkbox" {{#if tool_limit}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "limit"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_sum" type="checkbox" {{#if tool_sum}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "sum"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_nthroot" type="checkbox" {{#if tool_nthroot}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "n-root"}}
+    </label>
+</div>
 <hr />
 <h3>{{__ "Symbols"}}</h3>
 

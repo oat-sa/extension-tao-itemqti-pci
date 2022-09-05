@@ -256,6 +256,9 @@ define([
                         exp: toBoolean(config.tool_exp, true),
                         log: toBoolean(config.tool_log, true),
                         ln: toBoolean(config.tool_ln, true),
+                        limit: toBoolean(config.tool_limit, true),
+                        sum: toBoolean(config.tool_sum, true),
+                        nthroot: toBoolean(config.tool_nthroot, true),
                         e: toBoolean(config.tool_e, true),
                         infinity: toBoolean(config.tool_infinity, true),
                         lbrack: toBoolean(config.tool_lbrack, true),
@@ -618,6 +621,9 @@ define([
                         exp: {label: 'x&#8319;', latex: '^', fn: 'cmd', desc: 'Exponent'},
                         log: {label: 'log', latex: '\\log', fn: 'cmd', desc: 'Log'},
                         ln: {label: 'ln', latex: '\\ln', fn: 'cmd', desc: 'Ln'},
+                        limit: {label: 'lim', latex: '\\lim', fn: 'cmd', desc: 'Limit'},
+                        sum: {label: 'sum', latex: '\\sum', fn: 'cmd', desc: 'Sum'},
+                        nthroot: {label: 'n-root', latex: '\\nthroot', fn: 'cmd', desc: 'N-root'},
                         e: {label: 'e', latex: '\\mathrm{e}', fn: 'write', desc: 'Euler\'s constant'},
                         infinity: {label: '&#8734;', latex: '\\infty', fn: 'cmd', desc: 'Infinity'},
                         lbrack: {label: '[', latex: '\\lbrack', fn: 'cmd', desc: 'Left bracket'},
@@ -669,7 +675,7 @@ define([
                         contains: {label: '&#x220B;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
                     },
                     availableToolGroups = [ // we use an array to maintain order
-                        {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln']},
+                        {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln', 'limit', 'sum', 'nthroot']},
                         {
                             id: 'symbols',
                             tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon']
