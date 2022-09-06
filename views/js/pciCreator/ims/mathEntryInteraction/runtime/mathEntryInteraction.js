@@ -24,7 +24,6 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'mathEntryInteraction/runtime/mathquill/mathquill',
-    'mathEntryInteraction/helper/mathInPrompt',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
@@ -33,8 +32,7 @@ define([
     $,
     _,
     event,
-    MathQuill,
-    mathInPrompt
+    MathQuill
 ) {
     'use strict';
 
@@ -210,15 +208,6 @@ define([
                     this.createMathEditable(false);
                     this.addToolbarListeners();
                 }
-            },
-
-            /**
-             * Post-Render PCI
-             * @returns {Promise}
-             */
-            postRender: function postRender() {
-                const $prompt = this.$container.find('.prompt');
-                return mathInPrompt.postRender($prompt);
             },
 
             /**
@@ -945,7 +934,6 @@ define([
 
             pciInstance.on('configChange', function (properties) {
                 mathEntryInteraction.render(properties);
-                mathEntryInteraction.postRender();
             });
 
             pciInstance.on('latexInput', function (latex) {
@@ -970,10 +958,8 @@ define([
                 mathEntryInteraction.addGap();
             });
 
-            mathEntryInteraction.postRender().then(() => {
-                // PCI instance is ready to run
-                config.onready(pciInstance);
-            });
+            // PCI instance is ready to run
+            config.onready(pciInstance);
 
             mathEntryInteraction.pciInstance = pciInstance;
         }
