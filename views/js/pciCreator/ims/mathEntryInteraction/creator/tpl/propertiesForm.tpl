@@ -158,6 +158,13 @@
         : {{__ "colon"}}
     </label>
 </div>
+<div>
+    <label class="panel">
+        <input name="tool_to" type="checkbox" {{#if tool_to}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        &#x2192; {{__ "right arrow"}}
+    </label>
+</div>
 
 <hr />
 <h3>{{__ "Geometry"}}</h3>

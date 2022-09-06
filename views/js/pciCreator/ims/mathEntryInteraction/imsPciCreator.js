@@ -104,6 +104,7 @@ define([
                 tool_union: 'true',
                 tool_intersec: 'true',
                 tool_colon: 'true',
+                tool_to: 'true',
                 tool_congruent: 'true',
                 tool_subset: 'true',
                 tool_superset: 'true',

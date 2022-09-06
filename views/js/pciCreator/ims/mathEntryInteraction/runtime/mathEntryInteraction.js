@@ -266,6 +266,7 @@ define([
                         pi: toBoolean(config.tool_pi, true),
                         cos: toBoolean(config.tool_cos, true),
                         sin: toBoolean(config.tool_sin, true),
+                        tan: toBoolean(config.tool_tan, true),
                         lte: toBoolean(config.tool_lte, true),
                         gte: toBoolean(config.tool_gte, true),
                         times: toBoolean(config.tool_times, true),
@@ -293,6 +294,7 @@ define([
                         union: toBoolean(config.tool_union, true),
                         intersec: toBoolean(config.tool_intersec, true),
                         colon: toBoolean(config.tool_colon, true),
+                        to: toBoolean(config.tool_to, true),
                         congruent: toBoolean(config.tool_congruent, true),
                         subset: toBoolean(config.tool_subset, true),
                         superset: toBoolean(config.tool_superset, true),
@@ -669,6 +671,7 @@ define([
                         union: {label: '&cup;', latex: '\\cup', fn: 'cmd', desc: 'Set union'},
                         intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'},
                         colon: {label: ':', latex: ':', fn: 'write', desc: 'Colon'},
+                        to: {label: '&#x2192;', latex: '\\to', fn: 'write', desc: 'Right arrow'},
                         congruent: {label: '&#x2245;', latex: '\\cong', fn: 'cmd', desc: 'Congruent'},
                         subset: {label: '&#x2282;', latex: '\\subset', fn: 'cmd', desc: 'Subset'},
                         superset: {label: '&#x2283;', latex: '\\supset', fn: 'cmd', desc: 'Superset'},
@@ -678,7 +681,7 @@ define([
                         {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln', 'limit', 'sum', 'nthroot']},
                         {
                             id: 'symbols',
-                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon']
+                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon', 'to']
                         },
                         {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
                         {id: 'trigo', tools: ['pi', 'sin', 'cos','tan']},
