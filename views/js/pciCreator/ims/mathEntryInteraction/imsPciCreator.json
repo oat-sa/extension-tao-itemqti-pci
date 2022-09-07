@@ -60,7 +60,7 @@
             "./runtime/css/mathEntryInteraction.css",
             "./runtime/mathquill/mathquill.css",
             "./creator/widget/states/states.js",
-            "./helper/mathInPrompt.js"
+            "./creator/helper/mathInPrompt.js"
         ]
     }
 }
