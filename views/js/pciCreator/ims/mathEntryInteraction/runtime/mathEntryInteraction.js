@@ -245,6 +245,9 @@ define([
                         exp: toBoolean(config.tool_exp, true),
                         log: toBoolean(config.tool_log, true),
                         ln: toBoolean(config.tool_ln, true),
+                        limit: toBoolean(config.tool_limit, true),
+                        sum: toBoolean(config.tool_sum, true),
+                        nthroot: toBoolean(config.tool_nthroot, true),
                         e: toBoolean(config.tool_e, true),
                         infinity: toBoolean(config.tool_infinity, true),
                         lbrack: toBoolean(config.tool_lbrack, true),
@@ -252,6 +255,7 @@ define([
                         pi: toBoolean(config.tool_pi, true),
                         cos: toBoolean(config.tool_cos, true),
                         sin: toBoolean(config.tool_sin, true),
+                        tan: toBoolean(config.tool_tan, true),
                         lte: toBoolean(config.tool_lte, true),
                         gte: toBoolean(config.tool_gte, true),
                         times: toBoolean(config.tool_times, true),
@@ -277,7 +281,13 @@ define([
                         inmem: toBoolean(config.tool_inmem, true),
                         ninmem: toBoolean(config.tool_ninmem, true),
                         union: toBoolean(config.tool_union, true),
-                        intersec: toBoolean(config.tool_intersec, true)
+                        intersec: toBoolean(config.tool_intersec, true),
+                        colon: toBoolean(config.tool_colon, true),
+                        to: toBoolean(config.tool_to, true),
+                        congruent: toBoolean(config.tool_congruent, true),
+                        subset: toBoolean(config.tool_subset, true),
+                        superset: toBoolean(config.tool_superset, true),
+                        contains: toBoolean(config.tool_contains, true),
                     },
 
                     allowNewLine: toBoolean(config.allowNewLine, false),
@@ -602,6 +612,9 @@ define([
                         exp: {label: 'x&#8319;', latex: '^', fn: 'cmd', desc: 'Exponent'},
                         log: {label: 'log', latex: '\\log', fn: 'cmd', desc: 'Log'},
                         ln: {label: 'ln', latex: '\\ln', fn: 'cmd', desc: 'Ln'},
+                        limit: {label: 'lim', latex: '\\lim', fn: 'cmd', desc: 'Limit'},
+                        sum: {label: 'sum', latex: '\\sum', fn: 'cmd', desc: 'Sum'},
+                        nthroot: {label: 'n-root', latex: '\\nthroot', fn: 'cmd', desc: 'N-root'},
                         e: {label: 'e', latex: '\\mathrm{e}', fn: 'write', desc: 'Euler\'s constant'},
                         infinity: {label: '&#8734;', latex: '\\infty', fn: 'cmd', desc: 'Infinity'},
                         lbrack: {label: '[', latex: '\\lbrack', fn: 'cmd', desc: 'Left bracket'},
@@ -609,6 +622,7 @@ define([
                         pi: {label: '&pi;', latex: '\\pi', fn: 'cmd', desc: 'Pi'},
                         cos: {label: 'cos', latex: '\\cos', fn: 'cmd', desc: 'Cosinus'},
                         sin: {label: 'sin', latex: '\\sin', fn: 'cmd', desc: 'Sinus'},
+                        tan: {label: 'tan', latex: '\\tan', fn: 'cmd', desc: 'Tangent'},
                         lte: {
                             label: self.getLabel('&le;'),
                             latex: self.getLabel('\\le'),
@@ -644,20 +658,26 @@ define([
                         inmem: {label: '&isin;', latex: '\\in', fn: 'cmd', desc: 'Is a member of'},
                         ninmem: {label: '&notin;', latex: '\\notin', fn: 'cmd', desc: 'Is not a member of'},
                         union: {label: '&cup;', latex: '\\cup', fn: 'cmd', desc: 'Set union'},
-                        intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'}
+                        intersec: {label: '&cap;', latex: '\\cap', fn: 'cmd', desc: 'Set intersection'},
+                        colon: {label: ':', latex: ':', fn: 'write', desc: 'Colon'},
+                        to: {label: '&#x2192;', latex: '\\to', fn: 'write', desc: 'Right arrow'},
+                        congruent: {label: '&#x2245;', latex: '\\cong', fn: 'cmd', desc: 'Congruent'},
+                        subset: {label: '&#x2282;', latex: '\\subset', fn: 'cmd', desc: 'Subset'},
+                        superset: {label: '&#x2283;', latex: '\\supset', fn: 'cmd', desc: 'Superset'},
+                        contains: {label: '&#x220B;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
                     },
                     availableToolGroups = [ // we use an array to maintain order
-                        {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln']},
+                        {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln', 'limit', 'sum', 'nthroot']},
                         {
                             id: 'symbols',
-                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral']
+                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon', 'to']
                         },
                         {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
-                        {id: 'trigo', tools: ['pi', 'sin', 'cos']},
+                        {id: 'trigo', tools: ['pi', 'sin', 'cos','tan']},
                         {id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte']},
                         {
                             id: 'operands',
-                            tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec']
+                            tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec', 'congruent', 'subset', 'superset', 'contains']
                         }
                     ];
 
