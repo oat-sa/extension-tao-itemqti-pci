@@ -15,7 +15,7 @@
  *
  * Copyright (c) 2022 (original work) Open Assessment Technologies SA;
  */
-define(['core/moduleLoader'], function (moduleLoader) {
+define(['core/moduleLoader', 'mathEntryInteraction/runtime/mathml-to-latex/mathml-to-latex'], function (moduleLoader, Mathml2latex) {
     'use strict';
 
     let MathJax;
@@ -55,6 +55,10 @@ define(['core/moduleLoader'], function (moduleLoader) {
          * @returns {Promise}
          */
         postRender: function postRender($element) {
+            $element.find('math').each(function() {
+                console.log('converting:', this.innerHTML, 'to:', Mathml2latex.convert(this.outerHTML));
+            });
+
             if ($element.find('math').length === 0) {
                 return Promise.resolve();
             }
