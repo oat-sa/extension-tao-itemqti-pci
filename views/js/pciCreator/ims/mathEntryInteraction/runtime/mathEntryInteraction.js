@@ -288,6 +288,8 @@ define([
                         subset: toBoolean(config.tool_subset, true),
                         superset: toBoolean(config.tool_superset, true),
                         contains: toBoolean(config.tool_contains, true),
+                        matrix_2row: toBoolean(config.tool_matrix_2row, true),
+                        matrix_2row_2col: toBoolean(config.tool_matrix_2row_2col, true),
                     },
 
                     allowNewLine: toBoolean(config.allowNewLine, false),
@@ -665,6 +667,26 @@ define([
                         subset: {label: '&#x2282;', latex: '\\subset', fn: 'cmd', desc: 'Subset'},
                         superset: {label: '&#x2283;', latex: '\\supset', fn: 'cmd', desc: 'Superset'},
                         contains: {label: '&#x220B;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
+                        matrix_2row: {
+                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 50 111" xmlns="http://www.w3.org/2000/svg">' +
+                                '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                            '</svg>',
+                            latex: '\\begin{matrix}\\\\\\end{matrix}', 
+                            fn: 'write', 
+                            desc: 'Matrix with 2 rows'
+                        },
+                        matrix_2row_2col: {
+                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 108 111" xmlns="http://www.w3.org/2000/svg">' +
+                                '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_3" height="50" width="50" y="0" x="57" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_4" height="50" width="50" y="61" x="57" stroke="#fff" fill="#7f7f7f"/>' +
+                            '</svg>', 
+                            latex: '\\begin{matrix}&\\\\&\\end{matrix}', 
+                            fn: 'write', 
+                            desc: 'Matrix with 2 rows and 2 colmns'
+                        },
                     },
                     availableToolGroups = [ // we use an array to maintain order
                         {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln', 'limit', 'sum', 'nthroot']},
@@ -678,7 +700,8 @@ define([
                         {
                             id: 'operands',
                             tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec', 'congruent', 'subset', 'superset', 'contains']
-                        }
+                        },
+                        {id: 'matrix', tools: ['matrix_2row','matrix_2row_2col']}
                     ];
 
                 // create buttons

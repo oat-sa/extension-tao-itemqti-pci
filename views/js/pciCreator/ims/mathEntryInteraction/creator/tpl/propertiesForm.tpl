@@ -385,6 +385,23 @@
 </div>
 <hr />
 
+<h3>{{__ "Matrix"}}</h3>
+<div>
+    <label class="panel">
+        <input name="tool_matrix_2row" type="checkbox" {{#if tool_matrix_2row}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "2 rows"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_matrix_2row_2col" type="checkbox" {{#if tool_matrix_2row_2col}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "2 rows & 2 columns"}}
+    </label>
+</div>
+<hr />
+
 <h3 class="txt-error"><strong><span class="icon-warning"></span> {{__ "Experimental only"}}</strong></h3>
 
 <div>
