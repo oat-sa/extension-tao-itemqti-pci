@@ -15,76 +15,40 @@
  *
  * Copyright (c) 2022 (original work) Open Assessment Technologies SA;
  */
-define(['core/moduleLoader', 'mathEntryInteraction/runtime/mathml-to-latex/mathml-to-latex'], function (moduleLoader, Mathml2latex) {
+define([
+    'core/moduleLoader',
+    'mathEntryInteraction/runtime/mathml-to-latex/mathml-to-latex',
+    'mathEntryInteraction/runtime/mathquill/mathquill'
+], function (moduleLoader, Mathml2latex, MathQuill) {
     'use strict';
 
-    let MathJax;
-    let loaded = false;
+    const MQ = MathQuill.getInterface(2);
 
-    /***
-     * lazy-load MathJax dependency
-     * @returns {Promise}
+    /**
+     * Extract LaTeX content from a Math expression.
+     * @param {HTMLElement} element
+     * @returns {string|any}
      */
-    function load() {
-        if (loaded) {
-            return Promise.resolve();
+    function getLaTeX(element) {
+        const annotation = element.querySelector('annotation');
+        if (annotation) {
+            return annotation.innerHTML;
         }
-        return moduleLoader([], () => true)
-            .add({ module: 'mathJax', category: 'mathEntryInteraction' })
-            .load()
-            .then(loadedModule => {
-                loaded = true;
-                MathJax = loadedModule && loadedModule.length ? loadedModule[0] : void 0;
-
-                /**
-                 * Do not wait between rendering each individual math element
-                 * http://docs.mathjax.org/en/latest/api/hub.html
-                 * @see https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
-                 */
-                if (MathJax && MathJax.Hub) {
-                    MathJax.Hub.processSectionDelay = 0;
-                }
-            });
+        return Mathml2latex.convert(element.outerHTML);
     }
 
     const mathInPrompt = {
         /**
-         * On dom element containing `<math>...</math>` MathML markup,
-         * run MathJax renderer ("typeset" it)
-         * @param {Object} $element
-         * @returns {Promise}
+         * On dom element containing `<math>...</math>` MathML markup, apply a Math renderer
+         * @param {jQuery} $element
          */
-        postRender: function postRender($element) {
-            $element.find('math').each(function() {
-                let annotation = this.querySelector('annotation');
-                if (!annotation) {
-                    annotation = document.createElement('annotation');
-                    annotation.setAttribute('encoding', 'latex');
-                    this.appendChild(annotation);
-                }
-                annotation.innerText = Mathml2latex.convert(this.outerHTML);
-                console.log('converting:', this.innerHTML, 'to:', annotation.innerText);
+        postRender($element) {
+            $element.find('math').each(function () {
+                const math = document.createElement('span');
+                math.innerHTML = getLaTeX(this);
+                this.replaceWith(math);
+                MQ.StaticMath(math);
             });
-
-            return Promise.resolve();
-
-            // if ($element.find('math').length === 0) {
-            //     return Promise.resolve();
-            // }
-            // return load().then(() => {
-            //     if (MathJax && MathJax.Hub && typeof MathJax.Hub.Queue === 'function') {
-            //         /**
-            //          * MathJax needs to be exported globally to integrate with tools like TTS, it's weird...
-            //          * @see https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
-            //          */
-            //         if (!window.MathJax) {
-            //             window.MathJax = MathJax;
-            //         }
-            //         if ($element.length) {
-            //             MathJax.Hub.Queue(['Typeset', MathJax.Hub, $element[0]]);
-            //         }
-            //     }
-            // });
         }
     };
 
