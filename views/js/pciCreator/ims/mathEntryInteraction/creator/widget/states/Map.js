@@ -130,7 +130,7 @@ define([
             interaction = self.widget.element;
 
         interaction.onPci('responseChange', function (latex) {
-            if ((self.inGapMode(self) === false || self.inGapMode(self) === 'false') && self.activeEditId !== null) {
+            if ((self.inGapMode(self) === false) && self.activeEditId !== null) {
                 self.correctResponses[self.activeEditId] = latex;
             } else if (self.inGapMode(self) === true && self.activeEditId !== null) {
                 var response = interaction.getResponse();
@@ -303,10 +303,9 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.inGapMode = function inGapMode() {
-        var self = this,
-            interaction = self.widget.element;
-
-        return interaction.prop('useGapExpression');
+        var interaction = this.widget.element;
+        var useGapExpression = interaction.prop('useGapExpression');
+        return useGapExpression && useGapExpression !== 'false' || false;
     }
 
     return MathEntryInteractionStateResponse;
