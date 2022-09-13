@@ -56,26 +56,35 @@ define(['core/moduleLoader', 'mathEntryInteraction/runtime/mathml-to-latex/mathm
          */
         postRender: function postRender($element) {
             $element.find('math').each(function() {
-                console.log('converting:', this.innerHTML, 'to:', Mathml2latex.convert(this.outerHTML));
+                let annotation = this.querySelector('annotation');
+                if (!annotation) {
+                    annotation = document.createElement('annotation');
+                    annotation.setAttribute('encoding', 'latex');
+                    this.appendChild(annotation);
+                }
+                annotation.innerText = Mathml2latex.convert(this.outerHTML);
+                console.log('converting:', this.innerHTML, 'to:', annotation.innerText);
             });
 
-            if ($element.find('math').length === 0) {
-                return Promise.resolve();
-            }
-            return load().then(() => {
-                if (MathJax && MathJax.Hub && typeof MathJax.Hub.Queue === 'function') {
-                    /**
-                     * MathJax needs to be exported globally to integrate with tools like TTS, it's weird...
-                     * @see https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
-                     */
-                    if (!window.MathJax) {
-                        window.MathJax = MathJax;
-                    }
-                    if ($element.length) {
-                        MathJax.Hub.Queue(['Typeset', MathJax.Hub, $element[0]]);
-                    }
-                }
-            });
+            return Promise.resolve();
+
+            // if ($element.find('math').length === 0) {
+            //     return Promise.resolve();
+            // }
+            // return load().then(() => {
+            //     if (MathJax && MathJax.Hub && typeof MathJax.Hub.Queue === 'function') {
+            //         /**
+            //          * MathJax needs to be exported globally to integrate with tools like TTS, it's weird...
+            //          * @see https://github.com/oat-sa/tao-item-runner-qti-fe/blob/master/src/qtiCommonRenderer/renderers/Math.js
+            //          */
+            //         if (!window.MathJax) {
+            //             window.MathJax = MathJax;
+            //         }
+            //         if ($element.length) {
+            //             MathJax.Hub.Queue(['Typeset', MathJax.Hub, $element[0]]);
+            //         }
+            //     }
+            // });
         }
     };
 

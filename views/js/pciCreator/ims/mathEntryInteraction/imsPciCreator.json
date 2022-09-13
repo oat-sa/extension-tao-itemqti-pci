@@ -58,10 +58,10 @@
             "./creator/widget/states/Question.js",
             "./creator/widget/states/Map.js",
             "./creator/widget/states/Correct.js",
-            "./runtime/css/mathEntryInteraction.css",
-            "./runtime/mathquill/mathquill.css",
             "./creator/widget/states/states.js",
-            "./creator/helper/mathInPrompt.js"
+            "./runtime/helper/mathInPrompt.js",
+            "./runtime/css/mathEntryInteraction.css",
+            "./runtime/mathquill/mathquill.css"
         ]
     }
 }

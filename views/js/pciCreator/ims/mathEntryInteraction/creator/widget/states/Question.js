@@ -26,7 +26,7 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
     'tpl!mathEntryInteraction/creator/tpl/addGapBtn',
-    'mathEntryInteraction/creator/helper/mathInPrompt'
+    'mathEntryInteraction/runtime/helper/mathInPrompt'
 ], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, mathInPrompt){
     'use strict';
 
