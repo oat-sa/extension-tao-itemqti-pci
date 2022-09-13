@@ -8,7 +8,7 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
