@@ -16,10 +16,9 @@
  * Copyright (c) 2022 (original work) Open Assessment Technologies SA;
  */
 define([
-    'core/moduleLoader',
     'mathEntryInteraction/runtime/mathml-to-latex/mathml-to-latex',
     'mathEntryInteraction/runtime/mathquill/mathquill'
-], function (moduleLoader, Mathml2latex, MathQuill) {
+], function (Mathml2latex, MathQuill) {
     'use strict';
 
     const MQ = MathQuill.getInterface(2);
