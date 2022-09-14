@@ -78,6 +78,16 @@ define([
                     1,
                     'the interaction contains a prompt'
                 );
+                assert.equal(
+                    $container.find('.qti-customInteraction .prompt math').length,
+                    0,
+                    'the math expressions are replaced'
+                );
+                assert.equal(
+                    $container.find('.qti-customInteraction .prompt .mq-math-mode').length,
+                    2,
+                    'the math expressions are rendered'
+                );
 
                 runner.clear();
                 ready();

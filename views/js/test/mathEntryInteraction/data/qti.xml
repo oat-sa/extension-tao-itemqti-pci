@@ -43,7 +43,67 @@
             </pci:properties>
             <pci:markup>
               <html5:div class="mathEntryInteraction">
-                <html5:div class="prompt"></html5:div>
+                <div class="prompt">
+                  <div>LaTeX:
+                    <m:math>
+                      <m:semantics>
+                        <m:mstyle displaystyle="true" scriptlevel="0">
+                          <m:mrow class="MJX-TeXAtom-ORD">
+                            <m:msup>
+                              <m:mi>e</m:mi>
+                              <m:mrow class="MJX-TeXAtom-ORD">
+                                <m:mi>i</m:mi>
+                                <m:mi>&#x03C0;</m:mi>
+                              </m:mrow>
+                            </m:msup>
+                            <m:mo>=</m:mo>
+                            <m:mo>&#x2212;</m:mo>
+                            <m:mn>1</m:mn>
+                          </m:mrow>
+                        </m:mstyle>
+                        <m:annotation encoding="latex">e^{i \pi} = -1</m:annotation>
+                      </m:semantics>
+                    </m:math>
+                  </div>
+                  <div>MathML:
+                    <m:math>
+                      <m:mrow>
+                        <m:mi>x</m:mi>
+                        <m:mo>=</m:mo>
+                        <m:mfrac>
+                          <m:mrow>
+                            <m:mrow>
+                              <m:mo>-</m:mo>
+                              <m:mi>b</m:mi>
+                            </m:mrow>
+                            <m:mo>±</m:mo>
+                            <m:msqrt>
+                              <m:mrow>
+                                <m:msup>
+                                  <m:mi>b</m:mi>
+                                  <m:mn>2</m:mn>
+                                </m:msup>
+                                <m:mo>-</m:mo>
+                                <m:mrow>
+                                  <m:mn>4</m:mn>
+                                  <m:mo>⁢</m:mo>
+                                  <m:mi>a</m:mi>
+                                  <m:mo>⁢</m:mo>
+                                  <m:mi>c</m:mi>
+                                </m:mrow>
+                              </m:mrow>
+                            </m:msqrt>
+                          </m:mrow>
+                          <m:mrow>
+                            <m:mn>2</m:mn>
+                            <m:mo>⁢</m:mo>
+                            <m:mi>a</m:mi>
+                          </m:mrow>
+                        </m:mfrac>
+                      </m:mrow>
+                    </m:math>
+                  </div>
+                </div>
                 <html5:div class="math-entry">
                   <html5:div class="toolbar"></html5:div>
                   <html5:div>
