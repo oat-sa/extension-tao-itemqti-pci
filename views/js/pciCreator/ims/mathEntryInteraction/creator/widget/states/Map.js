@@ -130,7 +130,7 @@ define([
             interaction = self.widget.element;
 
         interaction.onPci('responseChange', function (latex) {
-            if ((self.inGapMode(self) === false) && self.activeEditId !== null) {
+            if (self.inGapMode(self) === false && self.activeEditId !== null) {
                 self.correctResponses[self.activeEditId] = latex;
             } else if (self.inGapMode(self) === true && self.activeEditId !== null) {
                 var response = interaction.getResponse();
