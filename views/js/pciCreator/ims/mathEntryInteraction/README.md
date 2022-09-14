@@ -6,7 +6,7 @@ PCI for rendering Maths expressions.
 
 The PCI embeds MathQuill for rendering Maths expressions.
 
-However, this library ony support LaTeX, and other formats need to be converted. For this purpose, it also includes [`mathml-to-latex`](https://github.com/qtikit/mathml-to-latex), which is installed via `npm`.
+However, this library ony support LaTeX, and other formats need to be converted. For this purpose, the PCI also includes [`mathml-to-latex`](https://github.com/qtikit/mathml-to-latex), which is installed via `npm`.
 
 To update the lib, please do:
 - update the version in the nested `package.json` file
