@@ -303,10 +303,9 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.inGapMode = function inGapMode() {
-        var self = this,
-            interaction = self.widget.element;
-
-        return interaction.prop('useGapExpression');
+        var interaction = this.widget.element;
+        var useGapExpression = interaction.prop('useGapExpression');
+        return useGapExpression && useGapExpression !== 'false' || false;
     }
 
     return MathEntryInteractionStateResponse;
