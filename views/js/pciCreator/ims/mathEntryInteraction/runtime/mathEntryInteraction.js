@@ -668,7 +668,7 @@ define([
                         superset: {label: '&#x2283;', latex: '\\supset', fn: 'cmd', desc: 'Superset'},
                         contains: {label: '&#x220B;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
                         matrix_2row: {
-                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 50 111" xmlns="http://www.w3.org/2000/svg">' +
+                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 50 111" xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;">' +
                                 '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
                                 '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
                             '</svg>',
@@ -677,7 +677,7 @@ define([
                             desc: 'Matrix with 2 rows'
                         },
                         matrix_2row_2col: {
-                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 108 111" xmlns="http://www.w3.org/2000/svg">' +
+                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 108 111" xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;">' +
                                 '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
                                 '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
                                 '<rect id="svg_3" height="50" width="50" y="0" x="57" stroke="#fff" fill="#7f7f7f"/>' +
