@@ -373,7 +373,7 @@
     <label class="panel">
         <input name="tool_superset" type="checkbox" {{#if tool_superset}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &#x2283; {{__ "superset of"}}
+        &#x2283; {{__ "superset"}}
     </label>
 </div>
 <div>
