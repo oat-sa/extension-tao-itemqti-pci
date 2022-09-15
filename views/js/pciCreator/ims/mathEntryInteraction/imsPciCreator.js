@@ -69,6 +69,8 @@ define([
                 tool_limit: 'true',
                 tool_sum: 'true',
                 tool_nthroot: 'true',
+                tool_matrix_2row: 'true',
+                tool_matrix_2row_2col: 'true',
                 tool_e: 'true',
                 tool_infinity: 'true',
                 tool_lbrack: 'true',
