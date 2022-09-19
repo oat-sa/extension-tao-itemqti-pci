@@ -373,6 +373,7 @@
 }
 .mq-math-mode .mq-limit .mq-lim {
   display: block;
+  padding: 0 0.2em 0;
 }
 .mq-math-mode .mq-limit .mq-approaches {
   font-size: 80%;
@@ -447,6 +448,29 @@
   content: '\27A4';
   visibility: visible;
   text-align: right;
+}
+.mq-math-mode .mq-matrix {
+  vertical-align: middle;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+}
+.mq-math-mode .mq-matrix table {
+  width: auto;
+  border-bottom: none;
+  border-spacing: 3px;
+  border-collapse: separate;
+}
+.mq-math-mode .mq-matrix table.mq-rows-1 {
+  /* better alignment when there's just one row */
+  vertical-align: middle;
+  margin-bottom: 1px;
+}
+.mq-math-mode .mq-matrix td {
+  border: none;
+  width: auto;
+  /* defensive resets */
+  padding: 0.1em 0.3em;
+  vertical-align: baseline;
 }
 .mq-math-mode .mq-selection,
 .mq-editable-field .mq-selection,
