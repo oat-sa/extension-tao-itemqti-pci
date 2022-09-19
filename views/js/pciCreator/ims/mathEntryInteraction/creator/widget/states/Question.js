@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2022 (original work) Open Assessment Technologies SA;
  */
 
 define([
@@ -26,7 +26,7 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
     'tpl!mathEntryInteraction/creator/tpl/addGapBtn',
-    'mathEntryInteraction/creator/helper/mathInPrompt'
+    'mathEntryInteraction/runtime/helper/mathInPrompt'
 ], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, mathInPrompt){
     'use strict';
 
