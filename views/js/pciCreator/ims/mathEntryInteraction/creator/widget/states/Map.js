@@ -326,20 +326,19 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.saveAnswers = function saveAnswers() {
-        var self = this,
-            interaction = self.widget.element,
-            responseDeclaration = interaction.getResponseDeclaration();
+        var interaction = this.widget.element;
+        var responseDeclaration = interaction.getResponseDeclaration();
 
         this.clearMapEntries();
 
         if (this.inGapMode() === true) {
-            self.correctResponses = self.correctResponses.filter(function (response) {
+            this.correctResponses = this.correctResponses.filter(function (response) {
                 return response.split(',').indexOf('') === -1;
             });
         }
-
-        self.correctResponses.forEach(function (response) {
-            responseDeclaration.setMapEntry(response, CORRECT_ANSWER_VALUE, false);
+        this.correctResponses.forEach(response => {
+            responseDeclaration.setMapEntry(response, responseDeclaration.getMappingAttribute('defaultValue'), false);
+            responseDeclaration.setCorrect(this.correctResponses[0]);
         });
     }
 
