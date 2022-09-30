@@ -311,7 +311,13 @@ define([
                         edit: function onChange(mathField) {
                             self.autoWrapContent();
                             if (self.pciInstance) {
-                                self.pciInstance.trigger('responseChange', [mathField.latex()]);
+                                let index = null;
+                                const $mathFieldInput = $(mathField.__controller.container[0]);
+                                if ($mathFieldInput.hasClass('math-entry-alternative-input')) {
+                                    index = $mathFieldInput.closest('div').attr('data-index');
+                                    console.log('responseChangeIndex', index)
+                                }
+                                self.pciInstance.trigger('responseChange', [mathField.latex(), index]);
                             }
                         },
                         enter: function onEnter(mathField) {
@@ -337,7 +343,7 @@ define([
             /**
              * Create a placeholder that will be displayed instead off the MathQuill field in authoring mode
              */
-            togglePlaceholder: function togglePlaceholder(displayPlaceholder) {
+            togglePlaceholder: function togglePlaceholder(displayPlaceholder, index = 0) {
                 if (!this.$inputPlaceholder) {
                     // this is not in the PCI markup for backward-compatibility reasons
                     this.$inputPlaceholder = $('<div>', {
@@ -346,11 +352,11 @@ define([
                     this.$toolbar.after(this.$inputPlaceholder);
                 }
                 if (displayPlaceholder) {
-                    this.$input.hide();
+                    this.$input[index].hide();
                     this.$inputPlaceholder.show();
 
                 } else {
-                    this.$input.css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
+                    this.$input[index].css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
                     this.$inputPlaceholder.hide();
                 }
             },
@@ -379,12 +385,12 @@ define([
             /**
              * Will wrap the content, to avoid overflow, if autoWrap is enabled
              */
-            autoWrapContent: function autoWrapContent() {
+            autoWrapContent: function autoWrapContent(index = 0) {
                 var $container, $cursor, current, lastSpace, lineBreak;
                 var maxWidth, lineWidth, cache, nodes, node, index, length, block;
 
                 if (this.config.enableAutoWrap) {
-                    $container = this.$input.find(cssSelectors.root);
+                    $container = this.$input[index].find(cssSelectors.root);
                     $cursor = $container.find(cssSelectors.cursor);
                     current = $cursor.closest(cssSelectors.root + '>span').get(0);
 
@@ -451,21 +457,21 @@ define([
              * Gap mode only: fill the mathfield markup with the math expression before creating the MathQuill instance
              * @param {String} latex - the math expression with gaps
              */
-            setMathStaticContent: function setMathStaticContent(latex) {
+            setMathStaticContent: function setMathStaticContent(latex, index = 0) {
                 latex = latex
                     .replace(/\\taoGap/g, '\\MathQuillMathField{}')
                     .replace(/\\taoBr/g, '\\embed{br}');
-                this.$input.text(latex);
+                this.$input[index].text(latex);
             },
 
             /**
              * Gap mode only: render the static math with the editable placeholders
              */
-            createMathStatic: function createMathStatic() {
+            createMathStatic: function createMathStatic(index = 0) {
                 var self = this,
                     gapFields;
 
-                this.mathField = MQ.StaticMath(this.$input.get(0));
+                this.mathField = MQ.StaticMath(this.$input[index].get(0));
 
                 gapFields = this.getGapFields();
                 gapFields.forEach(function (field) {
@@ -477,18 +483,17 @@ define([
              * MathQuill does not provide an API to detect which editable field has the focus, so we need to do that manually.
              * This will be helpful to know on which field the buttons will act on.
              */
-            monitorActiveGapField: function monitorActiveGapField() {
-                var self = this,
-                    $editableFields = this.$input.find('.mq-editable-field');
+            monitorActiveGapField: function monitorActiveGapField(index = 0) {
+                var $editableFields = this.$input[index].find('.mq-editable-field');
 
                 this._activeGapFieldIndex = null;
 
                 if ($editableFields.length) {
-                    $editableFields.each(function (index) {
+                    $editableFields.each(fieldIndex => {
                         $(this)
                             .off(ns)
                             .on('click' + ns + ' keyup' + ns, function () {
-                                self._activeGapFieldIndex = index;
+                                this._activeGapFieldIndex = fieldIndex;
                             });
                     });
                 }
@@ -497,7 +502,7 @@ define([
             /**
              * Transform a DOM element into a MathQuill Editable Field
              */
-            createMathEditable: function createMathEditable(replaceStatic) {
+            createMathEditable: function createMathEditable(replaceStatic, index = 0) {
                 var config = this.getMqConfig();
 
                 // if the element already exists, update the config
@@ -506,10 +511,10 @@ define([
                 }
                 // if not create it
                 else if (this.mathField && this.mathField instanceof MathQuill && !replaceStatic) {
-                    this.$input.empty();
-                    this.mathField = MQ.MathField(this.$input.get(0), config);
+                    this.$input[index].empty();
+                    this.mathField = MQ.MathField(this.$input[index].get(0), config);
                 } else {
-                    this.mathField = MQ.MathField(this.$input.get(0), config);
+                    this.mathField = MQ.MathField(this.$input[index].get(0), config);
                 }
             },
 
@@ -602,6 +607,18 @@ define([
             addGap: function addGap() {
                 if (this.inQtiCreator()) {
                     this.insertLatex('\\embed{gap}', 'write');
+                }
+            },
+
+            /**
+             * In Qti Creator mode only: insert an alternative response in a math expression
+             */
+            addAlternative: function addAlternative(latex = '\\embed{gap}') {
+                if (this.inQtiCreator()) {
+                    var alternativeInput = document.querySelectorAll('.math-entry-alternative-input')
+                    this.$input.push($(alternativeInput[alternativeInput.length - 1]));
+                    this.createMathEditable(true, alternativeInput.length);
+                    this.insertLatex(latex, 'write');
                 }
             },
 
@@ -818,7 +835,7 @@ define([
 
                 this.$container = $(dom);
                 this.$toolbar = this.$container.find('.toolbar');
-                this.$input = this.$container.find('.math-entry-input');
+                this.$input = [this.$container.find('.math-entry-input')];
 
                 this.render(config);
             },
@@ -898,8 +915,8 @@ define([
              * @param {Object} interaction
              */
             destroy: function destroy() {
-                this.$input.find('.mq-editable-field').off(ns);
-                this.$input.off(ns);
+                this.$input.each(i => i.find('.mq-editable-field').off(ns));
+                this.$input.each(i => i.off(ns));
                 this.$toolbar.off(ns);
                 this.resetResponse();
                 if (this.mathField instanceof MathQuill) {
@@ -994,6 +1011,10 @@ define([
 
             pciInstance.on('addGap', function () {
                 mathEntryInteraction.addGap();
+            });
+
+            pciInstance.on('addAlternative', function (latex) {
+                mathEntryInteraction.addAlternative(latex);
             });
 
             // PCI instance is ready to run
