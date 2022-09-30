@@ -131,6 +131,31 @@ $defaultGapWidth: 30;
                 text-align: left;
             }
 
+            .math-entry-correct-wrap,
+            .math-entry-alternative-wrap {
+                width: 90%;
+                display: inline-block;
+                padding-right: 2rem;
+            }
+            .math-entry-score-wrap {
+                display: block;
+                float: right;
+                width: 10%;
+            }
+
+            .math-entry-score-input {
+                width: 100%;
+                min-width: 100%;
+                height: 23px;
+                &:focus {
+                    border-color: 1px dotted #0e5d91;
+                }
+            }
+
+            .math-entry-response-wrap {
+                margin-bottom: 1rem;
+            }
+
             .mq-editable-field {
                 @include text-input();
             }

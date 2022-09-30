@@ -23,7 +23,10 @@ define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/states/Map',
     'tpl!mathEntryInteraction/creator/tpl/responseForm',
+    'tpl!mathEntryInteraction/creator/tpl/scoreForm',
+    'tpl!mathEntryInteraction/creator/tpl/addAlternativeBtn',
     'taoQtiItem/qtiCreator/widgets/component/minMax/minMax',
+    'taoQtiItem/qtiCreator/widgets/helpers/formElement'
 ], function (
     hb,
     __,
@@ -32,14 +35,16 @@ define([
     stateFactory,
     Map,
     responseFormTpl,
+    scoreTpl,
+    addAlternativeBtn,
     minMaxComponentFactory,
+    formElement
 ) {
     'use strict';
-    var CORRECT_ANSWER_VALUE = 1;
     hb.registerHelper('increaseIndex', function (value, options) {
         return parseInt(value) + 1;
     });
-
+    var $addAlternativeBtn = $(addAlternativeBtn());
     var MathEntryInteractionStateResponse = stateFactory.create(
         Map,
         function init() {
@@ -103,6 +108,7 @@ define([
             syncValues: true
         });     
         this.initResponseForm();
+        this.createScoreResponse();
         this.initEditingOptions();
     }
 
@@ -133,7 +139,68 @@ define([
         this.correctResponses.push(newCorrectAnswer);
         this.renderForm(self.correctResponses);
     }
+
+    MathEntryInteractionStateResponse.prototype.createScoreResponse = function createScoreResponse() {
+        var $container = this.widget.$container;
+        var $input = $container.find('.math-entry-input');
+
+        if ($($input[0]).siblings('.math-entry-response-correct').length > 0) {
+            return false
+        }
+
+        var $interaction = this.widget.element;
+        var response = $interaction.getResponseDeclaration();
+        this.$responseCorrectTitle = $('<span>', {
+            'class': 'math-entry-response-title math-entry-response-correct'
+        }).html('Correct');
+        $input[0].parentNode.prepend(this.$responseCorrectTitle[0]);
+        this.$correctDiv = $input[0].parentNode.className = 'math-entry-correct-wrap';
+        this.$scoreDiv = $('<div>', {
+            'class': 'math-entry-score-wrap math-entry-response-correct'
         });
+        $input[0].parentNode.parentNode.insertBefore(this.$scoreDiv[0], $input.nextSibling);
+        this.$scoreDiv.after($addAlternativeBtn);
+        $('.math-entry-correct-wrap, .math-entry-score-wrap').wrapAll('<div class="math-entry-response-wrap"></div>');
+        var pairId = $interaction.attr('responseIdentifier');
+    
+        this.$responseCorrectScore = $('<span>', {
+            'class': 'math-entry-score-title math-entry-response-correct'
+        }).html('Score');
+        this.$scoreDiv.append(scoreTpl({
+            serial: response.serial,
+            mathIdentifier: pairId,
+            placeholder: response.getMappingAttribute('defaultValue')
+        }));
+        this.$scoreDiv.prepend(this.$responseCorrectScore);
+
+        //add placeholder text to show the default value
+        var $scores = $container.find('.math-entry-response-wrap .math-entry-score-input');
+        $scores.on('click', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+
+        this.widget.on('mappingAttributeChange', function (data) {
+            if (data.key === 'defaultValue') {
+                $scores.attr('placeholder', data.value);
+            }
+        });
+
+        //init form javascript
+        formElement.initWidget($container);
+        formElement.setChangeCallbacks($container, response,
+            _.assign({
+                mathEntryScoreInput: function (response, value) {
+                    var key = $(this.widget).data('for');
+                    if (value === '') {
+                        response.removeMapEntry(key);
+                    } else {
+                        response.setMapEntry(key, value, true);
+                    }
+
+                }
+            })
+        );
     }
 
     MathEntryInteractionStateResponse.prototype.getExistingCorrectAnswerOptions = function getExistingCorrectAnswerOptions() {
@@ -230,12 +297,8 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.renderForm = function renderForm(correctAnswerOptions) {
-        var self = this,
-            $responseForm = self.widget.$responseForm;
 
         this.removeEditDeleteListeners();
-        $responseForm.find('.mathEntryInteraction').remove();
-        $responseForm.append(answerFormTpl({correctAnswerEntries: correctAnswerOptions}));
         this.initDeletingOptions();
         this.initEditingOptions();
     }
@@ -252,10 +315,7 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.removeAddButtonListener = function removeAddButtonListener() {
-        var self = this,
-            $responseForm = self.widget.$responseForm;
-
-        $responseForm.find($('.add-answer-option')).off('click');
+        $addAlternativeBtn.off('click');
     }
 
     MathEntryInteractionStateResponse.prototype.destroyForm = function destroyForm() {

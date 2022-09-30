@@ -165,6 +165,7 @@ define([
 
                 this.createToolbar();
                 this.togglePlaceholder(false);
+                this.toggleResponseCorrectRow(false);
 
                 // QtiCreator rendering of the PCI in Gap Expression mode and in response state: display a non-editable MathQuill field with editable gap fields
                 if (this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
@@ -174,6 +175,7 @@ define([
                     this.addToolbarListeners();
                     this.addGapStyle();
                     this.autoWrapContent();
+                    this.toggleResponseCorrectRow(true);
 
                     // QtiCreator rendering of the PCI in Gap Expression mode and in question state: display an editable MathQuill field with non-editable gap fields
                 } else if (this.inGapMode() && this.inQtiCreator() && !this.inResponseState()) {
@@ -192,6 +194,7 @@ define([
                 } else if (!this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
                     this.createMathEditable(true);
                     this.togglePlaceholder(false);
+                    this.toggleResponseCorrectRow(true);
                     this.addToolbarListeners();
 
                     // Rendering PCI for a test-taker in Gap Expression mode: static MathQuill field with editable gap fields
@@ -207,6 +210,7 @@ define([
                 } else {
                     this.createMathEditable(false);
                     this.addToolbarListeners();
+                    this.toggleResponseCorrectRow(true);
                 }
             },
 
@@ -351,6 +355,20 @@ define([
                 }
             },
 
+            /**
+             * Create a title for response that will be displayed in Response mode
+             */
+            toggleResponseCorrectRow: function toggleResponseCorrectRow(displayResponseCorrect) {    
+                var $responseBtn = $('.math-entry-response-correct');
+                var $responseWrap = $('.math-entry-response-wrap');
+                if (displayResponseCorrect) {
+                    $responseBtn.show();
+                    $responseWrap.show();
+                } else {
+                    $responseBtn.hide();
+                    $responseWrap.hide();
+                }
+            },
 
             /**
              * ===========================
