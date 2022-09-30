@@ -22,9 +22,8 @@ define([
     'jquery',
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/states/Map',
-    'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'tpl!mathEntryInteraction/creator/tpl/answerForm',
-    'tpl!mathEntryInteraction/creator/tpl/addAnswerOption',
+    'tpl!mathEntryInteraction/creator/tpl/responseForm',
+    'taoQtiItem/qtiCreator/widgets/component/minMax/minMax',
 ], function (
     hb,
     __,
@@ -32,9 +31,8 @@ define([
     $,
     stateFactory,
     Map,
-    formElement,
-    answerFormTpl,
-    addAnswerOptionBtn
+    responseFormTpl,
+    minMaxComponentFactory,
 ) {
     'use strict';
     var CORRECT_ANSWER_VALUE = 1;
@@ -73,47 +71,68 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.initForm = function initForm() {
-        var self = this,
-            interaction = self.widget.element,
-            $responseForm = self.widget.$responseForm;
+        var interaction = this.widget.element;
+        var $responseForm = this.widget.$responseForm;
 
+        var response = interaction.getResponseDeclaration();
+        var mapEntries = response.getMapEntries();
+        var mappingDisabled = _.isEmpty(mapEntries);
         this.initResponseChangeEventListener();
-        self.correctResponses = this.getExistingCorrectAnswerOptions();
-        $responseForm.html(addAnswerOptionBtn());
-        this.initAddAnswerButton();
-        this.renderForm(self.correctResponses);
+        this.correctResponses = this.getExistingCorrectAnswerOptions();
+        $responseForm.html(responseFormTpl({
+            identifier: interaction.attr('responseIdentifier'),
+            serial: response.serial,
+            min: interaction.prop('min'),
+            max: interaction.prop('max'),
+            mappingDisabled,
+            defaultValue: response.getMappingAttribute('defaultValue')
+        }));
+
+        minMaxComponentFactory($responseForm.find('.response-mapping-attributes > .min-max-panel'), {
+            min: {
+                fieldName: 'lowerBound',
+                value: _.parseInt(response.getMappingAttribute('lowerBound')) || 0,
+                helpMessage: __('Minimal  score for this interaction.')
+            },
+            max: {
+                fieldName: 'upperBound',
+                value: _.parseInt(response.getMappingAttribute('upperBound')) || 0,
+                helpMessage: __('Maximal score for this interaction.')
+            },
+            upperThreshold: Number.MAX_SAFE_INTEGER,
+            syncValues: true
+        });     
+        this.initResponseForm();
+        this.initEditingOptions();
     }
 
-    MathEntryInteractionStateResponse.prototype.initAddAnswerButton = function initAddAnswerButton() {
-        var self = this,
-            interaction = self.widget.element,
-            $responseForm = self.widget.$responseForm,
-            $addAnswerBtn = $responseForm.find($('.add-answer-option'));
+    MathEntryInteractionStateResponse.prototype.initResponseForm = function initResponseForm() {
+        var interaction = this.widget.element;
 
-        $addAnswerBtn.on('click', function () {
-            var newCorrectAnswer;
+        var newCorrectAnswer;
 
-            if (self.inGapMode() === true) {
-                self.emptyGapFields();
-                var gapExpression = interaction.prop('gapExpression');
-                var gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
-                if (gapCount > 0) {
-                    newCorrectAnswer = [];
-                    for (var i = 0; i < gapCount; i++) {
-                        newCorrectAnswer.push(' ');
-                    }
-
-                    newCorrectAnswer = newCorrectAnswer.join(',');
-                } else {
-                    newCorrectAnswer = '';
+        if (this.inGapMode() === true) {
+            this.emptyGapFields();
+            var gapExpression = interaction.prop('gapExpression');
+            var gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
+            if (gapCount > 0) {
+                newCorrectAnswer = [];
+                for (var i = 0; i < gapCount; i++) {
+                    newCorrectAnswer.push(' ');
                 }
+
+                newCorrectAnswer = newCorrectAnswer.join(',');
             } else {
                 newCorrectAnswer = '';
-                self.toggleResponseMode(false);
             }
+        } else {
+            newCorrectAnswer = '';
+            this.toggleResponseMode(false);
+        }
 
-            self.correctResponses.push(newCorrectAnswer);
-            self.renderForm(self.correctResponses);
+        this.correctResponses.push(newCorrectAnswer);
+        this.renderForm(self.correctResponses);
+    }
         });
     }
 
@@ -149,32 +168,19 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.initEditingOptions = function initEditingOptions() {
-        var self = this,
-            interaction = self.widget.element,
-            $responseForm = self.widget.$responseForm,
-            $entryConfig = $responseForm.find('.entry-config'),
-            $editButtons = $entryConfig.find('.answer-edit');
+        this.toggleResponseMode(true);
+        var interaction = this.widget.element;
+        var response = interaction.getResponseDeclaration();
+        var selectedEditId = 0;
 
-        $editButtons.click(function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            self.toggleResponseMode(true);
-            var selectedEditId = parseInt($(e.target).closest('div').attr('data-index'));
-
-            if (self.activeEditId !== selectedEditId) {
-
-                if (self.inGapMode() === true) {
-                    self.activeEditId = selectedEditId;
-                    var response = self.getGapResponseObject(self.correctResponses[self.activeEditId]);
-                    interaction.triggerPci('latexGapInput', [response]);
-                } else {
-                    self.activeEditId = selectedEditId;
-                    interaction.triggerPci('latexInput', [self.correctResponses[self.activeEditId]]);
-                }
-            } else {
-                self.emptyGapFields();
-            }
-        });
+        if (this.inGapMode() === true) {
+            this.activeEditId = selectedEditId;
+            var response = this.getGapResponseObject(this.correctResponses[this.activeEditId]);
+            interaction.triggerPci('latexGapInput', [response]);
+        } else {
+            this.activeEditId = selectedEditId;
+            interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
+        }
     }
 
     // forming gap response object to be further processed by the latexGapInput event
