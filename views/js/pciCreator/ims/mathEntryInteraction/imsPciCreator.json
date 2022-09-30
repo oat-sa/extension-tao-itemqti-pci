@@ -2,13 +2,13 @@
     "model": "IMSPCI",
     "response": {
         "baseType": "string",
-        "cardinality": "single"
+        "cardinality": "multiple"
     },
     "typeIdentifier": "mathEntryInteraction",
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "2.1.2",
+    "version": "2.4.0",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
@@ -51,8 +51,11 @@
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
             "./creator/tpl/addGapBtn.tpl",
-            "./creator/tpl/addAnswerOption.tpl",
+            "./creator/tpl/addAlternativeBtn.tpl",
+            "./creator/tpl/alternativeForm.tpl",
             "./creator/tpl/answerForm.tpl",
+            "./creator/tpl/responseForm.tpl",
+            "./creator/tpl/scoreForm.tpl",
             "./creator/widget/Widget.js",
             "./creator/widget/states/Question.js",
             "./creator/widget/states/Map.js",
