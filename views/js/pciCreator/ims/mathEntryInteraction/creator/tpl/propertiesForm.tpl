@@ -373,7 +373,7 @@
     <label class="panel">
         <input name="tool_superset" type="checkbox" {{#if tool_superset}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        &#x2283; {{__ "superset of"}}
+        &#x2283; {{__ "superset"}}
     </label>
 </div>
 <div>
@@ -381,6 +381,23 @@
         <input name="tool_contains" type="checkbox" {{#if tool_contains}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         &#x220B; {{__ "contains as member"}}
+    </label>
+</div>
+<hr />
+
+<h3>{{__ "Matrix"}}</h3>
+<div>
+    <label class="panel">
+        <input name="tool_matrix_2row" type="checkbox" {{#if tool_matrix_2row}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "2 rows"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_matrix_2row_2col" type="checkbox" {{#if tool_matrix_2row_2col}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "2 rows & 2 columns"}}
     </label>
 </div>
 <hr />

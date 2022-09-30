@@ -13,10 +13,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016-2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2022 (original work) Open Assessment Technologies SA;
  *
  * @author Christophe Noël <christophe@taotesting.com>
- *
  */
 define([
     'qtiCustomInteractionContext',
@@ -24,6 +23,7 @@ define([
     'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'mathEntryInteraction/runtime/mathquill/mathquill',
+    'mathEntryInteraction/runtime/helper/mathInPrompt',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
@@ -32,7 +32,8 @@ define([
     $,
     _,
     event,
-    MathQuill
+    MathQuill,
+    mathInPrompt
 ) {
     'use strict';
 
@@ -215,6 +216,14 @@ define([
             },
 
             /**
+             * Post-Render PCI
+             */
+            postRender: function postRender() {
+                const $prompt = this.$container.find('.prompt');
+                mathInPrompt.postRender($prompt);
+            },
+
+            /**
              * @param {Object} config
              * @param {Boolean} config.authorizeWhiteSpace - if space key creates a space
              * @param {Boolean} config.useGapExpression - create a math expression with gaps (placeholders)
@@ -292,6 +301,8 @@ define([
                         subset: toBoolean(config.tool_subset, true),
                         superset: toBoolean(config.tool_superset, true),
                         contains: toBoolean(config.tool_contains, true),
+                        matrix_2row: toBoolean(config.tool_matrix_2row, true),
+                        matrix_2row_2col: toBoolean(config.tool_matrix_2row_2col, true),
                     },
 
                     allowNewLine: toBoolean(config.allowNewLine, false),
@@ -700,6 +711,26 @@ define([
                         subset: {label: '&#x2282;', latex: '\\subset', fn: 'cmd', desc: 'Subset'},
                         superset: {label: '&#x2283;', latex: '\\supset', fn: 'cmd', desc: 'Superset'},
                         contains: {label: '&#x220B;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
+                        matrix_2row: {
+                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 50 111" xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;">' +
+                                '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                            '</svg>',
+                            latex: '\\begin{matrix}\\\\\\end{matrix}', 
+                            fn: 'write', 
+                            desc: 'Matrix with 2 rows'
+                        },
+                        matrix_2row_2col: {
+                            label: '<svg height="0.8em" width="0.8em" viewBox="0 0 108 111" xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;">' +
+                                '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_3" height="50" width="50" y="0" x="57" stroke="#fff" fill="#7f7f7f"/>' +
+                                '<rect id="svg_4" height="50" width="50" y="61" x="57" stroke="#fff" fill="#7f7f7f"/>' +
+                            '</svg>', 
+                            latex: '\\begin{matrix}&\\\\&\\end{matrix}', 
+                            fn: 'write', 
+                            desc: 'Matrix with 2 rows and 2 colmns'
+                        },
                     },
                     availableToolGroups = [ // we use an array to maintain order
                         {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln', 'limit', 'sum', 'nthroot']},
@@ -713,7 +744,8 @@ define([
                         {
                             id: 'operands',
                             tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec', 'congruent', 'subset', 'superset', 'contains']
-                        }
+                        },
+                        {id: 'matrix', tools: ['matrix_2row','matrix_2row_2col']}
                     ];
 
                 // create buttons
@@ -989,6 +1021,7 @@ define([
 
             pciInstance.on('configChange', function (properties) {
                 mathEntryInteraction.render(properties);
+                mathEntryInteraction.postRender();
             });
 
             pciInstance.on('latexInput', function (latex) {
@@ -1016,6 +1049,7 @@ define([
             pciInstance.on('addAlternative', function (latex) {
                 mathEntryInteraction.addAlternative(latex);
             });
+            mathEntryInteraction.postRender();
 
             // PCI instance is ready to run
             config.onready(pciInstance);

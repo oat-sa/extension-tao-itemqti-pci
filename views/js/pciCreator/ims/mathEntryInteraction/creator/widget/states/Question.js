@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016-2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2022 (original work) Open Assessment Technologies SA;
  */
 
 define([
@@ -26,7 +26,7 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
     'tpl!mathEntryInteraction/creator/tpl/addGapBtn',
-    'mathEntryInteraction/creator/helper/mathInPrompt'
+    'mathEntryInteraction/runtime/helper/mathInPrompt'
 ], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, mathInPrompt){
     'use strict';
 
@@ -112,7 +112,7 @@ define([
             tool_ln:        toBoolean(interaction.prop('tool_ln'),      true),
             tool_limit:     toBoolean(interaction.prop('tool_limit'),   true),
             tool_sum:       toBoolean(interaction.prop('tool_sum'),     true),
-            tool_nthroot:   toBoolean(interaction.prop('tool_nthroot'),     true),
+            tool_nthroot:   toBoolean(interaction.prop('tool_nthroot'), true),
             tool_e:         toBoolean(interaction.prop('tool_e'),       true),
             tool_infinity:  toBoolean(interaction.prop('tool_infinity'),true),
             squarebkts:     toBoolean(interaction.prop('tool_rbrack'),  true) && toBoolean(interaction.prop('tool_lbrack'), true),
@@ -150,6 +150,8 @@ define([
             tool_subset: toBoolean(interaction.prop('tool_subset'),     true),
             tool_superset: toBoolean(interaction.prop('tool_superset'), true),
             tool_contains: toBoolean(interaction.prop('tool_contains'), true),
+            tool_matrix_2row:   toBoolean(interaction.prop('tool_matrix_2row'),        true),
+            tool_matrix_2row_2col:   toBoolean(interaction.prop('tool_matrix_2row_2col'),        true),
             allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false),
             enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
         }));
@@ -227,6 +229,8 @@ define([
             tool_subset:    configChangeCallBack,
             tool_superset:    configChangeCallBack,
             tool_contains:    configChangeCallBack,
+            tool_matrix_2row:    configChangeCallBack,
+            tool_matrix_2row_2col:    configChangeCallBack,
 
             squarebkts: function squarebktsChangeCallBack(i, value) {
                 i.prop('tool_lbrack', value);
