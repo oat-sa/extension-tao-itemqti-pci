@@ -370,6 +370,7 @@ define([
                     this.$input[index].css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
                     this.$inputPlaceholder.hide();
                 }
+                this.focusSelectedInput()
             },
 
             /**
@@ -510,6 +511,21 @@ define([
                 }
             },
 
+            focusSelectedInput: function focusSelectedInput() {
+                const focusSelected = this.$container.find('.math-entry-input');
+                if (focusSelected.length > 1) {
+                    $.each(focusSelected, (input, index) => {
+                        $(input).click(e => {
+                            if (!this.inResponseState()) {
+                                return false;
+                            }
+                            this.mathField = MQ.MathField(this.$input[index].get(0));
+                            this.mathField.focus();                        
+                        });
+                    }) 
+                }
+            },
+
             /**
              * Transform a DOM element into a MathQuill Editable Field
              */
@@ -630,6 +646,7 @@ define([
                     this.$input.push($(alternativeInput[alternativeInput.length - 1]));
                     this.createMathEditable(true, alternativeInput.length);
                     this.insertLatex(latex, 'write');
+                    this.focusSelectedInput();
                 }
             },
 
