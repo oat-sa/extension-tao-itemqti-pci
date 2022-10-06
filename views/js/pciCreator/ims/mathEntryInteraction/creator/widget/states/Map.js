@@ -112,9 +112,14 @@ define([
         this.initResponseForm();
         this.createScoreResponse();
         this.initEditingOptions();
+
+        this.initAlternativeInput();
     }
 
     MathEntryInteractionStateResponse.prototype.initResponseForm = function initResponseForm() {
+        if (this.correctResponses.length > 0) {
+            return false;
+        }
         var interaction = this.widget.element;
 
         var newCorrectAnswer;
@@ -139,14 +144,13 @@ define([
         }
 
         this.correctResponses.push(newCorrectAnswer);
-        this.renderForm(self.correctResponses);
     }
 
     MathEntryInteractionStateResponse.prototype.createScoreResponse = function createScoreResponse() {
         var $container = this.widget.$container;
         var $input = $container.find('.math-entry-input');
 
-        if ($($input[0]).siblings('.math-entry-response-correct').length > 0) {
+        if ($container.find('.math-entry-response-wrap').length > 1) {
             return false
         }
 
@@ -156,7 +160,8 @@ define([
             'class': 'math-entry-response-title math-entry-response-correct'
         }).html('Correct');
         $input[0].parentNode.prepend(this.$responseCorrectTitle[0]);
-        this.$correctDiv = $input[0].parentNode.className = 'math-entry-correct-wrap';
+        $input[0].parentNode.className = 'math-entry-correct-wrap';
+        $input[0].parentNode.dataset.index = 0;
         this.$scoreDiv = $('<div>', {
             'class': 'math-entry-score-wrap math-entry-response-correct'
         });
@@ -239,18 +244,38 @@ define([
     MathEntryInteractionStateResponse.prototype.initEditingOptions = function initEditingOptions() {
         this.toggleResponseMode(true);
         var interaction = this.widget.element;
+         var $container = this.widget.$container;
         var response = interaction.getResponseDeclaration();
-        var selectedEditId = 0;
+        var mapEntries = response.getMapEntries();
 
-        if (this.inGapMode() === true) {
-            this.activeEditId = selectedEditId;
-            var response = this.getGapResponseObject(this.correctResponses[this.activeEditId]);
-            interaction.triggerPci('latexGapInput', [response]);
+        const inputs = $container.find('.math-entry-input');
+        if (this.correctResponses.length > inputs.length) {
+            this.correctResponses.forEach((value, index) => {
+                this.activeEditId = index;
+                if (this.inGapMode() === true) {
+                    var response = this.getGapResponseObject(value);
+                    interaction.triggerPci('latexGapInput', [response]);
+                } else {
+                    if (index > 0) {
+                        this.addAlternativeInput(this.activeEditId)
+                    } else {
+                        interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
+                        const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
+                        scoreInput[0].value = mapEntries[value] || response.getMappingAttribute('defaultValue')
+                    }
+                }
+            })
         } else {
-            this.activeEditId = selectedEditId;
-            interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
+            this.activeEditId = 0;
+            const value = this.correctResponses[0]
+            if (this.inGapMode() === true) {
+                var response = this.getGapResponseObject(value);
+                interaction.triggerPci('latexGapInput', [response]);
+            } else {
+                interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
                 const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
                 scoreInput[0].value = mapEntries[value] || response.getMappingAttribute('defaultValue')
+            }            
         }
     }
 
@@ -293,13 +318,6 @@ define([
         })
     }
 
-    MathEntryInteractionStateResponse.prototype.renderForm = function renderForm(correctAnswerOptions) {
-
-        this.removeEditDeleteListeners();
-        this.initDeletingOptions();
-        this.initEditingOptions();
-        this.initAlternativeInput();
-    }
 
     /**
      *   remove all event listeners to avoid any potential memory leaks
@@ -378,13 +396,27 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.initAlternativeInput = function initAlternativeInput() {
-        var $interaction = this.widget.element;
-        var response = $interaction.getResponseDeclaration();
-        var pairId = $interaction.attr('responseIdentifier');
-        var selectedEditId = 0;
+        $addAlternativeBtn.on('click', () => {
+            this.addAlternativeInput(0)
+        });
+    }
 
+    MathEntryInteractionStateResponse.prototype.addAlternativeInput = function addAlternativeInput(responseId = 0) { 
+        var $interaction = this.widget.element;
+        var $container = this.widget.$container;
+        var response = $interaction.getResponseDeclaration();
+        var mapEntries = response.getMapEntries();
+        let dataIndex = 0;
+        const focusSelected = $container.find('.math-entry-input');
+        if (focusSelected.length > 0) {
+            dataIndex = focusSelected[focusSelected.length - 1].parentNode.dataset.index;
+        }
+
+        $('button.math-entry-response-correct').before(alternativeFormTpl({
+            index: Number(dataIndex) + 1,
             placeholder: response.getMappingAttribute('defaultValue'),
             score: mapEntries.length > 0 && mapEntries[this.correctResponses[responseId]] || response.getMappingAttribute('defaultValue')
+        }));
 
         //add placeholder text to show the default value
         var $scores = this.widget.$container.find('.math-entry-score-input');
@@ -397,8 +429,8 @@ define([
                 $scores.attr('placeholder', data.value);
             }
         });
-            $interaction.triggerPci('addAlternative', [this.correctResponses[selectedEditId]]);
-        });
+        $interaction.triggerPci('addAlternative', [this.correctResponses[responseId]]);
+        this.initDeletingOptions();
     }
 
     return MathEntryInteractionStateResponse;

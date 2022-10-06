@@ -329,7 +329,6 @@ define([
                                 const $mathFieldInput = $(mathField.__controller.container[0]);
                                 if ($mathFieldInput.hasClass('math-entry-alternative-input')) {
                                     index = $mathFieldInput.closest('div').attr('data-index');
-                                    console.log('responseChangeIndex', index)
                                 }
                                 self.pciInstance.trigger('responseChange', [mathField.latex(), index]);
                             }
@@ -380,8 +379,8 @@ define([
              * Create a title for response that will be displayed in Response mode
              */
             toggleResponseCorrectRow: function toggleResponseCorrectRow(displayResponseCorrect) {    
-                var $responseBtn = $('.math-entry-response-correct');
-                var $responseWrap = $('.math-entry-response-wrap');
+                var $responseBtn = this.$container.find('.math-entry-response-correct');
+                var $responseWrap = this.$container.find('.math-entry-response-wrap');
                 if (displayResponseCorrect) {
                     $responseBtn.show();
                     $responseWrap.show();
@@ -658,12 +657,16 @@ define([
              */
             addAlternative: function addAlternative(latex = '\\embed{gap}') {
                 if (this.inQtiCreator()) {
-                    var alternativeInput = document.querySelectorAll('.math-entry-alternative-input')
-                    this.$input.push($(alternativeInput[alternativeInput.length - 1]));
-                    this.createMathEditable(true, alternativeInput.length);
-                    this.insertLatex(latex, 'write');
-                    this.focusSelectedInput();
-                    this.removeSelectedInput();
+                    const alternativeInput = this.$container.find('.math-entry-input')
+                    if (alternativeInput.length > 0) {
+                        const lastInput = alternativeInput[alternativeInput.length - 1];
+                        this.$input.push($(lastInput));
+                        const keysInput = Object.keys(this.$input)
+                        this.createMathEditable(true, keysInput[keysInput.length-1]);
+                        this.insertLatex(latex, 'write');
+                        this.focusSelectedInput();
+                        this.removeSelectedInput();
+                    }
                 }
             },
 
