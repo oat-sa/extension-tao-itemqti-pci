@@ -58,7 +58,7 @@ define([
             this.toggleResponseMode(false);
             this.saveAnswers();
             this.removeResponseChangeEventListener();
-            this.removeEditDeleteListeners();
+            this.removeDeleteListeners();
             this.removeAddButtonListener();
             this.destroyForm();
         }
@@ -274,28 +274,21 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
-        var self = this,
-            interaction = self.widget.element,
-            $responseForm = self.widget.$responseForm,
-            $entryConfig = $responseForm.find('.entry-config'),
-            $deleteButtons = $entryConfig.find('.answer-delete');
-
-        $deleteButtons.click(function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var id = parseInt($(e.target).closest('div').attr('data-index'));
-
-            if (self.inGapMode() === true) {
-                self.activeEditId = id;
-                self.emptyGapFields();
-            } else {
-                self.activeEditId = null;
-                self.toggleResponseMode(false);
+        var interaction = this.widget.element;
+        interaction.onPci('deleteInput', (inputEntry) => { 
+            const index = this.correctResponses.indexOf(inputEntry)
+            if (index < 0) {
+                return false
             }
 
-            self.correctResponses.splice(id, 1);
-            self.renderForm(self.correctResponses);
-        });
+            if (this.inGapMode() === true) {
+                this.activeEditId = index;
+                this.emptyGapFields();
+            } else {
+                this.activeEditId = 0;
+            }
+            this.correctResponses.splice(index, 1);
+        })
     }
 
     MathEntryInteractionStateResponse.prototype.renderForm = function renderForm(correctAnswerOptions) {
@@ -309,12 +302,9 @@ define([
     /**
      *   remove all event listeners to avoid any potential memory leaks
      */
-    MathEntryInteractionStateResponse.prototype.removeEditDeleteListeners = function removeEditDeleteListeners() {
-        var self = this,
-            $entryConfig = self.widget.$responseForm.find('.entry-config');
-
-        $entryConfig.find('.answer-edit').off('click');
-        $entryConfig.find('.answer-delete').off('click');
+    MathEntryInteractionStateResponse.prototype.removeDeleteListeners = function removeDeleteListeners() {
+        var $deleteButtons = this.widget.$container.find('.entry-config');
+        $deleteButtons.find('.answer-delete').off('click');
     }
 
     MathEntryInteractionStateResponse.prototype.removeAddButtonListener = function removeAddButtonListener() {

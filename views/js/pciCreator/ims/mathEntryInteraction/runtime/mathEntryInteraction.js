@@ -173,6 +173,7 @@ define([
                     this.setMathStaticContent(this.config.gapExpression);
                     this.createMathStatic();
                     this.monitorActiveGapField();
+                    this.removeSelectedInput();
                     this.addToolbarListeners();
                     this.addGapStyle();
                     this.autoWrapContent();
@@ -195,6 +196,7 @@ define([
                 } else if (!this.inGapMode() && this.inQtiCreator() && this.inResponseState()) {
                     this.createMathEditable(true);
                     this.togglePlaceholder(false);
+                    this.removeSelectedInput();
                     this.toggleResponseCorrectRow(true);
                     this.addToolbarListeners();
 
@@ -211,6 +213,7 @@ define([
                 } else {
                     this.createMathEditable(false);
                     this.addToolbarListeners();
+                    this.removeSelectedInput();
                     this.toggleResponseCorrectRow(true);
                 }
             },
@@ -526,6 +529,19 @@ define([
                 }
             },
 
+            removeSelectedInput: function removeSelectedInput() {
+                $('.answer-delete').click(e => {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    const inputEntry = $(e.target).closest('div').find('.math-entry-input')[0].textContent
+                    const dataIndex = parseInt($(e.target).closest('div').attr('data-index'));
+                    const inputId = this.$input.findIndex(i => i[0].parentElement.dataset.index == dataIndex)
+                    $(e.target).parents('.math-entry-response-wrap').remove();
+                    this.$input.splice(inputId, 1);
+                    this.pciInstance.trigger('deleteInput', [inputEntry]);
+                });
+            },
+
             /**
              * Transform a DOM element into a MathQuill Editable Field
              */
@@ -647,6 +663,7 @@ define([
                     this.createMathEditable(true, alternativeInput.length);
                     this.insertLatex(latex, 'write');
                     this.focusSelectedInput();
+                    this.removeSelectedInput();
                 }
             },
 
