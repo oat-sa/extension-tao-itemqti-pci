@@ -14,7 +14,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202209141533261465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update the Math Entry PCI, adding support for rendering Math expressions in the prompt';
