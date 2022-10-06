@@ -25,3 +25,4 @@ jobs:
         with:
           php: ${{ matrix.php-version }}
           coverage: ${{ matrix.coverage }}
+          test-suites-path: test/unit
