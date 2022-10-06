@@ -10,6 +10,6 @@
     </div>
     <div class="math-entry-score-wrap math-entry-response-alternative">
         <span class="math-entry-score-title math-entry-response-alternative">{{__ "Score"}}</span>
-        <input value type="text" data-for="{{mathIdentifier}}" name="mathEntryScoreInput" class="math-entry-score-input math-entry-response-alternative" data-validate="$numeric" data-validate-option="$allowEmpty; $event(type=keyup)" placeholder="{{placeholder}}">
+        <input value="{{score}}" type="text" data-for="{{index}}" name="mathEntryScoreInput" class="math-entry-score-input math-entry-response-alternative" data-validate="$numeric" data-validate-option="$allowEmpty; $event(type=keyup)" placeholder="{{placeholder}}">
     </div>
 </div>

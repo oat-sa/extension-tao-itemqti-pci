@@ -249,6 +249,8 @@ define([
         } else {
             this.activeEditId = selectedEditId;
             interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
+                const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
+                scoreInput[0].value = mapEntries[value] || response.getMappingAttribute('defaultValue')
         }
     }
 
@@ -329,8 +331,17 @@ define([
                 return response.split(',').indexOf('') === -1;
             });
         }
-        this.correctResponses.forEach(response => {
-            responseDeclaration.setMapEntry(response, responseDeclaration.getMappingAttribute('defaultValue'), false);
+        const score = [];
+        if (this.correctResponses.length) {
+            const scoreInput = this.widget.$container.find('.math-entry-score-input')
+            scoreInput.map(input => {
+                score.push(scoreInput[input].value);
+            })
+        }
+
+        this.correctResponses.forEach((response, index) => {
+            const scoreValue = score[index] ? score[index] : responseDeclaration.getMappingAttribute('defaultValue')
+            responseDeclaration.setMapEntry(response, scoreValue, false);
             responseDeclaration.setCorrect(this.correctResponses[0]);
         });
     }
@@ -372,25 +383,20 @@ define([
         var pairId = $interaction.attr('responseIdentifier');
         var selectedEditId = 0;
 
-        $addAlternativeBtn.on('click', () => {
-            var $responseBtn = $('button.math-entry-response-correct');
-            $responseBtn.before(alternativeFormTpl({
-                mathIdentifier: pairId,
-                index: this.correctResponses.length,
-                placeholder: response.getMappingAttribute('defaultValue')
-            }));
+            placeholder: response.getMappingAttribute('defaultValue'),
+            score: mapEntries.length > 0 && mapEntries[this.correctResponses[responseId]] || response.getMappingAttribute('defaultValue')
 
-            //add placeholder text to show the default value
-            var $scores = this.widget.$container.find('.math-entry-score-input');
-            $scores.on('click', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-            });
-            this.widget.on('mappingAttributeChange', function (data) {
-                if (data.key === 'defaultValue') {
-                    $scores.attr('placeholder', data.value);
-                }
-            });
+        //add placeholder text to show the default value
+        var $scores = this.widget.$container.find('.math-entry-score-input');
+        $scores.on('click', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        this.widget.on('mappingAttributeChange', function (data) {
+            if (data.key === 'defaultValue') {
+                $scores.attr('placeholder', data.value);
+            }
+        });
             $interaction.triggerPci('addAlternative', [this.correctResponses[selectedEditId]]);
         });
     }
