@@ -150,7 +150,7 @@ define([
         var $container = this.widget.$container;
         var $input = $container.find('.math-entry-input');
 
-        if ($container.find('.math-entry-response-wrap').length > 1) {
+        if ($container.find('.math-entry-response-wrap').length > 0) {
             return false
         }
 
