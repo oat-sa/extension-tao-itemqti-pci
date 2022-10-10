@@ -1,1 +1,1 @@
-<input value type="text" data-for="{{mathIdentifier}}" name="mathEntryScoreInput" class="math-entry-score-input math-entry-response-correct" placeholder="{{placeholder}}" data-validate="$numeric" data-validate-option="$allowEmpty; $event(type=keyup)" />
+<input value type="text" data-for="0" name="mathEntryScoreInput" class="math-entry-score-input math-entry-response-correct" placeholder="{{placeholder}}" data-validate="$numeric" data-validate-option="$allowEmpty; $event(type=keyup)" />

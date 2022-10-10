@@ -27,7 +27,8 @@ define([
     'tpl!mathEntryInteraction/creator/tpl/addAlternativeBtn',
     'tpl!mathEntryInteraction/creator/tpl/alternativeForm',
     'taoQtiItem/qtiCreator/widgets/component/minMax/minMax',
-    'taoQtiItem/qtiCreator/widgets/helpers/formElement'
+    'taoQtiItem/qtiCreator/widgets/helpers/formElement',
+    'ui/tooltip'
 ], function (
     hb,
     __,
@@ -40,7 +41,8 @@ define([
     addAlternativeBtn,
     alternativeFormTpl,
     minMaxComponentFactory,
-    formElement
+    formElement,
+    tooltip
 ) {
     'use strict';
     hb.registerHelper('increaseIndex', function (value, options) {
@@ -111,8 +113,10 @@ define([
         this.initResponseForm();
         this.createScoreResponse();
         this.initEditingOptions();
-
         this.initAlternativeInput();
+
+        // show tooltip
+        tooltip.lookup($responseForm);
     }
 
     MathEntryInteractionStateResponse.prototype.initResponseForm = function initResponseForm() {
@@ -167,14 +171,12 @@ define([
         input[0].parentNode.parentNode.insertBefore(this.$scoreDiv[0], input.nextSibling);
         this.$scoreDiv.after($addAlternativeBtn);
         $('.math-entry-correct-wrap, .math-entry-score-wrap').wrapAll('<div class="math-entry-response-wrap"></div>');
-        const pairId = interaction.attr('responseIdentifier');
     
         this.$responseCorrectScore = $('<span>', {
             'class': 'math-entry-score-title math-entry-response-correct'
         }).html('Score');
         this.$scoreDiv.append(scoreTpl({
             serial: response.serial,
-            mathIdentifier: pairId,
             placeholder: response.getMappingAttribute('defaultValue')
         }));
         this.$scoreDiv.prepend(this.$responseCorrectScore);
@@ -425,6 +427,8 @@ define([
             placeholder: response.getMappingAttribute('defaultValue'),
             score: mapEntries.length > 0 && mapEntries[this.correctResponses[responseId]] || response.getMappingAttribute('defaultValue')
         }));
+        // show tooltip
+        tooltip.lookup($('.answer-delete'));
 
         //add placeholder text to show the default value
         const $scores = $container.find('.math-entry-score-input');
