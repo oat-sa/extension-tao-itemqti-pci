@@ -46,8 +46,8 @@ define([
     hb.registerHelper('increaseIndex', function (value, options) {
         return parseInt(value) + 1;
     });
-    var $addAlternativeBtn = $(addAlternativeBtn());
-    var MathEntryInteractionStateResponse = stateFactory.create(
+    const $addAlternativeBtn = $(addAlternativeBtn());
+    const MathEntryInteractionStateResponse = stateFactory.create(
         Map,
         function init() {
             this.initGlobalVariables();
@@ -66,24 +66,23 @@ define([
 
 
     MathEntryInteractionStateResponse.prototype.initGlobalVariables = function initGlobalVariables() {
-        var self = this,
-            interaction = self.widget.element;
-        self.activeEditId = null;
-        self.correctResponses = [];
+        let interaction = this.widget.element;
+        this.activeEditId = null;
+        this.correctResponses = [];
 
-        if (this.inGapMode(self) === true) {
-            interaction = self.widget.element;
-            self.gapTemplate = interaction.prop('gapExpression');
+        if (this.inGapMode() === true) {
+            interaction = this.widget.element;
+            this.gapTemplate = interaction.prop('gapExpression');
         }
     }
 
     MathEntryInteractionStateResponse.prototype.initForm = function initForm() {
-        var interaction = this.widget.element;
-        var $responseForm = this.widget.$responseForm;
+        const interaction = this.widget.element;
+        const $responseForm = this.widget.$responseForm;
 
-        var response = interaction.getResponseDeclaration();
-        var mapEntries = response.getMapEntries();
-        var mappingDisabled = _.isEmpty(mapEntries);
+        const response = interaction.getResponseDeclaration();
+        const mapEntries = response.getMapEntries();
+        const mappingDisabled = _.isEmpty(mapEntries);
         this.initResponseChangeEventListener();
         this.correctResponses = this.getExistingCorrectAnswerOptions();
         $responseForm.html(responseFormTpl({
@@ -99,7 +98,7 @@ define([
             min: {
                 fieldName: 'lowerBound',
                 value: _.parseInt(response.getMappingAttribute('lowerBound')) || 0,
-                helpMessage: __('Minimal  score for this interaction.')
+                helpMessage: __('Minimal score for this interaction.')
             },
             max: {
                 fieldName: 'upperBound',
@@ -120,17 +119,17 @@ define([
         if (this.correctResponses.length > 0) {
             return false;
         }
-        var interaction = this.widget.element;
+        const interaction = this.widget.element;
 
-        var newCorrectAnswer;
+        let newCorrectAnswer;
 
         if (this.inGapMode() === true) {
             this.emptyGapFields();
-            var gapExpression = interaction.prop('gapExpression');
-            var gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
+            const gapExpression = interaction.prop('gapExpression');
+            const gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
             if (gapCount > 0) {
                 newCorrectAnswer = [];
-                for (var i = 0; i < gapCount; i++) {
+                for (let i = 0; i < gapCount; i++) {
                     newCorrectAnswer.push(' ');
                 }
 
@@ -147,28 +146,28 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.createScoreResponse = function createScoreResponse() {
-        var $container = this.widget.$container;
-        var $input = $container.find('.math-entry-input');
+        const $container = this.widget.$container;
+        const input = $container.find('.math-entry-input');
 
         if ($container.find('.math-entry-response-wrap').length > 0) {
             return false
         }
 
-        var $interaction = this.widget.element;
-        var response = $interaction.getResponseDeclaration();
+        const interaction = this.widget.element;
+        const response = interaction.getResponseDeclaration();
         this.$responseCorrectTitle = $('<span>', {
             'class': 'math-entry-response-title math-entry-response-correct'
         }).html('Correct');
-        $input[0].parentNode.prepend(this.$responseCorrectTitle[0]);
-        $input[0].parentNode.className = 'math-entry-correct-wrap';
-        $input[0].parentNode.dataset.index = 0;
+        input[0].parentNode.prepend(this.$responseCorrectTitle[0]);
+        input[0].parentNode.className = 'math-entry-correct-wrap';
+        input[0].parentNode.dataset.index = 0;
         this.$scoreDiv = $('<div>', {
             'class': 'math-entry-score-wrap math-entry-response-correct'
         });
-        $input[0].parentNode.parentNode.insertBefore(this.$scoreDiv[0], $input.nextSibling);
+        input[0].parentNode.parentNode.insertBefore(this.$scoreDiv[0], input.nextSibling);
         this.$scoreDiv.after($addAlternativeBtn);
         $('.math-entry-correct-wrap, .math-entry-score-wrap').wrapAll('<div class="math-entry-response-wrap"></div>');
-        var pairId = $interaction.attr('responseIdentifier');
+        const pairId = interaction.attr('responseIdentifier');
     
         this.$responseCorrectScore = $('<span>', {
             'class': 'math-entry-score-title math-entry-response-correct'
@@ -181,13 +180,13 @@ define([
         this.$scoreDiv.prepend(this.$responseCorrectScore);
 
         //add placeholder text to show the default value
-        var $scores = $container.find('.math-entry-response-wrap .math-entry-score-input');
-        $scores.on('click', function (e) {
+        const $scores = $container.find('.math-entry-response-wrap .math-entry-score-input');
+        $scores.on('click', e => {
             e.stopPropagation();
             e.preventDefault();
         });
 
-        this.widget.on('mappingAttributeChange', function (data) {
+        this.widget.on('mappingAttributeChange', data => {
             if (data.key === 'defaultValue') {
                 $scores.attr('placeholder', data.value);
             }
@@ -198,7 +197,7 @@ define([
         formElement.setChangeCallbacks($container, response,
             _.assign({
                 mathEntryScoreInput: function (response, value) {
-                    var key = $(this.widget).data('for');
+                    const key = $(this.widget).data('for');
                     if (value === '') {
                         response.removeMapEntry(key);
                     } else {
@@ -211,15 +210,14 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.getExistingCorrectAnswerOptions = function getExistingCorrectAnswerOptions() {
-        var self = this,
-            interaction = self.widget.element;
+        const interaction = this.widget.element;
 
-        var mapEntries = interaction.getResponseDeclaration().getMapEntries();
+        const mapEntries = interaction.getResponseDeclaration().getMapEntries();
         return _.keys(mapEntries) || [];
     }
 
     MathEntryInteractionStateResponse.prototype.initResponseChangeEventListener = function initResponseChangeEventListener() {
-        var interaction = this.widget.element;
+        const interaction = this.widget.element;
 
         interaction.onPci('responseChange', (latex, index, parentIndex) => {
             if (interaction.prop('inResponseState')) {
@@ -234,7 +232,7 @@ define([
                 if (this.inGapMode(this) === false && editIdIndex !== null) {
                     this.correctResponses[editIdIndex] = latex;
                 } else if (this.inGapMode(this) === true && editIdIndex !== null) {
-                    var response = interaction.getResponse();
+                    const response = interaction.getResponse();
                     if (response !== null) {
                         this.correctResponses[editIdIndex] = response.base.string;
                     }
@@ -244,18 +242,17 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.removeResponseChangeEventListener = function removeResponseChangeEventListener() {
-        var self = this,
-            interaction = self.widget.element;
+        const interaction = this.widget.element;
 
         interaction.offPci('responseChange');
     }
 
     MathEntryInteractionStateResponse.prototype.initEditingOptions = function initEditingOptions() {
         this.toggleResponseMode(true);
-        var interaction = this.widget.element;
-        var $container = this.widget.$container;
-        var responseDeclaration = interaction.getResponseDeclaration();
-        var mapEntries = responseDeclaration.getMapEntries();
+        const interaction = this.widget.element;
+        const $container = this.widget.$container;
+        const responseDeclaration = interaction.getResponseDeclaration();
+        const mapEntries = responseDeclaration.getMapEntries();
 
         const inputs = $container.find('.math-entry-input');
         if (this.correctResponses.length > 0) {
@@ -278,8 +275,6 @@ define([
                             scoreInput[0].value = mapEntries && mapEntries[value] || responseDeclaration.getMappingAttribute('defaultValue') || 0
                         }
                     }
-            }            
-                    }
                 }            
             })
         }
@@ -298,10 +293,9 @@ define([
 
     // removing all saved map entries
     MathEntryInteractionStateResponse.prototype.clearMapEntries = function clearMapEntries() {
-        var self = this,
-            interaction = self.widget.element,
-            response = interaction.getResponseDeclaration(),
-            mapEntries = response.getMapEntries();
+        const interaction = this.widget.element;
+        const response = interaction.getResponseDeclaration();
+        const mapEntries = response.getMapEntries();
 
         _.keys(mapEntries).forEach(function (mapKey) {
             response.removeMapEntry(mapKey, true);
@@ -309,7 +303,7 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
-        var interaction = this.widget.element;
+        const interaction = this.widget.element;
         interaction.onPci('deleteInput', (inputEntry) => { 
             const index = this.correctResponses.indexOf(inputEntry)
             if (index < 0) {
@@ -331,7 +325,7 @@ define([
      *   remove all event listeners to avoid any potential memory leaks
      */
     MathEntryInteractionStateResponse.prototype.removeDeleteListeners = function removeDeleteListeners() {
-        var $deleteButtons = this.widget.$container.find('.entry-config');
+        const $deleteButtons = this.widget.$container.find('.entry-config');
         $deleteButtons.find('.answer-delete').off('click');
     }
 
@@ -340,15 +334,13 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.destroyForm = function destroyForm() {
-        var self = this,
-            $responseForm = self.widget.$responseForm;
-
+        const $responseForm = this.widget.$responseForm;
         $responseForm.find('.mathEntryInteraction').remove();
     }
 
     MathEntryInteractionStateResponse.prototype.saveAnswers = function saveAnswers() {
-        var interaction = this.widget.element;
-        var responseDeclaration = interaction.getResponseDeclaration();
+        const interaction = this.widget.element;
+        const responseDeclaration = interaction.getResponseDeclaration();
 
         this.clearMapEntries();
 
@@ -376,20 +368,18 @@ define([
      *   if in gap mode: will empty all the gap fields
      */
     MathEntryInteractionStateResponse.prototype.emptyGapFields = function emptyGapFields() {
-        var self = this,
-            interaction = self.widget.element;
+        const interaction = this.widget.element;
 
         if (this.inGapMode() === true) {
-            self.activeEditId = null;
+            this.activeEditId = null;
 
-            interaction.prop('gapExpression', self.gapTemplate);
+            interaction.prop('gapExpression', this.gapTemplate);
             this.toggleResponseMode(false);
         }
     }
 
     MathEntryInteractionStateResponse.prototype.toggleResponseMode = function toggleResponseMode(value) {
-        var self = this,
-            interaction = self.widget.element;
+        const interaction = this.widget.element;
 
         if (interaction.prop('inResponseState') !== value) {
             interaction.prop('inResponseState', value);
@@ -398,8 +388,8 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.inGapMode = function inGapMode() {
-        var interaction = this.widget.element;
-        var useGapExpression = interaction.prop('useGapExpression');
+        const interaction = this.widget.element;
+        const useGapExpression = interaction.prop('useGapExpression');
         return useGapExpression && useGapExpression !== 'false' || false;
     }
 
@@ -410,10 +400,10 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.addAlternativeInput = function addAlternativeInput(responseId = 0) { 
-        var $interaction = this.widget.element;
-        var $container = this.widget.$container;
-        var response = $interaction.getResponseDeclaration();
-        var mapEntries = response.getMapEntries();
+        const interaction = this.widget.element;
+        const $container = this.widget.$container;
+        const response = interaction.getResponseDeclaration();
+        const mapEntries = response.getMapEntries();
         let dataIndex = 0;
         const focusSelected = $container.find('.math-entry-input');
         if (focusSelected.length > 0) {
@@ -437,7 +427,7 @@ define([
         }));
 
         //add placeholder text to show the default value
-        var $scores = this.widget.$container.find('.math-entry-score-input');
+        const $scores = $container.find('.math-entry-score-input');
         $scores.on('click', function (e) {
             e.stopPropagation();
             e.preventDefault();
@@ -447,7 +437,7 @@ define([
                 $scores.attr('placeholder', data.value);
             }
         });
-        $interaction.triggerPci('addAlternative', [responseValue, gapValues]);
+        interaction.triggerPci('addAlternative', [responseValue, gapValues]);
         this.initDeletingOptions();
     }
 
