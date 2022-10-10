@@ -330,10 +330,12 @@ define([
                                 const $mathFieldInput = $(mathField.__controller.container[0]);
                                 if ($mathFieldInput.hasClass('math-entry-alternative-input')) {
                                     index = $mathFieldInput.parent('.math-entry-alternative-wrap').attr('data-index');
+                                    index = typeof index === 'string' ? Number(index) : index;
                                 } else if ($mathFieldInput.hasClass('mq-editable-field') && self.inResponseState()) {
                                     parentIndex = $mathFieldInput[0] && $mathFieldInput[0].parentNode.parentNode.parentNode.dataset.index;
+                                    parentIndex = typeof parentIndex === 'string' ? Number(parentIndex) : parentIndex;
                                 }
-                                self.pciInstance.trigger('responseChange', [mathField.latex(), index, Number(parentIndex)]);
+                                self.pciInstance.trigger('responseChange', [mathField.latex(), index, parentIndex]);
                             }
                         },
                         enter: function onEnter(mathField) {
@@ -521,8 +523,10 @@ define([
                 if (focusInputSelected.length > 1) {
                     $.each(focusInputSelected, (index, input) => {
                         $(input).click(e => {
-                            if (!this.inResponseState()) {
-                                return false;
+                            if (this.inResponseState() && !this.inGapMode()) {
+                                const config = this.getMqConfig();
+                                this.mathField = MQ.MathField(this.$input[index].get(0), config);
+                                this.mathField.focus();
                             }
                             mathEntryInteraction.mathField.focus();
                         });

@@ -223,7 +223,7 @@ define([
 
         interaction.onPci('responseChange', (latex, index, parentIndex) => {
             if (interaction.prop('inResponseState')) {
-                let editIdIndex = null;
+                let editIdIndex = 0;
                 if (typeof index === 'number') {
                     editIdIndex = index 
                 } else if (typeof this.activeEditId === 'number') {
@@ -258,25 +258,31 @@ define([
         var mapEntries = responseDeclaration.getMapEntries();
 
         const inputs = $container.find('.math-entry-input');
-        this.correctResponses.forEach((value, index) => { 
-            this.activeEditId = index;
-            if (this.inGapMode() === true) {
-                if (this.correctResponses.length > inputs.length && index > 0) { 
-                    this.addAlternativeInput(this.activeEditId)
+        if (this.correctResponses.length > 0) {
+            this.correctResponses.forEach((value, index) => {
+                this.activeEditId = index;
+                if (this.inGapMode() === true) {
+                    if (this.correctResponses.length > inputs.length && index > 0) {
+                        this.addAlternativeInput(this.activeEditId)
+                    } else {
+                        const response = this.getGapResponseObject(value);
+                        interaction.triggerPci('latexGapInput', [response, this.activeEditId]);
+                    }
                 } else {
-                    var response = this.getGapResponseObject(value);
-                    interaction.triggerPci('latexGapInput', [response, this.activeEditId]);
-                }
-            } else {
-                if (this.correctResponses.length > inputs.length && index > 0) {
-                    this.addAlternativeInput(this.activeEditId)
-                } else {
-                    interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
-                    const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
-                    scoreInput[0].value = mapEntries[value] || responseDeclaration.getMappingAttribute('defaultValue') || 0
-                }
+                    if (this.correctResponses.length > inputs.length && index > 0) {
+                        this.addAlternativeInput(this.activeEditId)
+                    } else {
+                        interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
+                        const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
+                        if (scoreInput.length > 0) {
+                            scoreInput[0].value = mapEntries && mapEntries[value] || responseDeclaration.getMappingAttribute('defaultValue') || 0
+                        }
+                    }
             }            
-        })
+                    }
+                }            
+            })
+        }
         this.activeEditId = null;
         
     }
