@@ -306,19 +306,16 @@ define([
 
     MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
         const interaction = this.widget.element;
-        interaction.onPci('deleteInput', (inputEntry) => { 
-            const index = this.correctResponses.indexOf(inputEntry)
-            if (index < 0) {
-                return false
+        interaction.onPci('deleteInput', (inputId) => { 
+            if (this.correctResponses[inputId]) {
+                if (this.inGapMode() === true) {
+                    this.activeEditId = inputId;
+                    this.emptyGapFields();
+                } else {
+                    this.activeEditId = 0;
+                }
+                this.correctResponses.splice(inputId, 1);
             }
-
-            if (this.inGapMode() === true) {
-                this.activeEditId = index;
-                this.emptyGapFields();
-            } else {
-                this.activeEditId = 0;
-            }
-            this.correctResponses.splice(index, 1);
         })
     }
 
@@ -376,7 +373,6 @@ define([
             this.activeEditId = null;
 
             interaction.prop('gapExpression', this.gapTemplate);
-            this.toggleResponseMode(false);
         }
     }
 

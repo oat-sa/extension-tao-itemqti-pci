@@ -534,12 +534,11 @@ define([
                 $('.answer-delete').click(e => {
                     e.preventDefault();
                     e.stopImmediatePropagation();
-                    const inputEntry = $(e.target).closest('div').find('.math-entry-input')[0].textContent
                     const dataIndex = parseInt($(e.target).closest('div').attr('data-index'));
                     const inputId = this.$input.findIndex(i => i[0].parentElement.dataset.index == dataIndex)
                     $(e.target).parents('.math-entry-response-wrap').remove();
                     this.$input.splice(inputId, 1);
-                    this.pciInstance.trigger('deleteInput', [inputEntry]);
+                    this.pciInstance.trigger('deleteInput', [inputId]);
                 });
             },
 
