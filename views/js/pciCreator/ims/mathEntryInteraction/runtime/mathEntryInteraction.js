@@ -326,11 +326,14 @@ define([
                             self.autoWrapContent();
                             if (self.pciInstance) {
                                 let index = null;
+                                let parentIndex = null;
                                 const $mathFieldInput = $(mathField.__controller.container[0]);
                                 if ($mathFieldInput.hasClass('math-entry-alternative-input')) {
-                                    index = $mathFieldInput.closest('div').attr('data-index');
+                                    index = $mathFieldInput.parent('.math-entry-alternative-wrap').attr('data-index');
+                                } else if ($mathFieldInput.hasClass('mq-editable-field') && self.inResponseState()) {
+                                    parentIndex = $mathFieldInput[0] && $mathFieldInput[0].parentNode.parentNode.parentNode.dataset.index;
                                 }
-                                self.pciInstance.trigger('responseChange', [mathField.latex(), index]);
+                                self.pciInstance.trigger('responseChange', [mathField.latex(), index, Number(parentIndex)]);
                             }
                         },
                         enter: function onEnter(mathField) {
@@ -514,15 +517,14 @@ define([
             },
 
             focusSelectedInput: function focusSelectedInput() {
-                const focusSelected = this.$container.find('.math-entry-input');
-                if (focusSelected.length > 1) {
-                    $.each(focusSelected, (input, index) => {
+                const focusInputSelected = this.$container.find('.math-entry-input');
+                if (focusInputSelected.length > 1) {
+                    $.each(focusInputSelected, (index, input) => {
                         $(input).click(e => {
                             if (!this.inResponseState()) {
                                 return false;
                             }
-                            this.mathField = MQ.MathField(this.$input[index].get(0));
-                            this.mathField.focus();                        
+                            mathEntryInteraction.mathField.focus();
                         });
                     }) 
                 }
@@ -655,16 +657,30 @@ define([
             /**
              * In Qti Creator mode only: insert an alternative response in a math expression
              */
-            addAlternative: function addAlternative(latex = '\\embed{gap}') {
+            addAlternative: function addAlternative(latex = '\\embed{gap}', gapValues = null) {
                 if (this.inQtiCreator()) {
                     const alternativeInput = this.$container.find('.math-entry-input')
                     if (alternativeInput.length > 0) {
                         const lastInput = alternativeInput[alternativeInput.length - 1];
                         this.$input.push($(lastInput));
                         const keysInput = Object.keys(this.$input)
-                        this.createMathEditable(true, keysInput[keysInput.length-1]);
-                        this.insertLatex(latex, 'write');
-                        this.focusSelectedInput();
+                        const index = keysInput[keysInput.length - 1];
+                        if (this.inGapMode()) {
+                            this.setMathStaticContent(latex, index)
+                            this.createMathStatic(index);
+                            var gaps = this.getGapFields();
+                            if (gapValues && gaps.length > 0) {
+                                gaps.forEach(function (gap, index) {
+                                    if (gapValues.base.string[index] !== undefined) {
+                                        gap.latex(gapValues.base.string[index]);
+                                    }
+                                });                                
+                            }
+                        } else {
+                            this.createMathEditable(true, index);
+                            this.focusSelectedInput();
+                            this.insertLatex(latex, 'write');
+                        }
                         this.removeSelectedInput();
                     }
                 }
@@ -891,6 +907,12 @@ define([
                     });
                     self.$container.addClass(self.config.gapStyle);
                 }
+
+                // in case alternative responses, force the wrap to show
+                const inputWrap = this.$container.find('.math-entry-response-wrap');
+                if (inputWrap.length > 0) {
+                    $(inputWrap[0]).show();
+                }
             },
 
             /**
@@ -1066,8 +1088,10 @@ define([
                 mathEntryInteraction.mathField.focus();
             });
 
-            pciInstance.on('latexGapInput', function (gapLatex) {
+            pciInstance.on('latexGapInput', function (gapLatex, indexInput) {
                 if (gapLatex.base && _.isArray(gapLatex.base.string)) {
+                    var config = mathEntryInteraction.getMqConfig();
+                    mathEntryInteraction.mathField = MQ.StaticMath(mathEntryInteraction.$input[indexInput].get(0), config);
                     var gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
                         if (gapLatex.base.string[index] !== undefined) {
@@ -1083,8 +1107,8 @@ define([
                 mathEntryInteraction.addGap();
             });
 
-            pciInstance.on('addAlternative', function (latex) {
-                mathEntryInteraction.addAlternative(latex);
+            pciInstance.on('addAlternative', function (latex, gapValues) {
+                mathEntryInteraction.addAlternative(latex, gapValues);
             });
             mathEntryInteraction.postRender();
 
