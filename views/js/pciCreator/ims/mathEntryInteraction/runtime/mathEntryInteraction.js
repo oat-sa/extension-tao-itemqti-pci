@@ -1000,8 +1000,8 @@ define([
              * @param {Object} interaction
              */
             destroy: function destroy() {
-                this.$input.each(i => i.find('.mq-editable-field').off(ns));
-                this.$input.each(i => i.off(ns));
+                this.input.forEach(i => i.find('.mq-editable-field').off(ns));
+                this.input.forEach(i => i.off(ns));
                 this.$toolbar.off(ns);
                 this.resetResponse();
                 if (this.mathField instanceof MathQuill) {
