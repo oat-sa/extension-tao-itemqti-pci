@@ -6,7 +6,7 @@
                 <div class="tooltip-content">{{__ "delete the answer"}}</div>
             </a>
         </span>
-        <span class="math-entry-input mq-math-mode mq-editable-field math-entry-alternative-input" style="display: block;">
+        <span class="math-entry-input mq-math-mode mq-editable-field math-entry-alternative-input">
     </div>
     <div class="math-entry-score-wrap math-entry-response-alternative">
         <span class="math-entry-score-title math-entry-response-alternative">{{__ "Score"}}</span>
