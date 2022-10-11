@@ -183,7 +183,7 @@ define([
         //init form javascript
         formElement.initWidget($container);
         formElement.setChangeCallbacks($container, response,
-            _.assign({
+            {
                 mathEntryScoreInput: function (response, value) {
                     const key = $(this.widget).data('for');
                     if (value === '') {
@@ -193,7 +193,7 @@ define([
                     }
 
                 }
-            })
+            }
         );
     }
 

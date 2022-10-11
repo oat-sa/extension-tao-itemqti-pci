@@ -500,16 +500,17 @@ define([
              * This will be helpful to know on which field the buttons will act on.
              */
             monitorActiveGapField: function monitorActiveGapField(index = 0) {
+                const self = this;
                 const $editableFields = this.inputs[index].find('.mq-editable-field');
 
                 this._activeGapFieldIndex = null;
 
                 if ($editableFields.length) {
-                    $editableFields.each(fieldIndex => {
+                    $editableFields.each(function (fieldIndex) {
                         $(this)
                             .off(ns)
                             .on('click' + ns + ' keyup' + ns, function () {
-                                this._activeGapFieldIndex = fieldIndex;
+                                self._activeGapFieldIndex = fieldIndex;
                             });
                     });
                 }
