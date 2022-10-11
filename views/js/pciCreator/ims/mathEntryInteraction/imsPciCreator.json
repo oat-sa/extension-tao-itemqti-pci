@@ -2,7 +2,7 @@
     "model": "IMSPCI",
     "response": {
         "baseType": "string",
-        "cardinality": "multiple"
+        "cardinality": "single"
     },
     "typeIdentifier": "mathEntryInteraction",
     "label": "Math entry",
