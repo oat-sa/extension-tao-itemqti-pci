@@ -150,36 +150,22 @@ define([
     }
 
     MathEntryInteractionStateResponse.prototype.createScoreResponse = function createScoreResponse() {
-        const $container = this.widget.$container;
-        const input = $container.find('.math-entry-input');
-
+        const $container = this.widget.$container;        
         if ($container.find('.math-entry-response-wrap').length > 0) {
             return false
         }
-
+        
         const interaction = this.widget.element;
         const response = interaction.getResponseDeclaration();
-        this.$responseCorrectTitle = $('<span>', {
-            'class': 'math-entry-response-title math-entry-response-correct'
-        }).html('Correct');
-        input[0].parentNode.prepend(this.$responseCorrectTitle[0]);
-        input[0].parentNode.className = 'math-entry-correct-wrap';
-        input[0].parentNode.dataset.index = 0;
-        this.$scoreDiv = $('<div>', {
-            'class': 'math-entry-score-wrap math-entry-response-correct'
-        });
-        input[0].parentNode.parentNode.insertBefore(this.$scoreDiv[0], input.nextSibling);
-        this.$scoreDiv.after($addAlternativeBtn);
-        $('.math-entry-correct-wrap, .math-entry-score-wrap').wrapAll('<div class="math-entry-response-wrap"></div>');
-    
-        this.$responseCorrectScore = $('<span>', {
-            'class': 'math-entry-score-title math-entry-response-correct'
-        }).html('Score');
-        this.$scoreDiv.append(scoreTpl({
-            serial: response.serial,
+
+        const input = $container.find('.math-entry-input');
+        const parent = input[0].parentNode;
+        
+        $(parent).prepend(scoreTpl({
             placeholder: response.getMappingAttribute('defaultValue')
         }));
-        this.$scoreDiv.prepend(this.$responseCorrectScore);
+        input.detach().appendTo(".math-entry-correct-wrap");
+        $(parent).append($addAlternativeBtn);
 
         //add placeholder text to show the default value
         const $scores = $container.find('.math-entry-response-wrap .math-entry-score-input');
