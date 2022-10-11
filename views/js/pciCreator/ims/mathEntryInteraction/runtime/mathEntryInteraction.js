@@ -370,11 +370,11 @@ define([
                     this.$toolbar.after(this.$inputPlaceholder);
                 }
                 if (displayPlaceholder) {
-                    this.$input[index].hide();
+                    this.input[index].hide();
                     this.$inputPlaceholder.show();
 
                 } else {
-                    this.$input[index].css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
+                    this.input[index].css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
                     this.$inputPlaceholder.hide();
                 }
                 this.focusSelectedInput()
@@ -409,7 +409,7 @@ define([
                 var maxWidth, lineWidth, cache, nodes, node, index, length, block;
 
                 if (this.config.enableAutoWrap) {
-                    $container = this.$input[index].find(cssSelectors.root);
+                    $container = this.input[index].find(cssSelectors.root);
                     $cursor = $container.find(cssSelectors.cursor);
                     current = $cursor.closest(cssSelectors.root + '>span').get(0);
 
@@ -480,14 +480,14 @@ define([
                 latex = latex
                     .replace(/\\taoGap/g, '\\MathQuillMathField{}')
                     .replace(/\\taoBr/g, '\\embed{br}');
-                this.$input[index].text(latex);
+                this.input[index].text(latex);
             },
 
             /**
              * Gap mode only: render the static math with the editable placeholders
              */
             createMathStatic: function createMathStatic(index = 0) {
-                this.mathField = MQ.StaticMath(this.$input[index].get(0));
+                this.mathField = MQ.StaticMath(this.input[index].get(0));
 
                 const gapFields = this.getGapFields();
                 gapFields.forEach(field => {
@@ -500,7 +500,7 @@ define([
              * This will be helpful to know on which field the buttons will act on.
              */
             monitorActiveGapField: function monitorActiveGapField(index = 0) {
-                const $editableFields = this.$input[index].find('.mq-editable-field');
+                const $editableFields = this.input[index].find('.mq-editable-field');
 
                 this._activeGapFieldIndex = null;
 
@@ -522,7 +522,7 @@ define([
                         $(input).click(e => {
                             if (this.inResponseState() && !this.inGapMode()) {
                                 const config = this.getMqConfig();
-                                this.mathField = MQ.MathField(this.$input[index].get(0), config);
+                                this.mathField = MQ.MathField(this.input[index].get(0), config);
                                 this.mathField.focus();
                             }
                         });
@@ -535,9 +535,9 @@ define([
                     e.preventDefault();
                     e.stopImmediatePropagation();
                     const dataIndex = parseInt($(e.target).closest('div').attr('data-index'));
-                    const inputId = this.$input.findIndex(i => i[0].parentElement.dataset.index == dataIndex)
+                    const inputId = this.input.findIndex(i => i[0].parentElement.dataset.index == dataIndex)
                     $(e.target).parents('.math-entry-response-wrap').remove();
-                    this.$input.splice(inputId, 1);
+                    this.input.splice(inputId, 1);
                     this.pciInstance.trigger('deleteInput', [inputId]);
                 });
             },
@@ -554,10 +554,10 @@ define([
                 }
                 // if not create it
                 else if (this.mathField && this.mathField instanceof MathQuill && !replaceStatic) {
-                    this.$input[index].empty();
-                    this.mathField = MQ.MathField(this.$input[index].get(0), config);
+                    this.input[index].empty();
+                    this.mathField = MQ.MathField(this.input[index].get(0), config);
                 } else {
-                    this.mathField = MQ.MathField(this.$input[index].get(0), config);
+                    this.mathField = MQ.MathField(this.input[index].get(0), config);
                 }
             },
 
@@ -658,8 +658,8 @@ define([
                     const alternativeInput = this.$container.find('.math-entry-input')
                     if (alternativeInput.length > 0) {
                         const lastInput = alternativeInput[alternativeInput.length - 1];
-                        this.$input.push($(lastInput));
-                        const keysInput = Object.keys(this.$input)
+                        this.input.push($(lastInput));
+                        const keysInput = Object.keys(this.input)
                         const index = keysInput[keysInput.length - 1];
                         if (this.inGapMode()) {
                             this.setMathStaticContent(latex, index)
@@ -920,7 +920,7 @@ define([
 
                 this.$container = $(dom);
                 this.$toolbar = this.$container.find('.toolbar');
-                this.$input = [this.$container.find('.math-entry-input')];
+                this.input = [this.$container.find('.math-entry-input')];
 
                 this.render(config);
             },
@@ -1085,7 +1085,7 @@ define([
             pciInstance.on('latexGapInput', function (gapLatex, indexInput) {
                 if (gapLatex.base && _.isArray(gapLatex.base.string)) {
                     const config = mathEntryInteraction.getMqConfig();
-                    mathEntryInteraction.mathField = MQ.StaticMath(mathEntryInteraction.$input[indexInput].get(0), config);
+                    mathEntryInteraction.mathField = MQ.StaticMath(mathEntryInteraction.input[indexInput].get(0), config);
                     const gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
                         if (gapLatex.base.string[index] !== undefined) {
