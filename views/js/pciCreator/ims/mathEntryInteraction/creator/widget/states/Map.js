@@ -221,8 +221,13 @@ define([
                     this.correctResponses[editIdIndex] = latex;
                 } else if (this.inGapMode(this) === true && editIdIndex !== null) {
                     const response = interaction.getResponse();
-                    if (response !== null) {
+                    if (response !== null && response.base.string.length > 0) {
                         this.correctResponses[editIdIndex] = response.base.string;
+                    } else {
+                        if (editIdIndex === 0) {
+                            const newResponse = this.getGapResponseObject(latex);
+                            this.correctResponses[editIdIndex] = newResponse.base.string[0];
+                        }
                     }
                 }
             }
@@ -257,9 +262,9 @@ define([
                     if (this.correctResponses.length > inputs.length && index > 0) {
                         this.addAlternativeInput(this.activeEditId)
                     } else {
-                        interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId]]);
+                        interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId], this.activeEditId]);
                         const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
-                        if (scoreInput.length > 0) {
+                        if (scoreInput.length > 0 && index < 1) {
                             scoreInput[0].value = mapEntries && mapEntries[value] || responseDeclaration.getMappingAttribute('defaultValue') || 0
                         }
                     }
@@ -407,7 +412,7 @@ define([
         $('button.math-entry-response-correct').before(alternativeFormTpl({
             index: Number(dataIndex) + 1,
             placeholder: response.getMappingAttribute('defaultValue'),
-            score: mapEntries.length > 0 && mapEntries[this.correctResponses[responseId]] || response.getMappingAttribute('defaultValue')
+            score: responseId !== 0 && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses[responseId]] || response.getMappingAttribute('defaultValue')
         }));
         // show tooltip
         tooltip.lookup($('.answer-delete'));

@@ -1078,12 +1078,14 @@ define([
                 mathEntryInteraction.postRender();
             });
 
-            pciInstance.on('latexInput', function (latex) {
+            pciInstance.on('latexInput', function (latex, indexInput = 0) {
+                const config = mathEntryInteraction.getMqConfig();
+                mathEntryInteraction.mathField = MQ.MathField(mathEntryInteraction.inputs[indexInput].get(0), config);
                 mathEntryInteraction.setLatex(latex);
                 mathEntryInteraction.mathField.focus();
             });
 
-            pciInstance.on('latexGapInput', function (gapLatex, indexInput) {
+            pciInstance.on('latexGapInput', function (gapLatex, indexInput = 0) {
                 if (gapLatex.base && _.isArray(gapLatex.base.string)) {
                     const config = mathEntryInteraction.getMqConfig();
                     mathEntryInteraction.mathField = MQ.StaticMath(mathEntryInteraction.inputs[indexInput].get(0), config);
