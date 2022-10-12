@@ -45,10 +45,9 @@ define([
     tooltip
 ) {
     'use strict';
-    hb.registerHelper('increaseIndex', function (value, options) {
+    hb.registerHelper('increaseIndex', function (value) {
         return parseInt(value) + 1;
     });
-    const $addAlternativeBtn = $(addAlternativeBtn());
     const MathEntryInteractionStateResponse = stateFactory.create(
         Map,
         function init() {
@@ -76,7 +75,7 @@ define([
             interaction = this.widget.element;
             this.gapTemplate = interaction.prop('gapExpression');
         }
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.initForm = function initForm() {
         const interaction = this.widget.element;
@@ -109,7 +108,7 @@ define([
             },
             upperThreshold: Number.MAX_SAFE_INTEGER,
             syncValues: true
-        });     
+        });
         this.initResponseForm();
         this.createScoreResponse();
         this.initEditingOptions();
@@ -117,7 +116,7 @@ define([
 
         // show tooltip
         tooltip.lookup($responseForm);
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.initResponseForm = function initResponseForm() {
         if (this.correctResponses.length > 0) {
@@ -147,24 +146,26 @@ define([
         }
 
         this.correctResponses[0] = newCorrectAnswer;
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.createScoreResponse = function createScoreResponse() {
-        const $container = this.widget.$container;        
+        const $addAlternativeBtn = $(addAlternativeBtn());
+        const $container = this.widget.$container;
         if ($container.find('.math-entry-response-wrap').length > 0) {
-            return false
+            return false;
         }
-        
+
         const interaction = this.widget.element;
         const response = interaction.getResponseDeclaration();
 
         const input = $container.find('.math-entry-input');
         const parent = input[0].parentNode;
-        
+
         $(parent).prepend(scoreTpl({
             placeholder: response.getMappingAttribute('defaultValue')
         }));
-        input.detach().appendTo(".math-entry-correct-wrap");
+        const $correct = $container.find('.math-entry-correct-wrap');
+        input.detach().appendTo($correct);
         $(parent).append($addAlternativeBtn);
 
         //add placeholder text to show the default value
@@ -184,25 +185,25 @@ define([
         formElement.initWidget($container);
         formElement.setChangeCallbacks($container, response,
             {
-                mathEntryScoreInput: function (response, value) {
+                mathEntryScoreInput: function (rsp, value) {
                     const key = $(this.widget).data('for');
                     if (value === '') {
-                        response.removeMapEntry(key);
+                        rsp.removeMapEntry(key);
                     } else {
-                        response.setMapEntry(key, value, true);
+                        rsp.setMapEntry(key, value, true);
                     }
 
                 }
             }
         );
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.getExistingCorrectAnswerOptions = function getExistingCorrectAnswerOptions() {
         const interaction = this.widget.element;
 
         const mapEntries = interaction.getResponseDeclaration().getMapEntries();
         return _.keys(mapEntries) || [];
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.initResponseChangeEventListener = function initResponseChangeEventListener() {
         const interaction = this.widget.element;
@@ -211,11 +212,11 @@ define([
             if (interaction.prop('inResponseState')) {
                 let editIdIndex = 0;
                 if (typeof index === 'number') {
-                    editIdIndex = index 
+                    editIdIndex = index;
                 } else if (typeof this.activeEditId === 'number') {
-                    editIdIndex = this.activeEditId
+                    editIdIndex = this.activeEditId;
                 } else if (typeof parentIndex === 'number') {
-                    editIdIndex = parentIndex
+                    editIdIndex = parentIndex;
                 }
                 if (this.inGapMode(this) === false && editIdIndex !== null) {
                     this.correctResponses[editIdIndex] = latex;
@@ -232,13 +233,13 @@ define([
                 }
             }
         });
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.removeResponseChangeEventListener = function removeResponseChangeEventListener() {
         const interaction = this.widget.element;
 
         interaction.offPci('responseChange');
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.initEditingOptions = function initEditingOptions() {
         this.toggleResponseMode(true);
@@ -253,27 +254,27 @@ define([
                 this.activeEditId = index;
                 if (this.inGapMode() === true) {
                     if (this.correctResponses.length > inputs.length && index > 0) {
-                        this.addAlternativeInput(this.activeEditId)
+                        this.addAlternativeInput(this.activeEditId);
                     } else {
                         const response = this.getGapResponseObject(value);
                         interaction.triggerPci('latexGapInput', [response, this.activeEditId]);
                     }
                 } else {
                     if (this.correctResponses.length > inputs.length && index > 0) {
-                        this.addAlternativeInput(this.activeEditId)
+                        this.addAlternativeInput(this.activeEditId);
                     } else {
                         interaction.triggerPci('latexInput', [this.correctResponses[this.activeEditId], this.activeEditId]);
                         const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
                         if (scoreInput.length > 0 && index < 1) {
-                            scoreInput[0].value = mapEntries && mapEntries[value] || responseDeclaration.getMappingAttribute('defaultValue') || 0
+                            scoreInput[0].value = mapEntries && mapEntries[value] || responseDeclaration.getMappingAttribute('defaultValue') || 0;
                         }
                     }
-                }            
-            })
+                }
+            });
         }
         this.activeEditId = null;
-        
-    }
+
+    };
 
     // forming gap response object to be further processed by the latexGapInput event
     MathEntryInteractionStateResponse.prototype.getGapResponseObject = function getGapResponseObject(response) {
@@ -281,8 +282,8 @@ define([
             base: {
                 string: response.split(',')
             }
-        }
-    }
+        };
+    };
 
     // removing all saved map entries
     MathEntryInteractionStateResponse.prototype.clearMapEntries = function clearMapEntries() {
@@ -293,11 +294,11 @@ define([
         _.keys(mapEntries).forEach(function (mapKey) {
             response.removeMapEntry(mapKey, true);
         });
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
         const interaction = this.widget.element;
-        interaction.onPci('deleteInput', (inputId) => { 
+        interaction.onPci('deleteInput', (inputId) => {
             if (this.correctResponses[inputId]) {
                 if (this.inGapMode() === true) {
                     this.activeEditId = inputId;
@@ -307,8 +308,8 @@ define([
                 }
                 this.correctResponses.splice(inputId, 1);
             }
-        })
-    }
+        });
+    };
 
 
     /**
@@ -317,16 +318,16 @@ define([
     MathEntryInteractionStateResponse.prototype.removeDeleteListeners = function removeDeleteListeners() {
         const $deleteButtons = this.widget.$container.find('.entry-config');
         $deleteButtons.find('.answer-delete').off('click');
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.removeAddButtonListener = function removeAddButtonListener() {
-        $addAlternativeBtn.off('click');
-    }
+        this.widget.$container.find('.math-entry-response-correct.btn-info').off('click');
+    };
 
     MathEntryInteractionStateResponse.prototype.destroyForm = function destroyForm() {
         const $responseForm = this.widget.$responseForm;
         $responseForm.find('.mathEntryInteraction').remove();
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.saveAnswers = function saveAnswers() {
         const interaction = this.widget.element;
@@ -341,18 +342,18 @@ define([
         }
         const score = [];
         if (this.correctResponses.length) {
-            const scoreInput = this.widget.$container.find('.math-entry-score-input')
+            const scoreInput = this.widget.$container.find('.math-entry-score-input');
             scoreInput.map(input => {
                 score.push(scoreInput[input].value);
-            })
+            });
         }
 
         this.correctResponses.forEach((response, index) => {
-            const scoreValue = score[index] ? score[index] : responseDeclaration.getMappingAttribute('defaultValue')
+            const scoreValue = score[index] ? score[index] : responseDeclaration.getMappingAttribute('defaultValue');
             responseDeclaration.setMapEntry(response, scoreValue, false);
             responseDeclaration.setCorrect(this.correctResponses[0]);
         });
-    }
+    };
 
     /**
      *   if in gap mode: will empty all the gap fields
@@ -365,7 +366,7 @@ define([
 
             interaction.prop('gapExpression', this.gapTemplate);
         }
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.toggleResponseMode = function toggleResponseMode(value) {
         const interaction = this.widget.element;
@@ -374,21 +375,21 @@ define([
             interaction.prop('inResponseState', value);
             interaction.triggerPci('configChange', [interaction.getProperties()]);
         }
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.inGapMode = function inGapMode() {
         const interaction = this.widget.element;
         const useGapExpression = interaction.prop('useGapExpression');
         return useGapExpression && useGapExpression !== 'false' || false;
-    }
+    };
 
     MathEntryInteractionStateResponse.prototype.initAlternativeInput = function initAlternativeInput() {
-        $addAlternativeBtn.on('click', () => {
-            this.addAlternativeInput(0)
+        this.widget.$container.find('.math-entry-response-correct.btn-info').on('click', () => {
+            this.addAlternativeInput(0);
         });
-    }
+    };
 
-    MathEntryInteractionStateResponse.prototype.addAlternativeInput = function addAlternativeInput(responseId = 0) { 
+    MathEntryInteractionStateResponse.prototype.addAlternativeInput = function addAlternativeInput(responseId = 0) {
         const interaction = this.widget.element;
         const $container = this.widget.$container;
         const response = interaction.getResponseDeclaration();
@@ -403,13 +404,13 @@ define([
 
         let mapEntryResponse = Object.keys(mapEntries);
         let gapValues = mapEntryResponse[responseId] ? this.getGapResponseObject(mapEntryResponse[responseId]) : null;
-        if (this.inGapMode() === true) { 
-            responseValue = this.gapTemplate
+        if (this.inGapMode() === true) {
+            responseValue = this.gapTemplate;
         } else {
-            responseValue = this.correctResponses[responseId]
+            responseValue = '';
         }
 
-        $('button.math-entry-response-correct').before(alternativeFormTpl({
+        $container.find('button.math-entry-response-correct').before(alternativeFormTpl({
             index: Number(dataIndex) + 1,
             placeholder: response.getMappingAttribute('defaultValue'),
             score: responseId !== 0 && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses[responseId]] || response.getMappingAttribute('defaultValue')
@@ -430,7 +431,7 @@ define([
         });
         interaction.triggerPci('addAlternative', [responseValue, gapValues]);
         this.initDeletingOptions();
-    }
+    };
 
     return MathEntryInteractionStateResponse;
 });
