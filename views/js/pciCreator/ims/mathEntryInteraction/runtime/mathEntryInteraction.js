@@ -45,7 +45,7 @@ define([
         autoWrap: 'mq-tao-wrap'
     };
     var cssSelectors = _.mapValues(cssClass, function (cls) {
-        return '.' + cls;
+        return `.${cls}`;
     });
     var reSpace = /^(\s|&nbsp;)+$/;
     var MQ = MathQuill.getInterface(2);
@@ -58,13 +58,13 @@ define([
      */
     function htmlMarkup(cls, tag) {
         tag = tag || 'div';
-        return '<' + tag + ' class="' + cls + '"></' + tag + '>';
+        return `<${tag} class="${cls}"></ ${tag}>`;
     }
 
     /**
      * Computes the full width of an element, plus its margin.
      * This approach is more reliable than jQuery, as the decimals part is taken into account.
-     * @param element
+     * @param {any} element
      * @returns {Number}
      */
     function getWidth(element) {
@@ -112,11 +112,11 @@ define([
         }
     };
 
-    var mathEntryInteractionFactory = function () {
+    const mathEntryInteractionFactory = function () {
         return {
 
             /**
-             * return {Boolean} - Are we in a TAO QTI Creator context?
+             * @returns {Boolean} - Are we in a TAO QTI Creator context?
              */
             inQtiCreator: function isInCreator() {
                 if (_.isUndefined(this._inQtiCreator) && this.$container) {
@@ -127,6 +127,7 @@ define([
             },
 
             /**
+             * @param {any} label
              * @returns {string} - Localazed label
              */
             getLabel: function getLabel(label) {
@@ -160,6 +161,7 @@ define([
 
             /**
              * Render PCI
+             * @param {object} config
              */
             render: function render(config) {
                 this.initConfig(config);
@@ -360,6 +362,7 @@ define([
 
             /**
              * Create a placeholder that will be displayed instead off the MathQuill field in authoring mode
+             * @param {boolean} displayPlaceholder
              */
             togglePlaceholder: function togglePlaceholder(displayPlaceholder, index = 0) {
                 if (!this.$inputPlaceholder) {
@@ -382,8 +385,9 @@ define([
 
             /**
              * Create a title for response that will be displayed in Response mode
+             * @param {boolean} displayResponseCorrect
              */
-            toggleResponseCorrectRow: function toggleResponseCorrectRow(displayResponseCorrect) {    
+            toggleResponseCorrectRow: function toggleResponseCorrectRow(displayResponseCorrect) {
                 const $responseBtn = this.$container.find('.math-entry-response-correct');
                 const $responseWrap = this.$container.find('.math-entry-response-wrap');
                 if (displayResponseCorrect) {
@@ -403,6 +407,7 @@ define([
 
             /**
              * Will wrap the content, to avoid overflow, if autoWrap is enabled
+             * @param {number} index
              */
             autoWrapContent: function autoWrapContent(index = 0) {
                 var $container, $cursor, current, lastSpace, lineBreak;
@@ -475,6 +480,7 @@ define([
             /**
              * Gap mode only: fill the mathfield markup with the math expression before creating the MathQuill instance
              * @param {String} latex - the math expression with gaps
+             * @param {String} index
              */
             setMathStaticContent: function setMathStaticContent(latex, index = 0) {
                 latex = latex
@@ -485,6 +491,7 @@ define([
 
             /**
              * Gap mode only: render the static math with the editable placeholders
+             * @param {String} index
              */
             createMathStatic: function createMathStatic(index = 0) {
                 this.mathField = MQ.StaticMath(this.inputs[index].get(0));
@@ -506,11 +513,11 @@ define([
                 this._activeGapFieldIndex = null;
 
                 if ($editableFields.length) {
-                    $editableFields.each(function (fieldIndex) {
-                        $(this)
+                    $.each($editableFields, (fieldIndex, input) => {
+                        $(input)
                             .off(ns)
-                            .on('click' + ns + ' keyup' + ns, function () {
-                                self._activeGapFieldIndex = fieldIndex;
+                            .on(`click${  ns  } keyup${  ns}`, function () {
+                                this._activeGapFieldIndex = fieldIndex;
                             });
                     });
                 }
@@ -520,19 +527,19 @@ define([
                 const focusInputSelected = this.$container.find('.math-entry-input');
                 if (focusInputSelected.length > 1) {
                     $.each(focusInputSelected, (index, input) => {
-                        $(input).click(e => {
+                        $(input).on('click', e => {
                             if (this.inResponseState() && !this.inGapMode()) {
                                 const config = this.getMqConfig();
                                 this.mathField = MQ.MathField(this.inputs[index].get(0), config);
                                 this.mathField.focus();
                             }
                         });
-                    }) 
+                    });
                 }
             },
 
             removeSelectedInput: function removeSelectedInput() {
-                $('.answer-delete').click(e => {
+                $('.answer-delete', this.$container).on('click', e => {
                     e.preventDefault();
                     e.stopImmediatePropagation();
                     const dataIndex = parseInt($(e.target).closest('div').attr('data-index'));
@@ -545,6 +552,8 @@ define([
 
             /**
              * Transform a DOM element into a MathQuill Editable Field
+             * @param {boolean} replaceStatic
+             * @param {number} index
              */
             createMathEditable: function createMathEditable(replaceStatic, index = 0) {
                 const config = this.getMqConfig();
@@ -653,6 +662,8 @@ define([
 
             /**
              * In Qti Creator mode only: insert an alternative response in a math expression
+             * @param {string} latex
+             * @param {object} gapValues
              */
             addAlternative: function addAlternative(latex = '\\embed{gap}', gapValues = null) {
                 if (this.inQtiCreator()) {
@@ -766,8 +777,8 @@ define([
                                 '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
                                 '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
                             '</svg>',
-                            latex: '\\begin{matrix}\\\\\\end{matrix}', 
-                            fn: 'write', 
+                            latex: '\\begin{matrix}\\\\\\end{matrix}',
+                            fn: 'write',
                             desc: 'Matrix with 2 rows'
                         },
                         matrix_2row_2col: {
@@ -776,9 +787,9 @@ define([
                                 '<rect id="svg_2" height="50" width="50" y="61" x="0" stroke="#fff" fill="#7f7f7f"/>' +
                                 '<rect id="svg_3" height="50" width="50" y="0" x="57" stroke="#fff" fill="#7f7f7f"/>' +
                                 '<rect id="svg_4" height="50" width="50" y="61" x="57" stroke="#fff" fill="#7f7f7f"/>' +
-                            '</svg>', 
-                            latex: '\\begin{matrix}&\\\\&\\end{matrix}', 
-                            fn: 'write', 
+                            '</svg>',
+                            latex: '\\begin{matrix}&\\\\&\\end{matrix}',
+                            fn: 'write',
                             desc: 'Matrix with 2 rows and 2 colmns'
                         },
                     },
@@ -807,8 +818,8 @@ define([
 
                 // slightly changing fraction tool styles for a vertical fraction style in japanese locale
                 if (this.inJapanese()) {
-                    var dataId = 'frac';
-                    var fracTool = this.$toolbar.find(`[data-identifier='${dataId}']`)
+                    const dataId = 'frac';
+                    const fracTool = this.$toolbar.find(`[data-identifier='${dataId}']`);
                     fracTool.addClass('vertical-fraction-tool');
                 }
             },
@@ -867,21 +878,21 @@ define([
             addToolbarListeners: function addToolbarListeners() {
                 var self = this;
                 this.$toolbar
-                    .off('mousedown' + ns)
-                    .on('mousedown' + ns, function (e) {
+                    .off(`mousedown${  ns}`)
+                    .on(`mousedown${  ns}`, function (e) {
 
                         var $target,
                             fn = '',
-                            latex = ''
+                            latex = '';
 
                         if ($(e.target).data('fn')) {
                             $target = $(e.target),
-                                fn = $target.data('fn'),
-                                latex = $target.data('latex');
+                            fn = $target.data('fn'),
+                            latex = $target.data('latex');
                         } else {
                             $target = $(e.target.parentElement),
-                                fn = $target.data('fn'),
-                                latex = $target.data('latex');
+                            fn = $target.data('fn'),
+                            latex = $target.data('latex');
                         }
 
 
@@ -939,7 +950,7 @@ define([
                         const gaps = response.base.string.split(',');
                         gapFields.forEach(function (gap, index) {
                             gap.latex(gaps[index]);
-                        })
+                        });
                     }
 
                 } else {
@@ -975,7 +986,7 @@ define([
                     };
                 }
 
-                return response.base.string.replace(/,/g, '') !== '' ? response : {base: {string: ''}}
+                return response.base.string.replace(/,/g, '') !== '' ? response : {base: {string: ''}};
             },
             /**
              * Remove the current response set in the interaction
