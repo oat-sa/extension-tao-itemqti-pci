@@ -114,8 +114,8 @@ define([
             upperThreshold: Number.MAX_SAFE_INTEGER,
             syncValues: true
         });
-        this.initResponseForm();
         this.createScoreResponse();
+        this.initResponseForm();
         this.initEditingOptions();
         this.initAlternativeInput();
 
@@ -133,6 +133,7 @@ define([
 
         // get first id
         const $input = this.widget.$container.find('.math-entry-input');
+        const $score = this.widget.$container.find('.math-entry-response-wrap .math-entry-score-input');
         let id = $input.data('index') || null;
         if (!id) {
             id = this.uid();
@@ -141,15 +142,21 @@ define([
             this.uidCounter = id.split('-')[1];
             this.uidCounter++;
         }
+        $score[0].dataset.for = id;
 
         let existingReponses = this.getExistingCorrectAnswerOptions();
         if (existingReponses.length) {
+            const response = interaction.getResponseDeclaration();
+            const mapEntries = response.getMapEntries();
             existingReponses.forEach((entry, index) => {
                 let newId =  id;
                 if (index > 0) {
                     newId = this.uid();
                 }
                 this.correctResponses.set(newId, entry);
+                if (mapEntries[entry]) {
+                    $score[0].value = mapEntries[entry] || response.getMappingAttribute('defaultValue');
+                }
             });
         } else {
             if (this.inGapMode() === true) {
@@ -187,16 +194,7 @@ define([
 
         const $input = $container.find('.math-entry-input');
         const parent = $input[0].parentNode;
-        let id = $input.data('index');
-        if (!id) {
-            id = this.uid();
-            $input[0].dataset.index = id;
-        } else {
-            this.uidCounter = id.split('-')[1];
-            this.uidCounter++;
-        }
         $(parent).prepend(scoreTpl({
-            index: id,
             placeholder: response.getMappingAttribute('defaultValue')
         }));
         const $correct = $container.find('.math-entry-correct-wrap');
@@ -215,16 +213,6 @@ define([
                 $score.attr('placeholder', data.value);
             }
         });
-
-        if (this.correctResponses.size) {
-            const [correctIndex] = this.correctResponses.keys();
-            $input.value = this.correctResponses.get(correctIndex);
-
-            const mapEntries = response.getMapEntries();
-            if (mapEntries[$input.value]) {
-                $score[0].value = mapEntries[$input.value] || response.getMappingAttribute('defaultValue');
-            }
-        }
         //init form javascript
         formElement.initWidget($container);
         formElement.setChangeCallbacks($container, response,
@@ -340,13 +328,11 @@ define([
     MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
         const interaction = this.widget.element;
         interaction.onPci('deleteInput', (inputId) => {
-            if (this.correctResponses.get(inputId)) {
+            if (this.correctResponses.has(inputId)) {
                 if (this.inGapMode() === true) {
-                    this.activeEditId = inputId;
                     this.emptyGapFields();
-                } else {
-                    this.activeEditId = null;
                 }
+                this.activeEditId = null;
                 this.correctResponses.delete(inputId);
             }
         });

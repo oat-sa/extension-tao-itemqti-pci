@@ -561,7 +561,7 @@ define([
             /**
              * Transform a DOM element into a MathQuill Editable Field
              * @param {boolean} replaceStatic
-             * @param {number} index
+             * @param {string} index
              */
             createMathEditable: function createMathEditable(replaceStatic, index) {
                 const config = this.getMqConfig();
@@ -587,8 +587,9 @@ define([
             /**
              * Set the latex of the existing editable mathFields, whether in standard or gap mode.
              * @param {String|String[]} latex - String for standard mode, array of strings for gap mode.
+             * @param {string} indexInput
              */
-            setLatex: function setLatex(latex) {
+            setLatex: function setLatex(latex, indexInput) {
                 if (this.inGapMode() && _.isArray(latex)) {
                     const gapFields = this.getGapFields();
                     latex.forEach(function (latexExpr, i) {
@@ -603,9 +604,13 @@ define([
                         .replace(/\\taoBr/g, '\\embed{br}')
                         .replace(/\\text\{\}/g, '\\text{ }');  // quick fix for edge case that introduce empty text block
                     if (!this.mathField) {
-                        const [inputIndex] = this.inputs.keys();
+                        let index = indexInput;
+                        if (!indexInput.length) {
+                            const [inputIndex] = this.inputs.keys();
+                            index = inputIndex;
+                        }
                         const config = this.getMqConfig();
-                        this.mathField = MQ.MathField(this.inputs.get(inputIndex), config);
+                        this.mathField = MQ.MathField(this.inputs.get(index), config);
                     }
                     this.mathField.latex(latex);
                 }
@@ -1113,13 +1118,19 @@ define([
             });
 
             pciInstance.on('latexInput', function (latex, indexInput) {
+                if (!mathEntryInteraction.inputs.has(indexInput)) {
+                    return false;
+                }
                 mathEntryInteraction.mathField = MQ.MathField(mathEntryInteraction.inputs.get(indexInput), config);
-                mathEntryInteraction.setLatex(latex);
+                mathEntryInteraction.setLatex(latex, indexInput);
                 mathEntryInteraction.mathField.focus();
             });
 
             pciInstance.on('latexGapInput', function (gapLatex, indexInput) {
                 if (gapLatex.base && _.isArray(gapLatex.base.string)) {
+                    if (!mathEntryInteraction.inputs.has(indexInput)) {
+                        return false;
+                    }
                     mathEntryInteraction.mathField = MQ.StaticMath(mathEntryInteraction.inputs.get(indexInput), config);
                     const gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
