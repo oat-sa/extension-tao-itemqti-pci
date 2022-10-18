@@ -49,6 +49,7 @@ define([
         return parseInt(value) + 1;
     });
     let uidCounter = 0;
+
     const MathEntryInteractionStateResponse = stateFactory.create(
         MapState,
         function init() {
@@ -88,6 +89,14 @@ define([
             interaction = this.widget.element;
             this.gapTemplate = interaction.prop('gapExpression');
         }
+    };
+
+    MathEntryInteractionStateResponse.prototype.checkValues = function (index) {
+        let inputValue = {};
+        if (this.correctResponses.has(index) && Object.keys(this.correctResponses.get(index)).includes('input')) {
+            inputValue = { input: this.correctResponses.get(index).input };
+        }
+        return inputValue;
     };
 
     MathEntryInteractionStateResponse.prototype.uid = function uid() {
@@ -157,11 +166,7 @@ define([
                 if (index > 0) {
                     newId = this.uid();
                 }
-
-                let inputValue = {};
-                if (this.correctResponses.has(newId) && Object.keys(this.correctResponses.get(newId)).includes('input')) {
-                    inputValue = { input: this.correctResponses.get(newId).input };
-                }
+                const inputValue = this.checkValues(newId);
                 this.correctResponses.set(newId, Object.assign(inputValue, { response: entry }));
 
                 if (mapEntries[entry] && index < 1) {
@@ -186,12 +191,8 @@ define([
                 newCorrectAnswer = '';
                 this.toggleResponseMode(false);
             }
-
-            let inputValue = {};
-            if (this.correctResponses.has(id) && Object.keys(this.correctResponses.get(id)).includes('input')) {
-                inputValue = this.correctResponses.get(id).input;
-            }
-            this.correctResponses.set(id, Object.assign({ input: inputValue }, { response: newCorrectAnswer }));
+            const inputValue = this.checkValues(id);
+            this.correctResponses.set(id, Object.assign(inputValue, { response: newCorrectAnswer }));
         }
         this.activeEditId = id;
     };
@@ -262,29 +263,16 @@ define([
                     editIdIndex = this.activeEditId;
                 }
                 if (this.inGapMode(this) === false && editIdIndex !== null) {
-
-                    let inputValue = {};
-                    if (this.correctResponses.has(editIdIndex) && Object.keys(this.correctResponses.get(editIdIndex)).includes('input')) {
-                        inputValue = { input: this.correctResponses.get(editIdIndex).input };
-                    }
+                    const inputValue = this.checkValues(editIdIndex);
                     this.correctResponses.set(editIdIndex, Object.assign(inputValue, { response: latex }));
                 } else if (this.inGapMode(this) === true && editIdIndex !== null) {
                     const response = interaction.getResponse();
                     if (response !== null && response.base.string.length > 0) {
-
-                        let inputValue = {};
-                        if (this.correctResponses.has(editIdIndex) && Object.keys(this.correctResponses.get(editIdIndex)).includes('input')) {
-                            inputValue = { input: this.correctResponses.get(editIdIndex).input };
-                        }
+                        const inputValue = this.checkValues(editIdIndex);
                         this.correctResponses.set(editIdIndex, Object.assign(inputValue, { response: response.base.string }));
                     } else {
                         if (!!editIdIndex) {
-                            const newResponse = this.getGapResponseObject(latex);
-
-                            let inputValue = {};
-                            if (this.correctResponses.has(editIdIndex) && Object.keys(this.correctResponses.get(editIdIndex)).includes('input')) {
-                                inputValue = { input: this.correctResponses.get(editIdIndex).input };
-                            }
+                            const inputValue = this.checkValues(editIdIndex);
                             this.correctResponses.set(editIdIndex, Object.assign(inputValue, { response: response.base.string[0] }));
                         }
                     }
