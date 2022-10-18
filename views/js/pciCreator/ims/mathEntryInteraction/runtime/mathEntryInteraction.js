@@ -130,6 +130,50 @@ define([
         }
     };
 
+    function propertyManagerFactory() {
+        return {
+            list: new Map(),
+            get(index) {
+                return this.list.get(index);
+            },
+            getFirstItem(index) {
+                if (typeof index === 'undefined') {
+                    const [inputIndex] = this.list.keys();
+                    return this.list.get(inputIndex);
+                }
+                return this.list.get(index);
+            },
+            getFirstIndex(index) {
+                if (typeof index === 'undefined') {
+                    const [inputIndex] = this.list.keys();
+                    return inputIndex;
+                }
+                return index;
+            },
+            set(index, value) {
+                return this.list.set(index, value);
+            },
+            delete(index) {
+                return this.list.delete(index);
+            },
+            keys() {
+                return this.list.keys();
+            },
+            values() {
+                return this.list.values();
+            },
+            size() {
+                return this.list.size;
+            },
+            has(index) {
+                return this.list.has(index);
+            },
+            clear() {
+                return this.list.clear();
+            }
+        };
+    }
+
     const mathEntryInteractionFactory = function () {
         return {
 
@@ -385,11 +429,11 @@ define([
                 }
                 const [index] = this.inputs.keys();
                 if (displayPlaceholder) {
-                    $(this.inputs.get(index)).hide();
+                    $(this.inputs.get(index).input).hide();
                     this.$inputPlaceholder.show();
 
                 } else {
-                    $(this.inputs.get(index)).css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
+                    $(this.inputs.get(index).input).css({display: 'block'}); // not using .show() on purpose, as it results in 'inline-block' instead of 'block'
                     this.$inputPlaceholder.hide();
                 }
                 this.focusSelectedInput();
@@ -426,7 +470,7 @@ define([
 
                 if (this.config.enableAutoWrap) {
                     const [inputIndex] = this.inputs.keys();
-                    $container = $(this.inputs.get(inputIndex)).find(cssSelectors.root);
+                    $container = $(this.inputs.get(inputIndex).input).find(cssSelectors.root);
                     $cursor = $container.find(cssSelectors.cursor);
                     current = $cursor.closest(`${cssSelectors.root  }>span`).get(0);
 
@@ -495,11 +539,11 @@ define([
              * @param {String} index
              */
             setMathStaticContent: function setMathStaticContent(latex, index) {
-                index = getIndex(this.inputs, index);
+                const item = this.inputs.getFirstItem(index);
                 latex = latex
                     .replace(/\\taoGap/g, '\\MathQuillMathField{}')
                     .replace(/\\taoBr/g, '\\embed{br}');
-                $(this.inputs.get(index)).text(latex);
+                $(item.input).text(latex);
             },
 
             /**
@@ -507,8 +551,8 @@ define([
              * @param {number} index
              */
             createMathStatic: function createMathStatic(index) {
-                index = getIndex(this.inputs, index);
-                this.mathField = MQ.StaticMath(this.inputs.get(index));
+                const item = this.inputs.getFirstItem(index);
+                this.mathField = MQ.StaticMath(item.input);
 
                 const gapFields = this.getGapFields();
                 gapFields.forEach(field => {
@@ -522,7 +566,7 @@ define([
              */
             monitorActiveGapField: function monitorActiveGapField() {
                 const [index] = this.inputs.keys();
-                const $editableFields = $(this.inputs.get(index)).find('.mq-editable-field');
+                const $editableFields = $(this.inputs.get(index).input).find('.mq-editable-field');
 
                 this._activeGapFieldIndex = null;
 
@@ -545,7 +589,7 @@ define([
                             if (this.inResponseState() && !this.inGapMode()) {
                                 const config = this.getMqConfig();
                                 const inputIndex = input.dataset.index;
-                                this.mathField = MQ.MathField(this.inputs.get(inputIndex), config);
+                                this.mathField = MQ.MathField(this.inputs.get(inputIndex).input, config);
                                 this.mathField.focus();
                             }
                         });
@@ -573,7 +617,7 @@ define([
             createMathEditable: function createMathEditable(replaceStatic, index) {
                 const config = this.getMqConfig();
 
-                index = getIndex(this.inputs, index);
+                const item = this.inputs.getFirstItem(index);
 
                 // if the element already exists, update the config
                 if (this.mathField && this.mathField instanceof MathQuill && replaceStatic === false) {
@@ -581,10 +625,10 @@ define([
                 }
                 // if not create it
                 else if (this.mathField && this.mathField instanceof MathQuill && !replaceStatic) {
-                    $(this.inputs.get(index)).empty();
-                    this.mathField = MQ.MathField(this.inputs.get(index), config);
+                    $(item.input).empty();
+                    this.mathField = MQ.MathField(item.input, config);
                 } else {
-                    this.mathField = MQ.MathField(this.inputs.get(index), config);
+                    this.mathField = MQ.MathField(item.input, config);
                 }
             },
 
@@ -608,9 +652,9 @@ define([
                         .replace(/\\taoBr/g, '\\embed{br}')
                         .replace(/\\text\{\}/g, '\\text{ }');  // quick fix for edge case that introduce empty text block
                     if (!this.mathField) {
-                        index = getIndex(this.inputs, indexInput);
+                        const item = this.inputs.getFirstItem(indexInput);
                         const config = this.getMqConfig();
-                        this.mathField = MQ.MathField(this.inputs.get(index), config);
+                        this.mathField = MQ.MathField(item.input, config);
                     }
                     this.mathField.latex(latex);
                 }
@@ -693,14 +737,15 @@ define([
                 if (this.inQtiCreator()) {
                     const alternativeInput = this.$container.find('.math-entry-input');
                     if (alternativeInput.length > 0) {
-                        const $newInput = $(alternativeInput[alternativeInput.length - 1]);
-                        const id = $newInput[0].dataset.index;
-                        this.inputs.set(id, $newInput[0]);
-                        $newInput.data('index', id);
-                        $newInput.parent().find('.mathEntryScoreInput').data('for', id);
+                        const $newInput = $(`[data-index='${responseId}']`);
+                        let responseValue = {};
+                        if (this.inputs.has(responseId) && Object.keys(this.inputs.get(responseId)).includes('response')) {
+                            responseValue = { response: this.inputs.get(responseId).response };
+                        }
+                        this.inputs.set(responseId, Object.assign(responseValue, { input: $newInput[0] }));
                         if (this.inGapMode()) {
-                            this.setMathStaticContent(latex, id);
-                            this.createMathStatic(id);
+                            this.setMathStaticContent(latex, responseId);
+                            this.createMathStatic(responseId);
                             const gaps = this.getGapFields();
                             if (gapValues && gaps.length > 0) {
                                 gaps.forEach(function (gap, gapIndex) {
@@ -710,7 +755,7 @@ define([
                                 });
                             }
                         } else {
-                            this.createMathEditable(true, id);
+                            this.createMathEditable(true, responseId);
                             this.focusSelectedInput();
                             this.insertLatex(latex, 'write');
                         }
@@ -950,23 +995,22 @@ define([
              * Initialize the PCI :
              * @param {Node} dom
              * @param {Object} config - json
+             * @param {Map} propertyManager
              */
-            initialize: function initialize(dom, config) {
+            initialize: function initialize(dom, config, propertyManager) {
                 this.dom = dom;
                 this.userLanguage = config.userLanguage ? config.userLanguage.replace(/[-_][A-Z].*$/i, '').toLowerCase() : '';
 
                 this.$container = $(dom);
                 this.$toolbar = this.$container.find('.toolbar');
                 const $input = this.$container.find('.math-entry-input');
-                let inputIndex = $input.data('index');
-                if (!inputIndex) {
-                    const id = uid();
-                    $input[0].dataset.index = id;
-                    inputIndex = id;
-                } else {
-                    uidCounter = inputIndex.split('-')[1];
+                const id = uid();
+                this.inputs = propertyManager;
+                let responseValue = {};
+                if (this.inputs.has(id) && Object.keys(this.inputs.get(id)).includes('response')) {
+                    responseValue = { response: this.inputs.get(id).response };
                 }
-                this.inputs = new Map([[inputIndex, $input[0]]]);
+                this.inputs.set(id, Object.assign(responseValue,{input: $input[0]}));
                 this.render(config);
             },
             /**
@@ -1076,10 +1120,11 @@ define([
     qtiCustomInteractionContext.register({
         typeIdentifier: 'mathEntryInteraction',
         getInstance: function getInstance(dom, config, state) {
-            var mathEntryInteraction = mathEntryInteractionFactory();
+            const propertyManager = propertyManagerFactory();
+            const mathEntryInteraction = mathEntryInteractionFactory(propertyManager);
 
             // create a IMS PCI instance object that will be provided in onready
-            var pciInstance = {
+            const pciInstance = {
                 getResponse: function getResponse() {
                     return mathEntryInteraction.getResponse();
                 },
@@ -1097,6 +1142,10 @@ define([
                     pciInstance.off('latexGapInput');
 
                     mathEntryInteraction.destroy();
+                },
+
+                getPropertyManager() {
+                    return propertyManager;
                 }
             };
 
@@ -1104,7 +1153,7 @@ define([
             event.addEventMgr(pciInstance);
 
             // initialize and set previous response/state
-            mathEntryInteraction.initialize(dom, config.properties);
+            mathEntryInteraction.initialize(dom, config.properties, propertyManager);
 
             const boundTo = config.boundTo;
             const responseIdentifier = Object.keys(boundTo)[0];
@@ -1121,7 +1170,7 @@ define([
                 if (!mathEntryInteraction.inputs.has(indexInput)) {
                     return false;
                 }
-                mathEntryInteraction.mathField = MQ.MathField(mathEntryInteraction.inputs.get(indexInput), config);
+                mathEntryInteraction.mathField = MQ.MathField(mathEntryInteraction.inputs.get(indexInput).input, config);
                 mathEntryInteraction.setLatex(latex, indexInput);
                 mathEntryInteraction.mathField.focus();
             });
@@ -1131,7 +1180,7 @@ define([
                     if (!mathEntryInteraction.inputs.has(indexInput)) {
                         return false;
                     }
-                    mathEntryInteraction.mathField = MQ.StaticMath(mathEntryInteraction.inputs.get(indexInput), config);
+                    mathEntryInteraction.mathField = MQ.StaticMath(mathEntryInteraction.inputs.get(indexInput).input, config);
                     const gaps = mathEntryInteraction.getGapFields();
                     gaps.forEach(function (gap, index) {
                         if (typeof gapLatex.base.string[index] !== 'undefined') {
