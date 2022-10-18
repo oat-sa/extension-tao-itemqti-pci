@@ -66,6 +66,20 @@ define([
     }
 
     /**
+     * Get the first element on the inputs Map
+     * @param {Map} inputs
+     * @param {string} index
+     * @returns {string}
+     */
+    function getIndex(inputs, index) {
+        if (typeof index === 'undefined') {
+            const [inputIndex] = inputs.keys();
+            return inputIndex;
+        }
+        return index;
+    }
+
+    /**
      * Computes the full width of an element, plus its margin.
      * This approach is more reliable than jQuery, as the decimals part is taken into account.
      * @param {any} element
@@ -481,10 +495,7 @@ define([
              * @param {String} index
              */
             setMathStaticContent: function setMathStaticContent(latex, index) {
-                const [inputIndex] = this.inputs.keys();
-                if (typeof index === 'undefined') {
-                    index = inputIndex;
-                }
+                index = getIndex(this.inputs, index);
                 latex = latex
                     .replace(/\\taoGap/g, '\\MathQuillMathField{}')
                     .replace(/\\taoBr/g, '\\embed{br}');
@@ -496,10 +507,7 @@ define([
              * @param {number} index
              */
             createMathStatic: function createMathStatic(index) {
-                const [inputIndex] = this.inputs.keys();
-                if (typeof index === 'undefined') {
-                    index = inputIndex;
-                }
+                index = getIndex(this.inputs, index);
                 this.mathField = MQ.StaticMath(this.inputs.get(index));
 
                 const gapFields = this.getGapFields();
@@ -522,7 +530,7 @@ define([
                     $.each($editableFields, (fieldIndex, input) => {
                         $(input)
                             .off(ns)
-                            .on(`click${  ns  } keyup${  ns}`, function () {
+                            .on(`click${  ns  } keyup${  ns}`, () => {
                                 this._activeGapFieldIndex = fieldIndex;
                             });
                     });
@@ -551,8 +559,7 @@ define([
                     e.stopImmediatePropagation();
                     const dataIndex = $(e.target).closest('div').find('.math-entry-input').data('index');
                     $(e.target).parents('.math-entry-response-wrap').remove();
-                    if (dataIndex) {
-                        this.inputs.delete(dataIndex);
+                    if (dataIndex && this.inputs.delete(dataIndex)) {
                         this.pciInstance.trigger('deleteInput', [dataIndex]);
                     }
                 });
@@ -566,10 +573,7 @@ define([
             createMathEditable: function createMathEditable(replaceStatic, index) {
                 const config = this.getMqConfig();
 
-                const [inputIndex] = this.inputs.keys();
-                if (typeof index === 'undefined') {
-                    index = inputIndex;
-                }
+                index = getIndex(this.inputs, index);
 
                 // if the element already exists, update the config
                 if (this.mathField && this.mathField instanceof MathQuill && replaceStatic === false) {
@@ -604,11 +608,7 @@ define([
                         .replace(/\\taoBr/g, '\\embed{br}')
                         .replace(/\\text\{\}/g, '\\text{ }');  // quick fix for edge case that introduce empty text block
                     if (!this.mathField) {
-                        let index = indexInput;
-                        if (!indexInput.length) {
-                            const [inputIndex] = this.inputs.keys();
-                            index = inputIndex;
-                        }
+                        index = getIndex(this.inputs, indexInput);
                         const config = this.getMqConfig();
                         this.mathField = MQ.MathField(this.inputs.get(index), config);
                     }

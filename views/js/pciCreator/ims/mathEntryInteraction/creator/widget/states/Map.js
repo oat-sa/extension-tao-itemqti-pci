@@ -66,6 +66,7 @@ define([
         }
     );
 
+    let uidCounter = 0;
     MathEntryInteractionStateResponse.prototype.initGlobalVariables = function initGlobalVariables() {
         let interaction = this.widget.element;
         this.activeEditId = null;
@@ -79,7 +80,7 @@ define([
     };
 
     MathEntryInteractionStateResponse.prototype.uid = function uid() {
-        return `answer-${this.uidCounter++}`;
+        return `answer-${uidCounter++}`;
     };
 
     MathEntryInteractionStateResponse.prototype.initForm = function initForm() {
