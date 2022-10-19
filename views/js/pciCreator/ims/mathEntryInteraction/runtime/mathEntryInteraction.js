@@ -116,48 +116,25 @@ define([
         }
     };
 
-    function propertyManagerFactory() {
-        return {
-            list: new Map(),
-            get(index) {
-                return this.list.get(index);
-            },
+    /**
+     * Function to have a common Map object to store the responses/inputs list and keep updated
+     * @returns {Map}
+     */
+    function responsesManagerFactory() {
+        const list = new Map();
+        Object.assign(list, {
             getFirstItem(index) {
-                if (typeof index === 'undefined') {
-                    const [inputIndex] = this.list.keys();
-                    return this.list.get(inputIndex);
-                }
-                return this.list.get(index);
+                return list.get(this.getIndex(index));
             },
-            getFirstIndex(index) {
+            getIndex(index) {
                 if (typeof index === 'undefined') {
-                    const [inputIndex] = this.list.keys();
+                    const [inputIndex] = list.keys();
                     return inputIndex;
                 }
                 return index;
-            },
-            set(index, value) {
-                return this.list.set(index, value);
-            },
-            delete(index) {
-                return this.list.delete(index);
-            },
-            keys() {
-                return this.list.keys();
-            },
-            values() {
-                return this.list.values();
-            },
-            size() {
-                return this.list.size;
-            },
-            has(index) {
-                return this.list.has(index);
-            },
-            clear() {
-                return this.list.clear();
             }
-        };
+        });
+        return list;
     }
 
     const mathEntryInteractionFactory = function () {
@@ -981,9 +958,9 @@ define([
              * Initialize the PCI :
              * @param {Node} dom
              * @param {Object} config - json
-             * @param {Map} propertyManager
+             * @param {Map} responsesManager
              */
-            initialize: function initialize(dom, config, propertyManager) {
+            initialize: function initialize(dom, config, responsesManager) {
                 this.dom = dom;
                 this.userLanguage = config.userLanguage ? config.userLanguage.replace(/[-_][A-Z].*$/i, '').toLowerCase() : '';
 
@@ -991,7 +968,7 @@ define([
                 this.$toolbar = this.$container.find('.toolbar');
                 const $input = this.$container.find('.math-entry-input');
                 const id = uid();
-                this.inputs = propertyManager;
+                this.inputs = responsesManager;
                 let responseValue = {};
                 if (this.inputs.has(id) && Object.keys(this.inputs.get(id)).includes('response')) {
                     responseValue = { response: this.inputs.get(id).response };
@@ -1106,8 +1083,8 @@ define([
     qtiCustomInteractionContext.register({
         typeIdentifier: 'mathEntryInteraction',
         getInstance: function getInstance(dom, config, state) {
-            const propertyManager = propertyManagerFactory();
-            const mathEntryInteraction = mathEntryInteractionFactory(propertyManager);
+            const responsesManager = responsesManagerFactory();
+            const mathEntryInteraction = mathEntryInteractionFactory(responsesManager);
 
             // create a IMS PCI instance object that will be provided in onready
             const pciInstance = {
@@ -1130,8 +1107,8 @@ define([
                     mathEntryInteraction.destroy();
                 },
 
-                getPropertyManager() {
-                    return propertyManager;
+                getResponsesManager() {
+                    return responsesManager;
                 }
             };
 
@@ -1139,7 +1116,7 @@ define([
             event.addEventMgr(pciInstance);
 
             // initialize and set previous response/state
-            mathEntryInteraction.initialize(dom, config.properties, propertyManager);
+            mathEntryInteraction.initialize(dom, config.properties, responsesManager);
 
             const boundTo = config.boundTo;
             const responseIdentifier = Object.keys(boundTo)[0];

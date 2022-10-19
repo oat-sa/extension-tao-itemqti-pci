@@ -72,9 +72,9 @@ define([
         this.activeEditId = null;
 
         const pci = this.widget.element.data('pci');
-        const propertyManager = pci.getPropertyManager();
+        const responsesManager = pci.getResponsesManager();
 
-        this.correctResponses = propertyManager;
+        this.correctResponses = responsesManager;
 
         //reset
         const [inputIndex] = this.correctResponses.keys();
@@ -153,7 +153,7 @@ define([
         const $input = this.widget.$container.find('.math-entry-input');
         const $score = this.widget.$container.find('.math-entry-response-wrap .math-entry-score-input');
 
-        let id = this.correctResponses.getFirstIndex();
+        let id = this.correctResponses.getIndex();
         $score[0].dataset.for = id;
         $input[0].dataset.index = id;
 
