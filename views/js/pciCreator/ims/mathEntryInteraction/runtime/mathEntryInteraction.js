@@ -62,21 +62,7 @@ define([
      */
     function htmlMarkup(cls, tag) {
         tag = tag || 'div';
-        return `<${tag} class="${cls}"></ ${tag}>`;
-    }
-
-    /**
-     * Get the first element on the inputs Map
-     * @param {Map} inputs
-     * @param {string} index
-     * @returns {string}
-     */
-    function getIndex(inputs, index) {
-        if (typeof index === 'undefined') {
-            const [inputIndex] = inputs.keys();
-            return inputIndex;
-        }
-        return index;
+        return `<${tag} class="${cls}"></${tag}>`;
     }
 
     /**

@@ -382,9 +382,11 @@ define([
         let gapResponses = new Map();
         if (this.inGapMode() === true) {
             this.correctResponses.list.forEach((value, index) => {
-                if (value.response.split(',').indexOf('') === -1) {
-                    gapResponses.set(index, value.response);
+                let response = ' ';
+                if (value.response && value.response.split(',').indexOf('') === -1) {
+                    response = value.response;
                 }
+                gapResponses.set(index, response);
             });
         }
         const score = new Map();
@@ -397,9 +399,9 @@ define([
 
         this.correctResponses.list.forEach((response, index) => {
             const scoreValue = score.get(index) || responseDeclaration.getMappingAttribute('defaultValue');
-            responseDeclaration.setMapEntry(response.response, scoreValue, false);
+            responseDeclaration.setMapEntry(response.response || ' ', scoreValue, false);
             const [correctIndex] = this.correctResponses.keys();
-            responseDeclaration.setCorrect(this.correctResponses.get(correctIndex).response);
+            responseDeclaration.setCorrect(this.correctResponses.get(correctIndex).response || ' ');
         });
     };
 
