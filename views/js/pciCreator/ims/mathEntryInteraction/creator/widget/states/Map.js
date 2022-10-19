@@ -80,6 +80,7 @@ define([
         const [inputIndex] = this.correctResponses.keys();
         const inputValue = this.correctResponses.get(inputIndex);
 
+            uidCounter = inputIndex.split('-')[1];
         this.correctResponses.clear();
         $('.math-entry-alternative-wrap').parent('div').remove();
 
