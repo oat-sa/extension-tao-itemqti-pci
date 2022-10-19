@@ -1071,8 +1071,8 @@ define([
              */
             destroy: function destroy() {
                 for (let value of this.inputs.values()) {
-                    value.find('.mq-editable-field').off(ns);
-                    value.off(ns);
+                    $(value.input).find('.mq-editable-field').off(ns);
+                    $(value.input).off(ns);
                 }
                 this.$toolbar.off(ns);
                 this.resetResponse();
