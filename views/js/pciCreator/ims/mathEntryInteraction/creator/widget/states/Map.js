@@ -295,8 +295,8 @@ define([
         const mapEntries = responseDeclaration.getMapEntries();
         const [correctIndex] = this.correctResponses.keys();
         const inputs = $container.find('.math-entry-input');
-        if (this.correctResponses.list.size > 0) {
-            this.correctResponses.list.forEach((value, index) => {
+        if (this.correctResponses.size > 0) {
+            this.correctResponses.forEach((value, index) => {
                 this.activeEditId = index;
                 if (this.inGapMode() === true) {
                     if (!Object.keys(value).includes('input') && index !== correctIndex) {
@@ -381,7 +381,7 @@ define([
 
         let gapResponses = new Map();
         if (this.inGapMode() === true) {
-            this.correctResponses.list.forEach((value, index) => {
+            this.correctResponses.forEach((value, index) => {
                 let response = ' ';
                 if (value.response && value.response.split(',').indexOf('') === -1) {
                     response = value.response;
@@ -390,14 +390,14 @@ define([
             });
         }
         const score = new Map();
-        if (this.correctResponses.list.size) {
+        if (this.correctResponses.size) {
             const scoreInput = this.widget.$container.find('.math-entry-score-input');
             $(scoreInput).each(input => {
                 score.set(scoreInput[input].dataset.for, scoreInput[input].value);
             });
         }
 
-        this.correctResponses.list.forEach((response, index) => {
+        this.correctResponses.forEach((response, index) => {
             const scoreValue = score.get(index) || responseDeclaration.getMappingAttribute('defaultValue');
             responseDeclaration.setMapEntry(response.response || ' ', scoreValue, false);
             const [correctIndex] = this.correctResponses.keys();
