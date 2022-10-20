@@ -451,37 +451,38 @@ define([
         const id = responseId || this.uid();
 
         let gapValues = '';
-        if (this.correctResponses.has(responseId)) {
-            gapValues = {
-                base: {
-                    string: this.correctResponses.get(responseId).response
-                }
-            } ;
-        } else {
-            const gapExpression = this.gapTemplate;
-            const gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
-            if (gapCount > 0) {
-                gapValues = [];
-                for (let i = 0; i < gapCount; i++) {
-                    gapValues.push(' ');
-                }
-                gapValues = {
-                    base: {
-                        string: gapValues.join(',')
-                    }
-                };
-            } else {
-                gapValues = {
-                    base: {
-                        string: gapValues
-                    }
-                };
-            }
-        }
-
+        let scoreValue = '';
         if (this.inGapMode() === true) {
+            if (this.correctResponses.has(responseId)) {
+                gapValues = {
+                    base: {
+                        string: this.correctResponses.get(responseId).response
+                    }
+                } ;
+            } else {
+                const gapExpression = this.gapTemplate;
+                const gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
+                if (gapCount > 0) {
+                    gapValues = [];
+                    for (let i = 0; i < gapCount; i++) {
+                        gapValues.push(' ');
+                    }
+                    gapValues = {
+                        base: {
+                            string: gapValues.join(',')
+                        }
+                    };
+                } else {
+                    gapValues = {
+                        base: {
+                            string: gapValues
+                        }
+                    };
+                }
+            }
             responseValue = this.gapTemplate;
             this.correctResponses.set(id, { response: gapValues });
+            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response.base.string] || '';
         } else {
             let value = this.correctResponses.has(responseId) && this.correctResponses.get(responseId).response;
             if (!value) {
@@ -489,11 +490,12 @@ define([
             }
             responseValue = value || '';
             this.correctResponses.set(id, { response: responseValue });
+            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response] || '';
         }
         $container.find('button.math-entry-response-correct', $container).before(alternativeFormTpl({
             index: id,
             placeholder: response.getMappingAttribute('defaultValue'),
-            score: !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response] || response.getMappingAttribute('defaultValue')
+            score: scoreValue
         }));
         // show tooltip
         tooltip.lookup($('.answer-delete', $container));

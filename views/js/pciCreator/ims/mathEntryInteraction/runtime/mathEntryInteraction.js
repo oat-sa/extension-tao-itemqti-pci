@@ -561,7 +561,6 @@ define([
                                 const config = this.getMqConfig();
                                 const inputIndex = input.dataset.index;
                                 this.mathField = MQ.MathField(this.inputs.get(inputIndex).input, config);
-                                this.mathField.focus();
                             }
                         });
                     });
@@ -1012,13 +1011,13 @@ define([
             getResponse: function getResponse(inputId ) {
                 let response;
                 const config = this.getMqConfig();
-                if (typeof inputId !== 'undefined') {
-                    this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
-                } else if (typeof this.inputs.currentIndex() === 'string') {
-                    inputId = this.inputs.currentIndex();
-                    this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
-                }
                 if (this.inGapMode()) {
+                    if (typeof inputId !== 'undefined') {
+                        this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
+                    } else if (typeof this.inputs.currentIndex() === 'string') {
+                        inputId = this.inputs.currentIndex();
+                        this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
+                    }
                     response = {
                         base: {
                             string: this.getGapFields()
