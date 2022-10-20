@@ -122,6 +122,7 @@ define([
      */
     function responsesManagerFactory() {
         const list = new Map();
+        let currentIndex = null;
         Object.assign(list, {
             getFirstItem(index) {
                 return list.get(this.getIndex(index));
@@ -132,6 +133,13 @@ define([
                     return inputIndex;
                 }
                 return index;
+            },
+            currentIndex(index) {
+                if (typeof index !== 'undefined') {
+                    currentIndex = index;
+                    return;
+                }
+                return currentIndex;
             }
         });
         return list;
@@ -709,14 +717,11 @@ define([
                         if (this.inGapMode()) {
                             this.setMathStaticContent(latex, responseId);
                             this.createMathStatic(responseId);
-                            const gaps = this.getGapFields();
-                            if (gapValues && gaps.length > 0) {
-                                gaps.forEach(function (gap, gapIndex) {
-                                    if (typeof gapValues.base.string[gapIndex] !== 'undefined') {
-                                        gap.latex(gapValues.base.string[gapIndex]);
-                                    }
-                                });
-                            }
+                            const gapFields = this.getGapFields();
+                            const gaps = gapValues.base.string.split(',');
+                            gapFields.forEach(function (gap, index) {
+                                gap.latex(gaps[index] || '');
+                            });
                         } else {
                             this.createMathEditable(true, responseId);
                             this.focusSelectedInput();
@@ -1001,11 +1006,18 @@ define([
              * Get the response in the json format described in
              * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
              *
+             * @param {string} inputId
              * @returns {Object}
              */
-            getResponse: function getResponse() {
+            getResponse: function getResponse(inputId ) {
                 let response;
-
+                const config = this.getMqConfig();
+                if (typeof inputId !== 'undefined') {
+                    this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
+                } else if (typeof this.inputs.currentIndex() === 'string') {
+                    inputId = this.inputs.currentIndex();
+                    this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
+                }
                 if (this.inGapMode()) {
                     response = {
                         base: {

@@ -80,7 +80,10 @@ define([
         const [inputIndex] = this.correctResponses.keys();
         const inputValue = this.correctResponses.get(inputIndex);
 
+        if (inputIndex.length) {
             uidCounter = inputIndex.split('-')[1];
+            uidCounter++;
+        }
         this.correctResponses.clear();
         $('.math-entry-alternative-wrap').parent('div').remove();
 
@@ -263,18 +266,17 @@ define([
                 } else if (!!this.activeEditId) {
                     editIdIndex = this.activeEditId;
                 }
+
+                this.correctResponses.currentIndex(editIdIndex);
                 if (this.inGapMode(this) === false && editIdIndex !== null) {
                     const inputValue = this.checkValues(editIdIndex);
                     this.correctResponses.set(editIdIndex, Object.assign(inputValue, { response: latex }));
                 } else if (this.inGapMode(this) === true && editIdIndex !== null) {
-                    const response = interaction.getResponse();
-                    if (response !== null && response.base.string.length > 0) {
-                        const inputValue = this.checkValues(editIdIndex);
-                        this.correctResponses.set(editIdIndex, Object.assign(inputValue, { response: response.base.string }));
-                    } else {
-                        if (!!editIdIndex) {
+                    const response = interaction.getResponse(editIdIndex);
+                    if (response !== null) {
+                        if (response.base.string.length > 0 || !!editIdIndex) {
                             const inputValue = this.checkValues(editIdIndex);
-                            this.correctResponses.set(editIdIndex, Object.assign(inputValue, { response: response.base.string[0] }));
+                            this.correctResponses.set(editIdIndex, Object.assign(inputValue, { response: response.base.string }));
                         }
                     }
                 }
@@ -291,14 +293,13 @@ define([
     MathEntryInteractionStateResponse.prototype.initEditingOptions = function initEditingOptions() {
         this.toggleResponseMode(true);
         const interaction = this.widget.element;
-        const $container = this.widget.$container;
         const responseDeclaration = interaction.getResponseDeclaration();
         const mapEntries = responseDeclaration.getMapEntries();
         const [correctIndex] = this.correctResponses.keys();
-        const inputs = $container.find('.math-entry-input');
         if (this.correctResponses.size > 0) {
             this.correctResponses.forEach((value, index) => {
                 this.activeEditId = index;
+                this.correctResponses.currentIndex(index);
                 if (this.inGapMode() === true) {
                     if (!Object.keys(value).includes('input') && index !== correctIndex) {
                         this.addAlternativeInput(index);
@@ -445,20 +446,50 @@ define([
         const $container = this.widget.$container;
         const response = interaction.getResponseDeclaration();
         const mapEntries = response.getMapEntries();
-
+        const [correctIndex] = this.correctResponses.keys();
         let responseValue = '';
-        let gapValues = this.correctResponses.has(responseId) ? this.getGapResponseObject(this.correctResponses.get(responseId).response) : null;
+        const id = responseId || this.uid();
+
+        let gapValues = '';
+        if (this.correctResponses.has(responseId)) {
+            gapValues = {
+                base: {
+                    string: this.correctResponses.get(responseId).response
+                }
+            } ;
+        } else {
+            const gapExpression = this.gapTemplate;
+            const gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
+            if (gapCount > 0) {
+                gapValues = [];
+                for (let i = 0; i < gapCount; i++) {
+                    gapValues.push(' ');
+                }
+                gapValues = {
+                    base: {
+                        string: gapValues.join(',')
+                    }
+                };
+            } else {
+                gapValues = {
+                    base: {
+                        string: gapValues
+                    }
+                };
+            }
+        }
+
         if (this.inGapMode() === true) {
             responseValue = this.gapTemplate;
+            this.correctResponses.set(id, { response: gapValues });
         } else {
             let value = this.correctResponses.has(responseId) && this.correctResponses.get(responseId).response;
             if (!value) {
-                const [correctIndex] = this.correctResponses.keys();
                 value = this.correctResponses.get(correctIndex).response;
             }
-            responseValue = value || null;
+            responseValue = value || '';
+            this.correctResponses.set(id, { response: responseValue });
         }
-        const id = responseId || this.uid();
         $container.find('button.math-entry-response-correct', $container).before(alternativeFormTpl({
             index: id,
             placeholder: response.getMappingAttribute('defaultValue'),
@@ -466,10 +497,6 @@ define([
         }));
         // show tooltip
         tooltip.lookup($('.answer-delete', $container));
-
-        if (!this.correctResponses.has(id)) {
-            this.correctResponses.set(id, { response: responseValue });
-        }
 
         //add placeholder text to show the default value
         const $scores = $container.find('.math-entry-score-input');
