@@ -162,8 +162,17 @@ define([
         $input[0].dataset.index = id;
 
         let existingReponses = this.getExistingCorrectAnswerOptions();
+        const response = interaction.getResponseDeclaration();
+        const correctResponse = response.getCorrect();
+        if (!!correctResponse) {
+            let correctResponseIndex = existingReponses.indexOf(correctResponse[0]);
+            if (correctResponseIndex !== -1) {
+                existingReponses.splice(correctResponseIndex, 1);
+                existingReponses.unshift(correctResponse[0]);
+            }
+        }
+
         if (existingReponses.length) {
-            const response = interaction.getResponseDeclaration();
             const mapEntries = response.getMapEntries();
             existingReponses.forEach((entry, index) => {
                 let newId =  id;
