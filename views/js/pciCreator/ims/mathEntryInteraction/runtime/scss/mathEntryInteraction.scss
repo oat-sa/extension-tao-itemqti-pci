@@ -173,6 +173,11 @@ $defaultGapWidth: 30;
                 vertical-align: middle;
             }
 
+            // hide cursor on gap mode
+            .mq-editable-field .mq-editable-field~.mq-cursor {
+                display: none;
+            }
+
             sup, sub {
                 line-height: inherit;
                 top: initial;
