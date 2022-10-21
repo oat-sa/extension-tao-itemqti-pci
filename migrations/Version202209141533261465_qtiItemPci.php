@@ -12,7 +12,7 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version202209141533261465_qtiItemPci extends AbstractMigration
+final class Version202209141533261465QtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
