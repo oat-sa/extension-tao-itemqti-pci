@@ -33,7 +33,7 @@ final class Version202209131056091465_qtiItemPci extends AbstractMigration
     public function down(Schema $schema): void
     {
         throw new IrreversibleMigration(
-            'To undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
+            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
         );
     }
 }
