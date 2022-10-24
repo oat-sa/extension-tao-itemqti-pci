@@ -49,6 +49,7 @@ define([
         return parseInt(value) + 1;
     });
     let uidCounter = 0;
+    const defaultScore = 1;
 
     const MathEntryInteractionStateResponse = stateFactory.create(
         MapState,
@@ -122,7 +123,7 @@ define([
             min: interaction.prop('min'),
             max: interaction.prop('max'),
             mappingDisabled,
-            defaultValue: response.getMappingAttribute('defaultValue')
+            defaultValue: defaultScore
         }));
 
         minMaxComponentFactory($responseForm.find('.response-mapping-attributes > .min-max-panel'), {
@@ -161,18 +162,59 @@ define([
         $score[0].dataset.for = id;
         $input[0].dataset.index = id;
 
-        let existingReponses = this.getExistingCorrectAnswerOptions();
-        const response = interaction.getResponseDeclaration();
-        const correctResponse = response.getCorrect();
-        if (!!correctResponse) {
-            let correctResponseIndex = existingReponses.indexOf(correctResponse[0]);
-            if (correctResponseIndex !== -1) {
-                existingReponses.splice(correctResponseIndex, 1);
-                existingReponses.unshift(correctResponse[0]);
+        if (this.inGapMode() === true) {
+            this.emptyGapFields();
+            const gapExpression = interaction.prop('gapExpression');
+            const gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
+            if (gapCount > 0) {
+                newCorrectAnswer = [];
+                for (let i = 0; i < gapCount; i++) {
+                    newCorrectAnswer.push(' ');
+                }
+                newCorrectAnswer = newCorrectAnswer.join(',');
+            } else {
+                newCorrectAnswer = '';
             }
+        } else {
+            newCorrectAnswer = '';
+            this.toggleResponseMode(false);
         }
 
-        if (existingReponses.length) {
+        let existingReponses = this.getExistingCorrectAnswerOptions();
+        const response = interaction.getResponseDeclaration();
+        if (!!existingReponses.length) {
+            this.emptyGapFields();
+            const gapExpression = interaction.prop('gapExpression');
+            const gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
+            if (this.inGapMode() === true) {
+                if (!gapCount) {
+                    response.removeMapEntries();
+                    response.setCorrect(null);
+                    $score[0].value = defaultScore;
+                    const inputValue = this.checkValues(id);
+                    this.correctResponses.set(id, Object.assign(inputValue, { response: newCorrectAnswer }));
+                    return false;
+                }
+            } else {
+                if (!!gapCount) {
+                    response.removeMapEntries();
+                    response.setCorrect(null);
+                    $score[0].value = defaultScore;
+                    const inputValue = this.checkValues(id);
+                    this.correctResponses.set(id, Object.assign(inputValue, { response: newCorrectAnswer }));
+                    return false;
+                }
+            }
+
+            const correctResponse = response.getCorrect();
+            if (!!correctResponse) {
+                let correctResponseIndex = existingReponses.indexOf(correctResponse[0]);
+                if (correctResponseIndex !== -1) {
+                    existingReponses.splice(correctResponseIndex, 1);
+                    existingReponses.unshift(correctResponse[0]);
+                }
+            }
+
             const mapEntries = response.getMapEntries();
             existingReponses.forEach((entry, index) => {
                 let newId =  id;
@@ -183,27 +225,10 @@ define([
                 this.correctResponses.set(newId, Object.assign(inputValue, { response: entry }));
 
                 if (mapEntries[entry] && index < 1) {
-                    $score[0].value = mapEntries[entry] || response.getMappingAttribute('defaultValue');
+                    $score[0].value = mapEntries[entry] || defaultScore;
                 }
             });
         } else {
-            if (this.inGapMode() === true) {
-                this.emptyGapFields();
-                const gapExpression = interaction.prop('gapExpression');
-                const gapCount = (gapExpression.match(/\\taoGap/g) || []).length;
-                if (gapCount > 0) {
-                    newCorrectAnswer = [];
-                    for (let i = 0; i < gapCount; i++) {
-                        newCorrectAnswer.push(' ');
-                    }
-                    newCorrectAnswer = newCorrectAnswer.join(',');
-                } else {
-                    newCorrectAnswer = '';
-                }
-            } else {
-                newCorrectAnswer = '';
-                this.toggleResponseMode(false);
-            }
             const inputValue = this.checkValues(id);
             this.correctResponses.set(id, Object.assign(inputValue, { response: newCorrectAnswer }));
         }
@@ -223,7 +248,7 @@ define([
         const $input = $container.find('.math-entry-input');
         const parent = $input[0].parentNode;
         $(parent).prepend(scoreTpl({
-            placeholder: response.getMappingAttribute('defaultValue')
+            placeholder: defaultScore
         }));
         const $correct = $container.find('.math-entry-correct-wrap');
         $input.detach().appendTo($correct);
@@ -322,8 +347,8 @@ define([
                     } else {
                         interaction.triggerPci('latexInput', [value.response || '', index]);
                         const scoreInput = this.widget.$container.find('.math-entry-score-input.math-entry-response-correct');
-                        if (scoreInput.length > 0 && index < 1) {
-                            scoreInput[0].value = mapEntries && mapEntries[value.response || ''] || responseDeclaration.getMappingAttribute('defaultValue') || 0;
+                        if (scoreInput.length > 0 && !!index && value.response) {
+                            scoreInput[0].value = mapEntries && mapEntries[value.response];
                         }
                     }
                 }
@@ -394,7 +419,7 @@ define([
         if (this.inGapMode() === true) {
             this.correctResponses.forEach((value, index) => {
                 let response = ' ';
-                if (value.response && value.response.split(',').indexOf('') === -1) {
+                if (value.response && value.response.length && value.response.split(',').indexOf('') === -1) {
                     response = value.response;
                 }
                 gapResponses.set(index, response);
@@ -455,7 +480,6 @@ define([
         const $container = this.widget.$container;
         const response = interaction.getResponseDeclaration();
         const mapEntries = response.getMapEntries();
-        const [correctIndex] = this.correctResponses.keys();
         let responseValue = '';
         const id = responseId || this.uid();
 
@@ -494,17 +518,34 @@ define([
             scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response.base.string] || '';
         } else {
             let value = this.correctResponses.has(responseId) && this.correctResponses.get(responseId).response;
-            if (!value) {
-                value = this.correctResponses.get(correctIndex).response;
-            }
             responseValue = value || '';
             this.correctResponses.set(id, { response: responseValue });
             scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response] || '';
         }
+
+        let alternativeNumber = 1;
+        const alternativeInputs = $container.find('.math-entry-alternative-input');
+
+        if (!!responseId && alternativeInputs.length) {
+            const alternativeInput = this.correctResponses.get(responseId).input;
+            if (!!alternativeInput) {
+                $.each(alternativeInputs, (index, input) => {
+                    if (input === alternativeInput) {
+                        alternativeNumber = index;
+                    }
+                });
+            } else {
+                alternativeNumber = alternativeInputs.length + 1;
+            }
+        } else if (alternativeInputs.length) {
+            alternativeNumber = alternativeInputs.length + 1;
+        }
+
         $container.find('button.math-entry-response-correct', $container).before(alternativeFormTpl({
             index: id,
-            placeholder: response.getMappingAttribute('defaultValue'),
-            score: scoreValue
+            placeholder: defaultScore,
+            score: scoreValue,
+            alternativeNumber: alternativeNumber
         }));
         // show tooltip
         tooltip.lookup($('.answer-delete', $container));

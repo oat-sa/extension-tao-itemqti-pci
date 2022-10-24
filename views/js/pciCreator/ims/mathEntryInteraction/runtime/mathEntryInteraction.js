@@ -534,10 +534,14 @@ define([
             /**
              * MathQuill does not provide an API to detect which editable field has the focus, so we need to do that manually.
              * This will be helpful to know on which field the buttons will act on.
+             * @param inputIndex
              */
-            monitorActiveGapField: function monitorActiveGapField() {
-                const [index] = this.inputs.keys();
-                const $editableFields = $(this.inputs.get(index).input).find('.mq-editable-field');
+            monitorActiveGapField: function monitorActiveGapField(inputIndex) {
+                if (!inputIndex) {
+                    const [index] = this.inputs.keys();
+                    inputIndex = index;
+                }
+                const $editableFields = $(this.inputs.get(inputIndex).input).find('.mq-editable-field');
 
                 this._activeGapFieldIndex = null;
 
@@ -555,12 +559,18 @@ define([
             focusSelectedInput: function focusSelectedInput() {
                 const focusInputSelected = this.$container.find('.math-entry-input');
                 if (focusInputSelected.length > 1) {
+                    const config = this.getMqConfig();
                     $.each(focusInputSelected, (index, input) => {
                         $(input).on('click', e => {
                             if (this.inResponseState() && !this.inGapMode()) {
-                                const config = this.getMqConfig();
                                 const inputIndex = input.dataset.index;
                                 this.mathField = MQ.MathField(this.inputs.get(inputIndex).input, config);
+                            }
+                        });
+                        $(input).find('.mq-editable-field').on('click', e => {
+                            if (this.inResponseState() && this.inGapMode()) {
+                                const inputIndex = $(e.target).parents('.math-entry-input').data('index');
+                                this.mathField = MQ.StaticMath(this.inputs.get(inputIndex).input, config);
                             }
                         });
                     });
@@ -572,7 +582,22 @@ define([
                     e.preventDefault();
                     e.stopImmediatePropagation();
                     const dataIndex = $(e.target).closest('div').find('.math-entry-input').data('index');
+
+                    const responseNumber = $(e.target).parents('.math-entry-response-title').find('span').data('response-number');
+
                     $(e.target).parents('.math-entry-response-wrap').remove();
+
+                    const alternativeInputs = this.$container.find('.math-entry-alternative-input');
+                    if (alternativeInputs.length >= responseNumber) {
+                        $.each(alternativeInputs, (index, input) => {
+                            if (index+1 >= responseNumber) {
+                                const nextInput = $(input).siblings('.math-entry-response-title').find('span');
+                                $(nextInput[0]).data('response-number', index+1);
+                                $(nextInput[0]).text(index+1);
+                            }
+                        });
+                    }
+
                     if (dataIndex && this.inputs.delete(dataIndex)) {
                         this.pciInstance.trigger('deleteInput', [dataIndex]);
                     }
@@ -723,9 +748,10 @@ define([
                             });
                         } else {
                             this.createMathEditable(true, responseId);
-                            this.focusSelectedInput();
                             this.insertLatex(latex, 'write');
                         }
+                        this.focusSelectedInput();
+                        this.monitorActiveGapField(responseId);
                         this.removeSelectedInput();
                     }
                 }
