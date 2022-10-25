@@ -72,7 +72,10 @@ define([
         this.activeEditId = null;
 
         const response = this.widget.element.getResponseDeclaration();
-        response.setMappingAttribute('defaultValue', 1);
+        const getMappingDefault = response.getMappingAttribute('defaultValue');
+        if (getMappingDefault <= 0) {
+            response.setMappingAttribute('defaultValue', 1);
+        }
 
         const pci = this.widget.element.data('pci');
         const responsesManager = pci.getResponsesManager();
