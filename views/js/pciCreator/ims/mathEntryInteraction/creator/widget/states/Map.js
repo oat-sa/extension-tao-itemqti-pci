@@ -221,21 +221,8 @@ define([
     MathEntryInteractionStateResponse.prototype.createScoreResponse = function createScoreResponse() {
         const $addAlternativeBtn = $(addAlternativeBtn());
         const $container = this.widget.$container;
-        if ($container.find('.math-entry-response-wrap').length > 0) {
-            return false;
-        }
-
         const interaction = this.widget.element;
         const response = interaction.getResponseDeclaration();
-
-        const $input = $container.find('.math-entry-input');
-        const parent = $input[0].parentNode;
-        $(parent).prepend(scoreTpl({
-            placeholder: response.getMappingAttribute('defaultValue')
-        }));
-        const $correct = $container.find('.math-entry-correct-wrap');
-        $input.detach().appendTo($correct);
-        $(parent).append($addAlternativeBtn);
 
         //add placeholder text to show the default value
         const $score = $container.find('.math-entry-response-wrap .math-entry-score-input');
@@ -264,6 +251,19 @@ define([
                 }
             }
         );
+
+        if ($container.find('.math-entry-response-wrap').length > 0) {
+            return false;
+        }
+
+        const $input = $container.find('.math-entry-input');
+        const parent = $input[0].parentNode;
+        $(parent).prepend(scoreTpl({
+            placeholder: response.getMappingAttribute('defaultValue')
+        }));
+        const $correct = $container.find('.math-entry-correct-wrap');
+        $input.detach().appendTo($correct);
+        $(parent).append($addAlternativeBtn);
     };
 
     MathEntryInteractionStateResponse.prototype.getExistingCorrectAnswerOptions = function getExistingCorrectAnswerOptions() {
@@ -530,8 +530,6 @@ define([
             score: scoreValue,
             alternativeNumber: alternativeNumber
         }));
-        // show tooltip
-        tooltip.lookup($('.answer-delete', $container));
 
         //add placeholder text to show the default value
         const $scores = $container.find('.math-entry-score-input');
@@ -544,6 +542,22 @@ define([
                 $scores.attr('placeholder', data.value);
             }
         });
+        //init form javascript
+        formElement.initWidget($container);
+        formElement.setChangeCallbacks($container, response,
+            {
+                mathEntryScoreInput: (rsp, value) => {
+                    const key = $(this.widget).data('for');
+                    if (value === '') {
+                        rsp.removeMapEntry(key);
+                    } else {
+                        rsp.setMapEntry(key, value, true);
+                    }
+
+                }
+            }
+        );
+
         interaction.triggerPci('addAlternative', [responseValue, gapValues, id]);
         this.initDeletingOptions();
     };

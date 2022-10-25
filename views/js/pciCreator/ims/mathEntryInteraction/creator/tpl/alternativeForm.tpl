@@ -2,7 +2,7 @@
     <div class="math-entry-alternative-wrap">
         <span class="math-entry-response-title math-entry-response-alternative">{{__ "Alternative"}} <span data-response-number="{{alternativeNumber}}">{{alternativeNumber}}</span>
             <a href="#" class="answer-delete">
-                <span class="icon-bin tooltipstered"></span>
+                <span class="icon-bin"></span>
             </a>
         </span>
         <span class="math-entry-input mq-math-mode mq-editable-field math-entry-alternative-input" data-index="{{index}}">
