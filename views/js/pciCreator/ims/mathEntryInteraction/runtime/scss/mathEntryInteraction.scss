@@ -173,6 +173,14 @@ $defaultGapWidth: 30;
                 vertical-align: middle;
             }
 
+            .mq-editable-field .mq-editable-field {
+                -webkit-box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
+                -moz-box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
+                box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
+                border-color: #709AC0;
+                border-radius: 1px;
+            }
+
             // hide cursor on gap mode
             .mq-editable-field .mq-editable-field~.mq-cursor {
                 display: none;
