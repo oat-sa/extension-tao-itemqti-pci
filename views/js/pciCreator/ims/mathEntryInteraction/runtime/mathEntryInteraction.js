@@ -599,6 +599,7 @@ define([
                     }
 
                     if (dataIndex && this.inputs.delete(dataIndex)) {
+                        this.inputs.currentIndex(null);
                         this.pciInstance.trigger('deleteInput', [dataIndex]);
                     }
                 });

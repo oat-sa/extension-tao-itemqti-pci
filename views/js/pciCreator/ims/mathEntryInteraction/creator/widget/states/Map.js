@@ -364,13 +364,10 @@ define([
     MathEntryInteractionStateResponse.prototype.initDeletingOptions = function initDeletingOptions() {
         const interaction = this.widget.element;
         interaction.onPci('deleteInput', (inputId) => {
-            if (this.correctResponses.has(inputId)) {
-                if (this.inGapMode() === true) {
-                    this.emptyGapFields();
-                }
-                this.activeEditId = null;
-                this.correctResponses.delete(inputId);
+            if (this.inGapMode() === true) {
+                this.emptyGapFields();
             }
+            this.activeEditId = null;
         });
     };
 
