@@ -182,8 +182,17 @@ $defaultGapWidth: 30;
             }
 
             // hide cursor on gap mode
-            .mq-editable-field .mq-editable-field~.mq-cursor {
+            .mq-selectable + .mq-hasCursor .mq-cursor {
                 display: none;
+            }
+
+            .mq-sqrt-prefix + .mq-sqrt-stem.mq-hasCursor:after {
+                visibility: hidden;
+                content: 'i';
+            }
+
+            .mq-selectable+.mq-hasCursor .mq-editable-field .mq-cursor {
+                display: inline-block;
             }
 
             sup, sub {
@@ -287,6 +296,10 @@ $defaultGapWidth: 30;
                     text-decoration: overline;
                     text-decoration-color: inherit;
                 }
+            }
+
+            .mq-scaled {
+                transform: none !important;
             }
         }
     }
