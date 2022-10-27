@@ -159,9 +159,9 @@ define([
         //init form javascript
         formElement.initWidget($form);
 
-            //init data change callbacks
-            formElement.setChangeCallbacks($form, interaction, {
-                identifier: function(i, value){
+        //init data change callbacks
+        formElement.setChangeCallbacks($form, interaction, {
+            identifier: function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
             },
@@ -169,10 +169,12 @@ define([
                 if (toBoolean(value, false)) {
                     self.createAddGapBtn();
                     $gapStyleBox.show();
+                    response.removeMapEntries();
                 } else {
                     i.prop('gapExpression', '');
                     self.removeAddGapBtn();
                     $gapStyleBox.hide();
+                    response.removeMapEntries();
                 }
 
                 response.attr('cardinality', 'single');
@@ -272,7 +274,7 @@ define([
         var _widget = this.widget,
             interaction = _widget.element;
 
-        interaction.onPci('responseChange', function(latex) {
+        interaction.onPci('responseChange', function (latex) {
             if (toBoolean(interaction.prop('useGapExpression'), false)) {
                 interaction.prop('gapExpression', latex);
             } else {

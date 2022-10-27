@@ -131,6 +131,31 @@ $defaultGapWidth: 30;
                 text-align: left;
             }
 
+            .math-entry-correct-wrap,
+            .math-entry-alternative-wrap {
+                width: 90%;
+                display: inline-block;
+                padding-right: 2rem;
+            }
+            .math-entry-score-wrap {
+                display: block;
+                float: right;
+                width: 10%;
+            }
+
+            .math-entry-score-input {
+                width: 100%;
+                min-width: 100%;
+                height: 23px;
+                &:focus {
+                    border-color: 1px dotted #0e5d91;
+                }
+            }
+
+            .math-entry-response-wrap {
+                margin-bottom: 1rem;
+            }
+
             .mq-editable-field {
                 @include text-input();
             }
@@ -146,6 +171,28 @@ $defaultGapWidth: 30;
                 height: 21px;
                 margin: 0 3px;
                 vertical-align: middle;
+            }
+
+            .mq-editable-field .mq-editable-field {
+                -webkit-box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
+                -moz-box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
+                box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
+                border-color: #709AC0;
+                border-radius: 1px;
+            }
+
+            // hide cursor on gap mode
+            .mq-selectable + .mq-hasCursor .mq-cursor {
+                display: none;
+            }
+
+            .mq-sqrt-prefix + .mq-sqrt-stem.mq-hasCursor:after {
+                visibility: hidden;
+                content: 'i';
+            }
+
+            .mq-selectable+.mq-hasCursor .mq-editable-field .mq-cursor {
+                display: inline-block;
             }
 
             sup, sub {
@@ -249,6 +296,10 @@ $defaultGapWidth: 30;
                     text-decoration: overline;
                     text-decoration-color: inherit;
                 }
+            }
+
+            .mq-scaled {
+                transform: none !important;
             }
         }
     }

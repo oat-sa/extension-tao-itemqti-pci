@@ -24,7 +24,7 @@
         "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
         "oat-sa/generis" : ">=15.22",
         "oat-sa/tao-core" : ">=50.24.6",
-        "oat-sa/extension-tao-itemqti" : ">=28.8.0"
+        "oat-sa/extension-tao-itemqti" : ">=29.13.0"
     },
     "autoload" : {
         "psr-4" : {
