@@ -49,6 +49,7 @@ define([
         return parseInt(value) + 1;
     });
     let uidCounter = 0;
+    let defaultScoreValue = 1;
 
     const MathEntryInteractionStateResponse = stateFactory.create(
         MapState,
@@ -73,9 +74,6 @@ define([
 
         const response = this.widget.element.getResponseDeclaration();
         const getMappingDefault = response.getMappingAttribute('defaultValue');
-        if (getMappingDefault <= 0) {
-            response.setMappingAttribute('defaultValue', 1);
-        }
 
         const pci = this.widget.element.data('pci');
         const responsesManager = pci.getResponsesManager();
@@ -207,8 +205,15 @@ define([
                 const inputValue = this.checkValues(newId);
                 this.correctResponses.set(newId, Object.assign(inputValue, { response: entry }));
 
+                const getMappingDefault = response.getMappingAttribute('defaultValue');
+                if (+getMappingDefault !== 0) {
+                    defaultScoreValue = getMappingDefault;
+                } else {
+                    defaultScoreValue = 1;
+                }
+
                 if (mapEntries[entry] && index < 1) {
-                    $score[0].value = mapEntries[entry] || response.getMappingAttribute('defaultValue');
+                    $score[0].value = mapEntries[entry] || defaultScoreValue;
                 }
             });
         } else {
@@ -256,10 +261,17 @@ define([
             return false;
         }
 
+        const getMappingDefault = response.getMappingAttribute('defaultValue');
+        if (+getMappingDefault !== 0) {
+            defaultScoreValue = getMappingDefault;
+        } else {
+            defaultScoreValue = 1;
+        }
+
         const $input = $container.find('.math-entry-input');
         const parent = $input[0].parentNode;
         $(parent).prepend(scoreTpl({
-            placeholder: response.getMappingAttribute('defaultValue')
+            placeholder: defaultScoreValue
         }));
         const $correct = $container.find('.math-entry-correct-wrap');
         $input.detach().appendTo($correct);
@@ -521,9 +533,16 @@ define([
             alternativeNumber = alternativeInputs.length + 1;
         }
 
+        const getMappingDefault = response.getMappingAttribute('defaultValue');
+        if (+getMappingDefault !== 0) {
+            defaultScoreValue = getMappingDefault;
+        } else {
+            defaultScoreValue = 1;
+        }
+
         $container.find('button.math-entry-response-correct', $container).before(alternativeFormTpl({
             index: id,
-            placeholder: response.getMappingAttribute('defaultValue'),
+            placeholder: defaultScoreValue,
             score: scoreValue,
             alternativeNumber: alternativeNumber
         }));
