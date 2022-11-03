@@ -501,12 +501,16 @@ define([
             }
             responseValue = this.gapTemplate;
             this.correctResponses.set(id, { response: gapValues });
-            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response.base.string];
+            if (!!responseId && Object.keys(mapEntries).length > 0) {
+                scoreValue = mapEntries[this.correctResponses.get(responseId).response.base.string];
+            }
         } else {
             let value = this.correctResponses.has(responseId) && this.correctResponses.get(responseId).response;
             responseValue = value || '';
             this.correctResponses.set(id, { response: responseValue });
-            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response];
+            if (!!responseId && Object.keys(mapEntries).length > 0) {
+                scoreValue = mapEntries[this.correctResponses.get(responseId).response];
+            }
         }
 
         let alternativeNumber = 1;
