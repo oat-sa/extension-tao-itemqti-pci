@@ -99,6 +99,17 @@ define([
         }
     };
 
+    MathEntryInteractionStateResponse.prototype.getScoreValue = function getScoreValue() {
+        const response = this.widget.element.getResponseDeclaration();
+        const getMappingDefault = response.getMappingAttribute('defaultValue');
+        if (+getMappingDefault !== 0) {
+            defaultScoreValue = getMappingDefault;
+        } else {
+            defaultScoreValue = 1;
+        }
+        return defaultScoreValue;
+    };
+
     MathEntryInteractionStateResponse.prototype.checkValues = function (index) {
         let inputValue = {};
         if (this.correctResponses.has(index) && Object.keys(this.correctResponses.get(index)).includes('input')) {
@@ -213,7 +224,7 @@ define([
                 }
 
                 if (mapEntries[entry] && index < 1) {
-                    $score[0].value = mapEntries[entry] || defaultScoreValue;
+                    $score[0].value = mapEntries[entry];
                 }
             });
         } else {
@@ -271,7 +282,7 @@ define([
         const $input = $container.find('.math-entry-input');
         const parent = $input[0].parentNode;
         $(parent).prepend(scoreTpl({
-            placeholder: defaultScoreValue
+            placeholder: response.getMappingAttribute('defaultValue'),
         }));
         const $correct = $container.find('.math-entry-correct-wrap');
         $input.detach().appendTo($correct);
@@ -476,7 +487,7 @@ define([
         const id = responseId || this.uid();
 
         let gapValues = '';
-        let scoreValue = '';
+        let scoreValue = this.getScoreValue();
         if (this.inGapMode() === true) {
             if (this.correctResponses.has(responseId)) {
                 gapValues = {
@@ -542,7 +553,7 @@ define([
 
         $container.find('button.math-entry-response-correct', $container).before(alternativeFormTpl({
             index: id,
-            placeholder: defaultScoreValue,
+            placeholder: response.getMappingAttribute('defaultValue'),
             score: scoreValue,
             alternativeNumber: alternativeNumber
         }));
