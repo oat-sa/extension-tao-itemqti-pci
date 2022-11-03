@@ -1489,12 +1489,25 @@ var saneKeyboardEvents = (function() {
     modifiers.push(key);
     return modifiers.join('-');
   }
-
+  function isVisibleKey(evt) {
+    var which = evt.which || evt.keyCode;
+    var keyVal = KEY_VALUES[which];
+    return !(evt.ctrlKey || evt.originalEvent && evt.originalEvent.metaKey || evt.altKey || evt.shiftKey || keyVal);
+  }
+  function isIpadOS() {
+    return navigator.maxTouchPoints &&
+      navigator.maxTouchPoints > 2 &&
+      /MacIntel/.test(navigator.platform);
+  }
   // create a keyboard events shim that calls callbacks at useful times
   // and exports useful public methods
   return function saneKeyboardEvents(el, handlers) {
     var keydown = null;
     var keypress = null;
+    var keyup = null;
+    var input = null;
+    var textWasInserted = false;
+    var is_iPad = isIpadOS();
 
     var textarea = jQuery(el);
     var target = jQuery(handlers.container || textarea);
@@ -1520,8 +1533,6 @@ var saneKeyboardEvents = (function() {
         checker(e);
       });
     }
-    target.bind('keydown keypress input keyup focusout paste', function(e) { checkTextarea(e); });
-
 
     // -*- public methods -*- //
     function select(text) {
@@ -1560,6 +1571,9 @@ var saneKeyboardEvents = (function() {
 
       keydown = e;
       keypress = null;
+      input = null;
+      keyup = null;
+      textWasInserted = false;
 
       if (shouldBeSelected) checkTextareaOnce(function(e) {
         if (!(e && e.type === 'focusout') && textarea[0].select) {
@@ -1590,8 +1604,10 @@ var saneKeyboardEvents = (function() {
 
       // Handle case of no keypress event being sent
       if (!!keydown && !keypress) checkTextareaFor(typedText);
+      keyup = e;
+      checkTextareaFor(typedText);
     }
-    function typedText() {
+    function typedText(e) {
       // If there is a selection, the contents of the textarea couldn't
       // possibly have just been typed in.
       // This happens in browsers like Firefox and Opera that fire
@@ -1615,6 +1631,14 @@ var saneKeyboardEvents = (function() {
       if (text.length === 1) {
         textarea.val('');
         handlers.typedText(text);
+        textWasInserted = true;
+      } else if (text.length === 0 && is_iPad && !input && keydown && keyup && !textWasInserted && isVisibleKey(keydown)) {
+        // issue with iPad and Japanese keyboard
+        // only first symbol put in textare, 
+        // rest ignored and no text in textarea, no input event
+        // will be used keydown.key
+        handlers.typedText(keydown.key);
+        textWasInserted = true;
       } // in Firefox, keys that don't type text, just clear seln, fire keypress
       // https://github.com/mathquill/mathquill/issues/293#issuecomment-40997668
       else if (text && textarea[0].select) textarea[0].select(); // re-select if that's why we're here
@@ -1658,6 +1682,10 @@ var saneKeyboardEvents = (function() {
       cut: function() { checkTextareaOnce(function() { handlers.cut(); }); },
       copy: function() { checkTextareaOnce(function() { handlers.copy(); }); },
       paste: onPaste
+    });
+    // -*- attach event handlers -*- //
+    textarea.bind({
+      input: function(e) { input = e; },
     });
 
     // -*- export public methods -*- //
@@ -5412,6 +5440,8 @@ Environments.matrix = P(Environment, function(_, super_) {
   _.createBlocks = function() {
     this.blocks = [
       MatrixCell(0, this),
+      MatrixCell(0, this),
+      MatrixCell(1, this),
       MatrixCell(1, this)
     ];
   };
