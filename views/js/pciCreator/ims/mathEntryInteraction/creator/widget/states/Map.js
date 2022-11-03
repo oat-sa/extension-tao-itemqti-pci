@@ -72,9 +72,6 @@ define([
         let interaction = this.widget.element;
         this.activeEditId = null;
 
-        const response = this.widget.element.getResponseDeclaration();
-        const getMappingDefault = response.getMappingAttribute('defaultValue');
-
         const pci = this.widget.element.data('pci');
         const responsesManager = pci.getResponsesManager();
 
@@ -127,8 +124,7 @@ define([
         const $responseForm = this.widget.$responseForm;
 
         const response = interaction.getResponseDeclaration();
-        const mapEntries = response.getMapEntries();
-        const mappingDisabled = _.isEmpty(mapEntries);
+        const mappingDisabled = false;
         this.initResponseChangeEventListener();
 
         $responseForm.html(responseFormTpl({
@@ -216,13 +212,6 @@ define([
                 const inputValue = this.checkValues(newId);
                 this.correctResponses.set(newId, Object.assign(inputValue, { response: entry }));
 
-                const getMappingDefault = response.getMappingAttribute('defaultValue');
-                if (+getMappingDefault !== 0) {
-                    defaultScoreValue = getMappingDefault;
-                } else {
-                    defaultScoreValue = 1;
-                }
-
                 if (mapEntries[entry] && index < 1) {
                     $score[0].value = mapEntries[entry];
                 }
@@ -272,17 +261,11 @@ define([
             return false;
         }
 
-        const getMappingDefault = response.getMappingAttribute('defaultValue');
-        if (+getMappingDefault !== 0) {
-            defaultScoreValue = getMappingDefault;
-        } else {
-            defaultScoreValue = 1;
-        }
-
         const $input = $container.find('.math-entry-input');
         const parent = $input[0].parentNode;
         $(parent).prepend(scoreTpl({
             placeholder: response.getMappingAttribute('defaultValue'),
+            score: this.getScoreValue()
         }));
         const $correct = $container.find('.math-entry-correct-wrap');
         $input.detach().appendTo($correct);
@@ -518,12 +501,12 @@ define([
             }
             responseValue = this.gapTemplate;
             this.correctResponses.set(id, { response: gapValues });
-            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response.base.string] || '';
+            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response.base.string];
         } else {
             let value = this.correctResponses.has(responseId) && this.correctResponses.get(responseId).response;
             responseValue = value || '';
             this.correctResponses.set(id, { response: responseValue });
-            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response] || '';
+            scoreValue = !!responseId && Object.keys(mapEntries).length > 0 && mapEntries[this.correctResponses.get(responseId).response];
         }
 
         let alternativeNumber = 1;
@@ -542,13 +525,6 @@ define([
             }
         } else if (alternativeInputs.length) {
             alternativeNumber = alternativeInputs.length + 1;
-        }
-
-        const getMappingDefault = response.getMappingAttribute('defaultValue');
-        if (+getMappingDefault !== 0) {
-            defaultScoreValue = getMappingDefault;
-        } else {
-            defaultScoreValue = 1;
         }
 
         $container.find('button.math-entry-response-correct', $container).before(alternativeFormTpl({

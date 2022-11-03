@@ -4,7 +4,7 @@
     </div>
     <div class="math-entry-score-wrap math-entry-response-correct">
         <span class="math-entry-score-title math-entry-response-correct">{{__ "Score"}}</span>
-        <input value type="text" name="mathEntryScoreInput"
+        <input value="{{score}}" type="text" name="mathEntryScoreInput"
             class="math-entry-score-input math-entry-response-correct" data-validate="$numeric"
             data-validate-option="$allowEmpty; $event(type=keyup)" placeholder="{{placeholder}}">
     </div>
