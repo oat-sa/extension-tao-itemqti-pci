@@ -26,7 +26,7 @@ final class Version202211071145441465_qtiItemPci extends AbstractMigration
             $this->propagate(
                 new RegisterPciMathEntry()
             )(
-                ['2.4.1']
+                ['2.4.2']
             )
         );
     }
