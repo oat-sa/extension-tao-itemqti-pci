@@ -64,10 +64,10 @@
 
 <div class="panel">
     <label for="max-recording-time" class="spinner">{{__ "Time limit:"}}</label>
-    <input id="max-recording-time" name="maxRecordingTime" value="{{maxRecordingTime}}" class="large" data-increment="10" data-min="10" data-max="{{maximumRecordingTimeLimit}}" type="text" />
+    <input id="max-recording-time" name="maxRecordingTime" value="{{maxRecordingTime}}" class="large" data-increment="5" data-min="5" data-max="{{maximumRecordingTimeLimit}}" type="text" />
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
-        {{__ "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."}}
+        {{__ "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."}}
     </span>
 </div>
 
