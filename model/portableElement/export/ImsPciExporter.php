@@ -72,7 +72,6 @@ class ImsPciExporter extends PortableElementExporter
 
     public function exportDom(DOMDocument $dom)
     {
-
         // If asset files list is empty for current identifier skip
         if (empty($this->portableAssetsToExport)) {
             return;
@@ -87,7 +86,6 @@ class ImsPciExporter extends PortableElementExporter
         $portableElement = $this->object;
 
         for ($i = 0; $i < $portableElementNodes->length; $i++) {
-
             /** @var \DOMElement $currentPortableNode */
             $currentPortableNode = $portableElementNodes->item($i);
 
@@ -137,12 +135,18 @@ class ImsPciExporter extends PortableElementExporter
                             $configs[0]['data']['paths'][$id] = $paths;
                         }
 
-                        $this->replaceFile(json_encode($configs[0]['data'], JSON_UNESCAPED_SLASHES), $this->getRawExportPath($file));
+                        $this->replaceFile(
+                            json_encode($configs[0]['data'], JSON_UNESCAPED_SLASHES),
+                            $this->getRawExportPath($file)
+                        );
                     }
                 }
                 if (isset($configs[1])) {
                     $file = $configs[1]['file'];
-                    $modulesNode->setAttribute('fallbackConfiguration', $this->getImsPciExportPath($itemRelPath, $file));
+                    $modulesNode->setAttribute(
+                        'fallbackConfiguration',
+                        $this->getImsPciExportPath($itemRelPath, $file)
+                    );
                 }
             }
 
