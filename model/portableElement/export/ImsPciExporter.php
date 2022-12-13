@@ -110,7 +110,11 @@ class ImsPciExporter extends PortableElementExporter
             /** @var \DOMElement $resourcesNode */
             $modulesNode = $currentPortableNode->getElementsByTagName('modules')->item(0);
 
-            $this->removeOldNode($modulesNode, 'module');
+            if (!empty($modulesNode)) {
+                $this->removeOldNode($modulesNode, 'module');
+            } else {
+                $modulesNode = $currentPortableNode->appendChild($dom->createElement('modules'));
+            }
 
             $runtime = $portableElement->getRuntime();
             if (isset($runtime['config'])) {
