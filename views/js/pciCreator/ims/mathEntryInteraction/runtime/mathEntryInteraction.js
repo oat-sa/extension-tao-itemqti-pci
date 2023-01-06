@@ -288,6 +288,7 @@ define([
                     inResponseState: toBoolean(config.inResponseState, false),
                     gapExpression: config.gapExpression || '',
                     gapStyle: config.gapStyle,
+                    cardinality: config.responseDeclaration && config.responseDeclaration.cardinality,
                     locale: this.userLanguage || 'en',
 
                     toolsStatus: {
@@ -994,6 +995,7 @@ define([
             initialize: function initialize(dom, config, responsesManager) {
                 this.dom = dom;
                 this.userLanguage = config.userLanguage ? config.userLanguage.replace(/[-_][A-Z].*$/i, '').toLowerCase() : '';
+                this.responseCardinality = config.responseDeclaration && config.responseDeclaration.cardinality;
 
                 this.$container = $(dom);
                 this.$toolbar = this.$container.find('.toolbar');
@@ -1045,14 +1047,25 @@ define([
                         inputId = this.inputs.currentIndex();
                         this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
                     }
-                    response = {
-                        base: {
-                            string: this.getGapFields()
-                                .map(function (gapField) {
-                                    return gapField.latex();
-                                }).toString()
-                        }
-                    };
+                    if(this.responseCardinality === 'multiple') {
+                        response = {
+                            list: {
+                                string: this.getGapFields()
+                                    .map(function (gapField) {
+                                        return gapField.latex();
+                                    }).toString()
+                            }
+                        };
+                    }else{
+                        response = {
+                            base: {
+                                string: this.getGapFields()
+                                    .map(function (gapField) {
+                                        return gapField.latex();
+                                    }).toString()
+                            }
+                        };
+                    }
                 } else {
                     response = {
                         base: {
@@ -1060,8 +1073,11 @@ define([
                         }
                     };
                 }
-
-                return response.base.string.replace(/,/g, '') !== '' ? response : {base: {string: ''}};
+                
+                if(response.base && response.base.string.replace(/,/g, '') === '') {
+                    return {base: {string: ''}};
+                } 
+                return response;
             },
             /**
              * Remove the current response set in the interaction
