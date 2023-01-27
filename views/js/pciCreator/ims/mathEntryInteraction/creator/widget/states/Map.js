@@ -28,7 +28,8 @@ define([
     'tpl!mathEntryInteraction/creator/tpl/alternativeForm',
     'taoQtiItem/qtiCreator/widgets/component/minMax/minMax',
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
-    'ui/tooltip'
+    'ui/tooltip',
+    'mathEntryInteraction/runtime/helper/ambiguousSymbols',
 ], function (
     hb,
     __,
@@ -42,7 +43,8 @@ define([
     alternativeFormTpl,
     minMaxComponentFactory,
     formElement,
-    tooltip
+    tooltip,
+    convertAmbiguousSymbols
 ) {
     'use strict';
     hb.registerHelper('increaseIndex', function (value) {
@@ -421,9 +423,9 @@ define([
 
         this.correctResponses.forEach((response, index) => {
             const scoreValue = score.get(index) || responseDeclaration.getMappingAttribute('defaultValue');
-            responseDeclaration.setMapEntry(response.response || ' ', scoreValue, false);
+            responseDeclaration.setMapEntry(convertAmbiguousSymbols(response.response) || ' ', scoreValue, false);
             const [correctIndex] = this.correctResponses.keys();
-            responseDeclaration.setCorrect(this.correctResponses.get(correctIndex).response || ' ');
+            responseDeclaration.setCorrect(convertAmbiguousSymbols(this.correctResponses.get(correctIndex).response) || ' ');
         });
     };
 
