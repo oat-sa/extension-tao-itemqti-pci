@@ -24,6 +24,7 @@ define([
     'taoQtiItem/portableLib/OAT/util/event',
     'mathEntryInteraction/runtime/mathquill/mathquill',
     'mathEntryInteraction/runtime/helper/mathInPrompt',
+    'mathEntryInteraction/runtime/helper/ambiguousSymbols',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
@@ -33,7 +34,8 @@ define([
     _,
     event,
     MathQuill,
-    mathInPrompt
+    mathInPrompt,
+    convertAmbiguousSymbols
 ) {
     'use strict';
 
@@ -1049,14 +1051,14 @@ define([
                         base: {
                             string: this.getGapFields()
                                 .map(function (gapField) {
-                                    return gapField.latex();
+                                    return convertAmbiguousSymbols(gapField.latex());
                                 }).toString()
                         }
                     };
                 } else {
                     response = {
                         base: {
-                            string: this.mathField.latex()
+                            string: convertAmbiguousSymbols(this.mathField.latex())
                         }
                     };
                 }
