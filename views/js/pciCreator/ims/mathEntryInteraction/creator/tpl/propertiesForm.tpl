@@ -165,6 +165,20 @@
         &#x2192; {{__ "right arrow"}}
     </label>
 </div>
+<div>
+    <label class="panel">
+        <input name="tool_degree" type="checkbox" {{#if tool_degree}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        ° {{__ "Degree symbol"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_percent" type="checkbox" {{#if tool_percent}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        % {{__ "Percent"}}
+    </label>
+</div>
 
 <hr />
 <h3>{{__ "Geometry"}}</h3>
@@ -175,13 +189,6 @@
         <span class="icon-checkbox"></span>
         &ang; {{__ "angle"}}
     </label>
-</div>
-<div>
-    <label class="panel">
-        <input name="tool_integral" type="checkbox" {{#if tool_integral}}checked="checked"{{/if}}/>
-        <span class="icon-checkbox"></span>
-        {{__ "Indefinite integral"}}
-        </label>
 </div>
 <div>
     <label class="panel">
@@ -211,6 +218,13 @@
         &#8869; {{__ "is perpendicular to"}}
     </label>
 </div>
+<div>
+    <label class="panel">
+        <input name="tool_vline" type="checkbox" {{#if tool_vline}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        | {{__ "Vertical line, divide"}}
+    </label>
+</div>
 
 <hr />
 <h3>{{__ "Trigonometry"}}</h3>
@@ -224,16 +238,16 @@
 </div>
 <div>
     <label class="panel">
-        <input name="tool_cos" type="checkbox" {{#if tool_cos}}checked="checked"{{/if}}/>
+        <input name="tool_sin" type="checkbox" {{#if tool_sin}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "cosinus"}}
+        {{__ "sinus"}}
     </label>
 </div>
 <div>
     <label class="panel">
-        <input name="tool_sin" type="checkbox" {{#if tool_sin}}checked="checked"{{/if}}/>
+        <input name="tool_cos" type="checkbox" {{#if tool_cos}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
-        {{__ "sinus"}}
+        {{__ "cosinus"}}
     </label>
 </div>
 <div>
@@ -272,6 +286,13 @@
         <input name="tool_gte" type="checkbox" {{#if tool_gte}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span>
         {{__ "≥"}} {{__ "greater than or equal"}}
+    </label>
+</div>
+<div>
+    <label class="panel">
+        <input name="tool_approx" type="checkbox" {{#if tool_approx}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span>
+        {{__ "≈"}} {{__ "Approximately"}}
     </label>
 </div>
 
