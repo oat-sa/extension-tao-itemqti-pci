@@ -17,7 +17,7 @@ final class Version202303021214211465_qtiItemPci extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Update the Math Entry PCI with sanitizer';
+        return 'Update the Math Entry PCI with allowing copy paste for security plugins';
     }
 
     public function up(Schema $schema): void
