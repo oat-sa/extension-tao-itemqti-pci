@@ -12,7 +12,7 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version202209131056091465QtiItemPci extends AbstractMigration
+final class Version202209131056091465_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {

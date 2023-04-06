@@ -12,11 +12,12 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version202209141533261465QtiItemPci extends AbstractMigration
+final class Version202211031046021465_qtiItemPci extends AbstractMigration
 {
+
     public function getDescription(): string
     {
-        return 'Update the Math Entry PCI, adding support for rendering Math expressions in the prompt';
+        return 'Update the Math Entry PCI, set response mapping default to 0 for incorrect responses';
     }
 
     public function up(Schema $schema): void
@@ -25,9 +26,10 @@ final class Version202209141533261465QtiItemPci extends AbstractMigration
             $this->propagate(
                 new RegisterPciMathEntry()
             )(
-                ['2.3.0']
+                ['2.4.1']
             )
         );
+
     }
 
     public function down(Schema $schema): void
@@ -35,5 +37,6 @@ final class Version202209141533261465QtiItemPci extends AbstractMigration
         throw new IrreversibleMigration(
             'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
         );
+
     }
 }
