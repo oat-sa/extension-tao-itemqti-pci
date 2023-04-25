@@ -1,0 +1,29 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tao-3x\n"
+"PO-Revision-Date: 2023-04-21 15:46\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: pt\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-3x\n"
+"X-Crowdin-Project-ID: 582145\n"
+"X-Crowdin-Language: pt-BR\n"
+"X-Crowdin-File: /qtiItemPci/locales/en-US/role.rdf.po\n"
+"X-Crowdin-File-ID: 1245\n"
+"Language-Team: Portuguese, Brazilian\n"
+
+# http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager
+msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
+msgid "QTI PCI Manager"
+msgstr "Gerenciador de PCI QTI"
+
+# http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager
+msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
+msgid "QTI PCI Manager Role"
+msgstr "Função do Gerenciador PCI QTI"
+
