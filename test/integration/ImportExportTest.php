@@ -112,16 +112,39 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertEquals('7', $likertData['properties']['level']);
         $this->assertEquals('Don\'t like', $likertData['properties']['label-min']);
         $this->assertEquals(' Like', $likertData['properties']['label-max']);
-        $this->assertEquals(['oatSamplePciLikert/runtime/css/base.css', 'oatSamplePciLikert/runtime/css/oatSamplePciLikert.css'], $likertData['stylesheets']);
-        $this->assertEquals(['oatSamplePciLikert/runtime/assets/ThumbDown.png', 'oatSamplePciLikert/runtime/assets/ThumbUp.png', 'oatSamplePciLikert/runtime/css/img/bg.png'], $likertData['mediaFiles']);
+        $this->assertEquals(
+            [
+                'oatSamplePciLikert/runtime/css/base.css',
+                'oatSamplePciLikert/runtime/css/oatSamplePciLikert.css',
+            ],
+            $likertData['stylesheets']
+        );
+        $this->assertEquals(
+            [
+                'oatSamplePciLikert/runtime/assets/ThumbDown.png',
+                'oatSamplePciLikert/runtime/assets/ThumbUp.png',
+                'oatSamplePciLikert/runtime/css/img/bg.png',
+            ],
+            $likertData['mediaFiles']
+        );
 
         //check parsed audio interaction data
         $this->assertEquals('oatSamplePciAudio', $audioData['typeIdentifier']);
         $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $audioData['xmlns']);
         $this->assertEquals('oatSamplePciAudio/runtime/oatSamplePciAudio.js', $audioData['entryPoint']);
-        $this->assertEquals(['oatSamplePciAudio/runtime/js/player', 'oatSamplePciAudio/runtime/js/recorder', 'oatSamplePciAudio/runtime/js/uiElements'], $audioData['libraries']);
+        $this->assertEquals(
+            [
+                'oatSamplePciAudio/runtime/js/player',
+                'oatSamplePciAudio/runtime/js/recorder',
+                'oatSamplePciAudio/runtime/js/uiElements',
+            ],
+            $audioData['libraries']
+        );
         $this->assertEquals(['oatSamplePciAudio/runtime/css/oatSamplePciAudio.css'], $audioData['stylesheets']);
-        $this->assertEquals(['oatSamplePciAudio/runtime/img/controls.svg', 'oatSamplePciAudio/runtime/img/mic.svg'], $audioData['mediaFiles']);
+        $this->assertEquals(
+            ['oatSamplePciAudio/runtime/img/controls.svg', 'oatSamplePciAudio/runtime/img/mic.svg'],
+            $audioData['mediaFiles']
+        );
         $this->assertEquals([
             'allowPlayback' => 'true',
             'audioBitrate' => '20000',
@@ -182,7 +205,14 @@ class ImportExportTest extends TaoPhpUnitTestRunner
         $this->assertEquals('urn:oat:pci:likert', $likertData['typeIdentifier']);
         $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $likertData['xmlns']);
         $this->assertEquals(['../oat-pci.json'], $likertData['config']);
-        $this->assertEquals(['imsSamplePciLikert/runtime/js/imsSamplePciLikert', 'imsSamplePciLikert/runtime/js/renderer', 'jquery_2_1_1'], array_keys($likertData['modules']));
+        $this->assertEquals(
+            [
+                'imsSamplePciLikert/runtime/js/imsSamplePciLikert',
+                'imsSamplePciLikert/runtime/js/renderer',
+                'jquery_2_1_1',
+            ],
+            array_keys($likertData['modules'])
+        );
         $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $likertData['properties']);
 
         $pciLikert = $this->portableElementService->retrieve('IMSPCI', 'urn:oat:pci:likert');

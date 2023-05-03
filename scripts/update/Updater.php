@@ -177,9 +177,14 @@ class Updater extends \common_ext_ExtensionUpdater
 
             /** @var \common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            $hasPciRegistryEntriesConfig = $extensionManager
+                ->getExtensionById(PciRegistry::REGISTRY_EXTENSION)
+                ->hasConfig(PciRegistry::REGISTRY_ID);
 
-            if ($extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->hasConfig(PciRegistry::REGISTRY_ID)) {
-                $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
+            if ($hasPciRegistryEntriesConfig) {
+                $map = $extensionManager
+                    ->getExtensionById(PciRegistry::REGISTRY_EXTENSION)
+                    ->getConfig(PciRegistry::REGISTRY_ID);
 
                 if (is_array($map)) {
                     foreach ($map as $key => $value) {
@@ -192,7 +197,9 @@ class Updater extends \common_ext_ExtensionUpdater
                     }
                 }
 
-                $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->unsetConfig(PciRegistry::REGISTRY_ID);
+                $extensionManager
+                    ->getExtensionById(PciRegistry::REGISTRY_EXTENSION)
+                    ->unsetConfig(PciRegistry::REGISTRY_ID);
             }
             $this->setVersion('3.0.0');
         }
@@ -362,7 +369,10 @@ class Updater extends \common_ext_ExtensionUpdater
         $this->skip('5.1.0', '5.2.0');
 
         if ($this->isVersion('5.2.0')) {
-            $extension = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById('tao');
+            $extension = $this
+                ->getServiceManager()
+                ->get(\common_ext_ExtensionsManager::SERVICE_ID)
+                ->getExtensionById('tao');
             $config = $extension->getConfig('client_lib_config_registry');
             unset($config['taoQtiItem/controller/creator/index']['plugins'][1]);
             $extension->setConfig('client_lib_config_registry', $config);

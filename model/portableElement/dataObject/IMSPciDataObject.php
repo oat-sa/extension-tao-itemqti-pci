@@ -109,7 +109,11 @@ class IMSPciDataObject extends PciDataObject
     {
         $runtimeManifest = $this->getRuntime();
         if (isset($runtimeManifest['src'])) {
-            $runtimeManifest['src'] = preg_replace('/^(.\/)?(.*)/', $this->getTypeIdentifier() . "/$2", $runtimeManifest['src']);
+            $runtimeManifest['src'] = preg_replace(
+                '/^(.\/)?(.*)/',
+                $this->getTypeIdentifier() . "/$2",
+                $runtimeManifest['src']
+            );
         }
 
         return $runtimeManifest;

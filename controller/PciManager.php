@@ -35,6 +35,7 @@ use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use tao_helpers_Http;
+use oat\taoQtiItem\model\qti\interaction\CustomInteraction;
 
 /**
  * Actions for pci portable custom elements management
@@ -111,7 +112,7 @@ class PciManager extends \tao_actions_CommonModule
     {
         $pciModels = [];
         foreach (PortableModelRegistry::getRegistry()->getModels() as $model) {
-            if (is_subclass_of($model->getQtiElementClassName(), '\\oat\\taoQtiItem\\model\\qti\\interaction\\CustomInteraction')) {
+            if (is_subclass_of($model->getQtiElementClassName(), CustomInteraction::class)) {
                 $pciModels[] = $model;
             }
         }

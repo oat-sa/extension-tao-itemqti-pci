@@ -160,7 +160,10 @@ class OatPciExporter extends PortableElementExporter
             foreach ($portableElement->getRuntimeKey('mediaFiles') as $mediaFile) {
                 $mediaFileNode = $dom->createElement($localNs . 'file');
                 $mediaFileNode->setAttribute('src', $this->getOatPciExportPath($mediaFile));
-                $mediaFileNode->setAttribute('type', \tao_helpers_File::getMimeType($this->getOatPciExportPath($mediaFile)));
+                $mediaFileNode->setAttribute(
+                    'type',
+                    \tao_helpers_File::getMimeType($this->getOatPciExportPath($mediaFile))
+                );
                 $mediaFilesNode->appendChild($mediaFileNode);
             }
             if ($mediaFilesNode->hasChildNodes()) {
@@ -173,6 +176,8 @@ class OatPciExporter extends PortableElementExporter
 
     private function getOatPciExportPath($file)
     {
-        return $this->portableAssetsToExport[preg_replace('/^' . $this->object->getTypeIdentifier() . '\//', './', $file)];
+        $key = preg_replace('/^' . $this->object->getTypeIdentifier() . '\//', './', $file);
+
+        return $this->portableAssetsToExport[$key];
     }
 }
