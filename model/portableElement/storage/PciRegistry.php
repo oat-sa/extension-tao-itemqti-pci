@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model\portableElement\storage;
@@ -25,10 +24,9 @@ use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 
 class PciRegistry extends PortableElementRegistry
 {
+    /** @deprecated */
+    public const REGISTRY_EXTENSION = 'qtiItemPci';
+    /** @deprecated */
+    public const REGISTRY_ID = 'pciRegistryEntries';
     protected $fileSystemId = 'qtiItemPci';
-
-    /** @deprecated */
-    const REGISTRY_EXTENSION = 'qtiItemPci';
-    /** @deprecated */
-    const REGISTRY_ID = 'pciRegistryEntries';
 }

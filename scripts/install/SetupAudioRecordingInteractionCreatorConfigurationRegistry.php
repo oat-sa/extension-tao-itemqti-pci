@@ -41,8 +41,8 @@ class SetupAudioRecordingInteractionCreatorConfigurationRegistry extends ScriptA
     {
         return [
             self::MAXIMUM_RECORDING_TIME_LIMIT => [
-                'prefix'      => 'mr',
-                'longPrefix'  => self::MAXIMUM_RECORDING_TIME_LIMIT,
+                'prefix' => 'mr',
+                'longPrefix' => self::MAXIMUM_RECORDING_TIME_LIMIT,
                 'description' => sprintf(
                     'Maximum allowed audio recording time in seconds, %u by default',
                     self::OPTION_DEFAULT_VALUES[self::MAXIMUM_RECORDING_TIME_LIMIT]

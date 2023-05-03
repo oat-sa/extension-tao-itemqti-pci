@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model\portableElement\dataObject;
@@ -40,11 +39,13 @@ class PciDataObject extends PortableElementObject
 
     /**
      * @param $response
+     *
      * @return $this
      */
     public function setResponse($response)
     {
         $this->response = $response;
+
         return $this;
     }
 
@@ -58,6 +59,7 @@ class PciDataObject extends PortableElementObject
 
     /**
      * @param $creator
+     *
      * @return $this
      */
     public function setCreator($creator)
@@ -67,6 +69,7 @@ class PciDataObject extends PortableElementObject
                 $this->creator[$key] = $value;
             }
         }
+
         return $this;
     }
 
@@ -74,6 +77,7 @@ class PciDataObject extends PortableElementObject
      * Check if given creator key exists
      *
      * @param $key
+     *
      * @return bool
      */
     public function hasCreatorKey($key)
@@ -85,6 +89,7 @@ class PciDataObject extends PortableElementObject
      * Get creator value associated to the given key
      *
      * @param $key
+     *
      * @return null
      */
     public function getCreatorKey($key)
@@ -92,6 +97,7 @@ class PciDataObject extends PortableElementObject
         if ($this->hasCreatorKey($key)) {
             return $this->creator[$key];
         }
+
         return null;
     }
 
@@ -100,6 +106,7 @@ class PciDataObject extends PortableElementObject
      *
      * @param $key
      * @param $value
+     *
      * @return mixed
      */
     public function setCreatorKey($key, $value)

@@ -21,13 +21,15 @@
 
 namespace oat\qtiItemPci\scripts\install;
 
+use common_ext_ExtensionsManager;
 use oat\taoQtiItem\model\portableElement\action\RegisterPortableElement;
 
 class RegisterPciLikertScale extends RegisterPortableElement
 {
     protected function getSourceDirectory()
     {
-        $viewDir = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
+        $viewDir = common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
+
         return $viewDir . implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'likertScaleInteraction']);
     }
 }

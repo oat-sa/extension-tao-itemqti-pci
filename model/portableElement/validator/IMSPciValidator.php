@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model\portableElement\validator;
@@ -34,9 +33,10 @@ class IMSPciValidator extends PortableElementModelValidator
     public function getConstraints()
     {
         $pciConstraints = [
-            'response' => [ Validator::isArray, Validator::NotEmpty ],
-            'creator' => [ Validator::isArray ]
+            'response' => [Validator::isArray, Validator::NotEmpty],
+            'creator' => [Validator::isArray],
         ];
+
         return array_merge($pciConstraints, parent::getConstraints());
     }
 
@@ -44,6 +44,7 @@ class IMSPciValidator extends PortableElementModelValidator
      * Return asset constraints
      *
      * @param $key
+     *
      * @return array
      */
     public function getAssetConstraints($key)
@@ -52,7 +53,7 @@ class IMSPciValidator extends PortableElementModelValidator
             'runtime' => [
                 'modules',
                 'config',
-                'src'
+                'src',
             ],
             'creator' => [
                 'icon',
@@ -60,11 +61,12 @@ class IMSPciValidator extends PortableElementModelValidator
                 'libraries',
                 'stylesheets',
                 'mediaFiles',
-                'src'
-            ]
+                'src',
+            ],
         ];
 
         $this->assetConstraints = array_merge($this->assetConstraints, $pciConstraints);
+
         return parent::getAssetConstraints($key);
     }
 
@@ -73,6 +75,7 @@ class IMSPciValidator extends PortableElementModelValidator
      *
      * @param $key
      * @param $constraint
+     *
      * @return bool
      */
     public function isOptionalConstraint($key, $constraint)
@@ -81,10 +84,11 @@ class IMSPciValidator extends PortableElementModelValidator
             'creator' => [
                 'stylesheets',
                 'mediaFiles',
-            ]
+            ],
         ];
 
         $this->optional = array_merge($optional, $this->optional);
+
         return parent::isOptionalConstraint($key, $constraint);
     }
 }

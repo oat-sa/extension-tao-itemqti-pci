@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace oat\qtiItemPci\migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use oat\tao\scripts\tools\migrations\AbstractMigration;
 use Doctrine\Migrations\Exception\IrreversibleMigration;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
+use oat\tao\scripts\tools\migrations\AbstractMigration;
 
 final class Version202103240929581465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Added support for review mode for Audio Recording interaction';
@@ -21,8 +20,9 @@ final class Version202103240929581465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new PciModel())->getRegistry();
+
         if ($registry->has('audioRecordingInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
+            /* @noinspection PhpUnhandledExceptionInspection */
             $registry->removeAllVersions('audioRecordingInteraction');
         }
 
@@ -33,7 +33,6 @@ final class Version202103240929581465_qtiItemPci extends AbstractMigration
                 ['0.13.0']
             )
         );
-
     }
 
     public function down(Schema $schema): void

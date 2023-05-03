@@ -16,16 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\qtiItemPci\scripts\update;
 
+use common_ext_ExtensionsManager;
+use common_ext_ExtensionUpdater;
 use oat\generis\model\OntologyAwareTrait;
 use oat\qtiItemPci\model\IMSPciModel;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
+use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
@@ -33,7 +34,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\SetQtiCreatorConfig;
-use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\tao\model\accessControl\func\AclProxy;
 use oat\tao\model\TaoOntology;
@@ -44,18 +44,17 @@ use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 /**
  * @deprecated use migrations instead. See https://github.com/oat-sa/generis/wiki/Tao-Update-Process
  */
-class Updater extends \common_ext_ExtensionUpdater
+class Updater extends common_ext_ExtensionUpdater
 {
     use OntologyAwareTrait;
 
     /**
-     *
      * @param string $currentVersion
+     *
      * @return string $versionUpdatedTo
      */
     public function update($currentVersion)
     {
-
         //this is related to the actual version of the source code,
         //otherwise it's not possible to register any PCI
         $this->runExtensionScript(RegisterPciFilesystem::class);
@@ -175,8 +174,8 @@ class Updater extends \common_ext_ExtensionUpdater
             $registry->setServiceLocator($this->getServiceManager());
             $registry->setModel($model);
 
-            /** @var \common_ext_ExtensionsManager $extensionManager */
-            $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            /** @var common_ext_ExtensionsManager $extensionManager */
+            $extensionManager = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID);
 
             if ($extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->hasConfig(PciRegistry::REGISTRY_ID)) {
                 $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
@@ -204,8 +203,10 @@ class Updater extends \common_ext_ExtensionUpdater
             $model = PortableModelRegistry::getRegistry()->getModel(PciModel::PCI_IDENTIFIER);
             $portableElementRegistry = $model->getRegistry();
             $registeredPortableElements = array_keys($portableElementRegistry->getLatestRuntimes());
+
             foreach ($registeredPortableElements as $typeIdentifier) {
                 $portableElement = $portableElementRegistry->fetch($typeIdentifier);
+
                 if (! $portableElement->hasEnabled()) {
                     $portableElement->enable();
                     $portableElementRegistry->update($portableElement);
@@ -246,15 +247,19 @@ class Updater extends \common_ext_ExtensionUpdater
 
         if ($this->isVersion('3.5.0')) {
             $registry = (new IMSPciModel())->getRegistry();
+
             if ($registry->has('likertScaleInteraction')) {
                 $registry->removeAllVersions('likertScaleInteraction');
             }
+
             if ($registry->has('liquidsInteraction')) {
                 $registry->removeAllVersions('liquidsInteraction');
             }
+
             if ($registry->has('mathEntryInteraction')) {
                 $registry->removeAllVersions('mathEntryInteraction');
             }
+
             if ($registry->has('audioRecordingInteraction')) {
                 $registry->removeAllVersions('audioRecordingInteraction');
             }
@@ -362,7 +367,7 @@ class Updater extends \common_ext_ExtensionUpdater
         $this->skip('5.1.0', '5.2.0');
 
         if ($this->isVersion('5.2.0')) {
-            $extension = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById('tao');
+            $extension = $this->getServiceManager()->get(common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById('tao');
             $config = $extension->getConfig('client_lib_config_registry');
             unset($config['taoQtiItem/controller/creator/index']['plugins'][1]);
             $extension->setConfig('client_lib_config_registry', $config);
@@ -413,25 +418,25 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('6.2.0', '6.3.0');
 
-        if($this->isVersion('6.3.0')){
+        if ($this->isVersion('6.3.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.9.1']);
             $this->setVersion('6.3.1');
         }
 
         $this->skip('6.3.1', '6.5.0');
 
-        if($this->isVersion('6.5.0')){
+        if ($this->isVersion('6.5.0')) {
             call_user_func(new RegisterPciLiquid(), ['0.4.1']);
             $this->setVersion('6.5.1');
         }
 
-        if($this->isVersion('6.5.1')){
+        if ($this->isVersion('6.5.1')) {
             call_user_func(new RegisterPciMathEntry(), ['0.10.0']);
             $this->setVersion('6.6.0');
         }
 
         $this->skip('6.6.0', '6.7.2');
-        
+
         //Updater files are deprecated. Please use migrations.
         //See: https://github.com/oat-sa/generis/wiki/Tao-Update-Process
 

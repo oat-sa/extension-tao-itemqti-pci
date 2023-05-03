@@ -23,8 +23,9 @@ final class Version202008111120451465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new IMSPciModel())->getRegistry();
+
         if ($registry->has('audioRecordingInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
+            /* @noinspection PhpUnhandledExceptionInspection */
             $registry->removeAllVersions('audioRecordingInteraction');
         }
 

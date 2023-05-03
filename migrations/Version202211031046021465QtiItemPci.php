@@ -14,7 +14,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202211031046021465QtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update the Math Entry PCI, set response mapping default to 0 for incorrect responses';
@@ -29,7 +28,6 @@ final class Version202211031046021465QtiItemPci extends AbstractMigration
                 ['2.4.1']
             )
         );
-
     }
 
     public function down(Schema $schema): void
@@ -37,6 +35,5 @@ final class Version202211031046021465QtiItemPci extends AbstractMigration
         throw new IrreversibleMigration(
             'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
         );
-
     }
 }

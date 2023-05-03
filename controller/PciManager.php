@@ -16,32 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2014-2022 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\controller;
 
 use common_Exception;
 use common_exception_Error;
+use Exception;
+use HttpRequestException;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\tao\model\http\formatter\ResponseFormatter;
+use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidModelException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementParserException;
-use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementVersionIncompatibilityException;
 use oat\taoQtiItem\model\portableElement\model\PortableModelRegistry;
-use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
+use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
+use tao_actions_CommonModule;
 use tao_helpers_Http;
 
 /**
  * Actions for pci portable custom elements management
  * Class PciManager
+ *
  * @author Bartlomiej Marszal
  */
-class PciManager extends \tao_actions_CommonModule
+class PciManager extends tao_actions_CommonModule
 {
     /**
      * @var PortableElementRegistry
@@ -56,6 +59,7 @@ class PciManager extends \tao_actions_CommonModule
     /**
      * @param $method
      * @param $arguments
+     *
      * @security("hide");
      */
     public function __call($method, $arguments)
@@ -80,6 +84,7 @@ class PciManager extends \tao_actions_CommonModule
             $this->service = new PortableElementService();
             $this->service->setServiceLocator($this->getServiceManager());
         }
+
         return $this->service;
     }
 
@@ -91,8 +96,10 @@ class PciManager extends \tao_actions_CommonModule
         $returnValue = [];
 
         $pciModels = $this->getPciModels();
+
         foreach ($pciModels as $pciModel) {
             $all = $pciModel->getRegistry()->getLatest();
+
             foreach ($all as $portableElement) {
                 $returnValue[$portableElement->getTypeIdentifier()] = $this->getMinifiedModel($portableElement);
             }
@@ -105,16 +112,19 @@ class PciManager extends \tao_actions_CommonModule
 
     /**
      * Return the list of registered PCI php subclasses
+     *
      * @return array
      */
     protected function getPciModels()
     {
         $pciModels = [];
+
         foreach (PortableModelRegistry::getRegistry()->getModels() as $model) {
             if (is_subclass_of($model->getQtiElementClassName(), '\\oat\\taoQtiItem\\model\\qti\\interaction\\CustomInteraction')) {
                 $pciModels[] = $model;
             }
         }
+
         return $pciModels;
     }
 
@@ -133,7 +143,7 @@ class PciManager extends \tao_actions_CommonModule
     {
         $result = [
             'valid' => false,
-            'exists' => false
+            'exists' => false,
         ];
 
         $formatter = $responseFormatter->withJsonHeader();
@@ -149,9 +159,11 @@ class PciManager extends \tao_actions_CommonModule
         }
 
         $all = $pciObject->getModel()->getRegistry()->getLatestCreators();
+
         if (isset($all[$pciObject->getTypeIdentifier()])) {
             $result['exists'] = true;
             $currentVersion = $all[$pciObject->getTypeIdentifier()]->getVersion();
+
             if (version_compare($pciObject->getVersion(), $currentVersion, '<')) {
                 $result['valid'] = false;
                 $result['messages'][] = [
@@ -161,7 +173,7 @@ class PciManager extends \tao_actions_CommonModule
                         $pciObject->getTypeIdentifier(),
                         $currentVersion,
                         $pciObject->getVersion()
-                    )
+                    ),
                 ];
                 $this->setResponse($formatter->withBody($result)->format($this->getPsrResponse()));
 
@@ -210,10 +222,12 @@ class PciManager extends \tao_actions_CommonModule
         }
 
         $pciModels = $this->getPciModels();
+
         foreach ($pciModels as $pciModel) {
             try {
                 $portableElement = $this->getService()->import($pciModel->getId(), $file['tmp_name']);
                 $this->returnJson($this->getMinifiedModel($portableElement));
+
                 if (!is_null($portableElement)) {
                     break;//stop at the first one
                 }
@@ -231,6 +245,7 @@ class PciManager extends \tao_actions_CommonModule
         //as upload may be called multiple times, we remove the session lock as soon as possible
         session_write_close();
         $requestPayload = $this->getPsrRequest()->getQueryParams();
+
         try {
             if (!isset($requestPayload['typeIdentifier'], $requestPayload['pciIdentifier'])) {
                 throw new PortableElementException('PCI parameter missing.');
@@ -250,12 +265,14 @@ class PciManager extends \tao_actions_CommonModule
         $data['enabled'] = $object->isEnabled();
         $data['model'] = $object->getModelLabel();
         $data['pci_identifier'] = $object->getModelId();
+
         return $data;
     }
 
     /**
-     * @return PciDataObject
      * @throws PortableElementException
+     *
+     * @return PciDataObject
      */
     protected function getRequestPciDataObject()
     {
@@ -266,9 +283,11 @@ class PciManager extends \tao_actions_CommonModule
 
         $pciModels = $this->getPciModels();
         $pciDataObjects = [];
+
         foreach ($pciModels as $pciModel) {
             try {
                 $pciDataObject = $pciModel->getRegistry()->getLatestVersion($typeIdentifier);
+
                 if (!is_null($pciDataObject)) {
                     $pciDataObjects[$typeIdentifier] = $pciDataObject;
                 }
@@ -284,13 +303,12 @@ class PciManager extends \tao_actions_CommonModule
         throw new PortableElementException('Element not found');
     }
 
-
     /**
      * @throws PortableElementException
      * @throws PortableElementVersionIncompatibilityException
      * @throws common_Exception
      * @throws common_exception_Error
-     * @throws \HttpRequestException
+     * @throws HttpRequestException
      */
     public function unregister()
     {
@@ -298,17 +316,18 @@ class PciManager extends \tao_actions_CommonModule
             $pci = $this->getRequestPciDataObject();
             $registry = $pci->getModel()->getRegistry();
             $registry->removeAllVersions($pci->getTypeIdentifier());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new PortableElementException('Could not unregister element');
         }
 
         $this->returnJson([
-            'success' => true
+            'success' => true,
         ]);
     }
 
     /**
      * Enable pci object
+     *
      * @throws PortableElementException
      */
     public function enable()
@@ -318,12 +337,13 @@ class PciManager extends \tao_actions_CommonModule
         $pci->getModel()->getRegistry()->update($pci);
         $this->returnJson([
             'success' => true,
-            'interactionHook' => $this->getMinifiedModel($pci)
+            'interactionHook' => $this->getMinifiedModel($pci),
         ]);
     }
 
     /**
      * disable pci data object
+     *
      * @throws PortableElementException
      */
     public function disable()
@@ -333,7 +353,7 @@ class PciManager extends \tao_actions_CommonModule
         $pci->getModel()->getRegistry()->update($pci);
         $this->returnJson([
             'success' => true,
-            'interactionHook' => $this->getMinifiedModel($pci)
+            'interactionHook' => $this->getMinifiedModel($pci),
         ]);
     }
 }

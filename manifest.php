@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
@@ -29,8 +27,8 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
 use oat\qtiItemPci\scripts\install\SetupAudioRecordingInteractionCreatorConfigurationRegistry;
 use oat\qtiItemPci\scripts\update\Updater;
-use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 use oat\taoItems\model\user\TaoItemsRoles;
+use oat\taoQtiItem\scripts\SetupPortableElementFileStorage;
 
 return [
     'name' => 'qtiItemPci',
@@ -54,7 +52,7 @@ return [
     'install' => [
         'rdf' => [
             __DIR__ . '/install/ontology/registry.rdf',
-            __DIR__ . '/install/ontology/role.rdf'
+            __DIR__ . '/install/ontology/role.rdf',
         ],
         'php' => [
             RegisterPciFilesystem::class,
@@ -65,23 +63,23 @@ return [
             RegisterPciLikertScale::class,
             RegisterPciMathEntry::class,
             SetupAudioRecordingInteractionCreatorConfigurationRegistry::class,
-            RegisterIMSPciAudioRecording::class
-        ]
+            RegisterIMSPciAudioRecording::class,
+        ],
     ],
     'uninstall' => [
     ],
     'update' => Updater::class,
     'routes' => [
-        '/qtiItemPci' => 'oat\\qtiItemPci\\controller'
+        '/qtiItemPci' => 'oat\\qtiItemPci\\controller',
     ],
     'constants' => [
         # views directory
         'DIR_VIEWS' => __DIR__ . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR,
 
         #BASE URL (usually the domain root)
-        'BASE_URL'  => ROOT_URL . 'qtiItemPci/',
+        'BASE_URL' => ROOT_URL . 'qtiItemPci/',
     ],
     'extra' => [
-        'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml'
-    ]
+        'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml',
+    ],
 ];

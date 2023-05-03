@@ -16,18 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model\portableElement\dataObject;
 
 class IMSPciDataObject extends PciDataObject
 {
-
     /**
      * Get the registration path of the source within a standard QTI package
+     *
      * @param $packagePath - absolute path to the root of the item package
      * @param $itemPath - absolute path to the root of the item folder
+     *
      * @return string
      */
     public function getRegistrationSourcePath($packagePath, $itemPath)
@@ -37,7 +37,9 @@ class IMSPciDataObject extends PciDataObject
 
     /**
      * Get the registration file entry
+     *
      * @param $file - the relative path to the file
+     *
      * @return string
      */
     public function getRegistrationFileId($file)
@@ -48,7 +50,9 @@ class IMSPciDataObject extends PciDataObject
 
     /**
      * Check the given file entry should be registered or not
+     *
      * @param $file
+     *
      * @return bool
      */
     public function isRegistrableFile($file)
@@ -59,6 +63,7 @@ class IMSPciDataObject extends PciDataObject
 
     /**
      * Get the array of key in the portable element model that should not be registered as files
+     *
      * @return array
      */
     public function getRegistrationExcludedKey()
@@ -77,23 +82,28 @@ class IMSPciDataObject extends PciDataObject
         $paths = [];
 
         $runtimeManifest = $this->getRuntime();
+
         if (isset($runtimeManifest['src'])) {
             $paths['src'] = preg_replace('/^' . $this->getTypeIdentifier() . '/', '.', $runtimeManifest['src']);
         }
 
         $modules = [];
+
         if (isset($runtimeManifest['modules'])) {
             foreach ($runtimeManifest['modules'] as $module) {
                 //merge all module declaration as numeric array
                 $modules = array_merge($modules, array_values($module));
             }
         }
+
         if (isset($runtimeManifest['config'])) {
             $configs = [];
+
             foreach ($runtimeManifest['config'] as $config) {
                 if (isset($config['file'])) {
                     $configs[] = $config['file'];
                 }
+
                 if (isset($config['data']) && isset($config['data']['paths']) && is_array($config['data']['paths'])) {
                     $modules = array_merge($modules, array_values($config['data']['paths']));
                 }
@@ -109,8 +119,9 @@ class IMSPciDataObject extends PciDataObject
     public function getRuntimeAliases()
     {
         $runtimeManifest = $this->getRuntime();
+
         if (isset($runtimeManifest['src'])) {
-            $runtimeManifest['src'] = preg_replace('/^(.\/)?(.*)/', $this->getTypeIdentifier() . "/$2", $runtimeManifest['src']);
+            $runtimeManifest['src'] = preg_replace('/^(.\/)?(.*)/', $this->getTypeIdentifier() . '/$2', $runtimeManifest['src']);
         }
 
         return $runtimeManifest;

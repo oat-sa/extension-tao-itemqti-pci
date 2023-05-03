@@ -16,12 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model\portableElement\export;
 
+use common_Logger;
 use DOMDocument;
+use DOMElement;
 use DOMXPath;
 use oat\oatbox\service\ServiceManager;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
@@ -34,9 +35,12 @@ class ImsPciExporter extends PortableElementExporter
 
     /**
      * Cope the asset files of the PCI to the item exporter and return the list of copied assets
+     *
      * @param $replacementList
-     * @return array
+     *
      * @throws \oat\taoQtiItem\model\portableElement\exception\PortableElementInvalidAssetException
+     *
+     * @return array
      */
     public function copyAssetFiles(&$replacementList)
     {
@@ -46,12 +50,14 @@ class ImsPciExporter extends PortableElementExporter
         $service->setServiceLocator(ServiceManager::getServiceManager());
         $files = $object->getModel()->getValidator()->getAssets($object, 'runtime');
         $baseUrl = '';//add pcis to the root of the package
+
         foreach ($files as $url) {
             $stream = $service->getFileStream($object, $url);
             $replacement = $this->qtiItemExporter->copyAssetFile($stream, $baseUrl, $url, $replacementList);
             $portableAssetsToExport[$url] = $replacement;
-            \common_Logger::i('File copied: "' . $url . '" for portable element ' . $object->getTypeIdentifier());
+            common_Logger::i('File copied: "' . $url . '" for portable element ' . $object->getTypeIdentifier());
         }
+
         return $this->portableAssetsToExport = $portableAssetsToExport;
     }
 
@@ -86,7 +92,7 @@ class ImsPciExporter extends PortableElementExporter
         $portableElement = $this->object;
 
         for ($i = 0; $i < $portableElementNodes->length; $i++) {
-            /** @var \DOMElement $currentPortableNode */
+            /** @var DOMElement $currentPortableNode */
             $currentPortableNode = $portableElementNodes->item($i);
 
             //get the local namespace prefix to be used in new node creation
@@ -105,7 +111,7 @@ class ImsPciExporter extends PortableElementExporter
             //set version
             $currentPortableNode->setAttribute('data-version', $portableElement->getVersion());
 
-            /** @var \DOMElement $resourcesNode */
+            /** @var DOMElement $resourcesNode */
             $modulesNode = $currentPortableNode->getElementsByTagName('modules')->item(0);
 
             if (!empty($modulesNode)) {
@@ -115,6 +121,7 @@ class ImsPciExporter extends PortableElementExporter
             }
 
             $runtime = $portableElement->getRuntime();
+
             if (isset($runtime['config'])) {
                 $configs = $runtime['config'];
 
@@ -143,6 +150,7 @@ class ImsPciExporter extends PortableElementExporter
                         );
                     }
                 }
+
                 if (isset($configs[1])) {
                     $file = $configs[1]['file'];
                     $modulesNode->setAttribute(
@@ -155,10 +163,12 @@ class ImsPciExporter extends PortableElementExporter
             foreach ($portableElement->getRuntimeKey('modules') as $id => $modules) {
                 $moduleNode = $dom->createElement($localNs . 'module');
                 $moduleNode->setAttribute('id', $id);
+
                 if (isset($modules[0])) {
                     $file = $modules[0];
                     $moduleNode->setAttribute('primaryPath', $this->getImsPciExportPath($itemRelPath, $file));
                 }
+
                 if (isset($modules[1])) {
                     $file = $modules[1];
                     $moduleNode->setAttribute('fallbackPath', $this->getImsPciExportPath($itemRelPath, $file));
@@ -188,9 +198,11 @@ class ImsPciExporter extends PortableElementExporter
     {
         $returnValue = '';
         $arrDir = explode(self::EXPORTER_PATH_SEPARATOR, rtrim($itemBasePath, self::EXPORTER_PATH_SEPARATOR));
+
         for ($i = 0, $iMax = count($arrDir); $i < $iMax; $i++) {
             $returnValue .= '..' . self::EXPORTER_PATH_SEPARATOR;
         }
+
         return $returnValue;
     }
 }

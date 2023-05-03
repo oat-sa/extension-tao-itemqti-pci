@@ -16,15 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\controller;
 
-use oat\qtiItemPci\model\PciModel;
+use common_ext_ExtensionsManager;
 use oat\qtiItemPci\model\IMSPciModel;
+use oat\qtiItemPci\model\PciModel;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
-use \tao_actions_CommonModule;
+use tao_actions_CommonModule;
 
 class PciLoader extends tao_actions_CommonModule
 {
@@ -33,11 +33,12 @@ class PciLoader extends tao_actions_CommonModule
      */
     public function load()
     {
-        $customInteractionDirs = \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem')->getConfig('debug_portable_element');
+        $customInteractionDirs = common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem')->getConfig('debug_portable_element');
 
         try {
             $this->returnJson(array_reduce($this->getRegistries(), function ($acc, $registry) use ($customInteractionDirs) {
                 $latestRuntimes = $registry->getLatestRuntimes();
+
                 if (is_array($customInteractionDirs)) {
                     foreach ($latestRuntimes as $id => &$versions) {
                         if (isset($customInteractionDirs[$id])) {
@@ -63,6 +64,7 @@ class PciLoader extends tao_actions_CommonModule
                                     if (isset($version['runtime']) && isset($version['runtime']['modules'])) {
                                         $version['runtime']['modules'] = $modules;
                                     }
+
                                     if (isset($version['creator']) && isset($version['creator']['src'])) {
                                         //the first entry of the src array is always the entrypoint (PCI hook)
                                         $version['creator']['hook'] = array_shift($version['creator']['src']);
@@ -70,13 +72,14 @@ class PciLoader extends tao_actions_CommonModule
                                         unset($version['creator']['src']);
                                     }
 
-                                    // TAO PCI
+                                // TAO PCI
                                 } else {
                                     if (isset($version['runtime']) && isset($version['runtime']['src'])) {
                                         $version['runtime']['libraries'] = $version['runtime']['src'];
                                         unset($version['runtime']['hook']);
                                         unset($version['runtime']['src']);
                                     }
+
                                     if (isset($version['creator']) && isset($version['creator']['src'])) {
                                         //the first entry of the src array is always the entrypoint (PCI hook)
                                         $version['creator']['hook'] = array_shift($version['creator']['src']);
@@ -88,6 +91,7 @@ class PciLoader extends tao_actions_CommonModule
                         }
                     }
                 }
+
                 return array_merge($acc, $latestRuntimes);
             }, []));
         } catch (PortableElementException $e) {

@@ -2,6 +2,10 @@
 
 namespace oat\qtiItemPci\model;
 
+use common_Exception;
+use common_exception_Error;
+use core_kernel_classes_Container;
+use core_kernel_classes_Resource;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\qti\interaction\PortableCustomInteraction;
 use oat\taoQtiItem\model\qti\Service as QtiService;
@@ -9,6 +13,7 @@ use oat\taoQtiItem\model\qti\Service as QtiService;
 /**
  * Scan items for desire content
  * Class ItemsScannerService
+ *
  * @author Bartlomiej Marszal
  */
 class ItemsScannerService
@@ -20,6 +25,7 @@ class ItemsScannerService
 
     /**
      * ItemsScannerService constructor.
+     *
      * @param QtiService $qtiServiceSingleton
      */
     public function __construct(QtiService $qtiServiceSingleton)
@@ -30,14 +36,16 @@ class ItemsScannerService
     /**
      * @param string $requestTypeIndentifier
      * @param array $allItems
-     * @throws \common_Exception
-     * @throws \common_exception_Error
+     *
+     * @throws common_Exception
+     * @throws common_exception_Error
      */
     public function isPciUsedInItems($requestTypeIndentifier, array $allItems)
     {
         foreach ($allItems as $key => $item) {
             if ($this->qtiService->getDataItemByRdfItem($this->getItemResource($key)) !== null) {
                 $interactions = $this->qtiService->getDataItemByRdfItem($this->getItemResource($key))->getInteractions();
+
                 foreach ($interactions as $interaction) {
                     if (
                         $interaction instanceof PortableCustomInteraction
@@ -51,12 +59,14 @@ class ItemsScannerService
     }
 
     /**
-     * @param string|\core_kernel_classes_Container $key
-     * @return \core_kernel_classes_Resource
-     * @throws \common_exception_Error
+     * @param string|core_kernel_classes_Container $key
+     *
+     * @throws common_exception_Error
+     *
+     * @return core_kernel_classes_Resource
      */
     protected function getItemResource($key)
     {
-        return new \core_kernel_classes_Resource($key);
+        return new core_kernel_classes_Resource($key);
     }
 }

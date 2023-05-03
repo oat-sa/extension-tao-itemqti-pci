@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace oat\qtiItemPci\migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use oat\tao\scripts\tools\migrations\AbstractMigration;
-use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 use oat\qtiItemPci\model\PciModel;
+use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
+use oat\tao\scripts\tools\migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
 final class Version202202031355181465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Audio recording PCI: Catch error when browser does not support media format';
@@ -23,8 +22,9 @@ final class Version202202031355181465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new PciModel())->getRegistry();
+
         if ($registry->has('audioRecordingInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
+            /* @noinspection PhpUnhandledExceptionInspection */
             $registry->removeAllVersions('audioRecordingInteraction');
         }
 
@@ -35,7 +35,6 @@ final class Version202202031355181465_qtiItemPci extends AbstractMigration
                 ['0.14.2']
             )
         );
-
     }
 
     public function down(Schema $schema): void

@@ -2,31 +2,35 @@
 
 namespace oat\qtiItemPci\test\integration;
 
+use common_ext_ExtensionException;
+use common_ext_ExtensionsManager;
+use oat\generis\test\GenerisTestCase;
+use oat\generis\test\MockObject;
 use oat\qtiItemPci\controller\PciManager;
 use oat\qtiItemPci\model\IMSPciModel;
-use oat\qtiItemPci\model\ItemsScannerService;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
-use oat\generis\test\GenerisTestCase;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
 use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
-use oat\generis\test\MockObject;
 use oat\taoQtiItem\model\qti\ImportService;
+use Request;
+use taoItems_models_classes_ItemsService;
+use taoTests_models_classes_TestsService;
 
 class PciManagerTest extends GenerisTestCase
 {
-    const PRODUCT_NAME = 'TAO';
+    public const PRODUCT_NAME = 'TAO';
 
     /**
-     * @var \Request|MockObject
+     * @var Request|MockObject
      */
     private $requestMock;
     private $ontologyMock;
     /**
-     * @var \taoItems_models_classes_ItemsService
+     * @var taoItems_models_classes_ItemsService
      */
     private $itemsService;
 
@@ -36,7 +40,7 @@ class PciManagerTest extends GenerisTestCase
     private $portableElementService;
 
     /**
-     * @var \taoTests_models_classes_TestsService
+     * @var taoTests_models_classes_TestsService
      */
     private $testService;
 
@@ -46,18 +50,18 @@ class PciManagerTest extends GenerisTestCase
     private $importService;
 
     /**
-     * @throws \common_ext_ExtensionException
+     * @throws common_ext_ExtensionException
      */
     public function setUp(): void
     {
         $this->ontologyMock = $this->getOntologyMock();
-        $this->requestMock = $this->createMock(\Request::class);
-        $this->itemsService = \taoItems_models_classes_ItemsService::singleton();
+        $this->requestMock = $this->createMock(Request::class);
+        $this->itemsService = taoItems_models_classes_ItemsService::singleton();
         $this->itemsService->setModel($this->ontologyMock);
         $this->portableElementService = new PortableElementService();
-        $this->testService = \taoTests_models_classes_TestsService::singleton();
+        $this->testService = taoTests_models_classes_TestsService::singleton();
         $this->importService = ImportService::singleton();
-        \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
+        common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
     }
 
     public function testUnregisterRequestWithoutParameter()
@@ -111,14 +115,13 @@ class PciManagerTest extends GenerisTestCase
         $pciModelMock->method('getRegistry')->willReturn($pciRegistryMock);
 
         $pciModels = [
-            $pciModelMock, $IMSPciModelMock
+            $pciModelMock, $IMSPciModelMock,
         ];
 
         $pciManager = new PciManagerForTest($this->requestMock, $pciModels);
         $pciManager->unregister();
     }
 }
-
 
 class PciManagerForTest extends PciManager
 {
@@ -128,7 +131,7 @@ class PciManagerForTest extends PciManager
      */
     private $pciModels;
 
-    public function __construct(\Request $request, array $pciModels = [])
+    public function __construct(Request $request, array $pciModels = [])
     {
         parent::__construct();
         $this->request = $request;

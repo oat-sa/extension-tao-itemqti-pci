@@ -16,36 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model;
 
-use oat\oatbox\service\ServiceManager;
 use oat\oatbox\PhpSerializeStateless;
+use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\portableElement\dataObject\IMSPciDataObject;
+use oat\qtiItemPci\model\portableElement\export\ImsPciExporter;
 use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\IMSPciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\IMSPciValidator;
-use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
-use oat\qtiItemPci\model\portableElement\export\ImsPciExporter;
 use oat\taoQtiItem\model\Export\AbstractQTIItemExporter;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
+use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
 
 class IMSPciModel implements PortableElementModel
 {
     use PhpSerializeStateless;
 
-    const PCI_IDENTIFIER = 'IMSPCI';
+    public const PCI_IDENTIFIER = 'IMSPCI';
 
-    const PCI_LABEL = 'IMS PCI';
+    public const PCI_LABEL = 'IMS PCI';
 
-    const PCI_MANIFEST = 'imsPciCreator.json';
+    public const PCI_MANIFEST = 'imsPciCreator.json';
 
-    const PCI_ENGINE = 'imsPciCreator.js';
+    public const PCI_ENGINE = 'imsPciCreator.js';
 
-    const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction_v1';
+    public const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction_v1';
 
     public function getId()
     {
@@ -66,7 +65,7 @@ class IMSPciModel implements PortableElementModel
     {
         return [
             self::PCI_MANIFEST,
-            self::PCI_ENGINE
+            self::PCI_ENGINE,
         ];
     }
 
@@ -79,6 +78,7 @@ class IMSPciModel implements PortableElementModel
     {
         $object = (new IMSPciDataObject())->exchangeArray($data);
         $object->setModel($this);
+
         return $object;
     }
 
@@ -88,6 +88,7 @@ class IMSPciModel implements PortableElementModel
         $registry = IMSPciRegistry::getRegistry($this);
         $registry->setServiceLocator(ServiceManager::getServiceManager());
         $registry->setModel($this);
+
         return $registry;
     }
 
@@ -100,6 +101,7 @@ class IMSPciModel implements PortableElementModel
     {
         $directoryParser = new PciDirectoryParser();
         $directoryParser->setModel($this);
+
         return $directoryParser;
     }
 
@@ -107,6 +109,7 @@ class IMSPciModel implements PortableElementModel
     {
         $packageParser = new PciPackagerParser();
         $packageParser->setModel($this);
+
         return $packageParser;
     }
 

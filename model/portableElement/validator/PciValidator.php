@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model\portableElement\validator;
@@ -34,9 +33,10 @@ class PciValidator extends PortableElementModelValidator
     public function getConstraints()
     {
         $pciConstraints = [
-            'response' => [ Validator::isArray, Validator::NotEmpty ],
-            'creator' => [ Validator::isArray ]
+            'response' => [Validator::isArray, Validator::NotEmpty],
+            'creator' => [Validator::isArray],
         ];
+
         return array_merge($pciConstraints, parent::getConstraints());
     }
 
@@ -44,6 +44,7 @@ class PciValidator extends PortableElementModelValidator
      * Return asset constraints
      *
      * @param $key
+     *
      * @return array
      */
     public function getAssetConstraints($key)
@@ -55,10 +56,11 @@ class PciValidator extends PortableElementModelValidator
                 'libraries',
                 'stylesheets',
                 'mediaFiles',
-            ]
+            ],
         ];
 
         $this->assetConstraints = array_merge($pciConstraints, $this->assetConstraints);
+
         return parent::getAssetConstraints($key);
     }
 
@@ -67,6 +69,7 @@ class PciValidator extends PortableElementModelValidator
      *
      * @param $key
      * @param $constraint
+     *
      * @return bool
      */
     public function isOptionalConstraint($key, $constraint)
@@ -75,10 +78,11 @@ class PciValidator extends PortableElementModelValidator
             'creator' => [
                 'stylesheets',
                 'mediaFiles',
-            ]
+            ],
         ];
 
         $this->optional = array_merge($optional, $this->optional);
+
         return parent::isOptionalConstraint($key, $constraint);
     }
 }

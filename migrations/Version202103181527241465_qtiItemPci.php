@@ -15,7 +15,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202103181527241465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Audio Recording interaction';
@@ -24,8 +23,9 @@ final class Version202103181527241465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new PciModel())->getRegistry();
+
         if ($registry->has('audioRecordingInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
+            /* @noinspection PhpUnhandledExceptionInspection */
             $registry->removeAllVersions('audioRecordingInteraction');
         }
 

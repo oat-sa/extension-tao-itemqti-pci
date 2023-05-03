@@ -16,20 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013-2015 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 namespace oat\qtiItemPci\test\integration;
 
+use DirectoryIterator;
 use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
+use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementNotFoundException;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
-use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use tao_helpers_File;
 
 class PciRegistryTest extends TaoPhpUnitTestRunner
@@ -69,33 +68,33 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $pciDataObject = new PciDataObject('likertScaleInteraction', '1.0.0');
         $pciDataObject->setModel($pciModel);
         $pciDataObject->setCreator([
-            "icon" => ['creator/img/icon.svg' => $pciTmpDir . 'creator/img/icon.svg'],
-            "hook" => ['pciCreator.js' => $pciTmpDir . 'pciCreator.js'],
-            "manifest" => ['pciCreator.json' => $pciTmpDir . 'pciCreator.json'],
-            "libraries" => [
+            'icon' => ['creator/img/icon.svg' => $pciTmpDir . 'creator/img/icon.svg'],
+            'hook' => ['pciCreator.js' => $pciTmpDir . 'pciCreator.js'],
+            'manifest' => ['pciCreator.json' => $pciTmpDir . 'pciCreator.json'],
+            'libraries' => [
                 'creator/tpl/markup.tpl' => $pciTmpDir . 'creator/tpl/markup.tpl',
                 'creator/tpl/propertiesForm.tpl' => $pciTmpDir . 'creator/tpl/propertiesForm.tpl',
                 'creator/widget/Widget.js' => $pciTmpDir . 'creator/widget/Widget.js',
                 'creator/widget/states/Question.js' => $pciTmpDir . 'creator/widget/states/Question.js',
-                'creator/widget/states/states.js' => $pciTmpDir . 'creator/widget/states/states.js'
+                'creator/widget/states/states.js' => $pciTmpDir . 'creator/widget/states/states.js',
             ],
             'stylesheets' => [],
-            'mediaFiles' => []
+            'mediaFiles' => [],
         ]);
         $pciDataObject->setRuntime([
             'hook' => ['runtime/likertScaleInteraction.amd.js' => $pciTmpDir . 'runtime/likertScaleInteraction.amd.js'],
             'libraries' => [
-                'runtime/js/renderer.js' => $pciTmpDir . 'runtime/js/renderer.js'
+                'runtime/js/renderer.js' => $pciTmpDir . 'runtime/js/renderer.js',
             ],
             'stylesheets' => [
                 'runtime/css/likertScaleInteraction.css' => $pciTmpDir . 'runtime/css/likertScaleInteraction.css',
-                'runtime/css/base.css' => $pciTmpDir . 'runtime/css/base.css'
+                'runtime/css/base.css' => $pciTmpDir . 'runtime/css/base.css',
             ],
             'mediaFiles' => [
                 'runtime/assets/ThumbDown.png' => $pciTmpDir . 'runtime/assets/ThumbDown.png',
                 'runtime/assets/ThumbUp.png' => $pciTmpDir . 'runtime/assets/ThumbUp.png',
-                'runtime/css/img/bg.png' => $pciTmpDir . 'runtime/css/img/bg.png'
-            ]
+                'runtime/css/img/bg.png' => $pciTmpDir . 'runtime/css/img/bg.png',
+            ],
         ]);
 
         $this->registry->setModel($pciModel);
@@ -107,10 +106,12 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $pcis = $this->registry->getLatestRuntimes();
 
         $isOnRuntime = false;
+
         foreach ($pcis as $name => $runtime) {
             foreach ($runtime as $key => $runtime_pci) {
                 if ($runtime_pci['model'] == $pciDataObject->getModelId()) {
                     $isOnRuntime = true;
+
                     break;
                 }
             }
@@ -141,8 +142,8 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         $parser->setModel(new PciModel());
         $source = $parser->extract($exportDirectory);
 
-        $original = $this->fillArrayWithFileNodes(new \DirectoryIterator($packageValid));
-        $exported = $this->fillArrayWithFileNodes(new \DirectoryIterator($source));
+        $original = $this->fillArrayWithFileNodes(new DirectoryIterator($packageValid));
+        $exported = $this->fillArrayWithFileNodes(new DirectoryIterator($source));
 
         $this->assertJsonStringEqualsJsonString(
             file_get_contents($packageValid . DIRECTORY_SEPARATOR . PciModel::PCI_MANIFEST),
@@ -154,28 +155,32 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         tao_helpers_File::delTree($source);
     }
 
-    function fillArrayWithFileNodes(\DirectoryIterator $dir)
+    public function fillArrayWithFileNodes(DirectoryIterator $dir)
     {
         $data = [];
+
         foreach ($dir as $node) {
             if ($node->isDir() && !$node->isDot()) {
-                $data[$node->getFilename()] = $this->fillArrayWithFileNodes(new \DirectoryIterator($node->getPathname()));
+                $data[$node->getFilename()] = $this->fillArrayWithFileNodes(new DirectoryIterator($node->getPathname()));
             } elseif ($node->isFile()) {
                 $data[] = $node->getFilename();
             }
         }
+
         return $data;
     }
 
     protected function array_diff_assoc_recursive($array1, $array2)
     {
         $difference = [];
+
         foreach ($array1 as $key => $value) {
             if (is_array($value)) {
                 if (!isset($array2[$key]) || !is_array($array2[$key])) {
                     $difference[$key] = $value;
                 } else {
                     $new_diff = $this->array_diff_assoc_recursive($value, $array2[$key]);
+
                     if (!empty($new_diff)) {
                         $difference[$key] = $new_diff;
                     }
@@ -184,6 +189,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
                 $difference[$key] = $value;
             }
         }
+
         return $difference;
     }
 }

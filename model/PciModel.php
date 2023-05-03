@@ -16,37 +16,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\qtiItemPci\model;
 
+use oat\oatbox\PhpSerializeStateless;
 use oat\oatbox\service\ServiceManager;
 use oat\qtiItemPci\model\portableElement\dataObject\PciDataObject;
+use oat\qtiItemPci\model\portableElement\export\OatPciExporter;
 use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
 use oat\qtiItemPci\model\portableElement\parser\PciPackagerParser;
 use oat\qtiItemPci\model\portableElement\storage\PciRegistry;
 use oat\qtiItemPci\model\portableElement\validator\PciValidator;
-use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
-use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
-use oat\oatbox\PhpSerializeStateless;
-use oat\qtiItemPci\model\portableElement\export\OatPciExporter;
 use oat\taoQtiItem\model\Export\AbstractQTIItemExporter;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
+use oat\taoQtiItem\model\portableElement\model\PortableElementModel;
+use oat\taoQtiItem\model\portableElement\storage\PortableElementRegistry;
 
 class PciModel implements PortableElementModel
 {
     use PhpSerializeStateless;
 
-    const PCI_IDENTIFIER = 'PCI';
+    public const PCI_IDENTIFIER = 'PCI';
 
-    const PCI_LABEL = 'OAT PCI';
+    public const PCI_LABEL = 'OAT PCI';
 
-    const PCI_MANIFEST = 'pciCreator.json';
+    public const PCI_MANIFEST = 'pciCreator.json';
 
-    const PCI_ENGINE = 'pciCreator.js';
+    public const PCI_ENGINE = 'pciCreator.js';
 
-    const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction';
+    public const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction';
 
     public function getId()
     {
@@ -67,7 +66,7 @@ class PciModel implements PortableElementModel
     {
         return [
             self::PCI_MANIFEST,
-            self::PCI_ENGINE
+            self::PCI_ENGINE,
         ];
     }
 
@@ -80,6 +79,7 @@ class PciModel implements PortableElementModel
     {
         $object = (new PciDataObject())->exchangeArray($data);
         $object->setModel($this);
+
         return $object;
     }
 
@@ -89,6 +89,7 @@ class PciModel implements PortableElementModel
         $registry = PciRegistry::getRegistry($this);
         $registry->setServiceLocator(ServiceManager::getServiceManager());
         $registry->setModel($this);
+
         return $registry;
     }
 
@@ -101,6 +102,7 @@ class PciModel implements PortableElementModel
     {
         $directoryParser = new PciDirectoryParser();
         $directoryParser->setModel($this);
+
         return $directoryParser;
     }
 
@@ -108,6 +110,7 @@ class PciModel implements PortableElementModel
     {
         $packageParser = new PciPackagerParser();
         $packageParser->setModel($this);
+
         return $packageParser;
     }
 

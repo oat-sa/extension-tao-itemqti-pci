@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\test\integration;
 
+use common_ext_ExtensionsManager;
 use oat\tao\test\TaoPhpUnitTestRunner;
 use oat\taoQtiItem\model\qti\Parser;
 
@@ -32,15 +33,15 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     public function setUp(): void
     {
         TaoPhpUnitTestRunner::initTest();
-        \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
+        common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
     }
-
 
     public function testParseOatPci()
     {
         $qtiParser = new Parser(dirname(__FILE__) . '/samples/xml/oat/version_and_assets.xml');
 
         $qtiParser->validate();
+
         if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
@@ -70,18 +71,20 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     {
         return [
             [dirname(__FILE__) . '/samples/xml/ims/likert-global-ns.xml'],
-            [dirname(__FILE__) . '/samples/xml/ims/likert-inline-ns.xml']
+            [dirname(__FILE__) . '/samples/xml/ims/likert-inline-ns.xml'],
         ];
     }
 
     /**
      * @dataProvider imsPciPovider
+     *
+     * @param mixed $file
      */
     public function testParseImsPci($file)
     {
-
         $qtiParser = new Parser($file);
         $qtiParser->validate();
+
         if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
@@ -103,7 +106,7 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals(['likertScaleInteraction/runtime/js/likertScaleInteraction.js'], $modules['likertScaleInteraction/runtime/js/likertScaleInteraction']);
         $this->assertEquals([
             'likertScaleInteraction/runtime/js/renderer-unexisting.js',
-            'likertScaleInteraction/runtime/js/renderer.js'
+            'likertScaleInteraction/runtime/js/renderer.js',
         ], $modules['likertScaleInteraction/runtime/js/renderer']);
         $this->assertEquals([], $modules['jquery_2_1_1']);
 
@@ -116,6 +119,7 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $qtiParser = new Parser(dirname(__FILE__) . '/samples/xml/ims/likert-v1.xml');
 
         $qtiParser->validate();
+
         if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
@@ -149,19 +153,21 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
     {
         return [
             [dirname(__FILE__) . '/samples/xml/multi/likert-oat-ims.xml'],
-            [dirname(__FILE__) . '/samples/xml/multi/likert-oat-ims-ns.xml']
+            [dirname(__FILE__) . '/samples/xml/multi/likert-oat-ims-ns.xml'],
         ];
     }
 
     /**
      * @dataProvider compositeOatImsPciPovider
+     *
+     * @param mixed $file
      */
     public function testParseOatAndImsPciWithConfig($file)
     {
-
         $qtiParser = new Parser($file);
 
         $qtiParser->validate();
+
         if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }
@@ -185,10 +191,10 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
 
     public function testParseOatMulti()
     {
-
         $qtiParser = new Parser(dirname(__FILE__) . '/samples/xml/oat/likert_audio.xml');
 
         $qtiParser->validate();
+
         if (!$qtiParser->isValid()) {
             echo $qtiParser->displayErrors();
         }

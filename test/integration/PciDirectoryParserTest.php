@@ -20,6 +20,7 @@
 
 namespace oat\qtiItemPci\test\integration;
 
+use common_ext_ExtensionsManager;
 use oat\qtiItemPci\model\IMSPciModel;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\portableElement\parser\PciDirectoryParser;
@@ -34,12 +35,11 @@ class PciDirectoryParserTest extends TaoPhpUnitTestRunner
     public function setUp(): void
     {
         TaoPhpUnitTestRunner::initTest();
-        \common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
+        common_ext_ExtensionsManager::singleton()->getExtensionById('taoQtiItem');
     }
 
     public function testParsePciDirectory()
     {
-
         $oatPciDir = dirname(__FILE__) . '/samples/directoryParser/oat';
         $imsPciDir = dirname(__FILE__) . '/samples/directoryParser/ims';
 

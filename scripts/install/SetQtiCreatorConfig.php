@@ -16,20 +16,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
- *
  */
 
 namespace oat\qtiItemPci\scripts\install;
 
 use common_ext_action_InstallAction;
-use oat\taoQtiItem\model\QtiCreatorClientConfigRegistry;
 
 /**
  * @deprecated plugin register in this class is no longer used
  * Class SetQtiCreatorConfig
- * @author Bartlomiej Marszal
  *
+ * @author Bartlomiej Marszal
  */
 class SetQtiCreatorConfig extends common_ext_action_InstallAction
 {

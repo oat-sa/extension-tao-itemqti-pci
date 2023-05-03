@@ -15,7 +15,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202010041158341465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Liquids interaction';
@@ -24,8 +23,9 @@ final class Version202010041158341465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new IMSPciModel())->getRegistry();
+
         if ($registry->has('liquidsInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
+            /* @noinspection PhpUnhandledExceptionInspection */
             $registry->removeAllVersions('liquidsInteraction');
         }
 
@@ -40,8 +40,8 @@ final class Version202010041158341465_qtiItemPci extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-      throw new IrreversibleMigration(
-          'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciLiquid::class
-      );
+        throw new IrreversibleMigration(
+            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciLiquid::class
+        );
     }
 }
