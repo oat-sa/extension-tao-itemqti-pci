@@ -154,7 +154,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         tao_helpers_File::delTree($source);
     }
 
-    function fillArrayWithFileNodes(\DirectoryIterator $dir)
+    public function fillArrayWithFileNodes(\DirectoryIterator $dir)
     {
         $data = [];
         foreach ($dir as $node) {

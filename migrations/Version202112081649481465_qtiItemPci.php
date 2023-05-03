@@ -15,7 +15,6 @@ use oat\qtiItemPci\model\PciModel;
  */
 final class Version202112081649481465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Audio recording PCI: fix mp4 support in iOS';
@@ -43,6 +42,5 @@ final class Version202112081649481465_qtiItemPci extends AbstractMigration
         throw new IrreversibleMigration(
             'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciAudioRecording::class
         );
-
     }
 }

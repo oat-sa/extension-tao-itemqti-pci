@@ -11,7 +11,6 @@ use oat\taoItems\model\user\TaoItemsRoles;
 
 final class Version202107271111381465_qtiItemPci extends AbstractMigration
 {
-
     private const CONFIG = [
         SetRolesAccess::CONFIG_RULES => [
             TaoItemsRoles::ITEM_CONTENT_CREATOR => [

@@ -10,10 +10,8 @@ use Doctrine\Migrations\Exception\IrreversibleMigration;
 use oat\qtiItemPci\model\IMSPciModel;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 
-
 final class Version202202170734181465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'fix issue when enabling add gap button';

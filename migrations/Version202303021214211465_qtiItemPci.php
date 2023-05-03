@@ -14,7 +14,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  */
 final class Version202303021214211465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update the Math Entry PCI with allowing copy paste for security plugins';

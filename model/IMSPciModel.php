@@ -37,15 +37,15 @@ class IMSPciModel implements PortableElementModel
 {
     use PhpSerializeStateless;
 
-    const PCI_IDENTIFIER = 'IMSPCI';
+    public const PCI_IDENTIFIER = 'IMSPCI';
 
-    const PCI_LABEL = 'IMS PCI';
+    public const PCI_LABEL = 'IMS PCI';
 
-    const PCI_MANIFEST = 'imsPciCreator.json';
+    public const PCI_MANIFEST = 'imsPciCreator.json';
 
-    const PCI_ENGINE = 'imsPciCreator.js';
+    public const PCI_ENGINE = 'imsPciCreator.js';
 
-    const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction_v1';
+    public const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction_v1';
 
     public function getId()
     {

@@ -14,7 +14,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  */
 final class Version202301241337041465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update the Math Entry PCI with sanitizer';

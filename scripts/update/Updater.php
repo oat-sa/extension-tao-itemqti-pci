@@ -413,25 +413,25 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('6.2.0', '6.3.0');
 
-        if($this->isVersion('6.3.0')){
+        if ($this->isVersion('6.3.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.9.1']);
             $this->setVersion('6.3.1');
         }
 
         $this->skip('6.3.1', '6.5.0');
 
-        if($this->isVersion('6.5.0')){
+        if ($this->isVersion('6.5.0')) {
             call_user_func(new RegisterPciLiquid(), ['0.4.1']);
             $this->setVersion('6.5.1');
         }
 
-        if($this->isVersion('6.5.1')){
+        if ($this->isVersion('6.5.1')) {
             call_user_func(new RegisterPciMathEntry(), ['0.10.0']);
             $this->setVersion('6.6.0');
         }
 
         $this->skip('6.6.0', '6.7.2');
-        
+
         //Updater files are deprecated. Please use migrations.
         //See: https://github.com/oat-sa/generis/wiki/Tao-Update-Process
 

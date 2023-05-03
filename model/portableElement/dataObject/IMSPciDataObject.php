@@ -23,7 +23,6 @@ namespace oat\qtiItemPci\model\portableElement\dataObject;
 
 class IMSPciDataObject extends PciDataObject
 {
-
     /**
      * Get the registration path of the source within a standard QTI package
      * @param $packagePath - absolute path to the root of the item package

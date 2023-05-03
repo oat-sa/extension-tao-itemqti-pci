@@ -15,7 +15,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  */
 final class Version202102011314151465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Convert Math Entry interaction to IMS compliant';
@@ -40,8 +39,8 @@ final class Version202102011314151465_qtiItemPci extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-      throw new IrreversibleMigration(
-          'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
-      );
+        throw new IrreversibleMigration(
+            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
+        );
     }
 }

@@ -25,12 +25,11 @@ use oat\oatbox\service\ServiceManager;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use oat\taoQtiItem\model\portableElement\export\PortableElementExporter;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
-use \DOMDocument;
-use \DOMXPath;
+use DOMDocument;
+use DOMXPath;
 
 class OatPciExporter extends PortableElementExporter
 {
-
     /**
      * Copy the asset files of the PCI to the item exporter and return the list of copied assets
      * @param $replacementList

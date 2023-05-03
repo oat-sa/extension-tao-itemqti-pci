@@ -24,7 +24,7 @@ namespace oat\qtiItemPci\controller;
 use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\model\IMSPciModel;
 use oat\taoQtiItem\model\portableElement\exception\PortableElementException;
-use \tao_actions_CommonModule;
+use tao_actions_CommonModule;
 
 class PciLoader extends tao_actions_CommonModule
 {
@@ -70,7 +70,7 @@ class PciLoader extends tao_actions_CommonModule
                                         unset($version['creator']['src']);
                                     }
 
-                                    // TAO PCI
+                                // TAO PCI
                                 } else {
                                     if (isset($version['runtime']) && isset($version['runtime']['src'])) {
                                         $version['runtime']['libraries'] = $version['runtime']['src'];

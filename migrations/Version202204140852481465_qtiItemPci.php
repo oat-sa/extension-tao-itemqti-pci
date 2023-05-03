@@ -12,7 +12,6 @@ use oat\qtiItemPci\scripts\install\RegisterIMSPciAudioRecording;
 
 final class Version202204140852481465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Register IMS Pci AudioRecording interaction';
@@ -22,7 +21,8 @@ final class Version202204140852481465_qtiItemPci extends AbstractMigration
     {
         $registry = (new IMSPciModel())->getRegistry();
         $this->addReport(
-            $this->propagate(new RegisterIMSPciAudioRecording())([]));
+            $this->propagate(new RegisterIMSPciAudioRecording())([])
+        );
     }
 
     public function down(Schema $schema): void
