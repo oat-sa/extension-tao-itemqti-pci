@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +24,7 @@
  * RAW Bootstraping
  *
  */
+
 if (PHP_SAPI == 'cli') {
     $_SERVER['HTTP_HOST'] = 'http://localhost';
     $_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__) . '/../../..';

@@ -15,29 +15,28 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  */
 final class Version202203221158521465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Register new major version of Math Entry PCI with breaking change: single cardinality';
     }
 
     public function up(Schema $schema): void
-        {
-            $registry = (new IMSPciModel())->getRegistry();
+    {
+        $registry = (new IMSPciModel())->getRegistry();
 
-            $this->addReport(
-                $this->propagate(
-                    new RegisterPciMathEntry()
-                )(
-                    ['2.0.0']
-                )
-            );
-        }
+        $this->addReport(
+            $this->propagate(
+                new RegisterPciMathEntry()
+            )(
+                ['2.0.0']
+            )
+        );
+    }
 
-        public function down(Schema $schema): void
-        {
-            throw new IrreversibleMigration(
-                'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
-            );
-        }
+    public function down(Schema $schema): void
+    {
+        throw new IrreversibleMigration(
+            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
+        );
+    }
 }

@@ -15,7 +15,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
  */
 final class Version202111161903531465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Force direction for labels';

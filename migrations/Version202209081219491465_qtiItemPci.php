@@ -14,7 +14,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  */
 final class Version202209081219491465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update the Math Entry PCI reverting a bad fix that broke the compliance to IMS standard';

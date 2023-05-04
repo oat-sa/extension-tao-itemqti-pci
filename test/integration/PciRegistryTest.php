@@ -128,7 +128,12 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
 
         $pciDataObject = new PciDataObject('likertScaleInteraction', '1.0.0');
         $pciDataObject->setModel(new PciModel());
-        $pciDataObject->exchangeArray(json_decode(file_get_contents($packageValid . DIRECTORY_SEPARATOR . PciModel::PCI_MANIFEST), true));
+        $pciDataObject->exchangeArray(
+            json_decode(
+                file_get_contents($packageValid . DIRECTORY_SEPARATOR . PciModel::PCI_MANIFEST),
+                true
+            )
+        );
 
         $service = new PortableElementService();
         $service->setServiceLocator(ServiceManager::getServiceManager());
@@ -154,12 +159,14 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         tao_helpers_File::delTree($source);
     }
 
-    function fillArrayWithFileNodes(\DirectoryIterator $dir)
+    public function fillArrayWithFileNodes(\DirectoryIterator $dir)
     {
         $data = [];
         foreach ($dir as $node) {
             if ($node->isDir() && !$node->isDot()) {
-                $data[$node->getFilename()] = $this->fillArrayWithFileNodes(new \DirectoryIterator($node->getPathname()));
+                $data[$node->getFilename()] = $this->fillArrayWithFileNodes(
+                    new \DirectoryIterator($node->getPathname())
+                );
             } elseif ($node->isFile()) {
                 $data[] = $node->getFilename();
             }
@@ -167,6 +174,7 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         return $data;
     }
 
+    // phpcs:disable PSR1.Methods.CamelCapsMethodName
     protected function array_diff_assoc_recursive($array1, $array2)
     {
         $difference = [];
@@ -186,4 +194,5 @@ class PciRegistryTest extends TaoPhpUnitTestRunner
         }
         return $difference;
     }
+    // phpcs:enable PSR1.Methods.CamelCapsMethodName
 }

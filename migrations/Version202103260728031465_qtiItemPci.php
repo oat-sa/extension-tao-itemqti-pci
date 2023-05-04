@@ -15,7 +15,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  */
 final class Version202103260728031465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Remove Math Entry interaction from PCI registry';

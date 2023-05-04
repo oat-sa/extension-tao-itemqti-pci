@@ -12,7 +12,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciAudioRecording;
 
 final class Version202103240929581465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Added support for review mode for Audio Recording interaction';
@@ -33,7 +32,6 @@ final class Version202103240929581465_qtiItemPci extends AbstractMigration
                 ['0.13.0']
             )
         );
-
     }
 
     public function down(Schema $schema): void
