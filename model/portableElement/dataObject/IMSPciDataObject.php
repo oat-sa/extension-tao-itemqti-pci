@@ -23,7 +23,6 @@ namespace oat\qtiItemPci\model\portableElement\dataObject;
 
 class IMSPciDataObject extends PciDataObject
 {
-
     /**
      * Get the registration path of the source within a standard QTI package
      * @param $packagePath - absolute path to the root of the item package
@@ -110,7 +109,11 @@ class IMSPciDataObject extends PciDataObject
     {
         $runtimeManifest = $this->getRuntime();
         if (isset($runtimeManifest['src'])) {
-            $runtimeManifest['src'] = preg_replace('/^(.\/)?(.*)/', $this->getTypeIdentifier() . "/$2", $runtimeManifest['src']);
+            $runtimeManifest['src'] = preg_replace(
+                '/^(.\/)?(.*)/',
+                $this->getTypeIdentifier() . "/$2",
+                $runtimeManifest['src']
+            );
         }
 
         return $runtimeManifest;

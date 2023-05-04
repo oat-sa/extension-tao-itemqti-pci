@@ -29,6 +29,10 @@ class RegisterClientProvider extends common_ext_action_InstallAction
     public function __invoke($params)
     {
         CustomInteractionRegistry::getRegistry()->registerProvider('pciRegistry', 'qtiItemPci/pciProvider');
-        return new \common_report_Report(\common_report_Report::TYPE_SUCCESS, '"qtiItemPci/pciProvider" PCI provider added');
+
+        return new \common_report_Report(
+            \common_report_Report::TYPE_SUCCESS,
+            '"qtiItemPci/pciProvider" PCI provider added'
+        );
     }
 }

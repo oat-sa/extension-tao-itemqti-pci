@@ -25,12 +25,11 @@ use oat\oatbox\service\ServiceManager;
 use oat\taoQtiItem\model\portableElement\PortableElementService;
 use oat\taoQtiItem\model\portableElement\export\PortableElementExporter;
 use oat\taoQtiItem\model\portableElement\element\PortableElementObject;
-use \DOMDocument;
-use \DOMXPath;
+use DOMDocument;
+use DOMXPath;
 
 class OatPciExporter extends PortableElementExporter
 {
-
     /**
      * Copy the asset files of the PCI to the item exporter and return the list of copied assets
      * @param $replacementList
@@ -161,7 +160,10 @@ class OatPciExporter extends PortableElementExporter
             foreach ($portableElement->getRuntimeKey('mediaFiles') as $mediaFile) {
                 $mediaFileNode = $dom->createElement($localNs . 'file');
                 $mediaFileNode->setAttribute('src', $this->getOatPciExportPath($mediaFile));
-                $mediaFileNode->setAttribute('type', \tao_helpers_File::getMimeType($this->getOatPciExportPath($mediaFile)));
+                $mediaFileNode->setAttribute(
+                    'type',
+                    \tao_helpers_File::getMimeType($this->getOatPciExportPath($mediaFile))
+                );
                 $mediaFilesNode->appendChild($mediaFileNode);
             }
             if ($mediaFilesNode->hasChildNodes()) {
@@ -174,6 +176,8 @@ class OatPciExporter extends PortableElementExporter
 
     private function getOatPciExportPath($file)
     {
-        return $this->portableAssetsToExport[preg_replace('/^' . $this->object->getTypeIdentifier() . '\//', './', $file)];
+        $key = preg_replace('/^' . $this->object->getTypeIdentifier() . '\//', './', $file);
+
+        return $this->portableAssetsToExport[$key];
     }
 }

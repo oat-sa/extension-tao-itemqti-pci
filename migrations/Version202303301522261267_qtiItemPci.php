@@ -15,7 +15,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202303301522261267_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update minimum recording time to 5 seconds';
@@ -25,7 +24,8 @@ final class Version202303301522261267_qtiItemPci extends AbstractMigration
     {
         $registry = (new PciModel())->getRegistry();
         $this->addReport(
-            $this->propagate(new RegisterPciAudioRecording()
+            $this->propagate(
+                new RegisterPciAudioRecording()
             )(
                 ['0.14.5']
             )

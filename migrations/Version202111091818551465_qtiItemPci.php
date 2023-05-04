@@ -15,7 +15,6 @@ use oat\qtiItemPci\model\PciModel;
  */
 final class Version202111091818551465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Audio Recording interaction';

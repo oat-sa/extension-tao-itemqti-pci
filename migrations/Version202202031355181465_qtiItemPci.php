@@ -14,7 +14,6 @@ use oat\qtiItemPci\model\PciModel;
  */
 final class Version202202031355181465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Audio recording PCI: Catch error when browser does not support media format';
@@ -35,7 +34,6 @@ final class Version202202031355181465_qtiItemPci extends AbstractMigration
                 ['0.14.2']
             )
         );
-
     }
 
     public function down(Schema $schema): void

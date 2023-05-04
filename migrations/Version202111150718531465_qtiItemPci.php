@@ -15,7 +15,6 @@ use oat\qtiItemPci\model\PciModel;
  */
 final class Version202111150718531465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Math Entry interaction';
@@ -36,7 +35,6 @@ final class Version202111150718531465_qtiItemPci extends AbstractMigration
                 ['1.1.0']
             )
         );
-
     }
 
     public function down(Schema $schema): void

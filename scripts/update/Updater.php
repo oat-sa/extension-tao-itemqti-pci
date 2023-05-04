@@ -177,9 +177,14 @@ class Updater extends \common_ext_ExtensionUpdater
 
             /** @var \common_ext_ExtensionsManager $extensionManager */
             $extensionManager = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID);
+            $hasPciRegistryEntriesConfig = $extensionManager
+                ->getExtensionById(PciRegistry::REGISTRY_EXTENSION)
+                ->hasConfig(PciRegistry::REGISTRY_ID);
 
-            if ($extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->hasConfig(PciRegistry::REGISTRY_ID)) {
-                $map = $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->getConfig(PciRegistry::REGISTRY_ID);
+            if ($hasPciRegistryEntriesConfig) {
+                $map = $extensionManager
+                    ->getExtensionById(PciRegistry::REGISTRY_EXTENSION)
+                    ->getConfig(PciRegistry::REGISTRY_ID);
 
                 if (is_array($map)) {
                     foreach ($map as $key => $value) {
@@ -192,7 +197,9 @@ class Updater extends \common_ext_ExtensionUpdater
                     }
                 }
 
-                $extensionManager->getExtensionById(PciRegistry::REGISTRY_EXTENSION)->unsetConfig(PciRegistry::REGISTRY_ID);
+                $extensionManager
+                    ->getExtensionById(PciRegistry::REGISTRY_EXTENSION)
+                    ->unsetConfig(PciRegistry::REGISTRY_ID);
             }
             $this->setVersion('3.0.0');
         }
@@ -362,7 +369,10 @@ class Updater extends \common_ext_ExtensionUpdater
         $this->skip('5.1.0', '5.2.0');
 
         if ($this->isVersion('5.2.0')) {
-            $extension = $this->getServiceManager()->get(\common_ext_ExtensionsManager::SERVICE_ID)->getExtensionById('tao');
+            $extension = $this
+                ->getServiceManager()
+                ->get(\common_ext_ExtensionsManager::SERVICE_ID)
+                ->getExtensionById('tao');
             $config = $extension->getConfig('client_lib_config_registry');
             unset($config['taoQtiItem/controller/creator/index']['plugins'][1]);
             $extension->setConfig('client_lib_config_registry', $config);
@@ -413,25 +423,25 @@ class Updater extends \common_ext_ExtensionUpdater
 
         $this->skip('6.2.0', '6.3.0');
 
-        if($this->isVersion('6.3.0')){
+        if ($this->isVersion('6.3.0')) {
             call_user_func(new RegisterPciMathEntry(), ['0.9.1']);
             $this->setVersion('6.3.1');
         }
 
         $this->skip('6.3.1', '6.5.0');
 
-        if($this->isVersion('6.5.0')){
+        if ($this->isVersion('6.5.0')) {
             call_user_func(new RegisterPciLiquid(), ['0.4.1']);
             $this->setVersion('6.5.1');
         }
 
-        if($this->isVersion('6.5.1')){
+        if ($this->isVersion('6.5.1')) {
             call_user_func(new RegisterPciMathEntry(), ['0.10.0']);
             $this->setVersion('6.6.0');
         }
 
         $this->skip('6.6.0', '6.7.2');
-        
+
         //Updater files are deprecated. Please use migrations.
         //See: https://github.com/oat-sa/generis/wiki/Tao-Update-Process
 

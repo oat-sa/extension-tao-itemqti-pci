@@ -15,7 +15,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202103181527241465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Audio Recording interaction';

@@ -15,7 +15,6 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  */
 final class Version202104081405171465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Allow partial update of the response while recording from the Audio Recording interaction';
@@ -36,7 +35,6 @@ final class Version202104081405171465_qtiItemPci extends AbstractMigration
                 ['0.13.1']
             )
         );
-
     }
 
     public function down(Schema $schema): void
