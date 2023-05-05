@@ -1,0 +1,351 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tao-3x\n"
+"PO-Revision-Date: 2023-04-21 15:46\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: pt\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-3x\n"
+"X-Crowdin-Project-ID: 582145\n"
+"X-Crowdin-Language: pt-BR\n"
+"X-Crowdin-File: /qtiItemPci/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 1247\n"
+"Language-Team: Portuguese, Brazilian\n"
+
+msgid "Add answer option"
+msgstr "Adicionar opção de resposta"
+
+msgid "Add gap"
+msgstr "Adicionar lacuna"
+
+msgid "Add Interaction"
+msgstr "Adicionar interação"
+
+msgid "Allow download"
+msgstr "Permitir downloads"
+
+msgid "allow line break"
+msgstr "permitir quebra de linha"
+
+msgid "Allow playback"
+msgstr "Permitir reprodução"
+
+msgid "angle"
+msgstr "ângulo"
+
+msgid "Audio bitrate:"
+msgstr "Taxa de bits do áudio:"
+
+msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
+msgstr "Áudio já foi gravado anteriormente. Seu navegador não suporta a reprodução desta gravação. Por favor, tente em um navegador diferente."
+
+msgid "authorize white space"
+msgstr "autorizar espaço em branco"
+
+msgid "Auto playback recording"
+msgstr "Reprodução e gravação de áudio automática"
+
+msgid "Auto start recording"
+msgstr "Início de gravação automático"
+
+msgid "Back to listing"
+msgstr "Voltar à lista"
+
+msgid "braces/curly brackets"
+msgstr "chaves/colchetes"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Channels"
+msgstr "Canais"
+
+msgid "Close dialog"
+msgstr "Fechar janela de diálogo"
+
+msgid "Comparison"
+msgstr "Comparação"
+
+msgid "Compressed"
+msgstr "Comprimido"
+
+msgid "Correct answer option"
+msgstr "Opção de resposta correta"
+
+msgid "cosinus"
+msgstr "cosseno"
+
+msgid "Define correct responses"
+msgstr "Definir respostas corretas"
+
+msgid "Delete"
+msgstr "Remover"
+
+msgid "delete the answer"
+msgstr "remover a resposta"
+
+msgid "disabled"
+msgstr "desativado"
+
+msgid "divide"
+msgstr "dividir"
+
+msgid "Download"
+msgstr "Baixar"
+
+msgid "edit the answer"
+msgstr "editar a resposta"
+
+msgid "enable auto wrap"
+msgstr "ativar embrulho automático"
+
+msgid "Enabled in item authoring"
+msgstr "Habilitado em autoria de itens"
+
+msgid "equal"
+msgstr "igual"
+
+msgid "Experimental only"
+msgstr "Somente Experimental"
+
+msgid "exponent"
+msgstr "expoente"
+
+msgid "For tests only"
+msgstr "Apenas para testes"
+
+msgid "fraction"
+msgstr "fração"
+
+msgid "Functions"
+msgstr "Funções"
+
+msgid "Gap size"
+msgstr "Tamanho do espaço"
+
+msgid "Geometry"
+msgstr "Geometria"
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr "Dar a possibilidade ao candidato para reproduzir sua própria gravação."
+
+msgid "greater than"
+msgstr "maior que"
+
+msgid "greater than or equal"
+msgstr "maior ou igual a"
+
+msgid "id : "
+msgstr "id : "
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr "Em bps (bits por segundo). Defina a troca entre a qualidade de áudio e o tamanho dos arquivos. Com o valor padrão (20.000bps), uma gravação de dois minutos pesa cerca de 300KB."
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr "Em segundos. O tempo máximo de gravação permitido (não pode ser menor que 10 segundos). A gravação irá parar automaticamente quando atingido."
+
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr "Em segundos. O intervalo de tempo entre atualizações parciais da gravação."
+
+msgid "Indefinite integral"
+msgstr "Integral indefinida"
+
+msgid "Invalid files have been removed"
+msgstr "Arquivos inválidos foram removidos"
+
+msgid "is a member of"
+msgstr "é um membro do"
+
+msgid "is not a member of"
+msgstr "não é um membro de"
+
+msgid "is parallel with"
+msgstr "é paralelo com"
+
+msgid "is perpendicular to"
+msgstr "é perpendicular a"
+
+msgid "Large"
+msgstr "Grande"
+
+msgid "Level"
+msgstr "Nível"
+
+msgid "ln"
+msgstr "In"
+
+msgid "log"
+msgstr "log \t"
+
+msgid "lower than"
+msgstr "menor que"
+
+msgid "lower than or equal"
+msgstr "menor ou igual à"
+
+msgid "Manage custom interactions"
+msgstr "Administrar interações personalizadas"
+
+msgid "Max attempts:"
+msgstr "Máx. de tentativas:"
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr "Número máximo de tentativas de gravação permitidas para o testador. Defina como 0 para permitir tentativas ilimitadas. Com um limite de 3, o aplicativo de teste poderá clicar 2 vezes no botão de reiniciar."
+
+msgid "Medium"
+msgstr "Médio"
+
+msgid "Min:"
+msgstr "Min:"
+
+msgid "minus"
+msgstr "menos"
+
+msgid "Mono"
+msgstr "Mono"
+
+msgid "No Custom Interaction"
+msgstr "Nenhuma Interação Personalizada"
+
+msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
+msgstr "Número de canais para gravação. Permite cortar o tamanho do arquivo pela metade se usado no mono."
+
+msgid "Operands"
+msgstr "Operador"
+
+msgid "Options"
+msgstr "Opções"
+
+msgid "parentheses/round brackets"
+msgstr "parênteses/colchetes redondos"
+
+msgid "plus"
+msgstr "mais"
+
+msgid "Plus/minus"
+msgstr "Mais/menos"
+
+#, tao-public
+msgid "Portable Custom Interactions"
+msgstr "Interações Personalizadas Portáteis"
+
+msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
+msgstr "O áudio gravado é reproduzido automaticamente após a gravação parar. Durante a reprodução, nenhuma interação do usuário é possível e todos os botões estão desativados."
+
+msgid "Recording format"
+msgstr "Formato de gravação"
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr "A gravação começa automaticamente quando o realizador de testes dá autorização de uso do microfone. Se um estímulo de mídia for usado, a gravação inicia automaticamente após o estímulo ser reproduzido."
+
+msgid "Response identifier"
+msgstr "Identificador do Recurso"
+
+msgid "Scale size"
+msgstr "Tamanho da escala"
+
+msgid "Sec:"
+msgstr "Seg:"
+
+msgid "set intersection"
+msgstr "definir interseção"
+
+msgid "set union"
+msgstr "definir união"
+
+#, tao-public
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "similar"
+msgstr "similar"
+
+msgid "sinus"
+msgstr "seno"
+
+msgid "Small"
+msgstr "Pequeno"
+
+msgid "square brackets"
+msgstr "colchetes quadrados"
+
+msgid "square root"
+msgstr "raiz quadrada"
+
+msgid "Stereo"
+msgstr "Estéreo"
+
+msgid "subscript"
+msgstr "legenda"
+
+msgid "Symbols"
+msgstr "Símbolos"
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "O identificador da escolha. Este identificador não deve ser usado por qualquer outra resposta ou variável do item. Um identificador é uma string de caracteres que devem começar com uma letra ou um underscore (\"_\") e conter apenas letras, sublinhados, hífens (\"-\"), período (\". , a.k.a. parada), Digits, CombiningChars e Excursos."
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr "Isto é apenas para fins de teste. Exibe um link para baixar o arquivo gravado quando a gravação para. Isso não deve ser usado em um contexto de entrega, pois permitiria que o realizador de testes baixasse sua própria gravação."
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr "Estas opções permitem inserir um estímulo de mídia que terá de ser reproduzido para que a gravação possa acontecer."
+
+msgid "Time limit:"
+msgstr "Limite de tempo:"
+
+msgid "times"
+msgstr "vezes"
+
+msgid "times dot"
+msgstr "pontos de vezes"
+
+msgid "triangle"
+msgstr "triângulo"
+
+msgid "Trigonometry"
+msgstr "Trigonometria"
+
+msgid "type : "
+msgstr "tipo : "
+
+msgid "Unable to upload file %s : %s"
+msgstr "Não foi possível carregar o arquivo %s : %s"
+
+msgid "Uncompressed"
+msgstr "Descompactado"
+
+msgid "Update interval:"
+msgstr "Intervalo de atualização:"
+
+msgid "Upload new custom interaction (zip package)"
+msgstr "Enviar nova interação personalizada (pacote zip)"
+
+msgid "use expression with gaps"
+msgstr "usar expressão com lacunas"
+
+msgid "Use media stimulus"
+msgstr "Usar estímulo de mídia"
+
+msgid "version : "
+msgstr "versão : "
+
+msgid "Warning"
+msgstr "Atenção"
+
+msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr "Com a gravação comprimida, o áudio é salvo como um arquivo webm ou ogg (tamanho menor). Com não comprimido, como um arquivo Wav sem perdas (tamanho muito maior)."
+
+msgid "≤"
+msgstr "≤"
+
+msgid "≥"
+msgstr "≥"
+
