@@ -15,6 +15,7 @@
  *
  * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
  */
+/* eslint-disable func-names */
 define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
@@ -53,8 +54,10 @@ define([
      * @returns {boolean}
      */
     function toBoolean(value, defaultValue) {
-        if (typeof value === 'undefined' || value === '') {
+        if (typeof value === 'undefined') {
             return defaultValue;
+        } else if (value === '') {
+            return false;
         } else {
             return value === true || value === 'true';
         }
@@ -306,6 +309,7 @@ define([
                 this.initProgressBar();
                 this.initMeter();
                 this.initControls();
+                this.initBeepPlayer();
                 this.updateResetCount();
                 this.initRecording();
             },
@@ -315,8 +319,11 @@ define([
              * @param {Object}  config
              * @param {Boolean} config.isReviewMode - Is in review mode
              * @param {Boolean} config.allowPlayback - display the play button
+             * @param {Boolean} config.hideStopButton - don't display the stop button
              * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
+             * @param {Boolean} config.hideRecordButton - don't display the record button
              * @param {Boolean} config.autoPlayback - immediately playback recording after recording stops
+             * @param {Boolean} config.playSound - play beep sound when recording starts and ends
              * @param {Number}  config.delaySeconds - seconds delay before start recording
              * @param {Number}  config.delayMinutes - minutes delay before start recording
              * @param {Number}  config.maxRecords - 0 = unlimited / 1 = no retry / x = x attempts
@@ -333,8 +340,11 @@ define([
                 this.config = {
                     isReviewMode: toBoolean(config.isReviewMode, false),
                     allowPlayback: toBoolean(config.allowPlayback, true),
+                    hideStopButton: toBoolean(config.hideStopButton, false),
                     autoStart: toBoolean(config.autoStart, false),
+                    hideRecordButton: toBoolean(config.hideRecordButton, false),
                     autoPlayback: toBoolean(config.autoPlayback, false),
+                    playSound: toBoolean(config.playSound, false),
 
                     delaySeconds: toInteger(config.delaySeconds, 0),
                     delayMinutes: toInteger(config.delayMinutes, 0),
@@ -430,6 +440,12 @@ define([
                 this.recorder.on('levelUpdate', function (level) {
                     self.inputMeter.draw(level);
                 });
+
+                this.recorder.on('stop', function () {
+                    if (self.beepPlayer) {
+                        self.beepPlayer.playEndSound();
+                    }
+                });
             },
 
             /**
@@ -479,6 +495,16 @@ define([
                     $container: this.$meterContainer.find('.leds'),
                     maxLevel: 100 // this is closely related to the values analyser.minDecibels and analyser.maxDecibels in recorderFactory
                 });
+            },
+
+            /**
+             * Instanciate the audio player and its event listeners.
+             * This player is only for the playback of the recording.
+             */
+            initBeepPlayer: function initBeepPlayer() {
+                if (this.config.playSound === true && this.config.isReviewMode !== true) {
+                    this.beepPlayer = uiElements.beepPlayerFactory();
+                }
             },
 
             initRecording: function initRecording() {
@@ -586,13 +612,20 @@ define([
                     this.recorder
                         .init()
                         .then(function () {
-                            startForReal();
+                            return playBeepAndStartRecording();
                         })
                         .catch(function (err) {
                             // eslint-disable-next-line no-console
                             console.error(err);
                         });
                 } else {
+                    playBeepAndStartRecording();
+                }
+
+                function playBeepAndStartRecording() {
+                    if (self.beepPlayer) {
+                        return self.beepPlayer.playStartSound().then(startForReal);
+                    }
                     startForReal();
                 }
 
@@ -770,8 +803,8 @@ define([
                 this.$controlsContainer.empty();
                 this.controls = {};
 
-                if (this.config.isReviewMode !== true) {
-                    // Record button
+                // Record button
+                if (this.config.hideRecordButton !== true && this.config.isReviewMode !== true) {
                     record = uiElements.controlFactory({
                         id: 'record',
                         label: recordIcon,
@@ -799,34 +832,39 @@ define([
                 }
 
                 // Stop button
-                stop = uiElements.controlFactory({
-                    id: 'stop',
-                    label: stopIcon,
-                    container: this.$controlsContainer
-                });
-                stop.on(
-                    'click',
-                    function () {
-                        if (this.is('enabled')) {
-                            if (self.recorder.is('recording')) {
-                                self.stopRecording();
-                            } else if (self.player.is('playing')) {
-                                self.stopPlayback();
+                if (this.config.hideStopButton !== true || this.config.isReviewMode === true) {
+                    stop = uiElements.controlFactory({
+                        id: 'stop',
+                        label: stopIcon,
+                        container: this.$controlsContainer
+                    });
+                    stop.on(
+                        'click',
+                        function () {
+                            if (this.is('enabled')) {
+                                if (self.recorder.is('recording')) {
+                                    self.stopRecording();
+                                } else if (self.player.is('playing')) {
+                                    self.stopPlayback();
+                                }
                             }
-                        }
-                    }.bind(stop)
-                );
-                stop.on(
-                    'updatestate',
-                    function () {
-                        if ((self.player.is('playing') && !self._isAutoPlayingBack) || self.recorder.is('recording')) {
-                            this.enable();
-                        } else {
-                            this.disable();
-                        }
-                    }.bind(stop)
-                );
-                this.controls.stop = stop;
+                        }.bind(stop)
+                    );
+                    stop.on(
+                        'updatestate',
+                        function () {
+                            if (
+                                (self.player.is('playing') && !self._isAutoPlayingBack) ||
+                                self.recorder.is('recording')
+                            ) {
+                                this.enable();
+                            } else {
+                                this.disable();
+                            }
+                        }.bind(stop)
+                    );
+                    this.controls.stop = stop;
+                }
 
                 // Play button
                 if (this.config.allowPlayback === true || this.config.isReviewMode === true) {
@@ -869,6 +907,10 @@ define([
                             if (this.is('enabled')) {
                                 self.resetRecording();
                                 self.updateResetCount();
+
+                                if (self.config.hideRecordButton === true) {
+                                    self.startRecording();
+                                }
                             }
                         }.bind(reset)
                     );
@@ -941,12 +983,7 @@ define([
                 config.properties.media = JSON.parse(config.properties.media);
             }
             //simply mapped to existing TAO PCI API
-            audioRecordingInteraction.initialize(
-                responseIdentifier,
-                dom,
-                config.properties,
-                config.assetManager
-            );
+            audioRecordingInteraction.initialize(responseIdentifier, dom, config.properties, config.assetManager);
             audioRecordingInteraction.setResponse(response[responseIdentifier]);
             audioRecordingInteraction.setSerializedState(state);
 

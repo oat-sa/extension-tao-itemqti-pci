@@ -23,8 +23,9 @@
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/util/event'
-], function ($, _, event) {
+    'taoQtiItem/portableLib/OAT/util/event',
+    'text!audioRecordingInteraction/runtime/media/beep.txt'
+], function ($, _, event, beepSoundDataUrl) {
     'use strict';
 
     /**
@@ -336,10 +337,66 @@ define([
         return countdownPieChart;
     }
 
+    /**
+     * Creates a player for beep sound at the beginning and end of recording
+     * @returns {jQuery} beepPlayer
+     */
+    function beepPlayerFactory() {
+        let beepPlayer;
+        let currentAudio;
+        const soundDataUrl = beepSoundDataUrl;
+        const timeoutMs = 1500;
+
+        function playSound(soundUrl) {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            currentAudio = new Audio(soundUrl);
+            const playedToTheEndPromise = new Promise((resolve, reject) => {
+                const timeoutId = setTimeout(() => {
+                    reject(new Error('beep was not played in time'));
+                }, timeoutMs);
+                currentAudio.onended = () => {
+                    clearTimeout(timeoutId);
+                    resolve();
+                };
+                currentAudio.onerror = err => {
+                    clearTimeout(timeoutId);
+                    reject(err);
+                };
+            });
+            return currentAudio
+                .play()
+                .then(() => playedToTheEndPromise)
+                .catch(function onError(err) {
+                    // eslint-disable-next-line no-console
+                    console.error(err);
+                });
+        }
+
+        beepPlayer = {
+            playStartSound: function playStartSound() {
+                return playSound(soundDataUrl);
+            },
+            playEndSound: function playEndSound() {
+                return playSound(soundDataUrl);
+            },
+            destroy: function destroy() {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+            }
+        };
+
+        return beepPlayer;
+    }
+
     return {
         controlFactory: controlFactory,
         progressBarFactory: progressBarFactory,
         inputMeterFactory: inputMeterFactory,
-        countdownPieChartFactory: countdownPieChartFactory
+        countdownPieChartFactory: countdownPieChartFactory,
+        beepPlayerFactory: beepPlayerFactory
     };
 });

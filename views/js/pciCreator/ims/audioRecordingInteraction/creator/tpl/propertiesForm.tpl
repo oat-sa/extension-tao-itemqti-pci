@@ -24,6 +24,17 @@
 
 <div class="panel">
     <label>
+        <input name="hideStopButton" type="checkbox" {{#if hideStopButton}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span> {{__ "Hide stop button"}}
+    </label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "Hide the stop button from test takers."}}
+    </span>
+</div>
+
+<div class="panel">
+    <label>
         <input name="autoStart" type="checkbox" {{#if autoStart}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span> {{__ "Auto start recording"}}
     </label>
@@ -42,6 +53,19 @@
     </div>
 </div>
 
+<div data-role="hideRecordOption" {{#unless autoStart}}style="display:none"{{/unless}}>
+    <div class="panel">
+        <label>
+            <input name="hideRecordButton" type="checkbox" {{#if hideRecordButton}}checked="checked"{{/if}}/>
+            <span class="icon-checkbox"></span> {{__ "Hide record button"}}
+         </label>
+        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+        <span class="tooltip-content">
+            {{__ "Hide the record button from test takers."}}
+        </span>
+    </div>
+</div>
+
 <div class="panel">
     <label>
         <input name="autoPlayback" type="checkbox" {{#if autoPlayback}}checked="checked"{{/if}}/>
@@ -50,6 +74,17 @@
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
         {{__ "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."}}
+    </span>
+</div>
+
+<div class="panel">
+    <label>
+        <input name="playSound" type="checkbox" {{#if playSound}}checked="checked"{{/if}}/>
+        <span class="icon-checkbox"></span> {{__ "Play sound"}}
+    </label>
+    <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+    <span class="tooltip-content">
+        {{__ "Play a sound at the start and end of recording."}}
     </span>
 </div>
 
