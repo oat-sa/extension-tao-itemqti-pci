@@ -64,6 +64,9 @@ define([
                         'allowPlayback': true,
                         'autoStart': false,
                         'autoPlayback': false,
+                        "hideRecordButton": false,
+                        "hideStopButton": false,
+                        "playSound": false,
                         'delaySeconds': 0,
                         'delayMinutes': 0,
                         'maxRecords': 2,
@@ -495,4 +498,3 @@ define([
     /* */
 
 });
-
