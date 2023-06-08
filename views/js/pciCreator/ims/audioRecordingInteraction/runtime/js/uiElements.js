@@ -342,53 +342,98 @@ define([
      * @returns {jQuery} beepPlayer
      */
     function beepPlayerFactory() {
-        let beepPlayer;
-        let currentAudio;
-        const soundDataUrl = beepSoundDataUrl;
-        const timeoutMs = 1500;
+        const timeoutMs = 2000;
+        const soundUrl = beepSoundDataUrl;
 
-        function playSound(soundUrl) {
-            if (currentAudio) {
-                currentAudio.pause();
-            }
-            currentAudio = new Audio(soundUrl);
-            const playedToTheEndPromise = new Promise((resolve, reject) => {
-                const timeoutId = setTimeout(() => {
-                    reject(new Error('beep was not played in time'));
-                }, timeoutMs);
-                currentAudio.onended = () => {
-                    clearTimeout(timeoutId);
-                    resolve();
-                };
-                currentAudio.onerror = err => {
-                    clearTimeout(timeoutId);
-                    reject(err);
-                };
+        let beepPlayer;
+        let audioEl = new Audio();
+        let playedToTheEndPromise;
+
+        function createDeferredPromise() {
+            const deferred = {};
+            deferred.promise = new Promise((resolve, reject) => {
+                deferred.resolve = resolve;
+                deferred.reject = reject;
             });
-            return currentAudio
-                .play()
-                .then(() => playedToTheEndPromise)
+            return deferred;
+        }
+
+        function playSound() {
+            if (playedToTheEndPromise) {
+                playedToTheEndPromise.reject();
+            }
+            playedToTheEndPromise = createDeferredPromise();
+
+            return Promise.resolve()
+                .then(() => {
+                    if (!audioEl) {
+                        playedToTheEndPromise.reject();
+                        return;
+                    }
+
+                    audioEl.pause();
+                    audioEl.src = soundUrl;
+                    audioEl.currentTime = 0;
+                    audioEl.muted = false;
+
+                    audioEl.onended = () => {
+                        clearTimeout(timeoutId);
+                        if (playedToTheEndPromise) {
+                            playedToTheEndPromise.resolve();
+                        }
+                    };
+                    audioEl.onerror = err => {
+                        clearTimeout(timeoutId);
+                        if (playedToTheEndPromise) {
+                            playedToTheEndPromise.reject(err);
+                        }
+                    };
+                    const timeoutId = setTimeout(() => {
+                        if (playedToTheEndPromise) {
+                            playedToTheEndPromise.reject(new Error('beep was not played in time'));
+                        }
+                    }, timeoutMs);
+
+                    return audioEl.play();
+                })
+                .then(() => playedToTheEndPromise.promise)
                 .catch(function onError(err) {
-                    // eslint-disable-next-line no-console
-                    console.error(err);
+                    if (err) {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    }
+                })
+                .finally(() => {
+                    playedToTheEndPromise = null;
                 });
         }
 
+        function playSilentSound() {
+            if (!playedToTheEndPromise) {
+                audioEl.src = soundUrl;
+                audioEl.muted = true;
+                audioEl.play();
+            }
+        }
+
+        /**
+         * try to workaround the issue where iOS doesn't play audio if play wasn't started by the user action
+         * (happens if recording is set to autostart after the specified delay)
+         */
+        document.body.addEventListener('click', playSilentSound, { once: true });
+
         beepPlayer = {
-            playStartSound: function playStartSound() {
-                return playSound(soundDataUrl);
-            },
-            playEndSound: function playEndSound() {
-                return playSound(soundDataUrl);
-            },
+            playStartSound: playSound,
+            playEndSound: playSound,
             destroy: function destroy() {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio = null;
+                document.body.removeEventListener('click', playSilentSound);
+                if (playedToTheEndPromise) {
+                    playedToTheEndPromise.reject();
                 }
+                audioEl.pause();
+                audioEl = null;
             }
         };
-
         return beepPlayer;
     }
 

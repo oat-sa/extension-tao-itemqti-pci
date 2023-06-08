@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2023 (original work) Open Assessment Technologies SA;
  */
 /* eslint-disable func-names */
 define([
@@ -169,6 +169,10 @@ define([
                     promises.push(self.recorder.destroy());
                 }
 
+                if (self.beepPlayer) {
+                    promises.push(self.beepPlayer.destroy());
+                }
+
                 promises.push(self.resetResponse());
 
                 self._cleanDelayCallback();
@@ -178,6 +182,7 @@ define([
                     self.progressBar = null;
                     self.player = null;
                     self.recorder = null;
+                    self.beepPlayer = null;
                 });
             },
 
@@ -500,8 +505,7 @@ define([
             },
 
             /**
-             * Instanciate the audio player and its event listeners.
-             * This player is only for the playback of the recording.
+             * Instantiate the player that plays beep sound when recording starts and ends
              */
             initBeepPlayer: function initBeepPlayer() {
                 if (this.config.playSound === true && this.config.isReviewMode !== true) {
