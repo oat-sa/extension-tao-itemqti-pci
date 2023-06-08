@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 define([
     'jquery',
     'lodash',
@@ -25,22 +26,37 @@ define([
     var fixtureContainerId = 'item-container';
 
     function getAssetManager(baseUrl) {
-        return assetManagerFactory([
-            assetStrategies.external,
-            assetStrategies.baseUrl,
-            portableAssetStrategy
-        ], { baseUrl: baseUrl || '' });
+        return assetManagerFactory([assetStrategies.external, assetStrategies.baseUrl, portableAssetStrategy], {
+            baseUrl: baseUrl || ''
+        });
     }
 
     //Manually register the pci from its manifest
     pciTestProvider.addManifestPath(
         'audioRecordingInteraction',
-        'qtiItemPci/pciCreator/ims/audioRecordingInteraction/imsPciCreator.json');
+        'qtiItemPci/pciCreator/ims/audioRecordingInteraction/imsPciCreator.json'
+    );
     ciRegistry.resetProviders();
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
+    const itemDataWithAutostart = _.cloneDeep(itemData);
+    Object.assign(
+        itemDataWithAutostart.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties,
+        {
+            autoStart: 'true',
+            allowPlayback: '',
+            hideRecordButton: 'true',
+            hideStopButton: 'true',
+            playSound: 'true',
+            delayMinutes: '0',
+            delaySeconds: '7',
+            maxRecordingTime: '4',
+            maxRecords: '1'
+        }
+    );
+
     QUnit.module('Audio Recording Interaction', {
-        afterEach: function (assert) {
+        afterEach: function () {
             if (runner) {
                 runner.clear();
             }
@@ -60,37 +76,41 @@ define([
                 .on('render', function () {
                     var interaction = this._item.getInteractions()[0];
                     var config = {
-                        'isReviewMode': false,
-                        'allowPlayback': true,
-                        'autoStart': false,
-                        'autoPlayback': false,
-                        "hideRecordButton": false,
-                        "hideStopButton": false,
-                        "playSound": false,
-                        'delaySeconds': 0,
-                        'delayMinutes': 0,
-                        'maxRecords': 2,
-                        'maxRecordingTime': 120,
-                        'isCompressed': true,
-                        'audioBitrate': 20000,
-                        'isStereo': false,
-                        'media': {
-                            'autostart': 'true',
-                            'replayTimeout': '5',
-                            'maxPlays': '2',
-                            'loop': '',
-                            'pause': '',
-                            'uri': '',
-                            'type': '',
-                            'height': '270',
-                            'width': '480'
+                        isReviewMode: false,
+                        allowPlayback: true,
+                        autoStart: false,
+                        autoPlayback: false,
+                        hideRecordButton: false,
+                        hideStopButton: false,
+                        playSound: false,
+                        delaySeconds: 0,
+                        delayMinutes: 0,
+                        maxRecords: 2,
+                        maxRecordingTime: 120,
+                        isCompressed: true,
+                        audioBitrate: 20000,
+                        isStereo: false,
+                        media: {
+                            autostart: 'true',
+                            replayTimeout: '5',
+                            maxPlays: '2',
+                            loop: '',
+                            pause: '',
+                            uri: '',
+                            type: '',
+                            height: '270',
+                            width: '480'
                         },
-                        'displayDownloadLink': false,
-                        'updateResponsePartially': true,
-                        'partialUpdateInterval': 1000
+                        displayDownloadLink: false,
+                        updateResponsePartially: true,
+                        partialUpdateInterval: 1000
                     };
 
-                    assert.equal(interaction.typeIdentifier, 'audioRecordingInteraction', 'The expected interaction is created');
+                    assert.equal(
+                        interaction.typeIdentifier,
+                        'audioRecordingInteraction',
+                        'The expected interaction is created'
+                    );
                     assert.equal(typeof interaction.metaData, 'object', 'Meta data object is defined');
                     assert.equal(typeof interaction.metaData.pci, 'object', 'PCI object is defined');
                     assert.deepEqual(interaction.metaData.pci.config, config, 'The expected config has been set');
@@ -123,17 +143,52 @@ define([
         if (supportsMediaRecorder()) {
             runner = qtiItemRunner('qti', itemData)
                 .on('render', function () {
-
                     assert.equal($container.children().length, 1, 'the container a elements');
-                    assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
-                    assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
-                    assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
-                    assert.equal($container.find('.qti-customInteraction .audioRecordingInteraction').length, 1, 'the container contains an audio recording interaction');
-                    assert.equal($container.find('.qti-customInteraction .prompt').length, 0, 'the interaction doesn\'t contain a prompt');
-                    assert.equal($container.find('[data-identifier=\'record\']').length, 1, 'the interaction contains record button');
-                    assert.equal($container.find('[data-identifier=\'reset\']').length, 1, 'the interaction contains reset button');
-                    assert.equal($container.find('[data-identifier=\'play\']').length, 1, 'the interaction contains play button');
-                    assert.equal($container.find('[data-identifier=\'stop\']').length, 1, 'the interaction contains stop button');
+                    assert.equal(
+                        $container.children('.qti-item').length,
+                        1,
+                        'the container contains a the root element .qti-item'
+                    );
+                    assert.equal(
+                        $container.find('.qti-interaction').length,
+                        1,
+                        'the container contains an interaction .qti-interaction'
+                    );
+                    assert.equal(
+                        $container.find('.qti-interaction.qti-customInteraction').length,
+                        1,
+                        'the container contains a custom interaction'
+                    );
+                    assert.equal(
+                        $container.find('.qti-customInteraction .audioRecordingInteraction').length,
+                        1,
+                        'the container contains an audio recording interaction'
+                    );
+                    assert.equal(
+                        $container.find('.qti-customInteraction .prompt').length,
+                        0,
+                        "the interaction doesn't contain a prompt"
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='record']").length,
+                        1,
+                        'the interaction contains record button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='reset']").length,
+                        1,
+                        'the interaction contains reset button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='play']").length,
+                        1,
+                        'the interaction contains play button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='stop']").length,
+                        1,
+                        'the interaction contains stop button'
+                    );
 
                     ready();
                 })
@@ -160,22 +215,62 @@ define([
 
         if (supportsMediaRecorder()) {
             var newItemData = _.cloneDeep(itemData);
-            newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.isReviewMode = 'true';
+            newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.isReviewMode =
+                'true';
 
             runner = qtiItemRunner('qti', newItemData)
                 .on('render', function () {
-
                     assert.equal($container.children().length, 1, 'the container a elements');
-                    assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
-                    assert.equal($container.find('.qti-interaction').length, 1, 'the container contains an interaction .qti-interaction');
-                    assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 1, 'the container contains a custom interaction');
-                    assert.equal($container.find('.qti-customInteraction .audioRecordingInteraction').length, 1, 'the container contains an audio recording interaction in review mode');
-                    assert.equal($container.find('.qti-customInteraction .prompt').length, 0, 'the interaction doesn\'t contain a prompt');
-                    assert.equal($container.find('.qti-customInteraction .controls').length, 1, 'the interaction contains controls');
-                    assert.equal($container.find('[data-identifier=\'record\']').length, 0, 'the interaction does not contain record button');
-                    assert.equal($container.find('[data-identifier=\'reset\']').length, 0, 'the interaction does not contain reset button');
-                    assert.equal($container.find('[data-identifier=\'play\']').length, 1, 'the interaction does contain play button');
-                    assert.equal($container.find('[data-identifier=\'stop\']').length, 1, 'the interaction does contain stop button');
+                    assert.equal(
+                        $container.children('.qti-item').length,
+                        1,
+                        'the container contains a the root element .qti-item'
+                    );
+                    assert.equal(
+                        $container.find('.qti-interaction').length,
+                        1,
+                        'the container contains an interaction .qti-interaction'
+                    );
+                    assert.equal(
+                        $container.find('.qti-interaction.qti-customInteraction').length,
+                        1,
+                        'the container contains a custom interaction'
+                    );
+                    assert.equal(
+                        $container.find('.qti-customInteraction .audioRecordingInteraction').length,
+                        1,
+                        'the container contains an audio recording interaction in review mode'
+                    );
+                    assert.equal(
+                        $container.find('.qti-customInteraction .prompt').length,
+                        0,
+                        "the interaction doesn't contain a prompt"
+                    );
+                    assert.equal(
+                        $container.find('.qti-customInteraction .controls').length,
+                        1,
+                        'the interaction contains controls'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='record']").length,
+                        0,
+                        'the interaction does not contain record button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='reset']").length,
+                        0,
+                        'the interaction does not contain reset button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='play']").length,
+                        1,
+                        'the interaction does contain play button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='stop']").length,
+                        1,
+                        'the interaction does contain stop button'
+                    );
                     ready();
                 })
                 .init()
@@ -333,7 +428,8 @@ define([
                 })
                 .on('responsechange', function (res) {
                     changeCounter++;
-                    if (changeCounter === 1) { // So it runs only once
+                    if (changeCounter === 1) {
+                        // So it runs only once
                         assert.ok(_.isPlainObject(res), 'response changed');
                         assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
                         assert.deepEqual(res.RESPONSE, response, 'response set/get ok');
@@ -359,71 +455,312 @@ define([
 
     /* */
 
-    QUnit.cases.init([{
-        title: 'state as a response',
-        state: {
-            RESPONSE: {
-                base: {
-                    file: {
-                        name: 'myFileToBeReseted',
-                        mime: 'audio/wav',
-                        data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+    QUnit.cases
+        .init([
+            {
+                title: 'state as a response',
+                state: {
+                    RESPONSE: {
+                        base: {
+                            file: {
+                                name: 'myFileToBeReseted',
+                                mime: 'audio/wav',
+                                data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                            }
+                        }
                     }
-                }
-            }
-        },
-        response: {
-            RESPONSE: {
-                base: {
-                    file: {
-                        name: 'myFileToBeReseted',
-                        mime: 'audio/wav',
-                        data: 'YmFzZTY0ZW5jb2RlZERhdGE='
-                    }
-                }
-            }
-        }
-    }, {
-        title: 'state as a serialized response',
-        state: {
-            RESPONSE: {
+                },
                 response: {
-                    base: {
-                        file: {
-                            name: 'myFileToBeReseted',
-                            mime: 'audio/wav',
-                            data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                    RESPONSE: {
+                        base: {
+                            file: {
+                                name: 'myFileToBeReseted',
+                                mime: 'audio/wav',
+                                data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                title: 'state as a serialized response',
+                state: {
+                    RESPONSE: {
+                        response: {
+                            base: {
+                                file: {
+                                    name: 'myFileToBeReseted',
+                                    mime: 'audio/wav',
+                                    data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                                }
+                            }
+                        }
+                    }
+                },
+                response: {
+                    RESPONSE: {
+                        base: {
+                            file: {
+                                name: 'myFileToBeReseted',
+                                mime: 'audio/wav',
+                                data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                            }
                         }
                     }
                 }
             }
-        },
-        response: {
-            RESPONSE: {
-                base: {
-                    file: {
-                        name: 'myFileToBeReseted',
-                        mime: 'audio/wav',
-                        data: 'YmFzZTY0ZW5jb2RlZERhdGE='
-                    }
+        ])
+        .test('set and get state ', function (data, assert) {
+            var ready = assert.async();
+            var changeCounter = 0;
+            var $container = $('#' + fixtureContainerId);
+            assert.equal($container.length, 1, 'the item container exists');
+            assert.equal($container.children().length, 0, 'the container has no children');
+
+            if (supportsMediaRecorder()) {
+                runner = qtiItemRunner('qti', itemData)
+                    .on('render', function () {
+                        assert.deepEqual(this.getState(), data.response, 'state set/get ok');
+                        ready();
+                    })
+                    .init()
+                    .render($container, { state: data.state });
+            }
+
+            function supportsMediaRecorder() {
+                if (!window.MediaRecorder) {
+                    assert.ok(true, 'skipping test...');
+                    ready();
+                    return false;
                 }
+                return true;
+            }
+        });
+
+    /* */
+
+    QUnit.module('Audio Recording Interaction: config with hidden controls and autostart after delay', {
+        afterEach: function () {
+            if (runner) {
+                runner.clear();
             }
         }
-    }]).test('set and get state ', function (data, assert) {
+    });
+
+    QUnit.test('initializes correctly', function (assert) {
         var ready = assert.async();
-        var changeCounter = 0;
         var $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
 
         if (supportsMediaRecorder()) {
-            runner = qtiItemRunner('qti', itemData)
+            runner = qtiItemRunner('qti', itemDataWithAutostart)
                 .on('render', function () {
-                    assert.deepEqual(this.getState(), data.response, 'state set/get ok');
+                    var interaction = this._item.getInteractions()[0];
+                    var config = {
+                        isReviewMode: false,
+                        allowPlayback: false,
+                        autoStart: true,
+                        autoPlayback: false,
+                        hideRecordButton: true,
+                        hideStopButton: true,
+                        playSound: true,
+                        delaySeconds: 7,
+                        delayMinutes: 0,
+                        maxRecords: 1,
+                        maxRecordingTime: 4,
+                        isCompressed: true,
+                        audioBitrate: 20000,
+                        isStereo: false,
+                        media: {
+                            autostart: 'true',
+                            replayTimeout: '5',
+                            maxPlays: '2',
+                            loop: '',
+                            pause: '',
+                            uri: '',
+                            type: '',
+                            height: '270',
+                            width: '480'
+                        },
+                        displayDownloadLink: false,
+                        updateResponsePartially: true,
+                        partialUpdateInterval: 1000
+                    };
+
+                    assert.equal(
+                        interaction.typeIdentifier,
+                        'audioRecordingInteraction',
+                        'The expected interaction is created'
+                    );
+                    assert.equal(typeof interaction.metaData, 'object', 'Meta data object is defined');
+                    assert.equal(typeof interaction.metaData.pci, 'object', 'PCI object is defined');
+                    assert.deepEqual(interaction.metaData.pci.config, config, 'The expected config has been set');
+
                     ready();
                 })
                 .init()
-                .render($container, {state: data.state});
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    QUnit.test('renders correctly', function (assert) {
+        var ready = assert.async();
+
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            runner = qtiItemRunner('qti', itemDataWithAutostart)
+                .on('render', function () {
+                    assert.equal(
+                        $container.find('.qti-customInteraction .audioRecordingInteraction').length,
+                        1,
+                        'the container contains an audio recording interaction'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='record']").length,
+                        0,
+                        "the interaction doesn't contain record button"
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='reset']").length,
+                        0,
+                        "the interaction doesn't contain reset button"
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='play']").length,
+                        0,
+                        "the interaction doesn't contain play button"
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='stop']").length,
+                        0,
+                        "the interaction doesn't contain stop button"
+                    );
+
+                    ready();
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    QUnit.test('renders correctly in review mode', function (assert) {
+        const ready = assert.async();
+
+        const $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            const newItemData = _.cloneDeep(itemDataWithAutostart);
+            newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.isReviewMode =
+                'true';
+
+            runner = qtiItemRunner('qti', newItemData)
+                .on('render', function () {
+                    assert.equal(
+                        $container.find('.qti-customInteraction .audioRecordingInteraction').length,
+                        1,
+                        'the container contains an audio recording interaction in review mode'
+                    );
+                    assert.equal(
+                        $container.find('.qti-customInteraction .controls').length,
+                        1,
+                        'the interaction contains controls'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='record']").length,
+                        0,
+                        'the interaction does not contain record button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='reset']").length,
+                        0,
+                        'the interaction does not contain reset button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='play']").length,
+                        1,
+                        'the interaction does contain play button'
+                    );
+                    assert.equal(
+                        $container.find("[data-identifier='stop']").length,
+                        1,
+                        'the interaction does contain stop button'
+                    );
+
+                    ready();
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    QUnit.test('destroys', function (assert) {
+        var ready = assert.async();
+        var $container = $('#' + fixtureContainerId);
+
+        assert.expect(3);
+
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            runner = qtiItemRunner('qti', itemDataWithAutostart)
+                .on('render', function () {
+                    var $controls;
+
+                    //Call destroy manually
+                    var interaction = this._item.getInteractions()[0];
+                    interaction.renderer.destroy(interaction);
+
+                    $controls = $('.audiorec-control', $container);
+                    assert.equal($controls.length, 0, 'recorder has been destroyed');
+
+                    try {
+                        interaction.renderer.destroy(interaction);
+                    } catch (e) {
+                        console.log(e);
+                    }
+
+                    ready();
+                })
+                .on('error', function (error) {
+                    $('#error-display').html(error);
+                })
+                .init()
+                .render($container);
+            // runner.getState();
         }
 
         function supportsMediaRecorder() {
@@ -452,7 +789,21 @@ define([
             var $target = $(e.target),
                 newConfig = {};
             if (interaction) {
-                newConfig[$target.attr('name')] = $target.is(':checked');
+                if ($target.attr('name') === 'configWithAutostart') {
+                    newConfig = {
+                        autoStart: 'true',
+                        allowPlayback: '',
+                        hideRecordButton: 'true',
+                        hideStopButton: 'true',
+                        playSound: 'true',
+                        delayMinutes: '0',
+                        delaySeconds: '7',
+                        maxRecordingTime: '4',
+                        maxRecords: '1'
+                    };
+                } else {
+                    newConfig[$target.attr('name')] = $target.is(':checked');
+                }
                 interaction.triggerPci('configChange', [_.assign(interaction.properties, newConfig)]);
             }
         });
@@ -468,7 +819,8 @@ define([
                     ready();
                 })
                 .on('responsechange', function (response) {
-                    if (response &&
+                    if (
+                        response &&
                         response.RESPONSE &&
                         response.RESPONSE.base &&
                         response.RESPONSE.base.file &&
@@ -496,5 +848,4 @@ define([
     });
 
     /* */
-
 });

@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2023 (original work) Open Assessment Technologies SA;
  */
 /**
  * Those are the UI elements used by the audio recording PCI: progress bar, input meter and controls
@@ -430,8 +430,10 @@ define([
                 if (playedToTheEndPromise) {
                     playedToTheEndPromise.reject();
                 }
-                audioEl.pause();
-                audioEl = null;
+                if (audioEl) {
+                    audioEl.pause();
+                    audioEl = null;
+                }
             }
         };
         return beepPlayer;
