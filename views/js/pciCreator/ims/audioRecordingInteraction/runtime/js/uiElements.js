@@ -409,10 +409,10 @@ define([
         }
 
         function playSilentSound() {
-            if (!playedToTheEndPromise) {
+            if (!playedToTheEndPromise && audioEl) {
                 audioEl.src = soundUrl;
                 audioEl.muted = true;
-                audioEl.play();
+                audioEl.play().catch(() => {});
             }
         }
 
