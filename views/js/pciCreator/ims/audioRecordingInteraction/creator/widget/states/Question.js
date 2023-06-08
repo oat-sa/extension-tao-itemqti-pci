@@ -140,6 +140,8 @@ define([
                         } else {
                             $delayOptions.hide();
                             $hideRecordOption.hide();
+                            $hideRecordOption.find('input[name="hideRecordButton"]').prop('checked', false);
+                            configChangeCallBack(boundInteraction, false, 'hideRecordButton');
                         }
                         configChangeCallBack(boundInteraction, value, name);
                     },

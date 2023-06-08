@@ -267,7 +267,9 @@ define([
              */
             inQtiCreator: function inQtiCreator() {
                 if (typeof this._inQtiCreator === 'undefined' && this.$container) {
-                    this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
+                    this._inQtiCreator =
+                        this.$container.hasClass('tao-qti-creator-context') ||
+                        this.$container.find('.tao-qti-creator-context').length > 0;
                 }
                 return this._inQtiCreator;
             },
