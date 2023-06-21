@@ -319,6 +319,34 @@ define([
                 this.initBeepPlayer();
                 this.updateResetCount();
                 this.initRecording();
+
+                if (this.config.enableDomEvents) {
+                    // incoming events
+
+                    this.$container.get(0).addEventListener('config-change', ({ detail: newConfig}) => {
+                        console.log('PCI received config-change', newConfig);
+                        this.render(newConfig);
+                    });
+
+                    // outgoing events
+
+                    this.recorder.on('start', () => {
+                        console.log('PCI dispatch recorder-start');
+                        this.$container.get(0).dispatchEvent(new CustomEvent('recorder-start'));
+                    });
+
+                    this.recorder.on('stop', () => {
+                        console.log('PCI dispatch recorder-stop');
+                        this.$container.get(0).dispatchEvent(new CustomEvent('recorder-stop', {
+                            recordsAttempts: this._recordsAttempts
+                        }));
+                    });
+
+                    this.player.on('playbackend', () => {
+                        console.log('PCI dispatch playback-end');
+                        this.$container.get(0).dispatchEvent(new CustomEvent('playback-end'));
+                    });
+                }
             },
 
             /**
@@ -367,7 +395,9 @@ define([
 
                     displayDownloadLink: toBoolean(config.displayDownloadLink, false),
                     updateResponsePartially: toBoolean(config.updateResponsePartially, true),
-                    partialUpdateInterval: toInteger(config.partialUpdateInterval, 1000)
+                    partialUpdateInterval: toInteger(config.partialUpdateInterval, 1000),
+
+                    enableDomEvents: toBoolean(config.enableDomEvents, false)
                 };
             },
 
@@ -756,7 +786,8 @@ define([
              */
             updateResetCount: function updateResetCount() {
                 var remaining = this.config.maxRecords - this._recordsAttempts - 1,
-                    resetLabel = resetIcon;
+                    resetLabel = resetIcon,
+                    canRecordAgain;
 
                 if (this.config.maxRecords > 1) {
                     resetLabel += ' (' + remaining + ')';
@@ -764,6 +795,9 @@ define([
                 if (this.controls.reset) {
                     this.controls.reset.updateLabel(resetLabel);
                 }
+                // reflect can-record-again state in the DOM
+                canRecordAgain = this.config.maxRecords === 0 || remaining >= 0;
+                this.$container.find('.audio-rec').attr('data-disabled', !canRecordAgain);
             },
 
             /**
