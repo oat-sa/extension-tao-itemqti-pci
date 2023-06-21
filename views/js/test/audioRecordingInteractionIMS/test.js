@@ -103,7 +103,8 @@ define([
                         },
                         displayDownloadLink: false,
                         updateResponsePartially: true,
-                        partialUpdateInterval: 1000
+                        partialUpdateInterval: 1000,
+                        enableDomEvents: false
                     };
 
                     assert.equal(
@@ -585,7 +586,8 @@ define([
                         },
                         displayDownloadLink: false,
                         updateResponsePartially: true,
-                        partialUpdateInterval: 1000
+                        partialUpdateInterval: 1000,
+                        enableDomEvents: false
                     };
 
                     assert.equal(
