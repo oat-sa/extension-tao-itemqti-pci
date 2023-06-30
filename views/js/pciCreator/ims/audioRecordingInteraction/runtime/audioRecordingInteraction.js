@@ -323,23 +323,20 @@ define([
                 if (this.config.enableDomEvents) {
                     // incoming events
 
-                    this.$container.get(0).addEventListener('config-change', ({ detail: newConfig}) => {
+                    this.$container.get(0).addEventListener('config-change', ({ detail: newConfig }) => {
                         console.log('PCI received config-change', newConfig);
                         this.render(newConfig);
                     });
 
                     // outgoing events
 
-                    this.recorder.on('start', () => {
-                        console.log('PCI dispatch recorder-start');
-                        this.$container.get(0).dispatchEvent(new CustomEvent('recorder-start'));
-                    });
-
                     this.recorder.on('stop', () => {
                         console.log('PCI dispatch recorder-stop');
-                        this.$container.get(0).dispatchEvent(new CustomEvent('recorder-stop', {
-                            recordsAttempts: this._recordsAttempts
-                        }));
+                        this.$container.get(0).dispatchEvent(
+                            new CustomEvent('recorder-stop', {
+                                recordsAttempts: this._recordsAttempts
+                            })
+                        );
                     });
 
                     this.player.on('playbackend', () => {
