@@ -73,6 +73,7 @@ define([
             response = interaction.getResponseDeclaration(),
             $compressedOptions,
             $uncompressedOptions,
+            $autoStartSubOptions,
             $sequentialOption,
             $delayOptions,
             $hideRecordOption;
@@ -117,6 +118,7 @@ define([
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
 
+        $autoStartSubOptions = $form.find('[data-role="autoStartSubOptions"]');
         $sequentialOption = $form.find('[data-role="sequentialOption"]');
         $delayOptions = $form.find('[data-role="delayOptions"]');
         $hideRecordOption = $form.find('[data-role="hideRecordOption"]');
@@ -140,17 +142,13 @@ define([
 
                     autoStart: function autoStart(boundInteraction, value, name) {
                         if (value) {
-                            $delayOptions.show();
-                            $hideRecordOption.show();
-                            $sequentialOption.show();
+                            $autoStartSubOptions.show();
                         } else {
-                            $delayOptions.hide();
+                            $autoStartSubOptions.hide();
 
-                            $hideRecordOption.hide();
                             $hideRecordOption.find('input[name="hideRecordButton"]').prop('checked', false);
                             configChangeCallBack(boundInteraction, false, 'hideRecordButton');
 
-                            $sequentialOption.hide();
                             $sequentialOption.find('input[name="sequential"]').prop('checked', false);
                             $form.find('input[name="maxRecords"]').prop('disabled', false);
                             interaction.toggleClass('sequential', false);
@@ -201,6 +199,10 @@ define([
                 pciMediaManager.getChangeCallbacks()
             )
         );
+
+        if (!interaction.hasClass('sequential')) {
+            $form.find('input[name="maxRecords"]').prop('disabled', false);
+        }
 
         pciMediaManager.init();
     };

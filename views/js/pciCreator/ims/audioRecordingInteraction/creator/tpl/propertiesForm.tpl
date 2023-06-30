@@ -44,38 +44,40 @@
     </span>
 </div>
 
-<div data-role="sequentialOption" {{#unless autoStart}}style="display:none"{{/unless}}>
-    <div class="panel">
-        <label>
-            <input name="sequential" type="checkbox" {{#if sequential}}checked="checked"{{/if}}/>
-            <span class="icon-checkbox"></span> {{__ "Sequential"}}
-         </label>
-        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-        <span class="tooltip-content">
-            {{__ "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."}}
-        </span>
+<div class="panel subpanel" data-role="autoStartSubOptions" {{#unless autoStart}}style="display:none"{{/unless}}>
+    <div data-role="delayOptions">
+        <div class="panel">
+            <label for="delay-minutes" class="spinner">{{__ "Min:"}}</label>
+            <input id="delay-minutes" name="delayMinutes" value="{{delayMinutes}}" data-increment="1" data-min="0" data-max="20" type="text" />
+            <label for="delay-seconds" class="spinner">{{__ "Sec:"}}</label>
+            <input id="delay-seconds" name="delaySeconds" value="{{delaySeconds}}" data-increment="15" data-min="0" data-max="45" type="text" />
+        </div>
     </div>
-</div>
 
-<div data-role="delayOptions" {{#unless autoStart}}style="display:none"{{/unless}}>
-    <div class="panel">
-        <label for="delay-minutes" class="spinner">{{__ "Min:"}}</label>
-        <input id="delay-minutes" name="delayMinutes" value="{{delayMinutes}}" data-increment="1" data-min="0" data-max="20" type="text" />
-        <label for="delay-seconds" class="spinner">{{__ "Sec:"}}</label>
-        <input id="delay-seconds" name="delaySeconds" value="{{delaySeconds}}" data-increment="15" data-min="0" data-max="45" type="text" />
+    <div data-role="hideRecordOption">
+        <div class="panel">
+            <label>
+                <input name="hideRecordButton" type="checkbox" {{#if hideRecordButton}}checked="checked"{{/if}}/>
+                <span class="icon-checkbox"></span> {{__ "Hide record button"}}
+            </label>
+            <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+            <span class="tooltip-content">
+                {{__ "Hide the record button from test takers."}}
+            </span>
+        </div>
     </div>
-</div>
 
-<div data-role="hideRecordOption" {{#unless autoStart}}style="display:none"{{/unless}}>
-    <div class="panel">
-        <label>
-            <input name="hideRecordButton" type="checkbox" {{#if hideRecordButton}}checked="checked"{{/if}}/>
-            <span class="icon-checkbox"></span> {{__ "Hide record button"}}
-         </label>
-        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
-        <span class="tooltip-content">
-            {{__ "Hide the record button from test takers."}}
-        </span>
+    <div data-role="sequentialOption">
+        <div class="panel">
+            <label>
+                <input name="sequential" type="checkbox" {{#if sequential}}checked="checked"{{/if}}/>
+                <span class="icon-checkbox"></span> {{__ "Sequential"}}
+            </label>
+            <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+            <span class="tooltip-content">
+                {{__ "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."}}
+            </span>
+        </div>
     </div>
 </div>
 
@@ -103,7 +105,7 @@
 
 <div class="panel">
     <label for="max-records" class="spinner">{{__ "Max attempts:"}}</label>
-    <input id="max-records" name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" />
+    <input id="max-records" name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" disabled />
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
         {{__ "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."}}

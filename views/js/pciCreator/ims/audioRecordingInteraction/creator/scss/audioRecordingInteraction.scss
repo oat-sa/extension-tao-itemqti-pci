@@ -1,19 +1,13 @@
 .item-editor-interaction-related {
-    div[data-role="autoStartOption"] + div[data-role="delayOptions"],
-    div[data-role="autoStartOption"] + div[data-role="sequentialOption"]
-     {
-        margin-top: -10px;
+    .panel[data-role="autoStartOption"] + .panel.panel[data-role="autoStartSubOptions"] {
+        margin-top: -15px;
     }
     div[data-role="delayOptions"] {
         .panel {
             label {
-                padding-left: 22px;
+                padding-left: 5px;
             }
         }
-    }
-    div[data-role="hideRecordOption"],
-    div[data-role="sequentialOption"] {
-        padding-left: 18px;
     }
 }
 
