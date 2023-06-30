@@ -423,8 +423,28 @@ define([
         document.body.addEventListener('click', playSilentSound, { once: true });
 
         beepPlayer = {
-            playStartSound: playSound,
-            playEndSound: playSound,
+            playStartSound: function playStartSound() {
+                this.isPlayingStartSound = true;
+                return playSound().then(() => {
+                    this.isPlayingStartSound = false;
+                });
+            },
+            playEndSound: function playEndSound() {
+                this.isPlayingEndSound = true;
+                return playSound()
+                    .then(() => {
+                        if (!this.isPlayingStartSound) {
+                            return playSound();
+                        }
+                    })
+                    .then(() => {
+                        this.isPlayingEndSound = false;
+                        this.trigger('beep-endsound-played');
+                    });
+            },
+            getIsPlayingEndSound: function getIsPlayingEndSound() {
+                return this.isPlayingEndSound;
+            },
             destroy: function destroy() {
                 document.body.removeEventListener('click', playSilentSound);
                 if (playedToTheEndPromise) {
@@ -436,6 +456,7 @@ define([
                 }
             }
         };
+        event.addEventMgr(beepPlayer);
         return beepPlayer;
     }
 

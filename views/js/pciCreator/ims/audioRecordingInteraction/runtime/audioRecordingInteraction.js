@@ -330,14 +330,23 @@ define([
 
                     // outgoing events
 
-                    this.recorder.on('stop', () => {
+                    const dispatchRecorderStop = () => {
                         console.log('PCI dispatch recorder-stop');
                         this.$container.get(0).dispatchEvent(
                             new CustomEvent('recorder-stop', {
                                 recordsAttempts: this._recordsAttempts
                             })
                         );
-                    });
+                    };
+                    if (this.beepPlayer) {
+                        this.beepPlayer.on('beep-endsound-played.dispatchrecorderstop', () => {
+                            dispatchRecorderStop();
+                        });
+                    } else {
+                        this.recorder.on('stop', () => {
+                            dispatchRecorderStop();
+                        });
+                    }
 
                     this.player.on('playbackend', () => {
                         console.log('PCI dispatch playback-end');
@@ -367,6 +376,7 @@ define([
              * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
              * @param {Boolean} config.updateResponsePartially - enable/disable the partial response update (may affect the performance)
              * @param {Number} config.partialUpdateInterval - number of milliseconds to wait between each recording update
+             * @param {Number} config.enableDomEvents - to control interaction from outside, dispatch custom events from interaction container, and react to events triggered on it
              */
             initConfig: function init(config) {
                 this.config = {
@@ -438,8 +448,19 @@ define([
                             if (self.config.autoPlayback) {
                                 self.player.on('oncanplay', function () {
                                     self.player.off('oncanplay');
-                                    self._isAutoPlayingBack = true;
-                                    self.playRecording();
+
+                                    function doPlayRecording() {
+                                        self._isAutoPlayingBack = true;
+                                        self.playRecording();
+                                    }
+                                    if (self.beepPlayer && self.beepPlayer.getIsPlayingEndSound()) {
+                                        self.beepPlayer.on('beep-endsound-played.autoplayback', () => {
+                                            self.beepPlayer.off('beep-endsound-played.autoplayback');
+                                            doPlayRecording();
+                                        });
+                                    } else {
+                                        doPlayRecording();
+                                    }
                                 });
                             }
                             self.player.loadFromBase64(recording.data, recording.mime);
@@ -477,7 +498,9 @@ define([
 
                 this.recorder.on('stop', function () {
                     if (self.beepPlayer) {
-                        self.beepPlayer.playEndSound();
+                        self.beepPlayer.playEndSound().then(() => {
+                            self.updateControls();
+                        });
                     }
                 });
             },
@@ -710,9 +733,11 @@ define([
              * Start the playback of the recording
              */
             playRecording: function playRecording() {
-                this.player.play();
-                this.progressBar.setStyle('playback');
-                this.updateControls();
+                if (this.player) {
+                    this.player.play();
+                    this.progressBar.setStyle('playback');
+                    this.updateControls();
+                }
             },
 
             /**
@@ -921,7 +946,10 @@ define([
                     play.on(
                         'updatestate',
                         function () {
-                            if (self.player.is('idle') || (self.getRecording() && !self._isAutoPlayingBack)) {
+                            if (
+                                (self.player.is('idle') || (self.getRecording() && !self._isAutoPlayingBack)) &&
+                                !(self.beepPlayer && self.beepPlayer.getIsPlayingEndSound())
+                            ) {
                                 this.enable();
                             } else {
                                 this.disable();
@@ -956,7 +984,10 @@ define([
                         function () {
                             if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
                                 this.disable();
-                            } else if (self.player.is('idle')) {
+                            } else if (
+                                self.player.is('idle') &&
+                                !(self.beepPlayer && self.beepPlayer.getIsPlayingEndSound())
+                            ) {
                                 this.enable();
                             } else {
                                 this.disable();
