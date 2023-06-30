@@ -1,3 +1,3 @@
-.item-editor-interaction-related div[data-role="autoStartOption"]+div[data-role="delayOptions"],.item-editor-interaction-related div[data-role="autoStartOption"]+div[data-role="sequentialOption"]{margin-top:-10px}.item-editor-interaction-related div[data-role="delayOptions"] .panel label{padding-left:22px}.item-editor-interaction-related div[data-role="hideRecordOption"],.item-editor-interaction-related div[data-role="sequentialOption"]{padding-left:18px}
+.item-editor-interaction-related .panel[data-role="autoStartOption"]+.panel.panel[data-role="autoStartSubOptions"]{margin-top:-15px}.item-editor-interaction-related div[data-role="delayOptions"] .panel label{padding-left:5px}
 
 /*# sourceMappingURL=audioRecordingInteraction.css.map */
