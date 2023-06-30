@@ -18,7 +18,7 @@ final class Version202306061059281465_qtiItemPci extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Update Audio Recording PCI: add hideRecordButton/hideStopButton/playSound optons, fix allowPlayback option';
+        return 'Update Audio Recording PCI: add sequential/hideRecordButton/hideStopButton/playSound optons, fix allowPlayback option';
     }
 
     public function up(Schema $schema): void

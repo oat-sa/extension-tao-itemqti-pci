@@ -33,7 +33,7 @@
     </span>
 </div>
 
-<div class="panel">
+<div class="panel" data-role="autoStartOption">
     <label>
         <input name="autoStart" type="checkbox" {{#if autoStart}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span> {{__ "Auto start recording"}}
@@ -42,6 +42,19 @@
     <span class="tooltip-content">
         {{__ "Recording starts automatically once test taker give microphone use authorisation."}}
     </span>
+</div>
+
+<div data-role="sequentialOption" {{#unless autoStart}}style="display:none"{{/unless}}>
+    <div class="panel">
+        <label>
+            <input name="sequential" type="checkbox" {{#if sequential}}checked="checked"{{/if}}/>
+            <span class="icon-checkbox"></span> {{__ "Sequential"}}
+         </label>
+        <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
+        <span class="tooltip-content">
+            {{__ "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."}}
+        </span>
+    </div>
 </div>
 
 <div data-role="delayOptions" {{#unless autoStart}}style="display:none"{{/unless}}>

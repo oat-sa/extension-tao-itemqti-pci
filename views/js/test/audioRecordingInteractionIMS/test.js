@@ -40,6 +40,8 @@ define([
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
     const itemDataWithAutostart = _.cloneDeep(itemData);
+    itemDataWithAutostart.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.attributes.class =
+        'sequential';
     Object.assign(
         itemDataWithAutostart.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties,
         {
@@ -51,7 +53,8 @@ define([
             delayMinutes: '0',
             delaySeconds: '7',
             maxRecordingTime: '4',
-            maxRecords: '1'
+            maxRecords: '1',
+            enableDomEvents: 'true'
         }
     );
 
@@ -540,7 +543,7 @@ define([
 
     /* */
 
-    QUnit.module('Audio Recording Interaction: config with hidden controls and autostart after delay', {
+    QUnit.module('Audio Recording Interaction: sequential, hidden controls, autostart after delay', {
         afterEach: function () {
             if (runner) {
                 runner.clear();
@@ -587,7 +590,7 @@ define([
                         displayDownloadLink: false,
                         updateResponsePartially: true,
                         partialUpdateInterval: 1000,
-                        enableDomEvents: false
+                        enableDomEvents: true
                     };
 
                     assert.equal(

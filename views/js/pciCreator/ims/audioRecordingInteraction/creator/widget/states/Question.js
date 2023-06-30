@@ -73,6 +73,7 @@ define([
             response = interaction.getResponseDeclaration(),
             $compressedOptions,
             $uncompressedOptions,
+            $sequentialOption,
             $delayOptions,
             $hideRecordOption;
 
@@ -88,6 +89,7 @@ define([
                     allowPlayback: toBoolean(interaction.prop('allowPlayback'), true),
                     hideStopButton: toBoolean(interaction.prop('hideStopButton'), false),
                     autoStart: toBoolean(interaction.prop('autoStart'), false),
+                    sequential: !!interaction.hasClass('sequential'),
                     hideRecordButton: toBoolean(interaction.prop('hideRecordButton'), false),
                     autoPlayback: toBoolean(interaction.prop('autoPlayback'), false),
                     playSound: toBoolean(interaction.prop('playSound'), false),
@@ -105,7 +107,9 @@ define([
                     updateResponsePartially: toBoolean(interaction.prop('updateResponsePartially'), true),
                     partialUpdateInterval: parseInt(interaction.prop('partialUpdateInterval'), 10) / 1000,
 
-                    displayDownloadLink: toBoolean(interaction.prop('displayDownloadLink'), false)
+                    displayDownloadLink: toBoolean(interaction.prop('displayDownloadLink'), false),
+
+                    enableDomEvents: toBoolean(interaction.prop('enableDomEvents'), false)
                 })
             )
         );
@@ -113,6 +117,7 @@ define([
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
 
+        $sequentialOption = $form.find('[data-role="sequentialOption"]');
         $delayOptions = $form.find('[data-role="delayOptions"]');
         $hideRecordOption = $form.find('[data-role="hideRecordOption"]');
 
@@ -137,13 +142,31 @@ define([
                         if (value) {
                             $delayOptions.show();
                             $hideRecordOption.show();
+                            $sequentialOption.show();
                         } else {
                             $delayOptions.hide();
+
                             $hideRecordOption.hide();
                             $hideRecordOption.find('input[name="hideRecordButton"]').prop('checked', false);
                             configChangeCallBack(boundInteraction, false, 'hideRecordButton');
+
+                            $sequentialOption.hide();
+                            $sequentialOption.find('input[name="sequential"]').prop('checked', false);
+                            $form.find('input[name="maxRecords"]').prop('disabled', false);
+                            interaction.toggleClass('sequential', false);
+                            configChangeCallBack(boundInteraction, false, 'enableDomEvents');
                         }
                         configChangeCallBack(boundInteraction, value, name);
+                    },
+                    sequential: function sequential(boundInteraction, value) {
+                        if (value) {
+                            $form.find('input[name="maxRecords"]').prop('value', 1).prop('disabled', true);
+                            configChangeCallBack(boundInteraction, 1, 'maxRecords');
+                        } else {
+                            $form.find('input[name="maxRecords"]').prop('disabled', false);
+                        }
+                        interaction.toggleClass('sequential', value);
+                        configChangeCallBack(boundInteraction, value, 'enableDomEvents');
                     },
                     hideRecordButton: configChangeCallBack,
                     autoPlayback: configChangeCallBack,

@@ -1,21 +1,18 @@
 .item-editor-interaction-related {
+    div[data-role="autoStartOption"] + div[data-role="delayOptions"],
+    div[data-role="autoStartOption"] + div[data-role="sequentialOption"]
+     {
+        margin-top: -10px;
+    }
     div[data-role="delayOptions"] {
         .panel {
-            margin-top:-15px;
-
             label {
-                &[for="delayMinutes"] {
-                    min-width: 0;
-                }
-
-                &[for="delaySeconds"] {
-                    min-width: 0;
-                    padding-left: 18px;
-                }
+                padding-left: 22px;
             }
         }
     }
-    div[data-role="hideRecordOption"] {
+    div[data-role="hideRecordOption"],
+    div[data-role="sequentialOption"] {
         padding-left: 18px;
     }
 }
