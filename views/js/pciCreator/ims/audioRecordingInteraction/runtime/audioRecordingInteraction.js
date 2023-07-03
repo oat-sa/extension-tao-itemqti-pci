@@ -324,14 +324,12 @@ define([
                     // incoming events
 
                     this.$container.get(0).addEventListener('config-change', ({ detail: newConfig }) => {
-                        console.log('PCI received config-change', newConfig);
                         this.render(newConfig);
                     });
 
                     // outgoing events
 
                     const dispatchRecorderStop = () => {
-                        console.log('PCI dispatch recorder-stop');
                         this.$container.get(0).dispatchEvent(
                             new CustomEvent('recorder-stop', {
                                 recordsAttempts: this._recordsAttempts
@@ -349,7 +347,6 @@ define([
                     }
 
                     this.player.on('playbackend', () => {
-                        console.log('PCI dispatch playback-end');
                         this.$container.get(0).dispatchEvent(new CustomEvent('playback-end'));
                     });
                 }
