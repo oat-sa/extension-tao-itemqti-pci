@@ -89,8 +89,7 @@ define([
 
                 displayDownloadLink: false,
                 updateResponsePartially: true,
-                partialUpdateInterval: 1000,
-                sequential: false
+                partialUpdateInterval: 1000
             };
         },
         /**
