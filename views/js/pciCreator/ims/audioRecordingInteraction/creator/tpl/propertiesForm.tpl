@@ -105,7 +105,7 @@
 
 <div class="panel">
     <label for="max-records" class="spinner">{{__ "Max attempts:"}}</label>
-    <input id="max-records" name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" disabled />
+    <input id="max-records" name="maxRecords" value="{{maxRecords}}" class="large" data-increment="1" data-min="0" type="text" />
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content" data-tooltip-theme="info"></span>
     <span class="tooltip-content">
         {{__ "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."}}

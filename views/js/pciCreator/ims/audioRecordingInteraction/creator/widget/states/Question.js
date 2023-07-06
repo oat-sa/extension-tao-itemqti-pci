@@ -75,7 +75,6 @@ define([
             $uncompressedOptions,
             $autoStartSubOptions,
             $sequentialOption,
-            $delayOptions,
             $hideRecordOption;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
@@ -120,7 +119,6 @@ define([
 
         $autoStartSubOptions = $form.find('[data-role="autoStartSubOptions"]');
         $sequentialOption = $form.find('[data-role="sequentialOption"]');
-        $delayOptions = $form.find('[data-role="delayOptions"]');
         $hideRecordOption = $form.find('[data-role="hideRecordOption"]');
 
         //init form javascript
@@ -150,7 +148,7 @@ define([
                             configChangeCallBack(boundInteraction, false, 'hideRecordButton');
 
                             $sequentialOption.find('input[name="sequential"]').prop('checked', false);
-                            $form.find('input[name="maxRecords"]').prop('disabled', false);
+                            $form.find('input[name="maxRecords"]').trigger('enable');
                             interaction.toggleClass('sequential', false);
                             configChangeCallBack(boundInteraction, false, 'enableDomEvents');
                         }
@@ -158,10 +156,10 @@ define([
                     },
                     sequential: function sequential(boundInteraction, value) {
                         if (value) {
-                            $form.find('input[name="maxRecords"]').prop('value', 1).prop('disabled', true);
+                            $form.find('input[name="maxRecords"]').prop('value', 1).trigger('disable');
                             configChangeCallBack(boundInteraction, 1, 'maxRecords');
                         } else {
-                            $form.find('input[name="maxRecords"]').prop('disabled', false);
+                            $form.find('input[name="maxRecords"]').trigger('enable');
                         }
                         interaction.toggleClass('sequential', value);
                         configChangeCallBack(boundInteraction, value, 'enableDomEvents');
@@ -200,8 +198,8 @@ define([
             )
         );
 
-        if (!interaction.hasClass('sequential')) {
-            $form.find('input[name="maxRecords"]').prop('disabled', false);
+        if (interaction.hasClass('sequential')) {
+            $form.find('input[name="maxRecords"]').trigger('disable');
         }
 
         pciMediaManager.init();
