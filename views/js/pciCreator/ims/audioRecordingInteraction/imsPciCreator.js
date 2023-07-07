@@ -46,9 +46,8 @@ define([
                 if (pci.typeIdentifier && pci.typeIdentifier === _typeIdentifier) {
                     // ensure all the properties get a default value
                     defaultProperties = audioRecordingInteractionCreator.getDefaultProperties();
-                    _.forEach(defaultProperties, function(value, name) {
-                        if ((typeof pci.properties[name] === 'undefined') ||
-                            (typeof pci.properties[name] === 'string' && !pci.properties[name] && typeof value !== 'string')) {
+                    _.forEach(defaultProperties, function (value, name) {
+                        if (typeof pci.properties[name] === 'undefined') {
                             pci.properties[name] = value;
                         }
                     });
@@ -66,8 +65,11 @@ define([
             return {
                 isReviewMode: false,
                 allowPlayback: true,
+                hideStopButton: false,
                 autoStart: false,
+                hideRecordButton: false,
                 autoPlayback: false,
+                playSound: false,
 
                 delayMinutes: 0,
                 delaySeconds: 0,
