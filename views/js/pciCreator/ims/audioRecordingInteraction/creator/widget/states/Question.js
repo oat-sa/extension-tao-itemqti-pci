@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2023 (original work) Open Assessment Technologies SA;
  */
 define([
     'lodash',
@@ -25,21 +25,8 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/widgets/helpers/pciMediaManager/pciMediaManager',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
-    'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
-    'util/typeCaster'
-], function (
-    _,
-    __,
-    $,
-    module,
-    stateFactory,
-    Question,
-    formElement,
-    pciMediaManagerFactory,
-    simpleEditor,
-    formTpl,
-    typeCaster
-) {
+    'tpl!audioRecordingInteraction/creator/tpl/propertiesForm'
+], function (_, __, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, formTpl) {
     'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(
@@ -63,6 +50,22 @@ define([
         interaction.triggerPci('configChange', [interaction.getProperties()]);
     }
 
+    /**
+     * Type casting helpers for PCI parameters
+     * @param {String, boolean} value
+     * @param {String, boolean} defaultValue
+     * @returns {boolean}
+     */
+    function toBoolean(value, defaultValue) {
+        if (typeof value === 'undefined') {
+            return defaultValue;
+        } else if (value === '') {
+            return false;
+        } else {
+            return value === true || value === 'true';
+        }
+    }
+
     AudioRecordingInteractionStateQuestion.prototype.initForm = function initForm() {
         var _widget = this.widget,
             $form = _widget.$form,
@@ -70,7 +73,9 @@ define([
             response = interaction.getResponseDeclaration(),
             $compressedOptions,
             $uncompressedOptions,
-            $delayOptions;
+            $autoStartSubOptions,
+            $sequentialOption,
+            $hideRecordOption;
 
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
@@ -81,9 +86,13 @@ define([
                     serial: response.serial,
                     identifier: interaction.attr('responseIdentifier'),
 
-                    allowPlayback: typeCaster.strToBool(interaction.prop('allowPlayback'), true),
-                    autoStart: typeCaster.strToBool(interaction.prop('autoStart'), false),
-                    autoPlayback: typeCaster.strToBool(interaction.prop('autoPlayback'), false),
+                    allowPlayback: toBoolean(interaction.prop('allowPlayback'), true),
+                    hideStopButton: toBoolean(interaction.prop('hideStopButton'), false),
+                    autoStart: toBoolean(interaction.prop('autoStart'), false),
+                    sequential: !!interaction.hasClass('sequential'),
+                    hideRecordButton: toBoolean(interaction.prop('hideRecordButton'), false),
+                    autoPlayback: toBoolean(interaction.prop('autoPlayback'), false),
+                    playSound: toBoolean(interaction.prop('playSound'), false),
 
                     delayMinutes: interaction.prop('delayMinutes'),
                     delaySeconds: interaction.prop('delaySeconds'),
@@ -91,14 +100,16 @@ define([
                     maxRecords: interaction.prop('maxRecords'),
                     maxRecordingTime: interaction.prop('maxRecordingTime'),
 
-                    isCompressed: typeCaster.strToBool(interaction.prop('isCompressed'), true),
+                    isCompressed: toBoolean(interaction.prop('isCompressed'), true),
                     audioBitrate: interaction.prop('audioBitrate'),
-                    isStereo: typeCaster.strToBool(interaction.prop('isStereo'), false),
+                    isStereo: toBoolean(interaction.prop('isStereo'), false),
 
-                    updateResponsePartially: typeCaster.strToBool(interaction.prop('updateResponsePartially'), true),
+                    updateResponsePartially: toBoolean(interaction.prop('updateResponsePartially'), true),
                     partialUpdateInterval: parseInt(interaction.prop('partialUpdateInterval'), 10) / 1000,
 
-                    displayDownloadLink: typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
+                    displayDownloadLink: toBoolean(interaction.prop('displayDownloadLink'), false),
+
+                    enableDomEvents: toBoolean(interaction.prop('enableDomEvents'), false)
                 })
             )
         );
@@ -106,7 +117,9 @@ define([
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
 
-        $delayOptions = $form.find('[data-role="delayOptions"]');
+        $autoStartSubOptions = $form.find('[data-role="autoStartSubOptions"]');
+        $sequentialOption = $form.find('[data-role="sequentialOption"]');
+        $hideRecordOption = $form.find('[data-role="hideRecordOption"]');
 
         //init form javascript
         formElement.initWidget($form);
@@ -123,16 +136,37 @@ define([
                     },
 
                     allowPlayback: configChangeCallBack,
+                    hideStopButton: configChangeCallBack,
 
                     autoStart: function autoStart(boundInteraction, value, name) {
                         if (value) {
-                            $delayOptions.show();
+                            $autoStartSubOptions.show();
                         } else {
-                            $delayOptions.hide();
+                            $autoStartSubOptions.hide();
+
+                            $hideRecordOption.find('input[name="hideRecordButton"]').prop('checked', false);
+                            configChangeCallBack(boundInteraction, false, 'hideRecordButton');
+
+                            $sequentialOption.find('input[name="sequential"]').prop('checked', false);
+                            $form.find('input[name="maxRecords"]').trigger('enable');
+                            interaction.toggleClass('sequential', false);
+                            configChangeCallBack(boundInteraction, false, 'enableDomEvents');
                         }
                         configChangeCallBack(boundInteraction, value, name);
                     },
+                    sequential: function sequential(boundInteraction, value) {
+                        if (value) {
+                            $form.find('input[name="maxRecords"]').prop('value', 1).trigger('disable');
+                            configChangeCallBack(boundInteraction, 1, 'maxRecords');
+                        } else {
+                            $form.find('input[name="maxRecords"]').trigger('enable');
+                        }
+                        interaction.toggleClass('sequential', value);
+                        configChangeCallBack(boundInteraction, value, 'enableDomEvents');
+                    },
+                    hideRecordButton: configChangeCallBack,
                     autoPlayback: configChangeCallBack,
+                    playSound: configChangeCallBack,
 
                     delayMinutes: configChangeCallBack,
                     delaySeconds: configChangeCallBack,
@@ -163,6 +197,10 @@ define([
                 pciMediaManager.getChangeCallbacks()
             )
         );
+
+        if (interaction.hasClass('sequential')) {
+            $form.find('input[name="maxRecords"]').trigger('disable');
+        }
 
         pciMediaManager.init();
     };

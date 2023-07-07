@@ -1,17 +1,11 @@
 .item-editor-interaction-related {
+    .panel[data-role="autoStartOption"] + .panel.panel[data-role="autoStartSubOptions"] {
+        margin-top: -15px;
+    }
     div[data-role="delayOptions"] {
         .panel {
-            margin-top:-15px;
-
             label {
-                &[for="delayMinutes"] {
-                    min-width: 0;
-                }
-
-                &[for="delaySeconds"] {
-                    min-width: 0;
-                    padding-left: 18px;
-                }
+                padding-left: 5px;
             }
         }
     }
