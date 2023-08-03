@@ -449,6 +449,10 @@ define([
                                     function doPlayRecording() {
                                         self._isAutoPlayingBack = true;
                                         self.playRecording();
+                                        dispatchInteractiontraceEvent({
+                                            domEventType: 'play',
+                                            auto: true
+                                        });
                                     }
                                     if (self.beepPlayer && self.beepPlayer.getIsPlayingEndSound()) {
                                         self.beepPlayer.on('beep-endsound-played.autoplayback', () => {
@@ -573,6 +577,10 @@ define([
                 // no delay, start recording now
                 if (delayInSeconds === 0 && !this.inQtiCreator()) {
                     this.startRecording();
+                    dispatchInteractiontraceEvent({
+                        domEventType: 'record',
+                        auto: true
+                    });
                     return;
                 }
 
@@ -615,6 +623,10 @@ define([
 
                         self._cleanDelayCallback();
                         self.startRecording();
+                        dispatchInteractiontraceEvent({
+                            domEventType: 'record',
+                            delay: self.getDelayInSeconds(),
+                        });
                     }, self.getDelayInSeconds() * 1000);
                 });
             },
@@ -876,7 +888,6 @@ define([
                                 self.startRecording();
                                 dispatchInteractiontraceEvent({
                                     domEventType: 'record',
-                                    auto: false,
                                     target: record.getDOMElement()
                                 });
                             }
@@ -908,8 +919,16 @@ define([
                             if (this.is('enabled')) {
                                 if (self.recorder.is('recording')) {
                                     self.stopRecording();
+                                    dispatchInteractiontraceEvent({
+                                        domEventType: 'stop',
+                                        target: record.getDOMElement()
+                                    });
                                 } else if (self.player.is('playing')) {
                                     self.stopPlayback();
+                                    dispatchInteractiontraceEvent({
+                                        domEventType: 'stop',
+                                        target: record.getDOMElement()
+                                    });
                                 }
                             }
                         }.bind(stop)
@@ -942,6 +961,10 @@ define([
                         function () {
                             if (this.is('enabled')) {
                                 self.playRecording();
+                                dispatchInteractiontraceEvent({
+                                    domEventType: 'play',
+                                    target: record.getDOMElement()
+                                });
                             }
                         }.bind(play)
                     );
@@ -974,9 +997,17 @@ define([
                             if (this.is('enabled')) {
                                 self.resetRecording();
                                 self.updateResetCount();
+                                dispatchInteractiontraceEvent({
+                                    domEventType: 'reset',
+                                    target: record.getDOMElement()
+                                });
 
                                 if (self.config.hideRecordButton === true) {
                                     self.startRecording();
+                                    dispatchInteractiontraceEvent({
+                                        domEventType: 'record',
+                                        auto: true
+                                    });
                                 }
                             }
                         }.bind(reset)
