@@ -85,7 +85,7 @@ define([
      *
      * @returns {Object} audioRecordingInteraction
      */
-    audioRecordingInteractionFactory = function () {
+    audioRecordingInteractionFactory = function (dispatchInteractiontraceEvent) {
         return {
             _filePrefix: 'audioRecording',
             _recording: null,
@@ -874,6 +874,11 @@ define([
                         function () {
                             if (this.is('enabled')) {
                                 self.startRecording();
+                                dispatchInteractiontraceEvent({
+                                    domEventType: 'record',
+                                    auto: false,
+                                    target: record.getDOMElement()
+                                });
                             }
                         }.bind(record)
                     );
@@ -1038,9 +1043,17 @@ define([
          * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
          */
         getInstance: function getInstance(dom, config, state) {
+            const dispatchInteractiontraceEvent = detail => {
+                const interactiontraceEvent = new CustomEvent('interactiontrace', {
+                    detail,
+                    bubbles: true
+                });
+                dom.dispatchEvent(interactiontraceEvent);
+            };
+
             var response = config.boundTo;
             var responseIdentifier = Object.keys(response)[0];
-            var audioRecordingInteraction = audioRecordingInteractionFactory();
+            var audioRecordingInteraction = audioRecordingInteractionFactory(dispatchInteractiontraceEvent);
             // config.properties.media is serialized string
             // because in tao-item-runner-qti-fe/src/qtiCommonRenderer/renderers/interactions/pci/ims.js:82
             // property value is serialize if it is array or object
