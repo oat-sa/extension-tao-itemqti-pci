@@ -520,6 +520,9 @@ define([
                 });
 
                 this.player.on('playbackend', function () {
+                    dispatchInteractiontraceEvent({
+                        domEventType: 'ended'
+                    });
                     self.progressBar.setStyle('');
                     self._isAutoPlayingBack = false;
                 });
