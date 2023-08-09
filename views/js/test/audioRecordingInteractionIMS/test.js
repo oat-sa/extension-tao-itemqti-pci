@@ -822,6 +822,10 @@ define([
                     interaction = interactions[0];
 
                     ready();
+
+                    $container.on('interactiontrace', ({ originalEvent }) => {
+                        $('#log-display').append(`<p>${JSON.stringify(originalEvent.detail, null, 2)}</p>`);
+                    });
                 })
                 .on('responsechange', function (response) {
                     if (

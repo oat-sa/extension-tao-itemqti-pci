@@ -141,6 +141,14 @@ define([
                 $control.off('.audioPCI');
                 $control.remove();
                 $control = null;
+            },
+
+            /**
+             * Returns with DOM element of the control
+             * @returns {HTMLElement|null}
+             */
+            getDOMElement() {
+                return $control ? $control.get(0) : null;
             }
         };
         event.addEventMgr(control);
