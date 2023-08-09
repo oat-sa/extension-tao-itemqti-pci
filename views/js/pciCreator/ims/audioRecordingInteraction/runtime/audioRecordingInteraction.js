@@ -85,7 +85,7 @@ define([
      *
      * @returns {Object} audioRecordingInteraction
      */
-    audioRecordingInteractionFactory = function () {
+    audioRecordingInteractionFactory = function (dispatchInteractiontraceEvent) {
         return {
             _filePrefix: 'audioRecording',
             _recording: null,
@@ -449,6 +449,10 @@ define([
                                     function doPlayRecording() {
                                         self._isAutoPlayingBack = true;
                                         self.playRecording();
+                                        dispatchInteractiontraceEvent({
+                                            domEventType: 'play',
+                                            auto: true
+                                        });
                                     }
                                     if (self.beepPlayer && self.beepPlayer.getIsPlayingEndSound()) {
                                         self.beepPlayer.on('beep-endsound-played.autoplayback', () => {
@@ -516,6 +520,9 @@ define([
                 });
 
                 this.player.on('playbackend', function () {
+                    dispatchInteractiontraceEvent({
+                        domEventType: 'ended'
+                    });
                     self.progressBar.setStyle('');
                     self._isAutoPlayingBack = false;
                 });
@@ -573,6 +580,10 @@ define([
                 // no delay, start recording now
                 if (delayInSeconds === 0 && !this.inQtiCreator()) {
                     this.startRecording();
+                    dispatchInteractiontraceEvent({
+                        domEventType: 'record',
+                        auto: true
+                    });
                     return;
                 }
 
@@ -615,6 +626,10 @@ define([
 
                         self._cleanDelayCallback();
                         self.startRecording();
+                        dispatchInteractiontraceEvent({
+                            domEventType: 'record',
+                            delay: self.getDelayInSeconds(),
+                        });
                     }, self.getDelayInSeconds() * 1000);
                 });
             },
@@ -874,6 +889,10 @@ define([
                         function () {
                             if (this.is('enabled')) {
                                 self.startRecording();
+                                dispatchInteractiontraceEvent({
+                                    domEventType: 'record',
+                                    target: record.getDOMElement()
+                                });
                             }
                         }.bind(record)
                     );
@@ -903,8 +922,16 @@ define([
                             if (this.is('enabled')) {
                                 if (self.recorder.is('recording')) {
                                     self.stopRecording();
+                                    dispatchInteractiontraceEvent({
+                                        domEventType: 'stop',
+                                        target: record.getDOMElement()
+                                    });
                                 } else if (self.player.is('playing')) {
                                     self.stopPlayback();
+                                    dispatchInteractiontraceEvent({
+                                        domEventType: 'stop',
+                                        target: record.getDOMElement()
+                                    });
                                 }
                             }
                         }.bind(stop)
@@ -937,6 +964,10 @@ define([
                         function () {
                             if (this.is('enabled')) {
                                 self.playRecording();
+                                dispatchInteractiontraceEvent({
+                                    domEventType: 'play',
+                                    target: record.getDOMElement()
+                                });
                             }
                         }.bind(play)
                     );
@@ -969,9 +1000,17 @@ define([
                             if (this.is('enabled')) {
                                 self.resetRecording();
                                 self.updateResetCount();
+                                dispatchInteractiontraceEvent({
+                                    domEventType: 'reset',
+                                    target: record.getDOMElement()
+                                });
 
                                 if (self.config.hideRecordButton === true) {
                                     self.startRecording();
+                                    dispatchInteractiontraceEvent({
+                                        domEventType: 'record',
+                                        auto: true
+                                    });
                                 }
                             }
                         }.bind(reset)
@@ -1038,9 +1077,17 @@ define([
          * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
          */
         getInstance: function getInstance(dom, config, state) {
+            const dispatchInteractiontraceEvent = detail => {
+                const interactiontraceEvent = new CustomEvent('interactiontrace', {
+                    detail,
+                    bubbles: true
+                });
+                dom.dispatchEvent(interactiontraceEvent);
+            };
+
             var response = config.boundTo;
             var responseIdentifier = Object.keys(response)[0];
-            var audioRecordingInteraction = audioRecordingInteractionFactory();
+            var audioRecordingInteraction = audioRecordingInteractionFactory(dispatchInteractiontraceEvent);
             // config.properties.media is serialized string
             // because in tao-item-runner-qti-fe/src/qtiCommonRenderer/renderers/interactions/pci/ims.js:82
             // property value is serialize if it is array or object
