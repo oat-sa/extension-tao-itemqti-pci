@@ -23,6 +23,11 @@ define([
 
     const MQ = MathQuill.getInterface(2);
 
+    // MathML-to-LaTeX may be nested and needs to be unpacked
+    if (Mathml2latex.MathMLToLaTeX) {
+        Mathml2latex = Mathml2latex.MathMLToLaTeX;
+    }
+
     /**
      * Extract LaTeX content from a Math expression.
      * @param {HTMLElement} element
