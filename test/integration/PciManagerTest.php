@@ -18,7 +18,7 @@ use oat\taoQtiItem\model\qti\ImportService;
 
 class PciManagerTest extends GenerisTestCase
 {
-    const PRODUCT_NAME = 'TAO';
+    public const PRODUCT_NAME = 'TAO';
 
     /**
      * @var \Request|MockObject

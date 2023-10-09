@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tao-3x\n"
+"PO-Revision-Date: 2023-04-21 15:46\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: pt-BR\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: pt-BR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-3x\n"
+"X-Crowdin-Project-ID: 582145\n"
+"X-Crowdin-Language: pt-BR\n"
+"X-Crowdin-File: /qtiItemPci/locales/en-US/registry.rdf.po\n"
+"X-Crowdin-File-ID: 1249\n"
+"Language-Team: Portuguese, Brazilian\n"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook
+msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
+msgid "QTI-PCI-Creator Hooks"
+msgstr "Ganchos QTI-PCI-Creator"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
+msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
+msgid "typeIdentifier"
+msgstr "tipoId"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
+msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
+msgid "Unique Identifier of the PCI"
+msgstr "Identificador único do PCI"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory
+msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
+msgid "directory"
+msgstr "diretório"
+
+# http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory
+msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
+msgid "the location containing the unzipped source of the PCI creator"
+msgstr "a localização que contém o código-fonte descompactado do PCI"
+

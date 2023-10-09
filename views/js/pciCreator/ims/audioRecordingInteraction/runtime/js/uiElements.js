@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2023 (original work) Open Assessment Technologies SA;
  */
 /**
  * Those are the UI elements used by the audio recording PCI: progress bar, input meter and controls
@@ -23,8 +23,9 @@
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/lodash',
-    'taoQtiItem/portableLib/OAT/util/event'
-], function ($, _, event) {
+    'taoQtiItem/portableLib/OAT/util/event',
+    'text!audioRecordingInteraction/runtime/media/beep.txt'
+], function ($, _, event, beepSoundDataUrl) {
     'use strict';
 
     /**
@@ -140,6 +141,14 @@ define([
                 $control.off('.audioPCI');
                 $control.remove();
                 $control = null;
+            },
+
+            /**
+             * Returns with DOM element of the control
+             * @returns {HTMLElement|null}
+             */
+            getDOMElement() {
+                return $control ? $control.get(0) : null;
             }
         };
         event.addEventMgr(control);
@@ -336,10 +345,134 @@ define([
         return countdownPieChart;
     }
 
+    /**
+     * Creates a player for beep sound at the beginning and end of recording
+     * @returns {jQuery} beepPlayer
+     */
+    function beepPlayerFactory() {
+        const timeoutMs = 2000;
+        const soundUrl = beepSoundDataUrl;
+
+        let beepPlayer;
+        let audioEl = new Audio();
+        let playedToTheEndPromise;
+
+        function createDeferredPromise() {
+            const deferred = {};
+            deferred.promise = new Promise((resolve, reject) => {
+                deferred.resolve = resolve;
+                deferred.reject = reject;
+            });
+            return deferred;
+        }
+
+        function playSound() {
+            if (playedToTheEndPromise) {
+                playedToTheEndPromise.reject();
+            }
+            playedToTheEndPromise = createDeferredPromise();
+
+            return Promise.resolve()
+                .then(() => {
+                    if (!audioEl) {
+                        playedToTheEndPromise.reject();
+                        return;
+                    }
+
+                    audioEl.pause();
+                    audioEl.src = soundUrl;
+                    audioEl.currentTime = 0;
+                    audioEl.muted = false;
+
+                    audioEl.onended = () => {
+                        clearTimeout(timeoutId);
+                        if (playedToTheEndPromise) {
+                            playedToTheEndPromise.resolve();
+                        }
+                    };
+                    audioEl.onerror = err => {
+                        clearTimeout(timeoutId);
+                        if (playedToTheEndPromise) {
+                            playedToTheEndPromise.reject(err);
+                        }
+                    };
+                    const timeoutId = setTimeout(() => {
+                        if (playedToTheEndPromise) {
+                            playedToTheEndPromise.reject(new Error('beep was not played in time'));
+                        }
+                    }, timeoutMs);
+
+                    return audioEl.play();
+                })
+                .then(() => playedToTheEndPromise.promise)
+                .catch(function onError(err) {
+                    if (err) {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    }
+                })
+                .finally(() => {
+                    playedToTheEndPromise = null;
+                });
+        }
+
+        function playSilentSound() {
+            if (!playedToTheEndPromise && audioEl) {
+                audioEl.src = soundUrl;
+                audioEl.muted = true;
+                audioEl.play().catch(() => {});
+            }
+        }
+
+        /**
+         * try to workaround the issue where iOS doesn't play audio if play wasn't started by the user action
+         * (happens if recording is set to autostart after the specified delay)
+         */
+        document.body.addEventListener('click', playSilentSound, { once: true });
+
+        beepPlayer = {
+            playStartSound: function playStartSound() {
+                this.isPlayingStartSound = true;
+                return playSound().then(() => {
+                    this.isPlayingStartSound = false;
+                });
+            },
+            playEndSound: function playEndSound() {
+                this.isPlayingEndSound = true;
+                return playSound()
+                    .then(() => {
+                        if (!this.isPlayingStartSound) {
+                            return playSound();
+                        }
+                    })
+                    .then(() => {
+                        this.isPlayingEndSound = false;
+                        this.trigger('beep-endsound-played');
+                    });
+            },
+            getIsPlayingEndSound: function getIsPlayingEndSound() {
+                return this.isPlayingEndSound;
+            },
+            destroy: function destroy() {
+                document.body.removeEventListener('click', playSilentSound);
+                if (playedToTheEndPromise) {
+                    playedToTheEndPromise.reject();
+                }
+                if (audioEl) {
+                    audioEl.pause();
+                    audioEl = null;
+                }
+            }
+        };
+        event.addEventMgr(beepPlayer);
+        return beepPlayer;
+    }
+
     return {
         controlFactory: controlFactory,
         progressBarFactory: progressBarFactory,
         inputMeterFactory: inputMeterFactory,
-        countdownPieChartFactory: countdownPieChartFactory
+        countdownPieChartFactory: countdownPieChartFactory,
+        beepPlayerFactory: beepPlayerFactory
     };
 });

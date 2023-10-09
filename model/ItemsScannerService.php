@@ -37,7 +37,10 @@ class ItemsScannerService
     {
         foreach ($allItems as $key => $item) {
             if ($this->qtiService->getDataItemByRdfItem($this->getItemResource($key)) !== null) {
-                $interactions = $this->qtiService->getDataItemByRdfItem($this->getItemResource($key))->getInteractions();
+                $interactions = $this->qtiService
+                    ->getDataItemByRdfItem($this->getItemResource($key))
+                    ->getInteractions();
+
                 foreach ($interactions as $interaction) {
                     if (
                         $interaction instanceof PortableCustomInteraction

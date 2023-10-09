@@ -14,7 +14,6 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  */
 final class Version202209081725531465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Register new version of Math Entry PCI fixing the result saving on authoring';
@@ -29,7 +28,6 @@ final class Version202209081725531465_qtiItemPci extends AbstractMigration
                 ['2.1.2']
             )
         );
-
     }
 
     public function down(Schema $schema): void
@@ -37,6 +35,5 @@ final class Version202209081725531465_qtiItemPci extends AbstractMigration
         throw new IrreversibleMigration(
             'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
         );
-
     }
 }

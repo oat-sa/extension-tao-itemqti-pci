@@ -28,7 +28,7 @@ class PciRegistry extends PortableElementRegistry
     protected $fileSystemId = 'qtiItemPci';
 
     /** @deprecated */
-    const REGISTRY_EXTENSION = 'qtiItemPci';
+    public const REGISTRY_EXTENSION = 'qtiItemPci';
     /** @deprecated */
-    const REGISTRY_ID = 'pciRegistryEntries';
+    public const REGISTRY_ID = 'pciRegistryEntries';
 }

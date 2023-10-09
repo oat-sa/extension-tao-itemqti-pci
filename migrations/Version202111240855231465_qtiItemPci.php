@@ -15,7 +15,6 @@ use oat\qtiItemPci\model\PciModel;
  */
 final class Version202111240855231465_qtiItemPci extends AbstractMigration
 {
-
     public function getDescription(): string
     {
         return 'Update Math Entry interaction';
@@ -43,6 +42,5 @@ final class Version202111240855231465_qtiItemPci extends AbstractMigration
         throw new IrreversibleMigration(
             'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciMathEntry::class
         );
-
     }
 }

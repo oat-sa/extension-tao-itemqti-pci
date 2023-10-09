@@ -38,15 +38,15 @@ class PciModel implements PortableElementModel
 {
     use PhpSerializeStateless;
 
-    const PCI_IDENTIFIER = 'PCI';
+    public const PCI_IDENTIFIER = 'PCI';
 
-    const PCI_LABEL = 'OAT PCI';
+    public const PCI_LABEL = 'OAT PCI';
 
-    const PCI_MANIFEST = 'pciCreator.json';
+    public const PCI_MANIFEST = 'pciCreator.json';
 
-    const PCI_ENGINE = 'pciCreator.js';
+    public const PCI_ENGINE = 'pciCreator.js';
 
-    const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction';
+    public const PCI_NAMESPACE = 'http://www.imsglobal.org/xsd/portableCustomInteraction';
 
     public function getId()
     {

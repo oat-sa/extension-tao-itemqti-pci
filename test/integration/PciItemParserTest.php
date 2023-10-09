@@ -58,9 +58,15 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
 
         $this->assertEquals('likertScaleInteraction', $pci->getTypeIdentifier());
         $this->assertEquals('1.0.0', $pci->getVersion());
-        $this->assertEquals(['IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/renderer'], $pci->getLibraries());
+        $this->assertEquals(
+            ['IMSGlobal/jquery_2_1_1', 'likertScaleInteraction/runtime/renderer'],
+            $pci->getLibraries()
+        );
         $this->assertEquals(['level' => '5', 'label-min' => 'min', 'label-max' => 'max'], $pci->getProperties());
-        $this->assertEquals(['likertScaleInteraction/style/base.css', 'likertScaleInteraction/style/renderer.css'], $pci->getStylesheets());
+        $this->assertEquals(
+            ['likertScaleInteraction/style/base.css', 'likertScaleInteraction/style/renderer.css'],
+            $pci->getStylesheets()
+        );
     }
 
     /**
@@ -100,7 +106,10 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals('likertScaleInteraction', $pci->getTypeIdentifier());
 
         $modules = $pci->getModules();
-        $this->assertEquals(['likertScaleInteraction/runtime/js/likertScaleInteraction.js'], $modules['likertScaleInteraction/runtime/js/likertScaleInteraction']);
+        $this->assertEquals(
+            ['likertScaleInteraction/runtime/js/likertScaleInteraction.js'],
+            $modules['likertScaleInteraction/runtime/js/likertScaleInteraction']
+        );
         $this->assertEquals([
             'likertScaleInteraction/runtime/js/renderer-unexisting.js',
             'likertScaleInteraction/runtime/js/renderer.js'
@@ -135,7 +144,10 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
 
         $modules = $pci->getModules();
 
-        $this->assertEquals(['likertInteraction/runtime/js/likertInteraction.js'], $modules['likertInteraction/runtime/js/likertInteraction']);
+        $this->assertEquals(
+            ['likertInteraction/runtime/js/likertInteraction.js'],
+            $modules['likertInteraction/runtime/js/likertInteraction']
+        );
         $this->assertEquals([], $modules['likertInteraction/runtime/js/renderer']);
 
         $this->assertEquals(['likertInteraction/runtime/likertConfig.json'], $pci->getConfig());
@@ -179,8 +191,14 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals(1, count($pcis));
         $oatPci = reset($pcis);
 
-        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNamespace()->getUri());
-        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction_v1', $imsPci->getNamespace()->getUri());
+        $this->assertEquals(
+            'http://www.imsglobal.org/xsd/portableCustomInteraction',
+            $oatPci->getNamespace()->getUri()
+        );
+        $this->assertEquals(
+            'http://www.imsglobal.org/xsd/portableCustomInteraction_v1',
+            $imsPci->getNamespace()->getUri()
+        );
     }
 
     public function testParseOatMulti()
@@ -202,6 +220,9 @@ class PciItemParserTest extends TaoPhpUnitTestRunner
         $this->assertEquals(2, count($pcis));
         $oatPci = array_pop($pcis);
 
-        $this->assertEquals('http://www.imsglobal.org/xsd/portableCustomInteraction', $oatPci->getNamespace()->getUri());
+        $this->assertEquals(
+            'http://www.imsglobal.org/xsd/portableCustomInteraction',
+            $oatPci->getNamespace()->getUri()
+        );
     }
 }
