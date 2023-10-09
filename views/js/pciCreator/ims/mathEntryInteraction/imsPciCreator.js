@@ -111,6 +111,10 @@ define([
                 tool_subset: 'true',
                 tool_superset: 'true',
                 tool_contains: 'true',
+                tool_approx: 'true',
+                tool_vline: 'true',
+                tool_degree: 'true',
+                tool_percent: 'true',
                 allowNewLine: 'false',
                 enableAutoWrap: 'false'
             };
