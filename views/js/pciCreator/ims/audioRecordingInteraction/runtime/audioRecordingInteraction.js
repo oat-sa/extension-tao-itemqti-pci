@@ -628,7 +628,7 @@ define([
                         self.startRecording();
                         dispatchInteractiontraceEvent({
                             domEventType: 'record',
-                            auto: true,
+                            autostart: true,
                             delay: self.getDelayInSeconds(),
                         });
                     }, self.getDelayInSeconds() * 1000);
