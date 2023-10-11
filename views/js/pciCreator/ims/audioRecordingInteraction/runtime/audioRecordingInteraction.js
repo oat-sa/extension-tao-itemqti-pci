@@ -451,7 +451,7 @@ define([
                                         self.playRecording();
                                         dispatchInteractiontraceEvent({
                                             domEventType: 'play',
-                                            auto: true
+                                            autostart: true
                                         });
                                     }
                                     if (self.beepPlayer && self.beepPlayer.getIsPlayingEndSound()) {
@@ -582,7 +582,7 @@ define([
                     this.startRecording();
                     dispatchInteractiontraceEvent({
                         domEventType: 'record',
-                        auto: true
+                        autostart: true
                     });
                     return;
                 }
@@ -1010,7 +1010,7 @@ define([
                                     self.startRecording();
                                     dispatchInteractiontraceEvent({
                                         domEventType: 'record',
-                                        auto: true
+                                        autostart: true
                                     });
                                 }
                             }
