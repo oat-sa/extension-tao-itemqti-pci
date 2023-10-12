@@ -21,9 +21,9 @@
     "minimum-stability" : "dev",
     "require": {
         "oat-sa/oatbox-extension-installer": "~1.1||dev-master",
-        "oat-sa/generis" : ">=15.28.0",
-        "oat-sa/tao-core" : ">=53.7.3",
-        "oat-sa/extension-tao-itemqti" : ">=30.3.0"
+        "oat-sa/generis" : ">=15.22",
+        "oat-sa/tao-core" : ">=50.24.6",
+        "oat-sa/extension-tao-itemqti" : ">=29.13.0"
     },
     "autoload" : {
         "psr-4" : {
