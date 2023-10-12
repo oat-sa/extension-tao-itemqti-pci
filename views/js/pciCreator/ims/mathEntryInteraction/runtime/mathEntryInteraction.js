@@ -874,7 +874,7 @@ define([
                             tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon', 'to', 'degree', 'percent']
                         },
                         {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp', 'vline']},
-                        {id: 'trigo', tools: ['pi', 'sin', 'cos','tan', 'arcsin', 'arccos', 'arctan']},
+                        {id: 'trigo', tools: ['pi', 'sin', 'cos','tan']},
                         {id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte', 'approx']},
                         {
                             id: 'operands',

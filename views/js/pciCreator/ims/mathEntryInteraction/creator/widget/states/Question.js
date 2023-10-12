@@ -153,7 +153,7 @@ define([
             tool_approx:    toBoolean(interaction.prop('tool_approx'),  true),
             tool_vline:     toBoolean(interaction.prop('tool_vline'),   true),
             tool_degree:    toBoolean(interaction.prop('tool_degree'),  true),
-            tool_percent:    toBoolean(interaction.prop('tool_arcsin'),  true),
+            tool_percent:    toBoolean(interaction.prop('tool_percent'),  true),
             tool_matrix_2row:   toBoolean(interaction.prop('tool_matrix_2row'),        true),
             tool_matrix_2row_2col:   toBoolean(interaction.prop('tool_matrix_2row_2col'),        true),
             allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false),
