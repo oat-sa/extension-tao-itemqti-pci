@@ -341,6 +341,10 @@ define([
                         subset: toBoolean(config.tool_subset, true),
                         superset: toBoolean(config.tool_superset, true),
                         contains: toBoolean(config.tool_contains, true),
+                        approx: toBoolean(config.tool_approx, true),
+                        vline: toBoolean(config.tool_vline, true),
+                        degree: toBoolean(config.tool_degree, true),
+                        percent: toBoolean(config.tool_percent, true),
                         matrix_2row: toBoolean(config.tool_matrix_2row, true),
                         matrix_2row_2col: toBoolean(config.tool_matrix_2row_2col, true),
                     },
@@ -838,6 +842,10 @@ define([
                         subset: {label: '&#x2282;', latex: '\\subset', fn: 'cmd', desc: 'Subset'},
                         superset: {label: '&#x2283;', latex: '\\supset', fn: 'cmd', desc: 'Superset'},
                         contains: {label: '&#x220B;', latex: '\\ni', fn: 'cmd', desc: 'Contains as member'},
+                        approx: {label: '≈', latex: '\\approx', fn: 'cmd', desc: 'Approximately'},
+                        vline: {label:'|', latex: '\\mid', fn: 'cmd', desc: 'Vertical line, divide'},
+                        degree: {label: '°', latex: '°', fn: 'write', desc: 'Degree symbol'},
+                        percent: {label: '%', latex: '\%', fn: 'write', desc: 'Percent'},
                         matrix_2row: {
                             label: '<svg height="0.8em" width="0.8em" viewBox="0 0 50 111" xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;">' +
                                 '<rect id="svg_1" height="50" width="50" y="0" x="0" stroke="#fff" fill="#7f7f7f"/>' +
@@ -863,11 +871,11 @@ define([
                         {id: 'functions', tools: ['sqrt', 'frac', 'exp', 'subscript', 'log', 'ln', 'limit', 'sum', 'nthroot']},
                         {
                             id: 'symbols',
-                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon', 'to']
+                            tools: ['e', 'infinity', 'lparen', 'rparen', 'lbrace', 'rbrace', 'lbrack', 'rbrack', 'integral', 'colon', 'to', 'degree', 'percent']
                         },
-                        {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp']},
+                        {id: 'geometry', tools: ['angle', 'triangle', 'similar', 'paral', 'perp', 'vline']},
                         {id: 'trigo', tools: ['pi', 'sin', 'cos','tan']},
-                        {id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte']},
+                        {id: 'comparison', tools: ['lower', 'greater', 'lte', 'gte', 'approx']},
                         {
                             id: 'operands',
                             tools: ['equal', 'plus', 'minus', 'times', 'timesdot', 'divide', 'plusminus', 'inmem', 'ninmem', 'union', 'intersec', 'congruent', 'subset', 'superset', 'contains']
