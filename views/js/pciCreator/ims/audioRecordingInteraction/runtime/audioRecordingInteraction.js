@@ -451,7 +451,8 @@ define([
                                         self.playRecording();
                                         dispatchInteractiontraceEvent({
                                             domEventType: 'play',
-                                            autostart: true
+                                            autostart: true,
+                                            typeIdentifier: 'AudioRecordingInteraction'
                                         });
                                     }
                                     if (self.beepPlayer && self.beepPlayer.getIsPlayingEndSound()) {
@@ -521,7 +522,8 @@ define([
 
                 this.player.on('playbackend', function () {
                     dispatchInteractiontraceEvent({
-                        domEventType: 'ended'
+                        domEventType: 'ended',
+                        typeIdentifier: 'AudioRecordingInteraction'
                     });
                     self.progressBar.setStyle('');
                     self._isAutoPlayingBack = false;
@@ -582,7 +584,8 @@ define([
                     this.startRecording();
                     dispatchInteractiontraceEvent({
                         domEventType: 'record',
-                        autostart: true
+                        autostart: true,
+                        typeIdentifier: 'AudioRecordingInteraction'
                     });
                     return;
                 }
@@ -630,6 +633,7 @@ define([
                             domEventType: 'record',
                             autostart: true,
                             delay: self.getDelayInSeconds(),
+                            typeIdentifier: 'AudioRecordingInteraction'
                         });
                     }, self.getDelayInSeconds() * 1000);
                 });
@@ -892,7 +896,8 @@ define([
                                 self.startRecording();
                                 dispatchInteractiontraceEvent({
                                     domEventType: 'record',
-                                    target: record.getDOMElement()
+                                    target: record.getDOMElement(),
+                                    typeIdentifier: 'AudioRecordingInteraction'
                                 });
                             }
                         }.bind(record)
@@ -925,13 +930,15 @@ define([
                                     self.stopRecording();
                                     dispatchInteractiontraceEvent({
                                         domEventType: 'stop',
-                                        target: record.getDOMElement()
+                                        target: record.getDOMElement(),
+                                        typeIdentifier: 'AudioRecordingInteraction'
                                     });
                                 } else if (self.player.is('playing')) {
                                     self.stopPlayback();
                                     dispatchInteractiontraceEvent({
                                         domEventType: 'stop',
-                                        target: record.getDOMElement()
+                                        target: record.getDOMElement(),
+                                        typeIdentifier: 'AudioRecordingInteraction'
                                     });
                                 }
                             }
@@ -967,7 +974,8 @@ define([
                                 self.playRecording();
                                 dispatchInteractiontraceEvent({
                                     domEventType: 'play',
-                                    target: record.getDOMElement()
+                                    target: record.getDOMElement(),
+                                    typeIdentifier: 'AudioRecordingInteraction'
                                 });
                             }
                         }.bind(play)
@@ -1003,14 +1011,16 @@ define([
                                 self.updateResetCount();
                                 dispatchInteractiontraceEvent({
                                     domEventType: 'reset',
-                                    target: record.getDOMElement()
+                                    target: record.getDOMElement(),
+                                    typeIdentifier: 'AudioRecordingInteraction'
                                 });
 
                                 if (self.config.hideRecordButton === true) {
                                     self.startRecording();
                                     dispatchInteractiontraceEvent({
                                         domEventType: 'record',
-                                        autostart: true
+                                        autostart: true,
+                                        typeIdentifier: 'AudioRecordingInteraction'
                                     });
                                 }
                             }
