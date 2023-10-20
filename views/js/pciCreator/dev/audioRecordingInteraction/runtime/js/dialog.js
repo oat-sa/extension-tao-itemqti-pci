@@ -19,11 +19,10 @@
 *   This is a dialog component to throw a modal to give feedback to the user
 */
 define([
-    'lodash',
     'jquery',
     'audioRecordingInteraction/runtime/js/modal',
     'tpl!audioRecordingInteraction/runtime/js/dialog/tpl/body'
-], function (_, $, modal, bodyTpl) {
+], function ($, modal, bodyTpl) {
     'use strict';
     /**
      * The scope of events names
@@ -66,25 +65,32 @@ define([
         init(options) {
             // split options to events
             const events = {};
-            const initOptions = _.omit(options || {}, (value, key) => {
-                if (key.length > 2 && 'on' === key.substr(0, 2)) {
-                    events[key.substr(2)] = value;
-                    return true;
+            const initOptions = {...options};
+            Object.keys(initOptions).forEach(key => {
+                if (key.length > 2 && 'on' === key.substring(0, 2)) {
+                    events[key.substring(2)] = initOptions[key];
+                    delete initOptions[key];
                 }
-                return false;
             });
 
             // assign default values and options
-            _.defaults(this, initOptions, _defaults);
+            Object.assign(this, {..._defaults, ...initOptions});
+
+            const uniqueId = (function() {
+                let counter = 0;
+                return function(prefix = '') {
+                    return `${prefix}${++counter}`;
+                };
+            })();
 
             // pre-render the dialog box
-            this.dialogId = _.uniqueId('dlg-');
+            this.dialogId = uniqueId('dlg-');
             this.$html = $(bodyTpl(this));
             this.rendered = false;
             this.destroyed = false;
 
             // install the events extracted from the options
-            _.forEach(events, (callback, eventName) => {
+            Object.entries(events).forEach(([eventName, callback]) => {
                 if (eventName.indexOf('.') < 0) {
                     eventName += _scope;
                 }
@@ -205,7 +211,7 @@ define([
                 if (undefined === extraParameters) {
                     extraParameters = [];
                 }
-                if (!_.isArray(extraParameters)) {
+                if (!Array.isArray(extraParameters)) {
                     extraParameters = [extraParameters];
                 }
 

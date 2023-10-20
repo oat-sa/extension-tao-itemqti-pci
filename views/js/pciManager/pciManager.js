@@ -19,7 +19,6 @@
 define([
     'jquery',
     'i18n',
-    'lodash',
     'ui/component',
     'ui/hider',
     'ui/switch/switch',
@@ -37,7 +36,6 @@ define([
 ], function (
     $,
     __,
-    _,
     component,
     hider,
     switchFactory,
@@ -134,11 +132,11 @@ define([
             })
             .on('updateListing', function () {
                 const self = this,
-                    urls = _.pick(this.config, ['disableUrl', 'enableUrl', 'unregisterUrl', 'exportPciUrl']),
+                    urls = (({ disableUrl, enableUrl, unregisterUrl, exportPciUrl }) => ({ disableUrl, enableUrl, unregisterUrl, exportPciUrl }))(this.config),
                     $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty');
-                if (_.size(listing)) {
+                if (Array.isArray(listing) && listing.length) {
                     hider.hide($placeholder);
 
                     $fileContainer.empty().html(
@@ -255,7 +253,7 @@ define([
             .on('render', function () {
                 //init variables:
                 const self = this,
-                    urls = _.pick(this.config, ['loadUrl', 'disableUrl', 'enableUrl', 'verifyUrl', 'addUrl']),
+                    urls = (({ loadUrl, disableUrl, enableUrl, verifyUrl, addUrl }) => ({ loadUrl, disableUrl, enableUrl, verifyUrl, addUrl }))(this.config),
                     $container = this.getElement(),
                     $fileSelector = $container.find('.file-selector'),
                     $uploader = $fileSelector.find('.file-upload-container'),
@@ -267,12 +265,12 @@ define([
                 initUploader();
 
                 //load list of custom interactions from server
-                $.getJSON(urls.loadUrl, function (data) {
-                    //note : init as empty object and not array otherwise _.size will fail later
-                    listing = _.size(data) ? data : {};
-                    self.trigger('updateListing', data);
-                    self.trigger('loaded', data);
-                });
+                $.getJSON(urls.loadUrl)
+                    .then(data => {
+                        listing = Object.keys(data).length ? data : {};
+                        self.trigger('updateListing', data);
+                        self.trigger('loaded', data);
+                    });
 
                 function initEventListeners() {
                     //switch to upload mode
@@ -335,11 +333,11 @@ define([
                             const givenLength = files.length;
 
                             //check the mime-type
-                            files = _.filter(files, function (file) {
+                            files = files.filter(file => {
                                 // for some weird reasons some browsers have quotes around the file type
                                 const checkType = file.type.replace(/("|')/g, '');
                                 return (
-                                    _.contains(_fileTypeFilters, checkType) ||
+                                    _fileTypeFilters.includes(checkType) ||
                                     (checkType === '' && _fileExtFilter.test(file.name))
                                 );
                             });
@@ -393,8 +391,8 @@ define([
                                         done(true);
                                     }
                                 } else {
-                                    if (_.isArray(r.messages)) {
-                                        _.forEach(r.messages, function (report) {
+                                    if (Array.isArray(r.messages)) {
+                                        r.messages.forEach(report => {
                                             feedback().error(report.message);
                                         });
                                     }

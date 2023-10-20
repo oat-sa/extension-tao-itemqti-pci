@@ -16,11 +16,10 @@
  * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
-    'lodash',
     'taoQtiItem/qtiCreator/editor/customInteractionRegistry',
     'audioRecordingInteraction/creator/widget/Widget',
     'tpl!audioRecordingInteraction/creator/tpl/markup'
-], function (_, ciRegistry, Widget, markupTpl) {
+], function (ciRegistry, Widget, markupTpl) {
     'use strict';
 
     var _typeIdentifier = 'audioRecordingInteraction';
@@ -46,7 +45,7 @@ define([
                 if (pci.typeIdentifier && pci.typeIdentifier === _typeIdentifier) {
                     // ensure all the properties get a default value
                     defaultProperties = audioRecordingInteractionCreator.getDefaultProperties();
-                    _.forEach(defaultProperties, function (value, name) {
+                    Object.entries(defaultProperties).forEach(([name, value]) => {
                         if (typeof pci.properties[name] === 'undefined') {
                             pci.properties[name] = value;
                         }

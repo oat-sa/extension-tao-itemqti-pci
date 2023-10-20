@@ -16,7 +16,6 @@
  * Copyright (c) 2017-2023 (original work) Open Assessment Technologies SA;
  */
 define([
-    'lodash',
     'i18n',
     'jquery',
     'module',
@@ -26,7 +25,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/pciMediaManager/pciMediaManager',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'tpl!audioRecordingInteraction/creator/tpl/propertiesForm'
-], function (_, __, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, formTpl) {
+], function (__, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, formTpl) {
     'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(
@@ -80,9 +79,8 @@ define([
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
         //render the form using the form template
-        $form.html(
-            formTpl(
-                _.defaults({}, module.config(), {
+        $form.html(formTpl({
+            ...module.config(),
                     serial: response.serial,
                     identifier: interaction.attr('responseIdentifier'),
 
@@ -110,9 +108,7 @@ define([
                     displayDownloadLink: toBoolean(interaction.prop('displayDownloadLink'), false),
 
                     enableDomEvents: toBoolean(interaction.prop('enableDomEvents'), false)
-                })
-            )
-        );
+        }));
 
         $compressedOptions = $form.find('[data-role="compressedOptions"]');
         $uncompressedOptions = $form.find('[data-role="uncompressedOptions"]');
@@ -125,11 +121,8 @@ define([
         formElement.initWidget($form);
 
         //init data change callbacks
-        formElement.setChangeCallbacks(
-            $form,
-            interaction,
-            _.assign(
-                {
+        formElement.setChangeCallbacks($form, interaction, {
+                ...{
                     identifier: function identifier(i, value) {
                         response.id(value);
                         interaction.attr('responseIdentifier', value);
@@ -194,9 +187,8 @@ define([
 
                     displayDownloadLink: configChangeCallBack
                 },
-                pciMediaManager.getChangeCallbacks()
-            )
-        );
+            ...pciMediaManager.getChangeCallbacks()
+        });
 
         if (interaction.hasClass('sequential')) {
             $form.find('input[name="maxRecords"]').trigger('disable');

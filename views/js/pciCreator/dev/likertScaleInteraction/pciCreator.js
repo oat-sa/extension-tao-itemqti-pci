@@ -17,10 +17,9 @@
  *
  */
 define([
-    'lodash',
     'likertScaleInteraction/creator/widget/Widget',
     'tpl!likertScaleInteraction/creator/tpl/markup'
-], function(_, Widget, markupTpl){
+], function(Widget, markupTpl){
     'use strict';
 
     var _typeIdentifier = 'likertScaleInteraction';

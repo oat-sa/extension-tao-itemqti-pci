@@ -22,10 +22,9 @@
  */
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/OAT/mediaPlayer'
-], function($, _, event, mediaPlayerFactory) {
+], function($, event, mediaPlayerFactory) {
     'use strict';
 
     /**
@@ -342,7 +341,7 @@ define([
                 }
 
                 if (media.uri) {
-                    mediaPlayerOptions = _.assign({}, media, {
+                    mediaPlayerOptions = Object.assign({}, media, {
                         $container: $container,
                         url:        assetManager.resolve(media.uri)
                     });

@@ -22,10 +22,9 @@
  */
 define([
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'text!audioRecordingInteraction/runtime/media/beep.txt'
-], function ($, _, event, beepSoundDataUrl) {
+], function ($, event, beepSoundDataUrl) {
     'use strict';
 
     /**

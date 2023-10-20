@@ -16,7 +16,6 @@
  * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
-    'lodash',
     'i18n',
     'jquery',
     'module',
@@ -28,7 +27,7 @@ define([
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!audioRecordingInteraction/creator/tpl/propertiesForm',
     'util/typeCaster'
-], function (_, __, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, containerEditor, formTpl, typeCaster) {
+], function (__, $, module, stateFactory, Question, formElement, pciMediaManagerFactory, simpleEditor, containerEditor, formTpl, typeCaster) {
     'use strict';
 
     var AudioRecordingInteractionStateQuestion = stateFactory.extend(Question, function create(){
@@ -79,7 +78,8 @@ define([
         var pciMediaManager = pciMediaManagerFactory(_widget);
 
         //render the form using the form template
-        $form.html(formTpl(_.defaults({}, module.config(), {
+        $form.html(formTpl({
+            ...module.config(),
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
 
@@ -103,7 +103,7 @@ define([
             partialUpdateInterval: parseInt(interaction.prop('partialUpdateInterval'), 10) / 1000,
 
             displayDownloadLink:    typeCaster.strToBool(interaction.prop('displayDownloadLink'), false)
-        })));
+        }));
 
         $mediaStimulusForm = $form.find('.media-stimulus-properties-form');
         $mediaStimulusForm.append(pciMediaManager.getForm());
@@ -117,61 +117,63 @@ define([
         formElement.initWidget($form);
 
         //init data change callbacks
-        formElement.setChangeCallbacks($form, interaction, _.assign({
-            identifier : function identifier(i, value){
-                response.id(value);
-                interaction.attr('responseIdentifier', value);
+        formElement.setChangeCallbacks($form, interaction, {
+            ...{
+                identifier : function identifier(i, value){
+                    response.id(value);
+                    interaction.attr('responseIdentifier', value);
+                },
+
+                allowPlayback:      configChangeCallBack,
+
+                autoStart: function autoStart(boundInteraction, value, name) {
+                    if (value) {
+                        $delayOptions.show();
+                    } else {
+                        $delayOptions.hide();
+                    }
+                    configChangeCallBack(boundInteraction, value, name);
+                },
+                autoPlayback:       configChangeCallBack,
+
+                delayMinutes:       configChangeCallBack,
+                delaySeconds:       configChangeCallBack,
+
+                maxRecords:         configChangeCallBack,
+                maxRecordingTime:   configChangeCallBack,
+
+                isCompressed: function isCompressed(boundInteraction, value, name) {
+                    if (value === 'true') {
+                        $uncompressedOptions.hide();
+                        $compressedOptions.show();
+                    } else {
+                        $uncompressedOptions.show();
+                        $compressedOptions.hide();
+                    }
+                    configChangeCallBack(boundInteraction, value, name);
+                },
+                audioBitrate:       configChangeCallBack,
+                isStereo:           configChangeCallBack,
+
+                useMediaStimulus: function useMediaStimulusCb(boundInteraction, value, name) {
+                    if (value) {
+                        $mediaStimulusForm.removeClass('hidden');
+                        $mediaStimulusForm.show(250);
+                    } else {
+                        $mediaStimulusForm.hide(250);
+                    }
+                    configChangeCallBack(boundInteraction, value, name);
+                },
+
+                partialUpdateInterval: function partialUpdateInterval(boundInteraction, value, name) {
+                    value = parseFloat(value) * 1000
+                    configChangeCallBack(boundInteraction, value, name);
+                },
+
+                displayDownloadLink: configChangeCallBack
             },
-
-            allowPlayback:      configChangeCallBack,
-
-            autoStart: function autoStart(boundInteraction, value, name) {
-                if (value) {
-                    $delayOptions.show();
-                } else {
-                    $delayOptions.hide();
-                }
-                configChangeCallBack(boundInteraction, value, name);
-            },
-			autoPlayback:       configChangeCallBack,
-
-            delayMinutes:       configChangeCallBack,
-            delaySeconds:       configChangeCallBack,
-
-            maxRecords:         configChangeCallBack,
-            maxRecordingTime:   configChangeCallBack,
-
-            isCompressed: function isCompressed(boundInteraction, value, name) {
-                if (value === 'true') {
-                    $uncompressedOptions.hide();
-                    $compressedOptions.show();
-                } else {
-                    $uncompressedOptions.show();
-                    $compressedOptions.hide();
-                }
-                configChangeCallBack(boundInteraction, value, name);
-            },
-            audioBitrate:       configChangeCallBack,
-            isStereo:           configChangeCallBack,
-
-            useMediaStimulus: function useMediaStimulusCb(boundInteraction, value, name) {
-                if (value) {
-                    $mediaStimulusForm.removeClass('hidden');
-                    $mediaStimulusForm.show(250);
-                } else {
-                    $mediaStimulusForm.hide(250);
-                }
-                configChangeCallBack(boundInteraction, value, name);
-            },
-
-            partialUpdateInterval: function partialUpdateInterval(boundInteraction, value, name) {
-                value = parseFloat(value) * 1000
-                configChangeCallBack(boundInteraction, value, name);
-            },
-
-            displayDownloadLink: configChangeCallBack
-
-        }, pciMediaManager.getChangeCallbacks()));
+            ...pciMediaManager.getChangeCallbacks()
+        });
 
         pciMediaManager.init();
     };

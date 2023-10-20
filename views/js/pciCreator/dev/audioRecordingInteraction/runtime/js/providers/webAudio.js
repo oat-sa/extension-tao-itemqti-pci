@@ -22,10 +22,9 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event'
-], function(_, Promise, event) {
+], function(Promise, event) {
     'use strict';
 
     /**
@@ -77,7 +76,7 @@ define([
          * @param {Object} payload - command parameters, depends on the actual command
          */
         function sendToWorker(command, payload) {
-            recorderWorker.postMessage(_.merge({ command: command }, payload));
+            recorderWorker.postMessage({ command: command, ...payload });
         }
 
         /**

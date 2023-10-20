@@ -22,12 +22,11 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/jquery_2_1_1',
     'taoQtiItem/portableLib/OAT/util/event',
     'audioRecordingInteraction/runtime/js/dialog',
     'i18n'
-], function (_, $, event, dialogFactory, __) {
+], function ($, event, dialogFactory, __) {
     'use strict';
 
     /**
@@ -129,7 +128,7 @@ define([
                 audioEl = new Audio(url);
 
                 audioEl.ondurationchange = function ondurationchange() {
-                    if (_.isFinite(audioEl.duration)) {
+                    if (typeof audioEl.duration === 'number' && isFinite(audioEl.duration)) {
                         self.trigger('durationchange', [audioEl.duration]);
                     }
                 };

@@ -28,12 +28,11 @@
  * @author Christophe Noël <christophe@taotesting.com>
  */
 define([
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
     'audioRecordingInteraction/runtime/js/providers/mediaRecorder',
     'audioRecordingInteraction/runtime/js/providers/webAudio'
-], function(_, Promise, event, mediaRecorderProvider, webAudioProvider) {
+], function(Promise, event, mediaRecorderProvider, webAudioProvider) {
     'use strict';
 
     /**
@@ -300,7 +299,7 @@ define([
 
                 provider.stop();
                 setState(recorder, recorderStates.STOPED);
-            
+
                 this.trigger('stop');
             },
 
@@ -323,9 +322,7 @@ define([
              */
             releaseResourses: function releaseResourses() {
                 if (mediaStream) {
-                    _.forEach(mediaStream.getTracks(), function(track) {
-                        track.stop();
-                    });
+                    mediaStream.getTracks().forEach(track => track.stop());
                 }
                 audioContext.close().then(function() {
                     audioContext = null;

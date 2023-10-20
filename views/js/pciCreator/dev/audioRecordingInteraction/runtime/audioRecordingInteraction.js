@@ -18,7 +18,6 @@
 define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/promise',
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/OAT/util/html',
@@ -29,7 +28,6 @@ define([
 ], function (
     qtiCustomInteractionContext,
     $,
-    _,
     Promise,
     event,
     html,
@@ -84,7 +82,7 @@ define([
          * return {Boolean} - Are we in a TAO QTI Creator context?
          */
         inQtiCreator: function inQtiCreator() {
-            if (_.isUndefined(this._inQtiCreator) && this.$container) {
+            if (typeof this._inQtiCreator === 'undefined' && this.$container) {
                 this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
             }
             return this._inQtiCreator;
@@ -324,8 +322,8 @@ define([
             }
 
             // cache controls states
-            _.forEach(this.controls, function (ctr, id) {
-                self.ctrCache[id] = ctr.getState();
+            this.controls.forEach((ctr, id) => {
+                this.ctrCache[id] = ctr.getState();
                 ctr.disable();
             });
 
@@ -358,9 +356,10 @@ define([
                     self.countdown.destroy();
 
                     // restore controls states
-                    _.forEach(self.controls, function (ctr, id) {
+                    this.controls.forEach((ctr, id) => {
                         ctr.setState(self.ctrCache[id]);
                     });
+
 
                     self._cleanDelayCallback();
 
@@ -800,14 +799,26 @@ define([
             if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
                 return;
             }
-            _.invoke(this.controls, 'updateState');
+            if (this.controls) {
+                this.controls.forEach(control => {
+                    if (typeof control.updateState === 'function') {
+                        control.updateState();
+                    }
+                });
+            }
         },
 
         /**
          * Destroy the state of all the controls
          */
         destroyControls: function destroyControls() {
-            _.invoke(this.controls, 'destroy');
+            if (this.controls) {
+                this.controls.forEach(control => {
+                    if (typeof control.destroy === 'function') {
+                        control.destroy();
+                    }
+                });
+            }
             this.controls = null;
         },
 

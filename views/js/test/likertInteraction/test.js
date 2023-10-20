@@ -19,7 +19,6 @@
 define([
 
     'jquery',
-    'lodash',
     'util/url',
     'taoItems/assets/manager',
     'taoItems/assets/strategies',
@@ -31,7 +30,6 @@ define([
 ], function(
 
     $,
-    _,
     url,
     assetManagerFactory,
     assetStrategies,

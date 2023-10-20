@@ -184,7 +184,7 @@ define([
             .on('render', () => {
                 const interactions = runner._item.getInteractions();
 
-                assert.equal(_.size(interactions), 1, 'one interaction');
+                assert.equal(interactions.length, 1, 'one interaction');
 
                 const sqrt = document.querySelector('[data-identifier="sqrt"]');
                 sqrt.dispatchEvent(new Event('mousedown', { bubbles: true }));
@@ -231,7 +231,7 @@ define([
             .on('render', () => {
                 const interactions = runner._item.getInteractions();
 
-                assert.equal(_.size(interactions), 1, 'one interaction');
+                assert.equal(interactions.length, 1, 'one interaction');
 
                 assert.propEqual(
                     runner.getResponses(),

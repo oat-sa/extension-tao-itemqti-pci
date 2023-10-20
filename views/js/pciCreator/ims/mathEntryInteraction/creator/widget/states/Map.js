@@ -18,7 +18,6 @@
 define([
     'handlebars',
     'i18n',
-    'lodash',
     'jquery',
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/states/Map',
@@ -33,7 +32,6 @@ define([
 ], function (
     hb,
     __,
-    _,
     $,
     stateFactory,
     MapState,
@@ -141,12 +139,12 @@ define([
         minMaxComponentFactory($responseForm.find('.response-mapping-attributes > .min-max-panel'), {
             min: {
                 fieldName: 'lowerBound',
-                value: _.parseInt(response.getMappingAttribute('lowerBound')) || 0,
+                value: parseInt(response.getMappingAttribute('lowerBound')) || 0,
                 helpMessage: __('Minimal score for this interaction.')
             },
             max: {
                 fieldName: 'upperBound',
-                value: _.parseInt(response.getMappingAttribute('upperBound')) || 0,
+                value: parseInt(response.getMappingAttribute('upperBound')) || 0,
                 helpMessage: __('Maximal score for this interaction.')
             },
             upperThreshold: Number.MAX_SAFE_INTEGER,
@@ -277,7 +275,7 @@ define([
     MathEntryInteractionStateResponse.prototype.getExistingCorrectAnswerOptions = function getExistingCorrectAnswerOptions() {
         const interaction = this.widget.element;
         const mapEntries = interaction.getResponseDeclaration().getMapEntries();
-        return _.keys(mapEntries) || [];
+        return Object.keys(mapEntries) || [];
     };
 
     MathEntryInteractionStateResponse.prototype.initResponseChangeEventListener = function initResponseChangeEventListener() {
@@ -364,7 +362,7 @@ define([
         const response = interaction.getResponseDeclaration();
         const mapEntries = response.getMapEntries();
 
-        _.keys(mapEntries).forEach(function (mapKey) {
+        Object.keys(mapEntries).forEach(function (mapKey) {
             response.removeMapEntry(mapKey, true);
         });
     };

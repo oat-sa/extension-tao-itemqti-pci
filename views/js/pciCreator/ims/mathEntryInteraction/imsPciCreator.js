@@ -20,10 +20,9 @@
  */
 
 define([
-    'lodash',
     'mathEntryInteraction/creator/widget/Widget',
     'tpl!mathEntryInteraction/creator/tpl/markup'
-], function (_, Widget, markupTpl) {
+], function (Widget, markupTpl) {
     'use strict';
 
     var _typeIdentifier = 'mathEntryInteraction';

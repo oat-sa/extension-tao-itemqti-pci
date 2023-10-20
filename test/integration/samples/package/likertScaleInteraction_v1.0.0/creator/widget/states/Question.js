@@ -5,9 +5,8 @@ define([
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
     'tpl!likertScaleInteraction/creator/tpl/propertiesForm',
-    'lodash',
     'jquery'
-], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _, $){
+], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, $){
 
     var LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
 
@@ -54,10 +53,10 @@ define([
             levelData = {};
 
         //build select option data for the template
-        _.each(levels, function(lvl){
+        levels.forEach(function(lvl) {
             levelData[lvl] = {
-                label : lvl,
-                selected : (lvl === level)
+                label: lvl,
+                selected: (lvl === level)
             };
         });
 

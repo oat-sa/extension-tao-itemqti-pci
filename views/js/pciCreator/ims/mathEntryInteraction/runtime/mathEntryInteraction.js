@@ -20,7 +20,6 @@
 define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'mathEntryInteraction/runtime/mathquill/mathquill',
     'mathEntryInteraction/runtime/helper/mathInPrompt',
@@ -31,7 +30,6 @@ define([
 ], function (
     qtiCustomInteractionContext,
     $,
-    _,
     event,
     MathQuill,
     mathInPrompt,
@@ -46,9 +44,7 @@ define([
         newLine: 'mq-tao-br',
         autoWrap: 'mq-tao-wrap'
     };
-    var cssSelectors = _.mapValues(cssClass, function (cls) {
-        return `.${cls}`;
-    });
+    const cssSelectors = Object.fromEntries(Object.entries(cssClass).map(([key, cls]) => [key, `.${cls}`]));
     var reSpace = /^(\s|&nbsp;)+$/;
     var MQ = MathQuill.getInterface(2);
 
@@ -154,7 +150,7 @@ define([
              * @returns {Boolean} - Are we in a TAO QTI Creator context?
              */
             inQtiCreator: function isInCreator() {
-                if (_.isUndefined(this._inQtiCreator) && this.$container) {
+                if (typeof this._inQtiCreator === 'undefined' && this.$container) {
                     this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context') ||
                         this.$container.find('.tao-qti-creator-context').length > 0;
                 }
@@ -459,7 +455,7 @@ define([
                     lineWidth = 0;
 
                     // iterate over each block and insert a line break each time a block is overflowing its container
-                    nodes = _.toArray($container.get(0).childNodes);
+                    nodes = Array.from($container.get(0).childNodes);
                     for (length = nodes.length, index = 0; index < length; index++) {
                         node = nodes[index];
                         block = cache.get(node);
@@ -640,7 +636,7 @@ define([
              * @param {string} indexInput
              */
             setLatex: function setLatex(latex, indexInput) {
-                if (this.inGapMode() && _.isArray(latex)) {
+                if (this.inGapMode() && Array.isArray(latex)) {
                     const gapFields = this.getGapFields();
                     latex.forEach(function (latexExpr, i) {
                         if (gapFields[i]) {
@@ -682,7 +678,7 @@ define([
             insertLatex: function insertLatex(latex, fn) {
                 const activeMathField = this.getActiveMathField();
 
-                if (activeMathField && _.isFunction(activeMathField[fn])) {
+                if (activeMathField && typeof activeMathField[fn] === 'function') {
                     activeMathField[fn](latex);
                     activeMathField.focus();
                 }
@@ -697,7 +693,7 @@ define([
 
                 if ((this.inGapMode() && this.inResponseState()) || (this.inGapMode() && !this.inQtiCreator())) {
                     // default to the first gap field if none has received the focus yet
-                    if (!_.isFinite(this._activeGapFieldIndex)) {
+                    if (!Number.isFinite(this._activeGapFieldIndex)) {
                         this._activeGapFieldIndex = 0;
                     }
                     // access the MQ instances
@@ -715,7 +711,7 @@ define([
              * @returns {Array} - The gap fields of a static math instance
              */
             getGapFields: function getGapFields() {
-                return (this.mathField && _.isArray(this.mathField.innerFields))
+                return (this.mathField && Array.isArray(this.mathField.innerFields))
                     ? this.mathField.innerFields
                     : [];
             },
@@ -1187,7 +1183,7 @@ define([
             });
 
             pciInstance.on('latexGapInput', function (gapLatex, indexInput) {
-                if (gapLatex.base && _.isArray(gapLatex.base.string)) {
+                if (gapLatex.base && Array.isArray(gapLatex.base.string)) {
                     if (!mathEntryInteraction.inputs.has(indexInput)) {
                         return false;
                     }

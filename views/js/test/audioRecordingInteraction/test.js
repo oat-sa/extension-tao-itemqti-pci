@@ -262,7 +262,7 @@ define([
                     var interaction,
                         interactions = this._item.getInteractions();
 
-                    assert.equal(_.size(interactions), 1, 'one interaction');
+                    assert.equal(interactions.length, 1, 'one interaction');
                     interaction = interactions[0];
 
                     // First we set the response
@@ -323,7 +323,7 @@ define([
                     var interaction,
                         interactions = this._item.getInteractions();
 
-                    assert.equal(_.size(interactions), 1, 'one interaction');
+                    assert.equal(interactions.length, 1, 'one interaction');
                     interaction = interactions[0];
 
                     //Set the response
@@ -462,7 +462,7 @@ define([
                 newConfig = {};
             if (interaction) {
                 newConfig[$target.attr('name')] = $target.is(':checked');
-                interaction.triggerPci('configChange', [_.assign(interaction.properties, newConfig)]);
+                interaction.triggerPci('configChange', [Object.assign(interaction.properties, newConfig)]);
             }
         });
 

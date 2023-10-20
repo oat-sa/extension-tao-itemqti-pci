@@ -18,7 +18,6 @@
 define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/jquery_2_1_1',
-    'taoQtiItem/portableLib/lodash',
     'taoQtiItem/portableLib/OAT/util/event',
     'taoQtiItem/portableLib/OAT/util/html',
     'oatSamplePciAudio/runtime/js/player',
@@ -27,7 +26,6 @@ define([
 ], function(
     qtiCustomInteractionContext,
     $,
-    _,
     event,
     html,
     playerFactory,
@@ -545,14 +543,26 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
-            _.invoke(this.controls, 'updateState');
+            if (this.controls) {
+                this.controls.forEach(control => {
+                    if (typeof control.updateState === 'function') {
+                        control.updateState();
+                    }
+                });
+            }
         },
 
         /**
          * Destroy the state of all the controls
          */
         destroyControls: function destroyControls() {
-            _.invoke(this.controls, 'destroy');
+            if (this.controls) {
+                this.controls.forEach(control => {
+                    if (typeof control.destroy === 'function') {
+                        control.destroy();
+                    }
+                });
+            }
             this.controls = null;
         },
 

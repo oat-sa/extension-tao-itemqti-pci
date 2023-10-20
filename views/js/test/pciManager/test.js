@@ -18,10 +18,9 @@
 define([
 
     'jquery',
-    'lodash',
     'qtiItemPci/pciManager/pciManager',
     'css!qtiItemPciCss/pci-manager'
-], function($, _, pciManager) {
+], function($, pciManager) {
     'use strict';
 
     var pluginApi = [
