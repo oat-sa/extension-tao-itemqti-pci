@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 09:19\n"
+"PO-Revision-Date: 2023-12-04 16:10\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ar\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Crowdin-Project-ID: 590867\n"
 "X-Crowdin-Language: ar\n"
 "X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/role.rdf.po\n"
-"X-Crowdin-File-ID: 575\n"
+"X-Crowdin-File-ID: 970\n"
 "Language-Team: Arabic\n"
 
 # http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager
