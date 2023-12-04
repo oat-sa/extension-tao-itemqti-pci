@@ -545,14 +545,14 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
-            _.invoke(this.controls, 'updateState');
+            _.invokeMap(this.controls, 'updateState');
         },
 
         /**
          * Destroy the state of all the controls
          */
         destroyControls: function destroyControls() {
-            _.invoke(this.controls, 'destroy');
+            _.invokeMap(this.controls, 'destroy');
             this.controls = null;
         },
 
