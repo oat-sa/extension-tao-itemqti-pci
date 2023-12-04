@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 09:18\n"
+"PO-Revision-Date: 2023-12-04 16:10\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ar\n"
@@ -21,331 +21,331 @@ msgstr ""
 "Language-Team: Arabic\n"
 
 msgid "Add answer option"
-msgstr ""
+msgstr "إضافة خيار الإجابة"
 
 msgid "Add gap"
-msgstr ""
+msgstr "أضف فراغا"
 
 msgid "Add Interaction"
-msgstr ""
+msgstr "أضف تفاعلا"
 
 msgid "Allow download"
-msgstr ""
+msgstr "اسمح بالتحميل"
 
 msgid "allow line break"
-msgstr ""
+msgstr "رجوع إلى السطر"
 
 msgid "Allow playback"
-msgstr ""
+msgstr "اسمح بإعادة القراءة"
 
 msgid "angle"
-msgstr ""
+msgstr "زاوية"
 
 msgid "Audio bitrate:"
-msgstr ""
+msgstr "معدل نقل البيانات بالصوت:"
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr ""
+msgstr "تم تسجيل الصوت سابقا. متصفحك لا يدعم تشغيل هذا التسجيل. يرجى المحاولة على متصفح مختلف."
 
 msgid "authorize white space"
-msgstr ""
+msgstr "اسمح بفضاء فارغ"
 
 msgid "Auto playback recording"
-msgstr ""
+msgstr "تسجيل التشغيل الأوتوماتيكي"
 
 msgid "Auto start recording"
-msgstr ""
+msgstr "بدء التسجيل الأوتوماتيكي"
 
 msgid "Back to listing"
-msgstr ""
+msgstr "الرجوع إلى القائمة"
 
 msgid "braces/curly brackets"
-msgstr ""
+msgstr "الأقواس / الأقواس المتعرجة"
 
 msgid "Cancel"
-msgstr ""
+msgstr "إلغاء"
 
 msgid "Channels"
-msgstr ""
+msgstr "قنوات"
 
 msgid "Close dialog"
-msgstr ""
+msgstr "أغلق مربع الحوار"
 
 msgid "Comparison"
-msgstr ""
+msgstr "مقارنة"
 
 msgid "Compressed"
-msgstr ""
+msgstr "مضغوط"
 
 msgid "Correct answer option"
-msgstr ""
+msgstr "خِيار الإجابة الصحيحة"
 
 msgid "cosinus"
-msgstr ""
+msgstr "جيب التمام"
 
 msgid "Define correct responses"
-msgstr ""
+msgstr "عرف الإجابات الصحيحة"
 
 msgid "Delete"
-msgstr ""
+msgstr "حذف"
 
 msgid "delete the answer"
-msgstr ""
+msgstr "احذف الإجابة"
 
 msgid "disabled"
-msgstr ""
+msgstr "إيقاف"
 
 msgid "divide"
-msgstr ""
+msgstr "اقسم"
 
 msgid "Download"
-msgstr ""
+msgstr "تنزيل"
 
 msgid "edit the answer"
-msgstr ""
+msgstr "حرر الإجابة"
 
 msgid "enable auto wrap"
-msgstr ""
+msgstr "تشغيل الالتفاف الأتوماتيكي"
 
 msgid "Enabled in item authoring"
-msgstr ""
+msgstr "ممكن في تأليف البند"
 
 msgid "equal"
-msgstr ""
+msgstr "يساوي"
 
 msgid "Experimental only"
-msgstr ""
+msgstr "تجريبي فقط"
 
 msgid "exponent"
-msgstr ""
+msgstr "الأس"
 
 msgid "For tests only"
-msgstr ""
+msgstr "للروائز فقط"
 
 msgid "fraction"
-msgstr ""
+msgstr "كسر"
 
 msgid "Functions"
-msgstr ""
+msgstr "دوال"
 
 msgid "Gap size"
-msgstr ""
+msgstr "قياس الانحراف"
 
 msgid "Geometry"
-msgstr ""
+msgstr "الهندسة"
 
 msgid "Give the possibility to the test taker to playback its own recording."
-msgstr ""
+msgstr "اسمح للمتقدم لاجتياز الرائز أن يسمع تسجيله."
 
 msgid "greater than"
-msgstr ""
+msgstr "أكبر من"
 
 msgid "greater than or equal"
-msgstr ""
+msgstr "أكبر من أو يساوي"
 
 msgid "id : "
-msgstr ""
+msgstr "إذ "
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
-msgstr ""
+msgstr "باعتماد وحدة قياس بت في الثانية، وازن بين جودة التسجيل الصوتي وحجم الملف، علما أن القيمة الافتراضية هي ( 20.000 بت في الثانية)، إذ يزن التسجيل لمدة دقيقتين 300 كيلو بايت تقريبا."
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
-msgstr ""
+msgstr "يتوقف التسجيل أتوماتيكيا عند الوصول إلى الحد الأقصى المسموح به للتسجيل والذي لا يمكن أن يقل عن 10 ثواني."
 
 msgid "In seconds. The time interval between partial updates of the recording."
-msgstr ""
+msgstr "في ثواني. الفاصل الزمني بين التحديثات الجزئية للتسجيل."
 
 msgid "Indefinite integral"
-msgstr ""
+msgstr "تكامل غير محدد"
 
 msgid "Invalid files have been removed"
-msgstr ""
+msgstr "تمت إزالة الملفات غير الصالحة"
 
 msgid "is a member of"
-msgstr ""
+msgstr "عضو في/ ينتمي إلى"
 
 msgid "is not a member of"
-msgstr ""
+msgstr "ليس عضوا في"
 
 msgid "is parallel with"
-msgstr ""
+msgstr "متوازي مع"
 
 msgid "is perpendicular to"
-msgstr ""
+msgstr "متعامد مع"
 
 msgid "Large"
-msgstr ""
+msgstr "واسع"
 
 msgid "Level"
-msgstr ""
+msgstr "مستوى"
 
 msgid "ln"
-msgstr ""
+msgstr "لوغارتم طبيعي (النبري)"
 
 msgid "log"
-msgstr ""
+msgstr "لوغارتيم عشري"
 
 msgid "lower than"
-msgstr ""
+msgstr "أقل من"
 
 msgid "lower than or equal"
-msgstr ""
+msgstr "أقل من أو يساوي"
 
 msgid "Manage custom interactions"
-msgstr ""
+msgstr "تدبير التفاعلات المعتادة/المألوفة"
 
 msgid "Max attempts:"
-msgstr ""
+msgstr "العدد الأقصى للمحاولات:"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr ""
+msgstr "الحد الأقصى لعدد محاولات التسجيل المسموح بها للمتقدم  للرائز. اضبط على 0 للسماح بمحاولات غير محدودة. بحد أقصى 3 ، سيتمكن المختبر من النقر مرتين على زر إعادة الضبط."
 
 msgid "Medium"
-msgstr ""
+msgstr "متوسط"
 
 msgid "Min:"
-msgstr ""
+msgstr "الحد الأدنى:"
 
 msgid "minus"
-msgstr ""
+msgstr "ناقص"
 
 msgid "Mono"
-msgstr ""
+msgstr "أحادي"
 
 msgid "No Custom Interaction"
-msgstr ""
+msgstr "لا يوجد تفاعل مألوف"
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
-msgstr ""
+msgstr "عدد القنوات للتسجيل. اسمح بقطع حجم التسجيل إلى النصف إذا تم استخدامه في الوضع الأحادي."
 
 msgid "Operands"
-msgstr ""
+msgstr "المعاملات"
 
 msgid "Options"
-msgstr ""
+msgstr "خيارات"
 
 msgid "parentheses/round brackets"
-msgstr ""
+msgstr "أقواس/ بين هيلالين"
 
 msgid "plus"
-msgstr ""
+msgstr "زائد"
 
 msgid "Plus/minus"
-msgstr ""
+msgstr "زائد/ناقص"
 
 #, tao-public
 msgid "Portable Custom Interactions"
-msgstr ""
+msgstr "التفاعلات المخصصة المحمولة"
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr ""
+msgstr "يتم تشغيل الصوت المسجل أوتوماتيكيا بعد توقف التسجيل. أثناء التشغيل ، لا يمكن تفاعل المستخدم مع التطبيق. ويتم تعطيل جميع الأزرار."
 
 msgid "Recording format"
-msgstr ""
+msgstr "صيغة التسجيل"
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
-msgstr ""
+msgstr "يبدأ التسجيل أتوماتيكيا بمجرد أن يمنح المتقدم للاختبار إذنًا باستخدام الميكروفون. إذا تم استخدام محفز وسائط ، فسيبدأ التسجيل أتوماتيكيا بعد تشغيل التحفيز."
 
 msgid "Response identifier"
-msgstr ""
+msgstr "معرف الاستجابة"
 
 msgid "Scale size"
-msgstr ""
+msgstr "حجم المقياس"
 
 msgid "Sec:"
-msgstr ""
+msgstr "الثانية:"
 
 msgid "set intersection"
-msgstr ""
+msgstr "تقاطع مجموعات"
 
 msgid "set union"
-msgstr ""
+msgstr "اتحاد مجموعات"
 
 #, tao-public
 msgid "Settings"
-msgstr ""
+msgstr "إعدادات/تطبيقات"
 
 msgid "similar"
-msgstr ""
+msgstr "مماثل"
 
 msgid "sinus"
-msgstr ""
+msgstr "جيب"
 
 msgid "Small"
-msgstr ""
+msgstr "صغير"
 
 msgid "square brackets"
-msgstr ""
+msgstr "الأقواس المعقوفة"
 
 msgid "square root"
-msgstr ""
+msgstr "الجذر التربيعي"
 
 msgid "Stereo"
-msgstr ""
+msgstr "ستريو"
 
 msgid "subscript"
-msgstr ""
+msgstr "رمز مؤشر"
 
 msgid "Symbols"
-msgstr ""
+msgstr "رموز"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr ""
+msgstr "معرّف الاختيار. يجب عدم استخدام هذا المعرف من قبل أي استجابة أخرى أو متغير بند. المعرّف هو سلسلة من الأحرف التي يجب أن تبدأ بحرف أو شرطة سفلية (\"_\") وتحتوي فقط على أحرف ، وشرطات سفلية ، وواصلات (\"-\") ، ونقطة (\".\" ، ويعرف أيضًا باسم النقطة الكاملة) ، وأرقام ، و CombiningChars والموسعات."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr ""
+msgstr "هذا لأغراض الاختبار فقط. يعرض رابط لتنزيل الملف المسجل بمجرد توقف التسجيل. لا ينبغي استخدام هذا في سياق التسليم ، لأنه سيسمح للمتقدم للاختبار بتنزيل التسجيل الخاص به."
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr ""
+msgstr "تسمح هذه الخيارات بإدخال محفز وسائط يجب تشغيله قبل  التسجيل."
 
 msgid "Time limit:"
-msgstr ""
+msgstr "المهلة الزمنية:"
 
 msgid "times"
-msgstr ""
+msgstr "المرات"
 
 msgid "times dot"
-msgstr ""
+msgstr "التوقيت"
 
 msgid "triangle"
-msgstr ""
+msgstr "مثلث"
 
 msgid "Trigonometry"
-msgstr ""
+msgstr "الحساب المثلثي"
 
 msgid "type : "
-msgstr ""
+msgstr "نمط/طراز "
 
 msgid "Unable to upload file %s : %s"
-msgstr ""
+msgstr "تعذر تحميل الملف %s : %s"
 
 msgid "Uncompressed"
-msgstr ""
+msgstr "غير مضغوط"
 
 msgid "Update interval:"
-msgstr ""
+msgstr "فترة التحديث:"
 
 msgid "Upload new custom interaction (zip package)"
-msgstr ""
+msgstr "تحميل تفاعل مخصص جديد (zip package)"
 
 msgid "use expression with gaps"
-msgstr ""
+msgstr "استخدم التعبير مع الفجوات"
 
 msgid "Use media stimulus"
-msgstr ""
+msgstr "استخدم التحفيز الإعلامي"
 
 msgid "version : "
-msgstr ""
+msgstr "صيغة "
 
 msgid "Warning"
-msgstr ""
+msgstr "تحذير"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
-msgstr ""
+msgstr "مع التسجيل المضغوط، يتم حفظ الصوت كملف webm أو  ogg ( حجم أصغر) . غير مضغوط، كملف wav  من غير ضاع  ( حجم أكبر بكثير)"
 
 msgid "≤"
-msgstr ""
+msgstr "≤"
 
 msgid "≥"
-msgstr ""
+msgstr "≥"
 
