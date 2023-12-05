@@ -1,17 +1,27 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.4.0-sprint136\n"
-"PO-Revision-Date: 2020-08-28T09:36:08\n"
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2023-12-05 09:23\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: lt-LT\n"
+"Language: lt\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: lt-LT\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: lt\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
+"Language-Team: Lithuanian\n"
+
+msgid "Add answer option"
+msgstr ""
 
 msgid "Add gap"
 msgstr "Pridėti tarpą"
@@ -28,8 +38,14 @@ msgstr "leisti naują eilutę"
 msgid "Allow playback"
 msgstr "Leisti atkūrimą"
 
+msgid "angle"
+msgstr ""
+
 msgid "Audio bitrate:"
 msgstr "Garso perdavimo greitis:"
+
+msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
+msgstr ""
 
 msgid "authorize white space"
 msgstr "lesti palikti tuščią vietą"
@@ -47,10 +63,13 @@ msgid "braces/curly brackets"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Atšaukti"
 
 msgid "Channels"
 msgstr "Kanalai"
+
+msgid "Close dialog"
+msgstr ""
 
 msgid "Comparison"
 msgstr "Palyginimas"
@@ -58,10 +77,19 @@ msgstr "Palyginimas"
 msgid "Compressed"
 msgstr "Suspaustas"
 
+msgid "Correct answer option"
+msgstr ""
+
 msgid "cosinus"
 msgstr "kosinusas"
 
+msgid "Define correct responses"
+msgstr ""
+
 msgid "Delete"
+msgstr "Ištrinti"
+
+msgid "delete the answer"
 msgstr ""
 
 msgid "disabled"
@@ -71,6 +99,9 @@ msgid "divide"
 msgstr "dalinti"
 
 msgid "Download"
+msgstr ""
+
+msgid "edit the answer"
 msgstr ""
 
 msgid "enable auto wrap"
@@ -113,7 +144,7 @@ msgid "greater than or equal"
 msgstr "daugiau arba lygu"
 
 msgid "id : "
-msgstr "id : "
+msgstr ""
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
 msgstr "BPS (bitai per sekundę). Nustatyti kompromisą tarp garso kokybės ir failo dydžio. Su numatyta reikšme (20.000bps), 2 minučių įrašas užima maždaug 300KB."
@@ -121,7 +152,13 @@ msgstr "BPS (bitai per sekundę). Nustatyti kompromisą tarp garso kokybės ir f
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "Sekundės. Didžiausias leidžiamas įrašo laikas (negali būti mažesnis už 10 s). Įrašymas automatiškai bus sustabdytas, kai bus pasiekta ši riba. "
 
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr ""
+
 msgid "Indefinite integral"
+msgstr ""
+
+msgid "Invalid files have been removed"
 msgstr ""
 
 msgid "is a member of"
@@ -143,10 +180,10 @@ msgid "Level"
 msgstr "Lygis"
 
 msgid "ln"
-msgstr "ln"
+msgstr ""
 
 msgid "log"
-msgstr "log"
+msgstr ""
 
 msgid "lower than"
 msgstr ""
@@ -173,7 +210,7 @@ msgid "minus"
 msgstr ""
 
 msgid "Mono"
-msgstr "Mono"
+msgstr ""
 
 msgid "No Custom Interaction"
 msgstr "Nėra Pasirinktinės Sąveikos"
@@ -244,7 +281,7 @@ msgid "square root"
 msgstr "kvadratinė šaknis"
 
 msgid "Stereo"
-msgstr "Stereo"
+msgstr ""
 
 msgid "subscript"
 msgstr ""
@@ -254,12 +291,6 @@ msgstr "Simboliai"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "Pasirinkimo identifikatorius. Šis identifikatorius privalo nebūti naudojamas jokio kito atsakymo ar elemento kintamojo. Identifikatorius yra rinkinys raidžių ir simbolių, kurie privalo prasidėti su Raide arba apatiniu brūkšniu (\"_\") ir sudarytas tik iš Raidžių, apatinių brūkšnių, brūkšnių (\"-\"), taško (\".\"), Skaičių, jungiamųjų ženklų (CombiningChars) ir pratesėjų (Extenders)."
-
-msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
-msgstr "Jau yra viena užduotis su tokiu pačiu indentifikatoriumi \"%s\" (pavadinimu : \"%s\") ir tokia pačia versija : %s. Ar jūs norite perrašyti jau esamą ?"
-
-msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
-msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Tai skirta tik testavimo tikslams. Atvaizduoja atsisiuntimo nuorodą įrašytam failui, kai tik įrašymas yra baigtas. Tai neturėtų būti naudojama pateikties kontekste, nes tai leistų testo laikytojui atsisiųsti savo garso įrašą."
@@ -276,6 +307,9 @@ msgstr "kartai"
 msgid "times dot"
 msgstr ""
 
+msgid "triangle"
+msgstr ""
+
 msgid "Trigonometry"
 msgstr "Trigonometrija"
 
@@ -287,6 +321,9 @@ msgstr "Nepavyko įkelti failo %s : %s"
 
 msgid "Uncompressed"
 msgstr "Nesuspaustas"
+
+msgid "Update interval:"
+msgstr ""
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "Įkelti naują pasirinktą užduotį (zip paketas)"
@@ -306,6 +343,9 @@ msgstr ""
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Su suspaustu įrašu, garsas yra išsaugomas, kaip webm arba ogg (mažesnis dydis) failo formatas. Su nesuspaustu, kaip lossless wav failas (daug didesnis dydis)."
 
-msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
+msgid "≤"
+msgstr ""
+
+msgid "≥"
 msgstr ""
 

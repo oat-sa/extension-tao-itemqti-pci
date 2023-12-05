@@ -1,17 +1,27 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.4.0-sprint136\n"
-"PO-Revision-Date: 2020-08-28T09:36:08\n"
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2023-06-07 09:18\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: nl\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: nl\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
+"Language-Team: Dutch\n"
+
+msgid "Add answer option"
+msgstr ""
 
 msgid "Add gap"
 msgstr ""
@@ -28,8 +38,14 @@ msgstr "regeleinde toestaan"
 msgid "Allow playback"
 msgstr "Sta afspelen toe"
 
+msgid "angle"
+msgstr ""
+
 msgid "Audio bitrate:"
 msgstr "Audio-bitrate:"
+
+msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
+msgstr ""
 
 msgid "authorize white space"
 msgstr "sta witruimte toe"
@@ -47,10 +63,13 @@ msgid "braces/curly brackets"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 msgid "Channels"
 msgstr "Kanalen"
+
+msgid "Close dialog"
+msgstr ""
 
 msgid "Comparison"
 msgstr "Vergelijking"
@@ -58,10 +77,19 @@ msgstr "Vergelijking"
 msgid "Compressed"
 msgstr "Gecomprimeerd"
 
+msgid "Correct answer option"
+msgstr ""
+
 msgid "cosinus"
-msgstr "cosinus"
+msgstr ""
+
+msgid "Define correct responses"
+msgstr ""
 
 msgid "Delete"
+msgstr "Verwijderen"
+
+msgid "delete the answer"
 msgstr ""
 
 msgid "disabled"
@@ -71,6 +99,9 @@ msgid "divide"
 msgstr "delen"
 
 msgid "Download"
+msgstr ""
+
+msgid "edit the answer"
 msgstr ""
 
 msgid "enable auto wrap"
@@ -121,7 +152,13 @@ msgstr "In bps (bits per seconde). Stel de afweging in tussen audiokwaliteit en 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "In seconden. Maximum toegestane opname tijd (kan niet korter zijn dan 10 seconden). De opname zal automatisch stoppen wanneer de tijd wordt bereikt."
 
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr ""
+
 msgid "Indefinite integral"
+msgstr ""
+
+msgid "Invalid files have been removed"
 msgstr ""
 
 msgid "is a member of"
@@ -140,13 +177,13 @@ msgid "Large"
 msgstr "Groot"
 
 msgid "Level"
-msgstr "Niveau"
+msgstr ""
 
 msgid "ln"
 msgstr "In"
 
 msgid "log"
-msgstr "log"
+msgstr ""
 
 msgid "lower than"
 msgstr ""
@@ -210,10 +247,10 @@ msgid "Recording starts automatically once test taker give microphone use author
 msgstr "Opname start automatisch zodra de kandidaat de microfoon autoriseert. Indien een media stimulus gebruikt is, zal de opname automatisch starten nadat deze is afgespeeld."
 
 msgid "Response identifier"
-msgstr "Antwoord identificatie"
+msgstr "Antwoord naam"
 
 msgid "Scale size"
-msgstr "Schaalgrootte"
+msgstr ""
 
 msgid "Sec:"
 msgstr ""
@@ -232,7 +269,7 @@ msgid "similar"
 msgstr ""
 
 msgid "sinus"
-msgstr "sinus"
+msgstr ""
 
 msgid "Small"
 msgstr "Klein"
@@ -253,13 +290,7 @@ msgid "Symbols"
 msgstr "Symbolen"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr "The identificatie van de keuze. Deze identificatie mag niet gebruikt worden in enig andere keuze of item variabele. Een identificatie is een string van karakters die moet starten met een letter of een liggend streepje (\"_\") en mag alleen letters, liggende streepjes, hyphens (\"-\"), punten (\".\", ook wel full-stop genoemd), getallen, gecombineerde tekens en extended karakters."
-
-msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
-msgstr "Er bestaat al een interactie met dezelfde naam \"%s\" (label : \"%s\") en dezelfde versie : %s. Wilt u de bestaande overschrijven ?"
-
-msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
-msgstr ""
+msgstr "De naam van de keuze. Deze naam moet niet worden gebruikt door een andere keuze of item variabele. Een naam is een string van tekens die beginnen met een letter of een liggend streepje (\"_\") en mag alleen letters, liggende streepjes, streepjes (\"-\"), punten (\".\"), cijfers, gecombineerde tekens en extenders bevatten."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Dit is alleen voor testdoeleinden. Laat een link zien om het opgenomen bestand te downloaden op het moment dat de opname stopt. Dit moet niet worden gebruikt in een actieve toets, aangezien het de kandidaat de mogelijkheid geeft om zijn eigen opname te downloaden."
@@ -276,6 +307,9 @@ msgstr "keer"
 msgid "times dot"
 msgstr ""
 
+msgid "triangle"
+msgstr ""
+
 msgid "Trigonometry"
 msgstr "Trigonometrie"
 
@@ -287,6 +321,9 @@ msgstr "Kan bestand %s : %s niet uplodaen"
 
 msgid "Uncompressed"
 msgstr "Niet-gecomprimeerde"
+
+msgid "Update interval:"
+msgstr ""
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "Upload een nieuwe aangepaste interactie (zip pakket)"
@@ -306,6 +343,9 @@ msgstr ""
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Bij gecomprimeerde opname wordt de audio opgeslagen als een webm- of ogg-bestand (kleiner formaat). Bij niet-gecomprimeerd opname, als een lossless Wav-bestand (veel groter formaat)."
 
-msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
+msgid "≤"
+msgstr ""
+
+msgid "≥"
 msgstr ""
 
