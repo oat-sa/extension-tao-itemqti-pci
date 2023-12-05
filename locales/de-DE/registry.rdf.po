@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 09:18\n"
+"PO-Revision-Date: 2023-12-04 16:10\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: de\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Crowdin-Project-ID: 590867\n"
 "X-Crowdin-Language: de\n"
 "X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/registry.rdf.po\n"
-"X-Crowdin-File-ID: 573\n"
+"X-Crowdin-File-ID: 968\n"
 "Language-Team: German\n"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook

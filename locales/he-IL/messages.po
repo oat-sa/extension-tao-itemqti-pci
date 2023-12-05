@@ -4,7 +4,7 @@ msgstr ""
 "PO-Revision-Date: 2023-12-04 16:10\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: ja\n"
+"Language: he\n"
 "sourceLanguage: en-US\n"
 "targetLanguage: en-US\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,340 +12,340 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
 "X-Crowdin-Project: tao-open-source\n"
 "X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: ja\n"
+"X-Crowdin-Language: he\n"
 "X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
 "X-Crowdin-File-ID: 571\n"
-"Language-Team: Japanese\n"
+"Language-Team: Hebrew\n"
 
 msgid "Add answer option"
-msgstr "解答オプション追加"
+msgstr ""
 
 msgid "Add gap"
-msgstr "穴埋め追加"
+msgstr ""
 
 msgid "Add Interaction"
-msgstr "インタラクション追加"
+msgstr ""
 
 msgid "Allow download"
-msgstr "ダウンロードを許可"
+msgstr ""
 
 msgid "allow line break"
-msgstr "改行を許可"
+msgstr ""
 
 msgid "Allow playback"
-msgstr "録音確認再生の許可"
+msgstr ""
 
 msgid "angle"
-msgstr "角"
+msgstr ""
 
 msgid "Audio bitrate:"
-msgstr "音声ビットレート:"
+msgstr ""
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr "音声は以前に録音されたものです。お使いのブラウザは、この録画の再生に対応していません。別のブラウザでお試しください。"
+msgstr ""
 
 msgid "authorize white space"
-msgstr "スペースの入力許可"
+msgstr ""
 
 msgid "Auto playback recording"
-msgstr "録音後の自動再生"
+msgstr ""
 
 msgid "Auto start recording"
-msgstr "自動録音開始"
+msgstr ""
 
 msgid "Back to listing"
-msgstr "リストに戻る"
+msgstr ""
 
 msgid "braces/curly brackets"
-msgstr "波括弧"
+msgstr ""
 
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr ""
 
 msgid "Channels"
-msgstr "チャンネル"
+msgstr ""
 
 msgid "Close dialog"
-msgstr "ダイアログを閉じる"
+msgstr ""
 
 msgid "Comparison"
-msgstr "比較"
+msgstr ""
 
 msgid "Compressed"
-msgstr "圧縮"
+msgstr ""
 
 msgid "Correct answer option"
-msgstr "正解オプション"
+msgstr ""
 
 msgid "cosinus"
-msgstr "cos"
+msgstr ""
 
 msgid "Define correct responses"
-msgstr "正解の設定"
+msgstr ""
 
 msgid "Delete"
-msgstr "削除"
+msgstr ""
 
 msgid "delete the answer"
-msgstr "解答を削除"
+msgstr ""
 
 msgid "disabled"
-msgstr "無効"
+msgstr ""
 
 msgid "divide"
-msgstr "除算"
+msgstr ""
 
 msgid "Download"
-msgstr "ダウンロード"
+msgstr ""
 
 msgid "edit the answer"
-msgstr "解答を編集"
+msgstr ""
 
 msgid "enable auto wrap"
-msgstr "自動改行有効"
+msgstr ""
 
 msgid "Enabled in item authoring"
-msgstr "アイテムオーサリングで有効にする"
+msgstr ""
 
 msgid "equal"
-msgstr "イコール"
+msgstr ""
 
 msgid "Experimental only"
-msgstr "実験用"
+msgstr ""
 
 msgid "exponent"
-msgstr "指数"
+msgstr ""
 
 msgid "For tests only"
-msgstr "事前検証用"
+msgstr ""
 
 msgid "fraction"
-msgstr "x/y 分数"
+msgstr ""
 
 msgid "Functions"
-msgstr "関数"
+msgstr ""
 
 msgid "Gap size"
-msgstr "穴埋めのサイズ"
+msgstr ""
 
 msgid "Geometry"
-msgstr "ジオメトリ"
+msgstr ""
 
 msgid "Give the possibility to the test taker to playback its own recording."
-msgstr "受験者は自分が録音した声を，再生して聞くことができます"
+msgstr ""
 
 msgid "greater than"
-msgstr "大なり"
+msgstr ""
 
 msgid "greater than or equal"
-msgstr "大なりイコール"
+msgstr ""
 
 msgid "id : "
-msgstr "ID : "
+msgstr ""
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
-msgstr "オーディオ品質とファイルサイズのバランスを設定します（単位：bps(ビット/秒)）。デフォルト値(20,000bps)では、2分間で約300KBになります。"
+msgstr ""
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
-msgstr "秒単位で設定。設定時間に達すると録音は自動的に停止します。10秒未満は設定できません。"
+msgstr ""
 
 msgid "In seconds. The time interval between partial updates of the recording."
-msgstr "単位は秒。録画の部分的な更新の間隔。"
+msgstr ""
 
 msgid "Indefinite integral"
-msgstr "不定積分"
+msgstr ""
 
 msgid "Invalid files have been removed"
-msgstr "無効なファイルは削除されました"
+msgstr ""
 
 msgid "is a member of"
-msgstr "属する"
+msgstr ""
 
 msgid "is not a member of"
-msgstr "属さない"
+msgstr ""
 
 msgid "is parallel with"
-msgstr "平行"
+msgstr ""
 
 msgid "is perpendicular to"
-msgstr "垂直"
+msgstr ""
 
 msgid "Large"
-msgstr "大"
+msgstr ""
 
 msgid "Level"
-msgstr "レベル"
+msgstr ""
 
 msgid "ln"
-msgstr "ln"
+msgstr ""
 
 msgid "log"
-msgstr "log"
+msgstr ""
 
 msgid "lower than"
-msgstr "小なり"
+msgstr ""
 
 msgid "lower than or equal"
-msgstr "小なりイコール"
+msgstr ""
 
 msgid "Manage custom interactions"
-msgstr "PCI管理"
+msgstr ""
 
 msgid "Max attempts:"
-msgstr "最大試行回数:"
+msgstr ""
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr "受験者に許可する録音回数の設定です。3回に設定すると2回やり直しボタンを押せます。0に設定すると、何度でも録音のやり直しができます。"
+msgstr ""
 
 msgid "Medium"
-msgstr "中"
+msgstr ""
 
 msgid "Min:"
-msgstr "秒:"
+msgstr ""
 
 msgid "minus"
-msgstr "減算"
+msgstr ""
 
 msgid "Mono"
-msgstr "モノラル"
+msgstr ""
 
 msgid "No Custom Interaction"
-msgstr "カスタムインタラクションはありません"
+msgstr ""
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
-msgstr "録音するチャンネル数。モノラルの場合、レコードサイズが半分になります。"
+msgstr ""
 
 msgid "Operands"
-msgstr "演算子"
+msgstr ""
 
 msgid "Options"
-msgstr "オプション"
+msgstr ""
 
 msgid "parentheses/round brackets"
-msgstr "丸括弧"
+msgstr ""
 
 msgid "plus"
-msgstr "加算"
+msgstr ""
 
 msgid "Plus/minus"
-msgstr "プラス/マイナス"
+msgstr ""
 
 #, tao-public
 msgid "Portable Custom Interactions"
-msgstr "PCI（Portable Custom Interactions）"
+msgstr ""
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr "録音した音声は、録音停止後に自動的に再生されます。再生中はユーザーの操作はできず、すべてのボタンが無効になります。"
+msgstr ""
 
 msgid "Recording format"
-msgstr "録音フォーマット"
+msgstr ""
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
-msgstr "自動的に録音が開始されます。また，音声・動画を挿入すると、これらが再生後に自動的に録音が開始されます。"
+msgstr ""
 
 msgid "Response identifier"
-msgstr "レスポンス識別子"
+msgstr ""
 
 msgid "Scale size"
-msgstr "縮尺"
+msgstr ""
 
 msgid "Sec:"
-msgstr "秒："
+msgstr ""
 
 msgid "set intersection"
-msgstr "積集合"
+msgstr ""
 
 msgid "set union"
-msgstr "和集合"
+msgstr ""
 
 #, tao-public
 msgid "Settings"
-msgstr "設定"
+msgstr ""
 
 msgid "similar"
-msgstr "相似"
+msgstr ""
 
 msgid "sinus"
-msgstr "sin"
+msgstr ""
 
 msgid "Small"
-msgstr "小"
+msgstr ""
 
 msgid "square brackets"
-msgstr "角括弧"
+msgstr ""
 
 msgid "square root"
-msgstr "平方根"
+msgstr ""
 
 msgid "Stereo"
-msgstr "ステレオ"
+msgstr ""
 
 msgid "subscript"
-msgstr "下付き文字"
+msgstr ""
 
 msgid "Symbols"
-msgstr "シンボル"
+msgstr ""
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr "レスポンス識別子：同じ識別子を，他のレスポンスやアイテム変数で使用できません。識別子は、文字またはアンダースコア(\"_\") で始まり、文字、アンダースコア、ハイフン (\"-\")、ピリオド (\".\")、10進数値（digit）、結合文字（CombiningChars）、エクステンダ（Extender）を含む文字列です。"
+msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr "録音が停止した後、音声ファイルをダウンロードするためのリンクを表示します。これはテスト実施前の録音状態の事前検証に利用してください。"
+msgstr ""
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr "このオプションにより、録音回答する前に受験者が視聴する動画や音声を挿入することができます。"
+msgstr ""
 
 msgid "Time limit:"
-msgstr "録音時間制限:"
+msgstr ""
 
 msgid "times"
-msgstr "乗算"
+msgstr ""
 
 msgid "times dot"
-msgstr "ドット"
+msgstr ""
 
 msgid "triangle"
-msgstr "三角形"
+msgstr ""
 
 msgid "Trigonometry"
-msgstr "三角関数"
+msgstr ""
 
 msgid "type : "
-msgstr "タイプ: "
+msgstr ""
 
 msgid "Unable to upload file %s : %s"
-msgstr "アップロードができません %s : %s"
+msgstr ""
 
 msgid "Uncompressed"
-msgstr "非圧縮"
+msgstr ""
 
 msgid "Update interval:"
-msgstr "更新間隔"
+msgstr ""
 
 msgid "Upload new custom interaction (zip package)"
-msgstr "新規カスタムインタラクションをアップロード（ZIPパッケージ）"
+msgstr ""
 
 msgid "use expression with gaps"
-msgstr "穴埋め問題作成"
+msgstr ""
 
 msgid "Use media stimulus"
-msgstr "動画・音声を挿入"
+msgstr ""
 
 msgid "version : "
-msgstr "バージョン : "
+msgstr ""
 
 msgid "Warning"
-msgstr "警告"
+msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
-msgstr "圧縮の音声ファイルは，WebMまたはOggファイル（ファイル容量：小）として保存されます。非圧縮の場合は，WAVファイル（ファイル容量：大）として保存されます。"
+msgstr ""
 
 msgid "≤"
-msgstr "≦"
+msgstr ""
 
 msgid "≥"
-msgstr "≧"
+msgstr ""
 
