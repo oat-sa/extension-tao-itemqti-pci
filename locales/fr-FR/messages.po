@@ -1,17 +1,27 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.4.0-sprint136\n"
-"PO-Revision-Date: 2020-08-28T09:36:07\n"
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2023-06-07 09:18\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: fr-FR\n"
+"Language: fr\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: fr-FR\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
+"Language-Team: French\n"
+
+msgid "Add answer option"
+msgstr ""
 
 msgid "Add gap"
 msgstr "Ajouter un espace"
@@ -28,8 +38,14 @@ msgstr "permettre le saut de ligne"
 msgid "Allow playback"
 msgstr "Permettre la lecture"
 
+msgid "angle"
+msgstr ""
+
 msgid "Audio bitrate:"
 msgstr "Débit binaire audio :"
+
+msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
+msgstr ""
 
 msgid "authorize white space"
 msgstr "autoriser les espaces"
@@ -47,10 +63,13 @@ msgid "braces/curly brackets"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 msgid "Channels"
 msgstr "Canaux"
+
+msgid "Close dialog"
+msgstr ""
 
 msgid "Comparison"
 msgstr "Comparaison"
@@ -58,11 +77,20 @@ msgstr "Comparaison"
 msgid "Compressed"
 msgstr "Compressé"
 
+msgid "Correct answer option"
+msgstr ""
+
 msgid "cosinus"
-msgstr "cosinus"
+msgstr ""
+
+msgid "Define correct responses"
+msgstr ""
 
 msgid "Delete"
 msgstr "Supprimer"
+
+msgid "delete the answer"
+msgstr ""
 
 msgid "disabled"
 msgstr "désactivé"
@@ -71,7 +99,10 @@ msgid "divide"
 msgstr "diviser"
 
 msgid "Download"
-msgstr "Télécharger"
+msgstr ""
+
+msgid "edit the answer"
+msgstr ""
 
 msgid "enable auto wrap"
 msgstr "activer retour à la ligne automatique"
@@ -92,7 +123,7 @@ msgid "For tests only"
 msgstr "Uniquement pour des tests"
 
 msgid "fraction"
-msgstr "fraction"
+msgstr ""
 
 msgid "Functions"
 msgstr "Fonctions"
@@ -113,7 +144,7 @@ msgid "greater than or equal"
 msgstr "supérieur ou égal"
 
 msgid "id : "
-msgstr "id : "
+msgstr ""
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
 msgstr "En bps (bits par seconde). Définissez le compromis entre la qualité audio et la taille du fichier. Avec la valeur par défaut (20.000bps), la taille d'un enregistrement de 2 minutes est d'environ 300 Ko."
@@ -121,7 +152,13 @@ msgstr "En bps (bits par seconde). Définissez le compromis entre la qualité au
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "En secondes. Temps d'enregistrement maximal permis (n'est jamais inférieur à 10 secondes). L'enregistrement s'arrête automatiquement quand ce maximum est atteint."
 
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr ""
+
 msgid "Indefinite integral"
+msgstr ""
+
+msgid "Invalid files have been removed"
 msgstr ""
 
 msgid "is a member of"
@@ -137,7 +174,7 @@ msgid "is perpendicular to"
 msgstr ""
 
 msgid "Large"
-msgstr "Large"
+msgstr ""
 
 msgid "Level"
 msgstr "Niveau"
@@ -173,7 +210,7 @@ msgid "minus"
 msgstr ""
 
 msgid "Mono"
-msgstr "Mono"
+msgstr ""
 
 msgid "No Custom Interaction"
 msgstr "Pas d'interaction personnalisée"
@@ -185,7 +222,7 @@ msgid "Operands"
 msgstr "Opérandes"
 
 msgid "Options"
-msgstr "Options"
+msgstr ""
 
 msgid "parentheses/round brackets"
 msgstr ""
@@ -213,7 +250,7 @@ msgid "Response identifier"
 msgstr "Identifiant de la réponse"
 
 msgid "Scale size"
-msgstr "taille de redimentionnement"
+msgstr "Taille d'échelle"
 
 msgid "Sec:"
 msgstr "Sec :"
@@ -232,7 +269,7 @@ msgid "similar"
 msgstr ""
 
 msgid "sinus"
-msgstr "sinus"
+msgstr ""
 
 msgid "Small"
 msgstr "Petit"
@@ -253,13 +290,7 @@ msgid "Symbols"
 msgstr "Symboles"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr "L'identifiant du choix. Cet identifiant ne doit être utilisé par aucune autre réponse ou variable d'item. Un identifiant est une chaîne de caractères qui doit commencer par une lettre ou un sous-tiret (\"_\") et contient seulement des lettres, des sous-tirets, des traits d'union (\"-\"), des points (\".\"), des chiffres, des combinaisons de caractères et des extensions."
-
-msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
-msgstr "Il existe déjà une interaction avec le même identifiant \"%s\" (label : \"%s\") et la même version : %s. Voulez-vous surcharger celle existante ?"
-
-msgid "This action will affect all items that may be using it and cannot be undone. Please confirm your choice."
-msgstr ""
+msgstr "L'identifiant du choix. Cet identifiant ne doit pas être utilisé par un autre choix ou une variable d'item. Un identifiant est une chaîne de caractères qui doit commencer avec une lettre ou un tiret bas (\"_\") et doit contenir seulement des lettres, des tirets bas, des tirets (\"-\"), un point (\".\"), des chiffres, des caractères combinés et des caractères étendus."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Uniquement à des fins de test. Affiche un lien pour télécharger le fichier enregistré une fois que l'enregistrement s'arrête. Ceci ne devrait pas être utilisé dans le contexte d'une passation, étant donné que cela permettrait au participant de télécharger son propre enregistrement."
@@ -276,17 +307,23 @@ msgstr "fois"
 msgid "times dot"
 msgstr ""
 
+msgid "triangle"
+msgstr ""
+
 msgid "Trigonometry"
 msgstr "Trigonométrie"
 
 msgid "type : "
-msgstr "type : "
+msgstr ""
 
 msgid "Unable to upload file %s : %s"
 msgstr "Impossible de charger le fichier %s : %s"
 
 msgid "Uncompressed"
 msgstr "Non compressé"
+
+msgid "Update interval:"
+msgstr ""
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "Charger une nouvelle interaction personnalisée (paquet zip)"
@@ -298,7 +335,7 @@ msgid "Use media stimulus"
 msgstr "Utiliser le stimulus média"
 
 msgid "version : "
-msgstr "version : "
+msgstr ""
 
 msgid "Warning"
 msgstr ""
@@ -306,6 +343,9 @@ msgstr ""
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Avec un enregistrement compressé, l'audio est sauvegardé en tant que fichier webm ou ogg (plus petite taille). Si non compressé, en tant que fichier sans perte Wav (beaucoup plus grosse taille)."
 
-msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
+msgid "≤"
+msgstr ""
+
+msgid "≥"
 msgstr ""
 

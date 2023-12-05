@@ -1,0 +1,351 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2023-06-07 09:18\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: no\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: no\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
+"Language-Team: Norwegian\n"
+
+msgid "Add answer option"
+msgstr ""
+
+msgid "Add gap"
+msgstr ""
+
+msgid "Add Interaction"
+msgstr ""
+
+msgid "Allow download"
+msgstr ""
+
+msgid "allow line break"
+msgstr ""
+
+msgid "Allow playback"
+msgstr ""
+
+msgid "angle"
+msgstr ""
+
+msgid "Audio bitrate:"
+msgstr ""
+
+msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
+msgstr ""
+
+msgid "authorize white space"
+msgstr ""
+
+msgid "Auto playback recording"
+msgstr ""
+
+msgid "Auto start recording"
+msgstr ""
+
+msgid "Back to listing"
+msgstr ""
+
+msgid "braces/curly brackets"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Channels"
+msgstr ""
+
+msgid "Close dialog"
+msgstr ""
+
+msgid "Comparison"
+msgstr ""
+
+msgid "Compressed"
+msgstr ""
+
+msgid "Correct answer option"
+msgstr ""
+
+msgid "cosinus"
+msgstr ""
+
+msgid "Define correct responses"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "delete the answer"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "divide"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "edit the answer"
+msgstr ""
+
+msgid "enable auto wrap"
+msgstr ""
+
+msgid "Enabled in item authoring"
+msgstr ""
+
+msgid "equal"
+msgstr ""
+
+msgid "Experimental only"
+msgstr ""
+
+msgid "exponent"
+msgstr ""
+
+msgid "For tests only"
+msgstr ""
+
+msgid "fraction"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "Gap size"
+msgstr ""
+
+msgid "Geometry"
+msgstr ""
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr ""
+
+msgid "greater than"
+msgstr ""
+
+msgid "greater than or equal"
+msgstr ""
+
+msgid "id : "
+msgstr ""
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr ""
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr ""
+
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr ""
+
+msgid "Indefinite integral"
+msgstr ""
+
+msgid "Invalid files have been removed"
+msgstr ""
+
+msgid "is a member of"
+msgstr ""
+
+msgid "is not a member of"
+msgstr ""
+
+msgid "is parallel with"
+msgstr ""
+
+msgid "is perpendicular to"
+msgstr ""
+
+msgid "Large"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "ln"
+msgstr ""
+
+msgid "log"
+msgstr ""
+
+msgid "lower than"
+msgstr ""
+
+msgid "lower than or equal"
+msgstr ""
+
+msgid "Manage custom interactions"
+msgstr ""
+
+msgid "Max attempts:"
+msgstr ""
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "Min:"
+msgstr ""
+
+msgid "minus"
+msgstr ""
+
+msgid "Mono"
+msgstr ""
+
+msgid "No Custom Interaction"
+msgstr ""
+
+msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
+msgstr ""
+
+msgid "Operands"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "parentheses/round brackets"
+msgstr ""
+
+msgid "plus"
+msgstr ""
+
+msgid "Plus/minus"
+msgstr ""
+
+#, tao-public
+msgid "Portable Custom Interactions"
+msgstr ""
+
+msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
+msgstr ""
+
+msgid "Recording format"
+msgstr ""
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr ""
+
+msgid "Response identifier"
+msgstr ""
+
+msgid "Scale size"
+msgstr ""
+
+msgid "Sec:"
+msgstr ""
+
+msgid "set intersection"
+msgstr ""
+
+msgid "set union"
+msgstr ""
+
+#, tao-public
+msgid "Settings"
+msgstr ""
+
+msgid "similar"
+msgstr ""
+
+msgid "sinus"
+msgstr ""
+
+msgid "Small"
+msgstr ""
+
+msgid "square brackets"
+msgstr ""
+
+msgid "square root"
+msgstr ""
+
+msgid "Stereo"
+msgstr ""
+
+msgid "subscript"
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr ""
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr ""
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr ""
+
+msgid "Time limit:"
+msgstr ""
+
+msgid "times"
+msgstr ""
+
+msgid "times dot"
+msgstr ""
+
+msgid "triangle"
+msgstr ""
+
+msgid "Trigonometry"
+msgstr ""
+
+msgid "type : "
+msgstr ""
+
+msgid "Unable to upload file %s : %s"
+msgstr ""
+
+msgid "Uncompressed"
+msgstr ""
+
+msgid "Update interval:"
+msgstr ""
+
+msgid "Upload new custom interaction (zip package)"
+msgstr ""
+
+msgid "use expression with gaps"
+msgstr ""
+
+msgid "Use media stimulus"
+msgstr ""
+
+msgid "version : "
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+
+msgid "≤"
+msgstr ""
+
+msgid "≥"
+msgstr ""
+

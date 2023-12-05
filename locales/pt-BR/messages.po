@@ -1,23 +1,23 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: tao-3x\n"
-"PO-Revision-Date: 2023-04-21 15:46\n"
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2023-06-07 09:18\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: pt-BR\n"
+"Language: pt\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: pt-BR\n"
+"targetLanguage: en-US\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: tao-3x\n"
-"X-Crowdin-Project-ID: 582145\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
 "X-Crowdin-Language: pt-BR\n"
-"X-Crowdin-File: /qtiItemPci/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 1247\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
 "Language-Team: Portuguese, Brazilian\n"
 
 msgid "Add answer option"
@@ -63,7 +63,7 @@ msgid "braces/curly brackets"
 msgstr "chaves/colchetes"
 
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "cancelar"
 
 msgid "Channels"
 msgstr "Canais"
@@ -87,7 +87,7 @@ msgid "Define correct responses"
 msgstr "Definir respostas corretas"
 
 msgid "Delete"
-msgstr "Remover"
+msgstr "excluir"
 
 msgid "delete the answer"
 msgstr "remover a resposta"
@@ -99,7 +99,7 @@ msgid "divide"
 msgstr "dividir"
 
 msgid "Download"
-msgstr "Baixar"
+msgstr "BAIXAR"
 
 msgid "edit the answer"
 msgstr "editar a resposta"
@@ -144,7 +144,7 @@ msgid "greater than or equal"
 msgstr "maior ou igual a"
 
 msgid "id : "
-msgstr "id : "
+msgstr ""
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
 msgstr "Em bps (bits por segundo). Defina a troca entre a qualidade de áudio e o tamanho dos arquivos. Com o valor padrão (20.000bps), uma gravação de dois minutos pesa cerca de 300KB."
@@ -204,13 +204,13 @@ msgid "Medium"
 msgstr "Médio"
 
 msgid "Min:"
-msgstr "Min:"
+msgstr ""
 
 msgid "minus"
 msgstr "menos"
 
 msgid "Mono"
-msgstr "Mono"
+msgstr ""
 
 msgid "No Custom Interaction"
 msgstr "Nenhuma Interação Personalizada"
@@ -247,7 +247,7 @@ msgid "Recording starts automatically once test taker give microphone use author
 msgstr "A gravação começa automaticamente quando o realizador de testes dá autorização de uso do microfone. Se um estímulo de mídia for usado, a gravação inicia automaticamente após o estímulo ser reproduzido."
 
 msgid "Response identifier"
-msgstr "Identificador do Recurso"
+msgstr "Identificador de resposta"
 
 msgid "Scale size"
 msgstr "Tamanho da escala"
@@ -266,7 +266,7 @@ msgid "Settings"
 msgstr "Configurações"
 
 msgid "similar"
-msgstr "similar"
+msgstr ""
 
 msgid "sinus"
 msgstr "seno"
@@ -338,14 +338,14 @@ msgid "version : "
 msgstr "versão : "
 
 msgid "Warning"
-msgstr "Atenção"
+msgstr "ATENÇÃO"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Com a gravação comprimida, o áudio é salvo como um arquivo webm ou ogg (tamanho menor). Com não comprimido, como um arquivo Wav sem perdas (tamanho muito maior)."
 
 msgid "≤"
-msgstr "≤"
+msgstr ""
 
 msgid "≥"
-msgstr "≥"
+msgstr ""
 
