@@ -134,7 +134,7 @@ define([
             })
             .on('updateListing', function () {
                 const self = this,
-                    urls = _.pickBy(this.config, ['disableUrl', 'enableUrl', 'unregisterUrl', 'exportPciUrl']),
+                    urls = _.pick(this.config, ['disableUrl', 'enableUrl', 'unregisterUrl', 'exportPciUrl']),
                     $fileSelector = this.getElement().find('.file-selector'),
                     $fileContainer = $fileSelector.find('.files'),
                     $placeholder = $fileSelector.find('.empty');
@@ -255,7 +255,7 @@ define([
             .on('render', function () {
                 //init variables:
                 const self = this,
-                    urls = _.pickBy(this.config, ['loadUrl', 'disableUrl', 'enableUrl', 'verifyUrl', 'addUrl']),
+                    urls = _.pick(this.config, ['loadUrl', 'disableUrl', 'enableUrl', 'verifyUrl', 'addUrl']),
                     $container = this.getElement(),
                     $fileSelector = $container.find('.file-selector'),
                     $uploader = $fileSelector.find('.file-upload-container'),
