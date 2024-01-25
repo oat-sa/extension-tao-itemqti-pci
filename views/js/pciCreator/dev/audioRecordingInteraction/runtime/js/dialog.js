@@ -66,7 +66,7 @@ define([
         init(options) {
             // split options to events
             const events = {};
-            const initOptions = _.omitBy(options || {}, (value, key) => {
+            const initOptions = _.omit(options || {}, (value, key) => {
                 if (key.length > 2 && 'on' === key.substr(0, 2)) {
                     events[key.substr(2)] = value;
                     return true;
