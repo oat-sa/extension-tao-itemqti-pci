@@ -800,14 +800,14 @@ define([
             if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
                 return;
             }
-            _.invokeMap(this.controls, 'updateState');
+            _.invoke(this.controls, 'updateState');
         },
 
         /**
          * Destroy the state of all the controls
          */
         destroyControls: function destroyControls() {
-            _.invokeMap(this.controls, 'destroy');
+            _.invoke(this.controls, 'destroy');
             this.controls = null;
         },
 
