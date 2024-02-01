@@ -339,7 +339,7 @@ define([
                                 // for some weird reasons some browsers have quotes around the file type
                                 const checkType = file.type.replace(/("|')/g, '');
                                 return (
-                                    _.contains(_fileTypeFilters, checkType) ||
+                                    _.includes(_fileTypeFilters, checkType) ||
                                     (checkType === '' && _fileExtFilter.test(file.name))
                                 );
                             });
