@@ -17,20 +17,18 @@
         "cardinality": "single"
     },
     "runtime": {
-        "hook": "./runtime/likertScaleInteraction.js",
+        "hook": "./runtime/js/likertScaleInteraction.min.js",
+        "src": [ "./runtime/js/likertScaleInteraction.js"],
         "modules": {
             "likertScaleInteraction/runtime/likertScaleInteraction": [
-                "runtime/likertScaleInteraction.js"
+                "runtime/js/likertScaleInteraction.min.js"
             ]
         },
-        "libraries": [],
-        "src": [
-            "./runtime/likertScaleInteraction.js"
-        ]
+        "libraries": []
     },
      "creator": {
         "icon": "./icon.svg",
-        "hook": "./imsPciCreator.js",
+        "hook": "./imsPciCreator.min.js",
         "src": [
             "./imsPciCreator.js",
             "./creator/tpl/markup.tpl",
