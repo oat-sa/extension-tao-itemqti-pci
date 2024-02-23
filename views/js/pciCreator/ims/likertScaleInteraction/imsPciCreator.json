@@ -1,0 +1,39 @@
+{
+    "model": "IMSPCI",
+    "typeIdentifier": "likertScaleInteraction",
+    "label": "Likert Scale",
+    "description": "Implementation of a Likert scale",
+    "version": "1.0.0",
+    "author": "OAT SA",
+    "email": "contact@taotesting.com",
+    "tags": [],
+    "icon": "./icon.svg",
+    "short": "Likert Scale",
+    "response": {
+        "baseType": "integer",
+        "cardinality": "single"
+    },
+    "runtime" : {
+        "hook" : "./runtime/likertScaleInteraction.js",
+        "modules" : {
+            "likertScaleInteraction/runtime/likertScaleInteraction" : [
+                "runtime/likertScaleInteraction.js"
+            ]
+        },
+        "libraries" : [],
+        "src" : [
+            "./runtime/likertScaleInteraction.js"
+        ]
+    },
+     "creator" : {
+        "icon": "./icon.svg",
+        "hook": "./imsPciCreator.js",
+        "src" : [
+            "./imsPciCreator.js",
+            "./creator/widget/Widget.js",
+            "./creator/widget/states/states.js",
+            "./creator/widget/states/Question.js"
+        ]
+    }
+
+}
