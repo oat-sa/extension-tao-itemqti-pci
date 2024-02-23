@@ -24,6 +24,7 @@ use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterIMSPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
+use oat\qtiItemPci\scripts\install\RegisterPciLikertScaleIMS;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
 use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
 use oat\qtiItemPci\scripts\install\RegisterPciModel;
@@ -146,6 +147,7 @@ return [
             RegisterClientProvider::class,
             RegisterPciLiquid::class,
             RegisterPciLikertScale::class,
+            RegisterPciLikertScaleIMS::class,
             RegisterPciMathEntry::class,
             SetupAudioRecordingInteractionCreatorConfigurationRegistry::class,
             RegisterIMSPciAudioRecording::class
