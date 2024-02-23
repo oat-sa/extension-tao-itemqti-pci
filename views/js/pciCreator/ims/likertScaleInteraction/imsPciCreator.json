@@ -6,34 +6,39 @@
     "version": "1.0.0",
     "author": "OAT SA",
     "email": "contact@taotesting.com",
-    "tags": [],
+    "tags": [
+      "mcq",
+      "likert"
+    ],
     "icon": "./icon.svg",
     "short": "Likert Scale",
     "response": {
         "baseType": "integer",
         "cardinality": "single"
     },
-    "runtime" : {
-        "hook" : "./runtime/likertScaleInteraction.js",
-        "modules" : {
-            "likertScaleInteraction/runtime/likertScaleInteraction" : [
+    "runtime": {
+        "hook": "./runtime/likertScaleInteraction.js",
+        "modules": {
+            "likertScaleInteraction/runtime/likertScaleInteraction": [
                 "runtime/likertScaleInteraction.js"
             ]
         },
-        "libraries" : [],
-        "src" : [
+        "libraries": [],
+        "src": [
             "./runtime/likertScaleInteraction.js"
         ]
     },
-     "creator" : {
+     "creator": {
         "icon": "./icon.svg",
         "hook": "./imsPciCreator.js",
-        "src" : [
+        "src": [
             "./imsPciCreator.js",
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
             "./creator/widget/Widget.js",
-            "./creator/widget/states/states.js",
-            "./creator/widget/states/Question.js"
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/Answer.js",
+            "./creator/widget/states/states.js"
         ]
     }
-
 }

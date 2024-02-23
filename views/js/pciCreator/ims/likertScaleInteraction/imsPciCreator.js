@@ -1,1 +1,94 @@
-define("likertScaleInteraction/creator/widget/states/Question",["taoQtiItem/qtiCreator/widgets/states/factory","taoQtiItem/qtiCreator/widgets/interactions/states/Question","taoQtiItem/qtiCreator/widgets/helpers/formElement"],function(stateFactory,Question,formElement){"use strict";var stateQuestion=stateFactory.extend(Question,function(){},function(){});return stateQuestion.prototype.initForm=function(){const interaction=this.widget.element,$form=this.widget.$form;this.widget.$form.html(),formElement.initWidget(this.widget.$form),formElement.setChangeCallbacks($form,interaction,{})},stateQuestion}),define("likertScaleInteraction/creator/widget/states/states",["taoQtiItem/qtiCreator/widgets/states/factory","taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states","likertScaleInteraction/creator/widget/states/Question"],function(factory,states,QuestionState){"use strict";return factory.createBundle(states,[QuestionState],["answer","correct","map"])}),define("likertScaleInteraction/creator/widget/Widget",["taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget","likertScaleInteraction/creator/widget/states/states"],function(Widget,states){"use strict";const interactionWidget=Widget.clone();return interactionWidget.initCreator=function(){this.registerStates(states),Widget.initCreator.call(this)},interactionWidget}),define("likertScaleInteraction/imsPciCreator",["likertScaleInteraction/creator/widget/Widget"],function(Widget){"use strict";return{getTypeIdentifier(){return"likertScaleInteraction"},getWidget(){return Widget},getDefaultProperties(){return{}},afterCreate(){},getMarkupTemplate(){return templateData=>`<div class="likert_scale_interaction" data-serial="${templateData.serial}"></div>`},getMarkupData(pci,defaultData){return Object.assign({serial:Date.now()},defaultData)}}}),define("likertScaleInteraction/imsPciCreator",["likertScaleInteraction/imsPciCreator"],function(IMSPCI){return IMSPCI}),define(["likertScaleInteraction/imsPciCreator"],function(IMSPCI){return IMSPCI});
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2016-2024 (original work) Open Assessment Technologies SA;
+ *
+ */
+define([
+    'lodash',
+    'likertScaleInteraction/creator/widget/Widget',
+    'tpl!likertScaleInteraction/creator/tpl/markup'
+], function(_, Widget, markupTpl){
+    'use strict';
+
+    const _typeIdentifier = 'likertScaleInteraction';
+
+    return {
+        /**
+         * (required) Get the typeIdentifier of the custom interaction
+         *
+         * @returns {String}
+         */
+        getTypeIdentifier: function() {
+            return _typeIdentifier;
+        },
+
+        /**
+         * (required) Get the widget prototype
+         * Used in the renderer
+         *
+         * @returns {Object} Widget
+         */
+        getWidget: function() {
+            return Widget;
+        },
+
+        /**
+         * (optional) Get the default properties values of the pci.
+         * Used on new pci instance creation
+         *
+         * @returns {Object}
+         */
+        getDefaultProperties: function() {
+            return {
+                level: 5,
+                'label-min': 'min',
+                'label-max': 'max',
+                icons: false,
+                numbers: false,
+            };
+        },
+
+        /**
+         * (optional) Callback to execute on the
+         * Used on new pci instance creation
+         *
+         * @returns {Object}
+         */
+        afterCreate: function(pci) {
+            //always set the NONE response processing mode to likert scale
+            pci.getResponseDeclaration().setTemplate('NONE');
+        },
+
+        /**
+         * (required) Gives the qti pci xml template
+         *
+         * @returns {function} handlebar template
+         */
+        getMarkupTemplate: function() {
+            return markupTpl;
+        },
+
+        /**
+         * (optional) Allows passing additional data to xml template
+         *
+         * @returns {function} handlebar template
+         */
+        getMarkupData: function(pci, defaultData) {
+            defaultData.prompt = pci.data('prompt');
+            return defaultData;
+        }
+    };
+});
