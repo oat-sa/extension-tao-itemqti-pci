@@ -63,7 +63,7 @@ define([
              * @param {Object} interaction
              */
             destroy: function() {
-                this.dom.replaceChildren();
+                this.dom.innerHTML = '';
             },
 
 

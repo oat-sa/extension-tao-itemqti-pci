@@ -48,7 +48,7 @@ define([
         }
 
         //ensure that renderChoices() is idempotent
-        ol.replaceChildren();
+        ol.innerHTML = '';
 
         // add levels
         const level = parseInt(config.level) || 5;
@@ -86,10 +86,15 @@ define([
         const iconMin = parseSvgString(assets.thumbDown);
         const iconMax = parseSvgString(assets.thumbUp);
 
+        let newChildren;
+        row.innerHTML = '';
         if (config.icons) {
-            row.replaceChildren(labelMin, iconMin, ol, iconMax, labelMax);
+            newChildren = [labelMin, iconMin, ol, iconMax, labelMax];
         } else {
-            row.replaceChildren(labelMin, ol, labelMax);
+            newChildren = [labelMin, ol, labelMax];
+        }
+        for (const child of [labelMin, iconMin, ol, iconMax, labelMax]) {
+            row.append(child);
         }
     }
 
