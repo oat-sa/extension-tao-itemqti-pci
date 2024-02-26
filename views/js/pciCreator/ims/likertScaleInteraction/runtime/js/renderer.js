@@ -16,20 +16,42 @@
  * Copyright (c) 2016-2024 (original work) Open Assessment Technologies SA;
  *
  */
-define(['likertScaleInteraction/runtime/js/assets'], function(assets) {
+define([
+    'likertScaleInteraction/runtime/js/assets',
+    'text!likertScaleInteraction/runtime/css/likertScaleInteraction.css'
+], function(assets, css) {
     'use strict';
 
-    function renderChoices(id, container, config) {
-        const level = parseInt(config.level) || 5;
-        const rootElt = container.querySelector('.likertInteraction');
-        const ol = rootElt.querySelector('ol.likert');
+    function renderStyle(container) {
+        const rootElt = container.querySelector('.likertScaleInteraction');
+        let styleTag = rootElt.querySelector('style');
 
-        rootElt.classList.toggle('numbers-above', config['numbers']);
+        if (!styleTag) {
+            styleTag = document.createElement('style');
+            styleTag.innerHTML = css;
+            rootElt.prepend(styleTag);
+        }
+    }
+
+    function renderChoices(id, container, config) {
+        const rootElt = container.querySelector('.likertScaleInteraction');
+        const ol = rootElt && rootElt.querySelector('ol.likert');
+
+        if (!rootElt || !ol) {
+            throw new Error('LikertScaleInteraction: cannot render choices, markup elements not found');
+        }
+
+        if (config.numbers) {
+            rootElt.classList.add('numbers-above');
+        } else {
+            rootElt.classList.remove('numbers-above');
+        }
 
         //ensure that renderChoices() is idempotent
         ol.replaceChildren();
 
         // add levels
+        const level = parseInt(config.level) || 5;
         for (let i = 1; i <= level; i++) {
             const li = document.createElement('li');
             const input = document.createElement('input');
@@ -37,14 +59,18 @@ define(['likertScaleInteraction/runtime/js/assets'], function(assets) {
             input.setAttribute('name', id);
             input.setAttribute('value', i);
 
-            li.appendChild(input);
-            ol.appendChild(li);
+            li.append(input);
+            ol.append(li);
         }
     }
 
     function renderLabels(container, config) {
         const row = container.querySelector('.row');
-        const ol = row.querySelector('ol.likert');
+        const ol = row && row.querySelector('ol.likert');
+
+        if (!row || !ol) {
+            throw new Error('LikertScaleInteraction: cannot render labels, markup elements not found');
+        }
 
         // texts
         const labelMin = document.createElement('span');
@@ -69,6 +95,7 @@ define(['likertScaleInteraction/runtime/js/assets'], function(assets) {
 
     return {
         render(id, container, config) {
+            renderStyle(container);
             renderChoices(id, container, config);
             renderLabels(container, config);
         },

@@ -1,0 +1,45 @@
+.likertScaleInteraction {
+    --likert-choice-gap: 1em;
+}
+.likertScaleInteraction .row {
+    display: flex;
+    align-items: center;
+    margin-top: 1em;
+}
+.likertScaleInteraction .row svg {
+    margin: 0.5em 0;
+}
+.likertScaleInteraction .row svg:first-of-type {
+    margin-inline-start: 0.5em;
+}
+.likertScaleInteraction .row svg:last-of-type {
+    margin-inline-end: 0.5em;
+}
+.likertScaleInteraction .row ol.likert {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--likert-choice-gap);
+    list-style-type: none;
+    margin: 0.25em 1em 0;
+    padding: 0;
+}
+.likertScaleInteraction.numbers-above .row {
+    align-items: flex-end;
+    margin-top: 1.5em;
+}
+.likertScaleInteraction .row ol input {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+}
+.likertScaleInteraction.numbers-above .row ol input::before {
+    content: counter(list-item);
+    display: block;
+    text-align: center;
+    min-width: 2ch;
+    position: absolute;
+    top: -1.75em;
+    left: -0.15em;
+}
