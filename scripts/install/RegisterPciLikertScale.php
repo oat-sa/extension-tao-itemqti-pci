@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2024 (original work) Open Assessment Technologies SA;
  *
  * */
 
@@ -28,6 +28,6 @@ class RegisterPciLikertScale extends RegisterPortableElement
     protected function getSourceDirectory()
     {
         $viewDir = \common_ext_ExtensionsManager::singleton()->getExtensionById('qtiItemPci')->getConstant('DIR_VIEWS');
-        return $viewDir . implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'dev', 'likertScaleInteraction']);
+        return $viewDir . implode(DIRECTORY_SEPARATOR, ['js', 'pciCreator', 'ims', 'likertScaleInteraction']);
     }
 }
