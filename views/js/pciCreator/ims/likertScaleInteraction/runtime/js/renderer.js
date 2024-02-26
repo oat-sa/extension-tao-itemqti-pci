@@ -35,9 +35,9 @@ define([
 
     function renderChoices(id, container, config) {
         const rootElt = container.querySelector('.likertScaleInteraction');
-        const ol = rootElt && rootElt.querySelector('ol.likert');
+        const ul = rootElt && rootElt.querySelector('ul.likert');
 
-        if (!rootElt || !ol) {
+        if (!rootElt || !ul) {
             throw new Error('LikertScaleInteraction: cannot render choices, markup elements not found');
         }
 
@@ -48,7 +48,7 @@ define([
         }
 
         //ensure that renderChoices() is idempotent
-        ol.innerHTML = '';
+        ul.innerHTML = '';
 
         // add levels
         const level = parseInt(config.level) || 5;
@@ -60,15 +60,15 @@ define([
             input.setAttribute('value', i);
 
             li.append(input);
-            ol.append(li);
+            ul.append(li);
         }
     }
 
     function renderLabels(container, config) {
-        const row = container.querySelector('.row');
-        const ol = row && row.querySelector('ol.likert');
+        const div = container.querySelector('div.scale');
+        const ul = div && div.querySelector('ul.likert');
 
-        if (!row || !ol) {
+        if (!div || !ul) {
             throw new Error('LikertScaleInteraction: cannot render labels, markup elements not found');
         }
 
@@ -87,14 +87,14 @@ define([
         const iconMax = parseSvgString(assets.thumbUp);
 
         let newChildren;
-        row.innerHTML = '';
+        div.innerHTML = '';
         if (config.icons) {
-            newChildren = [labelMin, iconMin, ol, iconMax, labelMax];
+            newChildren = [labelMin, iconMin, ul, iconMax, labelMax];
         } else {
-            newChildren = [labelMin, ol, labelMax];
+            newChildren = [labelMin, ul, labelMax];
         }
-        for (const child of [labelMin, iconMin, ol, iconMax, labelMax]) {
-            row.append(child);
+        for (const child of newChildren) {
+            div.append(child);
         }
     }
 

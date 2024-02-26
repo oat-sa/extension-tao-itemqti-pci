@@ -1,21 +1,21 @@
 .likertScaleInteraction {
     --likert-choice-gap: 1em;
 }
-.likertScaleInteraction .row {
+.likertScaleInteraction .scale {
     display: flex;
     align-items: center;
     margin-top: 1em;
 }
-.likertScaleInteraction .row svg {
+.likertScaleInteraction .scale svg {
     margin: 0.5em 0;
 }
-.likertScaleInteraction .row svg:first-of-type {
+.likertScaleInteraction .scale svg:first-of-type {
     margin-inline-start: 0.5em;
 }
-.likertScaleInteraction .row svg:last-of-type {
+.likertScaleInteraction .scale svg:last-of-type {
     margin-inline-end: 0.5em;
 }
-.likertScaleInteraction .row ol.likert {
+.likertScaleInteraction .scale ul.likert {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
@@ -24,17 +24,17 @@
     margin: 0.25em 1em 0;
     padding: 0;
 }
-.likertScaleInteraction.numbers-above .row {
+.likertScaleInteraction.numbers-above .scale {
     align-items: flex-end;
     margin-top: 1.5em;
 }
-.likertScaleInteraction .row ol input {
+.likertScaleInteraction .scale ul input {
     position: relative;
     margin: 0;
     padding: 0;
     color: inherit;
 }
-.likertScaleInteraction.numbers-above .row ol input::before {
+.likertScaleInteraction.numbers-above .scale ul input::before {
     content: counter(list-item);
     display: block;
     text-align: center;
