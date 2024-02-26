@@ -36,40 +36,6 @@ define([
 
             typeIdentifier: _typeIdentifier,
 
-            /**
-             * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
-             * @param {DOMELement} dom - the dom element the PCI can use
-             * @param {Object} config - the standard configuration object
-             * @param {Object} [state] - the json serialized state object, returned by previous call to getStatus(), use to initialize an
-             */
-            // getInstance: function getInstance(dom, config, state) {
-            //     var response = config.boundTo;
-            //     //simply mapped to existing TAO PCI API
-            //     this.initialize(Object.getOwnPropertyNames(response).pop(), dom, config.properties, config.assetManager);
-            //     this.setSerializedState(state);
-
-            //     //tell the rendering engine that I am ready
-            //     if (typeof config.onready === 'function') {
-            //         config.onready(this, this.getState());
-            //     }
-            // },
-
-            /**
-             * Get the current state fo the PCI
-             * @returns {Object}
-             */
-            // getState: function getState() {
-            //     //simply mapped to existing TAO PCI API
-            //     return this.getSerializedState();
-            // },
-
-            /**
-             * Called by delivery engine when PCI is fully completed
-             */
-            // oncompleted: function oncompleted() {
-            //     this.destroy();
-            // },
-
             /*********************************
              *
              * TAO and IMS shared PCI API methods
@@ -122,24 +88,10 @@ define([
              * @param {Object} properties (PCI's config.properties)
              */
             initialize: function(id, dom, properties) {
-                //add methods on(), off() and trigger() to the current object
-                // event.addEventMgr(this);
-
                 this.dom = dom;
                 this.properties = properties || {};
 
                 renderer.render(id, this.dom, this.properties);
-
-                //listening to dynamic configuration changes
-                // this.on('levelchange', level => {
-                //     this.config.level = level;
-                //     renderer.renderChoices(id, this.dom, this.config);
-                // });
-                // this.on('configChange', detail => {
-                //     Object.assign(this.config, detail);
-                //     renderer.renderChoices(id, this.dom, this.config);
-                //     renderer.renderLabels(this.dom, this.config);
-                // });
             },
 
             /**
@@ -195,6 +147,12 @@ define([
     qtiCustomInteractionContext.register({
         typeIdentifier: _typeIdentifier,
 
+        /**
+         * initialize the PCI object. As this object is cloned for each instance, using "this" is safe practice.
+         * @param {DOMElement} dom - the dom element the PCI can use
+         * @param {Object} config - the standard configuration object
+         * @param {Object} [state] - the json serialized state object, returned by previous call to getState()
+         */
         getInstance(dom, config, state) {
             const likertInteraction = likertInteractionFactory();
 
@@ -243,6 +201,4 @@ define([
             likertInteraction.pciInstance = pciInstance;
         }
     });
-
-    // return likertInteraction;
 });
