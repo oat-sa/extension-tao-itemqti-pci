@@ -23,6 +23,11 @@ final class Version202402231520001465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $registry = (new IMSPciModel())->getRegistry();
+        if ($registry->has('likertScaleInteraction')) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $registry->removeAllVersions('likertScaleInteraction');
+        }
+
         $this->addReport(
             $this->propagate(
                 new RegisterPciLikertScale()
