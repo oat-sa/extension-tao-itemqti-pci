@@ -24,7 +24,7 @@ define([
     'taoQtiItem/runner/qtiItemRunner',
     'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
-    'json!qtiItemPci/test/likertScaleInteractionIMS/data/likert_triple/qti.json'
+    'json!qtiItemPci/test/likertScoreInteraction/data/likert_triple/qti.json'
 ], function(
     $,
     assetManagerFactory,
@@ -49,14 +49,14 @@ define([
     }
 
     //Manually register the pci from its manifest
-    pciTestProvider.addManifestPath('likertScaleInteraction', 'qtiItemPci/pciCreator/ims/likertScaleInteraction/imsPciCreator.json');
+    pciTestProvider.addManifestPath('likertScoreInteraction', 'qtiItemPci/pciCreator/ims/likertScoreInteraction/imsPciCreator.json');
     ciRegistry.resetProviders();
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
     QUnit.test('renders correctly', function(assert) {
         const ready = assert.async();
 
-        const assetManager = getAssetManager('/qtiItemPci/views/js/test/likertScaleInteractionIMS/data/likert_triple/');
+        const assetManager = getAssetManager('/qtiItemPci/views/js/test/likertScoreInteraction/data/likert_triple/');
         const $container = $('#' + fixtureContainerId);
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
@@ -83,7 +83,7 @@ define([
     QUnit.test('state standard', function(assert) {
         const ready = assert.async();
 
-        const assetManager = getAssetManager('/qtiItemPci/views/js/test/likertScaleInteractionIMS/data/likert_triple/');
+        const assetManager = getAssetManager('/qtiItemPci/views/js/test/likertScoreInteraction/data/likert_triple/');
         const $container = $('#' + fixtureContainerId);
         const state1 = {response: {base: {integer: 2}}};
         const state2 = {response: {base: {integer: 5}}};
