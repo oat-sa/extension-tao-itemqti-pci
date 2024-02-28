@@ -18,8 +18,8 @@
  */
 define([
     'lodash',
-    'likertScaleInteraction/creator/widget/Widget',
-    'tpl!likertScaleInteraction/creator/tpl/markup'
+    'likertScoreInteraction/creator/widget/Widget',
+    'tpl!likertScoreInteraction/creator/tpl/markup'
 ], function(_, Widget, markupTpl){
     'use strict';
 

@@ -1,7 +1,7 @@
 {
     "model": "IMSPCI",
     "typeIdentifier": "likertScoreInteraction",
-    "label": "Likert",
+    "label": "Likert Score",
     "description": "Implementation of a Likert",
     "version": "1.0.0",
     "author": "OAT SA",
@@ -11,17 +11,17 @@
       "likert"
     ],
     "icon": "./icon.svg",
-    "short": "Likert",
+    "short": "Likert Score",
     "response": {
         "baseType": "integer",
         "cardinality": "single"
     },
     "runtime": {
-        "hook": "./runtime/js/likertScaleInteraction.min.js",
-        "src": [ "./runtime/js/likertScaleInteraction.js"],
+        "hook": "./runtime/js/likertScoreInteraction.min.js",
+        "src": [ "./runtime/js/likertScoreInteraction.js"],
         "modules": {
-            "likertScaleInteraction/runtime/likertScaleInteraction": [
-                "runtime/js/likertScaleInteraction.min.js"
+            "likertScoreInteraction/runtime/likertScoreInteraction": [
+                "runtime/js/likertScoreInteraction.min.js"
             ]
         },
         "libraries": []

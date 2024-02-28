@@ -17,8 +17,8 @@
  *
  */
 define([
-    'likertScaleInteraction/runtime/js/assets',
-    'text!likertScaleInteraction/runtime/css/likertScaleInteraction.css'
+    'likertScoreInteraction/runtime/js/assets',
+    'text!likertScoreInteraction/runtime/css/likertScoreInteraction.css'
 ], function(assets, css) {
     'use strict';
 
@@ -38,7 +38,7 @@ define([
         const ul = rootElt && rootElt.querySelector('ul.likert');
 
         if (!rootElt || !ul) {
-            throw new Error('LikertScaleInteraction: cannot render choices, markup elements not found');
+            throw new Error('likertScoreInteraction: cannot render choices, markup elements not found');
         }
 
         if (config.numbers) {
@@ -69,7 +69,7 @@ define([
         const ul = div && div.querySelector('ul.likert');
 
         if (!div || !ul) {
-            throw new Error('LikertScaleInteraction: cannot render labels, markup elements not found');
+            throw new Error('likertScoreInteraction: cannot render labels, markup elements not found');
         }
 
         // texts
