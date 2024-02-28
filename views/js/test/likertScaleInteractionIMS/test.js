@@ -67,7 +67,7 @@ define([
                 assert.equal($container.children('.qti-item').length, 1, 'the container contains a the root element .qti-item');
                 assert.equal($container.find('.qti-interaction').length, 3, 'the container contains 3 interactions .qti-interaction');
                 assert.equal($container.find('.qti-interaction.qti-customInteraction').length, 3, 'the container contains 3 custom interactions');
-                assert.equal($container.find('.qti-customInteraction .likertScaleInteraction').length, 3, 'the container contains 3 likert interactions');
+                assert.equal($container.find('.qti-customInteraction .likertScoreInteraction').length, 3, 'the container contains 3 likert interactions');
                 assert.equal($container.find('.qti-customInteraction .prompt').length, 3, 'the interaction contains 3 prompts');
 
                 ready();

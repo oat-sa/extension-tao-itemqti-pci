@@ -23,7 +23,7 @@ define([
 ], function(_, Widget, markupTpl){
     'use strict';
 
-    const _typeIdentifier = 'likertScaleInteraction';
+    const _typeIdentifier = 'likertScoreInteraction';
 
     return {
         /**

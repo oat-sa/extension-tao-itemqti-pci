@@ -23,7 +23,7 @@ define([
 ], function(qtiCustomInteractionContext, renderer, event){
     'use strict';
 
-    const _typeIdentifier = 'likertScaleInteraction';
+    const _typeIdentifier = 'likertScoreInteraction';
 
     function likertInteractionFactory() {
         return {

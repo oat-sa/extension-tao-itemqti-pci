@@ -1,8 +1,8 @@
 {
     "model": "IMSPCI",
-    "typeIdentifier": "likertScaleInteraction",
-    "label": "Likert Scale",
-    "description": "Implementation of a Likert scale",
+    "typeIdentifier": "likertScoreInteraction",
+    "label": "Likert",
+    "description": "Implementation of a Likert",
     "version": "1.0.0",
     "author": "OAT SA",
     "email": "contact@taotesting.com",
@@ -11,7 +11,7 @@
       "likert"
     ],
     "icon": "./icon.svg",
-    "short": "Likert Scale",
+    "short": "Likert",
     "response": {
         "baseType": "integer",
         "cardinality": "single"

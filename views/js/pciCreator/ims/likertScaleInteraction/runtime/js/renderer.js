@@ -23,7 +23,7 @@ define([
     'use strict';
 
     function renderStyle(container) {
-        const rootElt = container.querySelector('.likertScaleInteraction');
+        const rootElt = container.querySelector('.likertScoreInteraction');
         let styleTag = rootElt.querySelector('style');
 
         if (!styleTag) {
@@ -34,7 +34,7 @@ define([
     }
 
     function renderChoices(id, container, config) {
-        const rootElt = container.querySelector('.likertScaleInteraction');
+        const rootElt = container.querySelector('.likertScoreInteraction');
         const ul = rootElt && rootElt.querySelector('ul.likert');
 
         if (!rootElt || !ul) {
