@@ -18,20 +18,9 @@
  */
 define([
     'likertScaleInteraction/runtime/js/assets',
-    'text!likertScaleInteraction/runtime/css/likertScaleInteraction.css'
-], function(assets, css) {
+    'css!likertScaleInteraction/runtime/css/likertScaleInteraction'
+], function(assets) {
     'use strict';
-
-    function renderStyle(container) {
-        const rootElt = container.querySelector('.likertScaleInteraction');
-        let styleTag = rootElt.querySelector('style');
-
-        if (!styleTag) {
-            styleTag = document.createElement('style');
-            styleTag.innerHTML = css;
-            rootElt.prepend(styleTag);
-        }
-    }
 
     function renderChoices(id, container, config) {
         const rootElt = container.querySelector('.likertScaleInteraction');
@@ -100,7 +89,6 @@ define([
 
     return {
         render(id, container, config) {
-            renderStyle(container);
             renderChoices(id, container, config);
             renderLabels(container, config);
         },
