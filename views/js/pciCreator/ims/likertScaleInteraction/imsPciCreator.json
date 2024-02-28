@@ -18,13 +18,20 @@
     },
     "runtime": {
         "hook": "./runtime/js/likertScaleInteraction.min.js",
-        "src": [ "./runtime/js/likertScaleInteraction.js"],
+        "src": [
+          "./runtime/js/likertScaleInteraction.js",
+          "./runtime/js/renderer.js",
+          "./runtime/js/assets.js"
+        ],
         "modules": {
-            "likertScaleInteraction/runtime/likertScaleInteraction": [
+            "likertScaleInteraction/runtime/js/likertScaleInteraction.min": [
                 "runtime/js/likertScaleInteraction.min.js"
             ]
         },
-        "libraries": []
+        "libraries": [],
+        "stylesheets" : [
+            "./runtime/css/mathEntryInteraction.css"
+        ]
     },
      "creator": {
         "icon": "./icon.svg",
