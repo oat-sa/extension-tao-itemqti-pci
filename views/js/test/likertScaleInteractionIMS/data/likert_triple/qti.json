@@ -39,7 +39,7 @@
           "label-max": "Very much",
           "numbers": true
         },
-        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
       },
       "interaction_portablecustominteraction_5b07da2501556207762223": {
         "serial": "interaction_portablecustominteraction_5b07da2501556207762223",
@@ -64,7 +64,7 @@
           "label-max": "Absolutely ! :)",
           "icons": true
         },
-        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
       },
       "interaction_portablecustominteraction_5b07da2501605590608293": {
         "serial": "interaction_portablecustominteraction_5b07da2501605590608293",
@@ -88,7 +88,7 @@
           "label-min": "Hate it",
           "label-max": "Love it"
         },
-        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction"
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
       }
     },
     "debug": {
@@ -101,7 +101,7 @@
   "namespaces": {
     "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
     "html5": "html5",
-    "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction",
+    "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1",
     "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
   },
   "schemaLocations": {
