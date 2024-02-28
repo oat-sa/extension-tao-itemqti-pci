@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 use Doctrine\Migrations\Exception\IrreversibleMigration;
 use oat\qtiItemPci\model\IMSPciModel;
-use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
+use oat\qtiItemPci\scripts\install\RegisterPciLikertScore;
 
 /**
  * phpcs:disable Squiz.Classes.ValidClassName
@@ -17,20 +17,16 @@ final class Version202402231520001465_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Update PCI LikertScaleInteraction (to IMS-compatible version)';
+        return 'Install PCI LikertScoreInteraction (IMS-compatible version)';
     }
 
     public function up(Schema $schema): void
     {
         $registry = (new IMSPciModel())->getRegistry();
-        if ($registry->has('likertScaleInteraction')) {
-            /** @noinspection PhpUnhandledExceptionInspection */
-            $registry->removeAllVersions('likertScaleInteraction');
-        }
 
         $this->addReport(
             $this->propagate(
-                new RegisterPciLikertScale()
+                new RegisterPciLikertScore()
             )(
                 ['1.0.0']
             )
@@ -40,7 +36,7 @@ final class Version202402231520001465_qtiItemPci extends AbstractMigration
     public function down(Schema $schema): void
     {
         throw new IrreversibleMigration(
-            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciLikertScale::class
+            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciLikertScore::class
         );
     }
 }
