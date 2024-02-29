@@ -20,7 +20,7 @@
 
 <div class="panel">
     <label>
-        <input name="numbers" type="checkbox" {{#if icons}}checked="checked"{{/if}}/>
+        <input name="numbers" type="checkbox" {{#if numbers}}checked="checked"{{/if}}/>
         <span class="icon-checkbox"></span> {{__ "Show numbers"}}
     </label>
     <span class="icon-help tooltipstered" data-tooltip="~ .tooltip-content:first" data-tooltip-theme="info"></span>
