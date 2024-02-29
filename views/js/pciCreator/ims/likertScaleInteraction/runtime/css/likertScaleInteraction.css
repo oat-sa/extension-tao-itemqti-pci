@@ -21,12 +21,11 @@
     align-items: center;
     gap: var(--likert-choice-gap);
     list-style-type: none;
-    margin: 0.25em 1em 0;
+    margin: 0.25em 1em;
     padding: 0;
 }
 .likertScaleInteraction.numbers-above .scale {
     align-items: flex-end;
-    margin-top: 1.5em;
 }
 .likertScaleInteraction .scale ul input {
     position: relative;
@@ -34,12 +33,10 @@
     padding: 0;
     color: inherit;
 }
-.likertScaleInteraction.numbers-above .scale ul input::before {
+.likertScaleInteraction.numbers-above .scale ul li {
+    text-align: center;
+}
+.likertScaleInteraction.numbers-above .scale ul li::before {
     content: counter(list-item);
     display: block;
-    text-align: center;
-    min-width: 2ch;
-    position: absolute;
-    top: -1.75em;
-    left: -0.15em;
 }
