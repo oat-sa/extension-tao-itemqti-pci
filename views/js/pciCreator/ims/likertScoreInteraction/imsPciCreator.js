@@ -18,12 +18,12 @@
  */
 define([
     'lodash',
-    'likertScaleInteraction/creator/widget/Widget',
-    'tpl!likertScaleInteraction/creator/tpl/markup'
+    'likertScoreInteraction/creator/widget/Widget',
+    'tpl!likertScoreInteraction/creator/tpl/markup'
 ], function(_, Widget, markupTpl){
     'use strict';
 
-    const _typeIdentifier = 'likertScaleInteraction';
+    const _typeIdentifier = 'likertScoreInteraction';
 
     return {
         /**
@@ -68,7 +68,7 @@ define([
          * @returns {Object}
          */
         afterCreate: function(pci) {
-            //always set the NONE response processing mode to likert scale
+            //always set the NONE response processing mode to likert score
             pci.getResponseDeclaration().setTemplate('NONE');
         },
 

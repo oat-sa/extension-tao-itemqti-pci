@@ -1,8 +1,8 @@
 {
     "model": "IMSPCI",
-    "typeIdentifier": "likertScaleInteraction",
-    "label": "Likert Scale",
-    "description": "Implementation of a Likert scale",
+    "typeIdentifier": "likertScoreInteraction",
+    "label": "Likert Score",
+    "description": "Implementation of a Likert score",
     "version": "1.0.0",
     "author": "OAT SA",
     "email": "contact@taotesting.com",
@@ -11,26 +11,26 @@
       "likert"
     ],
     "icon": "./icon.svg",
-    "short": "Likert Scale",
+    "short": "Likert Score",
     "response": {
         "baseType": "integer",
         "cardinality": "single"
     },
     "runtime": {
-        "hook": "./runtime/js/likertScaleInteraction.min.js",
+        "hook": "./runtime/js/likertScoreInteraction.min.js",
         "src": [
-          "./runtime/js/likertScaleInteraction.js",
+          "./runtime/js/likertScoreInteraction.js",
           "./runtime/js/renderer.js",
           "./runtime/js/assets.js"
         ],
         "modules": {
-            "likertScaleInteraction/runtime/js/likertScaleInteraction.min": [
-                "runtime/js/likertScaleInteraction.min.js"
+            "likertScoreInteraction/runtime/js/likertScoreInteraction.min": [
+                "runtime/js/likertScoreInteraction.min.js"
             ]
         },
         "libraries": [],
         "stylesheets" : [
-            "./runtime/css/mathEntryInteraction.css"
+            "./runtime/css/likertScoreInteraction.css"
         ]
     },
      "creator": {

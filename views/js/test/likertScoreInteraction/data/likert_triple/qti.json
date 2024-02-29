@@ -26,11 +26,11 @@
           "relatedItem": "item_5b07da24f1c5e082350329"
         },
         "choices": {},
-        "typeIdentifier": "likertScaleInteraction",
-        "markup": "\n                    <div class=\"likertScaleInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                Do you like movies ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/35395\/applications-multimedia.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                  <div class=\"scale\">\n      <ul class=\"likert\"><\/ul>\n               <\/div>\n     <\/div>\n                ",
+        "typeIdentifier": "likertScoreInteraction",
+        "markup": "\n                    <div class=\"likertScoreInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                Do you like movies ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/35395\/applications-multimedia.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                  <div class=\"scale\">\n      <ul class=\"likert\"><\/ul>\n               <\/div>\n     <\/div>\n                ",
         "version": "0.0.0",
-        "entryPoint": "likertScaleInteraction\/runtime\/likertScaleInteraction",
-        "libraries": ["likertScaleInteraction\/runtime\/js\/renderer"],
+        "entryPoint": "likertScoreInteraction\/runtime\/likertScoreInteraction",
+        "libraries": ["likertScoreInteraction\/runtime\/js\/renderer"],
         "stylesheets": [],
         "mediaFiles": [],
         "properties": {
@@ -51,11 +51,11 @@
           "relatedItem": "item_5b07da24f1c5e082350329"
         },
         "choices": {},
-        "typeIdentifier": "likertScaleInteraction",
-        "markup": "\n                    <div class=\"likertScaleInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                What about video games ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/4435\/BHSPitMonkey_Old_School_Game_Controller.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                      <div class=\"scale\">\n  <ul class=\"likert\"><\/ul>\n               <\/div>\n     <\/div>\n                ",
+        "typeIdentifier": "likertScoreInteraction",
+        "markup": "\n                    <div class=\"likertScoreInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                What about video games ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/4435\/BHSPitMonkey_Old_School_Game_Controller.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                      <div class=\"scale\">\n  <ul class=\"likert\"><\/ul>\n               <\/div>\n     <\/div>\n                ",
         "version": "0.0.0",
-        "entryPoint": "likertScaleInteraction\/runtime\/likertScaleInteraction",
-        "libraries": ["likertScaleInteraction\/runtime\/js\/renderer"],
+        "entryPoint": "likertScoreInteraction\/runtime\/likertScoreInteraction",
+        "libraries": ["likertScoreInteraction\/runtime\/js\/renderer"],
         "stylesheets": [],
         "mediaFiles": [],
         "properties": {
@@ -76,11 +76,11 @@
           "relatedItem": "item_5b07da24f1c5e082350329"
         },
         "choices": {},
-        "typeIdentifier": "likertScaleInteraction",
-        "markup": "\n                    <div class=\"likertScaleInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                And reading ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/29190\/MajinCline_Book.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                   <div class=\"scale\">\n     <ul class=\"likert\"><\/ul>\n            <\/div>\n        <\/div>\n                ",
+        "typeIdentifier": "likertScoreInteraction",
+        "markup": "\n                    <div class=\"likertScoreInteraction\">\n                        <div class=\"prompt\">\n                            <p>\n                                And reading ? <img src=\"http:\/\/openclipart.org\/image\/300px\/svg_to_png\/29190\/MajinCline_Book.png\"><\/img>\n                            <\/p>\n                        <\/div>\n                   <div class=\"scale\">\n     <ul class=\"likert\"><\/ul>\n            <\/div>\n        <\/div>\n                ",
         "version": "0.0.0",
-        "entryPoint": "likertScaleInteraction\/runtime\/likertScaleInteraction",
-        "libraries": ["likertScaleInteraction\/runtime\/js\/renderer"],
+        "entryPoint": "likertScoreInteraction\/runtime\/likertScoreInteraction",
+        "libraries": ["likertScoreInteraction\/runtime\/js\/renderer"],
         "stylesheets": [],
         "mediaFiles": [],
         "properties": {

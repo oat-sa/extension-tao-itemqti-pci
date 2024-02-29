@@ -18,21 +18,21 @@
  */
 define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
-    'likertScaleInteraction/creator/widget/states/states'
+    'likertScoreInteraction/creator/widget/states/states'
 ], function(Widget, states){
     'use strict';
 
-    var likertScaleInteractionWidget = Widget.clone();
+    var likertScoreInteractionWidget = Widget.clone();
 
-    likertScaleInteractionWidget.initCreator = function(){
+    likertScoreInteractionWidget.initCreator = function(){
 
         this.registerStates(states);
 
         Widget.initCreator.call(this);
 
-        //for existing likert scale PCI, ensure that the rp template is always NONE
+        //for existing likert score PCI, ensure that the rp template is always NONE
         this.element.getResponseDeclaration().setTemplate('NONE');
     };
 
-    return likertScaleInteractionWidget;
+    return likertScoreInteractionWidget;
 });

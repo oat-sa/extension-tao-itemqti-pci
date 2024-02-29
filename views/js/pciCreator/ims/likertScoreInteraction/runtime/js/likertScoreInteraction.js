@@ -18,12 +18,12 @@
  */
 define([
     'qtiCustomInteractionContext',
-    'likertScaleInteraction/runtime/js/renderer',
+    'likertScoreInteraction/runtime/js/renderer',
     'taoQtiItem/portableLib/OAT/util/event'
 ], function(qtiCustomInteractionContext, renderer, event){
     'use strict';
 
-    const _typeIdentifier = 'likertScaleInteraction';
+    const _typeIdentifier = 'likertScoreInteraction';
 
     function likertInteractionFactory() {
         return {
