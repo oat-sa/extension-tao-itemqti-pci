@@ -70,8 +70,8 @@ define([
         const levels = [2, 3, 4, 5, 6, 7, 8, 9, 10];
         const levelData = {};
 
-        const icons = ![false, 'false'].includes(interaction.prop('icons'));
-        const numbers = ![false, 'false'].includes(interaction.prop('numbers'));
+        const icons = [true, 'true'].includes(interaction.prop('icons'));
+        const numbers = [true, 'true'].includes(interaction.prop('numbers'));
 
         //build select option data for the template
         levels.forEach(lvl => {
