@@ -14,7 +14,7 @@ define([
 
     InteractionStateAnswer.prototype.initResponseForm = function initResponseForm(){
 
-        // CUSTOM option won't appear except with xmlResponseProcessor extension!
+        // CUSTOM option won't appear except with xmlEditRp extension!
         answerStateHelper.initResponseForm(this.widget, {rpTemplates : ['CUSTOM', 'NONE']});
     };
 
