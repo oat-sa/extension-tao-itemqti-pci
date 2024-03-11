@@ -7,7 +7,7 @@ namespace oat\qtiItemPci\migrations;
 use Doctrine\DBAL\Schema\Schema;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 use Doctrine\Migrations\Exception\IrreversibleMigration;
-use oat\qtiItemPci\model\IMSPciModel;
+use oat\qtiItemPci\model\PciModel;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScaleInteraction;
 
 /**
@@ -22,7 +22,7 @@ final class Version202403071639280420_qtiItemPci extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $registry = (new IMSPciModel())->getRegistry();
+        $registry = (new PciModel())->getRegistry();
         $this->addReport(
             $this->propagate(
                 new RegisterPciLikertScaleInteraction()
