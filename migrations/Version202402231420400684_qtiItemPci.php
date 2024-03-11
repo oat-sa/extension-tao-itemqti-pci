@@ -12,7 +12,7 @@ use oat\qtiItemPci\scripts\install\RegisterPciLikertScore;
 /**
  * phpcs:disable Squiz.Classes.ValidClassName
  */
-final class Version202402231520001465_qtiItemPci extends AbstractMigration
+final class Version202402231420400684_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
