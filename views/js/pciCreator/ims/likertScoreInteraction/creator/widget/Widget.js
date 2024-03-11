@@ -23,6 +23,7 @@ define([
     'use strict';
 
     var likertScoreInteractionWidget = Widget.clone();
+    var $interaction;
 
     likertScoreInteractionWidget.initCreator = function(){
 
@@ -32,6 +33,11 @@ define([
 
         //for existing likert score PCI, ensure that the rp template is always NONE
         this.element.getResponseDeclaration().setTemplate('NONE');
+
+        $interaction = this.$container.find('.likertScoreInteraction');
+        if ($interaction.length) {
+            $interaction.addClass('tao-qti-creator-context');
+        }
     };
 
     return likertScoreInteractionWidget;

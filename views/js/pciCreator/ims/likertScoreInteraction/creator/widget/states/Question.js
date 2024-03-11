@@ -28,7 +28,7 @@ define([
 ], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, _){
     'use strict';
 
-    const LikertInteractionStateQuestion = stateFactory.extend(Question, function(){
+    const LikertInteractionStateQuestion = stateFactory.extend(Question, function initQuestionState() {
         const $container = this.widget.$container;
         const $prompt = $container.find('.prompt');
         const interaction = this.widget.element;
@@ -52,9 +52,13 @@ define([
             interaction.prop('label-max', text);
         });
 
-    }, function destroy() {
+        this.widget.$original.find('.likert input').prop('disabled', true);
+
+    }, function exitQuestionState() {
         const $container = this.widget.$container;
         const $prompt = $container.find('.prompt');
+
+        this.widget.$original.find('.likert input').prop('disabled', false);
 
         simpleEditor.destroy(this.widget.$container);
         containerEditor.destroy($prompt);

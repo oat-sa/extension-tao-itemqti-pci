@@ -25,6 +25,7 @@ define([
     function renderChoices(id, container, config) {
         const rootElt = container.querySelector('.likertScoreInteraction');
         const ul = rootElt && rootElt.querySelector('ul.likert');
+        const disabled = container.classList.contains('tao-qti-creator-context');
 
         if (!rootElt || !ul) {
             throw new Error('LikertScoreInteraction: cannot render choices, markup elements not found');
@@ -47,6 +48,9 @@ define([
             input.setAttribute('type', 'radio');
             input.setAttribute('name', id);
             input.setAttribute('value', i);
+            if (disabled) {
+                input.setAttribute('disabled', 'disabled');
+            }
 
             li.append(input);
             ul.append(li);
