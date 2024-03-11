@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 use oat\tao\scripts\tools\migrations\AbstractMigration;
 use Doctrine\Migrations\Exception\IrreversibleMigration;
 use oat\qtiItemPci\model\PciModel;
-use oat\qtiItemPci\scripts\install\RegisterPciLikertScaleInteraction;
+use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 
 /**
  * phpcs:disable Squiz.Classes.ValidClassName
@@ -25,7 +25,7 @@ final class Version202403071639280420_qtiItemPci extends AbstractMigration
         $registry = (new PciModel())->getRegistry();
         $this->addReport(
             $this->propagate(
-                new RegisterPciLikertScaleInteraction()
+                new RegisterPciLikertScale()
             )(
                 ['0.6.1']
             )
@@ -35,7 +35,7 @@ final class Version202403071639280420_qtiItemPci extends AbstractMigration
     public function down(Schema $schema): void
     {
         throw new IrreversibleMigration(
-            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciLikertScaleInteraction::class
+            'In order to undo this migration, please revert the client-side changes and run ' . RegisterPciLikertScale::class
         );
     }
 }
