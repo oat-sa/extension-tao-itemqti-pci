@@ -25,11 +25,12 @@ define([
     function renderChoices(id, container, config) {
         const rootElt = container.querySelector('.likertScoreInteraction');
         const ul = rootElt && rootElt.querySelector('ul.likert');
-        const disabled = container.classList.contains('tao-qti-creator-context');
 
         if (!rootElt || !ul) {
             throw new Error('LikertScoreInteraction: cannot render choices, markup elements not found');
         }
+
+        const disabled = rootElt.classList.contains('tao-qti-creator-context');
 
         if (config.numbers) {
             rootElt.classList.add('numbers-above');
@@ -66,13 +67,19 @@ define([
         }
 
         // texts
-        const labelMin = document.createElement('span');
-        labelMin.classList.add('likert-label', 'likert-label-min');
-        labelMin.innerHTML = config['label-min'];
+        let labelMin = div.querySelector('.likert-label-min');
+        if (!labelMin) {
+            labelMin = document.createElement('span');
+            labelMin.classList.add('likert-label', 'likert-label-min');
+            labelMin.innerHTML = config['label-min'];
+        }
 
-        const labelMax = document.createElement('span');
-        labelMax.classList.add('likert-label', 'likert-label-max');
-        labelMax.innerHTML = config['label-max'];
+        let labelMax = div.querySelector('.likert-label-max');
+        if (!labelMax) {
+            labelMax = document.createElement('span');
+            labelMax.classList.add('likert-label', 'likert-label-max');
+            labelMax.innerHTML = config['label-max'];
+        }
 
         // icons
         const parseSvgString = svgString => new DOMParser().parseFromString(svgString, 'image/svg+xml').querySelector('svg');
