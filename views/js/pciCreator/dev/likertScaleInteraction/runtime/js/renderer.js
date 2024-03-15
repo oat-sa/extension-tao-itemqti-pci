@@ -26,16 +26,17 @@ define([
 
         var $li,
             level = parseInt(config.level) || 5,
-            $ul = $container.find('ul.likert');
-        
+            $ul = $container.find('ul.likert'),
+            disabled = $container.hasClass('tao-qti-creator-context');
+
         //ensure that renderChoices() is idempotent
         $ul.empty();
-        
+
         //add levels
         for(var i = 1; i <= level; i++){
 
             $li = $('<li>', {'class' : 'likert'});
-            $li.append($('<input>', {type : 'radio', name : id, value : i}));
+            $li.append($('<input>', {type : 'radio', name : id, value : i, disabled}));
 
             $ul.append($li);
         }
