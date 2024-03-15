@@ -23,6 +23,7 @@ define([
     'use strict';
 
     var LikertScaleInteractionWidget = Widget.clone();
+    var $interaction;
 
     LikertScaleInteractionWidget.initCreator = function(){
 
@@ -32,7 +33,12 @@ define([
 
         //for existing likert scale PCI, ensure that the rp template is always NONE
         this.element.getResponseDeclaration().setTemplate('NONE');
+
+        $interaction = this.$container.find('.likertScaleInteraction');
+        if ($interaction.length) {
+            $interaction.addClass('tao-qti-creator-context');
+        }
     };
-    
+
     return LikertScaleInteractionWidget;
 });
