@@ -1,0 +1,49 @@
+{
+    "model": "IMSPCI",
+    "typeIdentifier": "likertScoreInteraction",
+    "label": "Likert Score",
+    "description": "Implementation of a Likert score",
+    "version": "1.0.0",
+    "author": "OAT SA",
+    "email": "contact@taotesting.com",
+    "tags": [
+      "mcq",
+      "likert"
+    ],
+    "icon": "./icon.svg",
+    "short": "Likert Score",
+    "response": {
+        "baseType": "integer",
+        "cardinality": "single"
+    },
+    "runtime": {
+        "hook": "./runtime/js/likertScoreInteraction.min.js",
+        "src": [
+          "./runtime/js/likertScoreInteraction.js",
+          "./runtime/js/renderer.js",
+          "./runtime/js/assets.js"
+        ],
+        "modules": {
+            "likertScoreInteraction/runtime/js/likertScoreInteraction.min": [
+                "runtime/js/likertScoreInteraction.min.js"
+            ]
+        },
+        "libraries": [],
+        "stylesheets" : [
+            "./runtime/css/likertScoreInteraction.css"
+        ]
+    },
+     "creator": {
+        "icon": "./icon.svg",
+        "hook": "./imsPciCreator.min.js",
+        "src": [
+            "./imsPciCreator.js",
+            "./creator/tpl/markup.tpl",
+            "./creator/tpl/propertiesForm.tpl",
+            "./creator/widget/Widget.js",
+            "./creator/widget/states/Question.js",
+            "./creator/widget/states/Answer.js",
+            "./creator/widget/states/states.js"
+        ]
+    }
+}
