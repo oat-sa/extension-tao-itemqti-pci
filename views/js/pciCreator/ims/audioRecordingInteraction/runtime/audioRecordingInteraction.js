@@ -925,13 +925,13 @@ define([
                                     self.stopRecording();
                                     dispatchInteractiontraceEvent({
                                         domEventType: 'stop',
-                                        target: record.getDOMElement()
+                                        target: stop.getDOMElement()
                                     });
                                 } else if (self.player.is('playing')) {
                                     self.stopPlayback();
                                     dispatchInteractiontraceEvent({
                                         domEventType: 'stop',
-                                        target: record.getDOMElement()
+                                        target: stop.getDOMElement()
                                     });
                                 }
                             }
@@ -967,7 +967,7 @@ define([
                                 self.playRecording();
                                 dispatchInteractiontraceEvent({
                                     domEventType: 'play',
-                                    target: record.getDOMElement()
+                                    target: play.getDOMElement()
                                 });
                             }
                         }.bind(play)
@@ -1003,7 +1003,7 @@ define([
                                 self.updateResetCount();
                                 dispatchInteractiontraceEvent({
                                     domEventType: 'reset',
-                                    target: record.getDOMElement()
+                                    target: reset.getDOMElement()
                                 });
 
                                 if (self.config.hideRecordButton === true) {
