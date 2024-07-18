@@ -1,0 +1,24 @@
+<svg version="1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 512 512" xml:space="preserve">
+    <g>
+        <g>
+            <!-- If you would like to customize the color of the badge, these two HSL colors are the primary oranges -->
+            <!--  The second one needs to be +6 hue, +9% saturation, and +3% lightness of the first -->
+            <polygon fill="#000000" points="107,470 74,100 437,100 404,470 255,512"/>
+            <polygon fill="#111111" points="256,480 376,447 404,130 256,130"/>
+            <g>
+                <polygon fill="#EBEBEB" points="256,268 195,268 191,221 256,221 256,176 255,176 142,176 143,188 154,313 256,313"/>
+                <polygon fill="#EBEBEB" points="256,386 255,386 205,372 201,336 177,336 156,336 162,407 255,433 256,433"/>
+            </g>
+            <g>
+                <path d="M108,0h23v22h21V0h23v69H152v-23h-21v23h-23V0z"/>
+                <path d="M205,22h-20V0h63v22h-20v46h-23V22z"/>
+                <path d="M259,0h24l14,24L313,0h24v69h-22V34l-15,24h-0l-15-24v34h-22V0z"/>
+                <path d="M348,0h23v46h32v22H348V0z"/>
+            </g>
+            <g>
+                <polygon fill="#FFFFFF" points="255,268 255,313 311,313 306,372 255,386 255,433 348,407 349,399 360,280 361,268 349,268"/>
+                <polygon fill="#FFFFFF" points="255,176 255,204 255,221 255,221 365,221 365,221 365,221 366,211 368,188 369,176"/>
+            </g>
+        </g>
+    </g>
+</svg>

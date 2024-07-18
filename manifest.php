@@ -23,6 +23,7 @@
 use oat\qtiItemPci\scripts\install\RegisterClientProvider;
 use oat\qtiItemPci\scripts\install\RegisterIMSPciAudioRecording;
 use oat\qtiItemPci\scripts\install\RegisterPciFilesystem;
+use oat\qtiItemPci\scripts\install\RegisterPciHtmlTemplateTextbox;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScale;
 use oat\qtiItemPci\scripts\install\RegisterPciLikertScore;
 use oat\qtiItemPci\scripts\install\RegisterPciLiquid;
@@ -150,7 +151,8 @@ return [
             RegisterPciLikertScore::class,
             RegisterPciMathEntry::class,
             SetupAudioRecordingInteractionCreatorConfigurationRegistry::class,
-            RegisterIMSPciAudioRecording::class
+            RegisterIMSPciAudioRecording::class,
+            RegisterPciHtmlTemplateTextbox::class
         ]
     ],
     'uninstall' => [
