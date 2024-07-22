@@ -1,19 +1,60 @@
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * Copyright (c) 2024 (original work) Open Assessment Technologies SA;
+ *
+ */
 define([
     'qtiCustomInteractionContext',
-    './DomApi',
     'taoQtiItem/portableLib/OAT/util/event'
-], function (qtiCustomInteractionContext, DomApi, event) {
+], function (qtiCustomInteractionContext, event) {
     'use strict';
+
+    console.log('in src runtime');
 
     const _typeIdentifier = 'htmlTemplateTextboxInteraction';
 
-    const maxlength = 10000; // limit payload
+    const maxlength = 10000; // limit individual input value lengths
 
-    function getBlobURL(code, type) {
-        const blob = new Blob([code], { type })
-        return URL.createObjectURL(blob)
+    let blobUrls = new Set();
+
+    /**
+     * Prepare iframe src from html template
+     * @param {string} code
+     * @param {string} [type]
+     * @returns {string} blob URL - should be revoked when finished with
+     */
+    function createBlobURL(code, type = 'text/html') {
+        const blobUrl = URL.createObjectURL(new Blob([code], { type }));
+        blobUrls.add(blobUrl);
+        return blobUrl;
     };
 
+    /**
+     * Revoke all stored blob URLs. Prevents memory leak when tweaking html property in creator.
+     */
+    function revokeBlobUrls() {
+        blobUrls.values().forEach(URL.revokeObjectURL);
+        blobUrls = new Set();
+    }
+
+    /**
+     * Count words/chars in string according to built-in word separators
+     * @param {string} text
+     * @returns {object} counts
+     */
     function getCounts(text = '') {
         const wordSeparators = '\\s.,:;?!&#%/*+=';
         const wordRegex = new RegExp(`[^${wordSeparators}]+`, 'g');
@@ -22,6 +63,31 @@ define([
             words: wordMatches.length,
             chars: text.length
         };
+    }
+
+    /**
+     * Find out what type of element a response element is
+     * Supported types:
+     * - textarea
+     * - select
+     * - input type="text|number|email|url|search" (all submitted as string)
+     * - input type="checkbox"
+     * - input type="radio" - special case: response is id => name
+     * @param {HTMLElement} element
+     * @returns {object}
+     */
+    function getElementInfo(element) {
+        if (!element) {
+            return {};
+        }
+        const typeAttr = element.getAttribute('type');
+        const isTextArea = element.tagName === 'TEXTAREA';
+        const isSelect = element.tagName === 'SELECT';
+        const isTextInput = element.tagName === 'INPUT' && ['text', 'number', 'email', 'url', 'search'].includes(typeAttr);
+        const isCheckboxInput = element.tagName === 'INPUT' && element.type === 'checkbox';
+        const isRadioInput = element.tagName === 'INPUT' && element.type === 'radio';
+        const isUnsupportedElement = !isTextArea && !isSelect && !isTextInput && !isCheckboxInput && !isRadioInput;
+        return { isTextArea, isSelect, isTextInput, isCheckboxInput, isRadioInput, isUnsupportedElement };
     }
 
     function htmlTemplateTextboxInteractionFactory() {
@@ -49,21 +115,29 @@ define([
              * @returns {Object}
              */
             getResponse: function() {
-                const responseElt = this.getResponseElt();
-                this.responseValue = responseElt?.value?.substring(0, maxlength) || this.responseValue?.substring(0, maxlength) || null;
-                this.response = { base: { string: this.responseValue } };
+                let data = {};
+                const responseElts = this.getResponseElts();
+                responseElts.forEach(element => {
+                    const { isUnsupportedElement, isRadioInput } = getElementInfo(element);
+                    if (!isUnsupportedElement && element.name) {
+                        data[element.name] = element.value && element.value.substring(0, maxlength);
+                    }
+                });
+                // in case DOM was already destroyed, we can return last known response
+                if (Object.keys(data).length) {
+                    this.responseValueObj = data;
+                }
+                this.response = { base: { string: JSON.stringify(this.responseValueObj) } };
                 return this.response;
             },
 
             /**
              * Reverse operation performed by render()
              * After this function is executed, only the inital naked markup remains
-             * Event listeners are removed and the state and the response are reset
-             *
-             * @param {Object} interaction
              */
             destroy: function() {
                 this.dom.innerHTML = '';
+                revokeBlobUrls();
             },
 
 
@@ -94,6 +168,7 @@ define([
 
                 // get the markup-iframe (always present)
                 this.iframe = dom.querySelector('iframe');
+                // IMPORTANT! Never set 'allow-scripts' on the iframe. It can give content author power to influence platform code.
                 this.iframe.setAttribute('sandbox', 'allow-same-origin');
                 this.iframe.dataset.responseIdentifier = responseIdentifier;
                 this.iframe.style = 'border:none; width:100%;';
@@ -103,15 +178,16 @@ define([
             render: function() {
                 const iframeOnload = () => this.postRender();
 
-                // may not be needed - can I just add in initialize?
+                // may not be needed - can I just add once in initialize?
                 this.iframe.removeEventListener('load', iframeOnload);
                 this.iframe.addEventListener('load', iframeOnload);
 
                 // fill the markup-iframe
+                revokeBlobUrls();
                 try {
-                    this.iframe.src = getBlobURL(this.properties.html, 'text/html' );
+                    this.iframe.src = createBlobURL(this.properties.html);
                 } catch (e) {
-                    this.iframe.src = getBlobURL('<i>invalid or missing <code>html</code> property</i>', 'text/html' );
+                    this.iframe.src = createBlobURL('Invalid or missing <code>html</code> property');
                 }
             },
 
@@ -119,60 +195,77 @@ define([
              * Wire up events and attributes after the iframe is done loading
              */
             postRender: function() {
-                this.iframe.height = this.iframe.contentWindow?.document?.body?.scrollHeight || 500;
+                this.iframe.height = this.iframe.contentWindow.document.body.scrollHeight || 500;
 
-                const responseElt = this.getResponseElt();
+                console.log('postRender responseValueObj', this.responseValueObj);
 
-                // set initial response
-                if (responseElt) {
-                    responseElt.value = this.responseValue;
+                const responseElts = this.getResponseElts();
+                responseElts.forEach(element => {
+                    const { isTextArea, isSelect, isTextInput, isCheckboxInput, isRadioInput, isUnsupportedElement } = getElementInfo(element);
 
-                    if (!responseElt.getAttribute('maxlength')) {
-                        responseElt.setAttribute('maxlength', maxlength);
-                    }
-
-                    if (this.properties.isReviewMode) {
-                        responseElt.setAttribute('readonly', 'true');
-                    }
-                    // set up events API
-                    responseElt.addEventListener('input', e => {
-                        this.domApi.dispatch('responsechange', { detail: e.target.value });
-                    });
-                }
-
-                this.updateWordcount();
-            },
-
-            /**
-             * Update the innerHTML of the defined wordcount element with the word count text
-             */
-            updateWordcount: function() {
-                if (this.properties?.wordcountSelector) {
-                    const wordcountElt = this.iframe?.contentDocument?.querySelector(this.properties.wordcountSelector);
-                    if (wordcountElt) {
-                        // initial
-                        const { words } = getCounts(this.responseValue);
-                        wordcountElt.innerHTML = `${words} word(s)`;
-
-                        const responseElt = this.getResponseElt();
-                        if (responseElt) {
-                            // updates
-                            responseElt.addEventListener('input', (e) => {
-                                const { words } = getCounts(e.target.value);
-                                wordcountElt.innerHTML = `${words} word(s)`;
-                            });
+                    if (isUnsupportedElement) {
+                        console.warn('Unsupported data-response element in template:', element.outerHTML);
+                    } else if (!element.name) {
+                        console.warn('Response element found without name attribute and won\'t be considered:', element.outerHTML);
+                    } else if (isTextArea || isTextInput) {
+                        element.setAttribute('maxlength', element.getAttribute('maxlength') || maxlength);
+                        if (this.properties.isReviewMode) {
+                            element.setAttribute('readonly', 'true');
+                        }
+                    } else if (isSelect || isCheckboxInput || isRadioInput) {
+                        if (this.properties.isReviewMode) {
+                            element.setAttribute('disabled', 'true');
                         }
                     }
-                }
+
+                    // set initial responses TODO: move
+                    const elementResponseValue = this.responseValueObj[element.name];
+
+                    if (isRadioInput && elementResponseValue === element.getAttribute('value')) {
+                        element.checked = true; // ?
+                    } else if (isCheckboxInput && elementResponseValue === 'on') {
+                        element.checked = true // ?
+                    } else if (isSelect) {
+                        const selectedOption = element.querySelector(`option[value=${elementResponseValue}]`);
+                        if (selectedOption) {
+                            selectedOption.selected = true; // OK:
+                        }
+                    } else if (element.name in this.responseValueObj){
+                        element.value = elementResponseValue;
+                    }
+                });
+
+                this.connectWordcounts();
             },
 
             /**
-             * Get the rendered element defined by the properties as holding the response.
-             * Typically it will be a textarea or an input in this PCI.
-             * @returns {HTMLElement|null}
+             * Update the content of data-wordcount-for elements with their word count texts
              */
-            getResponseElt: function() {
-                return this.iframe?.contentDocument?.querySelector(this.properties.responseSelector);
+            connectWordcounts: function() {
+                const wordcountTargets = this.iframe.contentDocument.querySelectorAll('[data-wordcount-for]') || [];
+                wordcountTargets.forEach(wcTarget => {
+                    const wcSource = this.iframe.contentDocument.querySelector(`[name=${wcTarget.dataset.wordcountFor}]`);
+                    const { isTextArea, isTextInput } = getElementInfo(wcSource);
+                    if (isTextArea || isTextInput) {
+                        // initial
+                        const { words } = getCounts(wcSource.value);
+                        wcTarget.textContent = `${words} word(s)`;
+
+                        // updates
+                        wcSource.addEventListener('input', (e) => {
+                            const { words } = getCounts(e.target.value);
+                            wcTarget.textContent = `${words} word(s)`;
+                        });
+                    }
+                });
+            },
+
+            /**
+             * Get the rendered element(s) defined by the template as holding the response(s).
+             * @returns {HTMLCollection|Array}
+             */
+            getResponseElts: function() {
+                return this.iframe.contentDocument && this.iframe.contentDocument.querySelectorAll('[data-response][name]') || [];
             },
 
             /**
@@ -183,9 +276,16 @@ define([
              * @param {Object} response
              */
             setResponse: function(response) {
-                const responseElt = this.getResponseElt();
-                if (responseElt) {
-                    responseElt.value = response?.base?.string || '';
+                if (response && response.base && response.base.string) {
+                    this.responseValueObj = JSON.parse(response.base.string) || {};
+                    console.log('setResponse set responseValueObj', this.responseValueObj);
+
+                    const responseElts = this.getResponseElts(); // TODO: move logic here
+                    responseElts.forEach(element => {
+                        if (element.name in this.responseValueObj) {
+                            element.value = this.responseValueObj[element.name];
+                        }
+                    });
                 }
             },
 
@@ -219,7 +319,7 @@ define([
              * @returns {Object} json format
              */
             getSerializedState: function() {
-                return { response : this.getResponse() };
+                return { response: this.getResponse() };
             }
         }
     };
@@ -241,6 +341,10 @@ define([
 
             // create a IMS PCI instance object that will be provided in onready
             const pciInstance = {
+                /**
+                 * Get the current response of the PCI
+                 * @returns {Object}
+                 */
                 getResponse() {
                     return interaction.getResponse();
                 },
@@ -264,8 +368,7 @@ define([
             const responseIdentifier = Object.keys(config.boundTo)[0];
             let response = config.boundTo[responseIdentifier] || {};
 
-            interaction.responseValue = typeof response.base?.string === 'string' ? response.base.string : '';
-            interaction.domApi = new DomApi(dom);
+            interaction.responseValueObj = response && response.base && typeof response.base.string === 'string' ? JSON.parse(response.base.string) : {};
 
             interaction.initialize(responseIdentifier, dom, config.properties);
             interaction.setResponse(response);
@@ -274,8 +377,8 @@ define([
             // event manager is necessary only for creator part
             event.addEventMgr(pciInstance); // adds methods 'on', 'off', 'trigger'
 
+            // when in creator, respond to property changes
             pciInstance.on('configChange', newProperties => {
-                console.log('configChange', newProperties);
                 Object.assign(interaction.properties, newProperties);
                 interaction.render();
             });

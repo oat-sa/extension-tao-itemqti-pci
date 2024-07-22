@@ -73,10 +73,7 @@ define([
 
         //render the form using the form template
         $form.html(formTpl({
-            serial: interaction.getResponseDeclaration().serial,
-            html: interaction.prop('html'),
-            responseSelector: interaction.prop('responseSelector'),
-            wordcountSelector: interaction.prop('wordcountSelector')
+            html: interaction.prop('html')
         }));
 
         //init form javascript
@@ -85,17 +82,7 @@ define([
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
             html: function(i, value){
-                // i.properties.html = value;
-                // i.triggerPci('configChange', [{ html: value }]);
                 configChangeCallBack(i, value, 'html');
-            },
-            responseSelector: function(i, value){
-                i.prop('responseSelector', value);
-                i.triggerPci('configChange', [{ responseSelector: value }]);
-            },
-            wordcountSelector: function(i, value){
-                i.prop('wordcountSelector', value);
-                i.triggerPci('configChange', [{ wordcountSelector: value }]);
             }
         });
     };
