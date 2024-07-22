@@ -24,7 +24,7 @@ define([
 
     console.log('in src runtime');
 
-    const _typeIdentifier = 'htmlTemplateTextboxInteraction';
+    const _typeIdentifier = 'htmlTemplateInteraction';
 
     const maxlength = 10000; // limit individual input value lengths
 
@@ -90,7 +90,7 @@ define([
         return { isTextArea, isSelect, isTextInput, isCheckboxInput, isRadioInput, isUnsupportedElement };
     }
 
-    function htmlTemplateTextboxInteractionFactory() {
+    function htmlTemplateInteractionFactory() {
         return {
 
             /*********************************
@@ -337,7 +337,7 @@ define([
          * @param {Object} state - the state to restore
          */
         getInstance(dom, config, state) {
-            const interaction = htmlTemplateTextboxInteractionFactory();
+            const interaction = htmlTemplateInteractionFactory();
 
             // create a IMS PCI instance object that will be provided in onready
             const pciInstance = {

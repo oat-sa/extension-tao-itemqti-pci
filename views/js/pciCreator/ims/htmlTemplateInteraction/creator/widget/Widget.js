@@ -1,6 +1,6 @@
 define([
     'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/Widget',
-    'htmlTemplateTextboxInteraction/creator/widget/states/states',
+    'htmlTemplateInteraction/creator/widget/states/states',
 ], function (Widget, states) {
     'use strict';
 

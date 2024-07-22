@@ -1,10 +1,10 @@
 {
     "model" : "IMSPCI",
-    "typeIdentifier": "htmlTemplateTextboxInteraction",
+    "typeIdentifier": "htmlTemplateInteraction",
     "version": "0.0.1",
-    "label": "HTML Template Textbox Interaction",
-    "description": "A container for custom HTML, styles, images and a textbox",
-    "short": "HTML Template Textbox",
+    "label": "HTML Template Interaction",
+    "description": "A container for custom HTML, styles, images, response elements",
+    "short": "HTML Template",
     "author": "OAT SA",
     "email": "contact@taotesting.com",
     "tags": [],
@@ -13,13 +13,13 @@
         "cardinality": "single"
     },
     "runtime" : {
-        "hook" : "./runtime/htmlTemplateTextboxInteraction.min.js",
+        "hook" : "./runtime/htmlTemplateInteraction.min.js",
         "src" : [
-            "./runtime/htmlTemplateTextboxInteraction.js"
+            "./runtime/htmlTemplateInteraction.js"
         ],
         "modules" : {
-            "htmlTemplateTextboxInteraction/runtime/htmlTemplateTextboxInteraction.min": [
-                "runtime/htmlTemplateTextboxInteraction.min.js"
+            "htmlTemplateInteraction/runtime/htmlTemplateInteraction.min": [
+                "runtime/htmlTemplateInteraction.min.js"
             ]
         },
         "libraries" : [],

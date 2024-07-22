@@ -22,7 +22,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'taoQtiItem/qtiCreator/editor/simpleContentEditableElement',
     'taoQtiItem/qtiCreator/editor/containerEditor',
-    'tpl!htmlTemplateTextboxInteraction/creator/tpl/propertiesForm'
+    'tpl!htmlTemplateInteraction/creator/tpl/propertiesForm'
 ], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl) {
     'use strict';
 

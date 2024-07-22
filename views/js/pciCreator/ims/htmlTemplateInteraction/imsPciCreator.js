@@ -17,12 +17,12 @@
  *
  */
 define([
-    'htmlTemplateTextboxInteraction/creator/widget/Widget',
-    'tpl!htmlTemplateTextboxInteraction/creator/tpl/markup'
+    'htmlTemplateInteraction/creator/widget/Widget',
+    'tpl!htmlTemplateInteraction/creator/tpl/markup'
 ], function (Widget, markupTpl) {
     'use strict';
 
-    const typeIdentifier = 'htmlTemplateTextboxInteraction';
+    const typeIdentifier = 'htmlTemplateInteraction';
 
     return {
 
