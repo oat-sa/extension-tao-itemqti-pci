@@ -43,7 +43,7 @@ define([
     };
 
     /**
-     * Revoke all stored blob URLs. Prevents memory leak when tweaking html property in creator.
+     * Revoke all stored blob URLs. Prevents memory leak when repeatedly editing html property in creator.
      */
     function revokeBlobUrls() {
         blobUrls.values().forEach(URL.revokeObjectURL);
@@ -53,7 +53,7 @@ define([
     /**
      * Count words/chars in string according to built-in word separators
      * @param {string} text
-     * @returns {object} counts
+     * @returns {Object} counts
      */
     function getCounts(text = '') {
         const wordSeparators = '\\s.,:;?!&#%/*+=';
@@ -66,15 +66,15 @@ define([
     }
 
     /**
-     * Find out what type of element a response element is
+     * Find out what type of HTMLElement a response element is.
      * Supported types:
      * - textarea
      * - select
-     * - input type="text|number|email|url|search" (all submitted as string)
+     * - input type="text|number|email|url|search"
      * - input type="checkbox"
-     * - input type="radio" - special case: response is id => name
+     * - input type="radio"
      * @param {HTMLElement} element
-     * @returns {object}
+     * @returns {Object}
      */
     function getElementInfo(element) {
         if (!element) {
@@ -84,9 +84,10 @@ define([
         const isTextArea = element.tagName === 'TEXTAREA';
         const isSelect = element.tagName === 'SELECT';
         const isTextInput = element.tagName === 'INPUT' && ['text', 'number', 'email', 'url', 'search'].includes(typeAttr);
-        const isCheckboxInput = element.tagName === 'INPUT' && element.type === 'checkbox';
-        const isRadioInput = element.tagName === 'INPUT' && element.type === 'radio';
+        const isCheckboxInput = element.tagName === 'INPUT' && typeAttr === 'checkbox';
+        const isRadioInput = element.tagName === 'INPUT' && typeAttr === 'radio';
         const isUnsupportedElement = !isTextArea && !isSelect && !isTextInput && !isCheckboxInput && !isRadioInput;
+
         return { isTextArea, isSelect, isTextInput, isCheckboxInput, isRadioInput, isUnsupportedElement };
     }
 
@@ -110,20 +111,31 @@ define([
             /**
              * Get the response in the json format described in
              * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
+             * HTML response elements give up the following data:
+             * - textarea: { [string: name]: [string: value] }
+             * - select: { [string: name]: [string: option_name] }
+             * - input type="text|number|email|url|search": { [string: name]: [string: value] }
+             * - input type="checkbox": { [string: name]: [boolean: checked] }
+             * - input type="radio": { [string: name]: [string: value] }
              *
-             * @param {Object} interaction
              * @returns {Object}
              */
             getResponse: function() {
                 let data = {};
-                const responseElts = this.getResponseElts();
-                responseElts.forEach(element => {
-                    const { isUnsupportedElement, isRadioInput } = getElementInfo(element);
-                    if (!isUnsupportedElement && element.name) {
-                        data[element.name] = element.value && element.value.substring(0, maxlength);
+                this.getResponseElts().forEach(element => {
+                    const { isUnsupportedElement, isCheckboxInput, isRadioInput, isSelect } = getElementInfo(element);
+
+                    if (!isUnsupportedElement || element.name) {
+                        if (isCheckboxInput) {
+                            data[element.name] = element.checked; // boolean
+                        } else if (isRadioInput || isSelect) {
+                            data[element.name] = element.value; // identifier
+                        } else {
+                            data[element.name] = element.value && element.value.substring(0, maxlength); // string
+                        }
                     }
                 });
-                // in case DOM was already destroyed, we can return last known response
+                // in case DOM was already destroyed, we can return last known response TODO: is it safe?
                 if (Object.keys(data).length) {
                     this.responseValueObj = data;
                 }
@@ -172,13 +184,14 @@ define([
                 this.iframe.setAttribute('sandbox', 'allow-same-origin');
                 this.iframe.dataset.responseIdentifier = responseIdentifier;
                 this.iframe.style = 'border:none; width:100%;';
+                this.iframe.title = 'interaction';
                 this.render();
             },
 
             render: function() {
                 const iframeOnload = () => this.postRender();
 
-                // may not be needed - can I just add once in initialize?
+                // may not be needed - can I just add once in initialize? TODO:
                 this.iframe.removeEventListener('load', iframeOnload);
                 this.iframe.addEventListener('load', iframeOnload);
 
@@ -187,6 +200,7 @@ define([
                 try {
                     this.iframe.src = createBlobURL(this.properties.html);
                 } catch (e) {
+                    console.error(e);
                     this.iframe.src = createBlobURL('Invalid or missing <code>html</code> property');
                 }
             },
@@ -197,10 +211,8 @@ define([
             postRender: function() {
                 this.iframe.height = this.iframe.contentWindow.document.body.scrollHeight || 500;
 
-                console.log('postRender responseValueObj', this.responseValueObj);
-
-                const responseElts = this.getResponseElts();
-                responseElts.forEach(element => {
+                // Update some attributes (not response values) on rendered response elements
+                this.getResponseElts().forEach(element => {
                     const { isTextArea, isSelect, isTextInput, isCheckboxInput, isRadioInput, isUnsupportedElement } = getElementInfo(element);
 
                     if (isUnsupportedElement) {
@@ -217,24 +229,9 @@ define([
                             element.setAttribute('disabled', 'true');
                         }
                     }
-
-                    // set initial responses TODO: move
-                    const elementResponseValue = this.responseValueObj[element.name];
-
-                    if (isRadioInput && elementResponseValue === element.getAttribute('value')) {
-                        element.checked = true; // ?
-                    } else if (isCheckboxInput && elementResponseValue === 'on') {
-                        element.checked = true // ?
-                    } else if (isSelect) {
-                        const selectedOption = element.querySelector(`option[value=${elementResponseValue}]`);
-                        if (selectedOption) {
-                            selectedOption.selected = true; // OK:
-                        }
-                    } else if (element.name in this.responseValueObj){
-                        element.value = elementResponseValue;
-                    }
                 });
 
+                this.renderResponseValues();
                 this.connectWordcounts();
             },
 
@@ -269,31 +266,49 @@ define([
             },
 
             /**
+             * Renders known response values into their DOM elements
+             */
+            renderResponseValues: function() {
+                if (!this.responseValueObj) {
+                    return;
+                }
+                this.getResponseElts().forEach(element => {
+                    const { isSelect, isCheckboxInput, isRadioInput } = getElementInfo(element);
+
+                    const elementResponseValue = this.responseValueObj[element.name];
+
+                    if (isRadioInput && elementResponseValue === element.getAttribute('value')) {
+                        element.checked = true;
+                    } else if (isCheckboxInput && elementResponseValue) {
+                        element.checked = true;
+                    } else if (isSelect) {
+                        const selectedOption = element.querySelector(`option[value=${elementResponseValue}]`);
+                        if (selectedOption) {
+                            selectedOption.selected = true;
+                        }
+                    } else if (element.name in this.responseValueObj){
+                        element.value = elementResponseValue;
+                    }
+                });
+            },
+
+            /**
              * Programmatically set the response following the json schema described in
              * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
              *
-             * @param {Object} interaction
              * @param {Object} response
              */
             setResponse: function(response) {
                 if (response && response.base && response.base.string) {
                     this.responseValueObj = JSON.parse(response.base.string) || {};
                     console.log('setResponse set responseValueObj', this.responseValueObj);
-
-                    const responseElts = this.getResponseElts(); // TODO: move logic here
-                    responseElts.forEach(element => {
-                        if (element.name in this.responseValueObj) {
-                            element.value = this.responseValueObj[element.name];
-                        }
-                    });
+                    this.renderResponseValues();
                 }
             },
 
             /**
              * Remove the current response set in the interaction
              * The state may not be restored at this point.
-             *
-             * @param {Object} interaction
              */
             resetResponse: function() {
                 this.setResponse({ base: null });
@@ -302,7 +317,6 @@ define([
             /**
              * Restore the state of the interaction from the serializedState.
              *
-             * @param {Object} interaction
              * @param {Object} serializedState - json format
              */
             setSerializedState: function(state) {
@@ -315,7 +329,6 @@ define([
              * Get the current state of the interaction as a string.
              * It enables saving the state for later usage.
              *
-             * @param {Object} interaction
              * @returns {Object} json format
              */
             getSerializedState: function() {
