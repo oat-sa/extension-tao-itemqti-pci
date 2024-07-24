@@ -1,0 +1,154 @@
+{
+  "identifier": "pci002",
+  "serial": "item_5b07da24f1c5e082350329",
+  "qtiClass": "assessmentItem",
+  "attributes": {
+    "identifier": "pci002",
+    "title": "PCI 002",
+    "label": "",
+    "adaptive": false,
+    "timeDependent": false,
+    "toolName": "TAO",
+    "toolVersion": "3.3.0-sprint77",
+    "class": ""
+  },
+  "body": {
+    "serial": "container_containeritembody_5b07da24f1c50822086021",
+    "body": "{{interaction_portablecustominteraction_5b07da250112d182933654}}\n  {{interaction_portablecustominteraction_5b07da2501556207762223}}\n  {{interaction_portablecustominteraction_5b07da2501605590608293}}",
+    "elements": {
+      "interaction_portablecustominteraction_5b07da250112d182933654": {
+        "serial": "interaction_portablecustominteraction_5b07da250112d182933654",
+        "qtiClass": "customInteraction",
+        "attributes": {
+          "responseIdentifier": "htpl1"
+        },
+        "typeIdentifier": "htmlTemplateInteraction",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the first PCI (has default properties)</div><iframe></iframe></div>",
+        "version": "0.0.0",
+        "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
+        "libraries": [],
+        "stylesheets": [],
+        "mediaFiles": [],
+        "properties": {
+          "html": "<form><textarea name=\"text1\" data-response></textarea><p data-wordcount-for=\"text1\"></p></form>"
+        },
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
+      },
+      "interaction_portablecustominteraction_5b07da2501556207762223": {
+        "serial": "interaction_portablecustominteraction_5b07da2501556207762223",
+        "qtiClass": "customInteraction",
+        "attributes": {
+          "responseIdentifier": "htpl2"
+        },
+        "typeIdentifier": "htmlTemplateInteraction",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the middle PCI</div><iframe></iframe></div>",
+        "version": "0.0.0",
+        "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
+        "libraries": [],
+        "stylesheets": [],
+        "mediaFiles": [],
+        "properties": {
+          "html": "<!doctype html> <html lang=\"en\"> <head> <meta charset=\"utf-8\"> <title>Interaction</title> <style> body{ margin:0;background:limegreen;}form{ position:relative;& input{ position:absolute;}& input:nth-child(1){ top:20px;left:20px;}& input:nth-child(2){ top:40px;left:120px;}& input:nth-child(3){ top:60px;left:220px;}}</style> </head> <body> <form> <input placeholder=\"first\" name=\"inp1\" data-response> <input placeholder=\"second\" name=\"inp2\" data-response> <input placeholder=\"third\" name=\"inp3\" data-response> </form> </body> </html>"
+        },
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
+      },
+      "interaction_portablecustominteraction_5b07da2501605590608293": {
+        "serial": "interaction_portablecustominteraction_5b07da2501605590608293",
+        "qtiClass": "customInteraction",
+        "attributes": {
+          "responseIdentifier": "htpl3"
+        },
+        "typeIdentifier": "htmlTemplateInteraction",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the last PCI</div><iframe></iframe></div>",
+        "version": "0.0.0",
+        "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
+        "libraries": [],
+        "stylesheets": [],
+        "mediaFiles": [],
+        "properties": {
+          "html": "<!doctype html> <html lang=\"en\"> <head> <meta charset=\"utf-8\"> <title>Interaction</title> <style> body{ margin:0;background:yellow;}form{ position:relative;& label{ position:absolute;}& label:nth-child(1){ top:20px;left:20px;}& label:nth-child(2){ top:40px;left:120px;}& label:nth-child(3){ top:60px;left:220px;}}</style> </head> <body> <form> <label><input type=\"radio\" name=\"radgroup\" value=\"spot1\" data-response>A</label> <label><input type=\"radio\" name=\"radgroup\" value=\"spot2\" data-response>B</label> <label><input type=\"radio\" name=\"radgroup\" value=\"spot3\" data-response>C</label> </form> </body> </html>"
+        },
+        "xmlns": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1"
+      }
+    }
+  },
+  "namespaces": {
+    "": "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1",
+    "html5": "html5",
+    "pci": "http:\/\/www.imsglobal.org\/xsd\/portableCustomInteraction_v1",
+    "xsi": "http:\/\/www.w3.org\/2001\/XMLSchema-instance"
+  },
+  "schemaLocations": {
+    "http:\/\/www.imsglobal.org\/xsd\/imsqti_v2p1": "http:\/\/www.imsglobal.org\/xsd\/qti\/qtiv2p1\/imsqti_v2p1.xsd"
+  },
+  "stylesheets": {},
+  "outcomes": {},
+  "responses": {
+    "responsedeclaration_5b07da24f380b808768413": {
+      "identifier": "htpl1",
+      "serial": "responsedeclaration_5b07da24f380b808768413",
+      "qtiClass": "responseDeclaration",
+      "attributes": {
+        "identifier": "htpl1",
+        "cardinality": "single",
+        "baseType": "string"
+      },
+      "defaultValue": [],
+      "mapping": [],
+      "areaMapping": [],
+      "howMatch": "no_response_processing",
+      "correctResponses": [],
+      "mappingAttributes": {
+        "defaultValue": 0
+      },
+      "feedbackRules": {}
+    },
+    "responsedeclaration_5b07da24f3d30471534726": {
+      "identifier": "htpl2",
+      "serial": "responsedeclaration_5b07da24f3d30471534726",
+      "qtiClass": "responseDeclaration",
+      "attributes": {
+        "identifier": "htpl2",
+        "cardinality": "single",
+        "baseType": "string"
+      },
+      "defaultValue": [],
+      "mapping": [],
+      "areaMapping": [],
+      "howMatch": "no_response_processing",
+      "correctResponses": [],
+      "mappingAttributes": {
+        "defaultValue": 0
+      },
+      "feedbackRules": {}
+    },
+    "responsedeclaration_5b07da24f3d72356881489": {
+      "identifier": "htpl3",
+      "serial": "responsedeclaration_5b07da24f3d72356881489",
+      "qtiClass": "responseDeclaration",
+      "attributes": {
+        "identifier": "htpl3",
+        "cardinality": "single",
+        "baseType": "string"
+      },
+      "defaultValue": [],
+      "mapping": [],
+      "areaMapping": [],
+      "howMatch": "no_response_processing",
+      "correctResponses": [],
+      "mappingAttributes": {
+        "defaultValue": 0
+      },
+      "feedbackRules": {}
+    }
+  },
+  "feedbacks": {},
+  "responseProcessing": {
+    "serial": "response_templatesdriven_5b07da2501f68664395390",
+    "qtiClass": "responseProcessing",
+    "attributes": {},
+    "processingType": "templateDriven",
+    "responseRules": []
+  },
+  "apipAccessibility": ""
+}
