@@ -84,7 +84,6 @@ define([
          */
         getMarkupData(pci, defaultData) {
             return Object.assign({
-                serial: Date.now(),
                 prompt: pci.data('prompt')
             }, defaultData);
         }

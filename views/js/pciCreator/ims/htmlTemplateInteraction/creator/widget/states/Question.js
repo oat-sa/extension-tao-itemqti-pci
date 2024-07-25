@@ -26,7 +26,7 @@ define([
 ], function(stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl) {
     'use strict';
 
-    var stateQuestion = stateFactory.extend(
+    const stateQuestion = stateFactory.extend(
         Question,
         function enterQuestionState() {
             const $container = this.widget.$container;
@@ -34,13 +34,13 @@ define([
             const interaction = this.widget.element;
 
             containerEditor.create($prompt, {
-                change : function change(text){
+                change: function change(text) {
                     interaction.data('prompt', text);
                     interaction.updateMarkup();
                 },
-                markup : interaction.markup,
-                markupSelector : '.prompt',
-                related : interaction,
+                markup: interaction.markup,
+                markupSelector: '.prompt',
+                related: interaction,
                 areaBroker: this.widget.getAreaBroker()
             });
         },
@@ -86,5 +86,6 @@ define([
             }
         });
     };
+
     return stateQuestion;
 });
