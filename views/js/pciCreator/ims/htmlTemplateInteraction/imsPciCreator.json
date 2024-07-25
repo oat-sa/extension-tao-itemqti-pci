@@ -9,8 +9,7 @@
     "email": "contact@taotesting.com",
     "tags": [],
     "response": {
-        "baseType": "string",
-        "cardinality": "single"
+        "cardinality": "record"
     },
     "runtime" : {
         "hook" : "./runtime/htmlTemplateInteraction.min.js",

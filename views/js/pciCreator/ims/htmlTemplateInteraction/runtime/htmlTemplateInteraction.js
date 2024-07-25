@@ -18,8 +18,9 @@
  */
 define([
     'qtiCustomInteractionContext',
-    'taoQtiItem/portableLib/OAT/util/event'
-], function (qtiCustomInteractionContext, event) {
+    'taoQtiItem/portableLib/OAT/util/event',
+    'htmlTemplateInteraction/runtime/recordResponse'
+], function (qtiCustomInteractionContext, event, record) {
     'use strict';
 
     console.log('in src runtime');
@@ -112,35 +113,43 @@ define([
              * Get the response in the json format described in
              * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
              * HTML response elements give up the following data:
-             * - textarea: { [string: name]: [string: value] }
-             * - select: { [string: name]: [string: option_name] }
-             * - input type="text|number|email|url|search": { [string: name]: [string: value] }
-             * - input type="checkbox": { [string: name]: [boolean: checked] }
-             * - input type="radio": { [string: name]: [string: value] }
+             * - textarea: { name: name, base: { string: value } }
+             * - select: { name: name, base: { identifier: option_value } }
+             * - input type="text|number|email|url|search": { name: name, base: { string: value } }
+             * - input type="checkbox": { name: name, base: { boolean: checked } }
+             * - input type="radio": { name: name, base: { identifier: value } }
              *
              * @returns {Object}
              */
             getResponse: function() {
-                let data = {};
-                this.getResponseElts().forEach(element => {
-                    const { isUnsupportedElement, isCheckboxInput, isRadioInput, isSelect } = getElementInfo(element);
+                const recordEntries = [];
+                const usedGroupNames = [];
 
-                    if (!isUnsupportedElement || element.name) {
-                        if (isCheckboxInput) {
-                            data[element.name] = element.checked; // boolean
-                        } else if (isRadioInput || isSelect) {
-                            data[element.name] = element.value; // identifier
-                        } else {
-                            data[element.name] = element.value && element.value.substring(0, maxlength); // string
+                this.getResponseElts().forEach(element => {
+                    const { isTextArea, isSelect, isTextInput, isCheckboxInput, isRadioInput } = getElementInfo(element);
+
+                    if (isTextArea || isTextInput) {
+                        recordEntries.push(record.createRecordEntry(element.name, 'string', element.value && element.value.substring(0, maxlength) || null));
+                    } else if (isSelect) {
+                        recordEntries.push(record.createRecordEntry(element.name, 'identifier', element.value || null));
+                    } else if (isCheckboxInput) {
+                        recordEntries.push(record.createRecordEntry(element.name, 'boolean', element.checked));
+                    } else if (isRadioInput) {
+                        if (!usedGroupNames.includes(element.name)) {
+                            // only 1 radio input from a group should become its RecordEntry
+                            const radioGroupCheckedElt = this.iframe.contentDocument.querySelector(`input[type=radio][name=${element.name}][data-response]:checked`);
+                            const value = radioGroupCheckedElt ? radioGroupCheckedElt.value : null
+                            recordEntries.push(record.createRecordEntry(element.name, 'identifier', value));
+                            usedGroupNames.push(element.name);
                         }
                     }
                 });
-                // in case DOM was already destroyed, we can return last known response TODO: is it safe?
-                if (Object.keys(data).length) {
-                    this.responseValueObj = data;
+
+                // in case DOM was already destroyed, we can return last known response
+                if (recordEntries.length) {
+                    this.responseRecordValue = recordEntries;
                 }
-                this.response = { base: { string: JSON.stringify(this.responseValueObj) } };
-                return this.response;
+                return record.createRecord(this.responseRecordValue);
             },
 
             /**
@@ -191,7 +200,6 @@ define([
             render: function() {
                 const iframeOnload = () => this.postRender();
 
-                // may not be needed - can I just add once in initialize? TODO:
                 this.iframe.removeEventListener('load', iframeOnload);
                 this.iframe.addEventListener('load', iframeOnload);
 
@@ -236,6 +244,46 @@ define([
             },
 
             /**
+             * Get the rendered element(s) defined by the template as holding the response(s)
+             * and defined by the PCI as supported.
+             * @returns {HTMLElement[]}
+             */
+            getResponseElts: function() {
+                if (!this.iframe.contentDocument) {
+                    return [];
+                }
+                const elts = [...this.iframe.contentDocument.querySelectorAll('[data-response][name]')];
+                return elts.filter(elt => !getElementInfo(elt).isUnsupportedElement);
+            },
+
+            /**
+             * Renders known response values into their DOM elements
+             */
+            renderResponseValues: function() {
+                if (!this.responseRecordValue) {
+                    return;
+                }
+                this.getResponseElts().forEach(element => {
+                    const { isTextArea, isTextInput, isSelect, isCheckboxInput, isRadioInput } = getElementInfo(element);
+
+                    const elementResponseValue = record.getRecordEntryValue(this.responseRecordValue, element.name);
+
+                    if (isTextArea || isTextInput) {
+                        element.value = elementResponseValue || '';
+                    } else if (isSelect) {
+                        const options = element.querySelectorAll('option');
+                        options.forEach(optionElt => {
+                            optionElt.selected = optionElt.value === elementResponseValue;
+                        });
+                    } else if (isCheckboxInput) {
+                        element.checked = !!elementResponseValue;
+                    } else if (isRadioInput) {
+                        element.checked = elementResponseValue === element.getAttribute('value');
+                    }
+                });
+            },
+
+            /**
              * Update the content of data-wordcount-for elements with their word count texts
              */
             connectWordcounts: function() {
@@ -258,50 +306,15 @@ define([
             },
 
             /**
-             * Get the rendered element(s) defined by the template as holding the response(s).
-             * @returns {HTMLCollection|Array}
-             */
-            getResponseElts: function() {
-                return this.iframe.contentDocument && this.iframe.contentDocument.querySelectorAll('[data-response][name]') || [];
-            },
-
-            /**
-             * Renders known response values into their DOM elements
-             */
-            renderResponseValues: function() {
-                if (!this.responseValueObj) {
-                    return;
-                }
-                this.getResponseElts().forEach(element => {
-                    const { isSelect, isCheckboxInput, isRadioInput } = getElementInfo(element);
-
-                    const elementResponseValue = this.responseValueObj[element.name];
-
-                    if (isRadioInput && elementResponseValue === element.getAttribute('value')) {
-                        element.checked = true;
-                    } else if (isCheckboxInput && elementResponseValue) {
-                        element.checked = true;
-                    } else if (isSelect) {
-                        const selectedOption = element.querySelector(`option[value=${elementResponseValue}]`);
-                        if (selectedOption) {
-                            selectedOption.selected = true;
-                        }
-                    } else if (element.name in this.responseValueObj){
-                        element.value = elementResponseValue;
-                    }
-                });
-            },
-
-            /**
              * Programmatically set the response following the json schema described in
              * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
              *
              * @param {Object} response
              */
             setResponse: function(response) {
-                if (response && response.base && response.base.string) {
-                    this.responseValueObj = JSON.parse(response.base.string) || {};
-                    console.log('setResponse set responseValueObj', this.responseValueObj);
+                if (response && response.record) {
+                    this.responseRecordValue = response.record || [];
+                    console.log('setResponse set responseRecordValue', this.responseRecordValue);
                     this.renderResponseValues();
                 }
             },
@@ -311,7 +324,7 @@ define([
              * The state may not be restored at this point.
              */
             resetResponse: function() {
-                this.setResponse({ base: null });
+                this.setResponse({ record: [] });
             },
 
             /**
@@ -320,7 +333,7 @@ define([
              * @param {Object} serializedState - json format
              */
             setSerializedState: function(state) {
-                if(state && state.response) {
+                if (state && state.response) {
                     this.setResponse(state.response);
                 }
             },
@@ -378,14 +391,13 @@ define([
                 }
             };
 
+            const defaultResponse = { record: [] };
             const responseIdentifier = Object.keys(config.boundTo)[0];
-            let response = config.boundTo[responseIdentifier] || {};
-
-            interaction.responseValueObj = response && response.base && typeof response.base.string === 'string' ? JSON.parse(response.base.string) : {};
+            const response = config.boundTo[responseIdentifier] || defaultResponse;
 
             interaction.initialize(responseIdentifier, dom, config.properties);
-            interaction.setResponse(response);
-            interaction.setSerializedState(state);
+            interaction.setResponse(response); // ?
+            interaction.setSerializedState(state); // ?
 
             // event manager is necessary only for creator part
             event.addEventMgr(pciInstance); // adds methods 'on', 'off', 'trigger'

@@ -87,9 +87,18 @@ define([
 
         const assetManager = getAssetManager('/qtiItemPci/views/js/test/htmlTemplateInteraction/data/');
         const $container = $('#item-container');
-        const state1 = { response: { base: { string: "{\"text1\":\"foo\"}" } } };
-        const state2 = { response: { base: { string: "{\"inp1\":\"hey\",\"inp2\":\"my\",\"inp3\":\"guy\"}" } } };
-        const state3 = { response: { base: { string: "{\"radgroup\":\"spot2\"}" } } };
+
+        const state1 = { response: { record: [
+            { name: 'text1', base: { string: 'foo' } }
+        ] } };
+        const state2 = { response: { record: [
+            { name: 'inp1', base: { string: 'hey' } },
+            { name: 'inp2', base: { string: 'my' } },
+            { name: 'inp3', base: { string: 'guy' } }
+        ] } };
+        const state3 = { response: { record: [
+            { name: 'radgroup', base: { identifier: 'spot2' } }
+        ] } };
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
@@ -102,12 +111,12 @@ define([
 
                 // instead of 3 iframe onloads
                 setTimeout(() => {
-                    // TODO: after fixing response format
                     assert.equal($('[name=text1]', iframe1.contentDocument).val(), 'foo', 'interaction 1 DOM state restored from item');
                     assert.equal($('[name=inp1]', iframe2.contentDocument).val(), 'hey', 'interaction 2 DOM state restored from item');
                     assert.equal($('[name=inp2]', iframe2.contentDocument).val(), 'my', 'interaction 2 DOM state restored from item');
                     assert.equal($('[name=inp3]', iframe2.contentDocument).val(), 'guy', 'interaction 2 DOM state restored from item');
-                    assert.equal($('[name=radgroup]', iframe3.contentDocument).val(), 'spot2', 'interaction 3 DOM state restored from item');
+                    assert.equal($('[name=radgroup]:checked', iframe3.contentDocument).length, 1, 'interaction 3 DOM state restored from item');
+                    assert.equal($('[name=radgroup]:checked', iframe3.contentDocument).val(), 'spot2', 'interaction 3 DOM state restored from item');
 
                     assert.deepEqual(this.getState(), {
                         htpl1: state1,
@@ -138,7 +147,10 @@ define([
         const assetManager = getAssetManager('/qtiItemPci/views/js/test/htmlTemplateInteraction/data/');
         const $container = $('#item-container');
         const value1 = 'A count of 8 words, is expected here!';
-        const state1 = { response: { base: { string: `{\"text1\":\"${value1}\"}` } } };
+        const state1 = { response: { record: [
+            { name: 'text1', base: { string: value1 } }
+        ] } };
+
 
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
