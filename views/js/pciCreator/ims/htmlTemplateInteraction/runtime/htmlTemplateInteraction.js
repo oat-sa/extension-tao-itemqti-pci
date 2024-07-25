@@ -47,7 +47,9 @@ define([
      * Revoke all stored blob URLs. Prevents memory leak when repeatedly editing html property in creator.
      */
     function revokeBlobUrls() {
-        blobUrls.values().forEach(URL.revokeObjectURL);
+        for (const url of blobUrls.values()) {
+            URL.revokeObjectURL(url);
+        }
         blobUrls = new Set();
     }
 
@@ -70,7 +72,7 @@ define([
      * Find out what type of HTMLElement a response element is.
      * Supported types:
      * - textarea
-     * - select
+     * - select (not multiple)
      * - input type="text|number|email|url|search"
      * - input type="checkbox"
      * - input type="radio"
@@ -84,10 +86,11 @@ define([
         const typeAttr = element.getAttribute('type');
         const isTextArea = element.tagName === 'TEXTAREA';
         const isSelect = element.tagName === 'SELECT';
-        const isTextInput = element.tagName === 'INPUT' && ['text', 'number', 'email', 'url', 'search'].includes(typeAttr);
+        const isSelectMultiple = isSelect && element.getAttribute('multiple');
+        const isTextInput = element.tagName === 'INPUT' && (['text', 'number', 'email', 'url', 'search'].includes(typeAttr) || !typeAttr);
         const isCheckboxInput = element.tagName === 'INPUT' && typeAttr === 'checkbox';
         const isRadioInput = element.tagName === 'INPUT' && typeAttr === 'radio';
-        const isUnsupportedElement = !isTextArea && !isSelect && !isTextInput && !isCheckboxInput && !isRadioInput;
+        const isUnsupportedElement = !isTextArea && !(isSelect && !isSelectMultiple) && !isTextInput && !isCheckboxInput && !isRadioInput;
 
         return { isTextArea, isSelect, isTextInput, isCheckboxInput, isRadioInput, isUnsupportedElement };
     }
