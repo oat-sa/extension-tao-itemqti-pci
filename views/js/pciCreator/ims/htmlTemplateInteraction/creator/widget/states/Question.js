@@ -70,9 +70,12 @@ define([
     stateQuestion.prototype.initForm = function() {
         const interaction = this.widget.element;
         const $form = this.widget.$form;
+        const response = interaction.getResponseDeclaration();
 
         //render the form using the form template
         $form.html(formTpl({
+            serial : response.serial,
+            identifier : interaction.attr('responseIdentifier'),
             html: interaction.prop('html')
         }));
 
@@ -81,6 +84,10 @@ define([
 
         //init data change callbacks
         formElement.setChangeCallbacks($form, interaction, {
+            identifier: function(i, value){
+                response.id(value);
+                interaction.attr('responseIdentifier', value);
+            },
             html: function(i, value){
                 configChangeCallBack(i, value, 'html');
             }
