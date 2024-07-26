@@ -10,7 +10,7 @@ This PCI is a kind of blank canvas - it will render whatever HTML string you pas
 ## Special HTML attributes
 
 - `data-response` **mandatory** - add this valueless attribute to each input element intended to be captured in the response
-- `name` **mandatory** - name attribute to act as the identifier of each `data-response` element. Names must be unique (_execption: radio groups, where the name should be common and the values unique_).
+- `name` **mandatory** - name attribute to act as the identifier of each `data-response` element. Names must be unique (_exception: radio groups, where the name should be common and the values unique_).
 - `data-wordcount-for` - add this attribute to an empty element where the wordcount of a textarea or text input should be displayed (optional)
 
 Examples:

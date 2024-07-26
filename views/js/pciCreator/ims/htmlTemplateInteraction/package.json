@@ -1,0 +1,13 @@
+{
+  "name": "htmltemplateinteraction",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Manage the dependencies of htmlTemplateInteraction",
+  "scripts": {
+  },
+  "author": "OAT S.A.",
+  "license": "GPL-2.0-only",
+  "devDependencies": {
+    "inliner": "^1.13.1"
+  }
+}
