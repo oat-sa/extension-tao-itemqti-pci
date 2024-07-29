@@ -14,7 +14,9 @@
     "runtime" : {
         "hook" : "./runtime/htmlTemplateInteraction.min.js",
         "src" : [
-            "./runtime/htmlTemplateInteraction.js"
+            "./runtime/htmlTemplateInteraction.js",
+            "./runtime/recordResponse.js",
+            "./runtime/tpl/markupInner.tpl"
         ],
         "modules" : {
             "htmlTemplateInteraction/runtime/htmlTemplateInteraction.min": [

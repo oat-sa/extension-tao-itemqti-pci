@@ -19,8 +19,9 @@
 define([
     'qtiCustomInteractionContext',
     'taoQtiItem/portableLib/OAT/util/event',
-    'htmlTemplateInteraction/runtime/recordResponse'
-], function (qtiCustomInteractionContext, event, record) {
+    'htmlTemplateInteraction/runtime/recordResponse',
+    'text!htmlTemplateInteraction/runtime/tpl/markupInner.tpl',
+], function (qtiCustomInteractionContext, event, record, markupInnerHtml) {
     'use strict';
 
     console.log('in src runtime');
@@ -180,7 +181,7 @@ define([
             },
 
             /**
-             * Render the PCI
+             * Render the PCI markup (only once)
              * @param {String} responseIdentifier
              * @param {HTMLElement} dom - container provided by host
              * @param {Object} properties (PCI's config.properties)
@@ -190,16 +191,21 @@ define([
                 this.dom = dom;
                 this.properties = properties || {};
 
-                // get the markup-iframe (always present)
+                // create inner markup elements (so markup in item XML is kept to a minimum)
+                const wrapper = document.createElement('div');
+                dom.querySelector('.htmlTemplateInteraction').append(wrapper);
+                wrapper.outerHTML = markupInnerHtml;
+
                 this.iframe = dom.querySelector('iframe');
-                // IMPORTANT! Never set 'allow-scripts' on the iframe. It can give content author power to influence platform code.
-                this.iframe.setAttribute('sandbox', 'allow-same-origin');
                 this.iframe.dataset.responseIdentifier = responseIdentifier;
-                this.iframe.style = 'border:none; width:100%;';
-                this.iframe.title = 'interaction';
+
+                dom.dispatchEvent(new CustomEvent('init', { bubbles: true, detail: { iframe: this.iframe } }));
                 this.render();
             },
 
+            /**
+             * Render the contents of the iframe
+             */
             render: function() {
                 const iframeOnload = () => this.postRender();
 

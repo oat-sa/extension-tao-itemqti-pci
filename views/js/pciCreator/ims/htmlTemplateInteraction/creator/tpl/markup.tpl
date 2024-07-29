@@ -1,4 +1,4 @@
 <div class="htmlTemplateInteraction">
     <div class="prompt">{{{prompt}}}</div>
-    <iframe />
+    {{!-- markupInner goes here --}}
 </div>
