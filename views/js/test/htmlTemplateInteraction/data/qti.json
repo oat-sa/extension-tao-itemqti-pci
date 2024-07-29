@@ -23,7 +23,7 @@
           "responseIdentifier": "htpl1"
         },
         "typeIdentifier": "htmlTemplateInteraction",
-        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the first PCI (has default properties)</div><iframe></iframe></div>",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the first PCI (has default properties)</div></div>",
         "version": "0.0.0",
         "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
         "libraries": [],
@@ -41,7 +41,7 @@
           "responseIdentifier": "htpl2"
         },
         "typeIdentifier": "htmlTemplateInteraction",
-        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the second PCI</div><iframe></iframe></div>",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the second PCI</div></div>",
         "version": "0.0.0",
         "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
         "libraries": [],
@@ -59,7 +59,7 @@
           "responseIdentifier": "htpl3"
         },
         "typeIdentifier": "htmlTemplateInteraction",
-        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the third PCI</div><iframe></iframe></div>",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the third PCI</div></div>",
         "version": "0.0.0",
         "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
         "libraries": [],
@@ -77,7 +77,7 @@
           "responseIdentifier": "htpl4"
         },
         "typeIdentifier": "htmlTemplateInteraction",
-        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the fourth PCI</div><iframe></iframe></div>",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the fourth PCI</div></div>",
         "version": "0.0.0",
         "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
         "libraries": [],
@@ -95,7 +95,7 @@
           "responseIdentifier": "htpl5"
         },
         "typeIdentifier": "htmlTemplateInteraction",
-        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the last PCI</div><iframe></iframe></div>",
+        "markup": "<div class=\"htmlTemplateInteraction\"><div class=\"prompt\">The prompt of the last PCI</div></div>",
         "version": "0.0.0",
         "entryPoint": "htmlTemplateInteraction\/runtime\/htmlTemplateInteraction",
         "libraries": [],

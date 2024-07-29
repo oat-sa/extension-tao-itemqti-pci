@@ -55,12 +55,17 @@ define([
     QUnit.module('htmlTemplateInteraction');
 
     QUnit.test('renders correctly', function(assert) {
+        assert.expect(10);
         const ready = assert.async();
 
         const assetManager = getAssetManager('/qtiItemPci/views/js/test/htmlTemplateInteraction/data/');
         const $container = $('#item-container');
         assert.equal($container.length, 1, 'the item container exists');
         assert.equal($container.children().length, 0, 'the container has no children');
+
+        $container.one('init', e => {
+            assert.ok(e.originalEvent.detail.iframe instanceof HTMLIFrameElement, 'the init event was dispatched');
+        });
 
         runner = qtiItemRunner('qti', sampleItemData, {assetManager: assetManager})
             .on('render', function() {
@@ -83,6 +88,7 @@ define([
     });
 
     QUnit.test('word counter', function(assert) {
+        assert.expect(4);
         const ready = assert.async();
 
         const assetManager = getAssetManager('/qtiItemPci/views/js/test/htmlTemplateInteraction/data/');
@@ -102,6 +108,7 @@ define([
                 iframe1.onload = () => {
                     assert.equal($('[name=text1]', iframe1.contentDocument).val(), value1, 'interaction 1 DOM state restored from item');
                     assert.equal($('[name=text1] + p', iframe1.contentDocument).text(), '8 word(s)', 'interaction 1 word count displayed');
+
                     ready();
                     runner.clear();
                 }
@@ -118,6 +125,7 @@ define([
     });
 
     QUnit.test('renders given state', function(assert) {
+        assert.expect(14);
         const ready = assert.async();
 
         const assetManager = getAssetManager('/qtiItemPci/views/js/test/htmlTemplateInteraction/data/');
@@ -202,6 +210,7 @@ define([
     });
 
     QUnit.test('returns state', function(assert) {
+        assert.expect(5);
         const ready = assert.async();
 
         const assetManager = getAssetManager('/qtiItemPci/views/js/test/htmlTemplateInteraction/data/');

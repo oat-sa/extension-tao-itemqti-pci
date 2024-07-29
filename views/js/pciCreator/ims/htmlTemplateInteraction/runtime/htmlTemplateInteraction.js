@@ -323,7 +323,6 @@ define([
             setResponse: function(response) {
                 if (response && response.record) {
                     this.responseRecordValue = response.record || [];
-                    console.log('setResponse set responseRecordValue', this.responseRecordValue);
                     this.renderResponseValues();
                 }
             },
