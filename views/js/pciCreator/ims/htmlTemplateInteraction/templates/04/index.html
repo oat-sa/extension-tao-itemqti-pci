@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Interaction</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        form {
+            width: 270px; /* img width */
+            height: 193px; /* img height */
+            background: url(./aldehyde.jpg) no-repeat;
+            position: relative;
+
+            & input {
+                position: absolute;
+            }
+            & [name=checkbox1] {
+                top: 36px;
+                left: 95px;
+            }
+            & [name=checkbox2] {
+                top: 36px;
+                left: 150px;
+            }
+            & [name=checkbox3] {
+                top: 64px;
+                left: 66px;
+            }
+            & [name=checkbox4] {
+                top: 64px;
+                left: 123px;
+            }
+            & [name=checkbox5] {
+                top: 64px;
+                left: 179px;
+            }
+            & [name=checkbox6] {
+                top: 92px;
+                left: 95px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <input type="checkbox" name="checkbox1" data-response>
+        <input type="checkbox" name="checkbox2" data-response>
+        <input type="checkbox" name="checkbox3" data-response>
+        <input type="checkbox" name="checkbox4" data-response>
+        <input type="checkbox" name="checkbox5" data-response>
+        <input type="checkbox" name="checkbox6" data-response>
+    </form>
+</body>
+</html>

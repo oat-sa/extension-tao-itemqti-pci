@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    background: white;
+}
+form {
+    width: 399px; /* img width */
+    height: 297px; /* img height */
+    background: url(./bg_telesquawk.png) no-repeat;
+    position: relative;
+
+    & textarea {
+        position: absolute;
+        top: 69px;
+        left: 34px;
+        width: 331px;
+        height: 183px;
+        resize: none;
+    }
+    & footer {
+        position: absolute;
+        top: 268px;
+        width: 100%;
+        text-align: center;
+        & [data-wordcount-for] {
+            margin: 0;
+            font-weight: bold;
+        }
+    }
+}

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Interaction</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        form {
+            width: 1001px; /* img width */
+            height: 961px; /* img height */
+            background: url(./map-france.png) no-repeat;
+            position: relative;
+
+            & input {
+                position: absolute;
+                accent-color: blue;
+                transform: scale(200%);
+                &:before {
+                    content: '';
+                    position: absolute;
+                    left: -5px;
+                    right: -5px;
+                    top: -5px;
+                    bottom: -5px;
+                    border: 5px solid darkgrey;
+                    border-radius: 50%;
+                }
+                &:hover {
+                    cursor: pointer;
+                }
+                &:checked:before {
+                    border-color: blue;
+                }
+            }
+            & [value=spot1] {
+                top: 162px;
+                left: 282px;
+            }
+            & [value=spot2] {
+                top: 238px;
+                left: 240px;
+            }
+            & [value=spot3] {
+                top: 336px;
+                left: 132px;
+            }
+            & [value=spot4] {
+                top: 362px;
+                left: 290px;
+            }
+            & [value=spot5] {
+                top: 346px;
+                left: 416px;
+            }
+            & [value=spot6] {
+                top: 216px;
+                left: 490px;
+            }
+            & [value=spot7] {
+                top: 228px;
+                left: 858px;
+            }
+            & [value=spot8] {
+                top: 582px;
+                left: 288px;
+            }
+            & [value=spot9] {
+                top: 514px;
+                left: 806px;
+            }
+            & [value=spot10] {
+                top: 688px;
+                left: 650px;
+            }
+            & [value=spot11] {
+                top: 754px;
+                left: 506px;
+            }
+            & [value=spot12] {
+                top: 748px;
+                left: 714px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <input type="radio" name="radgroup" value="spot1" data-response>
+        <input type="radio" name="radgroup" value="spot2" data-response>
+        <input type="radio" name="radgroup" value="spot3" data-response>
+        <input type="radio" name="radgroup" value="spot4" data-response>
+        <input type="radio" name="radgroup" value="spot5" data-response>
+        <input type="radio" name="radgroup" value="spot6" data-response>
+        <input type="radio" name="radgroup" value="spot7" data-response>
+        <input type="radio" name="radgroup" value="spot8" data-response>
+        <input type="radio" name="radgroup" value="spot9" data-response>
+        <input type="radio" name="radgroup" value="spot10" data-response>
+        <input type="radio" name="radgroup" value="spot11" data-response>
+        <input type="radio" name="radgroup" value="spot12" data-response>
+    </form>
+</body>
+</html>
