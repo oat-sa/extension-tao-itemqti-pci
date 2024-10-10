@@ -13,17 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2022 (original work) Open Assessment Technologies SA ;
+ * Copyright (c) 2022-2024 (original work) Open Assessment Technologies SA ;
  */
 /*
-*   This is a dialog component to throw a modal to give feedback to the user
-*/
-define([
-    'lodash',
-    'jquery',
-    'audioRecordingInteraction/runtime/js/modal',
-    'tpl!audioRecordingInteraction/runtime/js/dialog/tpl/body'
-], function (_, $, modal, bodyTpl) {
+ *   This is a dialog component to throw a modal to give feedback to the user
+ */
+define(['lodash', 'jquery', 'audioRecordingInteraction/runtime/js/modal'], function (_, $, modal) {
     'use strict';
     /**
      * The scope of events names
@@ -79,7 +74,26 @@ define([
 
             // pre-render the dialog box
             this.dialogId = _.uniqueId('dlg-');
-            this.$html = $(bodyTpl(this));
+            this.$html = $(
+                '<div ' +
+                    'class="modal ' +
+                    this.class +
+                    '" ' +
+                    'role="dialog" ' +
+                    'aria-modal="true" ' +
+                    'data-control="navigable-modal-body" ' +
+                    'aria-describedby="core/ui-dialog-message-' +
+                    this.dialogId +
+                    '">' +
+                    '<div class="modal-body clearfix">' +
+                    '<p id="core/ui-dialog-message-' +
+                    this.dialogId +
+                    '" class="message">' +
+                    this.message +
+                    '</p>' +
+                    '</div>' +
+                    '</div>'
+            );
             this.rendered = false;
             this.destroyed = false;
 
@@ -245,8 +259,7 @@ define([
                             this.destroy();
                         }
                     });
-                const $items = this.getDom()
-                    .add($(_scope).find('input'));
+                const $items = this.getDom().add($(_scope).find('input'));
                 const closeButton = $(_scope).find('#modal-close-btn')[0];
 
                 if (closeButton) {
