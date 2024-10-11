@@ -3,7 +3,7 @@
     "label": "Audio recording",
     "short": "Audio",
     "description": "Allow test taker to record audio",
-    "version": "0.14.5",
+    "version": "0.14.6",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": ["audio"],
@@ -21,7 +21,7 @@
             "./runtime/js/providers/webAudio.js",
             "./runtime/js/dialog.js",
             "./runtime/js/modal.js"
-          ],
+        ],
         "stylesheets": ["./runtime/css/audioRecordingInteraction.css"],
         "mediaFiles": [
             "./runtime/img/controls.svg",
@@ -29,9 +29,7 @@
             "./runtime/js/workers/WavAudioEncoder.js",
             "./runtime/js/workers/WebAudioRecorderWav.js"
         ],
-        "src": [
-          "./runtime/audioRecordingInteraction.js"
-        ]
+        "src": ["./runtime/audioRecordingInteraction.js"]
     },
     "creator": {
         "icon": "./creator/img/icon.svg",
