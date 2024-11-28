@@ -15,9 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2020 (original work) Open Assessment Technologies SA;
- *
- * @author Sergei Mikhailov <sergei.mikhailov@taotesting.com>
+ * Copyright (c) 2020-2024 (original work) Open Assessment Technologies SA;
  */
 
 declare(strict_types=1);
@@ -34,7 +32,7 @@ class SetupAudioRecordingInteractionCreatorConfigurationRegistry extends ScriptA
     public const MAXIMUM_RECORDING_TIME_LIMIT = 'maximumRecordingTimeLimit';
 
     private const OPTION_DEFAULT_VALUES = [
-        self::MAXIMUM_RECORDING_TIME_LIMIT => 60 * 20,
+        self::MAXIMUM_RECORDING_TIME_LIMIT => 60 * 30,
     ];
 
     protected function provideOptions(): array
