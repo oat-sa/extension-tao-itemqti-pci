@@ -335,6 +335,9 @@ define([
                                 recordsAttempts: this._recordsAttempts
                             })
                         );
+                        dispatchInteractiontraceEvent({
+                            domEventType: 'end'
+                        });
                     };
                     if (this.beepPlayer) {
                         this.beepPlayer.on('beep-endsound-played.dispatchrecorderstop', () => {
