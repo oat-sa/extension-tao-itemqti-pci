@@ -329,23 +329,24 @@ define([
 
                     // outgoing events
 
-                    const dispatchRecorderStop = () => {
+                    const dispatchRecorderStop = (durationMs = 0) => {
                         this.$container.get(0).dispatchEvent(
                             new CustomEvent('recorder-stop', {
                                 recordsAttempts: this._recordsAttempts
                             })
                         );
                         dispatchInteractiontraceEvent({
-                            domEventType: 'end'
+                            domEventType: 'end',
+                            duration: durationMs
                         });
                     };
                     if (this.beepPlayer) {
-                        this.beepPlayer.on('beep-endsound-played.dispatchrecorderstop', () => {
-                            dispatchRecorderStop();
+                        this.beepPlayer.on('beep-endsound-played.dispatchrecorderstop', (durationMs) => {
+                            dispatchRecorderStop(durationMs);
                         });
                     } else {
-                        this.recorder.on('stop', () => {
-                            dispatchRecorderStop();
+                        this.recorder.on('stop', (durationMs) => {
+                            dispatchRecorderStop(durationMs);
                         });
                     }
 
@@ -500,9 +501,9 @@ define([
                     self.inputMeter.draw(level);
                 });
 
-                this.recorder.on('stop', function () {
+                this.recorder.on('stop', function (durationMs) {
                     if (self.beepPlayer) {
-                        self.beepPlayer.playEndSound().then(() => {
+                        self.beepPlayer.playEndSound(durationMs).then(() => {
                             self.updateControls();
                         });
                     }
