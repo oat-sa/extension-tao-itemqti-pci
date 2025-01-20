@@ -291,7 +291,7 @@ define([
                 provider.stop();
                 setState(recorder, recorderStates.STOPED);
 
-                this.trigger('stop');
+                this.trigger('stop', [durationMs]);
             },
 
             /**
