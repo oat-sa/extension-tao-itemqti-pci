@@ -701,6 +701,7 @@ define([
                 function startForReal() {
                     self.resetRecording();
                     self.recorder.start();
+                    self.$container.get(0).dispatchEvent(new CustomEvent('recorder-start'));
                     if (self.config.maxRecordingTime) {
                         self.$meterContainer.addClass('record');
                         self.progressBar.setStyle('record');
@@ -774,6 +775,7 @@ define([
                 if (this.recorder.is('recording')) {
                     this.recorder.cancel();
                 }
+                this.$container.get(0).dispatchEvent(new CustomEvent('recorder-reset'));
             },
 
             /**
