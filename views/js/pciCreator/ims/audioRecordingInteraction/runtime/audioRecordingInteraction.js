@@ -319,12 +319,18 @@ define([
                 this.initBeepPlayer();
                 this.updateResetCount();
                 this.initRecording();
+                this.updateAriaLabel();
 
                 if (this.config.enableDomEvents) {
                     // incoming events
 
                     this.$container.get(0).addEventListener('config-change', ({ detail: newConfig }) => {
-                        this.render(newConfig);
+                        if (this.config.isDisabled !== newConfig.isDisabled) {
+                            this.config.isDisabled = newConfig.isDisabled;
+                            this.updateControls();
+                        } else {
+                            this.render(newConfig);
+                        }
                     });
 
                     // outgoing events
@@ -356,6 +362,7 @@ define([
              * Initialize the PCI configuration
              * @param {Object}  config
              * @param {Boolean} config.isReviewMode - Is in review mode
+             * @param {Boolean} config.isDisabled - Is currently required to appear disabled
              * @param {Boolean} config.allowPlayback - display the play button
              * @param {Boolean} config.hideStopButton - don't display the stop button
              * @param {Boolean} config.autoStart - start recording immediately after interaction is loaded
@@ -373,11 +380,12 @@ define([
              * @param {Boolean} config.displayDownloadLink - for testing purposes only: allow to download the recorded file
              * @param {Boolean} config.updateResponsePartially - enable/disable the partial response update (may affect the performance)
              * @param {Number} config.partialUpdateInterval - number of milliseconds to wait between each recording update
-             * @param {Number} config.enableDomEvents - to control interaction from outside, dispatch custom events from interaction container, and react to events triggered on it
+             * @param {Boolean} config.enableDomEvents - to control interaction from outside, dispatch custom events from interaction container, and react to events triggered on it
              */
             initConfig: function init(config) {
                 this.config = {
                     isReviewMode: toBoolean(config.isReviewMode, false),
+                    isDisabled: toBoolean(config.isDisabled, false),
                     allowPlayback: toBoolean(config.allowPlayback, true),
                     hideStopButton: toBoolean(config.hideStopButton, false),
                     autoStart: toBoolean(config.autoStart, false),
@@ -733,6 +741,7 @@ define([
              */
             setRecording: function setRecording(data) {
                 this._recording = data;
+                this.updateAriaLabel();
             },
 
             /**
@@ -769,6 +778,7 @@ define([
                 this.player.unload();
                 this.updateResponse(null);
                 this.updateControls();
+                this.updateAriaLabel();
 
                 this.progressBar.reset();
                 this.$meterContainer.removeClass('record');
@@ -902,7 +912,7 @@ define([
                     record.on(
                         'updatestate',
                         function () {
-                            if (self.player.is('created') && !self.recorder.is('recording') && !self.getRecording()) {
+                            if (self.player.is('created') && !self.recorder.is('recording') && !self.getRecording() && !self.config.isDisabled) {
                                 this.enable();
                             } else {
                                 this.disable();
@@ -943,7 +953,7 @@ define([
                         'updatestate',
                         function () {
                             if (
-                                (self.player.is('playing') && !self._isAutoPlayingBack) ||
+                                (self.player.is('playing') && !self._isAutoPlayingBack && !self.config.isDisabled) ||
                                 self.recorder.is('recording')
                             ) {
                                 this.enable();
@@ -979,7 +989,8 @@ define([
                         function () {
                             if (
                                 (self.player.is('idle') || (self.getRecording() && !self._isAutoPlayingBack)) &&
-                                !(self.beepPlayer && self.beepPlayer.getIsPlayingEndSound())
+                                !(self.beepPlayer && self.beepPlayer.getIsPlayingEndSound()) &&
+                                !self.config.isDisabled
                             ) {
                                 this.enable();
                             } else {
@@ -1025,7 +1036,8 @@ define([
                                 this.disable();
                             } else if (
                                 self.player.is('idle') &&
-                                !(self.beepPlayer && self.beepPlayer.getIsPlayingEndSound())
+                                !(self.beepPlayer && self.beepPlayer.getIsPlayingEndSound()) &&
+                                !self.config.isDisabled
                             ) {
                                 this.enable();
                             } else {
@@ -1062,6 +1074,14 @@ define([
                     self.controls[id].destroy();
                 });
                 this.controls = null;
+            },
+
+            /**
+             * Update the aria-label of the interaction
+             */
+            updateAriaLabel: function updateAriaLabel() {
+                const label = this.getRecording() ? 'Audio recording interaction, with a recording' : 'Audio recording interaction, no recording';
+                this.$container.find('.audio-rec').attr('aria-label', label);
             }
         };
     };
