@@ -28,6 +28,7 @@ define([
     'text!audioRecordingInteraction/runtime/img/record.svg',
     'text!audioRecordingInteraction/runtime/img/reset.svg',
     'text!audioRecordingInteraction/runtime/img/stop.svg',
+    'text!audioRecordingInteraction/runtime/img/delete.svg',
     'css!audioRecordingInteraction/runtime/css/audioRecordingInteraction'
 ], function (
     qtiCustomInteractionContext,
@@ -40,7 +41,8 @@ define([
     playIcon,
     recordIcon,
     resetIcon,
-    stopIcon
+    stopIcon,
+    deleteIcon
 ) {
     'use strict';
 
@@ -833,7 +835,7 @@ define([
              */
             updateResetCount: function updateResetCount() {
                 var remaining = this.config.maxRecords - this._recordsAttempts - 1,
-                    resetLabel = resetIcon,
+                    resetLabel = deleteIcon,
                     canRecordAgain;
 
                 if (this.config.maxRecords > 1) {
@@ -1005,7 +1007,7 @@ define([
                 if (this.config.maxRecords !== 1 && this.config.isReviewMode !== true) {
                     reset = uiElements.controlFactory({
                         id: 'reset',
-                        label: resetIcon,
+                        label: deleteIcon,
                         container: this.$controlsContainer
                     });
                     reset.on(
