@@ -437,7 +437,7 @@ define([
                     this.isPlayingStartSound = false;
                 });
             },
-            playEndSound: function playEndSound() {
+            playEndSound: function playEndSound(durationMs) {
                 this.isPlayingEndSound = true;
                 return playSound()
                     .then(() => {
@@ -447,7 +447,7 @@ define([
                     })
                     .then(() => {
                         this.isPlayingEndSound = false;
-                        this.trigger('beep-endsound-played');
+                        this.trigger('beep-endsound-played', [durationMs]);
                     });
             },
             getIsPlayingEndSound: function getIsPlayingEndSound() {

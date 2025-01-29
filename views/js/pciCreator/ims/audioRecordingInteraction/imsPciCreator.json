@@ -4,10 +4,12 @@
     "label": "Audio recording",
     "short": "Audio",
     "description": "Allow test taker to record audio",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
-    "tags": ["audio"],
+    "tags": [
+        "audio"
+    ],
     "response": {
         "baseType": "file",
         "cardinality": "single"
@@ -19,7 +21,9 @@
                 "runtime/audioRecordingInteraction.min.js"
             ]
         },
-        "src": ["./runtime/audioRecordingInteraction.js"]
+        "src": [
+            "./runtime/audioRecordingInteraction.js"
+        ]
     },
     "creator": {
         "icon": "./creator/img/icon.svg",
@@ -32,6 +36,8 @@
             "./creator/widget/states/Question.js",
             "./creator/widget/states/states.js"
         ],
-        "stylesheets": ["./creator/css/audioRecordingInteraction.css"]
+        "stylesheets": [
+            "./creator/css/audioRecordingInteraction.css"
+        ]
     }
 }
