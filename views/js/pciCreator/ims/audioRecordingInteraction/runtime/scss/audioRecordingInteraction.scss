@@ -408,10 +408,6 @@ $modalShadowColor: #666666;
         &:hover {
             opacity: 0.6;
         }
-
-        .icon-close {
-            @include font-size(20);
-        }
     }
 
     // rewrite rules from _buttons.scss
@@ -420,10 +416,6 @@ $modalShadowColor: #666666;
         background-color: transparent;
         padding: 0;
         height: 20px;
-
-        .icon-close {
-            padding: 0;
-        }
     }
 
     .modal-close:focus {

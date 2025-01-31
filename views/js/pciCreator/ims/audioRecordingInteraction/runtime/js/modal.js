@@ -90,7 +90,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function ($) {
                     'aria-label="Close dialog" ' +
                     'data-control="close"' +
                     '>' +
-                        '<span class="icon-close"></span>' +
+                        '<svg width="12" height="12" viewbox="0 0 12 12"><path d="M1 0l5 5 5-5 1 1-5 5 5 5-1 1-5-5-5 5-1-1 5-5-5-5 1-1z"></path></svg>' +
                     '</button>'
                 ).appendTo($modal);
             }
