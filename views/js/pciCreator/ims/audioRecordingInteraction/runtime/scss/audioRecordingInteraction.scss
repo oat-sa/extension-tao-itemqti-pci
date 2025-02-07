@@ -43,9 +43,43 @@ $modalShadowColor: #666666;
 // =============
 // Interaction
 // =============
+:root {
+  --color-audioRecording-info: #{$info};
+  --color-audioRecording-info-bg: #{$infoBgColor};
+  --color-audioRecording-info-border: #{$infoBorderColor};
+  --color-audioRecording-modal-shadow: #{$modalShadowColor};
+
+  --color-audioRecording-action-link: #{$actionLinkColor};
+  --color-audioRecording-text: #{$textColor};
+}
 
 .qti-customInteraction {
   .audioRecordingInteraction {
+    // expose all used colours as css variables
+    --color-disabled-bg: #{$disabledBg};
+    --color-disabled-bg-lighter: #{whiten($disabledBg, .5)};
+    --color-disabled-bg-lightest: #{whiten($disabledBg, .75)};
+    --color-disabled-bg-darker: #{darken($disabledBg, .2)};
+    --color-disabled-txt: #{$disabledTxt};
+    --color-disabled-txt-shadow: #{$disabledTxtShadow};
+
+    --color-enabled-bg: #{$enabledBg};
+    --color-enabled-txt: #{$enabledTxt};
+    --color-enabled-txt-shadow: #{$enabledTxtShadow};
+
+    --color-active-bg: #{$activeBg};
+    --color-active-bg-lighter: #{whiten($activeBg, .9)};
+    --color-active-txt: #{$activeTxt};
+    --color-active-txt-shadow: #{$activeTxtShadow};
+
+    --color-record: #{$record};
+    --color-record-lighter: #{whiten($record, .9)};
+    --color-playback: #{$playback};
+    --color-playback-lighter: #{whiten($playback, .9)};
+    --color-countdown-bg: #{transparentize($disabledBg, .55)};
+
+    --color-info-border: #{$infoBorderColor};
+    --color-ui-general-content-bg: #{$uiGeneralContentBg};
 
     padding: 10px;
 
@@ -57,7 +91,7 @@ $modalShadowColor: #666666;
     // input meter
 
     .input-meter {
-      border: 2px solid whiten($disabledBg, .5);
+      border: 2px solid var(--color-disabled-bg-lighter);
       border-radius: 10px;
       width: 58px;
       padding: 10px;
@@ -78,11 +112,11 @@ $modalShadowColor: #666666;
       &.record {
         .mic {
           path {
-            fill: $activeBg
+            fill: var(--color-record);
           }
         }
-        border-color: $activeBg;
-        background-color: whiten($activeBg, 0.9);
+        border-color: var(--color-record);
+        background-color: var(--color-record-lighter);
       }
 
       .leds {
@@ -98,7 +132,7 @@ $modalShadowColor: #666666;
           margin-top: 10px;
         }
         path {
-          fill: $disabledBg
+          fill: var(--color-disabled-bg);
         }
       }
     }
@@ -128,21 +162,25 @@ $modalShadowColor: #666666;
         flex-direction: row-reverse;
       }
 
+      &:focus {
+        outline: 2px dotted var(--color-info-border);
+        outline-offset: 2px;
+      }
 
       &.disabled {
-        background-color: $disabledBg;
-        text-shadow: 1px 1px 0 $disabledTxtShadow !important;
+        background-color: var(--color-disabled-bg);
+        text-shadow: 1px 1px 0 var(--color-disabled-txt-shadow) !important;
         cursor: not-allowed !important;
         opacity: .55 !important;
-        color: $disabledTxt !important;
-        fill: $disabledTxt !important;
+        color: var(--color-disabled-txt) !important;
+        fill: var(--color-disabled-txt) !important;
       }
 
       &.enabled {
-        background-color: $enabledBg;
-        color: $enabledTxt;
-        fill: $enabledTxt;
-        text-shadow: 1px 1px 0 $enabledTxtShadow;
+        background-color: var(--color-enabled-bg);
+        color: var(--color-enabled-txt);
+        fill: var(--color-enabled-txt);
+        text-shadow: 1px 1px 0 var(--color-enabled-txt-shadow);
         cursor: pointer !important;
 
         &:hover {
@@ -152,10 +190,10 @@ $modalShadowColor: #666666;
 
       &:active,
       &.active {
-        background-color: $activeBg;
-        color: $activeTxt;
-        fill: $activeTxt;
-        text-shadow: 1px 1px 0 $activeTxtShadow;
+        background-color: var(--color-active-bg);
+        color: var(--color-active-txt);
+        fill: var(--color-active-txt);
+        text-shadow: 1px 1px 0 var(--color-active-txt-shadow);
         cursor: not-allowed !important;
       }
 
@@ -167,6 +205,7 @@ $modalShadowColor: #666666;
 
     .controls {
       display: flex;
+      flex-wrap: wrap;
 
       @include ltr {
         flex-direction: row;
@@ -179,7 +218,7 @@ $modalShadowColor: #666666;
 
     // Progress bar
 
-    @mixin progressBarColor($borderColor, $valueColor, $bgColor) {
+    @mixin progressBarColor($borderColor, $valueColor, $bgColor, $bgColorLighter) {
       border: $borderColor 2px solid;
 
       // progress value color
@@ -193,7 +232,7 @@ $modalShadowColor: #666666;
       // background color
       color: $bgColor; // FF
       &::-webkit-progress-bar {
-        background-color: whiten($bgColor, .5); // Chrome
+        background-color: $bgColorLighter; // Chrome
       }
     }
 
@@ -204,7 +243,6 @@ $modalShadowColor: #666666;
       width: 75%;
       height: 10px;
       border-radius: 5px;
-
       @include ltr {
         transform: scaleX(1);
       }
@@ -213,19 +251,34 @@ $modalShadowColor: #666666;
         transform: scaleX(-1);
       }
 
-      @include progressBarColor(darken($disabledBg, .2), $disabledBg, $disabledBg);
+      @include progressBarColor(
+        var(--color-disabled-bg-darker),
+        var(--color-disabled-bg),
+        var(--color-disabled-bg-lighter),
+        var(--color-disabled-bg-lightest)
+      );
 
       &.record {
-        @include progressBarColor($record, $record, whiten($record, 0.9));
+        @include progressBarColor(
+          var(--color-record),
+          var(--color-record),
+          var(--color-record-lighter),
+          var(--color-record-lighter)
+        );
       }
 
       &.playback {
-        @include progressBarColor($playback, $playback, whiten($playback, 0.9));
+        @include progressBarColor(
+          var(--color-playback),
+          var(--color-playback),
+          var(--color-playback-lighter),
+          var(--color-playback-lighter)
+        );
       }
     }
 
     // Countdown timer as a pie chart
-    $sizeCountdown: 52px;
+    --size-countdown: 52px;
 
     .countdown-pie-chart {
       position: absolute;
@@ -239,18 +292,18 @@ $modalShadowColor: #666666;
         width: 100%;
         height: 100%;
         border-radius: 10px;
-        background-color: transparentize($disabledBg, 0.55);
+        background-color: var(--color-countdown-bg);
         @include animation(disable);
-        animation: disable 15s steps(1,end) 1 forwards paused;
+        animation: disable 15s steps(1, end) 1 forwards paused;
 
         .countdown-pie-circle {
-          width: $sizeCountdown;
-          height: $sizeCountdown;
+          width: var(--size-countdown);
+          height: var(--size-countdown);
           position: relative;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          background: $enabledBg;
+          background: var(--color-enabled-bg);
           border-radius: 50%;
 
           .countdown-pie {
@@ -258,7 +311,7 @@ $modalShadowColor: #666666;
             height: 100%;
             transform-origin: 100% 50%;
             position: absolute;
-            background: $uiGeneralContentBg;
+            background: var(--color-ui-general-content-bg);
           }
 
           .countdown-pie-spinner {
@@ -290,8 +343,8 @@ $modalShadowColor: #666666;
             background: inherit;
             opacity: 1;
             z-index: 300;
-            border-bottom-left-radius: $sizeCountdown * 2;
-            border-top-left-radius: $sizeCountdown * 2;
+            border-bottom-left-radius: calc(var(--size-countdown) * 2);
+            border-top-left-radius: calc(var(--size-countdown) * 2);
             border-right: 0;
             animation: opa 15s steps(1,end) 1 forwards paused;
           }
@@ -318,9 +371,9 @@ $modalShadowColor: #666666;
 
 /* Modal styles */
 .modal {
-    background-color: $infoBgColor;
-    border: 1px solid $infoBorderColor;
-    box-shadow: 3px 3px 5px $modalShadowColor;
+    background-color: var(--color-audioRecording-info-bg);
+    border: 1px solid var(--color-audioRecording-info-border);
+    box-shadow: 3px 3px 5px var(--color-audioRecording-modal-shadow);
     height: auto;
     opacity: 0;
     top: -100%;
@@ -345,7 +398,7 @@ $modalShadowColor: #666666;
         top: 10px;
         cursor: pointer;
         font-weight: bold;
-        color: $textColor;
+        color: var(--color-audioRecording-text);
 
         [dir="rtl"] & {
             right: auto;
@@ -355,26 +408,18 @@ $modalShadowColor: #666666;
         &:hover {
             opacity: 0.6;
         }
-
-        .icon-close {
-            @include font-size(20);
-        }
     }
 
     // rewrite rules from _buttons.scss
     button.modal-close {
-        color: $textColor !important;
+        color: var(--color-audioRecording-text) !important;
         background-color: transparent;
         padding: 0;
         height: 20px;
-
-        .icon-close {
-            padding: 0;
-        }
     }
 
     .modal-close:focus {
-        outline: 3px solid $actionLinkColor;
+        outline: 3px solid var(--color-audioRecording-action-link);
         outline-offset: 3px;
     }
 
@@ -395,13 +440,13 @@ $modalShadowColor: #666666;
     &[class*=" icon-"] {
         &:before {
             @include font-size(30);
-            color: $info;
+            color: var(--color-audioRecording-info);
             position: absolute;
         }
 
         &.info {
             &:before {
-                color: $info;
+                color: var(--color-audioRecording-info);
             }
         }
 
@@ -416,8 +461,6 @@ $modalShadowColor: #666666;
 .modal-bg {
     background: none repeat scroll 0 0 black();
     opacity: 0.45;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=45)";
-    filter: alpha(opacity=45);
     display: none;
     position: fixed;
     height: 100%;

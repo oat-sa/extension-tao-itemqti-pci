@@ -80,6 +80,7 @@ define([
                     var interaction = this._item.getInteractions()[0];
                     var config = {
                         isReviewMode: false,
+                        isDisabled: false,
                         allowPlayback: true,
                         autoStart: false,
                         autoPlayback: false,
@@ -563,6 +564,7 @@ define([
                     var interaction = this._item.getInteractions()[0];
                     var config = {
                         isReviewMode: false,
+                        isDisabled: false,
                         allowPlayback: false,
                         autoStart: true,
                         autoPlayback: false,
