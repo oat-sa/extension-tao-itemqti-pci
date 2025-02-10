@@ -894,6 +894,7 @@ define([
                     reset;
 
                 this.$controlsContainer.empty();
+                this.$controlsContainer.attr('role', 'group');
                 this.controls = {};
 
                 // Record button
@@ -1087,7 +1088,7 @@ define([
              */
             updateAriaLabel: function updateAriaLabel() {
                 const label = this.getRecording() ? 'Audio recording interaction, with a recording' : 'Audio recording interaction, no recording';
-                this.$container.find('.audio-rec').attr('aria-label', label);
+                this.$container.find('.audio-rec').attr('role', 'region').attr('aria-label', label);
             }
         };
     };
