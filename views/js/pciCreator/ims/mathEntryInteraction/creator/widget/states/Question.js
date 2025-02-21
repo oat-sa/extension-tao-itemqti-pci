@@ -13,11 +13,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2016-2022 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2016-2025 (original work) Open Assessment Technologies SA;
  */
 
 define([
     'jquery',
+    'lodash',
     'i18n',
     'taoQtiItem/qtiCreator/widgets/states/factory',
     'taoQtiItem/qtiCreator/widgets/interactions/states/Question',
@@ -27,10 +28,65 @@ define([
     'tpl!mathEntryInteraction/creator/tpl/propertiesForm',
     'tpl!mathEntryInteraction/creator/tpl/addGapBtn',
     'mathEntryInteraction/runtime/helper/mathInPrompt'
-], function($, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, mathInPrompt){
+], function($, _, __, stateFactory, Question, formElement, simpleEditor, containerEditor, formTpl, addGapBtnTpl, mathInPrompt){
     'use strict';
 
     var $addGapBtn = $(addGapBtnTpl());
+
+    // initial list of tools checkboxes with the properties they depend on
+    const tools = {
+        tool_frac:       { props: [{ name: 'tool_frac', defaultValue: true }]},
+        tool_sqrt:       { props: [{ name: 'tool_sqrt', defaultValue: true }]},
+        tool_exp:        { props: [{ name: 'tool_exp', defaultValue: true }]},
+        tool_log:        { props: [{ name: 'tool_log', defaultValue: true }]},
+        tool_ln:         { props: [{ name: 'tool_ln', defaultValue: true }]},
+        tool_limit:      { props: [{ name: 'tool_limit', defaultValue: true }]},
+        tool_sum:        { props: [{ name: 'tool_sum', defaultValue: true }]},
+        tool_nthroot:    { props: [{ name: 'tool_nthroot', defaultValue: true }]},
+        tool_e:          { props: [{ name: 'tool_e', defaultValue: true }]},
+        tool_infinity:   { props: [{ name: 'tool_infinity', defaultValue: true }]},
+        squarebkts:      { props: [{ name: 'tool_rbrack', defaultValue: true }, { name: 'tool_lbrack', defaultValue: true }]},
+        tool_pi:         { props: [{ name: 'tool_pi', defaultValue: true }]},
+        tool_cos:        { props: [{ name: 'tool_cos', defaultValue: true }]},
+        tool_sin:        { props: [{ name: 'tool_sin', defaultValue: true }]},
+        tool_tan:        { props: [{ name: 'tool_tan', defaultValue: true }]},
+        tool_lte:        { props: [{ name: 'tool_lte', defaultValue: true }]},
+        tool_gte:        { props: [{ name: 'tool_gte', defaultValue: true }]},
+        tool_times:      { props: [{ name: 'tool_times', defaultValue: true }]},
+        tool_divide:     { props: [{ name: 'tool_divide', defaultValue: true }]},
+        tool_plusminus:  { props: [{ name: 'tool_plusminus', defaultValue: true }]},
+        roundbkts:       { props: [{ name: 'tool_rparen', defaultValue: true }, { name: 'tool_lparen', defaultValue: true }]},
+        curlybkts:       { props: [{ name: 'tool_rbrace', defaultValue: true }, { name: 'tool_lbrace', defaultValue: true }]},
+        tool_angle:      { props: [{ name: 'tool_angle', defaultValue: true }]},
+        tool_minus:      { props: [{ name: 'tool_minus', defaultValue: true }]},
+        tool_plus:       { props: [{ name: 'tool_plus', defaultValue: true }]},
+        tool_equal:      { props: [{ name: 'tool_equal', defaultValue: true }]},
+        tool_lower:      { props: [{ name: 'tool_lower', defaultValue: true }]},
+        tool_greater:    { props: [{ name: 'tool_greater', defaultValue: true }]},
+        tool_subscript:  { props: [{ name: 'tool_subscript', defaultValue: true }]},
+        tool_integral:   { props: [{ name: 'tool_integral', defaultValue: true }]},
+        tool_timesdot:   { props: [{ name: 'tool_timesdot', defaultValue: true }]},
+        tool_triangle:   { props: [{ name: 'tool_triangle', defaultValue: true }]},
+        tool_similar:    { props: [{ name: 'tool_similar', defaultValue: true }]},
+        tool_paral:      { props: [{ name: 'tool_paral', defaultValue: true }]},
+        tool_perp:       { props: [{ name: 'tool_perp', defaultValue: true }]},
+        tool_inmem:      { props: [{ name: 'tool_inmem', defaultValue: true }]},
+        tool_ninmem:     { props: [{ name: 'tool_ninmem', defaultValue: true }]},
+        tool_union:      { props: [{ name: 'tool_union', defaultValue: true }]},
+        tool_intersec:   { props: [{ name: 'tool_intersec', defaultValue: true }]},
+        tool_colon:      { props: [{ name: 'tool_colon', defaultValue: true }]},
+        tool_to:         { props: [{ name: 'tool_to', defaultValue: true }]},
+        tool_congruent:  { props: [{ name: 'tool_congruent', defaultValue: true }]},
+        tool_subset:     { props: [{ name: 'tool_subset', defaultValue: true }]},
+        tool_superset:   { props: [{ name: 'tool_superset', defaultValue: true }]},
+        tool_contains:   { props: [{ name: 'tool_contains', defaultValue: true }]},
+        tool_approx:     { props: [{ name: 'tool_approx', defaultValue: true }]},
+        tool_vline:      { props: [{ name: 'tool_vline', defaultValue: true }]},
+        tool_degree:     { props: [{ name: 'tool_degree', defaultValue: true }]},
+        tool_percent:    { props: [{ name: 'tool_percent', defaultValue: true }]},
+        tool_matrix_2row:        { props: [{ name: 'tool_matrix_2row', defaultValue: true }]},
+        tool_matrix_2row_2col:   { props: [{ name: 'tool_matrix_2row_2col', defaultValue: true }]},
+    };
 
     var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
         var $container = this.widget.$container,
@@ -86,6 +142,134 @@ define([
         interaction.triggerPci('configChange', [interaction.getProperties()]);
     }
 
+    /**
+     * Toggle all provided checkboxes
+     * @param {Object} interaction - the current interaction
+     * @param {Object} $checkboxes - checkboxes to toggle
+     * @param {Boolean} value - new value of the checkboxes
+     */
+    function toggleCheckBoxes(interaction, $checkboxes, value) {
+        $checkboxes.prop({ checked: value, indeterminate: false });
+    
+        $checkboxes.each(function() {
+            const propName = $(this).attr('name');
+            if (tools[propName]) {
+                tools[propName].props.forEach(prop => {
+                    interaction.prop(prop.name, value);
+                });
+            }
+        });
+    }
+    
+    /**
+     * Callback for toggle_all checkbox change
+     * @param {Object} interaction - the current interaction
+     * @param {Boolean} value - new value of the checkbox
+     */
+    function toggleAllChangeCallBack(interaction, value) {
+        const $checkboxes = $(this).closest('.tools').find('[type="checkbox"]');
+    
+        toggleCheckBoxes(interaction, $checkboxes, value);
+        interaction.triggerPci('configChange', [interaction.getProperties()]);
+    }
+
+    /**
+     * Callback for group checkbox change
+     * @param {Object} interaction - the current interaction
+     * @param {Boolean} value - new value of the checkbox
+     */
+    function groupChangeCallBack(interaction, value) {
+        const $this = $(this);
+        const $checkboxes = $this.closest('.group').find('[type="checkbox"]');
+        toggleCheckBoxes(interaction, $checkboxes, value);
+        // align the state of the toggle_all checkbox
+        const $allTools = $this.closest('.tools');
+        updateParentCheckboxState($allTools, '[name="toggle_all"]');
+        interaction.triggerPci('configChange', [interaction.getProperties()]);
+    }
+
+    /**
+     * Get initial values for the tools checkboxes
+     * @param {Object} interaction - the current interaction
+     * @returns {Object} - initial values for the tools checkboxes
+     */
+    function getToolsInitValues(interaction) {
+        return Object.keys(tools).reduce((acc, tool) => {
+            acc[tool] = tools[tool].props.every(prop => toBoolean(interaction.prop(prop.name), prop.defaultValue));
+            return acc;
+        }, {});
+    };
+
+    /**
+     * Update the state of the parent checkbox depending on the state of the child checkboxes
+     * @param {Object} $container - the container of the checkboxes
+     * @param {String} parentSelector - selector of the parent checkbox
+     */
+    function updateParentCheckboxState($container, parentSelector) {
+        const $parentCheckbox = $container.find(parentSelector);
+        const $childCheckboxes = $container.find('[type="checkbox"]').not(parentSelector);
+    
+        const checkedCount = $childCheckboxes.filter(':checked').length;
+        const allUnchecked = checkedCount === 0;
+        const allChecked = checkedCount === $childCheckboxes.length;
+    
+        if ($parentCheckbox.length) {
+            $parentCheckbox[0].checked = allChecked;
+            $parentCheckbox[0].indeterminate = !allUnchecked && !allChecked;
+        }
+    }
+
+    /**
+     * Callback for tool checkbox change
+     * @param {Object} interaction - the current interaction
+     * @param {Boolean} value - new value of the checkbox
+     * @param {String} name - name of the checkbox
+     */
+    function toolChangeCallBack(interaction, value, name) {
+        if (tools[name]) {
+            tools[name].props.forEach(prop => interaction.prop(prop.name, value));
+        }
+    
+        const $this = $(this);
+        const $group = $this.closest('.group');
+        const $allTools = $this.closest('.tools');
+        // align the state of the group checkbox
+        updateParentCheckboxState($group, '[name="group"]');
+        // align the state of the toggle_all checkbox
+        updateParentCheckboxState($allTools, '[name="toggle_all"]');
+    
+        interaction.triggerPci('configChange', [interaction.getProperties()]);
+    }
+    
+    /**
+     * Set the state of the group checkboxes depending on the state of the child checkboxes
+     * @param {Object} $form - the form
+     */
+    function setGroupCheckboxStates($form) {
+        $form.find('.group').each(function() {
+            updateParentCheckboxState($(this), '[name="group"]');
+        });
+    }
+    
+    /**
+     * Set the state of the toggle_all checkbox depending on the state of the child checkboxes
+     * @param {Object} $form - the form
+     */
+    function setToggleAllCheckboxState($form) {
+        updateParentCheckboxState($form.find('.tools'), '[name="toggle_all"]');
+    }
+
+    /**
+     * Get the change callbacks for the tools checkboxes
+     * @returns {Object} - callbacks for the tools checkboxes
+     */
+    function getToolsCallBacks() {
+        return Object.keys(tools).reduce((acc, tool) => {
+            acc[tool] = toolChangeCallBack;
+            return acc;
+        }, {});
+    };
+
     MathEntryInteractionStateQuestion.prototype.initForm = function initForm(){
 
         var self = this,
@@ -97,7 +281,7 @@ define([
             $gapStyleSelector;
 
         //render the form using the form template
-        $form.html(formTpl({
+        $form.html(formTpl(_.assign({
             serial : response.serial,
             identifier : interaction.attr('responseIdentifier'),
 
@@ -105,66 +289,15 @@ define([
             useGapExpression: toBoolean(interaction.prop('useGapExpression'), false),
             focusOnDenominator: toBoolean(interaction.prop('focusOnDenominator'), false),
 
-            tool_frac:      toBoolean(interaction.prop('tool_frac'),    true),
-            tool_sqrt:      toBoolean(interaction.prop('tool_sqrt'),    true),
-            tool_exp:       toBoolean(interaction.prop('tool_exp'),     true),
-            tool_log:       toBoolean(interaction.prop('tool_log'),     true),
-            tool_ln:        toBoolean(interaction.prop('tool_ln'),      true),
-            tool_limit:     toBoolean(interaction.prop('tool_limit'),   true),
-            tool_sum:       toBoolean(interaction.prop('tool_sum'),     true),
-            tool_nthroot:   toBoolean(interaction.prop('tool_nthroot'), true),
-            tool_e:         toBoolean(interaction.prop('tool_e'),       true),
-            tool_infinity:  toBoolean(interaction.prop('tool_infinity'),true),
-            squarebkts:     toBoolean(interaction.prop('tool_rbrack'),  true) && toBoolean(interaction.prop('tool_lbrack'), true),
-            tool_pi:        toBoolean(interaction.prop('tool_pi'),      true),
-            tool_cos:       toBoolean(interaction.prop('tool_cos'),     true),
-            tool_sin:       toBoolean(interaction.prop('tool_sin'),     true),
-            tool_tan:       toBoolean(interaction.prop('tan'),          true),
-            tool_lte:       toBoolean(interaction.prop('tool_lte'),     true),
-            tool_gte:       toBoolean(interaction.prop('tool_gte'),     true),
-            tool_times:     toBoolean(interaction.prop('tool_times'),   true),
-            tool_divide:    toBoolean(interaction.prop('tool_divide'),  true),
-            tool_plusminus: toBoolean(interaction.prop('tool_plusminus'),true),
-            roundbkts:      toBoolean(interaction.prop('tool_rparen'),  true) && toBoolean(interaction.prop('tool_lparen'), true),
-            curlybkts:      toBoolean(interaction.prop('tool_rbrace'),  true) && toBoolean(interaction.prop('tool_lbrace'), true),
-            tool_angle:     toBoolean(interaction.prop('tool_angle'),   true),
-            tool_minus:     toBoolean(interaction.prop('tool_minus'),   true),
-            tool_plus:      toBoolean(interaction.prop('tool_plus'),    true),
-            tool_equal:     toBoolean(interaction.prop('tool_equal'),   true),
-            tool_lower:     toBoolean(interaction.prop('tool_lower'),   true),
-            tool_greater:   toBoolean(interaction.prop('tool_greater'), true),
-            tool_subscript: toBoolean(interaction.prop('tool_subscript'),true),
-            tool_integral:  toBoolean(interaction.prop('tool_integral'),true),
-            tool_timesdot:  toBoolean(interaction.prop('tool_timesdot'),true),
-            tool_triangle:  toBoolean(interaction.prop('tool_triangle'),true),
-            tool_similar:   toBoolean(interaction.prop('tool_similar'), true),
-            tool_paral:     toBoolean(interaction.prop('tool_paral'),   true),
-            tool_perp:      toBoolean(interaction.prop('tool_perp'),    true),
-            tool_inmem:     toBoolean(interaction.prop('tool_inmem'),   true),
-            tool_ninmem:    toBoolean(interaction.prop('tool_ninmem'),  true),
-            tool_union:     toBoolean(interaction.prop('tool_union'),   true),
-            tool_intersec:  toBoolean(interaction.prop('tool_intersec'),true),
-            tool_colon:     toBoolean(interaction.prop('tool_colon'),   true),
-            tool_to:        toBoolean(interaction.prop('tool_to'),      true),
-            tool_congruent: toBoolean(interaction.prop('tool_congruent'),   true),
-            tool_subset: toBoolean(interaction.prop('tool_subset'),     true),
-            tool_superset: toBoolean(interaction.prop('tool_superset'), true),
-            tool_contains: toBoolean(interaction.prop('tool_contains'), true),
-            tool_approx:    toBoolean(interaction.prop('tool_approx'),  true),
-            tool_vline:     toBoolean(interaction.prop('tool_vline'),   true),
-            tool_degree:    toBoolean(interaction.prop('tool_degree'),  true),
-            tool_percent:    toBoolean(interaction.prop('tool_percent'),  true),
-            tool_matrix_2row:   toBoolean(interaction.prop('tool_matrix_2row'),        true),
-            tool_matrix_2row_2col:   toBoolean(interaction.prop('tool_matrix_2row_2col'),        true),
             allowNewLine:   toBoolean(interaction.prop('allowNewLine'), false),
             enableAutoWrap: toBoolean(interaction.prop('enableAutoWrap'), false)
-        }));
+        }, getToolsInitValues(interaction))));
 
         //init form javascript
         formElement.initWidget($form);
 
         //init data change callbacks
-        formElement.setChangeCallbacks($form, interaction, {
+        formElement.setChangeCallbacks($form, interaction, _.assign({
             identifier: function(i, value){
                 response.id(value);
                 interaction.attr('responseIdentifier', value);
@@ -193,74 +326,12 @@ define([
             authorizeWhiteSpace: configChangeCallBack,
             focusOnDenominator: configChangeCallBack,
 
-            tool_frac:      configChangeCallBack,
-            tool_sqrt:      configChangeCallBack,
-            tool_exp:       configChangeCallBack,
-            tool_log:       configChangeCallBack,
-            tool_ln:        configChangeCallBack,
-            tool_limit:     configChangeCallBack,
-            tool_sum:       configChangeCallBack,
-            tool_nthroot:   configChangeCallBack,
-            tool_e:         configChangeCallBack,
-            tool_infinity:  configChangeCallBack,
-            tool_pi:        configChangeCallBack,
-            tool_cos:       configChangeCallBack,
-            tool_sin:       configChangeCallBack,
-            tool_tan:       configChangeCallBack,
-            tool_lte:       configChangeCallBack,
-            tool_gte:       configChangeCallBack,
-            tool_times:     configChangeCallBack,
-            tool_divide:    configChangeCallBack,
-            tool_plusminus: configChangeCallBack,
-            tool_angle:     configChangeCallBack,
-            tool_minus:     configChangeCallBack,
-            tool_plus:      configChangeCallBack,
-            tool_equal:     configChangeCallBack,
-            tool_lower:     configChangeCallBack,
-            tool_greater:   configChangeCallBack,
-            tool_subscript: configChangeCallBack,
-            tool_integral:  configChangeCallBack,
-            tool_timesdot:  configChangeCallBack,
-            tool_triangle:  configChangeCallBack,
-            tool_similar:   configChangeCallBack,
-            tool_paral:     configChangeCallBack,
-            tool_perp:      configChangeCallBack,
-            tool_inmem:     configChangeCallBack,
-            tool_ninmem:    configChangeCallBack,
-            tool_union:     configChangeCallBack,
-            tool_intersec:  configChangeCallBack,
-            tool_colon:     configChangeCallBack,
-            tool_to:     configChangeCallBack,
-            tool_congruent: configChangeCallBack,
-            tool_subset:    configChangeCallBack,
-            tool_superset:    configChangeCallBack,
-            tool_contains:    configChangeCallBack,
-            tool_approx:    configChangeCallBack,
-            tool_vline:     configChangeCallBack,
-            tool_degree:    configChangeCallBack,
-            tool_percent:    configChangeCallBack,
-            tool_matrix_2row:    configChangeCallBack,
-            tool_matrix_2row_2col:    configChangeCallBack,
+            toggle_all:     toggleAllChangeCallBack,
+            group:          groupChangeCallBack,
 
-            squarebkts: function squarebktsChangeCallBack(i, value) {
-                i.prop('tool_lbrack', value);
-                i.prop('tool_rbrack', value);
-                i.triggerPci('configChange', [i.getProperties()]);
-            },
-            roundbkts: function roundbktsChangeCallBack(i, value) {
-                i.prop('tool_lparen', value);
-                i.prop('tool_rparen', value);
-                i.triggerPci('configChange', [i.getProperties()]);
-            },
-            curlybkts: function curlybktsChangeCallBack(i, value) {
-                i.prop('tool_lbrace', value);
-                i.prop('tool_rbrace', value);
-                i.triggerPci('configChange', [i.getProperties()]);
-            },
-
-            allowNewLine: configChangeCallBack,
+            allowNewLine:   configChangeCallBack,
             enableAutoWrap: configChangeCallBack
-        });
+        }, getToolsCallBacks()));
 
 
         $gapStyleBox = $form.find('.mathgap-style-box');
@@ -272,6 +343,9 @@ define([
         })
         .val(interaction.prop('gapStyle'))
         .trigger('change');
+        // set initial state of the toggle_all and group checkboxes
+        setGroupCheckboxStates($form);
+        setToggleAllCheckboxState($form);
     };
 
     /**
