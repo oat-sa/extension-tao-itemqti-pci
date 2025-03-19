@@ -14,7 +14,7 @@ use oat\qtiItemPci\scripts\install\RegisterPciMathEntry;
  *
  * phpcs:disable Squiz.Classes.ValidClassName
  */
-final class Version202502210933441465_qtiItemPci extends AbstractMigration
+final class Version202503131356361465_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
