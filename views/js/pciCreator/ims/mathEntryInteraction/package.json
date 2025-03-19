@@ -1,7 +1,7 @@
 {
     "name": "mathentryinteraction",
     "private": true,
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Manage the dependencies of mathEntryInteraction",
     "scripts": {
         "build": "rollup --config"
