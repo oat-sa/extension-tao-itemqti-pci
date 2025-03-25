@@ -1,5 +1,5 @@
 /**
- * MathQuill v0.10.1, by Han, Jeanine, and Mary
+ * MathQuill v0.10.2, by Han, Jeanine, and Mary
  * http://mathquill.com | maintainers@mathquill.com
  *
  * This Source Code Form is subject to the terms of the
@@ -1468,6 +1468,7 @@ var saneKeyboardEvents = (function() {
 
     144: 'NumLock'
   };
+  var SPECIAL_KEYS = Object.keys(KEY_VALUES).map(function (key) { return KEY_VALUES[key]; });
 
   // To the extent possible, create a normalized string representation
   // of the key combo (i.e., key code and modifier keys).
@@ -1476,6 +1477,10 @@ var saneKeyboardEvents = (function() {
     var keyVal = KEY_VALUES[which];
     var key;
     var modifiers = [];
+    var originalEventKey = evt.originalEvent && evt.originalEvent.key;
+    if (!keyVal && SPECIAL_KEYS.indexOf(originalEventKey) !== -1) {
+        keyVal = originalEventKey;
+    }
 
     if (evt.ctrlKey) modifiers.push('Ctrl');
     if (evt.originalEvent && evt.originalEvent.metaKey) modifiers.push('Meta');
@@ -1492,7 +1497,15 @@ var saneKeyboardEvents = (function() {
   function isVisibleKey(evt) {
     var which = evt.which || evt.keyCode;
     var keyVal = KEY_VALUES[which];
-    return !(evt.ctrlKey || evt.originalEvent && evt.originalEvent.metaKey || evt.altKey || evt.shiftKey || keyVal);
+    var originalEventKey = evt.originalEvent && evt.originalEvent.key;
+    if (!keyVal && SPECIAL_KEYS.indexOf(originalEventKey) !== -1) {
+        keyVal = originalEventKey;
+    }
+    return !(evt.ctrlKey ||
+        (evt.originalEvent && evt.originalEvent.metaKey) ||
+        evt.altKey ||
+        evt.shiftKey ||
+        keyVal);
   }
   function isIpadOS() {
     return navigator.maxTouchPoints &&
