@@ -8,9 +8,9 @@ on:
 
 jobs:
   pr-check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - run: git fetch --unshallow --tags
     - name: Check commit
       if: always()
