@@ -200,8 +200,8 @@ define([
                 silentAudio.volume = 0.0;
                 
                 var playSilentAudio = function () {
-                    silentAudio.play().catch(function () {
-                        console.warn('Silent audio autoplay failed.');
+                    silentAudio.play().catch(function (e) {
+                        console.warn('Silent audio autoplay failed.', e.message);
                     });
                 };
                 // Event listeners to the container to trigger the silent audio playback
