@@ -13,7 +13,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2025 (original work) Open Assessment Technologies SA;
  */
 define([
     'qtiCustomInteractionContext',
@@ -187,11 +187,33 @@ define([
             var self = this;
 
             this.recorder = recorderFactory(this.config, this.assetManager);
+            this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
             this.recorder.on('cancel', function () {
                 self.progressBar.reset();
                 self.$meterContainer.removeClass('record');
             });
+            this._setupAutoplayPermission = function () {
+                // Silent audio element setup to request autoplay permission
+                var silentAudio = document.createElement('audio');
+                silentAudio.src = 'data:audio/wav;base64,UklGRgAAAABXQVZFZm10IBAAAAABAAEAQB8AAIAfAAACABAAZGF0YQAAAAA=';
+                silentAudio.volume = 0.0;
+                
+                var playSilentAudio = function () {
+                    silentAudio.play().catch(function () {
+                        console.warn('Silent audio autoplay failed.');
+                    });
+                };
+                // Event listeners to the container to trigger the silent audio playback
+                this.$container.on('click', playSilentAudio);
+                this.$container.on('touchend', playSilentAudio);
+            };
+            if (this.isSafari) {
+                // Safari requires user interaction to enable autoplay
+                // https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/
+                // https://webkit.org/blog/6784/new-video-policies-for-ios/
+                this._setupAutoplayPermission();
+            }
 
             this.recorder.on('recordingavailable', function (blob, durationMs) {
                 var recordingUrl = window.URL && window.URL.createObjectURL && window.URL.createObjectURL(blob),
@@ -492,14 +514,16 @@ define([
             }
 
             function startForReal() {
-                self.resetRecording();
-                self.recorder.start();
-                if (self.config.maxRecordingTime) {
-                    self.$meterContainer.addClass('record');
-                    self.progressBar.setStyle('record');
-                    self.progressBar.setMax(self.config.maxRecordingTime);
-                }
-                self.updateControls();
+                setTimeout(function () {
+                    self.resetRecording();
+                    self.recorder.start();
+                    if (self.config.maxRecordingTime) {
+                        self.$meterContainer.addClass('record');
+                        self.progressBar.setStyle('record');
+                        self.progressBar.setMax(self.config.maxRecordingTime);
+                    }
+                    self.updateControls();
+                }, self.isSafari ? 200 : 0); // Safari needs a minimal timeout to start the recording
             }
         },
 
