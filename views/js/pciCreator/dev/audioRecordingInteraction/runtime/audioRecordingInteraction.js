@@ -241,9 +241,12 @@ define([
                         self.player.unload();
                         if (self.config.autoPlayback) {
                             self.player.on('oncanplay', function () {
+                                var onError = function () {
+                                    self._isAutoPlayingBack = false;
+                                }
                                 self.player.off('oncanplay');
                                 self._isAutoPlayingBack = true;
-                                self.playRecording();
+                                self.playRecording(onError);
                             });
                         }
                         self.player.loadFromBase64(recording.data, recording.mime);
@@ -562,8 +565,8 @@ define([
         /**
          * Start the playback of the recording
          */
-        playRecording: function playRecording() {
-            this.player.play();
+        playRecording: function playRecording(onError) {
+            this.player.play(onError);
             this.progressBar.setStyle('playback');
             this.updateControls();
         },
