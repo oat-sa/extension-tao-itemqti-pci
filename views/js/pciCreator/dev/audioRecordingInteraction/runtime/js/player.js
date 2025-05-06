@@ -200,7 +200,7 @@ define([
              */
             play: function play(onError) {
                 audioEl.play().catch((e) => {
-                    errorDialog(__('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.'));
+                    errorDialog(__('Your browser blocked auto-play. Press Play to listen to your recording.'));
                     if (onError) {
                         onError(e);
                     }
