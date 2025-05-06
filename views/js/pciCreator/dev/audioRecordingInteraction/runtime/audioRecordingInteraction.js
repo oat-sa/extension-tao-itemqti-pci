@@ -194,19 +194,26 @@ define([
                 self.$meterContainer.removeClass('record');
             });
             this._setupAutoplayPermission = function () {
+                this._bindAutoplayEvents = function() {
+                    this.$container.on('click.autoplay', playSilentAudio);
+                    this.$container.on('touchend.autoplay', playSilentAudio);
+                };
+ 
+                this._unbindAutoplayEvents = function() {
+                    this.$container.off('.autoplay');
+                };
                 // Silent audio element setup to request autoplay permission
                 var silentAudio = document.createElement('audio');
                 silentAudio.src = 'data:audio/wav;base64,UklGRgAAAABXQVZFZm10IBAAAAABAAEAQB8AAIAfAAACABAAZGF0YQAAAAA=';
                 silentAudio.volume = 0.0;
                 
                 var playSilentAudio = function () {
-                    silentAudio.play().catch(function (e) {
-                        console.warn('Silent audio autoplay failed.', e.message);
-                    });
+                    silentAudio.play().then(() => {
+                        this._unbindAutoplayEvents();
+                    }).catch(function () {});
                 };
-                // Event listeners to the container to trigger the silent audio playback
-                this.$container.on('click', playSilentAudio);
-                this.$container.on('touchend', playSilentAudio);
+                // Event listeners to the container to trigger the silent audio playback 
+                this._bindAutoplayEvents();  
             };
             if (this.isSafari) {
                 // Safari requires user interaction to enable autoplay
