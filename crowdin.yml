@@ -1,3 +1,9 @@
 files:
   - source: /locales/en-US/*.po
     translation: /locales/%locale%/%original_file_name%
+
+"pull_request_title": "Update translations from Crowdin"
+"pull_request_description": "This pull request updates translations from Crowdin"
+"pull_request_labels": ["l10n", "translations"]
+
+"commit_message": "chore: sync latest translations from Crowdin"
