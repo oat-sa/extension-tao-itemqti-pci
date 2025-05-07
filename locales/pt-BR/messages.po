@@ -44,6 +44,9 @@ msgstr "ângulo"
 msgid "Audio bitrate:"
 msgstr "Taxa de bits do áudio:"
 
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr ""
+
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
 msgstr "Áudio já foi gravado anteriormente. Seu navegador não suporta a reprodução desta gravação. Por favor, tente em um navegador diferente."
 
