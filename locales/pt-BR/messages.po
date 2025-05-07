@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 09:18\n"
+"PO-Revision-Date: 2025-05-07 14:02\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: pt\n"
@@ -144,7 +144,7 @@ msgid "greater than or equal"
 msgstr "maior ou igual a"
 
 msgid "id : "
-msgstr ""
+msgstr "id : "
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
 msgstr "Em bps (bits por segundo). Defina a troca entre a qualidade de áudio e o tamanho dos arquivos. Com o valor padrão (20.000bps), uma gravação de dois minutos pesa cerca de 300KB."
@@ -204,13 +204,13 @@ msgid "Medium"
 msgstr "Médio"
 
 msgid "Min:"
-msgstr ""
+msgstr "Min:"
 
 msgid "minus"
 msgstr "menos"
 
 msgid "Mono"
-msgstr ""
+msgstr "Mono"
 
 msgid "No Custom Interaction"
 msgstr "Nenhuma Interação Personalizada"
@@ -266,7 +266,7 @@ msgid "Settings"
 msgstr "Configurações"
 
 msgid "similar"
-msgstr ""
+msgstr "similar"
 
 msgid "sinus"
 msgstr "seno"
@@ -344,8 +344,8 @@ msgid "With compressed recording, the audio is saved as a webm or ogg file (smal
 msgstr "Com a gravação comprimida, o áudio é salvo como um arquivo webm ou ogg (tamanho menor). Com não comprimido, como um arquivo Wav sem perdas (tamanho muito maior)."
 
 msgid "≤"
-msgstr ""
+msgstr "≤"
 
 msgid "≥"
-msgstr ""
+msgstr "≥"
 
