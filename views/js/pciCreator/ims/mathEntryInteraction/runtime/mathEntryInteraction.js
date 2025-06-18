@@ -265,6 +265,7 @@ define([
 
             /**
              * @param {Object} config
+             * @param {Boolean} config.isReviewMode - when in delivery review mode
              * @param {Boolean} config.authorizeWhiteSpace - if space key creates a space
              * @param {Boolean} config.useGapExpression - create a math expression with gaps (placeholders)
              * @param {Boolean} config.inResponseState - if QTI is in response state
@@ -284,6 +285,7 @@ define([
                 }
 
                 this.config = {
+                    isReviewMode: toBoolean(config.isReviewMode, false),
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
                     focusOnDenominator: toBoolean(this.inJapanese(), false),
                     useGapExpression: toBoolean(config.useGapExpression, false),
