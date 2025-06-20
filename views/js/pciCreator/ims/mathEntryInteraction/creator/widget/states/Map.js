@@ -30,6 +30,7 @@ define([
     'taoQtiItem/qtiCreator/widgets/helpers/formElement',
     'ui/tooltip',
     'mathEntryInteraction/runtime/helper/ambiguousSymbols',
+    'mathEntryInteraction/runtime/helper/gapResponse',
 ], function (
     hb,
     __,
@@ -44,7 +45,8 @@ define([
     minMaxComponentFactory,
     formElement,
     tooltip,
-    convertAmbiguousSymbols
+    convertAmbiguousSymbols,
+    gapResponse
 ) {
     'use strict';
     hb.registerHelper('increaseIndex', function (value) {
@@ -183,7 +185,7 @@ define([
                 for (let i = 0; i < gapCount; i++) {
                     newCorrectAnswer.push(' ');
                 }
-                newCorrectAnswer = newCorrectAnswer.join(',');
+                newCorrectAnswer = gapResponse.arrayToString(newCorrectAnswer);
             } else {
                 newCorrectAnswer = '';
             }
@@ -353,7 +355,7 @@ define([
     MathEntryInteractionStateResponse.prototype.getGapResponseObject = function getGapResponseObject(response) {
         return {
             base: {
-                string: response.split(',')
+                string: gapResponse.stringToArray(response)
             }
         };
     };
@@ -407,7 +409,8 @@ define([
         if (this.inGapMode() === true) {
             this.correctResponses.forEach((value, index) => {
                 let response = ' ';
-                if (value.response && value.response.length && value.response.split(',').indexOf('') === -1) {
+                const responseAsArray = gapResponse.stringToArray(value.response);
+                if (responseAsArray && responseAsArray.length && !responseAsArray.some(v => !v)) {
                     response = value.response;
                 }
                 gapResponses.set(index, response);
@@ -490,7 +493,7 @@ define([
                     }
                     gapValues = {
                         base: {
-                            string: gapValues.join(',')
+                            string: gapResponse.arrayToString(gapValues)
                         }
                     };
                 } else {

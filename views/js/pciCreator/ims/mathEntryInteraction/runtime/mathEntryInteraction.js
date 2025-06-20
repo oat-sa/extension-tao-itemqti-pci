@@ -25,6 +25,7 @@ define([
     'mathEntryInteraction/runtime/mathquill/mathquill',
     'mathEntryInteraction/runtime/helper/mathInPrompt',
     'mathEntryInteraction/runtime/helper/ambiguousSymbols',
+    'mathEntryInteraction/runtime/helper/gapResponse',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
@@ -35,7 +36,8 @@ define([
     event,
     MathQuill,
     mathInPrompt,
-    convertAmbiguousSymbols
+    convertAmbiguousSymbols,
+    gapResponse
 ) {
     'use strict';
 
@@ -749,7 +751,7 @@ define([
                             this.setMathStaticContent(latex, responseId);
                             this.createMathStatic(responseId);
                             const gapFields = this.getGapFields();
-                            const gaps = gapValues.base.string.split(',');
+                            const gaps = gapResponse.stringToArray(gapValues.base.string);
                             gapFields.forEach(function (gap, index) {
                                 gap.latex(gaps[index] || '');
                             });
@@ -1027,7 +1029,7 @@ define([
                 if (this.inGapMode()) {
                     if (response && response.base && response.base.string) {
                         const gapFields = this.getGapFields();
-                        const gaps = response.base.string.split(',');
+                        const gaps = gapResponse.stringToArray(response.base.string);
                         gapFields.forEach(function (gap, index) {
                             gap.latex(gaps[index]);
                         });
@@ -1055,12 +1057,13 @@ define([
                         inputId = this.inputs.currentIndex();
                         this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
                     }
+                    const gapFieldValues = this.getGapFields()
+                        .map(function (gapField) {
+                            return convertAmbiguousSymbols(gapField.latex());
+                        });
                     response = {
                         base: {
-                            string: this.getGapFields()
-                                .map(function (gapField) {
-                                    return convertAmbiguousSymbols(gapField.latex());
-                                }).toString()
+                            string: gapResponse.arrayToString(gapFieldValues)
                         }
                     };
                 } else {
@@ -1070,8 +1073,7 @@ define([
                         }
                     };
                 }
-
-                return response.base.string.replace(/,/g, '') !== '' ? response : {base: {string: ''}};
+                return response;
             },
             /**
              * Remove the current response set in the interaction
