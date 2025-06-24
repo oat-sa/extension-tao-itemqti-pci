@@ -185,7 +185,7 @@ define([
                 for (let i = 0; i < gapCount; i++) {
                     newCorrectAnswer.push(' ');
                 }
-                newCorrectAnswer = gapResponse.arrayToString(newCorrectAnswer);
+                newCorrectAnswer = gapResponse.arrayToString(newCorrectAnswer, interaction.prop('gapResponseIsJson'));
             } else {
                 newCorrectAnswer = '';
             }
@@ -493,7 +493,7 @@ define([
                     }
                     gapValues = {
                         base: {
-                            string: gapResponse.arrayToString(gapValues)
+                            string: gapResponse.arrayToString(gapValues, interaction.prop('gapResponseIsJson'))
                         }
                     };
                 } else {

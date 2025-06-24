@@ -294,6 +294,16 @@ define([
                     gapStyle: config.gapStyle,
                     locale: this.userLanguage || 'en',
 
+                    // for migration to v3.0.0:
+                    // user-response and correct-response were comma-separated string before,
+                    //    but became json-encoded string after.
+                    // so for new PCI created after v3.0.0, set `gapResponseIsJson: true` (default value in imsPciCreator.js);
+                    // but old PCI created before v3.0.0 and published after with the new runtime,
+                    //    will have correct-response as comma-separated;
+                    //    so for such PCI we should continue to save user-response as comma-separated even in the new runtime;
+                    //    so check `gapResponseIsJson` prop - such PCI won't have it defined.
+                    gapResponseIsJson: toBoolean(config.gapResponseIsJson, false),
+
                     toolsStatus: {
                         frac: toBoolean(config.tool_frac, true),
                         sqrt: toBoolean(config.tool_sqrt, true),
@@ -1063,7 +1073,7 @@ define([
                         });
                     response = {
                         base: {
-                            string: gapResponse.arrayToString(gapFieldValues)
+                            string: gapResponse.arrayToString(gapFieldValues, this.config.gapResponseIsJson)
                         }
                     };
                 } else {

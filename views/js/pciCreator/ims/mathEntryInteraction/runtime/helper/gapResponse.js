@@ -18,25 +18,40 @@
 define([], function () {
     'use strict';
 
+    /** Helper for "gap" mode,
+     * to convert array of gap values to the string for `{response: {base: string}}` response,
+     * and vice versa
+     */
     const gapResponse = {
         /**
-         * in "gap" mode, convert array of gap values to the string for `{response: {base: string}}` response
          * @param {string[]} array
+         * @param {boolean?} gapResponseIsJson - json since v3.0.0, comma-separated string if older version
          * @returns {string}
          */
-        arrayToString(array) {
-            return array && array.length && array.some(v => !!v) ? JSON.stringify(array) : '';
+        arrayToString(array, gapResponseIsJson = true) {
+            if (!array || !array.length || !array.some(v => !!v) ) {
+                return '';
+            } else if (gapResponseIsJson) {
+                return JSON.stringify(array);
+            } else {
+                return array.join(',');
+            }
         },
-
         /**
-         * in "gap" mode, convert the string of `{response: {base: string}}` response to array of gap values
+         *
          * @param {string} response
          * @returns {string[]}
          */
         stringToArray(response) {
-            return response ? JSON.parse(response) : [];
+            if (!response) {
+                return [];
+            }
+            try {
+                return JSON.parse(response);
+            } catch (err) {
+                return response.split(',');
+            }
         }
     };
-
     return gapResponse;
 });

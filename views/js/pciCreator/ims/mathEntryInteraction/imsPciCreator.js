@@ -60,6 +60,7 @@ define([
                 gapExpression: '',
                 gapStyle: '',
                 focusOnDenominator: false,
+                gapResponseIsJson: true,
 
                 tool_frac: 'false',
                 tool_sqrt: 'false',
