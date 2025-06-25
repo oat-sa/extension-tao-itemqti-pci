@@ -22,6 +22,7 @@
               <pci:entry key="authorizeWhiteSpace">false</pci:entry>
               <pci:entry key="useGapExpression">false</pci:entry>
               <pci:entry key="gapExpression"></pci:entry>
+              <pci:entry key="gapResponseIsJson">true</pci:entry>
               <pci:entry key="tool_frac">true</pci:entry>
               <pci:entry key="tool_sqrt">true</pci:entry>
               <pci:entry key="tool_exp">true</pci:entry>
