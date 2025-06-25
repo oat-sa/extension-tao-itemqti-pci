@@ -18,7 +18,7 @@ final class Version202506201032571465_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Update the Math Entry PCI with fixes for Japanese IME';
+        return 'Update the Math Entry PCI to submit json-encoded string';
     }
 
     public function up(Schema $schema): void
