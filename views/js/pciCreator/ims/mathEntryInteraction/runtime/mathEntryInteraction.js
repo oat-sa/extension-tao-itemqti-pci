@@ -237,6 +237,20 @@ define([
                     this.toggleResponseCorrectRow(true);
                     this.addToolbarListeners();
 
+                    // Delivery review without gaps: render static math
+                } else if (this.config.isReviewMode && !this.inGapMode()) {
+                    this.createMathStatic();
+
+                    // Delivery review with gaps: render static math and make gaps non-editable
+                } else if (this.config.isReviewMode && this.inGapMode()) {
+                    this.setMathStaticContent(this.config.gapExpression);
+                    this.createMathStatic();
+                    this.monitorActiveGapField();
+                    this.setGapsDisabled(true);
+                    this.hideCursors();
+                    this.addGapStyle();
+                    this.autoWrapContent();
+
                     // Rendering PCI for a test-taker in Gap Expression mode: static MathQuill field with editable gap fields
                 } else if (this.inGapMode() && !this.inResponseState()) {
                     this.setMathStaticContent(this.config.gapExpression);
@@ -265,6 +279,7 @@ define([
 
             /**
              * @param {Object} config
+             * @param {Boolean} config.isReviewMode - when in delivery review mode
              * @param {Boolean} config.authorizeWhiteSpace - if space key creates a space
              * @param {Boolean} config.useGapExpression - create a math expression with gaps (placeholders)
              * @param {Boolean} config.inResponseState - if QTI is in response state
@@ -284,6 +299,7 @@ define([
                 }
 
                 this.config = {
+                    isReviewMode: toBoolean(config.isReviewMode, false),
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
                     focusOnDenominator: toBoolean(this.inJapanese(), false),
                     useGapExpression: toBoolean(config.useGapExpression, false),
@@ -535,6 +551,27 @@ define([
                 gapFields.forEach(field => {
                     field.config(this.getMqConfig());
                 });
+            },
+
+            /**
+             * Gap mode only: convert editable gaps to non-editable or vice-versa
+             * @param {Boolean} [disabled=true]
+             */
+            setGapsDisabled: function setGapsDisabled(disabled = true) {
+                this.getGapFields().forEach(gapField => {
+                    // setting the hidden textarea to disabled is a MathQuill way to make a disabled editable field
+                    const textarea = gapField.el().querySelector('textarea');
+                    if (textarea) {
+                        textarea.disabled = !!disabled;
+                    }
+                });
+            },
+
+            /**
+             * Hide all cursors of disabled gaps, because MathQuill doesn't manage them well
+             */
+            hideCursors: function hideCursors() {
+                this.$container.find('.mq-editable-field').addClass('hidden-cursor');
             },
 
             /**
