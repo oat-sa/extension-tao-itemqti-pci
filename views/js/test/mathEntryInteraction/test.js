@@ -216,7 +216,7 @@ define([
 
         const response = {
             base: {
-                string: '\\frac{1}{2},\\frac{1}{4}'
+                string: '["\\\\frac{1}{2}","3,4"]'
             }
         };
         const $container = $('#' + fixtureContainerId);
@@ -224,8 +224,7 @@ define([
         const newItemData = _.cloneDeep(itemData);
         newItemData.body.elements[elements.interaction].properties.useGapExpression = 'true';
         newItemData.body.elements[elements.interaction].properties.gapExpression =
-            '\\frac{1}{2}+\\taoGap=\\frac{5}{4}-\\taoGap';
-        newItemData.responses[elements.response].cardinality = 'multiple';
+            '\\frac{1}{2}+\\taoGap=3,4\\taoGap';
 
         const runner = qtiItemRunner('qti', newItemData)
             .on('render', () => {
@@ -238,7 +237,7 @@ define([
                     {
                         RESPONSE: {
                             base: {
-                                string: '\\frac{1}{2},\\frac{1}{4}'
+                                string:  '["\\\\frac{1}{2}","3,4"]'
                             }
                         }
                     },
@@ -296,7 +295,7 @@ define([
             RESPONSE: {
                 response: {
                     base: {
-                        string: '\\frac{1}{2},\\frac{1}{4}'
+                        string: '["\\\\frac{1}{2}","3,4"]'
                     }
                 }
             }
@@ -306,8 +305,7 @@ define([
         const newItemData = _.cloneDeep(itemData);
         newItemData.body.elements[elements.interaction].properties.useGapExpression = 'true';
         newItemData.body.elements[elements.interaction].properties.gapExpression =
-            '\\frac{1}{2}+\\taoGap=\\frac{5}{4}-\\taoGap';
-        newItemData.responses[elements.response].cardinality = 'multiple';
+            '\\frac{1}{2}+\\taoGap=3,4\\taoGap';
 
         const runner = qtiItemRunner('qti', newItemData)
             .on('render', () => {
@@ -317,7 +315,7 @@ define([
                 ready();
             })
             .init()
-            .render($container, { state });
+            .render($container, { state: _.cloneDeep(state) });
     });
 
     /* */
@@ -333,7 +331,6 @@ define([
         newItemData.body.elements[elements.interaction].properties.useGapExpression = 'true';
         newItemData.body.elements[elements.interaction].properties.gapExpression =
             '\\frac{1}{2}+\\taoGap=\\frac{5}{4}-\\taoGap';
-        newItemData.responses[elements.response].cardinality = 'multiple';
 
         assert.equal($container.length, 1, 'the item container exists');
 
