@@ -195,6 +195,10 @@ $defaultGapWidth: 30;
                 display: inline-block;
             }
 
+            .hidden-cursor.hidden-cursor .mq-hasCursor .mq-cursor {
+                display: none;
+            }
+
             sup, sub {
                 line-height: inherit;
                 top: initial;
