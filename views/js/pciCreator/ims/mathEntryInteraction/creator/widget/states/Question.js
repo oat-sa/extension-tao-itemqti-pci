@@ -105,6 +105,7 @@ define([
             markup : interaction.markup,
             markupSelector : '.prompt',
             related : interaction,
+            qtiImage: false,
             areaBroker: this.widget.getAreaBroker()
         });
 
