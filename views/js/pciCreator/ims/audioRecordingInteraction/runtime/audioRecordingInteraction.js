@@ -134,7 +134,8 @@ define([
                     response = { file: this.getRecording() };
                 }
                 return {
-                    base: response
+                    base: response,
+                    recordsAttempts: this._recordsAttempts
                 };
             },
             /**
@@ -236,6 +237,11 @@ define([
                     // restore interaction state
                     this.player.loadFromBase64(recording.data, recording.mime);
                 }
+
+                // restore recordsAttempts if present in response
+                if (response && typeof response.recordsAttempts === 'number' && response.recordsAttempts >= 0) {
+                    this._recordsAttempts = response.recordsAttempts;
+                }
             },
             /**
              * Remove the current response set in the interaction
@@ -304,7 +310,10 @@ define([
                 this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
 
                 this._recording = null;
-                this._recordsAttempts = 0;
+
+                if (typeof this._recordsAttempts === 'undefined') {
+                    this._recordsAttempts = 0;
+                }
 
                 this.config = {};
                 this.controls = {};
