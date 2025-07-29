@@ -134,8 +134,7 @@ define([
                     response = { file: this.getRecording() };
                 }
                 return {
-                    base: response,
-                    recordsAttempts: this._recordsAttempts
+                    base: response
                 };
             },
             /**
@@ -237,11 +236,6 @@ define([
                     // restore interaction state
                     this.player.loadFromBase64(recording.data, recording.mime);
                 }
-
-                // restore recordsAttempts if present in response
-                if (response && typeof response.recordsAttempts === 'number' && response.recordsAttempts >= 0) {
-                    this._recordsAttempts = response.recordsAttempts;
-                }
             },
             /**
              * Remove the current response set in the interaction
@@ -256,7 +250,14 @@ define([
              * @param {Object} state - json format
              */
             setSerializedState: function setSerializedState(state) {
-                this.setResponse((state && state.response) || state);
+                if (state && typeof state === 'object' && state.hasOwnProperty('response')) {
+                    this.setResponse(state.response);
+                    if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
+                        this._recordsAttempts = state.recordsAttempts;
+                    }
+                } else {
+                    this.setResponse(state);
+                }
             },
 
             /**
@@ -266,7 +267,10 @@ define([
              * @returns {Object} json format
              */
             getSerializedState: function getSerializedState() {
-                return this.getResponse();
+                return {
+                    response: this.getResponse(),
+                    recordsAttempts: this._recordsAttempts
+                };
             },
             /*********************************
              *
