@@ -198,8 +198,13 @@ define([
              * Start the playback
              * Catch error on media format support problem
              */
-            play: function play() {
-                audioEl.play().catch((e) => errorDialog(__('Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser.')));
+            play: function play(onError) {
+                audioEl.play().catch((e) => {
+                    errorDialog(__('Your browser blocked auto-play. Press Play to listen to your recording.'));
+                    if (onError) {
+                        onError(e);
+                    }
+                });
                 // state change has to be triggered by the onplaying listener
             },
 

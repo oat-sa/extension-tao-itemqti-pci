@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-12-04 16:10\n"
+"PO-Revision-Date: 2025-05-07 14:03\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja\n"
@@ -25,5 +25,5 @@ msgstr "QTI PCIマネジャ"
 # http://www.tao.lu/Ontologies/generis.rdf#qtiItemPciManager
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "QTI PCI Manager Role"
-msgstr ""
+msgstr "QTI PCI Manager ロール"
 

@@ -25,6 +25,7 @@ define([
     'mathEntryInteraction/runtime/mathquill/mathquill',
     'mathEntryInteraction/runtime/helper/mathInPrompt',
     'mathEntryInteraction/runtime/helper/ambiguousSymbols',
+    'mathEntryInteraction/runtime/helper/gapResponse',
     'mathEntryInteraction/runtime/polyfill/es6-collections',
     'css!mathEntryInteraction/runtime/mathquill/mathquill',
     'css!mathEntryInteraction/runtime/css/mathEntryInteraction'
@@ -35,7 +36,8 @@ define([
     event,
     MathQuill,
     mathInPrompt,
-    convertAmbiguousSymbols
+    convertAmbiguousSymbols,
+    gapResponse
 ) {
     'use strict';
 
@@ -237,6 +239,20 @@ define([
                     this.toggleResponseCorrectRow(true);
                     this.addToolbarListeners();
 
+                    // Delivery review without gaps: render static math
+                } else if (this.config.isReviewMode && !this.inGapMode()) {
+                    this.createMathStatic();
+
+                    // Delivery review with gaps: render static math and make gaps non-editable
+                } else if (this.config.isReviewMode && this.inGapMode()) {
+                    this.setMathStaticContent(this.config.gapExpression);
+                    this.createMathStatic();
+                    this.monitorActiveGapField();
+                    this.setGapsDisabled(true);
+                    this.hideCursors();
+                    this.addGapStyle();
+                    this.autoWrapContent();
+
                     // Rendering PCI for a test-taker in Gap Expression mode: static MathQuill field with editable gap fields
                 } else if (this.inGapMode() && !this.inResponseState()) {
                     this.setMathStaticContent(this.config.gapExpression);
@@ -265,6 +281,7 @@ define([
 
             /**
              * @param {Object} config
+             * @param {Boolean} config.isReviewMode - when in delivery review mode
              * @param {Boolean} config.authorizeWhiteSpace - if space key creates a space
              * @param {Boolean} config.useGapExpression - create a math expression with gaps (placeholders)
              * @param {Boolean} config.inResponseState - if QTI is in response state
@@ -284,6 +301,7 @@ define([
                 }
 
                 this.config = {
+                    isReviewMode: toBoolean(config.isReviewMode, false),
                     authorizeWhiteSpace: toBoolean(config.authorizeWhiteSpace, false),
                     focusOnDenominator: toBoolean(this.inJapanese(), false),
                     useGapExpression: toBoolean(config.useGapExpression, false),
@@ -291,6 +309,16 @@ define([
                     gapExpression: config.gapExpression || '',
                     gapStyle: config.gapStyle,
                     locale: this.userLanguage || 'en',
+
+                    // for migration to v3.0.0:
+                    // user-response and correct-response were comma-separated string before,
+                    //    but became json-encoded string after.
+                    // so for new PCI created after v3.0.0, set `gapResponseIsJson: true` (default value in imsPciCreator.js);
+                    // but old PCI created before v3.0.0 and published after with the new runtime,
+                    //    will have correct-response as comma-separated;
+                    //    so for such PCI we should continue to save user-response as comma-separated even in the new runtime;
+                    //    so check `gapResponseIsJson` prop - such PCI won't have it defined.
+                    gapResponseIsJson: toBoolean(config.gapResponseIsJson, false),
 
                     toolsStatus: {
                         frac: toBoolean(config.tool_frac, true),
@@ -538,6 +566,27 @@ define([
             },
 
             /**
+             * Gap mode only: convert editable gaps to non-editable or vice-versa
+             * @param {Boolean} [disabled=true]
+             */
+            setGapsDisabled: function setGapsDisabled(disabled = true) {
+                this.getGapFields().forEach(gapField => {
+                    // setting the hidden textarea to disabled is a MathQuill way to make a disabled editable field
+                    const textarea = gapField.el().querySelector('textarea');
+                    if (textarea) {
+                        textarea.disabled = !!disabled;
+                    }
+                });
+            },
+
+            /**
+             * Hide all cursors of disabled gaps, because MathQuill doesn't manage them well
+             */
+            hideCursors: function hideCursors() {
+                this.$container.find('.mq-editable-field').addClass('hidden-cursor');
+            },
+
+            /**
              * MathQuill does not provide an API to detect which editable field has the focus, so we need to do that manually.
              * This will be helpful to know on which field the buttons will act on.
              * @param inputIndex
@@ -749,7 +798,7 @@ define([
                             this.setMathStaticContent(latex, responseId);
                             this.createMathStatic(responseId);
                             const gapFields = this.getGapFields();
-                            const gaps = gapValues.base.string.split(',');
+                            const gaps = gapResponse.stringToArray(gapValues.base.string);
                             gapFields.forEach(function (gap, index) {
                                 gap.latex(gaps[index] || '');
                             });
@@ -1027,7 +1076,7 @@ define([
                 if (this.inGapMode()) {
                     if (response && response.base && response.base.string) {
                         const gapFields = this.getGapFields();
-                        const gaps = response.base.string.split(',');
+                        const gaps = gapResponse.stringToArray(response.base.string);
                         gapFields.forEach(function (gap, index) {
                             gap.latex(gaps[index]);
                         });
@@ -1055,12 +1104,13 @@ define([
                         inputId = this.inputs.currentIndex();
                         this.mathField = MQ.StaticMath(this.inputs.get(inputId).input, config);
                     }
+                    const gapFieldValues = this.getGapFields()
+                        .map(function (gapField) {
+                            return convertAmbiguousSymbols(gapField.latex());
+                        });
                     response = {
                         base: {
-                            string: this.getGapFields()
-                                .map(function (gapField) {
-                                    return convertAmbiguousSymbols(gapField.latex());
-                                }).toString()
+                            string: gapResponse.arrayToString(gapFieldValues, this.config.gapResponseIsJson)
                         }
                     };
                 } else {
@@ -1070,8 +1120,7 @@ define([
                         }
                     };
                 }
-
-                return response.base.string.replace(/,/g, '') !== '' ? response : {base: {string: ''}};
+                return response;
             },
             /**
              * Remove the current response set in the interaction

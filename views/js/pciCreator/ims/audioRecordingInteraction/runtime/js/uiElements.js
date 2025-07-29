@@ -54,6 +54,7 @@ define([
             $control = $('<button>', {
                 class: 'audiorec-control',
                 'data-identifier': config.id,
+                'aria-label': config.id,
                 html: config.label
             });
 

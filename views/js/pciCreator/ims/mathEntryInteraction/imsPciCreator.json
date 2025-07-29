@@ -8,18 +8,14 @@
     "label": "Math entry",
     "short": "Math entry",
     "description": "Allow test taker to type math formulas",
-    "version": "2.6.0",
+    "version": "3.0.1",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
-    "tags": [
-        "math"
-    ],
+    "tags": ["math"],
     "runtime": {
         "hook": "./runtime/mathEntryInteraction.min.js",
-        "modules" : {
-            "mathEntryInteraction/runtime/mathEntryInteraction.min" : [
-                "runtime/mathEntryInteraction.min.js"
-            ]
+        "modules": {
+            "mathEntryInteraction/runtime/mathEntryInteraction.min": ["runtime/mathEntryInteraction.min.js"]
         },
         "libraries": [],
         "mediaFiles": [
@@ -40,16 +36,15 @@
             "./runtime/mathml-to-latex/mathml-to-latex.js",
             "./runtime/helper/mathInPrompt.js",
             "./runtime/helper/ambiguousSymbols.js",
+            "./runtime/helper/gapResponse.js",
             "./runtime/polyfill/es6-collections.js"
         ],
-        "stylesheets" : [
-            "./runtime/css/mathEntryInteraction.css"
-        ]
+        "stylesheets": ["./runtime/css/mathEntryInteraction.css"]
     },
-    "creator" : {
+    "creator": {
         "icon": "./creator/img/icon.svg",
         "hook": "./imsPciCreator.min.js",
-        "src" : [
+        "src": [
             "./imsPciCreator.js",
             "./creator/tpl/markup.tpl",
             "./creator/tpl/propertiesForm.tpl",
@@ -66,6 +61,7 @@
             "./creator/widget/states/states.js",
             "./runtime/helper/mathInPrompt.js",
             "./runtime/helper/ambiguousSymbols.js",
+            "./runtime/helper/gapResponse.js",
             "./runtime/css/mathEntryInteraction.css",
             "./runtime/mathquill/mathquill.css"
         ]

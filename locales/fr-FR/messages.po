@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 09:18\n"
+"PO-Revision-Date: 2025-05-07 14:09\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: fr\n"
@@ -43,6 +43,9 @@ msgstr ""
 
 msgid "Audio bitrate:"
 msgstr "Débit binaire audio :"
+
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr ""
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
 msgstr ""

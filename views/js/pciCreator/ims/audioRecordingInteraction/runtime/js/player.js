@@ -127,7 +127,7 @@ define([
                 audioEl = new Audio(url);
 
                 audioEl.ondurationchange = function ondurationchange() {
-                    if (Number.isFinite(audioEl.duration)) {
+                    if (audioEl && Number.isFinite(audioEl.duration)) {
                         self.trigger('durationchange', [audioEl.duration]);
                     }
                 };
@@ -141,7 +141,9 @@ define([
                 // when playbacks ends on its own:
                 audioEl.onended = function onended() {
                     setState(player, playerStates.IDLE);
-                    audioEl.currentTime = 0;
+                    if (audioEl) {
+                        audioEl.currentTime = 0;
+                    }
                     self.trigger('timeupdate', [0]);
                     self.trigger('playbackend');
                 };
@@ -151,7 +153,9 @@ define([
                 };
 
                 audioEl.ontimeupdate = function ontimeupdate() {
-                    self.trigger('timeupdate', [audioEl.currentTime]);
+                    if (audioEl) {
+                        self.trigger('timeupdate', [audioEl.currentTime]);
+                    }
                 };
 
                 audioEl.onloadedmetadata = function () {
@@ -163,7 +167,7 @@ define([
                     // Unfortunately, this workaround does not work with Firefox that now support WebM as well,
                     // but suffers the same issue. So for Firefox, current workaround is to stick to Ogg files.
                     // source: https://stackoverflow.com/questions/38443084/how-can-i-add-predefined-length-to-audio-recorded-from-mediarecorder-in-chrome/39971175#39971175
-                    if (audioEl.duration === Infinity) {
+                    if (audioEl && audioEl.duration === Infinity) {
                         audioEl.ontimeupdate = function () {
                             audioEl.ontimeupdate = ontimeupdateBackup;
                             audioEl.currentTime = 0;

@@ -38,6 +38,7 @@
                     "authorizeWhiteSpace": "false",
                     "useGapExpression": "false",
                     "gapExpression": "",
+                    "gapResponseIsJson": "true",
                     "tool_frac": "true",
                     "tool_sqrt": "true",
                     "tool_exp": "true",
