@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-07-25 05:57\n"
+"PO-Revision-Date: 2025-07-30 08:15\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: sk\n"
@@ -51,7 +51,7 @@ msgid "Audio has been previously recorded. Your browser does not support the pla
 msgstr "Zvuk bol predtým nahraný. Váš prehliadač nepodporuje prehrávanie tejto nahrávky. Skúste to v inom prehliadači."
 
 msgid "authorize white space"
-msgstr "autorizovať biely priestor"
+msgstr "autorizovať prázdny priestor"
 
 msgid "Auto playback recording"
 msgstr "Automatické prehrávanie nahrávania"
