@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-07-25 05:57\n"
+"PO-Revision-Date: 2025-07-30 08:15\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: sk\n"
@@ -20,7 +20,7 @@ msgstr ""
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "QTI-PCI-Creator Hooks"
-msgstr "Háky QTI-PCI-Creator"
+msgstr "QTI-PCI-Creator háčiky"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
