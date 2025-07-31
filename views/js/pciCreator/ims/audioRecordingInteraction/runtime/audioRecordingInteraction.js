@@ -851,18 +851,18 @@ define([
              * Update the reset recording button with the number of remaining attempts
              */
             updateResetCount: function updateResetCount() {
-                var remaining = this.config.maxRecords - this._recordsAttempts - 1,
+                var remaining = this.config.maxRecords - this._recordsAttempts,
                     resetLabel = deleteIcon,
                     canRecordAgain;
 
                 if (this.config.maxRecords > 1) {
-                    resetLabel += ' (' + remaining + ')';
+                    resetLabel += ' (' + Math.max(0, remaining) + ')';
                 }
                 if (this.controls.reset) {
                     this.controls.reset.updateLabel(resetLabel);
                 }
                 // reflect can-record-again state in the DOM
-                canRecordAgain = this.config.maxRecords === 0 || remaining >= 0;
+                canRecordAgain = this.config.maxRecords === 0 || remaining > 0;
                 this.$container.find('.audio-rec').attr('data-disabled', !canRecordAgain);
             },
 
