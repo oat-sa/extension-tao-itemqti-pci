@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-07-30 08:15\n"
+"PO-Revision-Date: 2025-08-01 08:37\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: sk\n"
@@ -296,7 +296,7 @@ msgid "The identifier of the choice. This identifier must not be used by any oth
 msgstr "Identifikátor podľa výberu. Tento identifikátor nesmie byť použitý žiadnou inou premennou odpovede alebo položky. Identifikátor je reťazec znakov, ktorý musí začínať písmenom alebo podčiarkovníkom („_“) a obsahuje iba písmená, podčiarkovníky, pomlčky („-“), bodku („.“, čiže bodku), číslice, kombinované znaky a rozširujúce znaky."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr "Toto slúži len na testovacie účely. Po zastavení nahrávania sa zobrazí odkaz na stiahnutie nahraného súboru. Toto by sa nemalo používať v kontexte doručovania, pretože by to umožnilo účastníkovi testu stiahnuť si vlastnú nahrávku."
+msgstr "Toto slúži len na testovacie účely. Po zastavení nahrávania sa zobrazí odkaz na stiahnutie nahraného súboru. Toto by sa nemalo používať v kontexte reálneho testovania, pretože by to umožnilo účastníkovi testu stiahnuť si vlastnú nahrávku."
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
 msgstr "Táto možnosť umožňuje vložiť mediálny podnet, ktorý sa musí prehrať pred spustením nahrávania."
