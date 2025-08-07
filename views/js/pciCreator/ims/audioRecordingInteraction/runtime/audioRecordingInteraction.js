@@ -256,6 +256,7 @@ define([
                     this.setResponse(state.response);
                     if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
                         this._recordsAttempts = state.recordsAttempts;
+                        this.updateResetCount();
                     }
                 } else {
                     this.setResponse(state);
@@ -850,19 +851,19 @@ define([
             /**
              * Update the reset recording button with the number of remaining attempts
              */
-            updateResetCount: function updateResetCount() {
-                var remaining = this.config.maxRecords - this._recordsAttempts,
+        updateResetCount: function updateResetCount() {
+                var remaining = this.config.maxRecords - this._recordsAttempts -1,
                     resetLabel = deleteIcon,
                     canRecordAgain;
 
                 if (this.config.maxRecords > 1) {
-                    resetLabel += ' (' + Math.max(0, remaining) + ')';
+                    resetLabel += ' (' + remaining + ')';
                 }
                 if (this.controls.reset) {
                     this.controls.reset.updateLabel(resetLabel);
                 }
                 // reflect can-record-again state in the DOM
-                canRecordAgain = this.config.maxRecords === 0 || remaining > 0;
+                canRecordAgain = this.config.maxRecords === 0 || remaining >= 0;
                 this.$container.find('.audio-rec').attr('data-disabled', !canRecordAgain);
             },
 
