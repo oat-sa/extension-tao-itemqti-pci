@@ -256,7 +256,7 @@ define([
                     this.setResponse(state.response);
                     if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
                         this._recordsAttempts = state.recordsAttempts;
-                        this.updateResetCount();
+                        this.updateResetCount(0);
                     }
                 } else {
                     this.setResponse(state);
@@ -851,8 +851,8 @@ define([
             /**
              * Update the reset recording button with the number of remaining attempts
              */
-        updateResetCount: function updateResetCount() {
-                var remaining = this.config.maxRecords - this._recordsAttempts -1,
+        updateResetCount: function updateResetCount(remainingSubtraction = 1) {
+                var remaining = this.config.maxRecords - this._recordsAttempts - remainingSubtraction,
                     resetLabel = deleteIcon,
                     canRecordAgain;
 
