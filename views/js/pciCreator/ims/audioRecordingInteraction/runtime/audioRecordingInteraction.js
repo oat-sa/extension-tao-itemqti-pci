@@ -256,12 +256,7 @@ define([
                     this.setResponse(state.response);
                     if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
                         this._recordsAttempts = state.recordsAttempts;
-                        const fileExistInState = !!(
-                            state &&
-                            state.response &&
-                            state.response.base != null
-                        );
-                        this.updateResetCount(fileExistInState ? 0 : 1);
+                        this.updateResetCount();
                     }
                 } else {
                     this.setResponse(state);
@@ -856,8 +851,9 @@ define([
             /**
              * Update the reset recording button with the number of remaining attempts
              */
-        updateResetCount: function updateResetCount(remainingSubtraction = 1) {
-                var remaining = this.config.maxRecords - this._recordsAttempts - remainingSubtraction,
+        updateResetCount: function updateResetCount() {
+                var recordableAmount = this.getRecording() ? 0 : 1,
+                    remaining = this.config.maxRecords - this._recordsAttempts - recordableAmount,
                     resetLabel = deleteIcon,
                     canRecordAgain;
 
