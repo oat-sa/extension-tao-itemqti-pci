@@ -256,7 +256,12 @@ define([
                     this.setResponse(state.response);
                     if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
                         this._recordsAttempts = state.recordsAttempts;
-                        this.updateResetCount(0);
+                        const fileExistInState = !!(
+                            state &&
+                            state.response &&
+                            state.response.base != null
+                        );
+                        this.updateResetCount(fileExistInState ? 0 : 1);
                     }
                 } else {
                     this.setResponse(state);
