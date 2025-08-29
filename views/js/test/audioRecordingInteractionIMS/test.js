@@ -68,6 +68,77 @@ define([
 
     /* */
 
+    QUnit.cases
+        .init([
+            {
+                title: 'respects recordsAttempts when max reached',
+                itemData: itemData,
+                state: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 2
+                    }
+                },
+                expected: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 2
+                    }
+                },
+                disabled: 'true'
+            },
+            {
+                title: 'respects recordsAttempts when attempts remain',
+                itemData: (function () {
+                    var newItemData = _.cloneDeep(itemData);
+                    newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.maxRecords = '3';
+                    return newItemData;
+                })(),
+                state: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 1
+                    }
+                },
+                expected: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 1
+                    }
+                },
+                disabled: 'false'
+            }
+        ])
+        .test('recordsAttempts state behavior', function (data, assert) {
+            var ready = assert.async();
+            var $container = $('#' + fixtureContainerId);
+            assert.equal($container.length, 1, 'the item container exists');
+            assert.equal($container.children().length, 0, 'the container has no children');
+
+            if (supportsMediaRecorder()) {
+                runner = qtiItemRunner('qti', data.itemData)
+                    .on('render', function () {
+                        assert.deepEqual(this.getState(), data.expected, 'state contains recordsAttempts');
+                        var disabledAttr = $container.find('.audio-rec').attr('data-disabled');
+                        assert.strictEqual(disabledAttr, data.disabled, 'data-disabled reflects attempts availability');
+                        ready();
+                    })
+                    .init()
+                    .render($container, { state: data.state });
+            }
+
+            function supportsMediaRecorder() {
+                if (!window.MediaRecorder) {
+                    assert.ok(true, 'skipping test...');
+                    ready();
+                    return false;
+                }
+                return true;
+            }
+        });
+
+    /* */
+
     QUnit.test('initializes correctly', function (assert) {
         var ready = assert.async();
         var $container = $('#' + fixtureContainerId);
@@ -477,11 +548,14 @@ define([
                 },
                 response: {
                     RESPONSE: {
-                        base: {
-                            file: {
-                                name: 'myFileToBeReseted',
-                                mime: 'audio/wav',
-                                data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                        recordsAttempts: 0,
+                        response: {
+                            base: {
+                                file: {
+                                    name: 'myFileToBeReseted',
+                                    mime: 'audio/wav',
+                                    data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                                }
                             }
                         }
                     }
@@ -504,11 +578,14 @@ define([
                 },
                 response: {
                     RESPONSE: {
-                        base: {
-                            file: {
-                                name: 'myFileToBeReseted',
-                                mime: 'audio/wav',
-                                data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                        recordsAttempts: 0,
+                        response: {
+                            base: {
+                                file: {
+                                    name: 'myFileToBeReseted',
+                                    mime: 'audio/wav',
+                                    data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                                }
                             }
                         }
                     }
