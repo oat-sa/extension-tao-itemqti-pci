@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-05-07 14:09\n"
+"PO-Revision-Date: 2025-08-01 08:37\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: sk\n"
@@ -21,334 +21,334 @@ msgstr ""
 "Language-Team: Slovak\n"
 
 msgid "Add answer option"
-msgstr ""
+msgstr "Pridať možnosť odpovede"
 
 msgid "Add gap"
-msgstr ""
+msgstr "Pridať medzeru"
 
 msgid "Add Interaction"
-msgstr ""
+msgstr "Pridať interakciu"
 
 msgid "Allow download"
-msgstr ""
+msgstr "Povoliť sťahovanie"
 
 msgid "allow line break"
-msgstr ""
+msgstr "povoliť zalomenie riadku"
 
 msgid "Allow playback"
-msgstr ""
+msgstr "Povoliť prehrávanie"
 
 msgid "angle"
-msgstr ""
+msgstr "uhol"
 
 msgid "Audio bitrate:"
-msgstr ""
+msgstr "Bitová rýchlosť zvuku:"
 
 msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr ""
+msgstr "Váš prehliadač zablokoval automatické prehrávanie. Stlačte tlačidlo Prehrať a vypočujte si nahrávku."
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr ""
+msgstr "Zvuk bol predtým nahraný. Váš prehliadač nepodporuje prehrávanie tejto nahrávky. Skúste to v inom prehliadači."
 
 msgid "authorize white space"
-msgstr ""
+msgstr "autorizovať prázdny priestor"
 
 msgid "Auto playback recording"
-msgstr ""
+msgstr "Automatické prehrávanie nahrávania"
 
 msgid "Auto start recording"
-msgstr ""
+msgstr "Automatické spustenie nahrávania"
 
 msgid "Back to listing"
-msgstr ""
+msgstr "Späť na zoznam"
 
 msgid "braces/curly brackets"
-msgstr ""
+msgstr "zložené zátvorky"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušiť"
 
 msgid "Channels"
-msgstr ""
+msgstr "Kanály"
 
 msgid "Close dialog"
-msgstr ""
+msgstr "Zatvoriť dialógové okno"
 
 msgid "Comparison"
-msgstr ""
+msgstr "Porovnanie"
 
 msgid "Compressed"
-msgstr ""
+msgstr "Komprimované"
 
 msgid "Correct answer option"
-msgstr ""
+msgstr "Správna možnosť odpovede"
 
 msgid "cosinus"
-msgstr ""
+msgstr "kosínus"
 
 msgid "Define correct responses"
-msgstr ""
+msgstr "Definujte správne odpovede"
 
 msgid "Delete"
-msgstr ""
+msgstr "Odstrániť"
 
 msgid "delete the answer"
-msgstr ""
+msgstr "vymazať odpoveď"
 
 msgid "disabled"
-msgstr ""
+msgstr "postihnutý"
 
 msgid "divide"
-msgstr ""
+msgstr "rozdeliť"
 
 msgid "Download"
-msgstr ""
+msgstr "Stiahnuť"
 
 msgid "edit the answer"
-msgstr ""
+msgstr "upraviť odpoveď"
 
 msgid "enable auto wrap"
-msgstr ""
+msgstr "povoliť automatické zalamovanie"
 
 msgid "Enabled in item authoring"
-msgstr ""
+msgstr "Povolené pri vytváraní položiek"
 
 msgid "equal"
-msgstr ""
+msgstr "rovnaký"
 
 msgid "Experimental only"
-msgstr ""
+msgstr "Iba experimentálne"
 
 msgid "exponent"
-msgstr ""
+msgstr "exponent"
 
 msgid "For tests only"
-msgstr ""
+msgstr "Len na testy"
 
 msgid "fraction"
-msgstr ""
+msgstr "zlomok"
 
 msgid "Functions"
-msgstr ""
+msgstr "Funkcie"
 
 msgid "Gap size"
-msgstr ""
+msgstr "Veľkosť medzery"
 
 msgid "Geometry"
-msgstr ""
+msgstr "Geometria"
 
 msgid "Give the possibility to the test taker to playback its own recording."
-msgstr ""
+msgstr "Dajte účastníkovi testu možnosť prehrať si vlastnú nahrávku."
 
 msgid "greater than"
-msgstr ""
+msgstr "väčší ako"
 
 msgid "greater than or equal"
-msgstr ""
+msgstr "väčšie alebo rovné"
 
 msgid "id : "
-msgstr ""
+msgstr "id: "
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
-msgstr ""
+msgstr "V bps (bitoch za sekundu). Nastavte kompromis medzi kvalitou zvuku a veľkosťou súboru. Pri predvolenej hodnote (20 000 bps) váži 2-minútová nahrávka približne 300 KB."
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
-msgstr ""
+msgstr "V sekundách. Maximálny povolený čas nahrávania (nesmie byť kratší ako 10 sekúnd). Nahrávanie sa po jeho dosiahnutí automaticky zastaví."
 
 msgid "In seconds. The time interval between partial updates of the recording."
-msgstr ""
+msgstr "V sekundách. Časový interval medzi čiastočnými aktualizáciami záznamu."
 
 msgid "Indefinite integral"
-msgstr ""
+msgstr "Neurčitý integrál"
 
 msgid "Invalid files have been removed"
-msgstr ""
+msgstr "Neplatné súbory boli odstránené"
 
 msgid "is a member of"
-msgstr ""
+msgstr "je členom"
 
 msgid "is not a member of"
-msgstr ""
+msgstr "nie je členom"
 
 msgid "is parallel with"
-msgstr ""
+msgstr "je paralelný s"
 
 msgid "is perpendicular to"
-msgstr ""
+msgstr "je kolmá na"
 
 msgid "Large"
-msgstr ""
+msgstr "Veľký"
 
 msgid "Level"
-msgstr ""
+msgstr "Úroveň"
 
 msgid "ln"
-msgstr ""
+msgstr "v"
 
 msgid "log"
-msgstr ""
+msgstr "protokol"
 
 msgid "lower than"
-msgstr ""
+msgstr "nižšie ako"
 
 msgid "lower than or equal"
-msgstr ""
+msgstr "nižšie alebo rovné"
 
 msgid "Manage custom interactions"
-msgstr ""
+msgstr "Spravovať vlastné interakcie"
 
 msgid "Max attempts:"
-msgstr ""
+msgstr "Maximálny počet pokusov:"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr ""
+msgstr "Maximálny počet pokusov o nahrávanie povolený účastníkovi testu. Nastavte na 0, ak chcete povoliť neobmedzený počet pokusov. Pri limite 3 bude môcť účastník testu dvakrát kliknúť na tlačidlo resetovania."
 
 msgid "Medium"
-msgstr ""
+msgstr "Stredné"
 
 msgid "Min:"
-msgstr ""
+msgstr "Minimálne:"
 
 msgid "minus"
-msgstr ""
+msgstr "mínus"
 
 msgid "Mono"
-msgstr ""
+msgstr "Mono"
 
 msgid "No Custom Interaction"
-msgstr ""
+msgstr "Žiadna vlastná interakcia"
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
-msgstr ""
+msgstr "Počet kanálov pre nahrávanie. Pri použití v mono režime je možné znížiť veľkosť nahrávky na polovicu."
 
 msgid "Operands"
-msgstr ""
+msgstr "Operandy"
 
 msgid "Options"
-msgstr ""
+msgstr "Možnosti"
 
 msgid "parentheses/round brackets"
-msgstr ""
+msgstr "zátvorky/okrúhle zátvorky"
 
 msgid "plus"
-msgstr ""
+msgstr "plus"
 
 msgid "Plus/minus"
-msgstr ""
+msgstr "Plus/mínus"
 
 #, tao-public
 msgid "Portable Custom Interactions"
-msgstr ""
+msgstr "Prenosné vlastné interakcie"
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr ""
+msgstr "Nahraný zvuk sa po zastavení nahrávania automaticky prehrá. Počas prehrávania nie je možná žiadna interakcia s používateľom a všetky tlačidlá sú neaktívne."
 
 msgid "Recording format"
-msgstr ""
+msgstr "Formát nahrávania"
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
-msgstr ""
+msgstr "Nahrávanie sa spustí automaticky, akonáhle účastník testu udelí autorizáciu na použitie mikrofónu. Ak sa použije mediálny podnet, nahrávanie sa spustí automaticky po jeho prehratí."
 
 msgid "Response identifier"
-msgstr ""
+msgstr "Identifikátor odpovede"
 
 msgid "Scale size"
-msgstr ""
+msgstr "Veľkosť mierky"
 
 msgid "Sec:"
-msgstr ""
+msgstr "Sekcia:"
 
 msgid "set intersection"
-msgstr ""
+msgstr "križovatka množiny"
 
 msgid "set union"
-msgstr ""
+msgstr "zjednotenie množín"
 
 #, tao-public
 msgid "Settings"
-msgstr ""
+msgstr "Nastavenia"
 
 msgid "similar"
-msgstr ""
+msgstr "podobný"
 
 msgid "sinus"
-msgstr ""
+msgstr "dutina"
 
 msgid "Small"
-msgstr ""
+msgstr "Malý"
 
 msgid "square brackets"
-msgstr ""
+msgstr "hranaté zátvorky"
 
 msgid "square root"
-msgstr ""
+msgstr "druhá odmocnina"
 
 msgid "Stereo"
-msgstr ""
+msgstr "Stereo"
 
 msgid "subscript"
-msgstr ""
+msgstr "dolný index"
 
 msgid "Symbols"
-msgstr ""
+msgstr "Symboly"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr ""
+msgstr "Identifikátor podľa výberu. Tento identifikátor nesmie byť použitý žiadnou inou premennou odpovede alebo položky. Identifikátor je reťazec znakov, ktorý musí začínať písmenom alebo podčiarkovníkom („_“) a obsahuje iba písmená, podčiarkovníky, pomlčky („-“), bodku („.“, čiže bodku), číslice, kombinované znaky a rozširujúce znaky."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr ""
+msgstr "Toto slúži len na testovacie účely. Po zastavení nahrávania sa zobrazí odkaz na stiahnutie nahraného súboru. Toto by sa nemalo používať v kontexte reálneho testovania, pretože by to umožnilo účastníkovi testu stiahnuť si vlastnú nahrávku."
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr ""
+msgstr "Táto možnosť umožňuje vložiť mediálny podnet, ktorý sa musí prehrať pred spustením nahrávania."
 
 msgid "Time limit:"
-msgstr ""
+msgstr "Časový limit:"
 
 msgid "times"
-msgstr ""
+msgstr "krát"
 
 msgid "times dot"
-msgstr ""
+msgstr "krát bodka"
 
 msgid "triangle"
-msgstr ""
+msgstr "trojuholník"
 
 msgid "Trigonometry"
-msgstr ""
+msgstr "Trigonometria"
 
 msgid "type : "
-msgstr ""
+msgstr "typ: "
 
 msgid "Unable to upload file %s : %s"
-msgstr ""
+msgstr "Nepodarilo sa nahrať súbor %s : %s"
 
 msgid "Uncompressed"
-msgstr ""
+msgstr "Nekomprimované"
 
 msgid "Update interval:"
-msgstr ""
+msgstr "Interval aktualizácie:"
 
 msgid "Upload new custom interaction (zip package)"
-msgstr ""
+msgstr "Nahrať novú vlastnú interakciu (zip balíček)"
 
 msgid "use expression with gaps"
-msgstr ""
+msgstr "použiť výraz s medzerami"
 
 msgid "Use media stimulus"
-msgstr ""
+msgstr "Využite mediálne podnety"
 
 msgid "version : "
-msgstr ""
+msgstr "verzia: "
 
 msgid "Warning"
-msgstr ""
+msgstr "POZOR"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
-msgstr ""
+msgstr "Pri komprimovanom nahrávaní sa zvuk ukladá ako súbor WebM alebo Ogg (menšia veľkosť). Pri nekomprimovanom nahrávaní sa ukladá ako bezstratový súbor Wav (oveľa väčšia veľkosť)."
 
 msgid "≤"
-msgstr ""
+msgstr "≤"
 
 msgid "≥"
-msgstr ""
+msgstr "≥"
 
