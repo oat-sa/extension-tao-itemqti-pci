@@ -252,7 +252,15 @@ define([
              * @param {Object} state - json format
              */
             setSerializedState: function setSerializedState(state) {
-                this.setResponse((state && state.response) || state);
+                if (state && typeof state === 'object' && state.hasOwnProperty('response')) {
+                    this.setResponse(state.response);
+                    if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
+                        this._recordsAttempts = state.recordsAttempts;
+                        this.updateResetCount();
+                    }
+                } else {
+                    this.setResponse(state);
+                }
             },
 
             /**
@@ -262,7 +270,10 @@ define([
              * @returns {Object} json format
              */
             getSerializedState: function getSerializedState() {
-                return this.getResponse();
+                return {
+                    response: this.getResponse(),
+                    recordsAttempts: this._recordsAttempts
+                };
             },
             /*********************************
              *
@@ -306,7 +317,10 @@ define([
                 this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
 
                 this._recording = null;
-                this._recordsAttempts = 0;
+
+                if (typeof this._recordsAttempts === 'undefined') {
+                    this._recordsAttempts = 0;
+                }
 
                 this.config = {};
                 this.controls = {};
@@ -837,8 +851,9 @@ define([
             /**
              * Update the reset recording button with the number of remaining attempts
              */
-            updateResetCount: function updateResetCount() {
-                var remaining = this.config.maxRecords - this._recordsAttempts - 1,
+        updateResetCount: function updateResetCount() {
+                var recordableAmount = this.getRecording() ? 0 : 1,
+                    remaining = this.config.maxRecords - this._recordsAttempts - recordableAmount,
                     resetLabel = deleteIcon,
                     canRecordAgain;
 
