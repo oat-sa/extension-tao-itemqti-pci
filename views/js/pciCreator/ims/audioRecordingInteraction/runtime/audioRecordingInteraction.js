@@ -453,8 +453,6 @@ define([
 
                     self.getBase64Recoding(blob, filename)
                         .then(function (recording) {
-                            self._recordsAttempts++;
-
                             self.updateResponse(recording);
 
                             // shortcut if the PCI is being destroyed, as in this case some internal properties would be unreachable.
@@ -728,7 +726,9 @@ define([
 
                 function startForReal() {
                     self.resetRecording();
+                    self._recordsAttempts++;
                     self.recorder.start();
+                    self.updateResetCount();
                     self.$container.get(0).dispatchEvent(new CustomEvent('recorder-start'));
                     if (self.config.maxRecordingTime) {
                         self.$meterContainer.addClass('record');
@@ -851,8 +851,9 @@ define([
             /**
              * Update the reset recording button with the number of remaining attempts
              */
-        updateResetCount: function updateResetCount() {
-                var recordableAmount = this.getRecording() ? 0 : 1,
+            updateResetCount: function updateResetCount() {
+                var isRecording = this.recorder && typeof this.recorder.is === 'function' && this.recorder.is('recording');
+                var recordableAmount = (!this.getRecording() && !isRecording) ? 1 : 0,
                     remaining = this.config.maxRecords - this._recordsAttempts - recordableAmount,
                     resetLabel = deleteIcon,
                     canRecordAgain;
