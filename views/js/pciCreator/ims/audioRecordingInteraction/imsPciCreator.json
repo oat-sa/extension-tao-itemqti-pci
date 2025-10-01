@@ -4,7 +4,7 @@
     "label": "Audio recording",
     "short": "Audio",
     "description": "Allow test taker to record audio",
-    "version": "1.3.2",
+    "version": "1.3.3",
     "author": "Christophe Noël",
     "email": "christophe@taotesting.com",
     "tags": [
