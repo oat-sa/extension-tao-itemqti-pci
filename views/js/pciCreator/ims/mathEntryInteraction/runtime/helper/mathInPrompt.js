@@ -47,6 +47,10 @@ define([
          * @param {jQuery} $element
          */
         postRender($element) {
+            if (window.MathJax){
+                // prevent MathJax prompt rewriting
+                return;
+            }
             $element.find('math').each(function () {
                 const math = document.createElement('span');
                 math.innerHTML = getLaTeX(this);
