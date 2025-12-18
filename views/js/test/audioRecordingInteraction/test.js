@@ -49,6 +49,73 @@ define([
 
     /* */
 
+    QUnit.cases
+        .init([
+            {
+                title: 'respects recordsAttempts when max reached',
+                itemData: itemData,
+                state: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 2
+                    }
+                },
+                expected: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 2
+                    }
+                }
+            },
+            {
+                title: 'respects recordsAttempts when attempts remain',
+                itemData: (function () {
+                    var newItemData = _.cloneDeep(itemData);
+                    newItemData.body.elements.interaction_portablecustominteraction_5a61fdb9cb6a7534654927.properties.maxRecords = '3';
+                    return newItemData;
+                })(),
+                state: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 1
+                    }
+                },
+                expected: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 1
+                    }
+                }
+            }
+        ])
+        .test('recordsAttempts state behavior', function (data, assert) {
+            var ready = assert.async();
+            var $container = $('#' + fixtureContainerId);
+            assert.equal($container.length, 1, 'the item container exists');
+            assert.equal($container.children().length, 0, 'the container has no children');
+
+            if (supportsMediaRecorder()) {
+                runner = qtiItemRunner('qti', data.itemData)
+                    .on('render', function () {
+                        assert.deepEqual(this.getState(), data.expected, 'state contains recordsAttempts');
+                        ready();
+                    })
+                    .init()
+                    .render($container, { state: data.state });
+            }
+
+            function supportsMediaRecorder() {
+                if (!window.MediaRecorder) {
+                    assert.ok(true, 'skipping test...');
+                    ready();
+                    return false;
+                }
+                return true;
+            }
+        });
+
+    /* */
+
     QUnit.test('initializes correctly', function (assert) {
         var ready = assert.async();
         var $container = $('#' + fixtureContainerId);
@@ -372,19 +439,7 @@ define([
         },
         response: {
             RESPONSE: {
-                base: {
-                    file: {
-                        name: 'myFileToBeReseted',
-                        mime: 'audio/wav',
-                        data: 'YmFzZTY0ZW5jb2RlZERhdGE='
-                    }
-                }
-            }
-        }
-    }, {
-        title: 'state as a serialized response',
-        state: {
-            RESPONSE: {
+                recordsAttempts: 0,
                 response: {
                     base: {
                         file: {
@@ -395,14 +450,30 @@ define([
                     }
                 }
             }
-        },
-        response: {
+        }
+    }, {
+        title: 'state as a serialized response',
+        state: {
             RESPONSE: {
                 base: {
                     file: {
                         name: 'myFileToBeReseted',
                         mime: 'audio/wav',
                         data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                    }
+                }
+            }
+        },
+        response: {
+            RESPONSE: {
+                recordsAttempts: 0,
+                response: {
+                    base: {
+                        file: {
+                            name: 'myFileToBeReseted',
+                            mime: 'audio/wav',
+                            data: 'YmFzZTY0ZW5jb2RlZERhdGE='
+                        }
                     }
                 }
             }
@@ -426,7 +497,7 @@ define([
                     if (changeCounter === 1) { // So it runs only once
                         assert.ok(_.isPlainObject(res), 'response changed');
                         assert.ok(_.isPlainObject(res.RESPONSE), 'response identifier ok');
-                        assert.deepEqual(res, data.response, 'response set/get ok');
+                        assert.deepEqual(res, data.state, 'response set/get ok');
 
                         ready();
                     }
@@ -507,4 +578,3 @@ define([
     /* */
 
 });
-
