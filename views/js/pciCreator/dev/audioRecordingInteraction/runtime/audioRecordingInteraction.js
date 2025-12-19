@@ -116,7 +116,9 @@ define([
             this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
 
             this._recording = null;
-            this._recordsAttempts = 0;
+            if (typeof this._recordsAttempts === 'undefined') {
+                this._recordsAttempts = 0;
+            }
 
             this.config = {};
             this.controls = {};
@@ -198,7 +200,7 @@ define([
                     this.$container.on('click.autoplay', playSilentAudio);
                     this.$container.on('touchend.autoplay', playSilentAudio);
                 };
- 
+
                 this._unbindAutoplayEvents = function() {
                     this.$container.off('.autoplay');
                 };
@@ -206,14 +208,14 @@ define([
                 var silentAudio = document.createElement('audio');
                 silentAudio.src = 'data:audio/wav;base64,UklGRgAAAABXQVZFZm10IBAAAAABAAEAQB8AAIAfAAACABAAZGF0YQAAAAA=';
                 silentAudio.volume = 0.0;
-                
+
                 var playSilentAudio = function () {
                     silentAudio.play().then(() => {
                         this._unbindAutoplayEvents();
                     }).catch(function () {});
                 };
-                // Event listeners to the container to trigger the silent audio playback 
-                this._bindAutoplayEvents();  
+                // Event listeners to the container to trigger the silent audio playback
+                this._bindAutoplayEvents();
             };
             if (this.isSafari) {
                 // Safari requires user interaction to enable autoplay
@@ -645,7 +647,8 @@ define([
          * Update the reset recording button with the number of remaining attempts
          */
         updateResetCount: function updateResetCount() {
-            var remaining = this.config.maxRecords - this._recordsAttempts - 1,
+            var recordableAmount = this.getRecording() ? 0 : 1,
+                remaining = this.config.maxRecords - this._recordsAttempts - recordableAmount,
                 resetLabel = this.getControlIcon('reset');
 
             if (this.config.maxRecords > 1) {
@@ -996,11 +999,18 @@ define([
         /**
          * Restore the state of the interaction from the serializedState.
          *
-         * @param {Object} interaction
          * @param {Object} state - json format
          */
         setSerializedState: function setSerializedState(state) {
-            this.setResponse(state && state.response || state);
+            if (state && typeof state === 'object' && state.hasOwnProperty('response')) {
+                this.setResponse(state.response);
+                if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
+                    this._recordsAttempts = state.recordsAttempts;
+                    this.updateResetCount();
+                }
+            } else {
+                this.setResponse(state);
+            }
         },
 
         /**
@@ -1011,7 +1021,10 @@ define([
          * @returns {Object} json format
          */
         getSerializedState: function getSerializedState() {
-            return this.getResponse();
+            return {
+                response: this.getResponse(),
+                recordsAttempts: this._recordsAttempts
+            };
         }
     };
 
