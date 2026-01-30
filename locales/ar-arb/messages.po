@@ -1,24 +1,26 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-12-04 16:10\n"
+"Project-Id-Version: TAO 2026.01\n"
+"PO-Revision-Date: 2026-01-30T13:25:15\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ar-arb\n"
 "sourceLanguage: en-US\n"
 "targetLanguage: ar-arb\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: ar\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: Arabic\n"
+
+msgid "2 rows"
+msgstr ""
+
+msgid "2 rows & 2 columns"
+msgstr ""
+
+msgid "Add alternative"
+msgstr ""
 
 msgid "Add answer option"
 msgstr "إضافة خيار الإجابة"
@@ -38,14 +40,17 @@ msgstr "رجوع إلى السطر"
 msgid "Allow playback"
 msgstr "اسمح بإعادة القراءة"
 
+msgid "Alternative"
+msgstr ""
+
 msgid "angle"
 msgstr "زاوية"
 
+msgid "Approximately"
+msgstr ""
+
 msgid "Audio bitrate:"
 msgstr "معدل نقل البيانات بالصوت:"
-
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr ""
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
 msgstr "تم تسجيل الصوت سابقا. متصفحك لا يدعم تشغيل هذا التسجيل. يرجى المحاولة على متصفح مختلف."
@@ -74,11 +79,23 @@ msgstr "قنوات"
 msgid "Close dialog"
 msgstr "أغلق مربع الحوار"
 
+msgid "colon"
+msgstr ""
+
 msgid "Comparison"
 msgstr "مقارنة"
 
 msgid "Compressed"
 msgstr "مضغوط"
+
+msgid "congruent"
+msgstr ""
+
+msgid "contains as member"
+msgstr ""
+
+msgid "Correct"
+msgstr ""
 
 msgid "Correct answer option"
 msgstr "خِيار الإجابة الصحيحة"
@@ -89,6 +106,9 @@ msgstr "جيب التمام"
 msgid "Define correct responses"
 msgstr "عرف الإجابات الصحيحة"
 
+msgid "Degree symbol"
+msgstr ""
+
 msgid "Delete"
 msgstr "حذف"
 
@@ -98,6 +118,12 @@ msgstr "احذف الإجابة"
 msgid "disabled"
 msgstr "إيقاف"
 
+msgid "Display icons at each end, or not"
+msgstr ""
+
+msgid "Display numbers above the choices, or not"
+msgstr ""
+
 msgid "divide"
 msgstr "اقسم"
 
@@ -106,6 +132,9 @@ msgstr "تنزيل"
 
 msgid "edit the answer"
 msgstr "حرر الإجابة"
+
+msgid "Enable all symbols"
+msgstr ""
 
 msgid "enable auto wrap"
 msgstr "تشغيل الالتفاف الأتوماتيكي"
@@ -146,6 +175,18 @@ msgstr "أكبر من"
 msgid "greater than or equal"
 msgstr "أكبر من أو يساوي"
 
+msgid "Hide record button"
+msgstr ""
+
+msgid "Hide stop button"
+msgstr ""
+
+msgid "Hide the record button from test takers."
+msgstr ""
+
+msgid "Hide the stop button from test takers."
+msgstr ""
+
 msgid "id : "
 msgstr "إذ "
 
@@ -155,11 +196,17 @@ msgstr "باعتماد وحدة قياس بت في الثانية، وازن ب�
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "يتوقف التسجيل أتوماتيكيا عند الوصول إلى الحد الأقصى المسموح به للتسجيل والذي لا يمكن أن يقل عن 10 ثواني."
 
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr ""
+
 msgid "In seconds. The time interval between partial updates of the recording."
 msgstr "في ثواني. الفاصل الزمني بين التحديثات الجزئية للتسجيل."
 
 msgid "Indefinite integral"
 msgstr "تكامل غير محدد"
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
+msgstr ""
 
 msgid "Invalid files have been removed"
 msgstr "تمت إزالة الملفات غير الصالحة"
@@ -182,6 +229,9 @@ msgstr "واسع"
 msgid "Level"
 msgstr "مستوى"
 
+msgid "limit"
+msgstr ""
+
 msgid "ln"
 msgstr "لوغارتم طبيعي (النبري)"
 
@@ -197,8 +247,17 @@ msgstr "أقل من أو يساوي"
 msgid "Manage custom interactions"
 msgstr "تدبير التفاعلات المعتادة/المألوفة"
 
+msgid "Mapping default"
+msgstr ""
+
+msgid "Matrix"
+msgstr ""
+
 msgid "Max attempts:"
 msgstr "العدد الأقصى للمحاولات:"
+
+msgid "Maximal score for this interaction."
+msgstr ""
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
 msgstr "الحد الأقصى لعدد محاولات التسجيل المسموح بها للمتقدم  للرائز. اضبط على 0 للسماح بمحاولات غير محدودة. بحد أقصى 3 ، سيتمكن المختبر من النقر مرتين على زر إعادة الضبط."
@@ -209,11 +268,17 @@ msgstr "متوسط"
 msgid "Min:"
 msgstr "الحد الأدنى:"
 
+msgid "Minimal score for this interaction."
+msgstr ""
+
 msgid "minus"
 msgstr "ناقص"
 
 msgid "Mono"
 msgstr "أحادي"
+
+msgid "n-root"
+msgstr ""
 
 msgid "No Custom Interaction"
 msgstr "لا يوجد تفاعل مألوف"
@@ -229,6 +294,15 @@ msgstr "خيارات"
 
 msgid "parentheses/round brackets"
 msgstr "أقواس/ بين هيلالين"
+
+msgid "Percent"
+msgstr ""
+
+msgid "Play a sound at the start and end of recording."
+msgstr ""
+
+msgid "Play sound"
+msgstr ""
 
 msgid "plus"
 msgstr "زائد"
@@ -246,17 +320,32 @@ msgstr "يتم تشغيل الصوت المسجل أوتوماتيكيا بعد 
 msgid "Recording format"
 msgstr "صيغة التسجيل"
 
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr ""
+
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "يبدأ التسجيل أتوماتيكيا بمجرد أن يمنح المتقدم للاختبار إذنًا باستخدام الميكروفون. إذا تم استخدام محفز وسائط ، فسيبدأ التسجيل أتوماتيكيا بعد تشغيل التحفيز."
 
 msgid "Response identifier"
 msgstr "معرف الاستجابة"
 
+msgid "right arrow"
+msgstr ""
+
 msgid "Scale size"
 msgstr "حجم المقياس"
 
+msgid "Score"
+msgstr ""
+
+msgid "Score range"
+msgstr ""
+
 msgid "Sec:"
 msgstr "الثانية:"
+
+msgid "Sequential"
+msgstr ""
 
 msgid "set intersection"
 msgstr "تقاطع مجموعات"
@@ -267,6 +356,12 @@ msgstr "اتحاد مجموعات"
 #, tao-public
 msgid "Settings"
 msgstr "إعدادات/تطبيقات"
+
+msgid "Show icons"
+msgstr ""
+
+msgid "Show numbers"
+msgstr ""
 
 msgid "similar"
 msgstr "مماثل"
@@ -289,11 +384,26 @@ msgstr "ستريو"
 msgid "subscript"
 msgstr "رمز مؤشر"
 
+msgid "subset"
+msgstr ""
+
+msgid "sum"
+msgstr ""
+
+msgid "superset"
+msgstr ""
+
 msgid "Symbols"
 msgstr "رموز"
 
+msgid "tangent"
+msgstr ""
+
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "معرّف الاختيار. يجب عدم استخدام هذا المعرف من قبل أي استجابة أخرى أو متغير بند. المعرّف هو سلسلة من الأحرف التي يجب أن تبدأ بحرف أو شرطة سفلية (\"_\") وتحتوي فقط على أحرف ، وشرطات سفلية ، وواصلات (\"-\") ، ونقطة (\".\" ، ويعرف أيضًا باسم النقطة الكاملة) ، وأرقام ، و CombiningChars والموسعات."
+
+msgid "The mapping options are available when at least one map entry is defined."
+msgstr ""
 
 msgid "There is already one interaction with the same identifier \"%s\" (label : \"%s\") and same version : %s. Do you want to override the existing one ?"
 msgstr "يوجد بالفعل تفاعل واحد مع نفس المعرف  \"%s\" (التسمية: \"%s\") ونفس الصيغة: %s . هل تريد تجاوز الموجود؟"
@@ -346,6 +456,9 @@ msgstr "استخدم التحفيز الإعلامي"
 msgid "version : "
 msgstr "صيغة "
 
+msgid "Vertical line, divide"
+msgstr ""
+
 msgid "Warning"
 msgstr "تحذير"
 
@@ -355,8 +468,15 @@ msgstr "مع التسجيل المضغوط، يتم حفظ الصوت كملف w
 msgid "You are about to delete the Portable Custom Interaction <strong>%s</strong> from the system."
 msgstr "أنت على وشك حذف التفاعل المعتاد المحمول <strong>%s</strong> من النظام."
 
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr ""
+
+msgid "≈"
+msgstr ""
+
 msgid "≤"
 msgstr "≤"
 
 msgid "≥"
 msgstr "≥"
+
