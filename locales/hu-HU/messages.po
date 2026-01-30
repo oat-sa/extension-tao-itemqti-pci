@@ -1,24 +1,26 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-07-25 05:57\n"
+"Project-Id-Version: TAO 2026.01\n"
+"PO-Revision-Date: 2026-01-30T13:25:17\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: hu\n"
+"Language: hu-HU\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: hu-HU\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: hu\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: Hungarian\n"
+
+msgid "2 rows"
+msgstr ""
+
+msgid "2 rows & 2 columns"
+msgstr ""
+
+msgid "Add alternative"
+msgstr ""
 
 msgid "Add answer option"
 msgstr "Válaszlehetőség hozzáadása"
@@ -38,14 +40,17 @@ msgstr "sortörés engedélyezése"
 msgid "Allow playback"
 msgstr "Lejátszás engedélyezése"
 
+msgid "Alternative"
+msgstr ""
+
 msgid "angle"
 msgstr "szög"
 
+msgid "Approximately"
+msgstr ""
+
 msgid "Audio bitrate:"
 msgstr "Hang bitráta:"
-
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr "A böngésződ letiltotta az automatikus lejátszást. Nyomd meg a Lejátszás gombot a felvétel meghallgatásához."
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
 msgstr "A hanganyag korábban már rögzítésre került. A böngészője nem támogatja a felvétel lejátszását. Kérjük, próbálja meg egy másik böngészővel."
@@ -74,11 +79,23 @@ msgstr "Csatornák"
 msgid "Close dialog"
 msgstr "Párbeszédpanel bezárása"
 
+msgid "colon"
+msgstr ""
+
 msgid "Comparison"
 msgstr "Összehasonlítás"
 
 msgid "Compressed"
 msgstr "Tömörített"
+
+msgid "congruent"
+msgstr ""
+
+msgid "contains as member"
+msgstr ""
+
+msgid "Correct"
+msgstr ""
 
 msgid "Correct answer option"
 msgstr "Helyes válaszlehetőség"
@@ -89,6 +106,9 @@ msgstr "koszinusz"
 msgid "Define correct responses"
 msgstr "Határozza meg a helyes válaszokat"
 
+msgid "Degree symbol"
+msgstr ""
+
 msgid "Delete"
 msgstr "Töröl"
 
@@ -98,6 +118,12 @@ msgstr "törölje a választ"
 msgid "disabled"
 msgstr "fogyatékkal élő"
 
+msgid "Display icons at each end, or not"
+msgstr ""
+
+msgid "Display numbers above the choices, or not"
+msgstr ""
+
 msgid "divide"
 msgstr "osztás"
 
@@ -106,6 +132,9 @@ msgstr "Letöltés"
 
 msgid "edit the answer"
 msgstr "szerkessze a választ"
+
+msgid "Enable all symbols"
+msgstr ""
 
 msgid "enable auto wrap"
 msgstr "automatikus sortörés engedélyezése"
@@ -146,6 +175,18 @@ msgstr "nagyobb, mint"
 msgid "greater than or equal"
 msgstr "nagyobb vagy egyenlő, mint"
 
+msgid "Hide record button"
+msgstr ""
+
+msgid "Hide stop button"
+msgstr ""
+
+msgid "Hide the record button from test takers."
+msgstr ""
+
+msgid "Hide the stop button from test takers."
+msgstr ""
+
 msgid "id : "
 msgstr "azonosító: "
 
@@ -155,11 +196,17 @@ msgstr "bps-ben (bit/másodperc). Állítsa be a hangminőség és a fájlméret
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "Másodpercben. A maximálisan megengedett felvételi idő (nem lehet kevesebb 10 másodpercnél). A felvétel automatikusan leáll, ha eléri ezt az időt."
 
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr ""
+
 msgid "In seconds. The time interval between partial updates of the recording."
 msgstr "Másodpercben. A felvétel részleges frissítései közötti időintervallum."
 
 msgid "Indefinite integral"
 msgstr "Határozatlan integrál"
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
+msgstr ""
 
 msgid "Invalid files have been removed"
 msgstr "Érvénytelen fájlok eltávolítva"
@@ -182,6 +229,9 @@ msgstr "Nagy"
 msgid "Level"
 msgstr "Szint"
 
+msgid "limit"
+msgstr ""
+
 msgid "ln"
 msgstr "ban"
 
@@ -197,8 +247,17 @@ msgstr "alacsonyabb vagy egyenlő, mint"
 msgid "Manage custom interactions"
 msgstr "Egyéni interakciók kezelése"
 
+msgid "Mapping default"
+msgstr ""
+
+msgid "Matrix"
+msgstr ""
+
 msgid "Max attempts:"
 msgstr "Max. próbálkozás:"
+
+msgid "Maximal score for this interaction."
+msgstr ""
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
 msgstr "A vizsgázó számára engedélyezett maximális rögzítési kísérletek száma. 0-ra állítva korlátlan számú kísérletet engedélyezhet. 3-as korlát esetén a vizsgázó kétszer kattinthat a visszaállítás gombra."
@@ -209,11 +268,17 @@ msgstr "Közepes"
 msgid "Min:"
 msgstr "Min.:"
 
+msgid "Minimal score for this interaction."
+msgstr ""
+
 msgid "minus"
 msgstr "mínusz"
 
 msgid "Mono"
 msgstr "Monó"
+
+msgid "n-root"
+msgstr ""
 
 msgid "No Custom Interaction"
 msgstr "Nincs egyéni interakció"
@@ -229,6 +294,15 @@ msgstr "Opciók"
 
 msgid "parentheses/round brackets"
 msgstr "zárójelek/kerek zárójelek"
+
+msgid "Percent"
+msgstr ""
+
+msgid "Play a sound at the start and end of recording."
+msgstr ""
+
+msgid "Play sound"
+msgstr ""
 
 msgid "plus"
 msgstr "plusz"
@@ -246,17 +320,32 @@ msgstr "A felvett hanganyag automatikusan lejátszásra kerül a felvétel leál
 msgid "Recording format"
 msgstr "Felvételi formátum"
 
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr ""
+
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "A felvétel automatikusan elindul, amint a vizsgázó engedélyezi a mikrofon használatát. Médiainger használata esetén a felvétel az inger lejátszása után automatikusan elindul."
 
 msgid "Response identifier"
 msgstr "Válasz azonosítója"
 
+msgid "right arrow"
+msgstr ""
+
 msgid "Scale size"
 msgstr "Méretméret"
 
+msgid "Score"
+msgstr ""
+
+msgid "Score range"
+msgstr ""
+
 msgid "Sec:"
 msgstr "Másodperc:"
+
+msgid "Sequential"
+msgstr ""
 
 msgid "set intersection"
 msgstr "beállított kereszteződés"
@@ -267,6 +356,12 @@ msgstr "halmazunió"
 #, tao-public
 msgid "Settings"
 msgstr "Beállítások"
+
+msgid "Show icons"
+msgstr ""
+
+msgid "Show numbers"
+msgstr ""
 
 msgid "similar"
 msgstr "hasonló"
@@ -289,11 +384,26 @@ msgstr "Sztereó"
 msgid "subscript"
 msgstr "alsó index"
 
+msgid "subset"
+msgstr ""
+
+msgid "sum"
+msgstr ""
+
+msgid "superset"
+msgstr ""
+
 msgid "Symbols"
 msgstr "Szimbólumok"
 
+msgid "tangent"
+msgstr ""
+
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "A választott azonosító. Ezt az azonosítót nem használhatja más válasz- vagy elemváltozó. Az azonosító egy karakterlánc, amelynek betűvel vagy aláhúzásjellel (\"_\") kell kezdődnie, és csak betűket, aláhúzásjeleket, kötőjeleket (\"-\"), pontokat (\".\", más néven pont), számjegyeket, kombinált karaktereket és bővítményeket tartalmazhat."
+
+msgid "The mapping options are available when at least one map entry is defined."
+msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Ez csak tesztelési célokat szolgál. Megjelenít egy linket a rögzített fájl letöltéséhez, amint a felvétel leáll. Ezt nem szabad kézbesítési környezetben használni, mivel lehetővé tenné a vizsgázó számára a saját felvételének letöltését."
@@ -340,11 +450,20 @@ msgstr "Használj médiaösztönzőket"
 msgid "version : "
 msgstr "verzió: "
 
+msgid "Vertical line, divide"
+msgstr ""
+
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Tömörített felvétel esetén a hanganyag webm vagy ogg fájlként kerül mentésre (kisebb méret). Tömörítetlen felvétel esetén veszteségmentes Wav fájlként (sokkal nagyobb méret)."
+
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr "A böngésződ letiltotta az automatikus lejátszást. Nyomd meg a Lejátszás gombot a felvétel meghallgatásához."
+
+msgid "≈"
+msgstr ""
 
 msgid "≤"
 msgstr "≤"
