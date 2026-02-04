@@ -1,24 +1,26 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-05-07 14:10\n"
+"PO-Revision-Date: 2026-02-03 16:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: gl\n"
+"Language: gl-ES\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: gl-ES\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: gl\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: Galician\n"
+
+msgid "2 rows"
+msgstr "2 filas"
+
+msgid "2 rows & 2 columns"
+msgstr "2 filas e 2 columnas"
+
+msgid "Add alternative"
+msgstr "Engadir alternativa"
 
 msgid "Add answer option"
 msgstr ""
@@ -38,13 +40,16 @@ msgstr ""
 msgid "Allow playback"
 msgstr ""
 
+msgid "Alternative"
+msgstr "Alternativa"
+
 msgid "angle"
 msgstr ""
 
-msgid "Audio bitrate:"
-msgstr ""
+msgid "Approximately"
+msgstr "Aproximadamente"
 
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgid "Audio bitrate:"
 msgstr ""
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
@@ -74,10 +79,22 @@ msgstr ""
 msgid "Close dialog"
 msgstr ""
 
+msgid "colon"
+msgstr "colon"
+
 msgid "Comparison"
 msgstr ""
 
 msgid "Compressed"
+msgstr ""
+
+msgid "congruent"
+msgstr "congruente"
+
+msgid "contains as member"
+msgstr "contén como membro"
+
+msgid "Correct"
 msgstr ""
 
 msgid "Correct answer option"
@@ -89,6 +106,9 @@ msgstr ""
 msgid "Define correct responses"
 msgstr ""
 
+msgid "Degree symbol"
+msgstr "Símbolo de grao"
+
 msgid "Delete"
 msgstr ""
 
@@ -98,6 +118,12 @@ msgstr ""
 msgid "disabled"
 msgstr ""
 
+msgid "Display icons at each end, or not"
+msgstr "Mostrar iconas en cada extremo ou non"
+
+msgid "Display numbers above the choices, or not"
+msgstr "Mostrar ou non os números enriba das opcións"
+
 msgid "divide"
 msgstr ""
 
@@ -106,6 +132,9 @@ msgstr ""
 
 msgid "edit the answer"
 msgstr ""
+
+msgid "Enable all symbols"
+msgstr "Activar todos os símbolos"
 
 msgid "enable auto wrap"
 msgstr ""
@@ -146,6 +175,18 @@ msgstr ""
 msgid "greater than or equal"
 msgstr ""
 
+msgid "Hide record button"
+msgstr "Ocultar botón de gravación"
+
+msgid "Hide stop button"
+msgstr "Ocultar o botón de parada"
+
+msgid "Hide the record button from test takers."
+msgstr "Ocultar o botón de gravación dos examinandos."
+
+msgid "Hide the stop button from test takers."
+msgstr "Ocultar o botón de parar dos examinandos."
+
 msgid "id : "
 msgstr ""
 
@@ -155,10 +196,16 @@ msgstr ""
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr ""
 
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr "En segundos. Tempo máximo de gravación permitido (non pode ser inferior a 5 segundos). A gravación deterase automaticamente unha vez alcanzado."
+
 msgid "In seconds. The time interval between partial updates of the recording."
 msgstr ""
 
 msgid "Indefinite integral"
+msgstr ""
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
 msgstr ""
 
 msgid "Invalid files have been removed"
@@ -182,6 +229,9 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
+msgid "limit"
+msgstr "límite"
+
 msgid "ln"
 msgstr ""
 
@@ -197,7 +247,16 @@ msgstr ""
 msgid "Manage custom interactions"
 msgstr ""
 
+msgid "Mapping default"
+msgstr ""
+
+msgid "Matrix"
+msgstr "Matriz"
+
 msgid "Max attempts:"
+msgstr ""
+
+msgid "Maximal score for this interaction."
 msgstr ""
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
@@ -209,11 +268,17 @@ msgstr ""
 msgid "Min:"
 msgstr ""
 
+msgid "Minimal score for this interaction."
+msgstr "Puntuación mínima para esta interacción."
+
 msgid "minus"
 msgstr ""
 
 msgid "Mono"
 msgstr ""
+
+msgid "n-root"
+msgstr "raíz n"
 
 msgid "No Custom Interaction"
 msgstr ""
@@ -229,6 +294,15 @@ msgstr ""
 
 msgid "parentheses/round brackets"
 msgstr ""
+
+msgid "Percent"
+msgstr "Porcentaxe"
+
+msgid "Play a sound at the start and end of recording."
+msgstr "Reproducir un son ao comezo e ao final da gravación."
+
+msgid "Play sound"
+msgstr "Reproducir son"
 
 msgid "plus"
 msgstr ""
@@ -246,16 +320,31 @@ msgstr ""
 msgid "Recording format"
 msgstr ""
 
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr "A gravación comeza automaticamente unha vez que o examinando autoriza o uso do micrófono."
+
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr ""
 
 msgid "Response identifier"
 msgstr ""
 
+msgid "right arrow"
+msgstr "frecha dereita"
+
 msgid "Scale size"
 msgstr ""
 
+msgid "Score"
+msgstr ""
+
+msgid "Score range"
+msgstr ""
+
 msgid "Sec:"
+msgstr ""
+
+msgid "Sequential"
 msgstr ""
 
 msgid "set intersection"
@@ -267,6 +356,12 @@ msgstr ""
 #, tao-public
 msgid "Settings"
 msgstr ""
+
+msgid "Show icons"
+msgstr "Mostrar iconas"
+
+msgid "Show numbers"
+msgstr "Mostrar números"
 
 msgid "similar"
 msgstr ""
@@ -289,10 +384,25 @@ msgstr ""
 msgid "subscript"
 msgstr ""
 
+msgid "subset"
+msgstr "subconxunto"
+
+msgid "sum"
+msgstr "suma"
+
+msgid "superset"
+msgstr "superconxunto"
+
 msgid "Symbols"
 msgstr ""
 
+msgid "tangent"
+msgstr "tanxente"
+
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr ""
+
+msgid "The mapping options are available when at least one map entry is defined."
 msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
@@ -340,11 +450,20 @@ msgstr ""
 msgid "version : "
 msgstr ""
 
+msgid "Vertical line, divide"
+msgstr "Liña vertical, división"
+
 msgid "Warning"
 msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr ""
+
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr ""
+
+msgid "≈"
+msgstr "≈"
 
 msgid "≤"
 msgstr ""

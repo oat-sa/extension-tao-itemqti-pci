@@ -1,24 +1,26 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-05-07 14:10\n"
+"PO-Revision-Date: 2026-02-03 16:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nb_NO\n"
+"Language: nb-NO\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: nb-NO\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: nb\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: Norwegian Bokmal\n"
+
+msgid "2 rows"
+msgstr "2 rader"
+
+msgid "2 rows & 2 columns"
+msgstr "2 rader og 2 kolonner"
+
+msgid "Add alternative"
+msgstr "Legg til alternativ"
 
 msgid "Add answer option"
 msgstr ""
@@ -38,14 +40,17 @@ msgstr "tillat linjeskift"
 msgid "Allow playback"
 msgstr "Tillat avspilling"
 
+msgid "Alternative"
+msgstr "alternativt"
+
 msgid "angle"
 msgstr ""
 
+msgid "Approximately"
+msgstr "Omtrent"
+
 msgid "Audio bitrate:"
 msgstr "Lydhastighet:"
-
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr ""
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
 msgstr ""
@@ -74,11 +79,23 @@ msgstr "Kanaler"
 msgid "Close dialog"
 msgstr ""
 
+msgid "colon"
+msgstr "kolon"
+
 msgid "Comparison"
 msgstr "Sammenligning"
 
 msgid "Compressed"
 msgstr "Komprimert"
+
+msgid "congruent"
+msgstr "overskyet"
+
+msgid "contains as member"
+msgstr "inneholder som medlem"
+
+msgid "Correct"
+msgstr "Riktig"
 
 msgid "Correct answer option"
 msgstr ""
@@ -89,6 +106,9 @@ msgstr ""
 msgid "Define correct responses"
 msgstr ""
 
+msgid "Degree symbol"
+msgstr "Grader symbol"
+
 msgid "Delete"
 msgstr "Slett"
 
@@ -98,6 +118,12 @@ msgstr ""
 msgid "disabled"
 msgstr "deaktivert"
 
+msgid "Display icons at each end, or not"
+msgstr "Vis ikoner på hver ende, eller ikke"
+
+msgid "Display numbers above the choices, or not"
+msgstr "Vis tall over valgene, eller ikke"
+
 msgid "divide"
 msgstr "dele opp"
 
@@ -106,6 +132,9 @@ msgstr "Last ned"
 
 msgid "edit the answer"
 msgstr ""
+
+msgid "Enable all symbols"
+msgstr "Aktiver alle symboler"
 
 msgid "enable auto wrap"
 msgstr "tillat automatisk innpakning"
@@ -146,6 +175,18 @@ msgstr "større enn"
 msgid "greater than or equal"
 msgstr "større enn eller lik"
 
+msgid "Hide record button"
+msgstr "Skjul opptaksknappen"
+
+msgid "Hide stop button"
+msgstr "Skjul stopp-knappen"
+
+msgid "Hide the record button from test takers."
+msgstr "Skjul opptaksknappen fra testkjøpere."
+
+msgid "Hide the stop button from test takers."
+msgstr "Skjul stoppeknappen fra testkjøpere."
+
 msgid "id : "
 msgstr ""
 
@@ -155,11 +196,17 @@ msgstr "I bps (bits per sekund). Sett en avveining mellom lydkvalitet og filstø
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "I sekunder. Maksimal tillatt opptakstid (kan ikke være mindre enn 10 sekunder). Innspillingen stopper automatisk ved oppnådd tid."
 
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr "På sekunder. Maksimal opptakstid tillatt (kan ikke være mindre enn 5 sekunder). Opptak vil automatisk stoppes én gang."
+
 msgid "In seconds. The time interval between partial updates of the recording."
 msgstr "I sekunder. Tidsintervallet mellom delvise oppdateringer av innspillingen."
 
 msgid "Indefinite integral"
 msgstr "Ubestemt integral"
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
+msgstr ""
 
 msgid "Invalid files have been removed"
 msgstr ""
@@ -182,6 +229,9 @@ msgstr "Stor"
 msgid "Level"
 msgstr "Nivå"
 
+msgid "limit"
+msgstr "grense"
+
 msgid "ln"
 msgstr ""
 
@@ -197,8 +247,17 @@ msgstr "lavere enn eller lik"
 msgid "Manage custom interactions"
 msgstr "Administrer spesialdesignede oppgavetyper"
 
+msgid "Mapping default"
+msgstr "Kartleggingsstandard"
+
+msgid "Matrix"
+msgstr "Matrise"
+
 msgid "Max attempts:"
 msgstr "Maks forsøk:"
+
+msgid "Maximal score for this interaction."
+msgstr "Maksimal skår for denne oppgavetypen."
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
 msgstr "Maksimalt antall opptak eleven kan gjøre. Sett til 0 for å tillate ubegrensede forsøk. Med en øvre grense på 3 vil eleven kunne klikke 2 ganger på tilbakeknappen."
@@ -209,11 +268,17 @@ msgstr ""
 msgid "Min:"
 msgstr ""
 
+msgid "Minimal score for this interaction."
+msgstr "Minimal poengsum for denne interaksjonen."
+
 msgid "minus"
 msgstr ""
 
 msgid "Mono"
 msgstr ""
+
+msgid "n-root"
+msgstr "n-rot"
 
 msgid "No Custom Interaction"
 msgstr "Ingen PCI'er"
@@ -229,6 +294,15 @@ msgstr "Alternativer"
 
 msgid "parentheses/round brackets"
 msgstr "parenteser"
+
+msgid "Percent"
+msgstr "Prosent"
+
+msgid "Play a sound at the start and end of recording."
+msgstr "Spill av en lyd i begynnelsen og slutten av opptaket."
+
+msgid "Play sound"
+msgstr "Spill av lyd"
 
 msgid "plus"
 msgstr ""
@@ -246,17 +320,32 @@ msgstr "Innspilt lyd spoles automatisk tilbake etter at opptaket stopper. Under 
 msgid "Recording format"
 msgstr "Opptaksformat"
 
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr "Opptak starter automatisk etter at testavtalen gir mikrofon autorisasjon."
+
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "Opptaket starter automatisk når kandidaten tillater bruk av mikrofon. Hvis en mediefil brukes, starter opptaket automatisk etter at teksten er spilt av."
 
 msgid "Response identifier"
 msgstr "Skåringsidentifikator"
 
+msgid "right arrow"
+msgstr "pil høyre"
+
 msgid "Scale size"
 msgstr "Skala størrelse"
 
+msgid "Score"
+msgstr "Skåre"
+
+msgid "Score range"
+msgstr "Poenggrense"
+
 msgid "Sec:"
 msgstr "Sek:"
+
+msgid "Sequential"
+msgstr ""
 
 msgid "set intersection"
 msgstr "sett kryss"
@@ -267,6 +356,12 @@ msgstr "sett kombinasjon"
 #, tao-public
 msgid "Settings"
 msgstr "Instillinger"
+
+msgid "Show icons"
+msgstr "Vis ikoner"
+
+msgid "Show numbers"
+msgstr "Vis tall"
 
 msgid "similar"
 msgstr "lignende"
@@ -289,11 +384,26 @@ msgstr ""
 msgid "subscript"
 msgstr "abonnement"
 
+msgid "subset"
+msgstr "delsett"
+
+msgid "sum"
+msgstr "sum"
+
+msgid "superset"
+msgstr "oversatt"
+
 msgid "Symbols"
 msgstr "Symboler"
 
+msgid "tangent"
+msgstr "tangent"
+
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "Identifikator for valget. Denne identifikatoren må ikke brukes av andre svar- eller oppgavevariabler. En identifikator er en tegnrekke som må starte med en bokstav eller en understreking (\"_\") og bare inneholde bokstaver, understreker, bindestreker (\"-\"), punktum (\".\", Aka full-stop), sifre, kombinerte tegn og forlengere."
+
+msgid "The mapping options are available when at least one map entry is defined."
+msgstr "Kartleggingsalternativene er tilgjengelige når minst én oppføring er definert."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Dette er kun for testformål. Viser en kobling for å laste ned den innspilte filen når innspillingen stopper. Dette bør ikke brukes i en svarfil, da dette vil tillate kandidaten å laste ned sitt eget opptak."
@@ -340,11 +450,20 @@ msgstr "Bruk mediafiler"
 msgid "version : "
 msgstr "versjon: "
 
+msgid "Vertical line, divide"
+msgstr "Vertikal linje, dividere"
+
 msgid "Warning"
 msgstr "Advarsel"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Ved komprimert innspilling lagres lyden som en webm- eller ogg -fil (mindre størrelse). Som ikke-komprimert, lagres den som en tapsfri Wav -fil (mye større størrelse)."
+
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr ""
+
+msgid "≈"
+msgstr "≈"
 
 msgid "≤"
 msgstr ""

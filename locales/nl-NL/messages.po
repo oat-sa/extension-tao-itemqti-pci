@@ -1,30 +1,32 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-05-07 14:09\n"
+"PO-Revision-Date: 2026-02-03 16:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl\n"
+"Language: nl-NL\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: nl-NL\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: nl\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: Dutch\n"
+
+msgid "2 rows"
+msgstr "2 rijen"
+
+msgid "2 rows & 2 columns"
+msgstr "2 rijen & 2 kolommen"
+
+msgid "Add alternative"
+msgstr "Alternatief toevoegen"
 
 msgid "Add answer option"
-msgstr ""
+msgstr "Antwoordoptie toevoegen"
 
 msgid "Add gap"
-msgstr ""
+msgstr "Voeg opening toe"
 
 msgid "Add Interaction"
 msgstr "Voeg interactie toe"
@@ -38,23 +40,29 @@ msgstr "regeleinde toestaan"
 msgid "Allow playback"
 msgstr "Sta afspelen toe"
 
+msgid "Alternative"
+msgstr "Alternatief"
+
 msgid "angle"
+msgstr "hoek"
+
+msgid "Approximately"
+msgstr "Ongeveer"
+
+msgid "Approximately"
 msgstr ""
 
 msgid "Audio bitrate:"
 msgstr "Audio-bitrate:"
 
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr ""
-
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr ""
+msgstr "Audio is eerder opgenomen. Je browser ondersteunt het afspelen van deze opname niet. Probeer een andere browser."
 
 msgid "authorize white space"
 msgstr "sta witruimte toe"
 
 msgid "Auto playback recording"
-msgstr ""
+msgstr "Opname automatisch afspelen"
 
 msgid "Auto start recording"
 msgstr "Autostart opname"
@@ -63,7 +71,7 @@ msgid "Back to listing"
 msgstr "Terig naar lijst"
 
 msgid "braces/curly brackets"
-msgstr ""
+msgstr "haakjes/accolades"
 
 msgid "Cancel"
 msgstr "Annuleren"
@@ -72,6 +80,12 @@ msgid "Channels"
 msgstr "Kanalen"
 
 msgid "Close dialog"
+msgstr "Dialoogvenster sluiten"
+
+msgid "colon"
+msgstr "colon"
+
+msgid "colon"
 msgstr ""
 
 msgid "Comparison"
@@ -80,41 +94,68 @@ msgstr "Vergelijking"
 msgid "Compressed"
 msgstr "Gecomprimeerd"
 
+msgid "congruent"
+msgstr "congruent"
+
+msgid "contains as member"
+msgstr "bevat als lid"
+
+msgid "Correct"
+msgstr "Goed!"
+
 msgid "Correct answer option"
-msgstr ""
+msgstr "Juiste antwoord optie"
 
 msgid "cosinus"
-msgstr ""
+msgstr "cosinus"
 
 msgid "Define correct responses"
+msgstr "juiste antwoorden definiëren"
+
+msgid "Degree symbol"
+msgstr "Graad symbool"
+
+msgid "Degree symbol"
 msgstr ""
 
 msgid "Delete"
 msgstr "Verwijderen"
 
 msgid "delete the answer"
-msgstr ""
+msgstr "het antwoord verwijderen"
 
 msgid "disabled"
 msgstr "uitgeschakeld"
+
+msgid "Display icons at each end, or not"
+msgstr "Pictogrammen weergeven aan elk einde, of niet"
+
+msgid "Display numbers above the choices, or not"
+msgstr "Getallen weergeven boven de keuzes, of niet"
 
 msgid "divide"
 msgstr "delen"
 
 msgid "Download"
-msgstr ""
+msgstr "downloaden"
 
 msgid "edit the answer"
+msgstr "het antwoord bewerken"
+
+msgid "Enable all symbols"
+msgstr "Alle symbolen inschakelen"
+
+msgid "Enable all symbols"
 msgstr ""
 
 msgid "enable auto wrap"
-msgstr ""
+msgstr "automatische terugloop inschakelen"
 
 msgid "Enabled in item authoring"
-msgstr ""
+msgstr "Ingeschakeld bij het schrijven van items"
 
 msgid "equal"
-msgstr ""
+msgstr "gelijk"
 
 msgid "Experimental only"
 msgstr "Alleen experimenteel"
@@ -132,19 +173,31 @@ msgid "Functions"
 msgstr "Functies"
 
 msgid "Gap size"
-msgstr ""
+msgstr "Kloog grootte"
 
 msgid "Geometry"
-msgstr ""
+msgstr "Geometrie"
 
 msgid "Give the possibility to the test taker to playback its own recording."
 msgstr "Geef de mogelijkheid aan de kandidaat om zijn eigen afname af te spelen."
 
 msgid "greater than"
-msgstr ""
+msgstr "groter dan"
 
 msgid "greater than or equal"
 msgstr "Groter dan of gelijk aan"
+
+msgid "Hide record button"
+msgstr "Verberg opname knop"
+
+msgid "Hide stop button"
+msgstr "Verberg stop knop"
+
+msgid "Hide the record button from test takers."
+msgstr "Verberg de opname-knop voor test klanten."
+
+msgid "Hide the stop button from test takers."
+msgstr "Verberg de stop knop voor de test klanten."
 
 msgid "id : "
 msgstr "id :"
@@ -155,41 +208,56 @@ msgstr "In bps (bits per seconde). Stel de afweging in tussen audiokwaliteit en 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "In seconden. Maximum toegestane opname tijd (kan niet korter zijn dan 10 seconden). De opname zal automatisch stoppen wanneer de tijd wordt bereikt."
 
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr "In seconden. Maximale opnametijd toegestaan (kan niet minder dan 5 seconden zijn). Opname zal automatisch stoppen zodra deze is bereikt."
+
 msgid "In seconds. The time interval between partial updates of the recording."
-msgstr ""
+msgstr "In enkele seconden. Het tijdsinterval tussen gedeeltelijke updates van de opname."
 
 msgid "Indefinite integral"
+msgstr "Onbepaalde integraal"
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
+msgstr "Geeft aan dat de audio deel uitmaakt van een reeks met andere opeenvolgende interacties. De verdere ontwikkeling van de rijen wordt geregeld door de aanvoermotor."
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
 msgstr ""
 
 msgid "Invalid files have been removed"
-msgstr ""
+msgstr "Ongeldige bestanden zijn verwijderd"
 
 msgid "is a member of"
-msgstr ""
+msgstr "is lid van"
 
 msgid "is not a member of"
-msgstr ""
+msgstr "is geen lid van"
 
 msgid "is parallel with"
-msgstr ""
+msgstr "is parallel met"
 
 msgid "is perpendicular to"
-msgstr ""
+msgstr "is loodreigend aan"
 
 msgid "Large"
 msgstr "Groot"
 
 msgid "Level"
+msgstr "Niveau"
+
+msgid "limit"
+msgstr "limiet"
+
+msgid "limit"
 msgstr ""
 
 msgid "ln"
 msgstr "In"
 
 msgid "log"
-msgstr ""
+msgstr "logboek"
 
 msgid "lower than"
-msgstr ""
+msgstr "lager dan"
 
 msgid "lower than or equal"
 msgstr "kleiner dan of gelijk aan"
@@ -197,8 +265,17 @@ msgstr "kleiner dan of gelijk aan"
 msgid "Manage custom interactions"
 msgstr "Beheer aangepaste interactie"
 
+msgid "Mapping default"
+msgstr "Standaard indeling"
+
+msgid "Matrix"
+msgstr "Matrix"
+
 msgid "Max attempts:"
 msgstr "Maximum aantal pogingen"
+
+msgid "Maximal score for this interaction."
+msgstr "Maximale score voor deze interactie"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
 msgstr "Maximaal aan de kandidate toegestane opname pogingen. Stel in op 0 voor oneindig. Met een limiet van 3 kan de kandidaat tweemaal de resetbutton klikken."
@@ -207,12 +284,24 @@ msgid "Medium"
 msgstr "Gemiddeld"
 
 msgid "Min:"
+msgstr "Min:"
+
+msgid "Minimal score for this interaction."
+msgstr "Minimale score voor deze interactie."
+
+msgid "Minimal score for this interaction."
 msgstr ""
 
 msgid "minus"
-msgstr ""
+msgstr "minus"
 
 msgid "Mono"
+msgstr "Monochroom"
+
+msgid "n-root"
+msgstr "n-wortel"
+
+msgid "n-root"
 msgstr ""
 
 msgid "No Custom Interaction"
@@ -228,23 +317,44 @@ msgid "Options"
 msgstr "Opties"
 
 msgid "parentheses/round brackets"
+msgstr "haakjes/haakjes"
+
+msgid "Percent"
+msgstr "Percentage"
+
+msgid "Play a sound at the start and end of recording."
+msgstr "Een geluid afspelen aan het begin en einde van de opname."
+
+msgid "Play sound"
+msgstr "Geluid afspelen"
+
+msgid "Percent"
+msgstr ""
+
+msgid "Play a sound at the start and end of recording."
+msgstr ""
+
+msgid "Play sound"
 msgstr ""
 
 msgid "plus"
-msgstr ""
+msgstr "plus"
 
 msgid "Plus/minus"
 msgstr "Plus/min"
 
 #, tao-public
 msgid "Portable Custom Interactions"
-msgstr ""
+msgstr "Draagbare aangepaste interacties"
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr ""
+msgstr "Opgenomen audio wordt automatisch weer afgespeeld nadat de opname is gestopt. Tijdens het afspelen is geen gebruikersinteractie mogelijk en alle knoppen zijn uitgeschakeld."
 
 msgid "Recording format"
 msgstr "Opname formaat"
+
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr "Opname start automatisch zodra een test taker microfoon toestemming geeft."
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "Opname start automatisch zodra de kandidaat de microfoon autoriseert. Indien een media stimulus gebruikt is, zal de opname automatisch starten nadat deze is afgespeeld."
@@ -252,48 +362,105 @@ msgstr "Opname start automatisch zodra de kandidaat de microfoon autoriseert. In
 msgid "Response identifier"
 msgstr "Antwoord naam"
 
+msgid "right arrow"
+msgstr "pijltje naar rechts"
+
 msgid "Scale size"
+msgstr "Grootte schalen"
+
+msgid "Score"
+msgstr "Beoordeling"
+
+msgid "Score range"
+msgstr "Scorebereik"
+
+msgid "Score"
+msgstr ""
+
+msgid "Score range"
 msgstr ""
 
 msgid "Sec:"
+msgstr "Sec:"
+
+msgid "Sequential"
+msgstr "Sequentiële"
+
+msgid "Sequential"
 msgstr ""
 
 msgid "set intersection"
-msgstr ""
+msgstr "maak snijpunt"
 
 msgid "set union"
-msgstr ""
+msgstr "vakbond instellen"
 
 #, tao-public
 msgid "Settings"
+msgstr "Instellingen"
+
+msgid "Show icons"
+msgstr "Pictogrammen weergeven"
+
+msgid "Show numbers"
+msgstr "Getallen weergeven"
+
+msgid "Show icons"
+msgstr ""
+
+msgid "Show numbers"
 msgstr ""
 
 msgid "similar"
-msgstr ""
+msgstr "gelijksoortig"
 
 msgid "sinus"
-msgstr ""
+msgstr "sinus"
 
 msgid "Small"
 msgstr "Klein"
 
 msgid "square brackets"
-msgstr ""
+msgstr "vierkante haken"
 
 msgid "square root"
 msgstr "wortel"
 
 msgid "Stereo"
-msgstr ""
+msgstr "Stereo"
 
 msgid "subscript"
+msgstr "abonnement"
+
+msgid "subset"
+msgstr "subset"
+
+msgid "sum"
+msgstr "sum"
+
+msgid "superset"
+msgstr "superset"
+
+msgid "subset"
+msgstr ""
+
+msgid "sum"
+msgstr ""
+
+msgid "superset"
 msgstr ""
 
 msgid "Symbols"
 msgstr "Symbolen"
 
+msgid "tangent"
+msgstr "tangent"
+
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "De naam van de keuze. Deze naam moet niet worden gebruikt door een andere keuze of item variabele. Een naam is een string van tekens die beginnen met een letter of een liggend streepje (\"_\") en mag alleen letters, liggende streepjes, streepjes (\"-\"), punten (\".\"), cijfers, gecombineerde tekens en extenders bevatten."
+
+msgid "The mapping options are available when at least one map entry is defined."
+msgstr "De mapping opties zijn beschikbaar als ten minste één kaart item is gedefinieerd."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Dit is alleen voor testdoeleinden. Laat een link zien om het opgenomen bestand te downloaden op het moment dat de opname stopt. Dit moet niet worden gebruikt in een actieve toets, aangezien het de kandidaat de mogelijkheid geeft om zijn eigen opname te downloaden."
@@ -308,16 +475,16 @@ msgid "times"
 msgstr "keer"
 
 msgid "times dot"
-msgstr ""
+msgstr "keer stip"
 
 msgid "triangle"
-msgstr ""
+msgstr "driehoek"
 
 msgid "Trigonometry"
 msgstr "Trigonometrie"
 
 msgid "type : "
-msgstr ""
+msgstr "type : "
 
 msgid "Unable to upload file %s : %s"
 msgstr "Kan bestand %s : %s niet uplodaen"
@@ -326,13 +493,13 @@ msgid "Uncompressed"
 msgstr "Niet-gecomprimeerde"
 
 msgid "Update interval:"
-msgstr ""
+msgstr "Interval updaten:"
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "Upload een nieuwe aangepaste interactie (zip pakket)"
 
 msgid "use expression with gaps"
-msgstr ""
+msgstr "gebruik expressie met gaten"
 
 msgid "Use media stimulus"
 msgstr "Gebruik een media stimulus"
@@ -340,15 +507,24 @@ msgstr "Gebruik een media stimulus"
 msgid "version : "
 msgstr "Versie: "
 
+msgid "Vertical line, divide"
+msgstr "Verticale lijn, deel"
+
 msgid "Warning"
-msgstr ""
+msgstr "Waarschuwing"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Bij gecomprimeerde opname wordt de audio opgeslagen als een webm- of ogg-bestand (kleiner formaat). Bij niet-gecomprimeerd opname, als een lossless Wav-bestand (veel groter formaat)."
 
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr "Uw browser heeft automatisch afspelen geblokkeerd. Druk op Play om naar uw opname te luisteren."
+
+msgid "≈"
+msgstr "≈"
+
 msgid "≤"
-msgstr ""
+msgstr "≤"
 
 msgid "≥"
-msgstr ""
+msgstr "≥"
 

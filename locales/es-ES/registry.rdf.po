@@ -1,44 +1,37 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-12-04 16:10\n"
+"PO-Revision-Date: 2026-02-03 16:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: es\n"
+"Language: es-ES\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: es-ES\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: es-ES\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/registry.rdf.po\n"
-"X-Crowdin-File-ID: 968\n"
-"Language-Team: Spanish\n"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "QTI-PCI-Creator Hooks"
-msgstr ""
+msgstr "QTI-PCI-Creator Hooks"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "typeIdentifier"
-msgstr ""
+msgstr "typeIdentifier"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Unique Identifier of the PCI"
-msgstr ""
+msgstr "Identificador único del PCI"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "directory"
-msgstr ""
+msgstr "directorio"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "the location containing the unzipped source of the PCI creator"
-msgstr ""
+msgstr "la ubicación que contiene la fuente descomprimida del creador PCI"
 

@@ -1,24 +1,26 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 09:18\n"
+"Project-Id-Version: TAO 2026.01\n"
+"PO-Revision-Date: 2026-01-30T13:25:16\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: fr_CH\n"
+"Language: fr-CH\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: fr-CH\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: fr-CH\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: French, Switzerland\n"
+
+msgid "2 rows"
+msgstr ""
+
+msgid "2 rows & 2 columns"
+msgstr ""
+
+msgid "Add alternative"
+msgstr ""
 
 msgid "Add answer option"
 msgstr ""
@@ -38,13 +40,16 @@ msgstr ""
 msgid "Allow playback"
 msgstr ""
 
+msgid "Alternative"
+msgstr ""
+
 msgid "angle"
 msgstr ""
 
-msgid "Audio bitrate:"
+msgid "Approximately"
 msgstr ""
 
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgid "Audio bitrate:"
 msgstr ""
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
@@ -74,10 +79,22 @@ msgstr ""
 msgid "Close dialog"
 msgstr ""
 
+msgid "colon"
+msgstr ""
+
 msgid "Comparison"
 msgstr ""
 
 msgid "Compressed"
+msgstr ""
+
+msgid "congruent"
+msgstr ""
+
+msgid "contains as member"
+msgstr ""
+
+msgid "Correct"
 msgstr ""
 
 msgid "Correct answer option"
@@ -89,6 +106,9 @@ msgstr ""
 msgid "Define correct responses"
 msgstr ""
 
+msgid "Degree symbol"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -98,6 +118,12 @@ msgstr ""
 msgid "disabled"
 msgstr ""
 
+msgid "Display icons at each end, or not"
+msgstr ""
+
+msgid "Display numbers above the choices, or not"
+msgstr ""
+
 msgid "divide"
 msgstr ""
 
@@ -105,6 +131,9 @@ msgid "Download"
 msgstr ""
 
 msgid "edit the answer"
+msgstr ""
+
+msgid "Enable all symbols"
 msgstr ""
 
 msgid "enable auto wrap"
@@ -146,6 +175,18 @@ msgstr ""
 msgid "greater than or equal"
 msgstr ""
 
+msgid "Hide record button"
+msgstr ""
+
+msgid "Hide stop button"
+msgstr ""
+
+msgid "Hide the record button from test takers."
+msgstr ""
+
+msgid "Hide the stop button from test takers."
+msgstr ""
+
 msgid "id : "
 msgstr ""
 
@@ -155,10 +196,16 @@ msgstr ""
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr ""
 
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr ""
+
 msgid "In seconds. The time interval between partial updates of the recording."
 msgstr ""
 
 msgid "Indefinite integral"
+msgstr ""
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
 msgstr ""
 
 msgid "Invalid files have been removed"
@@ -182,6 +229,9 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
+msgid "limit"
+msgstr ""
+
 msgid "ln"
 msgstr ""
 
@@ -197,7 +247,16 @@ msgstr ""
 msgid "Manage custom interactions"
 msgstr ""
 
+msgid "Mapping default"
+msgstr ""
+
+msgid "Matrix"
+msgstr ""
+
 msgid "Max attempts:"
+msgstr ""
+
+msgid "Maximal score for this interaction."
 msgstr ""
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
@@ -209,10 +268,16 @@ msgstr ""
 msgid "Min:"
 msgstr ""
 
+msgid "Minimal score for this interaction."
+msgstr ""
+
 msgid "minus"
 msgstr ""
 
 msgid "Mono"
+msgstr ""
+
+msgid "n-root"
 msgstr ""
 
 msgid "No Custom Interaction"
@@ -228,6 +293,15 @@ msgid "Options"
 msgstr ""
 
 msgid "parentheses/round brackets"
+msgstr ""
+
+msgid "Percent"
+msgstr ""
+
+msgid "Play a sound at the start and end of recording."
+msgstr ""
+
+msgid "Play sound"
 msgstr ""
 
 msgid "plus"
@@ -246,16 +320,31 @@ msgstr ""
 msgid "Recording format"
 msgstr ""
 
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr ""
+
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr ""
 
 msgid "Response identifier"
 msgstr ""
 
+msgid "right arrow"
+msgstr ""
+
 msgid "Scale size"
 msgstr ""
 
+msgid "Score"
+msgstr ""
+
+msgid "Score range"
+msgstr ""
+
 msgid "Sec:"
+msgstr ""
+
+msgid "Sequential"
 msgstr ""
 
 msgid "set intersection"
@@ -266,6 +355,12 @@ msgstr ""
 
 #, tao-public
 msgid "Settings"
+msgstr ""
+
+msgid "Show icons"
+msgstr ""
+
+msgid "Show numbers"
 msgstr ""
 
 msgid "similar"
@@ -289,10 +384,25 @@ msgstr ""
 msgid "subscript"
 msgstr ""
 
+msgid "subset"
+msgstr ""
+
+msgid "sum"
+msgstr ""
+
+msgid "superset"
+msgstr ""
+
 msgid "Symbols"
 msgstr ""
 
+msgid "tangent"
+msgstr ""
+
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr ""
+
+msgid "The mapping options are available when at least one map entry is defined."
 msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
@@ -340,10 +450,19 @@ msgstr ""
 msgid "version : "
 msgstr ""
 
+msgid "Vertical line, divide"
+msgstr ""
+
 msgid "Warning"
 msgstr ""
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr ""
+
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr ""
+
+msgid "≈"
 msgstr ""
 
 msgid "≤"

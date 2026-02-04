@@ -1,27 +1,29 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-05-07 14:09\n"
+"PO-Revision-Date: 2026-02-03 16:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: fr\n"
+"Language: fr-FR\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: fr-FR\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: fr\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: French\n"
+
+msgid "2 rows"
+msgstr "2 rangées"
+
+msgid "2 rows & 2 columns"
+msgstr "2 lignes & 2 colonnes"
+
+msgid "Add alternative"
+msgstr "Ajouter une alternative"
 
 msgid "Add answer option"
-msgstr ""
+msgstr "Ajouter une option de réponse"
 
 msgid "Add gap"
 msgstr "Ajouter un espace"
@@ -38,23 +40,29 @@ msgstr "permettre le saut de ligne"
 msgid "Allow playback"
 msgstr "Permettre la lecture"
 
+msgid "Alternative"
+msgstr "Alternative"
+
 msgid "angle"
+msgstr "angle"
+
+msgid "Approximately"
+msgstr "Environ"
+
+msgid "Approximately"
 msgstr ""
 
 msgid "Audio bitrate:"
 msgstr "Débit binaire audio :"
 
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr ""
-
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr ""
+msgstr "L'audio a déjà été enregistré. Votre navigateur ne supporte pas la lecture de cet enregistrement. Veuillez essayer sur un autre navigateur."
 
 msgid "authorize white space"
 msgstr "autoriser les espaces"
 
 msgid "Auto playback recording"
-msgstr ""
+msgstr "Lecture automatique de l'enregistrement"
 
 msgid "Auto start recording"
 msgstr "Démarrage automatique de l'enregistrement"
@@ -63,7 +71,7 @@ msgid "Back to listing"
 msgstr "Retour à la liste"
 
 msgid "braces/curly brackets"
-msgstr ""
+msgstr "accolades / accolades"
 
 msgid "Cancel"
 msgstr "Annuler"
@@ -72,6 +80,12 @@ msgid "Channels"
 msgstr "Canaux"
 
 msgid "Close dialog"
+msgstr "Fermer la boîte de dialogue"
+
+msgid "colon"
+msgstr "deux-points"
+
+msgid "colon"
 msgstr ""
 
 msgid "Comparison"
@@ -80,31 +94,58 @@ msgstr "Comparaison"
 msgid "Compressed"
 msgstr "Compressé"
 
+msgid "congruent"
+msgstr "cohérent"
+
+msgid "contains as member"
+msgstr "contient en tant que membre"
+
+msgid "Correct"
+msgstr "Corriger"
+
 msgid "Correct answer option"
-msgstr ""
+msgstr "Option de réponse correcte"
 
 msgid "cosinus"
-msgstr ""
+msgstr "cosinus"
 
 msgid "Define correct responses"
+msgstr "Définir les réponses correctes"
+
+msgid "Degree symbol"
+msgstr "Symbole du Degree"
+
+msgid "Degree symbol"
 msgstr ""
 
 msgid "Delete"
 msgstr "Supprimer"
 
 msgid "delete the answer"
-msgstr ""
+msgstr "supprimer la réponse"
 
 msgid "disabled"
 msgstr "désactivé"
+
+msgid "Display icons at each end, or not"
+msgstr "Afficher les icônes à chaque extrémité, ou non"
+
+msgid "Display numbers above the choices, or not"
+msgstr "Afficher les numéros au-dessus des choix, ou non"
 
 msgid "divide"
 msgstr "diviser"
 
 msgid "Download"
-msgstr ""
+msgstr "Télécharger"
 
 msgid "edit the answer"
+msgstr "modifier la réponse"
+
+msgid "Enable all symbols"
+msgstr "Activer tous les symboles"
+
+msgid "Enable all symbols"
 msgstr ""
 
 msgid "enable auto wrap"
@@ -114,7 +155,7 @@ msgid "Enabled in item authoring"
 msgstr "Activé dans la création d'articles"
 
 msgid "equal"
-msgstr ""
+msgstr "égal à"
 
 msgid "Experimental only"
 msgstr "Uniquement expérimental"
@@ -126,7 +167,7 @@ msgid "For tests only"
 msgstr "Uniquement pour des tests"
 
 msgid "fraction"
-msgstr ""
+msgstr "fraction"
 
 msgid "Functions"
 msgstr "Fonctions"
@@ -135,19 +176,31 @@ msgid "Gap size"
 msgstr "Taille de l'écart"
 
 msgid "Geometry"
-msgstr ""
+msgstr "Géométrie"
 
 msgid "Give the possibility to the test taker to playback its own recording."
 msgstr "Donner la possibilité au participant de relire son propre enregistrement."
 
 msgid "greater than"
-msgstr ""
+msgstr "supérieur à"
 
 msgid "greater than or equal"
 msgstr "supérieur ou égal"
 
+msgid "Hide record button"
+msgstr "Cacher le bouton d'enregistrement"
+
+msgid "Hide stop button"
+msgstr "Cacher le bouton d'arrêt"
+
+msgid "Hide the record button from test takers."
+msgstr "Cacher le bouton d'enregistrement aux utilisateurs du test."
+
+msgid "Hide the stop button from test takers."
+msgstr "Masquer le bouton d'arrêt des tests."
+
 msgid "id : "
-msgstr ""
+msgstr "id : "
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
 msgstr "En bps (bits par seconde). Définissez le compromis entre la qualité audio et la taille du fichier. Avec la valeur par défaut (20.000bps), la taille d'un enregistrement de 2 minutes est d'environ 300 Ko."
@@ -155,32 +208,44 @@ msgstr "En bps (bits par seconde). Définissez le compromis entre la qualité au
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
 msgstr "En secondes. Temps d'enregistrement maximal permis (n'est jamais inférieur à 10 secondes). L'enregistrement s'arrête automatiquement quand ce maximum est atteint."
 
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr "En secondes. Temps d'enregistrement maximum autorisé (ne peut pas être inférieur à 5 secondes). L'enregistrement s'arrêtera automatiquement une fois atteint."
+
 msgid "In seconds. The time interval between partial updates of the recording."
-msgstr ""
+msgstr "En secondes. L'intervalle de temps entre les mises à jour partielles de l'enregistrement."
 
 msgid "Indefinite integral"
+msgstr "Intégrale indéfinie"
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
+msgstr "Indique que l'audio fait partie d'une séquence avec d'autres interactions séquentielles. La progression de la séquence est gérée par le moteur de livraison et les délais sont également respectés."
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
 msgstr ""
 
 msgid "Invalid files have been removed"
-msgstr ""
+msgstr "Les fichiers invalides ont été supprimés"
 
 msgid "is a member of"
-msgstr ""
+msgstr "est membre de"
 
 msgid "is not a member of"
-msgstr ""
+msgstr "n'est pas membre de"
 
 msgid "is parallel with"
-msgstr ""
+msgstr "est parallèle avec"
 
 msgid "is perpendicular to"
-msgstr ""
+msgstr "est perpendiculaire à"
 
 msgid "Large"
-msgstr ""
+msgstr "Gros"
 
 msgid "Level"
 msgstr "Niveau"
+
+msgid "limit"
+msgstr "limite"
 
 msgid "ln"
 msgstr "Dans"
@@ -189,7 +254,7 @@ msgid "log"
 msgstr "journal"
 
 msgid "lower than"
-msgstr ""
+msgstr "inférieur à"
 
 msgid "lower than or equal"
 msgstr "inférieur ou égal"
@@ -197,8 +262,17 @@ msgstr "inférieur ou égal"
 msgid "Manage custom interactions"
 msgstr "Gérer les interactions personnalisées"
 
+msgid "Mapping default"
+msgstr "Correspondance par défaut"
+
+msgid "Matrix"
+msgstr "Matrice"
+
 msgid "Max attempts:"
 msgstr "Nombre maximal de tentatives :"
+
+msgid "Maximal score for this interaction."
+msgstr "Score maximal pour cette interaction"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
 msgstr "Nombre maximal d'essais d'enregistrement permis pour le participant. Mettre à 0 pour un nombre illimité d'essais. Avec une limite de 3, le participant pourra cliquer 2 fois sur le bouton de remise à zéro."
@@ -209,10 +283,19 @@ msgstr "Moyen"
 msgid "Min:"
 msgstr "Min :"
 
+msgid "Minimal score for this interaction."
+msgstr "Score minimal pour cette interaction."
+
 msgid "minus"
-msgstr ""
+msgstr "minus"
 
 msgid "Mono"
+msgstr "Mono"
+
+msgid "n-root"
+msgstr "n-root"
+
+msgid "n-root"
 msgstr ""
 
 msgid "No Custom Interaction"
@@ -225,13 +308,31 @@ msgid "Operands"
 msgstr "Opérandes"
 
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 msgid "parentheses/round brackets"
+msgstr "parenthèses/parenthèses rondes"
+
+msgid "Percent"
+msgstr "Pourcentage"
+
+msgid "Play a sound at the start and end of recording."
+msgstr "Jouer un son au début et à la fin de l'enregistrement."
+
+msgid "Play sound"
+msgstr "Jouer un son"
+
+msgid "Percent"
+msgstr ""
+
+msgid "Play a sound at the start and end of recording."
+msgstr ""
+
+msgid "Play sound"
 msgstr ""
 
 msgid "plus"
-msgstr ""
+msgstr "plus"
 
 msgid "Plus/minus"
 msgstr "Plus/moins"
@@ -241,10 +342,13 @@ msgid "Portable Custom Interactions"
 msgstr "Interactions personnalisées portables"
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr ""
+msgstr "L'enregistrement audio est automatiquement lu après l'arrêt de l'enregistrement. Pendant la lecture, aucune interaction utilisateur n'est possible et tous les boutons sont désactivés."
 
 msgid "Recording format"
 msgstr "Format d’enregistrement"
+
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr "L'enregistrement démarre automatiquement une fois que le preneur de test autorise l'utilisation du micro."
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "L'enregistrement démarre automatiquement dès que le participant autorise l'utilisation du microphone. Si un média de type stimulus est utilisé, alors l'enregistrement démarre automatiquement après la lecture de ce stimulus."
@@ -252,33 +356,57 @@ msgstr "L'enregistrement démarre automatiquement dès que le participant autori
 msgid "Response identifier"
 msgstr "Identifiant de la réponse"
 
+msgid "right arrow"
+msgstr "flèche droite"
+
 msgid "Scale size"
 msgstr "Taille d'échelle"
+
+msgid "Score"
+msgstr "Score"
+
+msgid "Score range"
+msgstr "Échelle de score"
 
 msgid "Sec:"
 msgstr "Sec :"
 
+msgid "Sequential"
+msgstr "Séquentiel"
+
 msgid "set intersection"
-msgstr ""
+msgstr "définir l'intersection"
 
 msgid "set union"
-msgstr ""
+msgstr "définir une union"
 
 #, tao-public
 msgid "Settings"
+msgstr "Réglages"
+
+msgid "Show icons"
+msgstr "Afficher les icônes"
+
+msgid "Show numbers"
+msgstr "Afficher les numéros"
+
+msgid "Show icons"
+msgstr ""
+
+msgid "Show numbers"
 msgstr ""
 
 msgid "similar"
-msgstr ""
+msgstr "similaire"
 
 msgid "sinus"
-msgstr ""
+msgstr "sinus"
 
 msgid "Small"
 msgstr "Petit"
 
 msgid "square brackets"
-msgstr ""
+msgstr "crochets"
 
 msgid "square root"
 msgstr "racine carrée"
@@ -287,13 +415,37 @@ msgid "Stereo"
 msgstr "Stéréo"
 
 msgid "subscript"
+msgstr "souscription"
+
+msgid "subset"
+msgstr "sous-ensemble"
+
+msgid "sum"
+msgstr "sum"
+
+msgid "superset"
+msgstr "superset"
+
+msgid "subset"
+msgstr ""
+
+msgid "sum"
+msgstr ""
+
+msgid "superset"
 msgstr ""
 
 msgid "Symbols"
 msgstr "Symboles"
 
+msgid "tangent"
+msgstr "tangent"
+
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "L'identifiant du choix. Cet identifiant ne doit pas être utilisé par un autre choix ou une variable d'item. Un identifiant est une chaîne de caractères qui doit commencer avec une lettre ou un tiret bas (\"_\") et doit contenir seulement des lettres, des tirets bas, des tirets (\"-\"), un point (\".\"), des chiffres, des caractères combinés et des caractères étendus."
+
+msgid "The mapping options are available when at least one map entry is defined."
+msgstr "Les options de correspondance sont disponibles lorsqu'au moins une entrée de correspondance a été définie."
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Uniquement à des fins de test. Affiche un lien pour télécharger le fichier enregistré une fois que l'enregistrement s'arrête. Ceci ne devrait pas être utilisé dans le contexte d'une passation, étant donné que cela permettrait au participant de télécharger son propre enregistrement."
@@ -308,16 +460,16 @@ msgid "times"
 msgstr "fois"
 
 msgid "times dot"
-msgstr ""
+msgstr "fois point"
 
 msgid "triangle"
-msgstr ""
+msgstr "Triangle"
 
 msgid "Trigonometry"
 msgstr "Trigonométrie"
 
 msgid "type : "
-msgstr ""
+msgstr "type : "
 
 msgid "Unable to upload file %s : %s"
 msgstr "Impossible de charger le fichier %s : %s"
@@ -326,7 +478,7 @@ msgid "Uncompressed"
 msgstr "Non compressé"
 
 msgid "Update interval:"
-msgstr ""
+msgstr "Intervalle de mise à jour :"
 
 msgid "Upload new custom interaction (zip package)"
 msgstr "Charger une nouvelle interaction personnalisée (paquet zip)"
@@ -338,17 +490,29 @@ msgid "Use media stimulus"
 msgstr "Utiliser le stimulus média"
 
 msgid "version : "
+msgstr "version : "
+
+msgid "Vertical line, divide"
+msgstr "Ligne verticale, diviser"
+
+msgid "Vertical line, divide"
 msgstr ""
 
 msgid "Warning"
-msgstr ""
+msgstr "Avertissement"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
 msgstr "Avec un enregistrement compressé, l'audio est sauvegardé en tant que fichier webm ou ogg (plus petite taille). Si non compressé, en tant que fichier sans perte Wav (beaucoup plus grosse taille)."
 
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr "Votre navigateur a bloqué la lecture automatique. Appuyez sur Play pour écouter votre enregistrement."
+
+msgid "≈"
+msgstr "≈"
+
 msgid "≤"
-msgstr ""
+msgstr "≤"
 
 msgid "≥"
-msgstr ""
+msgstr "≥"
 

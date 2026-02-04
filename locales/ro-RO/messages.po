@@ -1,354 +1,590 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-05-07 14:09\n"
+"PO-Revision-Date: 2026-02-03 16:43\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: ro\n"
+"Language: ro-RO\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: en-US\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"targetLanguage: ro-RO\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
-"X-Crowdin-Project: tao-open-source\n"
-"X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: ro\n"
-"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
-"X-Crowdin-File-ID: 571\n"
-"Language-Team: Romanian\n"
+
+msgid "2 rows"
+msgstr "2 rânduri"
+
+msgid "2 rows & 2 columns"
+msgstr "2 rânduri & 2 coloane"
+
+msgid "Add alternative"
+msgstr "Adăugare alternativă"
 
 msgid "Add answer option"
-msgstr ""
+msgstr "Adaugă opțiune răspuns"
 
 msgid "Add gap"
-msgstr ""
+msgstr "Adăugare decalaj"
 
 msgid "Add Interaction"
-msgstr ""
+msgstr "Adaugă Interacțiune"
 
 msgid "Allow download"
-msgstr ""
+msgstr "Permite descărcarea"
 
 msgid "allow line break"
-msgstr ""
+msgstr "permite ruperea liniei"
 
 msgid "Allow playback"
+msgstr "Permite redare"
+
+msgid "Alternative"
+msgstr "Alternativ"
+
+msgid "Alternative"
 msgstr ""
 
 msgid "angle"
-msgstr ""
+msgstr "unghi"
+
+msgid "Approximately"
+msgstr "Aproximativ"
 
 msgid "Audio bitrate:"
+msgstr "Bitrat audio:"
+
+msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
+msgstr "Fișierul audio a fost înregistrat anterior. Browserul dvs. nu acceptă redarea acestei înregistrări. Încercați pe un alt browser."
+
+msgid "authorize white space"
+msgstr "autorizează spațiul alb"
+
+msgid "Auto playback recording"
+msgstr "Auto redare înregistrare"
+
+msgid "Auto start recording"
+msgstr "Pornire auto înregistrare"
+
+msgid "Back to listing"
+msgstr "Înapoi la listare"
+
+msgid "braces/curly brackets"
+msgstr "paranteze/paranteze"
+
+msgid "Cancel"
+msgstr "Anulează"
+
+msgid "Channels"
+msgstr "Canale"
+
+msgid "Close dialog"
+msgstr "Închide dialogul"
+
+msgid "colon"
+msgstr "colon"
+
+msgid "colon"
 msgstr ""
+
+msgid "Comparison"
+msgstr "Comparaţie"
+
+msgid "Compressed"
+msgstr "Comprimat"
+
+msgid "congruent"
+msgstr "congruent"
+
+msgid "contains as member"
+msgstr "conține ca membru"
+
+msgid "Correct"
+msgstr "Corect"
+
+msgid "congruent"
+msgstr ""
+
+msgid "contains as member"
+msgstr ""
+
+msgid "Correct"
+msgstr ""
+
+msgid "Correct answer option"
+msgstr "Opțiune de răspuns corectă"
+
+msgid "cosinus"
+msgstr "cosinus"
+
+msgid "Define correct responses"
+msgstr "Definește răspunsurile corecte"
+
+msgid "Degree symbol"
+msgstr "Simbolul gradului"
+
+msgid "Degree symbol"
+msgstr ""
+
+msgid "Delete"
+msgstr "Ștergere"
+
+msgid "delete the answer"
+msgstr "şterge răspunsul"
+
+msgid "disabled"
+msgstr "dezactivat"
+
+msgid "Display icons at each end, or not"
+msgstr "Afişare pictograme la fiecare capetă, sau nu"
+
+msgid "Display numbers above the choices, or not"
+msgstr "Afișează numerele deasupra opțiunilor sau nu"
+
+msgid "Display icons at each end, or not"
+msgstr ""
+
+msgid "Display numbers above the choices, or not"
+msgstr ""
+
+msgid "divide"
+msgstr "împarte"
+
+msgid "Download"
+msgstr "Descărcare"
+
+msgid "edit the answer"
+msgstr "editează răspunsul"
+
+msgid "Enable all symbols"
+msgstr "Activează toate simbolurile"
+
+msgid "Enable all symbols"
+msgstr ""
+
+msgid "enable auto wrap"
+msgstr "activare încărcare automată"
+
+msgid "Enabled in item authoring"
+msgstr "Activat în autorul articolului"
+
+msgid "equal"
+msgstr "egal"
+
+msgid "Experimental only"
+msgstr "Numai experimentale"
+
+msgid "exponent"
+msgstr "exponent"
+
+msgid "For tests only"
+msgstr "Numai pentru teste"
+
+msgid "fraction"
+msgstr "fracție"
+
+msgid "Functions"
+msgstr "Funcții"
+
+msgid "Gap size"
+msgstr "Dimensiune decalaj"
+
+msgid "Geometry"
+msgstr "Geometrie"
+
+msgid "Give the possibility to the test taker to playback its own recording."
+msgstr "Acordați posibilitatea persoanei care efectuează testul să redea propria înregistrare."
+
+msgid "greater than"
+msgstr "mai mare decât"
+
+msgid "greater than or equal"
+msgstr "mai mare sau egal"
+
+msgid "Hide record button"
+msgstr "Ascunde butonul de înregistrare"
+
+msgid "Hide stop button"
+msgstr "Ascunde butonul de oprire"
+
+msgid "Hide the record button from test takers."
+msgstr "Ascunde butonul de înregistrare din butoanele de testare."
+
+msgid "Hide the stop button from test takers."
+msgstr "Ascunde butonul de oprire din teste."
+
+msgid "Hide record button"
+msgstr ""
+
+msgid "Hide stop button"
+msgstr ""
+
+msgid "Hide the record button from test takers."
+msgstr ""
+
+msgid "Hide the stop button from test takers."
+msgstr ""
+
+msgid "id : "
+msgstr "id : "
+
+msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
+msgstr "În bps (bits pe secundă). Setați compromisul între calitatea audio și dimensiunea fișierului. Cu valoarea implicită (20.000bps), o greutate de înregistrare de 2 minute este de aproximativ 300KB."
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
+msgstr "În secunde. Timpul maxim de înregistrare permis (nu poate fi mai mic de 10 secunde). Înregistrarea se va opri automat odată atinsă."
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr "În secunde. Timpul maxim de înregistrare permis (nu poate fi mai mic de 5 secunde). Înregistrarea se va opri automat odată atinsă."
+
+msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
+msgstr ""
+
+msgid "In seconds. The time interval between partial updates of the recording."
+msgstr "În secunde. Intervalul de timp dintre actualizările parţiale ale înregistrării."
+
+msgid "Indefinite integral"
+msgstr "Integrală nedeterminată"
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
+msgstr "Indică faptul că audio face parte dintr-o secvență cu alte interacțiuni secvențiale. Progresul secvenței este gestionat de motorul de livrare. Întârzierile sunt, de asemenea, respectate."
+
+msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
+msgstr ""
+
+msgid "Invalid files have been removed"
+msgstr "Fișierele nevalide au fost eliminate"
+
+msgid "is a member of"
+msgstr "este membru al"
+
+msgid "is not a member of"
+msgstr "nu este membru al"
+
+msgid "is parallel with"
+msgstr "este paralel cu"
+
+msgid "is perpendicular to"
+msgstr "este perpendicular pe"
+
+msgid "Large"
+msgstr "Mare"
+
+msgid "Level"
+msgstr "Nivel"
+
+msgid "limit"
+msgstr "limită"
+
+msgid "limit"
+msgstr ""
+
+msgid "ln"
+msgstr "Ln"
+
+msgid "log"
+msgstr "jurnal"
+
+msgid "lower than"
+msgstr "mai mic de"
+
+msgid "lower than or equal"
+msgstr "mai mic sau egal"
+
+msgid "Manage custom interactions"
+msgstr "Gestionează interacțiuni personalizate"
+
+msgid "Mapping default"
+msgstr "Mapare implicită"
+
+msgid "Matrix"
+msgstr "Matricea"
+
+msgid "Mapping default"
+msgstr ""
+
+msgid "Matrix"
+msgstr ""
+
+msgid "Max attempts:"
+msgstr "Tentative maxime:"
+
+msgid "Maximal score for this interaction."
+msgstr "Scorul maxim pentru această interacţiune."
+
+msgid "Maximal score for this interaction."
+msgstr ""
+
+msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
+msgstr "Numărul maxim de încercări de înregistrare permis persoanei care efectuează testarea. Se setează la 0 pentru a permite încercări nelimitate. Cu o limită de 3, luatorul de test va putea să facă clic de 2 ori pe butonul de resetare."
+
+msgid "Medium"
+msgstr "Medie"
+
+msgid "Min:"
+msgstr "Min:"
+
+msgid "Minimal score for this interaction."
+msgstr "Scorul minim pentru această interacţiune."
+
+msgid "Minimal score for this interaction."
+msgstr ""
+
+msgid "minus"
+msgstr "minus"
+
+msgid "Mono"
+msgstr "Mono"
+
+msgid "n-root"
+msgstr "n-root"
+
+msgid "n-root"
+msgstr ""
+
+msgid "No Custom Interaction"
+msgstr "Nici o interacțiune personalizată"
+
+msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
+msgstr "Numărul de canale pentru înregistrare. Permiteți să tăiați dimensiunea înregistrării în jumătate dacă este folosită în mono."
+
+msgid "Operands"
+msgstr "Operațiuni"
+
+msgid "Options"
+msgstr "Opţiuni"
+
+msgid "parentheses/round brackets"
+msgstr "paranteze/paranteze rotunde"
+
+msgid "Percent"
+msgstr "Procent"
+
+msgid "Play a sound at the start and end of recording."
+msgstr "Redaţi un sunet la începutul şi sfârşitul înregistrării."
+
+msgid "Play sound"
+msgstr "Redare sunet"
+
+msgid "Percent"
+msgstr ""
+
+msgid "Play a sound at the start and end of recording."
+msgstr ""
+
+msgid "Play sound"
+msgstr ""
+
+msgid "plus"
+msgstr "plus"
+
+msgid "Plus/minus"
+msgstr "Plus/minus"
+
+#, tao-public
+msgid "Portable Custom Interactions"
+msgstr "Interacțiuni personalizate portabile"
+
+msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
+msgstr "Fișierul audio înregistrat este redat automat după opriri de înregistrare. În timpul redării, nicio interacțiune cu utilizatorul nu este posibilă și toate butoanele sunt dezactivate."
+
+msgid "Recording format"
+msgstr "Format înregistrare"
+
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr "Înregistrarea începe automat de îndată ce persoana care efectuează testul eliberează autorizația de utilizare a microfonului."
+
+msgid "Recording starts automatically once test taker give microphone use authorisation."
+msgstr ""
+
+msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
+msgstr "Înregistrarea începe automat de îndată ce persoana care efectuează testul eliberează autorizația de utilizare a microfonului. Dacă se utilizează un stimul media, atunci înregistrarea începe automat după ce stimulul a fost redat."
+
+msgid "Response identifier"
+msgstr "Identificator de răspuns"
+
+msgid "right arrow"
+msgstr "săgeată dreapta"
+
+msgid "right arrow"
+msgstr ""
+
+msgid "Scale size"
+msgstr "Dimensiune scară"
+
+msgid "Score"
+msgstr "Scor"
+
+msgid "Score range"
+msgstr "Interval scor"
+
+msgid "Score"
+msgstr ""
+
+msgid "Score range"
+msgstr ""
+
+msgid "Sec:"
+msgstr "Sec:"
+
+msgid "Sequential"
+msgstr "Secvenţial"
+
+msgid "Sequential"
+msgstr ""
+
+msgid "set intersection"
+msgstr "setează intersecția"
+
+msgid "set union"
+msgstr "setează uniune"
+
+#, tao-public
+msgid "Settings"
+msgstr "Setări"
+
+msgid "Show icons"
+msgstr "Arată pictograme"
+
+msgid "Show numbers"
+msgstr "Arată numerele"
+
+msgid "Show icons"
+msgstr ""
+
+msgid "Show numbers"
+msgstr ""
+
+msgid "similar"
+msgstr "similare"
+
+msgid "sinus"
+msgstr "sinus"
+
+msgid "Small"
+msgstr "Mică"
+
+msgid "square brackets"
+msgstr "paranteze pătrate"
+
+msgid "square root"
+msgstr "rădăcină pătrată"
+
+msgid "Stereo"
+msgstr "Stereo"
+
+msgid "subscript"
+msgstr "abonare"
+
+msgid "subset"
+msgstr "subset"
+
+msgid "sum"
+msgstr "sum"
+
+msgid "superset"
+msgstr "superset"
+
+msgid "subset"
+msgstr ""
+
+msgid "sum"
+msgstr ""
+
+msgid "superset"
+msgstr ""
+
+msgid "Symbols"
+msgstr "Simboluri"
+
+msgid "tangent"
+msgstr "tangent"
+
+msgid "tangent"
+msgstr ""
+
+msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
+msgstr "Identificatorul ales. Acest identificator nu trebuie să fie folosit de nici un alt răspuns sau de nici o variabilă de element. Un identificator este un șir de caractere care trebuie să înceapă cu o scrisoare sau o subliniere (\"_\") și să conțină doar litere, sublinieri, cratime (\"-\"), perioadă (\". , a.k.a. punct de oprire completă), cifre, combinații Chars și extensii."
+
+msgid "The mapping options are available when at least one map entry is defined."
+msgstr "Opțiunile de cartografiere sunt disponibile atunci când cel puțin o intrare de hartă este definită."
+
+msgid "The mapping options are available when at least one map entry is defined."
+msgstr ""
+
+msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
+msgstr "Acesta este doar pentru testare. Afișează un link pentru a descărca fișierul înregistrat odată ce înregistrarea se oprește. Acest lucru nu ar trebui utilizat într-un context de livrare, deoarece ar permite persoanei care efectuează testul să descarce propria înregistrare."
+
+msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
+msgstr "Aceste opțiuni permit inserarea unui stimul media care va trebui redat înainte ca înregistrarea să se poată întâmpla."
+
+msgid "Time limit:"
+msgstr "Termen limită:"
+
+msgid "times"
+msgstr "ori"
+
+msgid "times dot"
+msgstr "ori punct"
+
+msgid "triangle"
+msgstr "triunghi"
+
+msgid "Trigonometry"
+msgstr "Trigonometrie"
+
+msgid "type : "
+msgstr "type : "
+
+msgid "Unable to upload file %s : %s"
+msgstr "Imposibil de încărcat fișierul %s : %s"
+
+msgid "Uncompressed"
+msgstr "Necomprimat"
+
+msgid "Update interval:"
+msgstr "Interval actualizare:"
+
+msgid "Upload new custom interaction (zip package)"
+msgstr "Încărcați o nouă interacțiune personalizată (pachet poștal)"
+
+msgid "use expression with gaps"
+msgstr "utilizează expresia cu lacune"
+
+msgid "Use media stimulus"
+msgstr "Utilizarea stimulentelor media"
+
+msgid "version : "
+msgstr "versiune : "
+
+msgid "Vertical line, divide"
+msgstr "Linie verticală, divizați"
+
+msgid "Vertical line, divide"
+msgstr ""
+
+msgid "Warning"
+msgstr "Avertizare"
+
+msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgstr "Cu înregistrarea comprimată, fișierul audio este salvat ca un fișier web sau de ogg (mărime mai mică). Cu un fișier necomprimat, Wav fără pierdere (dimensiune mult mai mare)."
+
+msgid "Your browser blocked auto-play. Press Play to listen to your recording."
+msgstr "Browserul dvs. a blocat redarea automată. Apăsați Play pentru a vă asculta înregistrarea."
+
+msgid "≈"
+msgstr "≈"
 
 msgid "Your browser blocked auto-play. Press Play to listen to your recording."
 msgstr ""
 
-msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr ""
-
-msgid "authorize white space"
-msgstr ""
-
-msgid "Auto playback recording"
-msgstr ""
-
-msgid "Auto start recording"
-msgstr ""
-
-msgid "Back to listing"
-msgstr ""
-
-msgid "braces/curly brackets"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Channels"
-msgstr ""
-
-msgid "Close dialog"
-msgstr ""
-
-msgid "Comparison"
-msgstr ""
-
-msgid "Compressed"
-msgstr ""
-
-msgid "Correct answer option"
-msgstr ""
-
-msgid "cosinus"
-msgstr ""
-
-msgid "Define correct responses"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
-msgid "delete the answer"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "divide"
-msgstr ""
-
-msgid "Download"
-msgstr ""
-
-msgid "edit the answer"
-msgstr ""
-
-msgid "enable auto wrap"
-msgstr ""
-
-msgid "Enabled in item authoring"
-msgstr ""
-
-msgid "equal"
-msgstr ""
-
-msgid "Experimental only"
-msgstr ""
-
-msgid "exponent"
-msgstr ""
-
-msgid "For tests only"
-msgstr ""
-
-msgid "fraction"
-msgstr ""
-
-msgid "Functions"
-msgstr ""
-
-msgid "Gap size"
-msgstr ""
-
-msgid "Geometry"
-msgstr ""
-
-msgid "Give the possibility to the test taker to playback its own recording."
-msgstr ""
-
-msgid "greater than"
-msgstr ""
-
-msgid "greater than or equal"
-msgstr ""
-
-msgid "id : "
-msgstr ""
-
-msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
-msgstr ""
-
-msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
-msgstr ""
-
-msgid "In seconds. The time interval between partial updates of the recording."
-msgstr ""
-
-msgid "Indefinite integral"
-msgstr ""
-
-msgid "Invalid files have been removed"
-msgstr ""
-
-msgid "is a member of"
-msgstr ""
-
-msgid "is not a member of"
-msgstr ""
-
-msgid "is parallel with"
-msgstr ""
-
-msgid "is perpendicular to"
-msgstr ""
-
-msgid "Large"
-msgstr ""
-
-msgid "Level"
-msgstr ""
-
-msgid "ln"
-msgstr ""
-
-msgid "log"
-msgstr ""
-
-msgid "lower than"
-msgstr ""
-
-msgid "lower than or equal"
-msgstr ""
-
-msgid "Manage custom interactions"
-msgstr ""
-
-msgid "Max attempts:"
-msgstr ""
-
-msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr ""
-
-msgid "Medium"
-msgstr ""
-
-msgid "Min:"
-msgstr ""
-
-msgid "minus"
-msgstr ""
-
-msgid "Mono"
-msgstr ""
-
-msgid "No Custom Interaction"
-msgstr ""
-
-msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
-msgstr ""
-
-msgid "Operands"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "parentheses/round brackets"
-msgstr ""
-
-msgid "plus"
-msgstr ""
-
-msgid "Plus/minus"
-msgstr ""
-
-#, tao-public
-msgid "Portable Custom Interactions"
-msgstr ""
-
-msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr ""
-
-msgid "Recording format"
-msgstr ""
-
-msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
-msgstr ""
-
-msgid "Response identifier"
-msgstr ""
-
-msgid "Scale size"
-msgstr ""
-
-msgid "Sec:"
-msgstr ""
-
-msgid "set intersection"
-msgstr ""
-
-msgid "set union"
-msgstr ""
-
-#, tao-public
-msgid "Settings"
-msgstr ""
-
-msgid "similar"
-msgstr ""
-
-msgid "sinus"
-msgstr ""
-
-msgid "Small"
-msgstr ""
-
-msgid "square brackets"
-msgstr ""
-
-msgid "square root"
-msgstr ""
-
-msgid "Stereo"
-msgstr ""
-
-msgid "subscript"
-msgstr ""
-
-msgid "Symbols"
-msgstr ""
-
-msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr ""
-
-msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr ""
-
-msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr ""
-
-msgid "Time limit:"
-msgstr ""
-
-msgid "times"
-msgstr ""
-
-msgid "times dot"
-msgstr ""
-
-msgid "triangle"
-msgstr ""
-
-msgid "Trigonometry"
-msgstr ""
-
-msgid "type : "
-msgstr ""
-
-msgid "Unable to upload file %s : %s"
-msgstr ""
-
-msgid "Uncompressed"
-msgstr ""
-
-msgid "Update interval:"
-msgstr ""
-
-msgid "Upload new custom interaction (zip package)"
-msgstr ""
-
-msgid "use expression with gaps"
-msgstr ""
-
-msgid "Use media stimulus"
-msgstr ""
-
-msgid "version : "
-msgstr ""
-
-msgid "Warning"
-msgstr ""
-
-msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
+msgid "≈"
 msgstr ""
 
 msgid "≤"
-msgstr ""
+msgstr "≤"
 
 msgid "≥"
-msgstr ""
+msgstr "≥"
 
