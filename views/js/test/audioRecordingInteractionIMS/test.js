@@ -857,6 +857,145 @@ define([
         }
     });
 
+    QUnit.test('config-change event with { isDisabled }', function (assert) {
+        var ready = assert.async();
+
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            var newItemData = _.cloneDeep(itemData);
+            newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.enableDomEvents = 'true';
+
+            runner = qtiItemRunner('qti', newItemData)
+                .on('render', function () {
+                    assert.equal(
+                        $container.find('.qti-customInteraction .audioRecordingInteraction').length,
+                        1,
+                        'the container contains an audio recording interaction'
+                    );
+
+                    var $interaction = $container.find('.qti-customInteraction');
+                    var $buttons = $interaction.find('.audiorec-control');
+                    var totalButtons = $buttons.length;
+                    var initialDisabledCount = $interaction.find('.audiorec-control.disabled').length;
+
+                    assert.equal(totalButtons, 4, 'there are 4 control buttons');
+                    assert.equal(initialDisabledCount, 3, '3 buttons are disabled');
+
+                    $interaction.get(0).dispatchEvent(
+                        new CustomEvent('config-change', { detail: { isDisabled: true } })
+                    );
+
+                    $buttons = $interaction.find('.audiorec-control');
+                    assert.equal(
+                        $interaction.find('.audiorec-control.disabled').length,
+                        totalButtons,
+                        'after isDisabled:true, all buttons are disabled'
+                    );
+
+                    $interaction.get(0).dispatchEvent(
+                        new CustomEvent('config-change', { detail: { isDisabled: false } })
+                    );
+
+                    $buttons = $interaction.find('.audiorec-control');
+                    assert.equal(
+                        $interaction.find('.audiorec-control.disabled').length,
+                        initialDisabledCount,
+                        'after isDisabled:false, disabled count returns to initial state'
+                    );
+
+                    // setTimeout(ready, 250);
+                    ready();
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    QUnit.test('config-change event with { autoStart }', function (assert) {
+        var ready = assert.async();
+
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            var newItemData = _.cloneDeep(itemData);
+            var properties = newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties;
+            properties.enableDomEvents = 'true';
+
+            runner = qtiItemRunner('qti', newItemData)
+                .on('render', function () {
+                    var interaction = this._item.getInteractions()[0];
+                    var $interaction = $container.find('.qti-customInteraction');
+                    var $buttons = $interaction.find('.audiorec-control');
+
+                    assert.equal(
+                        $container.find('.qti-customInteraction .audioRecordingInteraction').length,
+                        1,
+                        'the container contains an audio recording interaction'
+                    );
+                    assert.equal($buttons.length, 4, 'initially there are 4 control buttons');
+
+                    $buttons.attr('data-test-marker', 'original');
+                    assert.equal(
+                        $interaction.find('.audiorec-control[data-test-marker="original"]').length,
+                        4,
+                        'all 4 buttons are marked'
+                    );
+
+                    $interaction.get(0).dispatchEvent(
+                        new CustomEvent('config-change', {
+                            detail: {
+                                ...properties,
+                                autoStart: 'true'
+                            }
+                        })
+                    );
+
+                    assert.equal(
+                        $interaction.find('.audiorec-control').length,
+                        4,
+                        'after config-change with autoStart, still 4 control buttons'
+                    );
+                    assert.equal(
+                        $interaction.find('.audiorec-control[data-test-marker="original"]').length,
+                        0,
+                        'none of the buttons have the original marker - they were recreated'
+                    );
+
+                    // PCI's destroy will be called by oncompleted, by test cleanup.
+                    // Because the real destroy does async work, and a recording was started in this test,
+                    // it's safer to override it with a synchronous noop:
+                    interaction.metaData.pci.destroy = function destroy() {};
+
+                    ready();
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
     /* */
 
     QUnit.module('Visual test');
