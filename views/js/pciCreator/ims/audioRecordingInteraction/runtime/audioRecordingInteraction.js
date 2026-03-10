@@ -342,7 +342,7 @@ define([
                     // incoming events
 
                     this.$container.get(0).addEventListener('config-change', ({ detail: newConfig }) => {
-                        if (this.config.isDisabled !== newConfig.isDisabled) {
+                        if (typeof newConfig.isDisabled !== 'undefined' && this.config.isDisabled !== newConfig.isDisabled) {
                             this.config.isDisabled = newConfig.isDisabled;
                             this.updateControls();
                         } else {
