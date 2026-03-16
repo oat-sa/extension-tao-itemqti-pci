@@ -43,16 +43,21 @@
         ul.files{
             overflow-y:auto;
             min-height: 300px;
-            div.action-header{
-              position: relative;
-              height: 2rem;
-              span.switch-header {
+            padding-inline-start: 20px;
+        }
+        div.action-header{
+            position: relative;
+            height: 2rem;
+            .switch-header {
                 position: absolute;
-              }
+                right: 220px;
             }
         }
         .pci-list-element{
             cursor: default !important;
+            display: flex;
+            justify-content: space-between;
+            min-height: 28px;
             span.runtime {
               color: $info;
             }
@@ -71,7 +76,7 @@
                 .pci-unregister-button {
                     position: relative;
                     display: inline;
-                    margin-right: 2rem
+                    // margin-right: 2rem
                 }
                 .pci-download-button {
                     position: relative;
@@ -94,9 +99,9 @@
             }
             &.pci-disabled{
                 color: whiten($textColor, 0.6);
-                &:hover{
-                    background: whiten($uiClickableHoverBg, 0.9);
-                }
+                // &:hover{
+                //     background: whiten($uiClickableHoverBg, 0.9);
+                // }
                 .button-disable{
                     display: none;
                 }
@@ -110,9 +115,49 @@
                     display: inline-block;
                 }
             }
+            &:hover {
+                background: whiten($uiClickableHoverBg, 0.9);
+            }
         }
         .file-upload-container{
             display: block;
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .pcimgr{
+        .file-selector{
+            div.action-header{
+                .switch-header {
+                    right: 70px;
+                }
+            }
+            .pci-list-element{
+                div.actions{
+                    .pci-switch{
+                        margin-right: 0.5rem;
+                        label{
+                            span {
+                                min-width: 35px;
+                            }
+                        }
+                    }
+                    .pci-unregister-button,.pci-download-button{
+                        .icon{
+                            padding: 0;
+                        }
+                        .label{
+                            clip: rect(0 0 0 0);
+                            clip-path: inset(50%);
+                            height: 1px;
+                            width: 1px;
+                            overflow: hidden;
+                            position: absolute;
+                        }
+                    }
+                }
+            }
         }
     }
 }
