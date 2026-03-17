@@ -13,15 +13,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2022 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2023 (original work) Open Assessment Technologies SA;
  */
 define([
     'taoQtiItem/qtiCreator/widgets/states/factory',
-    'taoQtiItem/qtiCreator/widgets/interactions/customInteraction/states/states',
-    'audioRecordingInteraction/creator/widget/states/Question',
-    'audioRecordingInteraction/creator/widget/states/Answer'
-], function (factory, states) {
+    'taoQtiItem/qtiCreator/widgets/interactions/states/Answer',
+    'taoQtiItem/qtiCreator/widgets/interactions/helpers/answerState'
+], function (stateFactory, Answer, answerStateHelper) {
     'use strict';
 
-    return factory.createBundle(states, arguments, ['correct', 'map']);
+    var AudioRecordingInteractionStateAnswer = stateFactory.extend(Answer, function initAnswerState() {}, function exitAnswerState() {});
+
+    AudioRecordingInteractionStateAnswer.prototype.initResponseForm = function initResponseForm() {
+        answerStateHelper.initResponseForm(this.widget, { rpTemplates: ['CUSTOM', 'NONE'] });
+    };
+
+    return AudioRecordingInteractionStateAnswer;
 });

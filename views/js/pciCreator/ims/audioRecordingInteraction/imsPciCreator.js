@@ -98,8 +98,8 @@ define([
          *
          * @returns {Object}
          */
-        afterCreate: function afterCreate() {
-            //do some stuff
+        afterCreate: function afterCreate(pci) {
+            pci.getResponseDeclaration().setTemplate('NONE');
         },
         /**
          * (required) Gives the qti pci xml template

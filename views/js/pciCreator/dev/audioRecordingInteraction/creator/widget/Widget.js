@@ -30,6 +30,7 @@ define([
         this.registerStates(states);
 
         Widget.initCreator.call(this);
+        this.element.getResponseDeclaration().setTemplate('NONE');
 
         $interaction = this.$container.find('.audioRecordingInteraction');
         if ($interaction.length) {
