@@ -1,7 +1,7 @@
 <div class="pcimgr resourcemgr">
 
     <section class="file-selector">
-        <h1>
+        <h1 class="clearfix">
             <div class="title-container lft">
                 <span class="title">{{__ 'Manage custom interactions'}}</span>
             </div>
@@ -13,6 +13,10 @@
 
         <div class="empty">
             {{__ 'No Custom Interaction'}}
+        </div>
+
+        <div class="action-header">
+            <span class="switch-header">{{__ 'Enabled in item authoring'}}</span>
         </div>
 
         <ul class="files"></ul>
