@@ -3,7 +3,8 @@
     margin: auto auto;
     width: 80%;
     .pcimgr {
-        max-width: 100%;
+        max-width: 920px;
+        margin: 0 auto;
     }
     .resourcemgr {
         width: 100%;
@@ -122,34 +123,37 @@
 }
 
 @media screen and (max-width: 1024px) {
-    .pcimgr{
-        .file-selector{
-            div.action-header{
-                .switch-header {
-                    right: 70px;
+    .pci-manager {
+        width: 96%;
+        .pcimgr{
+            .file-selector{
+                div.action-header{
+                    .switch-header {
+                        right: 70px;
+                    }
                 }
-            }
-            .pci-list-element{
-                div.actions{
-                    .pci-switch{
-                        margin-right: 0.5rem;
-                        label{
-                            span {
-                                min-width: 35px;
+                .pci-list-element{
+                    div.actions{
+                        .pci-switch{
+                            margin-right: 0.5rem;
+                            label{
+                                span {
+                                    min-width: 35px;
+                                }
                             }
                         }
-                    }
-                    .pci-unregister-button,.pci-download-button{
-                        .icon{
-                            padding: 0;
-                        }
-                        .label{
-                            clip: rect(0 0 0 0);
-                            clip-path: inset(50%);
-                            height: 1px;
-                            width: 1px;
-                            overflow: hidden;
-                            position: absolute;
+                        .pci-unregister-button,.pci-download-button{
+                            .icon{
+                                padding: 0;
+                            }
+                            .label{
+                                clip: rect(0 0 0 0);
+                                clip-path: inset(50%);
+                                height: 1px;
+                                width: 1px;
+                                overflow: hidden;
+                                position: absolute;
+                            }
                         }
                     }
                 }
