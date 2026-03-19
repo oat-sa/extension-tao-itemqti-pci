@@ -1,4 +1,3 @@
-
 <?php
 
 declare(strict_types=1);
@@ -28,7 +27,7 @@ final class Version202603170900311465_qtiItemPci extends AbstractMigration
             $this->propagate(
                 new RegisterIMSPciAudioRecording()
             )(
-                ['1.3.4']
+                ['1.3.6']
             )
         );
     }
