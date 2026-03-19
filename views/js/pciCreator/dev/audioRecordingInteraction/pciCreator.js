@@ -11,9 +11,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 31 Milk Street, # 960789, Boston, MA 02196, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2017-2026 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2021 (original work) Open Assessment Technologies SA;
  */
 define([
     'lodash',
@@ -97,8 +97,8 @@ define([
          *
          * @returns {Object}
          */
-        afterCreate: function afterCreate(pci) {
-            pci.getResponseDeclaration().setTemplate('NONE');
+        afterCreate: function afterCreate() {
+            //do some stuff
         },
         /**
          * (required) Gives the qti pci xml template
