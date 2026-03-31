@@ -1,17 +1,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2026-02-03 16:43\n"
+"PO-Revision-Date: 2026-03-27 13:00\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: ro-RO\n"
+"Language: ro\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: ro-RO\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: ro\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
+"Language-Team: Romanian\n"
 
 msgid "2 rows"
 msgstr "2 rânduri"
@@ -42,9 +49,6 @@ msgstr "Permite redare"
 
 msgid "Alternative"
 msgstr "Alternativ"
-
-msgid "Alternative"
-msgstr ""
 
 msgid "angle"
 msgstr "unghi"
@@ -85,9 +89,6 @@ msgstr "Închide dialogul"
 msgid "colon"
 msgstr "colon"
 
-msgid "colon"
-msgstr ""
-
 msgid "Comparison"
 msgstr "Comparaţie"
 
@@ -103,15 +104,6 @@ msgstr "conține ca membru"
 msgid "Correct"
 msgstr "Corect"
 
-msgid "congruent"
-msgstr ""
-
-msgid "contains as member"
-msgstr ""
-
-msgid "Correct"
-msgstr ""
-
 msgid "Correct answer option"
 msgstr "Opțiune de răspuns corectă"
 
@@ -123,9 +115,6 @@ msgstr "Definește răspunsurile corecte"
 
 msgid "Degree symbol"
 msgstr "Simbolul gradului"
-
-msgid "Degree symbol"
-msgstr ""
 
 msgid "Delete"
 msgstr "Ștergere"
@@ -142,12 +131,6 @@ msgstr "Afişare pictograme la fiecare capetă, sau nu"
 msgid "Display numbers above the choices, or not"
 msgstr "Afișează numerele deasupra opțiunilor sau nu"
 
-msgid "Display icons at each end, or not"
-msgstr ""
-
-msgid "Display numbers above the choices, or not"
-msgstr ""
-
 msgid "divide"
 msgstr "împarte"
 
@@ -159,9 +142,6 @@ msgstr "editează răspunsul"
 
 msgid "Enable all symbols"
 msgstr "Activează toate simbolurile"
-
-msgid "Enable all symbols"
-msgstr ""
 
 msgid "enable auto wrap"
 msgstr "activare încărcare automată"
@@ -214,18 +194,6 @@ msgstr "Ascunde butonul de înregistrare din butoanele de testare."
 msgid "Hide the stop button from test takers."
 msgstr "Ascunde butonul de oprire din teste."
 
-msgid "Hide record button"
-msgstr ""
-
-msgid "Hide stop button"
-msgstr ""
-
-msgid "Hide the record button from test takers."
-msgstr ""
-
-msgid "Hide the stop button from test takers."
-msgstr ""
-
 msgid "id : "
 msgstr "id : "
 
@@ -238,9 +206,6 @@ msgstr "În secunde. Timpul maxim de înregistrare permis (nu poate fi mai mic d
 msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
 msgstr "În secunde. Timpul maxim de înregistrare permis (nu poate fi mai mic de 5 secunde). Înregistrarea se va opri automat odată atinsă."
 
-msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
-msgstr ""
-
 msgid "In seconds. The time interval between partial updates of the recording."
 msgstr "În secunde. Intervalul de timp dintre actualizările parţiale ale înregistrării."
 
@@ -249,9 +214,6 @@ msgstr "Integrală nedeterminată"
 
 msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
 msgstr "Indică faptul că audio face parte dintr-o secvență cu alte interacțiuni secvențiale. Progresul secvenței este gestionat de motorul de livrare. Întârzierile sunt, de asemenea, respectate."
-
-msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
-msgstr ""
 
 msgid "Invalid files have been removed"
 msgstr "Fișierele nevalide au fost eliminate"
@@ -277,9 +239,6 @@ msgstr "Nivel"
 msgid "limit"
 msgstr "limită"
 
-msgid "limit"
-msgstr ""
-
 msgid "ln"
 msgstr "Ln"
 
@@ -301,20 +260,11 @@ msgstr "Mapare implicită"
 msgid "Matrix"
 msgstr "Matricea"
 
-msgid "Mapping default"
-msgstr ""
-
-msgid "Matrix"
-msgstr ""
-
 msgid "Max attempts:"
 msgstr "Tentative maxime:"
 
 msgid "Maximal score for this interaction."
 msgstr "Scorul maxim pentru această interacţiune."
-
-msgid "Maximal score for this interaction."
-msgstr ""
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
 msgstr "Numărul maxim de încercări de înregistrare permis persoanei care efectuează testarea. Se setează la 0 pentru a permite încercări nelimitate. Cu o limită de 3, luatorul de test va putea să facă clic de 2 ori pe butonul de resetare."
@@ -328,9 +278,6 @@ msgstr "Min:"
 msgid "Minimal score for this interaction."
 msgstr "Scorul minim pentru această interacţiune."
 
-msgid "Minimal score for this interaction."
-msgstr ""
-
 msgid "minus"
 msgstr "minus"
 
@@ -339,9 +286,6 @@ msgstr "Mono"
 
 msgid "n-root"
 msgstr "n-root"
-
-msgid "n-root"
-msgstr ""
 
 msgid "No Custom Interaction"
 msgstr "Nici o interacțiune personalizată"
@@ -367,15 +311,6 @@ msgstr "Redaţi un sunet la începutul şi sfârşitul înregistrării."
 msgid "Play sound"
 msgstr "Redare sunet"
 
-msgid "Percent"
-msgstr ""
-
-msgid "Play a sound at the start and end of recording."
-msgstr ""
-
-msgid "Play sound"
-msgstr ""
-
 msgid "plus"
 msgstr "plus"
 
@@ -395,9 +330,6 @@ msgstr "Format înregistrare"
 msgid "Recording starts automatically once test taker give microphone use authorisation."
 msgstr "Înregistrarea începe automat de îndată ce persoana care efectuează testul eliberează autorizația de utilizare a microfonului."
 
-msgid "Recording starts automatically once test taker give microphone use authorisation."
-msgstr ""
-
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
 msgstr "Înregistrarea începe automat de îndată ce persoana care efectuează testul eliberează autorizația de utilizare a microfonului. Dacă se utilizează un stimul media, atunci înregistrarea începe automat după ce stimulul a fost redat."
 
@@ -406,9 +338,6 @@ msgstr "Identificator de răspuns"
 
 msgid "right arrow"
 msgstr "săgeată dreapta"
-
-msgid "right arrow"
-msgstr ""
 
 msgid "Scale size"
 msgstr "Dimensiune scară"
@@ -419,20 +348,11 @@ msgstr "Scor"
 msgid "Score range"
 msgstr "Interval scor"
 
-msgid "Score"
-msgstr ""
-
-msgid "Score range"
-msgstr ""
-
 msgid "Sec:"
 msgstr "Sec:"
 
 msgid "Sequential"
 msgstr "Secvenţial"
-
-msgid "Sequential"
-msgstr ""
 
 msgid "set intersection"
 msgstr "setează intersecția"
@@ -449,12 +369,6 @@ msgstr "Arată pictograme"
 
 msgid "Show numbers"
 msgstr "Arată numerele"
-
-msgid "Show icons"
-msgstr ""
-
-msgid "Show numbers"
-msgstr ""
 
 msgid "similar"
 msgstr "similare"
@@ -486,32 +400,17 @@ msgstr "sum"
 msgid "superset"
 msgstr "superset"
 
-msgid "subset"
-msgstr ""
-
-msgid "sum"
-msgstr ""
-
-msgid "superset"
-msgstr ""
-
 msgid "Symbols"
 msgstr "Simboluri"
 
 msgid "tangent"
 msgstr "tangent"
 
-msgid "tangent"
-msgstr ""
-
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "Identificatorul ales. Acest identificator nu trebuie să fie folosit de nici un alt răspuns sau de nici o variabilă de element. Un identificator este un șir de caractere care trebuie să înceapă cu o scrisoare sau o subliniere (\"_\") și să conțină doar litere, sublinieri, cratime (\"-\"), perioadă (\". , a.k.a. punct de oprire completă), cifre, combinații Chars și extensii."
 
 msgid "The mapping options are available when at least one map entry is defined."
 msgstr "Opțiunile de cartografiere sunt disponibile atunci când cel puțin o intrare de hartă este definită."
-
-msgid "The mapping options are available when at least one map entry is defined."
-msgstr ""
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
 msgstr "Acesta este doar pentru testare. Afișează un link pentru a descărca fișierul înregistrat odată ce înregistrarea se oprește. Acest lucru nu ar trebui utilizat într-un context de livrare, deoarece ar permite persoanei care efectuează testul să descarce propria înregistrare."
@@ -561,9 +460,6 @@ msgstr "versiune : "
 msgid "Vertical line, divide"
 msgstr "Linie verticală, divizați"
 
-msgid "Vertical line, divide"
-msgstr ""
-
 msgid "Warning"
 msgstr "Avertizare"
 
@@ -575,12 +471,6 @@ msgstr "Browserul dvs. a blocat redarea automată. Apăsați Play pentru a vă a
 
 msgid "≈"
 msgstr "≈"
-
-msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr ""
-
-msgid "≈"
-msgstr ""
 
 msgid "≤"
 msgstr "≤"
