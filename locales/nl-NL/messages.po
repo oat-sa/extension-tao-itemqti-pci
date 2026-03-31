@@ -1,17 +1,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2026-02-03 16:43\n"
+"PO-Revision-Date: 2026-03-25 12:55\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: nl\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: nl\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
+"Language-Team: Dutch\n"
 
 msgid "2 rows"
 msgstr "2 rijen"
@@ -49,9 +56,6 @@ msgstr "hoek"
 msgid "Approximately"
 msgstr "Ongeveer"
 
-msgid "Approximately"
-msgstr ""
-
 msgid "Audio bitrate:"
 msgstr "Audio-bitrate:"
 
@@ -85,9 +89,6 @@ msgstr "Dialoogvenster sluiten"
 msgid "colon"
 msgstr "colon"
 
-msgid "colon"
-msgstr ""
-
 msgid "Comparison"
 msgstr "Vergelijking"
 
@@ -115,9 +116,6 @@ msgstr "juiste antwoorden definiëren"
 msgid "Degree symbol"
 msgstr "Graad symbool"
 
-msgid "Degree symbol"
-msgstr ""
-
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -144,9 +142,6 @@ msgstr "het antwoord bewerken"
 
 msgid "Enable all symbols"
 msgstr "Alle symbolen inschakelen"
-
-msgid "Enable all symbols"
-msgstr ""
 
 msgid "enable auto wrap"
 msgstr "automatische terugloop inschakelen"
@@ -220,9 +215,6 @@ msgstr "Onbepaalde integraal"
 msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
 msgstr "Geeft aan dat de audio deel uitmaakt van een reeks met andere opeenvolgende interacties. De verdere ontwikkeling van de rijen wordt geregeld door de aanvoermotor."
 
-msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
-msgstr ""
-
 msgid "Invalid files have been removed"
 msgstr "Ongeldige bestanden zijn verwijderd"
 
@@ -246,9 +238,6 @@ msgstr "Niveau"
 
 msgid "limit"
 msgstr "limiet"
-
-msgid "limit"
-msgstr ""
 
 msgid "ln"
 msgstr "In"
@@ -289,9 +278,6 @@ msgstr "Min:"
 msgid "Minimal score for this interaction."
 msgstr "Minimale score voor deze interactie."
 
-msgid "Minimal score for this interaction."
-msgstr ""
-
 msgid "minus"
 msgstr "minus"
 
@@ -300,9 +286,6 @@ msgstr "Monochroom"
 
 msgid "n-root"
 msgstr "n-wortel"
-
-msgid "n-root"
-msgstr ""
 
 msgid "No Custom Interaction"
 msgstr "Geen aangepaste interactie"
@@ -327,15 +310,6 @@ msgstr "Een geluid afspelen aan het begin en einde van de opname."
 
 msgid "Play sound"
 msgstr "Geluid afspelen"
-
-msgid "Percent"
-msgstr ""
-
-msgid "Play a sound at the start and end of recording."
-msgstr ""
-
-msgid "Play sound"
-msgstr ""
 
 msgid "plus"
 msgstr "plus"
@@ -374,20 +348,11 @@ msgstr "Beoordeling"
 msgid "Score range"
 msgstr "Scorebereik"
 
-msgid "Score"
-msgstr ""
-
-msgid "Score range"
-msgstr ""
-
 msgid "Sec:"
 msgstr "Sec:"
 
 msgid "Sequential"
 msgstr "Sequentiële"
-
-msgid "Sequential"
-msgstr ""
 
 msgid "set intersection"
 msgstr "maak snijpunt"
@@ -404,12 +369,6 @@ msgstr "Pictogrammen weergeven"
 
 msgid "Show numbers"
 msgstr "Getallen weergeven"
-
-msgid "Show icons"
-msgstr ""
-
-msgid "Show numbers"
-msgstr ""
 
 msgid "similar"
 msgstr "gelijksoortig"
@@ -440,15 +399,6 @@ msgstr "sum"
 
 msgid "superset"
 msgstr "superset"
-
-msgid "subset"
-msgstr ""
-
-msgid "sum"
-msgstr ""
-
-msgid "superset"
-msgstr ""
 
 msgid "Symbols"
 msgstr "Symbolen"

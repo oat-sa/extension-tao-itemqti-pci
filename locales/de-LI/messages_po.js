@@ -1,1 +1,1 @@
-[]
+{"Wrap image left":"Left","Wrap image right":"Right"}

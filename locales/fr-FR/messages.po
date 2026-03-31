@@ -1,17 +1,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2026-02-03 16:43\n"
+"PO-Revision-Date: 2026-03-27 13:00\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: fr-FR\n"
+"Language: fr\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: fr-FR\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-itemqti-pci] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 571\n"
+"Language-Team: French\n"
 
 msgid "2 rows"
 msgstr "2 rangées"
@@ -49,9 +56,6 @@ msgstr "angle"
 msgid "Approximately"
 msgstr "Environ"
 
-msgid "Approximately"
-msgstr ""
-
 msgid "Audio bitrate:"
 msgstr "Débit binaire audio :"
 
@@ -85,9 +89,6 @@ msgstr "Fermer la boîte de dialogue"
 msgid "colon"
 msgstr "deux-points"
 
-msgid "colon"
-msgstr ""
-
 msgid "Comparison"
 msgstr "Comparaison"
 
@@ -115,9 +116,6 @@ msgstr "Définir les réponses correctes"
 msgid "Degree symbol"
 msgstr "Symbole du Degree"
 
-msgid "Degree symbol"
-msgstr ""
-
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -144,9 +142,6 @@ msgstr "modifier la réponse"
 
 msgid "Enable all symbols"
 msgstr "Activer tous les symboles"
-
-msgid "Enable all symbols"
-msgstr ""
 
 msgid "enable auto wrap"
 msgstr "activer retour à la ligne automatique"
@@ -220,9 +215,6 @@ msgstr "Intégrale indéfinie"
 msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
 msgstr "Indique que l'audio fait partie d'une séquence avec d'autres interactions séquentielles. La progression de la séquence est gérée par le moteur de livraison et les délais sont également respectés."
 
-msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
-msgstr ""
-
 msgid "Invalid files have been removed"
 msgstr "Les fichiers invalides ont été supprimés"
 
@@ -295,9 +287,6 @@ msgstr "Mono"
 msgid "n-root"
 msgstr "n-root"
 
-msgid "n-root"
-msgstr ""
-
 msgid "No Custom Interaction"
 msgstr "Pas d'interaction personnalisée"
 
@@ -321,15 +310,6 @@ msgstr "Jouer un son au début et à la fin de l'enregistrement."
 
 msgid "Play sound"
 msgstr "Jouer un son"
-
-msgid "Percent"
-msgstr ""
-
-msgid "Play a sound at the start and end of recording."
-msgstr ""
-
-msgid "Play sound"
-msgstr ""
 
 msgid "plus"
 msgstr "plus"
@@ -390,12 +370,6 @@ msgstr "Afficher les icônes"
 msgid "Show numbers"
 msgstr "Afficher les numéros"
 
-msgid "Show icons"
-msgstr ""
-
-msgid "Show numbers"
-msgstr ""
-
 msgid "similar"
 msgstr "similaire"
 
@@ -425,15 +399,6 @@ msgstr "sum"
 
 msgid "superset"
 msgstr "superset"
-
-msgid "subset"
-msgstr ""
-
-msgid "sum"
-msgstr ""
-
-msgid "superset"
-msgstr ""
 
 msgid "Symbols"
 msgstr "Symboles"
@@ -494,9 +459,6 @@ msgstr "version : "
 
 msgid "Vertical line, divide"
 msgstr "Ligne verticale, diviser"
-
-msgid "Vertical line, divide"
-msgstr ""
 
 msgid "Warning"
 msgstr "Avertissement"
