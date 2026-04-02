@@ -29,10 +29,28 @@ define(['jquery', 'helpers'], function($, helpers) {
 
     var expectedFallbackUrl = helpers._url('load', 'PciLoader', 'qtiItemPci');
     var originalAjax = $.ajax;
+    var pciProviderModuleId = 'qtiItemPci/pciProvider';
+
+    /**
+     * Helper to restore the pciProvider module to its original/default state.
+     * This resets the RequireJS config and undefines the module so it can be
+     * reloaded fresh with default config in subsequent tests.
+     */
+    function restorePciProviderModule() {
+        // Reset the module config to empty (default state)
+        require.config({
+            config: {
+                'qtiItemPci/pciProvider': {}
+            }
+        });
+        // Undefine the module so next require() will reload it with fresh config
+        require.undef(pciProviderModuleId);
+    }
 
     QUnit.module('pciProvider - _pciLoadUrl configuration fallback', {
         afterEach: function() {
             $.ajax = originalAjax;
+            restorePciProviderModule();
         }
     });
 
@@ -143,6 +161,7 @@ define(['jquery', 'helpers'], function($, helpers) {
     QUnit.module('pciProvider - API', {
         afterEach: function() {
             $.ajax = originalAjax;
+            restorePciProviderModule();
         }
     });
 
