@@ -6,14 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
  *
- * Copyright (c) 2017-2025 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2026 (original work) Open Assessment Technologies SA;
  */
 define([
     'qtiCustomInteractionContext',
@@ -231,8 +231,6 @@ define([
 
                 self.getBase64Recoding(blob, filename)
                     .then(function (recording) {
-                        self._recordsAttempts++;
-
                         self.updateResponse(recording);
 
                         // shortcut if the PCI is being destroyed, as in this case some internal properties would be unreachable.
@@ -528,7 +526,9 @@ define([
             function startForReal() {
                 setTimeout(function () {
                     self.resetRecording();
+                    self._recordsAttempts++;
                     self.recorder.start();
+                    self.updateResetCount();
                     if (self.config.maxRecordingTime) {
                         self.$meterContainer.addClass('record');
                         self.progressBar.setStyle('record');
@@ -647,7 +647,8 @@ define([
          * Update the reset recording button with the number of remaining attempts
          */
         updateResetCount: function updateResetCount() {
-            var recordableAmount = this.getRecording() ? 0 : 1,
+            var isRecording = this.recorder && typeof this.recorder.is === 'function' && this.recorder.is('recording');
+            var recordableAmount = isRecording || this.getRecording() ? 0 : 1,
                 remaining = this.config.maxRecords - this._recordsAttempts - recordableAmount,
                 resetLabel = this.getControlIcon('reset');
 
