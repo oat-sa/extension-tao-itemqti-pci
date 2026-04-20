@@ -235,6 +235,21 @@ $modalShadowColor: #666666;
         margin: 0 auto;
       }
 
+      // Media player can keep an oversized inline height after metadata preview.
+      // Let the shell collapse to the actual media height in the authoring preview.
+      .mediaplayer.preview.video {
+        height: auto !important;
+
+        .player,
+        .media.video,
+        .mejs-container,
+        .mejs-mediaelement,
+        .mejs-overlay,
+        .mejs-poster {
+          height: auto !important;
+        }
+      }
+
     }
 
     // Countdown timer as a pie chart
