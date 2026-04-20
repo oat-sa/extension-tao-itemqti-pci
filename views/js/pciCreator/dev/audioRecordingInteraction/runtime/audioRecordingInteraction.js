@@ -650,10 +650,11 @@ define([
             var isRecording = this.recorder && typeof this.recorder.is === 'function' && this.recorder.is('recording');
             var recordableAmount = isRecording || this.getRecording() ? 0 : 1,
                 remaining = this.config.maxRecords - this._recordsAttempts - recordableAmount,
+                visualRemaining = Math.max(0, remaining),
                 resetLabel = this.getControlIcon('reset');
 
             if (this.config.maxRecords > 1) {
-                resetLabel += ' (' + remaining + ')';
+                resetLabel += ' (' + visualRemaining + ')';
             }
             if (this.controls.reset) {
                 this.controls.reset.updateLabel(resetLabel);
@@ -815,7 +816,7 @@ define([
                 reset.on(
                     'updatestate',
                     function () {
-                        if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
+                        if (self.config.maxRecords > 1 && self.config.maxRecords <= self._recordsAttempts) {
                             this.disable();
                         } else if (self.player.is('idle')) {
                             this.enable();
@@ -1008,6 +1009,7 @@ define([
                 if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
                     this._recordsAttempts = state.recordsAttempts;
                     this.updateResetCount();
+                    this.updateControls();
                 }
             } else {
                 this.setResponse(state);
