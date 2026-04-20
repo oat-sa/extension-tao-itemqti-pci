@@ -243,10 +243,13 @@ $modalShadowColor: #666666;
         .player,
         .media.video,
         .mejs-container,
-        .mejs-mediaelement,
+        .mejs-mediaelement {
+          height: auto !important;
+        }
+
         .mejs-overlay,
         .mejs-poster {
-          height: auto !important;
+          height: 100% !important;
         }
       }
 
