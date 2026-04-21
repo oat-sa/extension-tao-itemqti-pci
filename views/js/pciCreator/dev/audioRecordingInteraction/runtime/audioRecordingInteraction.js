@@ -77,6 +77,7 @@ define([
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
+        _playbackAttempts: 0,
         _isAutoPlayingBack: false,
         _delayCallback: null,
 
@@ -118,6 +119,9 @@ define([
             this._recording = null;
             if (typeof this._recordsAttempts === 'undefined') {
                 this._recordsAttempts = 0;
+            }
+            if (typeof this._playbackAttempts === 'undefined') {
+                this._playbackAttempts = 0;
             }
 
             this.config = {};
@@ -435,6 +439,10 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function () {
+                    if (self.hasMediaStimulusMaxPlayLimit()) {
+                        self._playbackAttempts = Math.min(self.config.media.maxPlays, self._playbackAttempts + 1);
+                        self.triggerResponseChange();
+                    }
                     // If auto start recording is set and PCI is not in review mode
                     if (self.config.autoStart && !self.config.isReviewMode) {
                         if (!self.config.delayMinutes && !self.config.delaySeconds) {
@@ -445,6 +453,16 @@ define([
                             self.initDelay();
                         }
                     }
+                });
+
+                this.mediaStimulus.on('disabled', function () {
+                    if (!self.hasMediaStimulusMaxPlayLimit()) {
+                        return;
+                    }
+
+                    // permanently disable the media playback if the replay timeout was reached
+                    self._playbackAttempts = self.config.media.maxPlays;
+                    self.triggerResponseChange();
                 });
                 this.mediaStimulus.render();
             } else {
@@ -470,6 +488,10 @@ define([
          */
         hasMediaStimulus: function hasMediaStimulus() {
             return this.config.useMediaStimulus && this.config.media && this.config.media.uri;
+        },
+
+        hasMediaStimulusMaxPlayLimit: function hasMediaStimulusMaxPlayLimit() {
+            return this.hasMediaStimulus() && this.config.media.maxPlays;
         },
 
         /**
@@ -638,9 +660,7 @@ define([
          */
         updateResponse: function updateResponse(recording) {
             this.setRecording(recording);
-            if (typeof this.trigger === 'function') {
-                this.trigger('responseChange'); // this has to be camelcase
-            }
+            this.triggerResponseChange();
         },
 
         /**
@@ -907,6 +927,15 @@ define([
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
         },
+
+        triggerResponseChange: function triggerResponseChange() {
+            if (typeof this.trigger !== 'function') {
+                return;
+            }
+
+            this.trigger('responseChange'); // this has to be camelcase
+        },
+
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
@@ -1005,9 +1034,18 @@ define([
          */
         setSerializedState: function setSerializedState(state) {
             if (state && typeof state === 'object' && state.hasOwnProperty('response')) {
+                var isInitialized = false;
+                if (this.hasMediaStimulus()) {
+                    this.mediaStimulus.setPlaybackAttempts(state.playbackAttempts);
+                    isInitialized = this.mediaStimulus.getPlaybackAttempts() > 0;
+                }
                 this.setResponse(state.response);
                 if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
                     this._recordsAttempts = state.recordsAttempts;
+                    isInitialized = true;
+                }
+
+                if (isInitialized) {
                     this.updateResetCount();
                     this.updateControls();
                 }
@@ -1024,10 +1062,16 @@ define([
          * @returns {Object} json format
          */
         getSerializedState: function getSerializedState() {
-            return {
+            var state = {
                 response: this.getResponse(),
                 recordsAttempts: this._recordsAttempts
             };
+
+            if (this.hasMediaStimulusMaxPlayLimit()) {
+                state.playbackAttempts = this._playbackAttempts;
+            }
+
+            return state;
         }
     };
 
