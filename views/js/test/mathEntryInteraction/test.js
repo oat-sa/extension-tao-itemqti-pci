@@ -41,6 +41,56 @@ define([
 
     QUnit.module('Math Entry Interaction');
 
+    function createInteraction(properties) {
+        const responseDeclaration = {
+            serial: 'response-serial',
+            id: _.noop,
+            attr: _.noop,
+            removeMapEntries: _.noop
+        };
+
+        return {
+            properties: _.cloneDeep(properties || {}),
+            responseIdentifier: 'RESPONSE',
+            prop(name, value) {
+                if (arguments.length > 1) {
+                    this.properties[name] = value;
+                    return value;
+                }
+
+                return this.properties[name];
+            },
+            attr(name, value) {
+                if (arguments.length > 1) {
+                    this[name] = value;
+                    return value;
+                }
+
+                return this[name];
+            },
+            getResponseDeclaration() {
+                return responseDeclaration;
+            },
+            getProperties() {
+                return this.properties;
+            },
+            triggerPci: _.noop
+        };
+    }
+
+    function initQuestionState(QuestionState, properties) {
+        const widget = {
+            $form: $('<div>'),
+            element: createInteraction(properties)
+        };
+        const state = Object.create(QuestionState.prototype);
+
+        state.widget = widget;
+        state.initForm();
+
+        return state;
+    }
+
     /* */
 
     QUnit.test('renders correctly', assert => {
@@ -316,6 +366,230 @@ define([
             })
             .init()
             .render($container, { state: _.cloneDeep(state) });
+    });
+
+    /* */
+
+    QUnit.test('Question state initializes symbol props from explicit properties only', assert => {
+        assert.expect(28);
+
+        const questionStateModuleName = 'mathEntryInteraction/creator/widget/states/Question';
+        const templateModuleName = 'tpl!mathEntryInteraction/creator/tpl/propertiesForm';
+        const originalSelect2 = $.fn.select2;
+        const originalRequire = window.require;
+        let capturedModule;
+        let finished = false;
+
+        function teardown() {
+            $.fn.select2 = originalSelect2;
+            requirejs.undef(questionStateModuleName);
+            requirejs.undef(templateModuleName);
+        }
+
+        function finalize() {
+            if (!finished) {
+                finished = true;
+                done();
+            }
+        }
+
+        $.fn.select2 = function () {
+            return this;
+        };
+
+        const done = assert.async();
+
+        requirejs.undef(questionStateModuleName);
+        requirejs.undef(templateModuleName);
+
+        define(templateModuleName, [], function () {
+            return function (props) {
+                capturedModule = props;
+                return [
+                    '<div class="mathgap-style-box">',
+                    '  <select data-mathgap-style></select>',
+                    '</div>',
+                    '<div class="tools"></div>'
+                ].join('');
+            };
+        });
+
+        try {
+            originalRequire([questionStateModuleName], function (QuestionState) {
+                try {
+                    const cases = [
+                        {
+                            label: 'tool_frac explicit true',
+                            properties: { tool_frac: 'true' },
+                            expected: { tool_frac: true }
+                        },
+                        {
+                            label: 'tool_frac explicit false',
+                            properties: { tool_frac: 'false' },
+                            expected: { tool_frac: false }
+                        },
+                        {
+                            label: 'tool_frac omitted',
+                            properties: {},
+                            expected: { tool_frac: false }
+                        },
+                        {
+                            label: 'tool_sqrt explicit true',
+                            properties: { tool_sqrt: 'true' },
+                            expected: { tool_sqrt: true }
+                        },
+                        {
+                            label: 'tool_sqrt explicit false',
+                            properties: { tool_sqrt: 'false' },
+                            expected: { tool_sqrt: false }
+                        },
+                        {
+                            label: 'tool_sqrt omitted',
+                            properties: {},
+                            expected: { tool_sqrt: false }
+                        },
+                        {
+                            label: 'tool_pi explicit true',
+                            properties: { tool_pi: 'true' },
+                            expected: { tool_pi: true }
+                        },
+                        {
+                            label: 'tool_pi explicit false',
+                            properties: { tool_pi: 'false' },
+                            expected: { tool_pi: false }
+                        },
+                        {
+                            label: 'tool_pi omitted',
+                            properties: {},
+                            expected: { tool_pi: false }
+                        },
+                        {
+                            label: 'squarebkts explicit true',
+                            properties: { tool_lbrack: 'true', tool_rbrack: 'true' },
+                            expected: { squarebkts: true }
+                        },
+                        {
+                            label: 'squarebkts explicit false',
+                            properties: { tool_lbrack: 'false', tool_rbrack: 'false' },
+                            expected: { squarebkts: false }
+                        },
+                        {
+                            label: 'squarebkts omitted',
+                            properties: {},
+                            expected: { squarebkts: false }
+                        },
+                        {
+                            label: 'squarebkts partial explicit',
+                            properties: { tool_lbrack: 'true' },
+                            expected: { squarebkts: false }
+                        },
+                        {
+                            label: 'roundbkts explicit true',
+                            properties: { tool_lparen: 'true', tool_rparen: 'true' },
+                            expected: { roundbkts: true }
+                        },
+                        {
+                            label: 'roundbkts explicit false',
+                            properties: { tool_lparen: 'false', tool_rparen: 'false' },
+                            expected: { roundbkts: false }
+                        },
+                        {
+                            label: 'roundbkts omitted',
+                            properties: {},
+                            expected: { roundbkts: false }
+                        },
+                        {
+                            label: 'roundbkts partial explicit',
+                            properties: { tool_lparen: 'true' },
+                            expected: { roundbkts: false }
+                        },
+                        {
+                            label: 'tool_matrix_2row explicit true',
+                            properties: { tool_matrix_2row: 'true' },
+                            expected: { tool_matrix_2row: true }
+                        },
+                        {
+                            label: 'tool_matrix_2row explicit false',
+                            properties: { tool_matrix_2row: 'false' },
+                            expected: { tool_matrix_2row: false }
+                        },
+                        {
+                            label: 'tool_matrix_2row omitted',
+                            properties: {},
+                            expected: { tool_matrix_2row: false }
+                        },
+                        {
+                            label: 'tool_matrix_2row_2col explicit true',
+                            properties: { tool_matrix_2row_2col: 'true' },
+                            expected: { tool_matrix_2row_2col: true }
+                        },
+                        {
+                            label: 'tool_matrix_2row_2col explicit false',
+                            properties: { tool_matrix_2row_2col: 'false' },
+                            expected: { tool_matrix_2row_2col: false }
+                        },
+                        {
+                            label: 'tool_matrix_2row_2col omitted',
+                            properties: {},
+                            expected: { tool_matrix_2row_2col: false }
+                        }
+                    ];
+
+                    _.forEach(cases, testCase => {
+                        initQuestionState(QuestionState, testCase.properties);
+                        assert.propEqual(
+                            _.pick(capturedModule, _.keys(testCase.expected)),
+                            testCase.expected,
+                            testCase.label
+                        );
+                    });
+
+                    assert.strictEqual(
+                        Object.prototype.hasOwnProperty.call(capturedModule, 'tool_lbrack'),
+                        false,
+                        'captured state props do not expose tool_lbrack directly'
+                    );
+                    assert.strictEqual(
+                        Object.prototype.hasOwnProperty.call(capturedModule, 'tool_rbrack'),
+                        false,
+                        'captured state props do not expose tool_rbrack directly'
+                    );
+                    assert.strictEqual(
+                        Object.prototype.hasOwnProperty.call(capturedModule, 'tool_lparen'),
+                        false,
+                        'captured state props do not expose tool_lparen directly'
+                    );
+                    assert.strictEqual(
+                        Object.prototype.hasOwnProperty.call(capturedModule, 'tool_rparen'),
+                        false,
+                        'captured state props do not expose tool_rparen directly'
+                    );
+
+                    assert.strictEqual(
+                        capturedModule.allowNewLine,
+                        false,
+                        'non-target boolean props still use explicit false defaults in question state init'
+                    );
+                } finally {
+                    teardown();
+                    finalize();
+                }
+            }, function (error) {
+                try {
+                    assert.ok(false, `Failed to load ${questionStateModuleName}: ${error && error.message ? error.message : error}`);
+                } finally {
+                    teardown();
+                    finalize();
+                }
+            });
+        } catch (error) {
+            try {
+                assert.ok(false, `Unexpected error while requiring ${questionStateModuleName}: ${error && error.message ? error.message : error}`);
+            } finally {
+                teardown();
+                finalize();
+            }
+        }
     });
 
     /* */
