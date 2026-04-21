@@ -18,7 +18,7 @@ final class Version202604211018221465_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Set visiability by default ot false for math elements';
+        return 'Set visibility of math elements to false by default';
     }
 
     public function up(Schema $schema): void
