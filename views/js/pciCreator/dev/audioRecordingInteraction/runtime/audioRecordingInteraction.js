@@ -195,28 +195,32 @@ define([
                 self.progressBar.reset();
                 self.$meterContainer.removeClass('record');
             });
+            this._bindAutoplayEvents = function () {
+                this.$container.on('click.autoplay touchend.autoplay', requestAutoplayPermission);
+            };
+
+            this._unbindAutoplayEvents = function () {
+                this.$container.off('.autoplay');
+            };
+
             this._setupAutoplayPermission = function () {
-                this._bindAutoplayEvents = function() {
-                    this.$container.on('click.autoplay', playSilentAudio);
-                    this.$container.on('touchend.autoplay', playSilentAudio);
-                };
-
-                this._unbindAutoplayEvents = function() {
-                    this.$container.off('.autoplay');
-                };
-                // Silent audio element setup to request autoplay permission
-                var silentAudio = document.createElement('audio');
-                silentAudio.src = 'data:audio/wav;base64,UklGRgAAAABXQVZFZm10IBAAAAABAAEAQB8AAIAfAAACABAAZGF0YQAAAAA=';
-                silentAudio.volume = 0.0;
-
-                var playSilentAudio = function () {
-                    silentAudio.play().then(() => {
-                        this._unbindAutoplayEvents();
-                    }).catch(function () {});
-                };
-                // Event listeners to the container to trigger the silent audio playback
+                this._autoplayPermissionRequested = false;
                 this._bindAutoplayEvents();
             };
+
+            function requestAutoplayPermission() {
+                if (self._autoplayPermissionRequested) {
+                    return;
+                }
+
+                self._autoplayPermissionRequested = true;
+                self._unbindAutoplayEvents();
+
+                if (self.player && _.isFunction(self.player.enableAutoplay)) {
+                    self.player.enableAutoplay().catch(function () {});
+                }
+            }
+
             if (this.isSafari) {
                 // Safari requires user interaction to enable autoplay
                 // https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/
@@ -258,7 +262,11 @@ define([
                                 self.playRecording(onError);
                             });
                         }
-                        self.player.loadFromBase64(recording.data, recording.mime);
+                        if (recordingUrl) {
+                            self.player.load(recordingUrl, { ownsUrl: true });
+                        } else {
+                            self.player.loadFromBase64(recording.data, recording.mime);
+                        }
 
                         self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
                     })

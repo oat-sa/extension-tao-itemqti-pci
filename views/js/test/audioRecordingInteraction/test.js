@@ -7,6 +7,8 @@ define([
     'taoQtiItem/runner/qtiItemRunner',
     'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
+    'audioRecordingInteraction/runtime/js/player',
+    'audioRecordingInteraction/runtime/js/recorder',
     'json!qtiItemPci/test/audioRecordingInteraction/data/qti.json'
 ], function (
     $,
@@ -17,6 +19,8 @@ define([
     qtiItemRunner,
     ciRegistry,
     pciTestProvider,
+    playerFactory,
+    recorderFactory,
     itemData
 ) {
     'use strict';
@@ -38,6 +42,270 @@ define([
         'qtiItemPci/pciCreator/dev/audioRecordingInteraction/pciCreator.json');
     ciRegistry.resetProviders();
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
+
+    function createFakeAudioConstructor() {
+        var instances = [];
+
+        function FakeAudio(src) {
+            this.src = src || '';
+            this.currentSrc = this.src;
+            this.currentTime = 0;
+            this.duration = 1;
+            this.muted = false;
+            this.readyState = 0;
+            this.networkState = 0;
+            this.error = null;
+            this.loadCalls = 0;
+            this.playCalls = 0;
+            this.pauseCalls = 0;
+            instances.push(this);
+        }
+
+        FakeAudio.instances = instances;
+
+        FakeAudio.prototype.load = function load() {
+            this.loadCalls++;
+            this.currentSrc = this.src;
+            if (typeof this.oncanplay === 'function') {
+                this.oncanplay();
+            }
+        };
+
+        FakeAudio.prototype.play = function play() {
+            this.playCalls++;
+            if (typeof this.onplaying === 'function') {
+                this.onplaying();
+            }
+            return Promise.resolve();
+        };
+
+        FakeAudio.prototype.pause = function pause() {
+            this.pauseCalls++;
+        };
+
+        FakeAudio.prototype.removeAttribute = function removeAttribute(attributeName) {
+            if (attributeName === 'src') {
+                this.src = '';
+            }
+        };
+
+        return FakeAudio;
+    }
+
+    function createPlayRejectingAudioConstructor(errorName) {
+        var FakeAudio = createFakeAudioConstructor();
+
+        FakeAudio.prototype.play = function play() {
+            this.playCalls++;
+            return Promise.reject({
+                name: errorName
+            });
+        };
+
+        return FakeAudio;
+    }
+
+    function overrideNavigatorProperties(properties) {
+        var target = window.navigator;
+        var prototype = Object.getPrototypeOf(window.navigator);
+        var restorers = [];
+
+        _.forEach(properties, function (value, propertyName) {
+            var descriptor = Object.getOwnPropertyDescriptor(target, propertyName);
+            var descriptorTarget = target;
+
+            if (!(descriptor && descriptor.configurable)) {
+                descriptorTarget = prototype;
+                descriptor = Object.getOwnPropertyDescriptor(descriptorTarget, propertyName);
+            }
+
+            Object.defineProperty(descriptorTarget, propertyName, {
+                value: value,
+                configurable: true
+            });
+
+            restorers.push(function restoreProperty() {
+                if (descriptor) {
+                    Object.defineProperty(descriptorTarget, propertyName, descriptor);
+                } else {
+                    delete descriptorTarget[propertyName];
+                }
+            });
+        });
+
+        return function restoreNavigatorProperties() {
+            _.forEach(restorers, function (restoreProperty) {
+                restoreProperty();
+            });
+        };
+    }
+
+    QUnit.module('Audio Recording Interaction Player', {
+        beforeEach: function () {
+            this.originalAudio = window.Audio;
+            this.originalUrl = window.URL;
+        },
+        afterEach: function () {
+            window.Audio = this.originalAudio;
+            window.URL = this.originalUrl;
+            $('.modal').remove();
+        }
+    });
+
+    QUnit.test('reuses the same audio element when reloading media', function (assert) {
+        var FakeAudio = createFakeAudioConstructor();
+        var player = playerFactory();
+
+        window.Audio = FakeAudio;
+
+        player.load('blob:first');
+        player.load('blob:second');
+
+        assert.equal(FakeAudio.instances.length, 1, 'one audio element is reused across loads');
+        assert.equal(FakeAudio.instances[0].src, 'blob:second', 'the player updates the existing element source');
+        assert.equal(FakeAudio.instances[0].loadCalls, 2, 'the existing audio element is reloaded for each source');
+    });
+
+    QUnit.test('keeps the autoplay-enabled audio element for later playback', function (assert) {
+        var done = assert.async();
+        var FakeAudio = createFakeAudioConstructor();
+        var player = playerFactory();
+
+        window.Audio = FakeAudio;
+
+        player.enableAutoplay().then(function () {
+            player.unload();
+            player.load('blob:recording');
+
+            assert.equal(FakeAudio.instances.length, 1, 'autoplay enabling and playback share the same audio element');
+            assert.ok(player.isAutoplayEnabled(), 'the player reports autoplay as enabled');
+            assert.equal(FakeAudio.instances[0].src, 'blob:recording', 'the autoplay-enabled element is reused for the recorded media');
+            done();
+        });
+    });
+
+    QUnit.test('revokes owned object urls when media is replaced or unloaded', function (assert) {
+        var FakeAudio = createFakeAudioConstructor();
+        var player = playerFactory();
+        var revokedUrls = [];
+
+        window.Audio = FakeAudio;
+        window.URL = {
+            revokeObjectURL: function revokeObjectURL(url) {
+                revokedUrls.push(url);
+            }
+        };
+
+        player.load('blob:first', { ownsUrl: true });
+        player.load('blob:second', { ownsUrl: true });
+        player.unload();
+
+        assert.deepEqual(revokedUrls, ['blob:first', 'blob:second'], 'owned blob urls are revoked when replaced and unloaded');
+    });
+
+    QUnit.test('shows the autoplay warning only for NotAllowedError', function (assert) {
+        var done = assert.async();
+        var FakeAudio = createPlayRejectingAudioConstructor('NotAllowedError');
+        var player = playerFactory();
+        var message;
+
+        window.Audio = FakeAudio;
+
+        player.load('blob:first');
+        player.play(function () {
+            message = $('.modal .message').text();
+            assert.equal(message, 'Your browser blocked auto-play. Press Play to listen to your recording.', 'autoplay warning is reserved for policy rejections');
+            done();
+        });
+    });
+
+    QUnit.test('shows a playback support error for non-policy failures', function (assert) {
+        var done = assert.async();
+        var FakeAudio = createPlayRejectingAudioConstructor('NotSupportedError');
+        var player = playerFactory();
+        var message;
+
+        window.Audio = FakeAudio;
+
+        player.load('blob:first');
+        player.play(function () {
+            message = $('.modal .message').text();
+            assert.equal(message, 'Your recording could not be played back in this browser.', 'playback support errors use a different message');
+            done();
+        });
+    });
+
+    QUnit.module('Audio Recording Interaction Recorder Provider Selection', {
+        beforeEach: function () {
+            this.restoreUserAgent = function () {};
+        },
+        afterEach: function () {
+            this.restoreUserAgent();
+        }
+    });
+
+    QUnit.test('uses WebAudio recording on iOS even when compression is enabled', function (assert) {
+        var recorder;
+
+        this.restoreUserAgent = overrideNavigatorProperties({
+            userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1',
+            platform: 'iPad',
+            maxTouchPoints: 5
+        });
+
+        recorder = recorderFactory({
+            isCompressed: true,
+            maxRecordingTime: 120
+        }, {
+            resolve: function resolve(assetPath) {
+                return assetPath;
+            }
+        });
+
+        assert.equal(recorder.getProviderType(), 'webAudio', 'iOS recording falls back to wav/webAudio');
+    });
+
+    QUnit.test('uses WebAudio recording for iPadOS desktop user agents', function (assert) {
+        var recorder;
+
+        this.restoreUserAgent = overrideNavigatorProperties({
+            userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15',
+            platform: 'MacIntel',
+            maxTouchPoints: 5
+        });
+
+        recorder = recorderFactory({
+            isCompressed: true,
+            maxRecordingTime: 120
+        }, {
+            resolve: function resolve(assetPath) {
+                return assetPath;
+            }
+        });
+
+        assert.equal(recorder.getProviderType(), 'webAudio', 'iPadOS desktop UA still falls back to wav/webAudio');
+    });
+
+    QUnit.test('keeps MediaRecorder recording on non-iOS browsers', function (assert) {
+        var recorder;
+
+        this.restoreUserAgent = overrideNavigatorProperties({
+            userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15',
+            platform: 'MacIntel',
+            maxTouchPoints: 0
+        });
+
+        recorder = recorderFactory({
+            isCompressed: true,
+            maxRecordingTime: 120
+        }, {
+            resolve: function resolve(assetPath) {
+                return assetPath;
+            }
+        });
+
+        assert.equal(recorder.getProviderType(), 'mediaRecorder', 'Mac Safari keeps the compressed recorder path');
+    });
 
     QUnit.module('Audio Recording Interaction', {
         afterEach: function (assert) {

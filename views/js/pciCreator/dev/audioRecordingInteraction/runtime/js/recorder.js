@@ -127,7 +127,17 @@ define([
          * @returns {*|boolean}
          */
         function isIOSDevice() {
-            return /(iPhone|iPad)/i.test(navigator.userAgent)
+            var userAgent = navigator.userAgent || '';
+            var platform = navigator.platform || '';
+            var maxTouchPoints = navigator.maxTouchPoints || 0;
+
+            return /(iPhone|iPad|iPod)/i.test(userAgent) ||
+                (platform === 'MacIntel' && maxTouchPoints > 1) ||
+                (/Macintosh/i.test(userAgent) && maxTouchPoints > 1);
+        }
+
+        function shouldUseWebAudioProvider() {
+            return !!config.isCompressed && isIOSDevice();
         }
 
         /**
@@ -234,11 +244,11 @@ define([
             init: function init() {
                 var self = this;
 
-                provider = (config.isCompressed)
+                provider = this.getProviderType() === 'mediaRecorder'
                     ? mediaRecorderProvider(config)
                     : webAudioProvider(config, assetManager);
 
-                    this.initAudioContext();
+                this.initAudioContext();
 
                 return navigator.mediaDevices.getUserMedia({ audio: true })
                     .then(function(stream) {
@@ -276,6 +286,10 @@ define([
                 window.audioContext = audioContext;
 
                 return audioContext;
+            },
+
+            getProviderType: function getProviderType() {
+                return shouldUseWebAudioProvider() ? 'webAudio' : 'mediaRecorder';
             },
 
             /**
