@@ -518,6 +518,123 @@ define([
 
     /* */
 
+    QUnit.cases
+        .init([
+            {
+                title: 'disabled when max attempts reached (maxRecords=2, attempts=2)',
+                maxRecords: '2',
+                recordsAttempts: 2,
+                expectedClass: 'disabled'
+            },
+            {
+                title: 'enabled when attempts remain (maxRecords=3, attempts=1)',
+                maxRecords: '3',
+                recordsAttempts: 1,
+                expectedClass: 'enabled'
+            },
+            {
+                title: 'enabled when unlimited recording (maxRecords=0, attempts=5)',
+                maxRecords: '0',
+                recordsAttempts: 5,
+                expectedClass: 'enabled'
+            }
+        ])
+        .test('reset button state respects remaining attempts', function (data, assert) {
+            var ready = assert.async();
+            var $container = $('#' + fixtureContainerId);
+            assert.equal($container.length, 1, 'the item container exists');
+            assert.equal($container.children().length, 0, 'the container has no children');
+
+            if (supportsMediaRecorder()) {
+                var newItemData = _.cloneDeep(itemData);
+                newItemData.body.elements.interaction_portablecustominteraction_5a61fdb9cb6a7534654927.properties.maxRecords = data.maxRecords;
+
+                runner = qtiItemRunner('qti', newItemData)
+                    .on('render', function () {
+                        // Allow _stateResolver promise chain to flush before checking control state
+                        setTimeout(function () {
+                            var $reset = $container.find('[data-identifier="reset"]');
+                            assert.equal($reset.length, 1, 'reset button exists');
+                            assert.ok(
+                                $reset.hasClass(data.expectedClass),
+                                'reset button has class "' + data.expectedClass + '" with maxRecords=' + data.maxRecords + ' and ' + data.recordsAttempts + ' attempt(s)'
+                            );
+                            ready();
+                        }, 50);
+                    })
+                    .init()
+                    .render($container, {
+                        state: {
+                            RESPONSE: {
+                                response: { base: null },
+                                recordsAttempts: data.recordsAttempts
+                            }
+                        }
+                    });
+            }
+
+            function supportsMediaRecorder() {
+                if (!window.MediaRecorder) {
+                    assert.ok(true, 'skipping test...');
+                    ready();
+                    return false;
+                }
+                return true;
+            }
+        });
+
+    /* */
+
+    QUnit.test('setSerializedState resolves state and allows controls to update', function (assert) {
+        var ready = assert.async();
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            runner = qtiItemRunner('qti', itemData)
+                .on('render', function () {
+                    var interaction = this._item.getInteractions()[0];
+                    var pci = interaction.metaData.pci;
+
+                    // After render, _stateResolver should be a pending Promise
+                    assert.ok(pci._stateResolver instanceof Promise, '_stateResolver is a Promise');
+
+                    // After setSerializedState is called, the state resolver should be triggered
+                    var stateWasResolved = false;
+                    pci._stateResolver.then(function () {
+                        stateWasResolved = true;
+                    });
+
+                    // setSerializedState calls _resolveState() which resolves _stateResolver
+                    pci.setSerializedState({
+                        response: { base: null },
+                        recordsAttempts: 1
+                    });
+
+                    // Use setTimeout to wait for microtasks to flush
+                    setTimeout(function () {
+                        assert.ok(stateWasResolved, '_stateResolver was resolved after setSerializedState');
+                        assert.equal(pci._recordsAttempts, 1, '_recordsAttempts updated from serialized state');
+                        ready();
+                    }, 50);
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    /* */
+
     QUnit.module('Visual test');
 
     QUnit.test('display and play', function (assert) {

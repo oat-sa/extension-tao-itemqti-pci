@@ -1,3 +1,21 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
+ *
+ * Copyright (c) 2026 (original work) Open Assessment Technologies SA;
+ */
+
 /* eslint-disable func-names */
 define([
     'jquery',
@@ -104,6 +122,27 @@ define([
                     RESPONSE: {
                         response: { base: null },
                         recordsAttempts: 1
+                    }
+                },
+                disabled: 'false'
+            },
+            {
+                title: 'never disabled when unlimited (maxRecords=0)',
+                itemData: (function () {
+                    var newItemData = _.cloneDeep(itemData);
+                    newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.maxRecords = '0';
+                    return newItemData;
+                })(),
+                state: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 5
+                    }
+                },
+                expected: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 5
                     }
                 },
                 disabled: 'false'
@@ -621,6 +660,56 @@ define([
 
     /* */
 
+    QUnit.test('setSerializedState resolves state and updates controls', function (assert) {
+        var ready = assert.async();
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            runner = qtiItemRunner('qti', itemData)
+                .on('render', function () {
+                    var interaction = this._item.getInteractions()[0];
+                    var pci = interaction.metaData.pci;
+
+                    // After render, _stateResolver should be a pending Promise
+                    assert.ok(pci._stateResolver instanceof Promise, '_stateResolver is a Promise');
+
+                    // Track whether the promise resolved
+                    var stateWasResolved = false;
+                    pci._stateResolver.then(function () {
+                        stateWasResolved = true;
+                    });
+
+                    // Calling setSerializedState triggers _resolveState(), which resolves _stateResolver
+                    pci.setSerializedState({
+                        response: { base: null },
+                        recordsAttempts: 1
+                    });
+
+                    // Flush microtasks/macrotasks before asserting
+                    setTimeout(function () {
+                        assert.ok(stateWasResolved, '_stateResolver was resolved after setSerializedState');
+                        assert.equal(pci._recordsAttempts, 1, '_recordsAttempts updated by setSerializedState');
+                        ready();
+                    }, 50);
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    /* */
+
     QUnit.module('Audio Recording Interaction: sequential, hidden controls, autostart after delay', {
         afterEach: function () {
             if (runner) {
@@ -869,7 +958,7 @@ define([
             newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.enableDomEvents = 'true';
 
             runner = qtiItemRunner('qti', newItemData)
-                .on('render', function () {
+                .on('render', async function () {
                     assert.equal(
                         $container.find('.qti-customInteraction .audioRecordingInteraction').length,
                         1,
@@ -887,6 +976,9 @@ define([
                     $interaction.get(0).dispatchEvent(
                         new CustomEvent('config-change', { detail: { isDisabled: true } })
                     );
+                    await new Promise(function (resolve) {
+                        setTimeout(resolve, 0)
+                    });
 
                     $buttons = $interaction.find('.audiorec-control');
                     assert.equal(
@@ -898,6 +990,9 @@ define([
                     $interaction.get(0).dispatchEvent(
                         new CustomEvent('config-change', { detail: { isDisabled: false } })
                     );
+                    await new Promise(function (resolve) {
+                        setTimeout(resolve, 0)
+                    });
 
                     $buttons = $interaction.find('.audiorec-control');
                     assert.equal(
@@ -936,7 +1031,7 @@ define([
             properties.enableDomEvents = 'true';
 
             runner = qtiItemRunner('qti', newItemData)
-                .on('render', function () {
+                .on('render', async function () {
                     var interaction = this._item.getInteractions()[0];
                     var $interaction = $container.find('.qti-customInteraction');
                     var $buttons = $interaction.find('.audiorec-control');
@@ -963,6 +1058,9 @@ define([
                             }
                         })
                     );
+                    await new Promise(function (resolve) {
+                        setTimeout(resolve, 0)
+                    });
 
                     assert.equal(
                         $interaction.find('.audiorec-control').length,
