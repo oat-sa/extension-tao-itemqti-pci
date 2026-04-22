@@ -82,7 +82,7 @@ class PciLoaderTest extends TestCase
                     'typeIdentifier' => 'entryCodeInteraction',
                     'version' => '1.2.0',
                     'runtime' => [
-                        'hook' => 'https:\/\/backoffice.ngs.test\/tao\/File\/accessFile\/NjdiZGJlZmY3NTg2ZiBJTVNQQ0kvZDEzMmNmN2ZjY2E3ZjRkMzczNzg0NDE5NDM3YTBmNWE=\/runtime\/entryCode.min.js',
+                        'hook' => '\/\/runtime\/entryCode.min.js',
                         'modules' => [
                             'entryCodeInteraction\/runtime\/entryCode.min' => [
                                 'runtime\/entryCode.min.js'
