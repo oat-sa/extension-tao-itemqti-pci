@@ -78,6 +78,7 @@ define([
         _recording: null,
         _recordsAttempts: 0,
         _playbackAttempts: 0,
+        _hydrationEvents: 0,
         _isAutoPlayingBack: false,
         _delayCallback: null,
 
@@ -439,12 +440,16 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function () {
-                    if (self.hasMediaStimulusMaxPlayLimit()) {
+                    if (self._hydrationEvents > 0) {
+                        // skip _playbackAttempts increment when handling `ended` events
+                        // during the interaction's state hydration
+                        self._hydrationEvents--;
+                    } else if (self.hasMediaStimulusMaxPlayLimit()) {
                         self._playbackAttempts = Math.min(self.config.media.maxPlays, self._playbackAttempts + 1);
                         self.triggerResponseChange();
                     }
                     // If auto start recording is set and PCI is not in review mode
-                    if (self.config.autoStart && !self.config.isReviewMode) {
+                    if (!self._hydrationEvents && self.config.autoStart && !self.config.isReviewMode) {
                         if (!self.config.delayMinutes && !self.config.delaySeconds) {
                             // without delay - startRecording
                             self.startRecording();
@@ -1037,7 +1042,9 @@ define([
                 var isInitialized = false;
                 if (this.hasMediaStimulus()) {
                     this.mediaStimulus.setPlaybackAttempts(state.playbackAttempts);
-                    isInitialized = this.mediaStimulus.getPlaybackAttempts() > 0;
+                    this._playbackAttempts = this.mediaStimulus.getPlaybackAttempts();
+                    this._hydrationEvents = this._playbackAttempts;
+                    isInitialized = this._playbackAttempts > 0;
                 }
                 this.setResponse(state.response);
                 if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
