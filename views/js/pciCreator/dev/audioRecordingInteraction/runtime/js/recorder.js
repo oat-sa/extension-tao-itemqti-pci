@@ -137,7 +137,7 @@ define([
         }
 
         function shouldUseWebAudioProvider() {
-            return !!config.isCompressed && isIOSDevice();
+            return !config.isCompressed || (!!config.isCompressed && isIOSDevice());
         }
 
         /**

@@ -217,7 +217,11 @@ define([
                 self._unbindAutoplayEvents();
 
                 if (self.player && _.isFunction(self.player.enableAutoplay)) {
-                    self.player.enableAutoplay().catch(function () {});
+                    var autoplayResult = self.player.enableAutoplay();
+
+                    if (autoplayResult && _.isFunction(autoplayResult.catch)) {
+                        autoplayResult.catch(function () {});
+                    }
                 }
             }
 

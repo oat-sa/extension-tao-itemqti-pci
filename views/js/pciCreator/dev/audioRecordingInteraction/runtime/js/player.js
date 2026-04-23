@@ -86,7 +86,8 @@ define([
             state = playerStates.CREATED,
             isEnablingAutoplay = false,
             isAutoplayEnabled = false,
-            currentObjectUrl;
+            currentObjectUrl,
+            hasResolvedInfiniteDurationForCurrentSource = false;
 
         /**
          * Set player state
@@ -175,7 +176,8 @@ define([
             audioEl.onloadedmetadata = function onloadedmetadata() {
                 var ontimeupdateBackup = audioEl.ontimeupdate;
 
-                if (audioEl.duration === Infinity) {
+                if (audioEl.duration === Infinity && !hasResolvedInfiniteDurationForCurrentSource) {
+                    hasResolvedInfiniteDurationForCurrentSource = true;
                     // Chrome workaround for bug https://bugs.chromium.org/p/chromium/issues/detail?id=642012
                     // This is a known issue where created WebM files are not seekable, meaning they don't have a proper duration,
                     // which we need to size the player progress bar.
@@ -191,7 +193,6 @@ define([
                     // - it fixes the duration value of the audio element
                     // - it triggers the 'ontimeupdate' listener (defined above)
                     audioEl.currentTime = 1e101;
-                    audioEl.onloadedmetadata = null;
                 }
             };
 
@@ -233,6 +234,7 @@ define([
                 if (loadInfo && loadInfo.ownsUrl) {
                     currentObjectUrl = url;
                 }
+                hasResolvedInfiniteDurationForCurrentSource = false;
                 audioEl.pause();
                 audioEl.currentTime = 0;
                 audioEl.src = url;
@@ -286,6 +288,7 @@ define([
                 audioEl.currentTime = 0;
                 audioEl.src = SILENT_AUDIO_SRC;
                 audioEl.muted = true;
+                hasResolvedInfiniteDurationForCurrentSource = false;
                 audioEl.load();
 
                 playResult = audioEl.play();
@@ -324,6 +327,7 @@ define([
                     audioEl.removeAttribute('src');
                     audioEl.load();
                 }
+                hasResolvedInfiniteDurationForCurrentSource = false;
                 releaseCurrentObjectUrl();
                 setState(player, playerStates.CREATED);
             },

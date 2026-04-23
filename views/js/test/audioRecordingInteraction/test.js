@@ -92,6 +92,20 @@ define([
         return FakeAudio;
     }
 
+    function createNonPromisePlayAudioConstructor() {
+        var FakeAudio = createFakeAudioConstructor();
+
+        FakeAudio.prototype.play = function play() {
+            this.playCalls++;
+            if (typeof this.onplaying === 'function') {
+                this.onplaying();
+            }
+            return undefined;
+        };
+
+        return FakeAudio;
+    }
+
     function createPlayRejectingAudioConstructor(errorName) {
         var FakeAudio = createFakeAudioConstructor();
 
@@ -184,6 +198,18 @@ define([
         });
     });
 
+    QUnit.test('keeps autoplay enabled when play does not return a promise', function (assert) {
+        var FakeAudio = createNonPromisePlayAudioConstructor();
+        var player = playerFactory();
+
+        window.Audio = FakeAudio;
+
+        player.enableAutoplay();
+
+        assert.equal(FakeAudio.instances.length, 1, 'one audio element is created for autoplay enabling');
+        assert.ok(player.isAutoplayEnabled(), 'autoplay stays enabled even without a promise return value');
+    });
+
     QUnit.test('revokes owned object urls when media is replaced or unloaded', function (assert) {
         var FakeAudio = createFakeAudioConstructor();
         var player = playerFactory();
@@ -233,6 +259,33 @@ define([
             assert.equal(message, 'Your recording could not be played back in this browser.', 'playback support errors use a different message');
             done();
         });
+    });
+
+    QUnit.test('runs the metadata workaround only once per load and keeps it for future loads', function (assert) {
+        var FakeAudio = createFakeAudioConstructor();
+        var player = playerFactory();
+
+        window.Audio = FakeAudio;
+
+        player.load('blob:first');
+
+        assert.equal(typeof FakeAudio.instances[0].onloadedmetadata, 'function', 'metadata handler is attached after the first load');
+
+        FakeAudio.instances[0].duration = Infinity;
+        FakeAudio.instances[0].onloadedmetadata();
+        assert.equal(FakeAudio.instances[0].loadCalls, 2, 'the workaround reloads the media once for the current source');
+
+        FakeAudio.instances[0].onloadedmetadata();
+        assert.equal(FakeAudio.instances[0].loadCalls, 2, 'the workaround does not loop for the same source');
+
+        assert.equal(typeof FakeAudio.instances[0].onloadedmetadata, 'function', 'metadata handler remains attached after applying the workaround');
+
+        player.load('blob:second');
+        FakeAudio.instances[0].duration = Infinity;
+        FakeAudio.instances[0].onloadedmetadata();
+
+        assert.equal(typeof FakeAudio.instances[0].onloadedmetadata, 'function', 'metadata handler is still available for later loads');
+        assert.equal(FakeAudio.instances[0].loadCalls, 4, 'a new load can trigger the workaround again for the next source');
     });
 
     QUnit.module('Audio Recording Interaction Recorder Provider Selection', {
@@ -305,6 +358,27 @@ define([
         });
 
         assert.equal(recorder.getProviderType(), 'mediaRecorder', 'Mac Safari keeps the compressed recorder path');
+    });
+
+    QUnit.test('uses WebAudio recording for uncompressed sessions', function (assert) {
+        var recorder;
+
+        this.restoreUserAgent = overrideNavigatorProperties({
+            userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15',
+            platform: 'MacIntel',
+            maxTouchPoints: 0
+        });
+
+        recorder = recorderFactory({
+            isCompressed: false,
+            maxRecordingTime: 120
+        }, {
+            resolve: function resolve(assetPath) {
+                return assetPath;
+            }
+        });
+
+        assert.equal(recorder.getProviderType(), 'webAudio', 'uncompressed recording uses the webAudio provider');
     });
 
     QUnit.module('Audio Recording Interaction', {
