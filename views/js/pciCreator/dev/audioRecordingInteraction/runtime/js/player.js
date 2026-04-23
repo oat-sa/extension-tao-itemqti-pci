@@ -87,6 +87,7 @@ define([
             isEnablingAutoplay = false,
             isAutoplayEnabled = false,
             currentObjectUrl,
+            audioEventGeneration = 0,
             hasResolvedInfiniteDurationForCurrentSource = false;
 
         /**
@@ -130,22 +131,29 @@ define([
             currentObjectUrl = null;
         }
 
-        function ensureAudioElement(playerInstance) {
-            if (audioEl) {
-                return audioEl;
+        function invalidateAudioHandlers() {
+            audioEventGeneration++;
+        }
+
+        function bindAudioElementHandlers(playerInstance) {
+            var handlerGeneration;
+
+            invalidateAudioHandlers();
+            handlerGeneration = audioEventGeneration;
+
+            function isStaleHandler() {
+                return handlerGeneration !== audioEventGeneration;
             }
 
-            audioEl = new Audio();
-
             audioEl.ondurationchange = function ondurationchange() {
-                if (!isEnablingAutoplay && _.isFinite(audioEl.duration)) {
+                if (!isStaleHandler() && !isEnablingAutoplay && _.isFinite(audioEl.duration)) {
                     playerInstance.trigger('durationchange', [audioEl.duration]);
                 }
             };
 
             // when playback is stopped by user or when the media is loaded:
             audioEl.oncanplay = function oncanplay() {
-                if (!isEnablingAutoplay) {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
                     setState(player, playerStates.IDLE);
                     playerInstance.trigger('oncanplay');
                 }
@@ -153,7 +161,7 @@ define([
 
             // when playback ends on its own:
             audioEl.onended = function onended() {
-                if (!isEnablingAutoplay) {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
                     setState(player, playerStates.IDLE);
                     audioEl.currentTime = 0;
                     playerInstance.trigger('timeupdate', [0]);
@@ -162,19 +170,23 @@ define([
             };
 
             audioEl.onplaying = function onplaying() {
-                if (!isEnablingAutoplay) {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
                     setState(player, playerStates.PLAYING);
                 }
             };
 
             audioEl.ontimeupdate = function ontimeupdate() {
-                if (!isEnablingAutoplay) {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
                     playerInstance.trigger('timeupdate', [audioEl.currentTime]);
                 }
             };
 
             audioEl.onloadedmetadata = function onloadedmetadata() {
                 var ontimeupdateBackup = audioEl.ontimeupdate;
+
+                if (isStaleHandler()) {
+                    return;
+                }
 
                 if (audioEl.duration === Infinity && !hasResolvedInfiniteDurationForCurrentSource) {
                     hasResolvedInfiniteDurationForCurrentSource = true;
@@ -185,6 +197,9 @@ define([
                     // but suffers the same issue. So for Firefox, current workaround is to stick to Ogg files.
                     // source: https://stackoverflow.com/questions/38443084/how-can-i-add-predefined-length-to-audio-recorded-from-mediarecorder-in-chrome/39971175#39971175
                     audioEl.ontimeupdate = function() {
+                        if (isStaleHandler()) {
+                            return;
+                        }
                         audioEl.ontimeupdate = ontimeupdateBackup;
                         audioEl.currentTime = 0;
                         audioEl.load();
@@ -195,6 +210,16 @@ define([
                     audioEl.currentTime = 1e101;
                 }
             };
+        }
+
+        function ensureAudioElement(playerInstance) {
+            if (audioEl) {
+                bindAudioElementHandlers(playerInstance);
+                return audioEl;
+            }
+
+            audioEl = new Audio();
+            bindAudioElementHandlers(playerInstance);
 
             return audioEl;
         }
@@ -322,6 +347,7 @@ define([
              */
             unload: function unload() {
                 if (audioEl) {
+                    invalidateAudioHandlers();
                     audioEl.pause();
                     audioEl.currentTime = 0;
                     audioEl.removeAttribute('src');

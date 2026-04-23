@@ -111,9 +111,14 @@ define([
 
         FakeAudio.prototype.play = function play() {
             this.playCalls++;
-            return Promise.reject({
-                name: errorName
-            });
+            return {
+                catch: function catchPlaybackError(handler) {
+                    handler({
+                        name: errorName
+                    });
+                    return this;
+                }
+            };
         };
 
         return FakeAudio;
@@ -158,10 +163,15 @@ define([
         beforeEach: function () {
             this.originalAudio = window.Audio;
             this.originalUrl = window.URL;
+            this.originalModal = $.fn.modal;
+            $.fn.modal = function modalStub() {
+                return this;
+            };
         },
         afterEach: function () {
             window.Audio = this.originalAudio;
             window.URL = this.originalUrl;
+            $.fn.modal = this.originalModal;
             $('.modal').remove();
         }
     });
@@ -273,6 +283,7 @@ define([
 
         FakeAudio.instances[0].duration = Infinity;
         FakeAudio.instances[0].onloadedmetadata();
+        FakeAudio.instances[0].ontimeupdate();
         assert.equal(FakeAudio.instances[0].loadCalls, 2, 'the workaround reloads the media once for the current source');
 
         FakeAudio.instances[0].onloadedmetadata();
@@ -283,9 +294,38 @@ define([
         player.load('blob:second');
         FakeAudio.instances[0].duration = Infinity;
         FakeAudio.instances[0].onloadedmetadata();
+        FakeAudio.instances[0].ontimeupdate();
 
         assert.equal(typeof FakeAudio.instances[0].onloadedmetadata, 'function', 'metadata handler is still available for later loads');
         assert.equal(FakeAudio.instances[0].loadCalls, 4, 'a new load can trigger the workaround again for the next source');
+    });
+
+    QUnit.test('ignores stale timeupdate callbacks after unload', function (assert) {
+        var FakeAudio = createFakeAudioConstructor();
+        var player = playerFactory();
+        var timeUpdateCount = 0;
+        var staleTimeupdate;
+
+        window.Audio = FakeAudio;
+
+        player.on('timeupdate', function () {
+            timeUpdateCount++;
+        });
+
+        player.load('blob:first');
+        staleTimeupdate = FakeAudio.instances[0].ontimeupdate;
+
+        player.unload();
+        FakeAudio.instances[0].currentTime = 0.5;
+        staleTimeupdate();
+
+        assert.equal(timeUpdateCount, 0, 'late callbacks from a previous load are ignored after unload');
+
+        player.load('blob:second');
+        FakeAudio.instances[0].currentTime = 0.75;
+        FakeAudio.instances[0].ontimeupdate();
+
+        assert.equal(timeUpdateCount, 1, 'fresh callbacks still update after the next load');
     });
 
     QUnit.module('Audio Recording Interaction Recorder Provider Selection', {
