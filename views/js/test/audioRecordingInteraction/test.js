@@ -124,6 +124,19 @@ define([
         return FakeAudio;
     }
 
+    function createThrowingPlayAudioConstructor(errorName) {
+        var FakeAudio = createFakeAudioConstructor();
+
+        FakeAudio.prototype.play = function play() {
+            this.playCalls++;
+            throw {
+                name: errorName
+            };
+        };
+
+        return FakeAudio;
+    }
+
     function overrideNavigatorProperties(properties) {
         var target = window.navigator;
         var prototype = Object.getPrototypeOf(window.navigator);
@@ -269,6 +282,36 @@ define([
             assert.equal(message, 'Your recording could not be played back in this browser.', 'playback support errors use a different message');
             done();
         });
+    });
+
+    QUnit.test('handles play calls that do not return a promise', function (assert) {
+        var FakeAudio = createNonPromisePlayAudioConstructor();
+        var player = playerFactory();
+
+        window.Audio = FakeAudio;
+
+        player.load('blob:first');
+
+        assert.strictEqual(player.play(), undefined, 'play returns undefined when the browser does not provide a promise');
+        assert.equal(FakeAudio.instances[0].playCalls, 1, 'playback still starts without throwing');
+    });
+
+    QUnit.test('shows a playback error for synchronous play failures', function (assert) {
+        var FakeAudio = createThrowingPlayAudioConstructor('NotSupportedError');
+        var player = playerFactory();
+        var message;
+        var thrownError;
+
+        window.Audio = FakeAudio;
+
+        player.load('blob:first');
+        player.play(function (error) {
+            thrownError = error;
+        });
+
+        message = $('.modal .message').text();
+        assert.equal(message, 'Your recording could not be played back in this browser.', 'synchronous playback failures show the playback support message');
+        assert.deepEqual(thrownError, { name: 'NotSupportedError' }, 'synchronous playback failures are forwarded to the callback');
     });
 
     QUnit.test('runs the metadata workaround only once per load and keeps it for future loads', function (assert) {

@@ -287,15 +287,31 @@ define([
              * Catch error on media format support problem
              */
             play: function play(onError) {
+                var playResult;
+
+                function handlePlaybackError(error) {
+                    errorDialog(getPlaybackErrorMessage(error));
+                    if (onError) {
+                        onError(error);
+                    }
+                }
+
                 if (!audioEl) {
                     return;
                 }
-                audioEl.play().catch((e) => {
-                    errorDialog(getPlaybackErrorMessage(e));
-                    if (onError) {
-                        onError(e);
-                    }
-                });
+
+                try {
+                    playResult = audioEl.play();
+                } catch (error) {
+                    handlePlaybackError(error);
+                    return;
+                }
+
+                if (playResult && _.isFunction(playResult.catch)) {
+                    playResult.catch(handlePlaybackError);
+                }
+
+                return playResult;
                 // state change has to be triggered by the onplaying listener
             },
 
