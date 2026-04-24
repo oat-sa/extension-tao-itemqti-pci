@@ -6,14 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
  *
- * Copyright (c) 2017-2025 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2026 (original work) Open Assessment Technologies SA;
  */
 define([
     'qtiCustomInteractionContext',
@@ -79,6 +79,8 @@ define([
         _recordsAttempts: 0,
         _isAutoPlayingBack: false,
         _delayCallback: null,
+        _stateResolver: new Promise(function () {
+        }),
 
         /**
          * return {Boolean} - Are we in a TAO QTI Creator context?
@@ -88,6 +90,10 @@ define([
                 this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
             }
             return this._inQtiCreator;
+        },
+
+        _resolveState: function _resolveState() {
+            // stub, replaced by the _stateResolver promise resolver
         },
 
         _cleanDelayCallback: function _cleanDelayCallback() {
@@ -110,6 +116,7 @@ define([
          * @param {Object} config
          */
         render: function render(config) {
+            var self = this;
             this.$mediaStimulusContainer = this.$container.find('.audio-rec > .media-stimulus');
             this.$controlsContainer = this.$container.find('.audio-rec > .controls');
             this.$progressContainer = this.$container.find('.audio-rec > .progress');
@@ -119,6 +126,14 @@ define([
             if (typeof this._recordsAttempts === 'undefined') {
                 this._recordsAttempts = 0;
             }
+
+            this._stateResolver = Promise.race([new Promise(function (resolve) {
+                self._resolveState = resolve;
+            }), new Promise(function (resolve) {
+                // setSerializedState is not being invoked when no itemState is defined,
+                // so we just wait here a bit and hope the state can be considered ready
+                setTimeout(resolve, 500)
+            })]);
 
             this.config = {};
             this.controls = {};
@@ -466,6 +481,10 @@ define([
             }
         },
 
+        hasRemainingAttempts: function hasRemainingAttempts() {
+            return this.config.maxRecords < 1 || this.config.maxRecords > this._recordsAttempts;
+        },
+
         /**
          * Check if the item has a media stimulus defined
          * @returns {Boolean}
@@ -510,33 +529,43 @@ define([
         startRecording: function startRecording() {
             var self = this;
 
-            if (this.recorder.isNeedInit()) {
-                // if recorder is not initialised yet or need create new stream
-                this.recorder
-                    .init()
-                    .then(function () {
-                        startForReal();
-                    })
-                    .catch(function (err) {
-                        // eslint-disable-next-line no-console
-                        console.error(err);
-                    });
-            } else {
-                startForReal();
-            }
+            this._stateResolver.then(function () {
+                if (!self.recorder || !self.player || !self.progressBar || !self.hasRemainingAttempts()) {
+                    return;
+                }
 
-            function startForReal() {
-                setTimeout(function () {
-                    self.resetRecording();
-                    self.recorder.start();
-                    if (self.config.maxRecordingTime) {
-                        self.$meterContainer.addClass('record');
-                        self.progressBar.setStyle('record');
-                        self.progressBar.setMax(self.config.maxRecordingTime);
-                    }
-                    self.updateControls();
-                }, self.isSafari ? 200 : 0); // Safari needs a minimal timeout to start the recording
-            }
+                if (self.recorder.isNeedInit()) {
+                    // if recorder is not initialised yet or need create new stream
+                    self.recorder
+                        .init()
+                        .then(function () {
+                            startForReal();
+                        })
+                        .catch(function (err) {
+                            // eslint-disable-next-line no-console
+                            console.error(err);
+                        });
+                } else {
+                    startForReal();
+                }
+
+                function startForReal() {
+                    setTimeout(function () {
+                        if (!self.recorder || !self.player || !self.progressBar) {
+                            return;
+                        }
+
+                        self.resetRecording();
+                        self.recorder.start();
+                        if (self.config.maxRecordingTime) {
+                            self.$meterContainer.addClass('record');
+                            self.progressBar.setStyle('record');
+                            self.progressBar.setMax(self.config.maxRecordingTime);
+                        }
+                        self.updateControls();
+                    }, self.isSafari ? 200 : 0); // Safari needs a minimal timeout to start the recording
+                }
+            });
         },
 
         /**
@@ -814,7 +843,7 @@ define([
                 reset.on(
                     'updatestate',
                     function () {
-                        if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
+                        if (!self.hasRemainingAttempts()) {
                             this.disable();
                         } else if (self.player.is('idle')) {
                             this.enable();
@@ -833,11 +862,14 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
+            var self = this;
             // dont't change controls state, waiting for delay callback
             if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
                 return;
             }
-            _.invokeMap(this.controls, 'updateState');
+            this._stateResolver.then(function () {
+                _.invokeMap(self.controls, 'updateState');
+            });
         },
 
         /**
@@ -1011,6 +1043,7 @@ define([
             } else {
                 this.setResponse(state);
             }
+            this._resolveState();
         },
 
         /**
