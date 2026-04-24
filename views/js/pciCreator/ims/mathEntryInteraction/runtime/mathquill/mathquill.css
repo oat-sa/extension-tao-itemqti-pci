@@ -35,7 +35,7 @@
   display: inline-block;
 }
 .mq-editable-field .mq-cursor {
-  border-left: 1px solid currentColor;
+  border-left: 1px solid currentcolor;
   margin-left: -1px;
   position: relative;
   z-index: 1;
@@ -166,7 +166,7 @@
   line-height: .9;
 }
 .mq-math-mode svg {
-  fill: currentColor;
+  fill: currentcolor;
   position: absolute;
   top: 0;
   left: 0;
