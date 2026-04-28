@@ -16,16 +16,16 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA;
  *
  */
-define('qtiItemPci/pciProvider', ['jquery', 'helpers', 'core/promise'], function($, helpers, Promise){
+define('qtiItemPci/pciProvider', ['jquery', 'helpers', 'core/promise', 'module'], function($, helpers, Promise, module){
     'use strict';
-    
-    var _serverUrl = helpers._url('load', 'PciLoader', 'qtiItemPci');
-    
+    const config = module.config();
+    let _pciLoadUrl = config.serverUrl || helpers._url('load', 'PciLoader', 'qtiItemPci');
+
     return {
         load: function load(){
             return new Promise(function(resolve, reject){
                 $.ajax({
-                    url : _serverUrl,
+                    url : _pciLoadUrl,
                     dataType : 'json',
                     type : 'GET'
                 }).done(resolve).fail(reject);
