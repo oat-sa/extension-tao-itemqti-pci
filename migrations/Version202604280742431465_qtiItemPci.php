@@ -24,10 +24,10 @@ final class Version202604280742431465_qtiItemPci extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addReport(
-            $this->propagate(
+            $this->propagate( 
                 new RegisterPciAudioRecording()
             )(
-                ['0.15.1']
+                ['0.15.2']
             )
         );
 
