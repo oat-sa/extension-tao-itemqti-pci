@@ -30,6 +30,8 @@ define([
 ], function (_, $, event, dialogFactory, __) {
     'use strict';
 
+    var SILENT_AUDIO_SRC = 'data:audio/wav;base64,UklGRgAAAABXQVZFZm10IBAAAAABAAEAQB8AAIAfAAACABAAZGF0YQAAAAA=';
+
     /**
      * @property {String} CREATED   - player instance created, but no media loaded
      * @property {String} IDLE      - media loaded and playable
@@ -81,7 +83,12 @@ define([
     return function playerFactory() {
         var audioEl,
             player,
-            state = playerStates.CREATED;
+            state = playerStates.CREATED,
+            isEnablingAutoplay = false,
+            isAutoplayEnabled = false,
+            currentObjectUrl,
+            audioEventGeneration = 0,
+            hasResolvedInfiniteDurationForCurrentSource = false;
 
         /**
          * Set player state
@@ -109,6 +116,129 @@ define([
             return dialog;
         }
 
+        function getPlaybackErrorMessage(error) {
+            if (error && error.name === 'NotAllowedError') {
+                return __('Your browser blocked auto-play. Press Play to listen to your recording.');
+            }
+
+            return __('Your recording could not be played back in this browser.');
+        }
+
+        function releaseCurrentObjectUrl() {
+            if (currentObjectUrl && window.URL && window.URL.revokeObjectURL) {
+                window.URL.revokeObjectURL(currentObjectUrl);
+            }
+            currentObjectUrl = null;
+        }
+
+        function invalidateAudioHandlers() {
+            audioEventGeneration++;
+        }
+
+        function bindAudioElementHandlers(playerInstance) {
+            var handlerGeneration;
+
+            invalidateAudioHandlers();
+            handlerGeneration = audioEventGeneration;
+
+            function isStaleHandler() {
+                return handlerGeneration !== audioEventGeneration;
+            }
+
+            audioEl.ondurationchange = function ondurationchange() {
+                if (!isStaleHandler() && !isEnablingAutoplay && _.isFinite(audioEl.duration)) {
+                    playerInstance.trigger('durationchange', [audioEl.duration]);
+                }
+            };
+
+            // when playback is stopped by user or when the media is loaded:
+            audioEl.oncanplay = function oncanplay() {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
+                    setState(player, playerStates.IDLE);
+                    playerInstance.trigger('oncanplay');
+                }
+            };
+
+            // when playback ends on its own:
+            audioEl.onended = function onended() {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
+                    setState(player, playerStates.IDLE);
+                    audioEl.currentTime = 0;
+                    playerInstance.trigger('timeupdate', [0]);
+                    playerInstance.trigger('playbackend');
+                }
+            };
+
+            audioEl.onplaying = function onplaying() {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
+                    setState(player, playerStates.PLAYING);
+                }
+            };
+
+            audioEl.ontimeupdate = function ontimeupdate() {
+                if (!isStaleHandler() && !isEnablingAutoplay) {
+                    playerInstance.trigger('timeupdate', [audioEl.currentTime]);
+                }
+            };
+
+            audioEl.onloadedmetadata = function onloadedmetadata() {
+                var ontimeupdateBackup = audioEl.ontimeupdate;
+
+                if (isStaleHandler()) {
+                    return;
+                }
+
+                if (audioEl.duration === Infinity && !hasResolvedInfiniteDurationForCurrentSource) {
+                    hasResolvedInfiniteDurationForCurrentSource = true;
+                    // Chrome workaround for bug https://bugs.chromium.org/p/chromium/issues/detail?id=642012
+                    // This is a known issue where created WebM files are not seekable, meaning they don't have a proper duration,
+                    // which we need to size the player progress bar.
+                    // Unfortunately, this workaround does not work with Firefox that now support WebM as well,
+                    // but suffers the same issue. So for Firefox, current workaround is to stick to Ogg files.
+                    // source: https://stackoverflow.com/questions/38443084/how-can-i-add-predefined-length-to-audio-recorded-from-mediarecorder-in-chrome/39971175#39971175
+                    audioEl.ontimeupdate = function() {
+                        if (isStaleHandler()) {
+                            return;
+                        }
+                        audioEl.ontimeupdate = ontimeupdateBackup;
+                        audioEl.currentTime = 0;
+                        audioEl.load();
+                    };
+                    // setting currentTime to a huge value does 2 things:
+                    // - it fixes the duration value of the audio element
+                    // - it triggers the 'ontimeupdate' listener (defined above)
+                    audioEl.currentTime = 1e101;
+                }
+            };
+        }
+
+        function ensureAudioElement(playerInstance) {
+            if (audioEl) {
+                bindAudioElementHandlers(playerInstance);
+                return audioEl;
+            }
+
+            audioEl = new Audio();
+            bindAudioElementHandlers(playerInstance);
+
+            return audioEl;
+        }
+
+        function finishEnablingAutoplay(element) {
+            element.pause();
+            element.currentTime = 0;
+            element.muted = false;
+            isEnablingAutoplay = false;
+            isAutoplayEnabled = true;
+        }
+
+        function cancelEnablingAutoplay(element) {
+            element.pause();
+            element.currentTime = 0;
+            element.muted = false;
+            isEnablingAutoplay = false;
+        }
+
         player = {
             /**
              * Check the current state
@@ -123,61 +253,17 @@ define([
              * Load a media into the player and register audio element event handlers
              * @param {String} url
              */
-            load: function load(url) {
-                var self = this;
-
-                audioEl = new Audio(url);
-
-                audioEl.ondurationchange = function ondurationchange() {
-                    if (_.isFinite(audioEl.duration)) {
-                        self.trigger('durationchange', [audioEl.duration]);
-                    }
-                };
-
-                // when playback is stopped by user or when the media is loaded:
-                audioEl.oncanplay = function oncanplay() {
-                    setState(player, playerStates.IDLE);
-                    self.trigger('oncanplay');
-                };
-
-                // when playbacks ends on its own:
-                audioEl.onended = function onended() {
-                    setState(player, playerStates.IDLE);
-                    audioEl.currentTime = 0;
-                    self.trigger('timeupdate', [0]);
-                    self.trigger('playbackend');
-                };
-
-                audioEl.onplaying = function onplaying() {
-                    setState(player, playerStates.PLAYING);
-                };
-
-                audioEl.ontimeupdate = function ontimeupdate() {
-                    self.trigger('timeupdate', [audioEl.currentTime]);
-                };
-
-                audioEl.onloadedmetadata = function() {
-                    var ontimeupdateBackup = audioEl.ontimeupdate;
-
-                    // Chrome workaround for bug https://bugs.chromium.org/p/chromium/issues/detail?id=642012
-                    // This is a known issue where created WebM files are not seekable, meaning they don't have a proper duration,
-                    // which we need to size the player progress bar.
-                    // Unfortunately, this workaround does not work with Firefox that now support WebM as well,
-                    // but suffers the same issue. So for Firefox, current workaround is to stick to Ogg files.
-                    // source: https://stackoverflow.com/questions/38443084/how-can-i-add-predefined-length-to-audio-recorded-from-mediarecorder-in-chrome/39971175#39971175
-                    if (audioEl.duration === Infinity) {
-                        audioEl.ontimeupdate = function() {
-                            audioEl.ontimeupdate = ontimeupdateBackup;
-                            audioEl.currentTime = 0;
-                            audioEl.load();
-                        };
-                        // setting currentTime to a huge value does 2 things:
-                        // - it fixes the duration value of the audio element
-                        // - it triggers the 'ontimeupdate' listener (defined above)
-                        audioEl.currentTime = 1e101;
-                        audioEl.onloadedmetadata = null;
-                    }
-                };
+            load: function load(url, loadInfo) {
+                audioEl = ensureAudioElement(this);
+                releaseCurrentObjectUrl();
+                if (loadInfo && loadInfo.ownsUrl) {
+                    currentObjectUrl = url;
+                }
+                hasResolvedInfiniteDurationForCurrentSource = false;
+                audioEl.pause();
+                audioEl.currentTime = 0;
+                audioEl.src = url;
+                audioEl.load();
 
                 setState(player, playerStates.IDLE);
             },
@@ -185,12 +271,14 @@ define([
             /**
              * Load from base64
              */
-            loadFromBase64: function loadFromBase64(base64, mime) {
+            loadFromBase64: function loadFromBase64(base64, mime, loadInfo) {
                 var blob = b64toBlob(base64, mime),
                     blobUrl = window.URL && window.URL.createObjectURL && window.URL.createObjectURL(blob);
 
                 if (blobUrl) {
-                    this.load(blobUrl);
+                    this.load(blobUrl, _.assign({
+                        ownsUrl: true
+                    }, loadInfo));
                 }
             },
 
@@ -199,13 +287,64 @@ define([
              * Catch error on media format support problem
              */
             play: function play(onError) {
-                audioEl.play().catch((e) => {
-                    errorDialog(__('Your browser blocked auto-play. Press Play to listen to your recording.'));
+                var playResult;
+
+                function handlePlaybackError(error) {
+                    errorDialog(getPlaybackErrorMessage(error));
                     if (onError) {
-                        onError(e);
+                        onError(error);
                     }
-                });
+                }
+
+                if (!audioEl) {
+                    return;
+                }
+
+                try {
+                    playResult = audioEl.play();
+                } catch (error) {
+                    handlePlaybackError(error);
+                    return;
+                }
+
+                if (playResult && _.isFunction(playResult.catch)) {
+                    playResult.catch(handlePlaybackError);
+                }
+
+                return playResult;
                 // state change has to be triggered by the onplaying listener
+            },
+
+            /**
+             * Enable the playback element for Safari autoplay.
+             * The same element is then reused for the recorded audio source.
+             * @returns {Promise|undefined}
+             */
+            enableAutoplay: function enableAutoplay() {
+                var playResult;
+
+                audioEl = ensureAudioElement(this);
+                isEnablingAutoplay = true;
+                audioEl.pause();
+                audioEl.currentTime = 0;
+                audioEl.src = SILENT_AUDIO_SRC;
+                audioEl.muted = true;
+                hasResolvedInfiniteDurationForCurrentSource = false;
+                audioEl.load();
+
+                playResult = audioEl.play();
+
+                if (!playResult || !_.isFunction(playResult.then)) {
+                    finishEnablingAutoplay(audioEl);
+                    return playResult;
+                }
+
+                return playResult.then(function () {
+                    finishEnablingAutoplay(audioEl);
+                }).catch(function (error) {
+                    cancelEnablingAutoplay(audioEl);
+                    throw error;
+                });
             },
 
             /**
@@ -224,11 +363,19 @@ define([
              */
             unload: function unload() {
                 if (audioEl) {
-                    // prevent runtime error when the player is destroyed while the audio was playing
-                    audioEl.ontimeupdate = null;
+                    invalidateAudioHandlers();
+                    audioEl.pause();
+                    audioEl.currentTime = 0;
+                    audioEl.removeAttribute('src');
+                    audioEl.load();
                 }
-                audioEl = null;
+                hasResolvedInfiniteDurationForCurrentSource = false;
+                releaseCurrentObjectUrl();
                 setState(player, playerStates.CREATED);
+            },
+
+            isAutoplayEnabled: function isAutoplayEnabled() {
+                return isAutoplayEnabled;
             }
         };
         event.addEventMgr(player);
