@@ -14,7 +14,7 @@ use oat\tao\scripts\tools\migrations\AbstractMigration;
  *
  * phpcs:disable Squiz.Classes.ValidClassName
  */
-final class Version202604211018221465_qtiItemPci extends AbstractMigration
+final class Version202604280937541465_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -27,7 +27,7 @@ final class Version202604211018221465_qtiItemPci extends AbstractMigration
             $this->propagate(
                 new RegisterPciMathEntry()
             )(
-                ['3.0.3']
+                ['3.0.5']
             )
         );
     }
