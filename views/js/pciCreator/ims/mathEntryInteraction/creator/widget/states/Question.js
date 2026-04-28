@@ -35,57 +35,57 @@ define([
 
     // initial list of tools checkboxes with the properties they depend on
     const tools = {
-        tool_frac:       { props: [{ name: 'tool_frac', defaultValue: true }]},
-        tool_sqrt:       { props: [{ name: 'tool_sqrt', defaultValue: true }]},
-        tool_exp:        { props: [{ name: 'tool_exp', defaultValue: true }]},
-        tool_log:        { props: [{ name: 'tool_log', defaultValue: true }]},
-        tool_ln:         { props: [{ name: 'tool_ln', defaultValue: true }]},
-        tool_limit:      { props: [{ name: 'tool_limit', defaultValue: true }]},
-        tool_sum:        { props: [{ name: 'tool_sum', defaultValue: true }]},
-        tool_nthroot:    { props: [{ name: 'tool_nthroot', defaultValue: true }]},
-        tool_e:          { props: [{ name: 'tool_e', defaultValue: true }]},
-        tool_infinity:   { props: [{ name: 'tool_infinity', defaultValue: true }]},
-        squarebkts:      { props: [{ name: 'tool_rbrack', defaultValue: true }, { name: 'tool_lbrack', defaultValue: true }]},
-        tool_pi:         { props: [{ name: 'tool_pi', defaultValue: true }]},
-        tool_cos:        { props: [{ name: 'tool_cos', defaultValue: true }]},
-        tool_sin:        { props: [{ name: 'tool_sin', defaultValue: true }]},
-        tool_tan:        { props: [{ name: 'tool_tan', defaultValue: true }]},
-        tool_lte:        { props: [{ name: 'tool_lte', defaultValue: true }]},
-        tool_gte:        { props: [{ name: 'tool_gte', defaultValue: true }]},
-        tool_times:      { props: [{ name: 'tool_times', defaultValue: true }]},
-        tool_divide:     { props: [{ name: 'tool_divide', defaultValue: true }]},
-        tool_plusminus:  { props: [{ name: 'tool_plusminus', defaultValue: true }]},
-        roundbkts:       { props: [{ name: 'tool_rparen', defaultValue: true }, { name: 'tool_lparen', defaultValue: true }]},
-        curlybkts:       { props: [{ name: 'tool_rbrace', defaultValue: true }, { name: 'tool_lbrace', defaultValue: true }]},
-        tool_angle:      { props: [{ name: 'tool_angle', defaultValue: true }]},
-        tool_minus:      { props: [{ name: 'tool_minus', defaultValue: true }]},
-        tool_plus:       { props: [{ name: 'tool_plus', defaultValue: true }]},
-        tool_equal:      { props: [{ name: 'tool_equal', defaultValue: true }]},
-        tool_lower:      { props: [{ name: 'tool_lower', defaultValue: true }]},
-        tool_greater:    { props: [{ name: 'tool_greater', defaultValue: true }]},
-        tool_subscript:  { props: [{ name: 'tool_subscript', defaultValue: true }]},
-        tool_integral:   { props: [{ name: 'tool_integral', defaultValue: true }]},
-        tool_timesdot:   { props: [{ name: 'tool_timesdot', defaultValue: true }]},
-        tool_triangle:   { props: [{ name: 'tool_triangle', defaultValue: true }]},
-        tool_similar:    { props: [{ name: 'tool_similar', defaultValue: true }]},
-        tool_paral:      { props: [{ name: 'tool_paral', defaultValue: true }]},
-        tool_perp:       { props: [{ name: 'tool_perp', defaultValue: true }]},
-        tool_inmem:      { props: [{ name: 'tool_inmem', defaultValue: true }]},
-        tool_ninmem:     { props: [{ name: 'tool_ninmem', defaultValue: true }]},
-        tool_union:      { props: [{ name: 'tool_union', defaultValue: true }]},
-        tool_intersec:   { props: [{ name: 'tool_intersec', defaultValue: true }]},
-        tool_colon:      { props: [{ name: 'tool_colon', defaultValue: true }]},
-        tool_to:         { props: [{ name: 'tool_to', defaultValue: true }]},
-        tool_congruent:  { props: [{ name: 'tool_congruent', defaultValue: true }]},
-        tool_subset:     { props: [{ name: 'tool_subset', defaultValue: true }]},
-        tool_superset:   { props: [{ name: 'tool_superset', defaultValue: true }]},
-        tool_contains:   { props: [{ name: 'tool_contains', defaultValue: true }]},
-        tool_approx:     { props: [{ name: 'tool_approx', defaultValue: true }]},
-        tool_vline:      { props: [{ name: 'tool_vline', defaultValue: true }]},
-        tool_degree:     { props: [{ name: 'tool_degree', defaultValue: true }]},
-        tool_percent:    { props: [{ name: 'tool_percent', defaultValue: true }]},
-        tool_matrix_2row:        { props: [{ name: 'tool_matrix_2row', defaultValue: true }]},
-        tool_matrix_2row_2col:   { props: [{ name: 'tool_matrix_2row_2col', defaultValue: true }]},
+        tool_frac:       { props: [{ name: 'tool_frac', defaultValue: false }]},
+        tool_sqrt:       { props: [{ name: 'tool_sqrt', defaultValue: false }]},
+        tool_exp:        { props: [{ name: 'tool_exp', defaultValue: false }]},
+        tool_log:        { props: [{ name: 'tool_log', defaultValue: false }]},
+        tool_ln:         { props: [{ name: 'tool_ln', defaultValue: false }]},
+        tool_limit:      { props: [{ name: 'tool_limit', defaultValue: false }]},
+        tool_sum:        { props: [{ name: 'tool_sum', defaultValue: false }]},
+        tool_nthroot:    { props: [{ name: 'tool_nthroot', defaultValue: false }]},
+        tool_e:          { props: [{ name: 'tool_e', defaultValue: false }]},
+        tool_infinity:   { props: [{ name: 'tool_infinity', defaultValue: false }]},
+        squarebkts:      { props: [{ name: 'tool_rbrack', defaultValue: false }, { name: 'tool_lbrack', defaultValue: false }]},
+        tool_pi:         { props: [{ name: 'tool_pi', defaultValue: false }]},
+        tool_cos:        { props: [{ name: 'tool_cos', defaultValue: false }]},
+        tool_sin:        { props: [{ name: 'tool_sin', defaultValue: false }]},
+        tool_tan:        { props: [{ name: 'tool_tan', defaultValue: false }]},
+        tool_lte:        { props: [{ name: 'tool_lte', defaultValue: false }]},
+        tool_gte:        { props: [{ name: 'tool_gte', defaultValue: false }]},
+        tool_times:      { props: [{ name: 'tool_times', defaultValue: false }]},
+        tool_divide:     { props: [{ name: 'tool_divide', defaultValue: false }]},
+        tool_plusminus:  { props: [{ name: 'tool_plusminus', defaultValue: false }]},
+        roundbkts:       { props: [{ name: 'tool_rparen', defaultValue: false }, { name: 'tool_lparen', defaultValue: false }]},
+        curlybkts:       { props: [{ name: 'tool_rbrace', defaultValue: false }, { name: 'tool_lbrace', defaultValue: false }]},
+        tool_angle:      { props: [{ name: 'tool_angle', defaultValue: false }]},
+        tool_minus:      { props: [{ name: 'tool_minus', defaultValue: false }]},
+        tool_plus:       { props: [{ name: 'tool_plus', defaultValue: false }]},
+        tool_equal:      { props: [{ name: 'tool_equal', defaultValue: false }]},
+        tool_lower:      { props: [{ name: 'tool_lower', defaultValue: false }]},
+        tool_greater:    { props: [{ name: 'tool_greater', defaultValue: false }]},
+        tool_subscript:  { props: [{ name: 'tool_subscript', defaultValue: false }]},
+        tool_integral:   { props: [{ name: 'tool_integral', defaultValue: false }]},
+        tool_timesdot:   { props: [{ name: 'tool_timesdot', defaultValue: false }]},
+        tool_triangle:   { props: [{ name: 'tool_triangle', defaultValue: false }]},
+        tool_similar:    { props: [{ name: 'tool_similar', defaultValue: false }]},
+        tool_paral:      { props: [{ name: 'tool_paral', defaultValue: false }]},
+        tool_perp:       { props: [{ name: 'tool_perp', defaultValue: false }]},
+        tool_inmem:      { props: [{ name: 'tool_inmem', defaultValue: false }]},
+        tool_ninmem:     { props: [{ name: 'tool_ninmem', defaultValue: false }]},
+        tool_union:      { props: [{ name: 'tool_union', defaultValue: false }]},
+        tool_intersec:   { props: [{ name: 'tool_intersec', defaultValue: false }]},
+        tool_colon:      { props: [{ name: 'tool_colon', defaultValue: false }]},
+        tool_to:         { props: [{ name: 'tool_to', defaultValue: false }]},
+        tool_congruent:  { props: [{ name: 'tool_congruent', defaultValue: false }]},
+        tool_subset:     { props: [{ name: 'tool_subset', defaultValue: false }]},
+        tool_superset:   { props: [{ name: 'tool_superset', defaultValue: false }]},
+        tool_contains:   { props: [{ name: 'tool_contains', defaultValue: false }]},
+        tool_approx:     { props: [{ name: 'tool_approx', defaultValue: false }]},
+        tool_vline:      { props: [{ name: 'tool_vline', defaultValue: false }]},
+        tool_degree:     { props: [{ name: 'tool_degree', defaultValue: false }]},
+        tool_percent:    { props: [{ name: 'tool_percent', defaultValue: false }]},
+        tool_matrix_2row:        { props: [{ name: 'tool_matrix_2row', defaultValue: false }]},
+        tool_matrix_2row_2col:   { props: [{ name: 'tool_matrix_2row_2col', defaultValue: false }]},
     };
 
     var MathEntryInteractionStateQuestion = stateFactory.extend(Question, function create(){
@@ -131,6 +131,19 @@ define([
         } else {
             return (value === true || value === "true");
         }
+    }
+
+    /**
+     * Check if a property was explicitly defined on the interaction.
+     * Some interaction implementations may expose default values via `prop()`
+     * even when the key is absent from the underlying XML properties.
+     *
+     * @param {Object} interaction
+     * @param {String} propName
+     * @returns {Boolean}
+     */
+    function hasExplicitProperty(interaction, propName) {
+        return !!(interaction && interaction.properties && Object.prototype.hasOwnProperty.call(interaction.properties, propName));
     }
     /**
      * Callback for configuration change
@@ -196,7 +209,9 @@ define([
      */
     function getToolsInitValues(interaction) {
         return Object.keys(tools).reduce((acc, tool) => {
-            acc[tool] = tools[tool].props.every(prop => toBoolean(interaction.prop(prop.name), prop.defaultValue));
+            acc[tool] = tools[tool].props.every(
+                prop => hasExplicitProperty(interaction, prop.name) && toBoolean(interaction.prop(prop.name), prop.defaultValue)
+            );
             return acc;
         }, {});
     };
