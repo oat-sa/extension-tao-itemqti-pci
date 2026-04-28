@@ -1,3 +1,21 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; under version 2
+ * of the License (non-upgradable).
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
+ *
+ * Copyright (c) 2026 (original work) Open Assessment Technologies SA;
+ */
+
 /* eslint-disable func-names */
 define([
     'jquery',
@@ -869,7 +887,7 @@ define([
             newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.enableDomEvents = 'true';
 
             runner = qtiItemRunner('qti', newItemData)
-                .on('render', function () {
+                .on('render', async function () {
                     assert.equal(
                         $container.find('.qti-customInteraction .audioRecordingInteraction').length,
                         1,
@@ -887,6 +905,9 @@ define([
                     $interaction.get(0).dispatchEvent(
                         new CustomEvent('config-change', { detail: { isDisabled: true } })
                     );
+                    await new Promise(function (resolve) {
+                        setTimeout(resolve, 0)
+                    });
 
                     $buttons = $interaction.find('.audiorec-control');
                     assert.equal(
@@ -898,6 +919,9 @@ define([
                     $interaction.get(0).dispatchEvent(
                         new CustomEvent('config-change', { detail: { isDisabled: false } })
                     );
+                    await new Promise(function (resolve) {
+                        setTimeout(resolve, 0)
+                    });
 
                     $buttons = $interaction.find('.audiorec-control');
                     assert.equal(
@@ -936,7 +960,7 @@ define([
             properties.enableDomEvents = 'true';
 
             runner = qtiItemRunner('qti', newItemData)
-                .on('render', function () {
+                .on('render', async function () {
                     var interaction = this._item.getInteractions()[0];
                     var $interaction = $container.find('.qti-customInteraction');
                     var $buttons = $interaction.find('.audiorec-control');
@@ -963,6 +987,9 @@ define([
                             }
                         })
                     );
+                    await new Promise(function (resolve) {
+                        setTimeout(resolve, 0)
+                    });
 
                     assert.equal(
                         $interaction.find('.audiorec-control').length,
