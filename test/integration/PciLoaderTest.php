@@ -19,8 +19,13 @@
  *
  */
 
+declare(strict_types=1);
+
 namespace oat\qtiItemPci\test\integration;
 
+use common_ext_Extension;
+use common_ext_ExtensionException;
+use common_ext_ExtensionsManager;
 use oat\generis\test\MockObject;
 use oat\generis\test\TestCase;
 use oat\oatbox\service\ServiceManager;
@@ -46,7 +51,7 @@ class PciLoaderTest extends TestCase
     private $previousServiceManager;
 
     /**
-     * @throws \common_ext_ExtensionException
+     * @throws common_ext_ExtensionException
      */
     public function setUp(): void
     {
@@ -110,20 +115,20 @@ class PciLoaderTest extends TestCase
             ->method('getLatestRuntimes')
             ->willReturn($imsTestData);
 
-        $extensionMock = $this->createMock(\common_ext_Extension::class);
+        $extensionMock = $this->createMock(common_ext_Extension::class);
         $extensionMock
             ->method('getConfig')
             ->with('debug_portable_element')
             ->willReturn(null);
 
-        $extensionsManagerMock = $this->createMock(\common_ext_ExtensionsManager::class);
+        $extensionsManagerMock = $this->createMock(common_ext_ExtensionsManager::class);
         $extensionsManagerMock
             ->method('getExtensionById')
             ->with('taoQtiItem')
             ->willReturn($extensionMock);
 
         ServiceManager::setServiceManager($this->traitGetServiceManagerMock([
-            \common_ext_ExtensionsManager::class => $extensionsManagerMock,
+            common_ext_ExtensionsManager::class => $extensionsManagerMock,
         ]));
     }
 
