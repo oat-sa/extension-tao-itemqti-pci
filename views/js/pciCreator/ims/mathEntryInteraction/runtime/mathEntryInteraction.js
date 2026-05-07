@@ -1030,11 +1030,15 @@ define([
              * Add the style that sets the width of the gaps, discard previous style
              */
             addGapStyle: function addGapStyle() {
+                const $styleTarget = this.$container.hasClass('mathEntryInteraction')
+                    ? this.$container
+                    : this.$container.find('.mathEntryInteraction').first();
+
                 if (this.config.gapStyle) {
-                    this.$container.removeClass(function (index, className) {
+                    $styleTarget.removeClass(function (index, className) {
                         return (className.match(/\bmath-gap-[\w]+\b/g) || []).join(' ');
                     });
-                    this.$container.addClass(this.config.gapStyle);
+                    $styleTarget.addClass(this.config.gapStyle);
                 }
 
                 // in case alternative responses, force the wrap to show
