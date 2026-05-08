@@ -320,6 +320,70 @@ define([
 
     /* */
 
+    QUnit.test('applies configured gap style on mathEntryInteraction in gap expression mode', assert => {
+        const ready = assert.async();
+
+        assert.expect(1);
+
+        const $container = $('#' + fixtureContainerId);
+        const newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements[elements.interaction].properties.useGapExpression = 'true';
+        newItemData.body.elements[elements.interaction].properties.gapExpression = '\\taoGap+\\taoGap';
+        newItemData.body.elements[elements.interaction].properties.gapStyle = 'math-gap-large';
+
+        const runner = qtiItemRunner('qti', newItemData)
+            .on('render', () => {
+                const $mathEntryInteraction = $container.find('.qti-customInteraction .mathEntryInteraction').first();
+
+                assert.ok(
+                    $mathEntryInteraction.hasClass('math-gap-large'),
+                    'gap style class is applied on the .mathEntryInteraction root'
+                );
+
+                runner.clear();
+                ready();
+            })
+            .on('error', error => $('#error-display').html(error))
+            .init()
+            .render($container);
+    });
+
+    /* */
+
+    QUnit.test('renders editable gaps in gap expression mode', assert => {
+        const ready = assert.async();
+
+        assert.expect(2);
+
+        const $container = $('#' + fixtureContainerId);
+        const newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements[elements.interaction].properties.useGapExpression = 'true';
+        newItemData.body.elements[elements.interaction].properties.gapExpression = '\\frac{1}{2}+\\taoGap=3\\taoGap';
+        newItemData.body.elements[elements.interaction].properties.gapStyle = 'math-gap-large';
+
+        const runner = qtiItemRunner('qti', newItemData)
+            .on('render', () => {
+                const $mathEntryInteraction = $container.find('.qti-customInteraction .mathEntryInteraction').first();
+
+                assert.ok(
+                    $mathEntryInteraction.find('.mq-editable-field').length > 0,
+                    'gap expression rendering includes editable gap fields'
+                );
+                assert.ok(
+                    $mathEntryInteraction.hasClass('math-gap-large'),
+                    'gap expression render path keeps configured gap style class on root'
+                );
+
+                runner.clear();
+                ready();
+            })
+            .on('error', error => $('#error-display').html(error))
+            .init()
+            .render($container);
+    });
+
+    /* */
+
     QUnit.module('Visual test');
 
     QUnit.test('display and play', assert => {
