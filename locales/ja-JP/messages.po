@@ -1,5 +1,5 @@
 msgid ""
-msgstr ""
+msgstr " {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 "Project-Id-Version: tao-open-source\n"
 "PO-Revision-Date: 2026-03-25 12:55\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
@@ -21,460 +21,460 @@ msgstr ""
 "Language-Team: Japanese\n"
 
 msgid "2 rows"
-msgstr "2 行"
+msgstr "2 行 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "2 rows & 2 columns"
-msgstr "2行2列"
+msgstr "2行2列 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Add alternative"
-msgstr "代替を追加"
+msgstr "代替を追加 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Add answer option"
-msgstr "解答オプション追加"
+msgstr "解答オプション追加 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Add gap"
-msgstr "穴埋め追加"
+msgstr "穴埋め追加 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Add Interaction"
-msgstr "インタラクション追加"
+msgstr "インタラクション追加 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Allow download"
-msgstr "ダウンロードを許可"
+msgstr "ダウンロードを許可 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "allow line break"
-msgstr "改行を許可"
+msgstr "改行を許可 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Allow playback"
-msgstr "録音確認再生の許可"
+msgstr "録音確認再生の許可 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Alternative"
-msgstr "代替"
+msgstr "代替 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "angle"
-msgstr "角"
+msgstr "角 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Approximately"
-msgstr "約"
+msgstr "約 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Audio bitrate:"
-msgstr "音声ビットレート:"
+msgstr "音声ビットレート: {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Audio has been previously recorded. Your browser does not support the playback of this recording. Please try on a different browser."
-msgstr "音声は以前に録音されたものです。お使いのブラウザは、この録画の再生に対応していません。別のブラウザでお試しください。"
+msgstr "音声は以前に録音されたものです。お使いのブラウザは、この録画の再生に対応していません。別のブラウザでお試しください。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "authorize white space"
-msgstr "スペースの入力許可"
+msgstr "スペースの入力許可 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Auto playback recording"
-msgstr "録音後の自動再生"
+msgstr "録音後の自動再生 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Auto start recording"
-msgstr "自動録音開始"
+msgstr "自動録音開始 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Back to listing"
-msgstr "リストに戻る"
+msgstr "リストに戻る {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "braces/curly brackets"
-msgstr "波括弧"
+msgstr "波括弧 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr "キャンセル {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Channels"
-msgstr "チャンネル"
+msgstr "チャンネル {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Close dialog"
-msgstr "ダイアログを閉じる"
+msgstr "ダイアログを閉じる {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "colon"
-msgstr "コロン"
+msgstr "コロン {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Comparison"
-msgstr "比較"
+msgstr "比較 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Compressed"
-msgstr "圧縮"
+msgstr "圧縮 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "congruent"
-msgstr "おめでとうございます"
+msgstr "おめでとうございます {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "contains as member"
-msgstr "にメンバーとして含まれています"
+msgstr "にメンバーとして含まれています {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Correct"
-msgstr "正解"
+msgstr "正解 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Correct answer option"
-msgstr "正解オプション"
+msgstr "正解オプション {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "cosinus"
-msgstr "cos"
+msgstr "cos {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Define correct responses"
-msgstr "正解の設定"
+msgstr "正解の設定 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Degree symbol"
-msgstr "学位記号"
+msgstr "学位記号 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Delete"
-msgstr "削除"
+msgstr "削除 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "delete the answer"
-msgstr "解答を削除"
+msgstr "解答を削除 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "disabled"
-msgstr "無効"
+msgstr "無効 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Display icons at each end, or not"
-msgstr "各端にアイコンを表示するかどうか"
+msgstr "各端にアイコンを表示するかどうか {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Display numbers above the choices, or not"
-msgstr "選択肢の上に数字を表示するかどうか"
+msgstr "選択肢の上に数字を表示するかどうか {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "divide"
-msgstr "除算"
+msgstr "除算 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Download"
-msgstr "ダウンロード"
+msgstr "ダウンロード {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "edit the answer"
-msgstr "解答を編集"
+msgstr "解答を編集 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Enable all symbols"
-msgstr "すべての記号を有効にする"
+msgstr "すべての記号を有効にする {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "enable auto wrap"
-msgstr "自動改行有効"
+msgstr "自動改行有効 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Enabled in item authoring"
-msgstr "アイテムオーサリングで有効にする"
+msgstr "アイテムオーサリングで有効にする {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "equal"
-msgstr "イコール"
+msgstr "イコール {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Experimental only"
-msgstr "実験用"
+msgstr "実験用 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "exponent"
-msgstr "指数"
+msgstr "指数 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "For tests only"
-msgstr "事前検証用"
+msgstr "事前検証用 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "fraction"
-msgstr "x/y 分数"
+msgstr "x/y 分数 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Functions"
-msgstr "関数"
+msgstr "関数 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Gap size"
-msgstr "穴埋めのサイズ"
+msgstr "穴埋めのサイズ {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Geometry"
-msgstr "ジオメトリ"
+msgstr "ジオメトリ {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Give the possibility to the test taker to playback its own recording."
-msgstr "受験者は自分が録音した声を，再生して聞くことができます"
+msgstr "受験者は自分が録音した声を，再生して聞くことができます {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "greater than"
-msgstr "大なり"
+msgstr "大なり {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "greater than or equal"
-msgstr "大なりイコール"
+msgstr "大なりイコール {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Hide record button"
-msgstr "録音ボタンを隠す"
+msgstr "録音ボタンを隠す {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Hide stop button"
-msgstr "停止ボタンを隠す"
+msgstr "停止ボタンを隠す {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Hide the record button from test takers."
-msgstr "テスト受験者から記録ボタンを非表示にします。"
+msgstr "テスト受験者から記録ボタンを非表示にします。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Hide the stop button from test takers."
-msgstr "テスト受験者から停止ボタンを非表示にします。"
+msgstr "テスト受験者から停止ボタンを非表示にします。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "id : "
-msgstr "ID : "
+msgstr "ID :  {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "In bps (bits per second). Set the tradeoff between audio quality and filesize. With the default value (20.000bps), a 2minutes recording weights roughly 300KB."
-msgstr "オーディオ品質とファイルサイズのバランスを設定します（単位：bps(ビット/秒)）。デフォルト値(20,000bps)では、2分間で約300KBになります。"
+msgstr "オーディオ品質とファイルサイズのバランスを設定します（単位：bps(ビット/秒)）。デフォルト値(20,000bps)では、2分間で約300KBになります。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 10seconds). Recording will automatically stop once reached."
-msgstr "秒単位で設定。設定時間に達すると録音は自動的に停止します。10秒未満は設定できません。"
+msgstr "秒単位で設定。設定時間に達すると録音は自動的に停止します。10秒未満は設定できません。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "In seconds. Maximum recording time allowed (cannot be less than 5 seconds). Recording will automatically stop once reached."
-msgstr "秒単位で記録できる最大時間（5秒未満にすることはできません）に達すると自動的に記録は停止します。"
+msgstr "秒単位で記録できる最大時間（5秒未満にすることはできません）に達すると自動的に記録は停止します。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "In seconds. The time interval between partial updates of the recording."
-msgstr "単位は秒。録画の部分的な更新の間隔。"
+msgstr "単位は秒。録画の部分的な更新の間隔。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Indefinite integral"
-msgstr "不定積分"
+msgstr "不定積分 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Indicates that the audio forms part of a sequence with other sequential interactions. The advancing of the sequence is handled by the delivery engine. Delays are also respected."
-msgstr "オーディオが他のシーケンシャル相互作用を伴うシーケンスの一部を形成していることを示します。 シーケンスの進歩は配信エンジンによって処理されます。遅延も尊重されます。"
+msgstr "オーディオが他のシーケンシャル相互作用を伴うシーケンスの一部を形成していることを示します。 シーケンスの進歩は配信エンジンによって処理されます。遅延も尊重されます。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Invalid files have been removed"
-msgstr "無効なファイルは削除されました"
+msgstr "無効なファイルは削除されました {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "is a member of"
-msgstr "属する"
+msgstr "属する {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "is not a member of"
-msgstr "属さない"
+msgstr "属さない {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "is parallel with"
-msgstr "平行"
+msgstr "平行 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "is perpendicular to"
-msgstr "垂直"
+msgstr "垂直 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Large"
-msgstr "大"
+msgstr "大 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Level"
-msgstr "レベル"
+msgstr "レベル {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "limit"
-msgstr "制限"
+msgstr "制限 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "ln"
-msgstr "ln"
+msgstr "ln {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "log"
-msgstr "log"
+msgstr "log {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "lower than"
-msgstr "小なり"
+msgstr "小なり {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "lower than or equal"
-msgstr "小なりイコール"
+msgstr "小なりイコール {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Manage custom interactions"
-msgstr "PCI管理"
+msgstr "PCI管理 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Mapping default"
-msgstr "スコア初期値"
+msgstr "スコア初期値 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Matrix"
-msgstr "マトリクス"
+msgstr "マトリクス {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Max attempts:"
-msgstr "最大試行回数:"
+msgstr "最大試行回数: {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Maximal score for this interaction."
-msgstr "この問題の最大スコア"
+msgstr "この問題の最大スコア {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Maximum number of recording attempts allowed to the test taker. Set to 0 to allow unlimited attempts. With a limit of 3, the test taker will be able to click 2 times on the reset button."
-msgstr "受験者に許可する録音回数の設定です。3回に設定すると2回やり直しボタンを押せます。0に設定すると、何度でも録音のやり直しができます。"
+msgstr "受験者に許可する録音回数の設定です。3回に設定すると2回やり直しボタンを押せます。0に設定すると、何度でも録音のやり直しができます。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Medium"
-msgstr "中"
+msgstr "中 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Min:"
-msgstr "秒:"
+msgstr "秒: {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Minimal score for this interaction."
-msgstr "この操作の最小スコア。"
+msgstr "この操作の最小スコア。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "minus"
-msgstr "減算"
+msgstr "減算 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Mono"
-msgstr "モノラル"
+msgstr "モノラル {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "n-root"
-msgstr "n-root"
+msgstr "n-root {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "No Custom Interaction"
-msgstr "カスタムインタラクションはありません"
+msgstr "カスタムインタラクションはありません {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Number of channels for the recording. Allow to cut the record size in half if used in mono."
-msgstr "録音するチャンネル数。モノラルの場合、レコードサイズが半分になります。"
+msgstr "録音するチャンネル数。モノラルの場合、レコードサイズが半分になります。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Operands"
-msgstr "演算子"
+msgstr "演算子 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Options"
-msgstr "オプション"
+msgstr "オプション {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "parentheses/round brackets"
-msgstr "丸括弧"
+msgstr "丸括弧 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Percent"
-msgstr "割合"
+msgstr "割合 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Play a sound at the start and end of recording."
-msgstr "録音の開始と終了時にサウンドを再生します。"
+msgstr "録音の開始と終了時にサウンドを再生します。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Play sound"
-msgstr "サウンドを再生"
+msgstr "サウンドを再生 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "plus"
-msgstr "加算"
+msgstr "加算 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Plus/minus"
-msgstr "プラス/マイナス"
+msgstr "プラス/マイナス {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 #, tao-public
 msgid "Portable Custom Interactions"
-msgstr "PCI（Portable Custom Interactions）"
+msgstr "PCI（Portable Custom Interactions） {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Recorded audio is automatically played back after recording stops. During playback, no user interaction is possible and all buttons are disabled."
-msgstr "録音した音声は、録音停止後に自動的に再生されます。再生中はユーザーの操作はできず、すべてのボタンが無効になります。"
+msgstr "録音した音声は、録音停止後に自動的に再生されます。再生中はユーザーの操作はできず、すべてのボタンが無効になります。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Recording format"
-msgstr "録音フォーマット"
+msgstr "録音フォーマット {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Recording starts automatically once test taker give microphone use authorisation."
-msgstr "受験者がマイク使用の許可を与えると、録音が自動的に開始されます。"
+msgstr "受験者がマイク使用の許可を与えると、録音が自動的に開始されます。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Recording starts automatically once test taker give microphone use authorisation. If a media stimulus is used, then the recording starts automatically after the stimulus has been played."
-msgstr "自動的に録音が開始されます。また，音声・動画を挿入すると、これらが再生後に自動的に録音が開始されます。"
+msgstr "自動的に録音が開始されます。また，音声・動画を挿入すると、これらが再生後に自動的に録音が開始されます。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Response identifier"
-msgstr "レスポンス識別子"
+msgstr "レスポンス識別子 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "right arrow"
-msgstr "右矢印"
+msgstr "右矢印 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Scale size"
-msgstr "縮尺"
+msgstr "縮尺 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Score"
-msgstr "スコア"
+msgstr "スコア {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Score range"
-msgstr "スコア範囲"
+msgstr "スコア範囲 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Sec:"
-msgstr "秒："
+msgstr "秒： {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Sequential"
-msgstr "シーケンシャル"
+msgstr "シーケンシャル {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "set intersection"
-msgstr "積集合"
+msgstr "積集合 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "set union"
-msgstr "和集合"
+msgstr "和集合 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 #, tao-public
 msgid "Settings"
-msgstr "設定"
+msgstr "設定 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Show icons"
-msgstr "アイコンを表示"
+msgstr "アイコンを表示 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Show numbers"
-msgstr "数字を表示"
+msgstr "数字を表示 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "similar"
-msgstr "相似"
+msgstr "相似 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "sinus"
-msgstr "sin"
+msgstr "sin {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Small"
-msgstr "小"
+msgstr "小 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "square brackets"
-msgstr "角括弧"
+msgstr "角括弧 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "square root"
-msgstr "平方根"
+msgstr "平方根 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Stereo"
-msgstr "ステレオ"
+msgstr "ステレオ {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "subscript"
-msgstr "下付き文字"
+msgstr "下付き文字 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "subset"
-msgstr "サブセット"
+msgstr "サブセット {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "sum"
-msgstr "sum"
+msgstr "sum {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "superset"
-msgstr "スーパーセット"
+msgstr "スーパーセット {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Symbols"
-msgstr "シンボル"
+msgstr "シンボル {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "tangent"
-msgstr "tangent"
+msgstr "tangent {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
-msgstr "レスポンス識別子：同じ識別子を，他のレスポンスやアイテム変数で使用できません。識別子は、文字またはアンダースコア(\"_\") で始まり、文字、アンダースコア、ハイフン (\"-\")、ピリオド (\".\")、10進数値（digit）、結合文字（CombiningChars）、エクステンダ（Extender）を含む文字列です。"
+msgstr "レスポンス識別子：同じ識別子を，他のレスポンスやアイテム変数で使用できません。識別子は、文字またはアンダースコア(\ {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "The mapping options are available when at least one map entry is defined."
-msgstr "採点方法の「マップレスポンス」は、準正答などにスコアを設定したい場合に使用します。"
+msgstr "採点方法の「マップレスポンス」は、準正答などにスコアを設定したい場合に使用します。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "This is for testing purposes only. Displays a link to download the recorded file once the recording stops. This shouldn't be used in a delivery context, as it would allow the test taker to download its own recording."
-msgstr "録音が停止した後、音声ファイルをダウンロードするためのリンクを表示します。これはテスト実施前の録音状態の事前検証に利用してください。"
+msgstr "録音が停止した後、音声ファイルをダウンロードするためのリンクを表示します。これはテスト実施前の録音状態の事前検証に利用してください。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "This options allow to insert a media stimulus that will have to be played before recording can happen."
-msgstr "このオプションにより、録音回答する前に受験者が視聴する動画や音声を挿入することができます。"
+msgstr "このオプションにより、録音回答する前に受験者が視聴する動画や音声を挿入することができます。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Time limit:"
-msgstr "録音時間制限:"
+msgstr "録音時間制限: {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "times"
-msgstr "乗算"
+msgstr "乗算 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "times dot"
-msgstr "ドット"
+msgstr "ドット {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "triangle"
-msgstr "三角形"
+msgstr "三角形 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Trigonometry"
-msgstr "三角関数"
+msgstr "三角関数 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "type : "
-msgstr "タイプ: "
+msgstr "タイプ:  {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Unable to upload file %s : %s"
-msgstr "アップロードができません %s : %s"
+msgstr "アップロードができません %s : %s {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Uncompressed"
-msgstr "非圧縮"
+msgstr "非圧縮 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Update interval:"
-msgstr "更新間隔"
+msgstr "更新間隔 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Upload new custom interaction (zip package)"
-msgstr "新規カスタムインタラクションをアップロード（ZIPパッケージ）"
+msgstr "新規カスタムインタラクションをアップロード（ZIPパッケージ） {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "use expression with gaps"
-msgstr "穴埋め問題作成"
+msgstr "穴埋め問題作成 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Use media stimulus"
-msgstr "動画・音声を挿入"
+msgstr "動画・音声を挿入 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "version : "
-msgstr "バージョン : "
+msgstr "バージョン :  {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Vertical line, divide"
-msgstr "垂直方向の分割線"
+msgstr "垂直方向の分割線 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Warning"
-msgstr "警告"
+msgstr "警告 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "With compressed recording, the audio is saved as a webm or ogg file (smaller size). With uncompressed, as a lossless Wav file (much bigger size)."
-msgstr "圧縮の音声ファイルは，WebMまたはOggファイル（ファイル容量：小）として保存されます。非圧縮の場合は，WAVファイル（ファイル容量：大）として保存されます。"
+msgstr "圧縮の音声ファイルは，WebMまたはOggファイル（ファイル容量：小）として保存されます。非圧縮の場合は，WAVファイル（ファイル容量：大）として保存されます。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "Your browser blocked auto-play. Press Play to listen to your recording."
-msgstr "お使いのブラウザーが自動再生をブロックしました。再生を押して録音を再生します。"
+msgstr "お使いのブラウザーが自動再生をブロックしました。再生を押して録音を再生します。 {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "≈"
-msgstr "≈"
+msgstr "≈ {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "≤"
-msgstr "≦"
+msgstr "≦ {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
 msgid "≥"
-msgstr "≧"
+msgstr "≧ {ruby}{rb}6{/rb}{rt}7{/rt}{/ruby}"
 
