@@ -1807,6 +1807,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             46: 'Del',
             144: 'NumLock',
         };
+        var SPECIAL_KEYS = Object.keys(KEY_VALUES).map(function (key) { return KEY_VALUES[key]; });
         // To the extent possible, create a normalized string representation
         // of the key combo (i.e., key code and modifier keys).
         function stringify(evt) {
@@ -1814,6 +1815,10 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             var keyVal = KEY_VALUES[which];
             var key;
             var modifiers = [];
+            var originalEventKey = evt.originalEvent && evt.originalEvent.key;
+            if (!keyVal && SPECIAL_KEYS.indexOf(originalEventKey) !== -1) {
+                keyVal = originalEventKey;
+            }
             if (evt.ctrlKey)
                 modifiers.push('Ctrl');
             if (evt.originalEvent && evt.originalEvent.metaKey)
@@ -1831,7 +1836,15 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         function isVisibleKey(evt) {
             var which = evt.which || evt.keyCode;
             var keyVal = KEY_VALUES[which];
-            return !(evt.ctrlKey || evt.originalEvent && evt.originalEvent.metaKey || evt.altKey || evt.shiftKey || keyVal);
+            var originalEventKey = evt.originalEvent && evt.originalEvent.key;
+            if (!keyVal && SPECIAL_KEYS.indexOf(originalEventKey) !== -1) {
+                keyVal = originalEventKey;
+            }
+            return !(evt.ctrlKey ||
+                (evt.originalEvent && evt.originalEvent.metaKey) ||
+                evt.altKey ||
+                evt.shiftKey ||
+                keyVal);
         }
         function isIpadOS() {
             return navigator.maxTouchPoints &&
