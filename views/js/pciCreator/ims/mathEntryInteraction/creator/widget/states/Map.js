@@ -353,9 +353,10 @@ define([
 
     // forming gap response object to be further processed by the latexGapInput event
     MathEntryInteractionStateResponse.prototype.getGapResponseObject = function getGapResponseObject(response) {
+        const interaction = this.widget.element;
         return {
             base: {
-                string: gapResponse.stringToArray(response)
+                string: gapResponse.stringToArray(response, interaction.prop('gapResponseIsJson'))
             }
         };
     };
@@ -409,7 +410,10 @@ define([
         if (this.inGapMode() === true) {
             this.correctResponses.forEach((value, index) => {
                 let response = ' ';
-                const responseAsArray = gapResponse.stringToArray(value.response);
+                const responseAsArray = gapResponse.stringToArray(
+                    value.response,
+                    interaction.prop('gapResponseIsJson')
+                );
                 if (responseAsArray && responseAsArray.length && !responseAsArray.some(v => !v)) {
                     response = value.response;
                 }
