@@ -40,14 +40,19 @@ define([], function () {
         /**
          *
          * @param {string} response
+         * @param {boolean?} gapResponseIsJson - json since v3.0.0, comma-separated string if older version
          * @returns {string[]}
          */
-        stringToArray(response) {
+        stringToArray(response, gapResponseIsJson = true) {
             if (!response) {
                 return [];
             }
+            if (!gapResponseIsJson) {
+                return response.split(',');
+            }
             try {
-                return JSON.parse(response);
+                const parsedResponse = JSON.parse(response);
+                return Array.isArray(parsedResponse) ? parsedResponse : response.split(',');
             } catch (err) {
                 return response.split(',');
             }
