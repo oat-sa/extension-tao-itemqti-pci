@@ -798,7 +798,10 @@ define([
                             this.setMathStaticContent(latex, responseId);
                             this.createMathStatic(responseId);
                             const gapFields = this.getGapFields();
-                            const gaps = gapResponse.stringToArray(gapValues.base.string);
+                            const gaps = gapResponse.stringToArray(
+                                gapValues.base.string,
+                                this.config.gapResponseIsJson
+                            );
                             gapFields.forEach(function (gap, index) {
                                 gap.latex(gaps[index] || '');
                             });
@@ -1080,9 +1083,12 @@ define([
                 if (this.inGapMode()) {
                     if (response && response.base && response.base.string) {
                         const gapFields = this.getGapFields();
-                        const gaps = gapResponse.stringToArray(response.base.string);
+                        const gaps = gapResponse.stringToArray(
+                            response.base.string,
+                            this.config.gapResponseIsJson
+                        );
                         gapFields.forEach(function (gap, index) {
-                            gap.latex(gaps[index]);
+                            gap.latex(gaps[index] || '');
                         });
                     }
                 } else {

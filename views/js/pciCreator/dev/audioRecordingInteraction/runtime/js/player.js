@@ -323,6 +323,10 @@ define([
             enableAutoplay: function enableAutoplay() {
                 var playResult;
 
+                if (!this.is(playerStates.CREATED)) {
+                    return;
+                }
+
                 audioEl = ensureAudioElement(this);
                 isEnablingAutoplay = true;
                 audioEl.pause();
