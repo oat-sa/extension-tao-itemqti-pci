@@ -221,6 +221,23 @@ define([
         });
     });
 
+    QUnit.test('does not replace loaded media when requesting autoplay permission', function (assert) {
+        var FakeAudio = createFakeAudioConstructor();
+        var player = playerFactory();
+
+        window.Audio = FakeAudio;
+
+        player.load('blob:recording');
+
+        assert.strictEqual(player.enableAutoplay(), undefined, 'autoplay priming is skipped after media is loaded');
+        assert.equal(FakeAudio.instances[0].src, 'blob:recording', 'the loaded recording source is preserved');
+        assert.equal(FakeAudio.instances[0].loadCalls, 1, 'the recording is not reloaded or replaced');
+
+        player.play();
+
+        assert.equal(FakeAudio.instances[0].playCalls, 1, 'manual playback uses the loaded recording');
+    });
+
     QUnit.test('keeps autoplay enabled when play does not return a promise', function (assert) {
         var FakeAudio = createNonPromisePlayAudioConstructor();
         var player = playerFactory();
