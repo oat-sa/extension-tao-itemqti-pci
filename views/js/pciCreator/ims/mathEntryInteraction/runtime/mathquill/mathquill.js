@@ -2039,7 +2039,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                         insertText(text);
                         compositionString = text;
                     }
-                    else {
+                    else if (text !== compositionString) {
                         updateCompositionText(text);
                     }
                 }
