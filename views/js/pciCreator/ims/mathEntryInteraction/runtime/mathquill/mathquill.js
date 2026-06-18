@@ -30,11 +30,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 /* eslint-disable */
 define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
-
-    var L = -1;
-    var R = 1;
-    var min = Math.min;
-    var max = Math.max;
+    var undefined,
+        L = -1,
+        R = 1,
+        min = Math.min,
+        max = Math.max;
     if (!jQuery)
         throw 'MathQuill requires jQuery 1.5.2+ to be loaded first';
     function noop() { }
