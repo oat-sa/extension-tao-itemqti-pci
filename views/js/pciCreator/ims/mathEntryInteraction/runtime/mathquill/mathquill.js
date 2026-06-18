@@ -13,9 +13,7 @@
  * - wrap in a AMD module
  * - Disabled eslint warnings
  */
-var __extends = (this && this.__extends) || /* eslint-disable */
-define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
-
+var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -30,7 +28,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-(function () {
+/* eslint-disable */
+define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
+
     var L = -1;
     var R = 1;
     var min = Math.min;
@@ -1892,8 +1892,12 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 if (!isComposing)
                     return;
                 var text = textarea.val();
-                if (!text)
+                if (!text) {
+                    if (compositionTextLength > 0) {
+                        clearCompositionText();
+                    }
                     return;
+                }
                 if (text === compositionString)
                     return;
                 updateCompositionText(text);
@@ -2006,7 +2010,12 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     // only first symbol put in textare,
                     // rest ignored and no text in textarea, no input event
                     // will be used keydown.key
-                    insertText(keydown.key || '');
+                    var fallbackKey = keydown.key ||
+                        (keydown.originalEvent && keydown.originalEvent.key) ||
+                        '';
+                    if (fallbackKey.length === 1) {
+                        insertText(fallbackKey);
+                    }
                 } // in Firefox, keys that don't type text, just clear seln, fire keypress
                 // https://github.com/mathquill/mathquill/issues/293#issuecomment-40997668
                 else if (text) {
@@ -2042,6 +2051,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     else if (text !== compositionString) {
                         updateCompositionText(text);
                     }
+                }
+                else if (compositionTextLength > 0) {
+                    clearCompositionText();
                 }
                 compositionTextLength = 0;
                 keydown = null;
