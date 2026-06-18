@@ -1,6 +1,6 @@
 /**
  * ORGINAL VERSION:
- * MathQuill v0.10.2               http://mathquill.com
+ * MathQuill v0.10.1               http://mathquill.com
  * by Han, Jeanine, and Mary  maintainers@mathquill.com
  *
  * This Source Code Form is subject to the terms of the
@@ -13,9 +13,7 @@
  * - wrap in a AMD module
  * - Disabled eslint warnings
  */
-var __extends = (this && this.__extends) || /* eslint-disable */
-define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
-
+var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -30,14 +28,101 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-(function () {
-    var L = -1;
-    var R = 1;
-    var min = Math.min;
-    var max = Math.max;
-    if (!jQuery)
-        throw 'MathQuill requires jQuery 1.5.2+ to be loaded first';
-    function noop() { }
+/* eslint-disable */
+define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
+    var undefined,
+        L = -1,
+        R = 1,
+        mqCmdId = 'mathquill-command-id',
+        mqBlockId = 'mathquill-block-id',
+        min = Math.min,
+        max = Math.max;
+
+    function noop() {}
+
+    /**
+     * A utility higher-order function that makes defining variadic
+     * functions more convenient by letting you essentially define functions
+     * with the last argument as a splat, i.e. the last argument "gathers up"
+     * remaining arguments to the function:
+     *   var doStuff = variadic(function(first, rest) { return rest; });
+     *   doStuff(1, 2, 3); // => [2, 3]
+     */
+    var __slice = [].slice;
+    function variadic(fn) {
+        var numFixedArgs = fn.length - 1;
+        return function() {
+            var args = __slice.call(arguments, 0, numFixedArgs);
+            var varArg = __slice.call(arguments, numFixedArgs);
+            return fn.apply(this, args.concat([ varArg ]));
+        };
+    }
+
+    /**
+     * A utility higher-order function that makes combining object-oriented
+     * programming and functional programming techniques more convenient:
+     * given a method name and any number of arguments to be bound, returns
+     * a function that calls it's first argument's method of that name (if
+     * it exists) with the bound arguments and any additional arguments that
+     * are passed:
+     *   var sendMethod = send('method', 1, 2);
+     *   var obj = { method: function() { return Array.apply(this, arguments); } };
+     *   sendMethod(obj, 3, 4); // => [1, 2, 3, 4]
+     *   // or more specifically,
+     *   var obj2 = { method: function(one, two, three) { return one*two + three; } };
+     *   sendMethod(obj2, 3); // => 5
+     *   sendMethod(obj2, 4); // => 6
+     */
+    var send = variadic(function(method, args) {
+        return variadic(function(obj, moreArgs) {
+            if (method in obj) return obj[method].apply(obj, args.concat(moreArgs));
+        });
+    });
+
+    /**
+     * A utility higher-order function that creates "implicit iterators"
+     * from "generators": given a function that takes in a sole argument,
+     * a "yield_" function, that calls "yield_" repeatedly with an object as
+     * a sole argument (presumably objects being iterated over), returns
+     * a function that calls it's first argument on each of those objects
+     * (if the first argument is a function, it is called repeatedly with
+     * each object as the first argument, otherwise it is stringified and
+     * the method of that name is called on each object (if such a method
+     * exists)), passing along all additional arguments:
+     *   var a = [
+     *     { method: function(list) { list.push(1); } },
+     *     { method: function(list) { list.push(2); } },
+     *     { method: function(list) { list.push(3); } }
+     *   ];
+     *   a.each = iterator(function(yield_) {
+ *     for (var i in this) yield_(this[i]);
+ *   });
+     *   var list = [];
+     *   a.each('method', list);
+     *   list; // => [1, 2, 3]
+     *   // Note that the for-in loop will yield 'each', but 'each' maps to
+     *   // the function object created by iterator() which does not have a
+     *   // .method() method, so that just fails silently.
+     */
+    function iterator(generator) {
+        return variadic(function(fn, args) {
+            if (typeof fn !== 'function') fn = send(fn);
+            var yield_ = function(obj) { return fn.apply(obj, [ obj ].concat(args)); };
+            return generator.call(this, yield_);
+        });
+    }
+
+    /**
+     * sugar to make defining lots of commands easier.
+     * TODO: rethink this.
+     */
+    function bind(cons /*, args... */) {
+        var args = __slice.call(arguments, 1);
+        return function() {
+            return cons.apply(this, args);
+        };
+    }
+
     /**
      * a development-only debug method.  This definition and all
      * calls to `pray` will be stripped from the minified
@@ -87,6 +172,11 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 if (output === '') {
                     output = itemMathspeak;
                 }
+            }
+            else if (item instanceof Fragment) {
+                output = item.fold('', function (speech, child) {
+                    return (speech + ' ' + child.mathspeak()).trim();
+                });
             }
             else {
                 output = item || '';
@@ -174,26 +264,26 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
          called.
       3) even if everything above worked it's really common for users of
          mathquill to forget to tear it down correctly.
-    
+
       It turns out mathquill always uses the Node and the Element as pairs. So we
       can store the Node on the Element and the Element on the Node. That makes it
       possible to get one from the other. This also has the added benefit of meaning
       the Node isn't stored in a global dictionary. If you lose all references to
       the Element, then you'll also lose all references to the Node. This means the
       browser can garbage collect all of mathquill's internals when the DOM is destroyed.
-    
+
       There's only 1 small gotcha. The linking between Element and Node is a little clumsy.
       1) All of the Nodes will be created.
       2) Then all of the Elements will be created.
       3) Then the two will be linked
-    
+
       The problem is that the linking step only has access to the elements. It doesn't have
       access to the nodes. That means we need to store the id of the node we want on the element
       at creation time. Then we need to lookup that Node by id during the linking step. This
       means we still need a dictionary. But at least it can be a temporary dictionary.
       Steps 1 - 3 happen synchronously. So after those steps we can simply clean out the
       temporary dictionary and remove all hard references to the Nodes.
-    
+
       Any time we create a Node we schedule a task to clean all Nodes out of the dictionary
       on the next frame. That's safe because there's no opportunity for nodes to be created
       and NOT linked between the time we schedule the cleaning step and actually do it.
@@ -1076,11 +1166,17 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     }, timeout);
                 }
                 this.ariaPostLabel = ariaPostLabel;
+                if (typeof timeout !== 'number' && !this.containerHasFocus()) {
+                    this.updateMathspeak();
+                }
             }
             else {
                 if (this._ariaAlertTimeout)
                     clearTimeout(this._ariaAlertTimeout);
                 this.ariaPostLabel = '';
+                if (!this.containerHasFocus()) {
+                    this.updateMathspeak();
+                }
             }
             return this;
         };
@@ -1165,7 +1261,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         return MQ1(el);
     }
     MathQuill.prototype = Progenote.prototype;
-    MathQuill.VERSION = 'v0.10.2';
+    MathQuill.VERSION = 'v0.10.1';
     MathQuill.interfaceVersion = function (v) {
         // shim for #459-era interface versioning (ended with #495)
         if (v !== 1)
@@ -1260,6 +1356,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     return el
                         .empty()
                         .unbind('.mathquill')
+                        .find('*').addBack().unbind('.mathquill')
                         .removeClass('mq-editable-field mq-math-mode mq-text-mode')
                         .append(contents);
                 };
@@ -1750,9 +1847,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 keyVal);
         }
         function isIpadOS() {
-            return (navigator.maxTouchPoints &&
+            return navigator.maxTouchPoints &&
                 navigator.maxTouchPoints > 2 &&
-                /MacIntel/.test(navigator.platform));
+                /MacIntel/.test(navigator.platform);
         }
         // create a keyboard events shim that calls callbacks at useful times
         // and exports useful public methods
@@ -1793,7 +1890,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     checker(e);
                 });
             }
-            target.bind('keydown keypress input keyup paste', function (e) {
+            target.bind('keydown.mathquill keypress.mathquill input.mathquill keyup.mathquill paste.mathquill', function (e) {
                 checkTextarea(e);
             });
             function guardedTextareaSelect() {
@@ -1857,7 +1954,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             function clearCompositionText() {
                 if (!compositionTextLength)
                     return;
-                for (var i = 0; i < compositionTextLength; i += 1) {
+                for (var k = 0; k < compositionTextLength; k += 1) {
                     if (controller.options && controller.options.overrideKeystroke) {
                         controller.options.overrideKeystroke('Backspace', noopKeyboardEvent);
                     }
@@ -1875,16 +1972,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 clearCompositionText();
                 if (!text)
                     return;
-                if (controller.options && controller.options.overrideTypedText) {
-                    for (var k = 0; k < text.length; k += 1) {
-                        controller.options.overrideTypedText(text.charAt(k));
-                    }
-                }
-                else {
-                    for (var l = 0; l < text.length; l += 1) {
-                        controller.typedText(text.charAt(l));
-                    }
-                }
+                insertText(text);
                 compositionTextLength = text.length;
                 compositionString = text;
             }
@@ -1892,8 +1980,12 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 if (!isComposing)
                     return;
                 var text = textarea.val();
-                if (!text)
+                if (!text) {
+                    if (compositionTextLength > 0) {
+                        clearCompositionText();
+                    }
                     return;
+                }
                 if (text === compositionString)
                     return;
                 updateCompositionText(text);
@@ -2006,7 +2098,12 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     // only first symbol put in textare,
                     // rest ignored and no text in textarea, no input event
                     // will be used keydown.key
-                    insertText(keydown.key || '');
+                    var fallbackKey = keydown.key ||
+                        (keydown.originalEvent && keydown.originalEvent.key) ||
+                        '';
+                    if (fallbackKey.length === 1) {
+                        insertText(fallbackKey);
+                    }
                 } // in Firefox, keys that don't type text, just clear seln, fire keypress
                 // https://github.com/mathquill/mathquill/issues/293#issuecomment-40997668
                 else if (text) {
@@ -2042,6 +2139,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     else if (text !== compositionString) {
                         updateCompositionText(text);
                     }
+                }
+                else if (compositionTextLength > 0) {
+                    clearCompositionText();
                 }
                 compositionTextLength = 0;
                 keydown = null;
@@ -2085,46 +2185,46 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             // -*- attach event handlers -*- //
             if (controller.options && controller.options.disableCopyPaste) {
                 target.bind({
-                    keydown: onKeydown,
-                    keypress: onKeypress,
-                    keyup: onKeyup,
-                    focusout: onBlur,
-                    copy: function (e) {
+                    'keydown.mathquill': onKeydown,
+                    'keypress.mathquill': onKeypress,
+                    'keyup.mathquill': onKeyup,
+                    'focusout.mathquill': onBlur,
+                    'copy.mathquill': function (e) {
                         e.preventDefault();
                     },
-                    cut: function (e) {
+                    'cut.mathquill': function (e) {
                         e.preventDefault();
                     },
-                    paste: function (e) {
+                    'paste.mathquill': function (e) {
                         e.preventDefault();
                     },
                 });
             }
             else {
                 target.bind({
-                    keydown: onKeydown,
-                    keypress: onKeypress,
-                    keyup: onKeyup,
-                    focusout: onBlur,
-                    cut: function () {
+                    'keydown.mathquill': onKeydown,
+                    'keypress.mathquill': onKeypress,
+                    'keyup.mathquill': onKeyup,
+                    'focusout.mathquill': onBlur,
+                    'cut.mathquill': function () {
                         checkTextareaOnce(function () {
                             controller.cut();
                         });
                     },
-                    copy: function () {
+                    'copy.mathquill': function () {
                         checkTextareaOnce(function () {
                             controller.copy();
                         });
                     },
-                    paste: onPaste,
+                    'paste.mathquill': onPaste,
                 });
             }
             // -*- attach event handlers -*- //
             textarea.bind({
-                compositionstart: onCompositionStart,
-                compositionupdate: onCompositionUpdate,
-                compositionend: onCompositionEnd,
-                input: function (e) {
+                'compositionstart.mathquill': onCompositionStart,
+                'compositionupdate.mathquill': onCompositionUpdate,
+                'compositionend.mathquill': onCompositionEnd,
+                'input.mathquill': function (e) {
                     input = e;
                     if (isComposing) {
                         syncCompositionText();
@@ -2659,9 +2759,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             }
             var cursorL = cursor[L];
             var cursorR = cursor[R];
-            if (cursorL.siblingDeleted)
+            if (cursorL && cursorL.siblingDeleted)
                 cursorL.siblingDeleted(cursor.options, R);
-            if (cursorR.siblingDeleted)
+            if (cursorR && cursorR.siblingDeleted)
                 cursorR.siblingDeleted(cursor.options, L);
             cursor.parent.bubble(function (node) {
                 node.reflow();
@@ -3131,8 +3231,10 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         };
         Controller_latex.prototype.renderLatexMath = function (latex) {
             this.notify('replace');
-            if (this.renderLatexMathEfficiently(latex))
+            if (this.renderLatexMathEfficiently(latex)) {
+                this.updateMathspeak();
                 return;
+            }
             this.renderLatexMathFromScratch(latex);
         };
         Controller_latex.prototype.renderLatexText = function (latex) {
@@ -3236,7 +3338,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     if (cursor.selection)
                         cursor.controller.aria
                             .clear()
-                            .queue(cursor.selection.join('mathspeak') + ' selected')
+                            .queue(cursor.selection.join('mathspeak', ' ').trim() + ' selected')
                             .alert();
                     target = undefined;
                 }
@@ -3468,14 +3570,31 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             }
             this.selectFn(latex);
         };
+        Controller.prototype.addStaticFieldMathspeakSpan = function () {
+            if (this.mathspeakSpan) {
+                return;
+            }
+            this.mathspeakSpan = $('<span class="mq-mathspeak"></span>');
+            this.container.prepend(this.mathspeakSpan);
+        };
+        Controller.prototype.updateStaticFieldSelectableText = function () {
+            if (!this.container) {
+                return;
+            }
+            // The .mq-selectable span is created by staticMathTextareaEvents() only
+            // when mouseEvents is enabled. Refresh it in-place when present so copy/
+            // select stays in sync with the current LaTeX; skip silently otherwise.
+            var $selectable = this.container.children('.mq-selectable');
+            if ($selectable.length) {
+                $selectable.text('$' + this.exportLatex() + '$');
+            }
+        };
         Controller.prototype.staticMathTextareaEvents = function () {
             var ctrlr = this;
             var cursor = ctrlr.cursor;
             var textarea = ctrlr.getTextareaOrThrow();
             var textareaSpan = ctrlr.getTextareaSpanOrThrow();
             this.container.prepend(jQuery('<span aria-hidden="true" class="mq-selectable">').text('$' + ctrlr.exportLatex() + '$'));
-            this.mathspeakSpan = $('<span class="mq-mathspeak"></span>');
-            this.container.prepend(this.mathspeakSpan);
             ctrlr.blurred = true;
             textarea.bind('cut paste', false);
             if (ctrlr.options.disableCopyPaste) {
@@ -3522,6 +3641,8 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             var ctrlr = this;
             var textarea = ctrlr.getTextareaOrThrow();
             var textareaSpan = ctrlr.getTextareaSpanOrThrow();
+            this.container.unbind('.mathquill');
+            textarea.unbind('.mathquill');
             this.selectFn = function (text) {
                 textarea.val(text);
                 if (text)
@@ -3530,7 +3651,6 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             textareaSpan.remove();
             this.unbindFocusBlurEvents();
             ctrlr.blurred = true;
-            textarea.bind('cut paste', false);
         };
         Controller.prototype.typedText = function (ch) {
             if (ch === '\n')
@@ -3753,9 +3873,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         MathCommand.prototype.placeCursor = function (cursor) {
             //insert the cursor at the right end of the first empty child, searching
             //left-to-right, or if none empty, the right end child
-            cursor.insAtRightEnd(this.foldChildren(this.ends[L], function (leftward, child) {
-                return leftward.isEmpty() ? leftward : child;
-            }));
+            cursor.insAtRightEnd(this.foldChildren(this.ends[cursor.options.focusOnDenominator ? R : L]
+                , function (leftward, child) { return leftward.isEmpty() ? leftward : child; }
+            ));
         };
         // editability methods: called by the cursor for editing, cursor movements,
         // and selection of the MathQuill tree, these all take in a direction and
@@ -3851,9 +3971,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             '<span>&0</span>'
           or
             '<span><span>&0</span><span>&1</span></span>'
-      
+
           See html.test.js for more examples.
-      
+
           Requirements:
           - For each block of the command, there must be exactly one "block content
             marker" of the form '&<number>' where <number> is the 0-based index of the
@@ -3867,7 +3987,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             conform to the XHTML requirements on tags, specifically all tags must
             either be self-closing (like '<br/>') or come in matching pairs.
             Close tags are never optional.
-      
+
           Note that &<number> isn't well-formed HTML; if you wanted a literal '&123',
           your HTML template would have to have '&amp;123'.
         */
@@ -3975,12 +4095,13 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         MathCommand.prototype.mathspeak = function () {
             var cmd = this, i = 0;
             return cmd.foldChildren(cmd.mathspeakTemplate[i] || 'Start' + cmd.ctrlSeq + ' ', function (speech, block) {
+                var suffix = cmd.mathspeakTemplate[i];
                 i += 1;
                 return (speech +
                     ' ' +
                     block.mathspeak() +
                     ' ' +
-                    (cmd.mathspeakTemplate[i] + ' ' || 'End' + cmd.ctrlSeq + ' '));
+                    (suffix ? suffix + ' ' : 'End' + cmd.ctrlSeq + ' '));
             });
         };
         return MathCommand;
@@ -4290,6 +4411,8 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 StaticMath.prototype.__mathquillify = function (opts, _interfaceVersion) {
                     this.config(opts);
                     _super.prototype.__mathquillify.call(this, 'mq-math-mode');
+                    this.__controller.addStaticFieldMathspeakSpan();
+                    this.__controller.updateMathspeak();
                     if (this.__options.mouseEvents) {
                         this.__controller.delegateMouseEvents();
                         this.__controller.staticMathTextareaEvents();
@@ -4305,6 +4428,8 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                         });
                         // Force an ARIA label update to remain in sync with the new LaTeX value.
                         this.__controller.updateMathspeak();
+                        // Refresh cached .mq-selectable so copy/select reflects the new LaTeX.
+                        this.__controller.updateStaticFieldSelectableText();
                     }
                     return returned;
                 };
@@ -4457,10 +4582,11 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 '}');
         };
         TextBlock.prototype.html = function () {
+            var escaped = $('').text(this.textContents()).html();
             return ('<span class="mq-text-mode" mathquill-command-id=' +
                 this.id +
                 '>' +
-                this.textContents() +
+                escaped +
                 '</span>');
         };
         TextBlock.prototype.mathspeak = function (opts) {
@@ -4561,7 +4687,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             if (!textPc)
                 return;
             // insert cursor at approx position in DOMTextNode
-            var avgChWidth = this.jQ.width() / this.text.length;
+            var avgChWidth = this.jQ.width() / textPc.textStr.length;
             var approxPosition = Math.round((pageX - this.jQ.offset().left) / avgChWidth);
             if (approxPosition <= 0)
                 cursor.insAtLeftEnd(this);
@@ -4775,6 +4901,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             }
             class_2.prototype.html = function () {
                 var cmdId = 'mathquill-command-id=' + this.id;
+                var escaped = $('').text(this.textContents()).html();
                 return ('<' +
                     tagName +
                     ' ' +
@@ -4782,7 +4909,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     ' ' +
                     cmdId +
                     '>' +
-                    this.textContents() +
+                    escaped +
                     '</' +
                     tagName +
                     '>');
@@ -4871,7 +4998,8 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 function class_3() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
-                class_3.prototype.__mathquillify = function () {
+                class_3.prototype.__mathquillify = function (opts) {
+                    this.config(opts);
                     return _super.prototype.__mathquillify.call(this, 'mq-editable-field mq-text-mode');
                 };
                 class_3.prototype.latex = function (latex) {
@@ -5156,11 +5284,11 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
     LatexCmds.rceil = bindVanillaSymbol('\\rceil ', '&#8969;', 'right ceiling');
     LatexCmds.opencurlybrace = LatexCmds.lbrace = bindVanillaSymbol('\\lbrace ', '{', 'left brace');
     LatexCmds.closecurlybrace = LatexCmds.rbrace = bindVanillaSymbol('\\rbrace ', '}', 'right brace');
-    LatexCmds.lbrack = bindVanillaSymbol('[', 'left bracket');
-    LatexCmds.rbrack = bindVanillaSymbol(']', 'right bracket');
+    LatexCmds.lbrack = bindVanillaSymbol('\\lbrack', '[', 'left bracket');
+    LatexCmds.rbrack = bindVanillaSymbol('\\rbrack', ']', 'right bracket');
     //various symbols
-    LatexCmds.slash = bindVanillaSymbol('/', 'slash');
-    LatexCmds.vert = bindVanillaSymbol('|', 'vertical bar');
+    LatexCmds.slash = bindVanillaSymbol('/','/', 'slash');
+    LatexCmds.vert = bindVanillaSymbol('|','|', 'vertical bar');
     LatexCmds.perp = LatexCmds.perpendicular = bindVanillaSymbol('\\perp ', '&perp;', 'perpendicular');
     LatexCmds.nabla = LatexCmds.del = bindVanillaSymbol('\\nabla ', '&nabla;');
     LatexCmds.hbar = bindVanillaSymbol('\\hbar ', '&#8463;', 'horizontal bar');
@@ -6528,7 +6656,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
         return new Style('\\mathbf', 'b', 'class="mq-font"', 'Bold Font');
     };
     LatexCmds.mathsf = function () {
-        return new Style('\\mathsf', 'span', 'class="mq-sans-serif mq-font"', 'Serif Font');
+        return new Style('\\mathsf', 'span', 'class="mq-sans-serif mq-font"', 'Sans Serif Font');
     };
     LatexCmds.mathtt = function () {
         return new Style('\\mathtt', 'span', 'class="mq-monospace mq-font"', 'Math Text');
@@ -8033,5 +8161,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             else
                 MathQuill[key] = val;
         }(key, MQ1[key]));
+
     return MathQuill;
 });
+
