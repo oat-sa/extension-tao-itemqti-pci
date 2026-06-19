@@ -1859,7 +1859,13 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             var keyup = null;
             var input = null;
             var textWasInserted = false;
+            var isComposing = false;
+            var compositionTextLength = 0;
+            var compositionString = '';
             var is_iPad = isIpadOS();
+            var noopKeyboardEvent = {
+                preventDefault: noop,
+            };
             var textarea = jQuery(el);
             var target = jQuery(controller.container || textarea);
             // checkTextareaFor() is called after key or clipboard events to
@@ -1930,6 +1936,60 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     controller.keystroke(stringify(keydown), keydown);
                 }
             }
+            function insertText(text) {
+                if (!text)
+                    return;
+                if (controller.options && controller.options.overrideTypedText) {
+                    for (var i = 0; i < text.length; i += 1) {
+                        controller.options.overrideTypedText(text.charAt(i));
+                    }
+                }
+                else {
+                    for (var j = 0; j < text.length; j += 1) {
+                        controller.typedText(text.charAt(j));
+                    }
+                }
+                textWasInserted = true;
+            }
+            function clearCompositionText() {
+                if (!compositionTextLength)
+                    return;
+                for (var k = 0; k < compositionTextLength; k += 1) {
+                    if (controller.options && controller.options.overrideKeystroke) {
+                        controller.options.overrideKeystroke('Backspace', noopKeyboardEvent);
+                    }
+                    else if (typeof controller.backspace === 'function') {
+                        controller.backspace();
+                    }
+                    else {
+                        controller.keystroke('Backspace', noopKeyboardEvent);
+                    }
+                }
+                compositionTextLength = 0;
+                compositionString = '';
+            }
+            function updateCompositionText(text) {
+                clearCompositionText();
+                if (!text)
+                    return;
+                insertText(text);
+                compositionTextLength = text.length;
+                compositionString = text;
+            }
+            function syncCompositionText() {
+                if (!isComposing)
+                    return;
+                var text = textarea.val();
+                if (!text) {
+                    if (compositionTextLength > 0) {
+                        clearCompositionText();
+                    }
+                    return;
+                }
+                if (text === compositionString)
+                    return;
+                updateCompositionText(text);
+            }
             // -*- event handlers -*- //
             function onKeydown(e) {
                 if (e.target !== textarea[0])
@@ -1947,6 +2007,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                             guardedTextareaSelect();
                         }
                     });
+                if (isComposing || e.isComposing || e.keyCode === 229) {
+                    return;
+                }
                 handleKey();
             }
             function isArrowKey(e) {
@@ -2014,28 +2077,77 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 //   reliable as our tests are comprehensive
                 // If anything like #40 or #71 is reported in IE < 9, see
                 // b1318e5349160b665003e36d4eedd64101ceacd8
+                var text = textarea.val();
                 if (hasSelection())
                     return;
-                var text = textarea.val();
+                if (isComposing)
+                    return;
+                if (textWasInserted)
+                    return;
                 if (text.length === 1) {
                     textarea.val('');
-                    if (controller.options && controller.options.overrideTypedText) {
-                        controller.options.overrideTypedText(text);
-                    }
-                    else {
-                        controller.typedText(text);
-                    }
+                    insertText(text);
                 }
-                else if (text.length === 0 && is_iPad && !input && keydown && keyup && !textWasInserted && isVisibleKey(keydown)) {
+                else if (text.length === 0 &&
+                    is_iPad &&
+                    !input &&
+                    keydown &&
+                    keyup &&
+                    isVisibleKey(keydown)) {
                     // issue with iPad and Japanese keyboard
                     // only first symbol put in textare,
                     // rest ignored and no text in textarea, no input event
                     // will be used keydown.key
-                    controller.typedText(keydown.key || '');
+                    var fallbackKey = keydown.key ||
+                        (keydown.originalEvent && keydown.originalEvent.key) ||
+                        '';
+                    if (fallbackKey.length === 1) {
+                        insertText(fallbackKey);
+                    }
                 } // in Firefox, keys that don't type text, just clear seln, fire keypress
                 // https://github.com/mathquill/mathquill/issues/293#issuecomment-40997668
-                else if (text)
+                else if (text) {
                     guardedTextareaSelect(); // re-select if that's why we're here
+                }
+            }
+            function onCompositionStart() {
+                isComposing = true;
+                compositionTextLength = 0;
+                compositionString = '';
+                checkTextarea = noop;
+                clearTimeout(timeoutId);
+            }
+            function onCompositionUpdate() {
+                syncCompositionText();
+            }
+            function onCompositionEnd(e) {
+                var textareaVal = textarea.val();
+                var eventData = e && e.originalEvent
+                    ? e.originalEvent.data
+                    : undefined;
+                isComposing = false;
+                var text = textareaVal;
+                if (!text && eventData) {
+                    text = eventData;
+                }
+                textarea.val('');
+                if (text) {
+                    if (compositionTextLength === 0) {
+                        insertText(text);
+                        compositionString = text;
+                    }
+                    else if (text !== compositionString) {
+                        updateCompositionText(text);
+                    }
+                }
+                else if (compositionTextLength > 0) {
+                    clearCompositionText();
+                }
+                compositionTextLength = 0;
+                keydown = null;
+                keypress = null;
+                keyup = null;
+                input = null;
             }
             function onBlur() {
                 keydown = null;
@@ -2109,7 +2221,15 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             }
             // -*- attach event handlers -*- //
             textarea.bind({
-                'input.mathquill': function (e) { input = e; },
+                'compositionstart.mathquill': onCompositionStart,
+                'compositionupdate.mathquill': onCompositionUpdate,
+                'compositionend.mathquill': onCompositionEnd,
+                'input.mathquill': function (e) {
+                    input = e;
+                    if (isComposing) {
+                        syncCompositionText();
+                    }
+                },
             });
             // -*- export public methods -*- //
             return {
