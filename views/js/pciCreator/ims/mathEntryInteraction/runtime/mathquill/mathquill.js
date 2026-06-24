@@ -1975,6 +1975,10 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 if (text.indexOf(compositionString) === 0) {
                     insertText(text.slice(compositionString.length));
                 }
+                else if (compositionString.indexOf(text) === 0) {
+                    compositionTextLength = compositionString.length - text.length;
+                    clearCompositionText();
+                }
                 else {
                     clearCompositionText();
                     insertText(text);
