@@ -1955,6 +1955,9 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 if (!compositionTextLength)
                     return;
                 for (var k = 0; k < compositionTextLength; k += 1) {
+                    if (!controller.cursor[L]) {
+                        break;
+                    }
                     if (controller.options && controller.options.overrideKeystroke) {
                         controller.options.overrideKeystroke('Backspace', noopKeyboardEvent);
                     }
@@ -1969,10 +1972,19 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                 compositionString = '';
             }
             function updateCompositionText(text) {
-                clearCompositionText();
+                if (text.indexOf(compositionString) === 0) {
+                    insertText(text.slice(compositionString.length));
+                }
+                else if (compositionString.indexOf(text) === 0) {
+                    compositionTextLength = compositionString.length - text.length;
+                    clearCompositionText();
+                }
+                else {
+                    clearCompositionText();
+                    insertText(text);
+                }
                 if (!text)
                     return;
-                insertText(text);
                 compositionTextLength = text.length;
                 compositionString = text;
             }
@@ -2144,6 +2156,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     clearCompositionText();
                 }
                 compositionTextLength = 0;
+                compositionString = '';
                 keydown = null;
                 keypress = null;
                 keyup = null;
@@ -2152,6 +2165,12 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             function onBlur() {
                 keydown = null;
                 keypress = null;
+                keyup = null;
+                input = null;
+                textWasInserted = false;
+                isComposing = false;
+                compositionTextLength = 0;
+                compositionString = '';
                 checkTextarea = noop;
                 clearTimeout(timeoutId);
                 textarea.val('');
@@ -8164,4 +8183,3 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
 
     return MathQuill;
 });
-
