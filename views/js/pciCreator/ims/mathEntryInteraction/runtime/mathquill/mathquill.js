@@ -2156,6 +2156,7 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
                     clearCompositionText();
                 }
                 compositionTextLength = 0;
+                compositionString = '';
                 keydown = null;
                 keypress = null;
                 keyup = null;
@@ -2164,6 +2165,12 @@ define(['taoQtiItem/portableLib/jquery_2_1_1'], function(jQuery) {
             function onBlur() {
                 keydown = null;
                 keypress = null;
+                keyup = null;
+                input = null;
+                textWasInserted = false;
+                isComposing = false;
+                compositionTextLength = 0;
+                compositionString = '';
                 checkTextarea = noop;
                 clearTimeout(timeoutId);
                 textarea.val('');
