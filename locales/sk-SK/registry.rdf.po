@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2026-03-27 13:00\n"
+"PO-Revision-Date: 2026-07-03 14:32\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: sk\n"
@@ -20,7 +20,7 @@ msgstr ""
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorHook
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "QTI-PCI-Creator Hooks"
-msgstr "QTI-PCI-Creator háčiky"
+msgstr "Väzby QTI-PCI-Creator"
 
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorIdentifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -40,5 +40,5 @@ msgstr "adresár"
 # http://www.tao.lu/Ontologies/QtiItemPci.rdf#PciCreatorDirectory
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "the location containing the unzipped source of the PCI creator"
-msgstr "umiestnenie obsahujúce rozbalený zdrojový súbor nástroja na tvorbu PCI"
+msgstr "umiestnenie, v ktorom sa nachádza rozbalený zdrojový kód nástroja PCI Creator"
 
