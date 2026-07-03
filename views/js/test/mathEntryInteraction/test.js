@@ -21,8 +21,9 @@ define([
     'taoQtiItem/runner/qtiItemRunner',
     'taoQtiItem/portableElementRegistry/ciRegistry',
     'taoQtiItem/portableElementRegistry/provider/localManifestProvider',
+    'qtiItemPci/pciCreator/ims/mathEntryInteraction/runtime/helper/gapResponse',
     'json!qtiItemPci/test/mathEntryInteraction/data/qti.json'
-], function ($, _, qtiItemRunner, ciRegistry, pciTestProvider, itemData) {
+], function ($, _, qtiItemRunner, ciRegistry, pciTestProvider, gapResponse, itemData) {
     'use strict';
 
     const fixtureContainerId = 'item-container';
@@ -40,6 +41,31 @@ define([
     ciRegistry.registerProvider(pciTestProvider.getModuleName());
 
     QUnit.module('Math Entry Interaction');
+
+    /* */
+
+    [
+        { title: 'empty response', response: '', isJson: false, expected: [] },
+        { title: 'legacy integer', response: '5', isJson: false, expected: ['5'] },
+        { title: 'legacy multi-digit integer', response: '42', isJson: false, expected: ['42'] },
+        { title: 'legacy decimal', response: '1.5', isJson: false, expected: ['1.5'] },
+        { title: 'legacy boolean-like value', response: 'true', isJson: false, expected: ['true'] },
+        { title: 'legacy null-like value', response: 'null', isJson: false, expected: ['null'] },
+        { title: 'legacy text', response: 'abc', isJson: false, expected: ['abc'] },
+        { title: 'legacy multiple gaps', response: '5,7', isJson: false, expected: ['5', '7'] },
+        { title: 'JSON single gap', response: '["5"]', isJson: true, expected: ['5'] },
+        { title: 'JSON value containing comma', response: '["3,4"]', isJson: true, expected: ['3,4'] },
+        { title: 'JSON scalar fallback', response: '5', isJson: true, expected: ['5'] },
+        { title: 'malformed JSON fallback', response: '["5"', isJson: true, expected: ['["5"'] }
+    ].forEach(data => {
+        QUnit.test(`converts ${data.title} gap response to array`, assert => {
+            assert.deepEqual(
+                gapResponse.stringToArray(data.response, data.isJson),
+                data.expected,
+                data.title
+            );
+        });
+    });
 
     /* */
 
@@ -255,6 +281,50 @@ define([
 
     /* */
 
+    QUnit.test('restores a legacy single numeric gap response', assert => {
+        const ready = assert.async();
+        const response = {
+            base: {
+                string: '5'
+            }
+        };
+        const $container = $('#' + fixtureContainerId);
+        const newItemData = _.cloneDeep(itemData);
+        const properties = newItemData.body.elements[elements.interaction].properties;
+
+        properties.useGapExpression = 'true';
+        properties.gapExpression = '\\taoGap';
+        delete properties.gapResponseIsJson;
+
+        const runner = qtiItemRunner('qti', newItemData)
+            .on('render', () => {
+                assert.propEqual(
+                    runner.getResponses(),
+                    {
+                        RESPONSE: {
+                            base: {
+                                string: '5'
+                            }
+                        }
+                    },
+                    'legacy response is restored and serialized unchanged'
+                );
+                assert.notOk(
+                    $container.text().includes('undefined'),
+                    'the restored gap does not render undefined'
+                );
+
+                runner.clear();
+                ready();
+            })
+            .on('error', error => $('#error-display').html(error))
+            .init()
+            .setState({ RESPONSE: response })
+            .render($container, { state: { RESPONSE: { response } } });
+    });
+
+    /* */
+
     QUnit.test('set and get state', assert => {
         const ready = assert.async();
 
@@ -316,6 +386,70 @@ define([
             })
             .init()
             .render($container, { state: _.cloneDeep(state) });
+    });
+
+    /* */
+
+    QUnit.test('applies configured gap style on mathEntryInteraction in gap expression mode', assert => {
+        const ready = assert.async();
+
+        assert.expect(1);
+
+        const $container = $('#' + fixtureContainerId);
+        const newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements[elements.interaction].properties.useGapExpression = 'true';
+        newItemData.body.elements[elements.interaction].properties.gapExpression = '\\taoGap+\\taoGap';
+        newItemData.body.elements[elements.interaction].properties.gapStyle = 'math-gap-large';
+
+        const runner = qtiItemRunner('qti', newItemData)
+            .on('render', () => {
+                const $mathEntryInteraction = $container.find('.qti-customInteraction .mathEntryInteraction').first();
+
+                assert.ok(
+                    $mathEntryInteraction.hasClass('math-gap-large'),
+                    'gap style class is applied on the .mathEntryInteraction root'
+                );
+
+                runner.clear();
+                ready();
+            })
+            .on('error', error => $('#error-display').html(error))
+            .init()
+            .render($container);
+    });
+
+    /* */
+
+    QUnit.test('renders editable gaps in gap expression mode', assert => {
+        const ready = assert.async();
+
+        assert.expect(2);
+
+        const $container = $('#' + fixtureContainerId);
+        const newItemData = _.cloneDeep(itemData);
+        newItemData.body.elements[elements.interaction].properties.useGapExpression = 'true';
+        newItemData.body.elements[elements.interaction].properties.gapExpression = '\\frac{1}{2}+\\taoGap=3\\taoGap';
+        newItemData.body.elements[elements.interaction].properties.gapStyle = 'math-gap-large';
+
+        const runner = qtiItemRunner('qti', newItemData)
+            .on('render', () => {
+                const $mathEntryInteraction = $container.find('.qti-customInteraction .mathEntryInteraction').first();
+
+                assert.ok(
+                    $mathEntryInteraction.find('.mq-editable-field').length > 0,
+                    'gap expression rendering includes editable gap fields'
+                );
+                assert.ok(
+                    $mathEntryInteraction.hasClass('math-gap-large'),
+                    'gap expression render path keeps configured gap style class on root'
+                );
+
+                runner.clear();
+                ready();
+            })
+            .on('error', error => $('#error-display').html(error))
+            .init()
+            .render($container);
     });
 
     /* */

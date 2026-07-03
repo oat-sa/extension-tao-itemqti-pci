@@ -6,14 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
  *
- * Copyright (c) 2017 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2026 (original work) Open Assessment Technologies SA;
  */
 /**
  * Those are the UI elements used by the audio recording PCI: media stimulus, progress bar, input meter and controls
@@ -321,9 +321,10 @@ define([
      * @param {Object} config.media - the media properties as given by the PCI media manager helper
      */
     function mediaStimulusFactory(config) {
-        var $container   = config.$container,
+        var $container = config.$container,
             assetManager = config.assetManager,
-            media        = config.media || {};
+            playbackAttempts = 0,
+            media = config.media || {};
 
         var state = mediaStimulusStates.CREATED;
 
@@ -333,6 +334,14 @@ define([
             mediaElement;
 
         mediaStimulus = {
+            setPlaybackAttempts: function setPlaybackAttempts(value) {
+                playbackAttempts = Math.min(value || 0, media.maxPlays || 0);
+            },
+
+            getPlaybackAttempts: function getPlaybackAttempts() {
+                return playbackAttempts;
+            },
+
             /**
              * Set state of the mediaStimulus
              * @param {String} newState
@@ -379,6 +388,15 @@ define([
                         mediaElement
                             .on('ready pause stop', function() {
                                 self.setState(mediaStimulusStates.IDLE);
+                            })
+                            .on('ready', function() {
+                                if (!mediaElement.player || typeof mediaElement.player.trigger !== 'function') {
+                                    return;
+                                }
+                                for (var i = 0; i < playbackAttempts; i++) {
+                                    // to ensure all end-playback events are also triggered
+                                    mediaElement.player.trigger('end');
+                                }
                             })
                             .on('play', function() {
                                 self.setState(mediaStimulusStates.PLAYING);

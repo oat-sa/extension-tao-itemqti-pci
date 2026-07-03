@@ -6,14 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
  *
- * Copyright (c) 2017-2023 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2026 (original work) Open Assessment Technologies SA;
  */
 /* eslint-disable func-names */
 define([
@@ -94,6 +94,8 @@ define([
             _recordsAttempts: 0,
             _isAutoPlayingBack: false,
             _delayCallback: null,
+            _stateResolver: new Promise(function () {
+            }),
 
             /*********************************
              *
@@ -262,6 +264,7 @@ define([
                 } else {
                     this.setResponse(state);
                 }
+                this._resolveState()
             },
 
             /**
@@ -313,6 +316,7 @@ define([
              * @param {Object} config
              */
             render: function render(config) {
+                var self = this;
                 this.$controlsContainer = this.$container.find('.audio-rec > .controls');
                 this.$progressContainer = this.$container.find('.audio-rec > .progress');
                 this.$meterContainer = this.$container.find('.audio-rec > .input-meter');
@@ -323,6 +327,9 @@ define([
                     this._recordsAttempts = 0;
                 }
 
+                this._stateResolver = new Promise(function (resolve) {
+                    self._resolveState = resolve;
+                })
                 this.config = {};
                 this.controls = {};
 
@@ -348,6 +355,7 @@ define([
                         } else {
                             this.render(newConfig);
                         }
+                        this._resolveState();
                     });
 
                     // outgoing events
@@ -606,10 +614,15 @@ define([
 
                 // no delay, start recording now
                 if (delayInSeconds === 0 && !this.inQtiCreator()) {
-                    this.startRecording();
-                    dispatchInteractiontraceEvent({
-                        domEventType: 'record',
-                        autostart: true
+                    this._stateResolver.then(function () {
+                        if (!self.hasRemainingAttempts()) {
+                            return;
+                        }
+                        self.startRecording();
+                        dispatchInteractiontraceEvent({
+                            domEventType: 'record',
+                            autostart: true
+                        });
                     });
                     return;
                 }
@@ -652,12 +665,18 @@ define([
                         });
 
                         self._cleanDelayCallback();
-                        self.startRecording();
-                        dispatchInteractiontraceEvent({
-                            domEventType: 'record',
-                            autostart: true,
-                            delay: self.getDelayInSeconds()
+                        self._stateResolver.then(function () {
+                            if (!self.hasRemainingAttempts()) {
+                                return;
+                            }
+                            self.startRecording();
+                            dispatchInteractiontraceEvent({
+                                domEventType: 'record',
+                                autostart: true,
+                                delay: self.getDelayInSeconds()
+                            });
                         });
+
                     }, self.getDelayInSeconds() * 1000);
                 });
             },
@@ -1057,7 +1076,7 @@ define([
                     reset.on(
                         'updatestate',
                         function () {
-                            if (self.config.maxRecords > 1 && self.config.maxRecords <= self._recordsAttempts) {
+                            if (!self.hasRemainingAttempts()) {
                                 this.disable();
                             } else if (
                                 self.player.is('idle') &&
@@ -1085,8 +1104,10 @@ define([
                 if (this._delayCallback || (this.countdown && this.countdown.isDisplayed())) {
                     return;
                 }
-                Object.keys(this.controls || {}).forEach(function (id) {
-                    self.controls[id].updateState();
+                this._stateResolver.then(function () {
+                    Object.keys(self.controls || {}).forEach(function (id) {
+                        self.controls[id].updateState();
+                    });
                 });
             },
 
@@ -1107,7 +1128,15 @@ define([
             updateAriaLabel: function updateAriaLabel() {
                 const label = this.getRecording() ? 'Audio recording interaction, with a recording' : 'Audio recording interaction, no recording';
                 this.$container.find('.audio-rec').attr('role', 'region').attr('aria-label', label);
-            }
+            },
+
+            hasRemainingAttempts: function hasRemainingAttempts() {
+                return this.config.maxRecords < 1 || this.config.maxRecords > this._recordsAttempts;
+            },
+
+            _resolveState: function _resolveState() {
+                // stub, replaced by the _stateResolver promise resolver
+            },
         };
     };
 

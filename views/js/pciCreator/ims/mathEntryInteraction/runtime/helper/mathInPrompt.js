@@ -47,11 +47,17 @@ define([
          * @param {jQuery} $element
          */
         postRender($element) {
-            if (window.MathJax){
-                // prevent MathJax prompt rewriting
+            const $mathElements = $element.find('math');
+            if (!$mathElements.length) {
                 return;
             }
-            $element.find('math').each(function () {
+
+            if (window.MathJax && window.MathJax.Hub) {
+                window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, $element[0]]);
+                return;
+            }
+
+            $mathElements.each(function () {
                 const math = document.createElement('span');
                 math.innerHTML = getLaTeX(this);
                 this.replaceWith(math);

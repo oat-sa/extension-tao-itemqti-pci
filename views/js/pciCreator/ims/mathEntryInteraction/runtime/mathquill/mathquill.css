@@ -7,6 +7,24 @@
  * was not distributed with this file, You can obtain
  * one at http://mozilla.org/MPL/2.0/.
  */
+.mq-aria-alert {
+  position: absolute;
+  left: -1000px;
+  top: -1000px;
+  width: 0px;
+  height: 0px;
+  text-align: left;
+  overflow: hidden;
+}
+.mq-mathspeak {
+  position: absolute;
+  left: -1000px;
+  top: -1000px;
+  width: 0px;
+  height: 0px;
+  text-align: left;
+  overflow: hidden;
+}
 @font-face {
   font-family: Symbola;
   src: url(fonts/Symbola.eot);
@@ -17,7 +35,7 @@
   display: inline-block;
 }
 .mq-editable-field .mq-cursor {
-  border-left: 1px solid black;
+  border-left: 1px solid currentcolor;
   margin-left: -1px;
   position: relative;
   z-index: 1;
@@ -38,7 +56,6 @@
   -moz-box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
   box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
   border-color: #709AC0;
-  border-radius: 1px;
 }
 .mq-math-mode .mq-editable-field {
   margin: 1px;
@@ -88,6 +105,46 @@
   overflow: hidden;
   vertical-align: middle;
 }
+.mq-root-block .mq-digit,
+.mq-math-mode .mq-root-block .mq-digit {
+  margin-left: 0.009em;
+  margin-right: 0.009em;
+}
+.mq-root-block .mq-group-start,
+.mq-math-mode .mq-root-block .mq-group-start {
+  margin-left: 0.11em;
+  margin-right: -0.01em;
+}
+.mq-root-block .mq-group-other,
+.mq-math-mode .mq-root-block .mq-group-other {
+  margin-left: -0.01em;
+  margin-right: -0.01em;
+}
+.mq-root-block .mq-group-leading-1,
+.mq-math-mode .mq-root-block .mq-group-leading-1,
+.mq-root-block .mq-group-leading-2,
+.mq-math-mode .mq-root-block .mq-group-leading-2 {
+  margin-left: 0;
+  margin-right: -0.01em;
+}
+.mq-root-block .mq-group-leading-3,
+.mq-math-mode .mq-root-block .mq-group-leading-3 {
+  margin-left: 0.036em;
+  margin-right: -0.01em;
+}
+.mq-root-block.mq-suppress-grouping .mq-group-start,
+.mq-math-mode .mq-root-block.mq-suppress-grouping .mq-group-start,
+.mq-root-block.mq-suppress-grouping .mq-group-other,
+.mq-math-mode .mq-root-block.mq-suppress-grouping .mq-group-other,
+.mq-root-block.mq-suppress-grouping .mq-group-leading-1,
+.mq-math-mode .mq-root-block.mq-suppress-grouping .mq-group-leading-1,
+.mq-root-block.mq-suppress-grouping .mq-group-leading-2,
+.mq-math-mode .mq-root-block.mq-suppress-grouping .mq-group-leading-2,
+.mq-root-block.mq-suppress-grouping .mq-group-leading-3,
+.mq-math-mode .mq-root-block.mq-suppress-grouping .mq-group-leading-3 {
+  margin-left: 0.009em;
+  margin-right: 0.009em;
+}
 .mq-math-mode {
   font-variant: normal;
   font-weight: normal;
@@ -106,7 +163,15 @@
 .mq-math-mode .mq-text-mode,
 .mq-math-mode .mq-nonSymbola {
   font-family: "Times New Roman", Symbola, serif;
-  line-height: 0.9;
+  line-height: .9;
+}
+.mq-math-mode svg {
+  fill: currentcolor;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 .mq-math-mode * {
   font-size: inherit;
@@ -120,9 +185,12 @@
   box-sizing: border-box;
 }
 .mq-math-mode .mq-empty {
-  background: #ccc;
+  background: rgba(0, 0, 0, 0.2);
 }
 .mq-math-mode .mq-empty.mq-root-block {
+  background: transparent;
+}
+.mq-math-mode .mq-empty.mq-quiet-delimiter {
   background: transparent;
 }
 .mq-math-mode.mq-empty {
@@ -133,8 +201,8 @@
   white-space: pre;
 }
 .mq-math-mode .mq-text-mode.mq-hasCursor {
-  box-shadow: inset darkgray 0 0.1em 0.2em;
-  padding: 0 0.1em;
+  box-shadow: inset darkgray 0 .1em .2em;
+  padding: 0 .1em;
   margin: 0 -0.1em;
   min-width: 1ex;
 }
@@ -176,7 +244,7 @@
 .mq-math-mode .mq-int > .mq-supsub {
   font-size: 80%;
   vertical-align: -1.1em;
-  padding-right: 0.2em;
+  padding-right: .2em;
 }
 .mq-math-mode .mq-int > .mq-supsub > .mq-sup > .mq-sup-inner {
   vertical-align: 1.3em;
@@ -194,11 +262,11 @@
   font-family: monospace, Symbola, serif;
 }
 .mq-math-mode .mq-overline {
-  border-top: 1px solid black;
+  border-top: 1px solid;
   margin-top: 1px;
 }
 .mq-math-mode .mq-underline {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid;
   margin-bottom: 1px;
 }
 .mq-math-mode .mq-binary-operator {
@@ -212,9 +280,9 @@
   vertical-align: -0.5em;
 }
 .mq-math-mode .mq-supsub.mq-sup-only {
-  vertical-align: 0.5em;
+  vertical-align: .5em;
 }
-.mq-math-mode .mq-supsub.mq-sup-only .mq-sup {
+.mq-math-mode .mq-supsub.mq-sup-only > .mq-sup {
   display: inline-block;
   vertical-align: text-bottom;
 }
@@ -226,7 +294,7 @@
   float: left;
 }
 .mq-math-mode .mq-supsub .mq-binary-operator {
-  padding: 0 0.1em;
+  padding: 0 .1em;
 }
 .mq-math-mode .mq-supsub .mq-fraction {
   font-size: 70%;
@@ -235,24 +303,30 @@
   font-size: 80%;
   vertical-align: 0.8em;
   margin-right: -0.6em;
-  margin-left: 0.2em;
-  min-width: 0.5em;
+  margin-left: .2em;
+  min-width: .5em;
 }
-.mq-math-mode .mq-paren {
-  padding: 0 0.1em;
-  vertical-align: top;
-  -webkit-transform-origin: center 0.06em;
-  -moz-transform-origin: center 0.06em;
-  -ms-transform-origin: center 0.06em;
-  -o-transform-origin: center 0.06em;
-  transform-origin: center 0.06em;
+.mq-math-mode .mq-ghost svg {
+  opacity: 0.2;
 }
-.mq-math-mode .mq-paren.mq-ghost {
-  color: silver;
+.mq-math-mode .mq-bracket-middle {
+  margin-top: .1em;
+  margin-bottom: .1em;
 }
-.mq-math-mode .mq-paren + span {
-  margin-top: 0.1em;
-  margin-bottom: 0.1em;
+.mq-math-mode .mq-bracket-l,
+.mq-math-mode .mq-bracket-r {
+  position: absolute;
+  top: 0;
+  bottom: 2px;
+}
+.mq-math-mode .mq-bracket-l {
+  left: 0;
+}
+.mq-math-mode .mq-bracket-r {
+  right: 0;
+}
+.mq-math-mode .mq-bracket-container {
+  position: relative;
 }
 .mq-math-mode .mq-array {
   vertical-align: middle;
@@ -263,21 +337,21 @@
 }
 .mq-math-mode .mq-operator-name {
   font-family: Symbola, "Times New Roman", serif;
-  line-height: 0.9;
+  line-height: .9;
   font-style: normal;
 }
 .mq-math-mode var.mq-operator-name.mq-first {
-  padding-left: 0.2em;
+  padding-left: .2em;
 }
 .mq-math-mode var.mq-operator-name.mq-last,
 .mq-math-mode .mq-supsub.mq-after-operator-name {
-  padding-right: 0.2em;
+  padding-right: .2em;
 }
 .mq-math-mode .mq-fraction {
   font-size: 90%;
   text-align: center;
   vertical-align: -0.4em;
-  padding: 0 0.2em;
+  padding: 0 .2em;
 }
 .mq-math-mode .mq-fraction,
 .mq-math-mode .mq-large-operator,
@@ -309,28 +383,27 @@
   height: 0.3em;
 }
 .mq-math-mode .mq-sqrt-prefix {
-  padding-top: 0;
+  position: absolute;
+  top: 1px;
+  bottom: 0.15em;
+  width: 0.95em;
+}
+.mq-math-mode .mq-sqrt-container {
   position: relative;
-  top: 0.1em;
-  vertical-align: top;
-  -webkit-transform-origin: top;
-  -moz-transform-origin: top;
-  -ms-transform-origin: top;
-  -o-transform-origin: top;
-  transform-origin: top;
 }
 .mq-math-mode .mq-sqrt-stem {
   border-top: 1px solid;
   margin-top: 1px;
-  padding-left: 0.15em;
-  padding-right: 0.2em;
-  margin-right: 0.1em;
+  margin-left: 0.9em;
+  padding-left: .15em;
+  padding-right: .2em;
+  margin-right: .1em;
   padding-top: 1px;
 }
 .mq-math-mode .mq-diacritic-above {
   display: block;
   text-align: center;
-  line-height: 0.4em;
+  line-height: .4em;
 }
 .mq-math-mode .mq-diacritic-stem {
   display: block;
@@ -339,7 +412,7 @@
 .mq-math-mode .mq-hat-prefix {
   display: block;
   text-align: center;
-  line-height: 0.95em;
+  line-height: .95em;
   margin-bottom: -0.7em;
   transform: scaleX(1.5);
   -moz-transform: scaleX(1.5);
@@ -351,7 +424,7 @@
 }
 .mq-math-mode .mq-large-operator {
   vertical-align: -0.2em;
-  padding: 0.2em;
+  padding: .2em;
   text-align: center;
 }
 .mq-math-mode .mq-large-operator .mq-from,
@@ -389,65 +462,47 @@
 }
 .mq-math-mode .mq-overarc {
   border-top: 1px solid black;
-  -webkit-border-top-right-radius: 50% 0.3em;
-  -moz-border-radius-topright: 50% 0.3em;
-  border-top-right-radius: 50% 0.3em;
-  -webkit-border-top-left-radius: 50% 0.3em;
-  -moz-border-radius-topleft: 50% 0.3em;
-  border-top-left-radius: 50% 0.3em;
+  -webkit-border-top-right-radius: 50% .3em;
+  -moz-border-radius-topright: 50% .3em;
+  border-top-right-radius: 50% .3em;
+  -webkit-border-top-left-radius: 50% .3em;
+  -moz-border-radius-topleft: 50% .3em;
+  border-top-left-radius: 50% .3em;
   margin-top: 1px;
   padding-top: 0.15em;
 }
 .mq-math-mode .mq-overarrow {
-  min-width: 0.5em;
+  min-width: .5em;
   border-top: 1px solid black;
   margin-top: 1px;
   padding-top: 0.2em;
   text-align: center;
-}
-.mq-math-mode .mq-overarrow:before {
-  display: block;
   position: relative;
-  top: -0.34em;
-  font-size: 0.5em;
-  line-height: 0em;
-  content: '\27A4';
-  text-align: right;
 }
-.mq-math-mode .mq-overarrow.mq-arrow-left:before {
+.mq-math-mode .mq-overarrow:after {
+  position: absolute;
+  right: -0.1em;
+  top: -0.48em;
+  font-size: 0.5em;
+  content: '\27A4';
+}
+.mq-math-mode .mq-overarrow.mq-arrow-left:after {
+  content: '';
+  display: none;
+}
+.mq-math-mode .mq-overarrow.mq-arrow-left:before,
+.mq-math-mode .mq-overarrow.mq-arrow-leftright:before {
+  position: absolute;
+  top: -0.48em;
+  left: -0.1em;
+  font-size: 0.5em;
+  content: '\27A4';
   -moz-transform: scaleX(-1);
   -o-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
   filter: FlipH;
   -ms-filter: "FlipH";
-}
-.mq-math-mode .mq-overarrow.mq-arrow-both {
-  vertical-align: text-bottom;
-}
-.mq-math-mode .mq-overarrow.mq-arrow-both.mq-empty {
-  min-height: 1.23em;
-}
-.mq-math-mode .mq-overarrow.mq-arrow-both.mq-empty:after {
-  top: -0.34em;
-}
-.mq-math-mode .mq-overarrow.mq-arrow-both:before {
-  -moz-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-  filter: FlipH;
-  -ms-filter: "FlipH";
-}
-.mq-math-mode .mq-overarrow.mq-arrow-both:after {
-  display: block;
-  position: relative;
-  top: -2.3em;
-  font-size: 0.5em;
-  line-height: 0em;
-  content: '\27A4';
-  visibility: visible;
-  text-align: right;
 }
 .mq-math-mode .mq-matrix {
   vertical-align: middle;
@@ -472,6 +527,34 @@
   padding: 0.1em 0.3em;
   vertical-align: baseline;
 }
+.mq-math-mode .mq-overparen {
+  position: relative;
+  padding-top: 0.5em;
+}
+.mq-math-mode .mq-overparen:before {
+  content: '';
+  position: absolute;
+  top: 0.3em;
+  left: -0.15em;
+  right: -0.15em;
+  height: 0.8em;
+  border-top: 1px solid black;
+  border-radius: 50% 50% 0 0;
+}
+.mq-stackrel {
+  display: inline-block;
+  text-align: center;
+  position: relative;
+}
+.mq-stackrel .mq-top {
+  display: block;
+  line-height: 1;
+  margin-bottom: -0.5em;
+}
+.mq-stackrel .mq-bottom {
+  display: block;
+  line-height: 1;
+}
 .mq-math-mode .mq-selection,
 .mq-editable-field .mq-selection,
 .mq-math-mode .mq-selection .mq-non-leaf,
@@ -479,33 +562,20 @@
 .mq-math-mode .mq-selection .mq-scaled,
 .mq-editable-field .mq-selection .mq-scaled {
   background: #B4D5FE !important;
-  background: Highlight !important;
-  color: HighlightText;
-  border-color: HighlightText;
-}
-.mq-math-mode .mq-selection .mq-matrixed,
-.mq-editable-field .mq-selection .mq-matrixed {
-  background: #39F !important;
-}
-.mq-math-mode .mq-selection .mq-matrixed-container,
-.mq-editable-field .mq-selection .mq-matrixed-container {
-  filter: progid:DXImageTransform.Microsoft.Chroma(color='#3399FF') !important;
 }
 .mq-math-mode .mq-selection.mq-blur,
 .mq-editable-field .mq-selection.mq-blur,
 .mq-math-mode .mq-selection.mq-blur .mq-non-leaf,
 .mq-editable-field .mq-selection.mq-blur .mq-non-leaf,
 .mq-math-mode .mq-selection.mq-blur .mq-scaled,
-.mq-editable-field .mq-selection.mq-blur .mq-scaled,
-.mq-math-mode .mq-selection.mq-blur .mq-matrixed,
-.mq-editable-field .mq-selection.mq-blur .mq-matrixed {
+.mq-editable-field .mq-selection.mq-blur .mq-scaled {
   background: #D4D4D4 !important;
   color: black;
   border-color: black;
 }
-.mq-math-mode .mq-selection.mq-blur .mq-matrixed-container,
-.mq-editable-field .mq-selection.mq-blur .mq-matrixed-container {
-  filter: progid:DXImageTransform.Microsoft.Chroma(color='#D4D4D4') !important;
+html body .mq-math-mode .mq-selection .mq-nthroot-container *,
+html body .mq-editable-field .mq-selection .mq-nthroot-container * {
+  background: transparent !important;
 }
 .mq-editable-field .mq-textarea,
 .mq-math-mode .mq-textarea {
@@ -532,13 +602,4 @@
   width: 1px;
   height: 1px;
   box-sizing: content-box;
-}
-.mq-math-mode .mq-matrixed {
-  background: white;
-  display: -moz-inline-box;
-  display: inline-block;
-}
-.mq-math-mode .mq-matrixed-container {
-  filter: progid:DXImageTransform.Microsoft.Chroma(color='white');
-  margin-top: -0.1em;
 }

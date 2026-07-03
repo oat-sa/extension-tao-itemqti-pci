@@ -6,14 +6,14 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 31 Milk St # 960789 Boston, MA 02196 USA.
  *
- * Copyright (c) 2017-2025 (original work) Open Assessment Technologies SA;
+ * Copyright (c) 2017-2026 (original work) Open Assessment Technologies SA;
  */
 define([
     'qtiCustomInteractionContext',
@@ -77,8 +77,12 @@ define([
         _filePrefix: 'audioRecording',
         _recording: null,
         _recordsAttempts: 0,
+        _playbackAttempts: 0,
+        _hydrationEvents: 0,
         _isAutoPlayingBack: false,
         _delayCallback: null,
+        _stateResolver: new Promise(function () {
+        }),
 
         /**
          * return {Boolean} - Are we in a TAO QTI Creator context?
@@ -88,6 +92,10 @@ define([
                 this._inQtiCreator = this.$container.hasClass('tao-qti-creator-context');
             }
             return this._inQtiCreator;
+        },
+
+        _resolveState: function _resolveState() {
+            // stub, replaced by the _stateResolver promise resolver
         },
 
         _cleanDelayCallback: function _cleanDelayCallback() {
@@ -110,6 +118,7 @@ define([
          * @param {Object} config
          */
         render: function render(config) {
+            var self = this;
             this.$mediaStimulusContainer = this.$container.find('.audio-rec > .media-stimulus');
             this.$controlsContainer = this.$container.find('.audio-rec > .controls');
             this.$progressContainer = this.$container.find('.audio-rec > .progress');
@@ -119,6 +128,17 @@ define([
             if (typeof this._recordsAttempts === 'undefined') {
                 this._recordsAttempts = 0;
             }
+            if (typeof this._playbackAttempts === 'undefined') {
+                this._playbackAttempts = 0;
+            }
+
+            this._stateResolver = Promise.race([new Promise(function (resolve) {
+                self._resolveState = resolve;
+            }), new Promise(function (resolve) {
+                // setSerializedState is not being invoked when no itemState is defined,
+                // so we just wait here a bit and hope the state can be considered ready
+                setTimeout(resolve, 500)
+            })]);
 
             this.config = {};
             this.controls = {};
@@ -195,28 +215,36 @@ define([
                 self.progressBar.reset();
                 self.$meterContainer.removeClass('record');
             });
+            this._bindAutoplayEvents = function () {
+                this.$container.on('click.autoplay touchend.autoplay', requestAutoplayPermission);
+            };
+
+            this._unbindAutoplayEvents = function () {
+                this.$container.off('.autoplay');
+            };
+
             this._setupAutoplayPermission = function () {
-                this._bindAutoplayEvents = function() {
-                    this.$container.on('click.autoplay', playSilentAudio);
-                    this.$container.on('touchend.autoplay', playSilentAudio);
-                };
-
-                this._unbindAutoplayEvents = function() {
-                    this.$container.off('.autoplay');
-                };
-                // Silent audio element setup to request autoplay permission
-                var silentAudio = document.createElement('audio');
-                silentAudio.src = 'data:audio/wav;base64,UklGRgAAAABXQVZFZm10IBAAAAABAAEAQB8AAIAfAAACABAAZGF0YQAAAAA=';
-                silentAudio.volume = 0.0;
-
-                var playSilentAudio = function () {
-                    silentAudio.play().then(() => {
-                        this._unbindAutoplayEvents();
-                    }).catch(function () {});
-                };
-                // Event listeners to the container to trigger the silent audio playback
+                this._autoplayPermissionRequested = false;
                 this._bindAutoplayEvents();
             };
+
+            function requestAutoplayPermission() {
+                if (self._autoplayPermissionRequested) {
+                    return;
+                }
+
+                self._autoplayPermissionRequested = true;
+                self._unbindAutoplayEvents();
+
+                if (self.player && _.isFunction(self.player.enableAutoplay)) {
+                    var autoplayResult = self.player.enableAutoplay();
+
+                    if (autoplayResult && _.isFunction(autoplayResult.catch)) {
+                        autoplayResult.catch(function () {});
+                    }
+                }
+            }
+
             if (this.isSafari) {
                 // Safari requires user interaction to enable autoplay
                 // https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/
@@ -231,8 +259,6 @@ define([
 
                 self.getBase64Recoding(blob, filename)
                     .then(function (recording) {
-                        self._recordsAttempts++;
-
                         self.updateResponse(recording);
 
                         // shortcut if the PCI is being destroyed, as in this case some internal properties would be unreachable.
@@ -258,7 +284,11 @@ define([
                                 self.playRecording(onError);
                             });
                         }
-                        self.player.loadFromBase64(recording.data, recording.mime);
+                        if (recordingUrl) {
+                            self.player.load(recordingUrl, { ownsUrl: true });
+                        } else {
+                            self.player.loadFromBase64(recording.data, recording.mime);
+                        }
 
                         self.displayDownloadLink(recordingUrl, filename, filesize, durationMs);
                     })
@@ -437,8 +467,16 @@ define([
                 });
 
                 this.mediaStimulus.on('ended', function () {
+                    if (self._hydrationEvents > 0) {
+                        // skip _playbackAttempts increment when handling `ended` events
+                        // during the interaction's state hydration
+                        self._hydrationEvents--;
+                    } else if (self.hasMediaStimulusMaxPlayLimit()) {
+                        self._playbackAttempts = Math.min(self.config.media.maxPlays, self._playbackAttempts + 1);
+                        self.triggerResponseChange();
+                    }
                     // If auto start recording is set and PCI is not in review mode
-                    if (self.config.autoStart && !self.config.isReviewMode) {
+                    if (!self._hydrationEvents && self.config.autoStart && !self.config.isReviewMode) {
                         if (!self.config.delayMinutes && !self.config.delaySeconds) {
                             // without delay - startRecording
                             self.startRecording();
@@ -447,6 +485,16 @@ define([
                             self.initDelay();
                         }
                     }
+                });
+
+                this.mediaStimulus.on('disabled', function () {
+                    if (!self.hasMediaStimulusMaxPlayLimit()) {
+                        return;
+                    }
+
+                    // permanently disable the media playback if the replay timeout was reached
+                    self._playbackAttempts = self.config.media.maxPlays;
+                    self.triggerResponseChange();
                 });
                 this.mediaStimulus.render();
             } else {
@@ -466,12 +514,20 @@ define([
             }
         },
 
+        hasRemainingAttempts: function hasRemainingAttempts() {
+            return this.config.maxRecords < 1 || this.config.maxRecords > this._recordsAttempts;
+        },
+
         /**
          * Check if the item has a media stimulus defined
          * @returns {Boolean}
          */
         hasMediaStimulus: function hasMediaStimulus() {
             return this.config.useMediaStimulus && this.config.media && this.config.media.uri;
+        },
+
+        hasMediaStimulusMaxPlayLimit: function hasMediaStimulusMaxPlayLimit() {
+            return this.hasMediaStimulus() && this.config.media.maxPlays;
         },
 
         /**
@@ -510,33 +566,45 @@ define([
         startRecording: function startRecording() {
             var self = this;
 
-            if (this.recorder.isNeedInit()) {
-                // if recorder is not initialised yet or need create new stream
-                this.recorder
-                    .init()
-                    .then(function () {
-                        startForReal();
-                    })
-                    .catch(function (err) {
-                        // eslint-disable-next-line no-console
-                        console.error(err);
-                    });
-            } else {
-                startForReal();
-            }
+            this._stateResolver.then(function () {
+                if (!self.recorder || !self.player || !self.progressBar || !self.hasRemainingAttempts()) {
+                    return;
+                }
 
-            function startForReal() {
-                setTimeout(function () {
-                    self.resetRecording();
-                    self.recorder.start();
-                    if (self.config.maxRecordingTime) {
-                        self.$meterContainer.addClass('record');
-                        self.progressBar.setStyle('record');
-                        self.progressBar.setMax(self.config.maxRecordingTime);
-                    }
-                    self.updateControls();
-                }, self.isSafari ? 200 : 0); // Safari needs a minimal timeout to start the recording
-            }
+                if (self.recorder.isNeedInit()) {
+                    // if recorder is not initialised yet or need create new stream
+                    self.recorder
+                        .init()
+                        .then(function () {
+                            startForReal();
+                        })
+                        .catch(function (err) {
+                            // eslint-disable-next-line no-console
+                            console.error(err);
+                        });
+                } else {
+                    startForReal();
+                }
+
+                function startForReal() {
+                    setTimeout(function () {
+                        if (!self.recorder || !self.player || !self.progressBar) {
+                            return;
+                        }
+
+                        self.resetRecording();
+                        self._recordsAttempts++;
+                        self.recorder.start();
+                        self.updateResetCount();
+                        if (self.config.maxRecordingTime) {
+                            self.$meterContainer.addClass('record');
+                            self.progressBar.setStyle('record');
+                            self.progressBar.setMax(self.config.maxRecordingTime);
+                        }
+                        self.updateControls();
+                    }, self.isSafari ? 200 : 0); // Safari needs a minimal timeout to start the recording
+                }
+            });
         },
 
         /**
@@ -638,21 +706,21 @@ define([
          */
         updateResponse: function updateResponse(recording) {
             this.setRecording(recording);
-            if (typeof this.trigger === 'function') {
-                this.trigger('responseChange'); // this has to be camelcase
-            }
+            this.triggerResponseChange();
         },
 
         /**
          * Update the reset recording button with the number of remaining attempts
          */
         updateResetCount: function updateResetCount() {
-            var recordableAmount = this.getRecording() ? 0 : 1,
+            var isRecording = this.recorder && typeof this.recorder.is === 'function' && this.recorder.is('recording');
+            var recordableAmount = isRecording || this.getRecording() ? 0 : 1,
                 remaining = this.config.maxRecords - this._recordsAttempts - recordableAmount,
+                visualRemaining = Math.max(0, remaining),
                 resetLabel = this.getControlIcon('reset');
 
             if (this.config.maxRecords > 1) {
-                resetLabel += ' (' + remaining + ')';
+                resetLabel += ' (' + visualRemaining + ')';
             }
             if (this.controls.reset) {
                 this.controls.reset.updateLabel(resetLabel);
@@ -814,7 +882,7 @@ define([
                 reset.on(
                     'updatestate',
                     function () {
-                        if (self.config.maxRecords > 1 && self.config.maxRecords === self._recordsAttempts) {
+                        if (!self.hasRemainingAttempts()) {
                             this.disable();
                         } else if (self.player.is('idle')) {
                             this.enable();
@@ -833,11 +901,14 @@ define([
          * Update the state of all the controls
          */
         updateControls: function updateControls() {
+            var self = this;
             // dont't change controls state, waiting for delay callback
             if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
                 return;
             }
-            _.invokeMap(this.controls, 'updateState');
+            this._stateResolver.then(function () {
+                _.invokeMap(self.controls, 'updateState');
+            });
         },
 
         /**
@@ -905,6 +976,15 @@ define([
             // render rich text content in prompt
             html.render(this.$container.find('.prompt'));
         },
+
+        triggerResponseChange: function triggerResponseChange() {
+            if (typeof this.trigger !== 'function') {
+                return;
+            }
+
+            this.trigger('responseChange'); // this has to be camelcase
+        },
+
         /**
          * Programmatically set the response following the json schema described in
          * http://www.imsglobal.org/assessment/pciv1p0cf/imsPCIv1p0cf.html#_Toc353965343
@@ -1003,14 +1083,27 @@ define([
          */
         setSerializedState: function setSerializedState(state) {
             if (state && typeof state === 'object' && state.hasOwnProperty('response')) {
+                var isInitialized = false;
+                if (this.hasMediaStimulus()) {
+                    this.mediaStimulus.setPlaybackAttempts(state.playbackAttempts);
+                    this._playbackAttempts = this.mediaStimulus.getPlaybackAttempts();
+                    this._hydrationEvents = this._playbackAttempts;
+                    isInitialized = this._playbackAttempts > 0;
+                }
                 this.setResponse(state.response);
                 if (typeof state.recordsAttempts === 'number' && state.recordsAttempts >= 0) {
                     this._recordsAttempts = state.recordsAttempts;
+                    isInitialized = true;
+                }
+
+                if (isInitialized) {
                     this.updateResetCount();
+                    this.updateControls();
                 }
             } else {
                 this.setResponse(state);
             }
+            this._resolveState();
         },
 
         /**
@@ -1021,10 +1114,16 @@ define([
          * @returns {Object} json format
          */
         getSerializedState: function getSerializedState() {
-            return {
+            var state = {
                 response: this.getResponse(),
                 recordsAttempts: this._recordsAttempts
             };
+
+            if (this.hasMediaStimulusMaxPlayLimit()) {
+                state.playbackAttempts = this._playbackAttempts;
+            }
+
+            return state;
         }
     };
 
