@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2026-07-03 14:32\n"
+"PO-Revision-Date: 2026-07-09 10:45\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja\n"
@@ -401,7 +401,7 @@ msgid "superset"
 msgstr "全体集合"
 
 msgid "Symbols"
-msgstr "シンボル"
+msgstr "記号"
 
 msgid "tangent"
 msgstr "tan"
