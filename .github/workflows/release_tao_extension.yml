@@ -46,8 +46,8 @@ jobs:
       ENABLED: true
       TAO_EXTENSION_NAME: qtiItemPci
       SLACK_NOTIFICATION: true
-      TAO_BUILD_FE: ${{ inputs.build_fe }}
-      TAO_BUILD_LOCALE: ${{ inputs.build_locale }}
+      TAO_BUILD_FE: ${{ github.event.inputs.build_fe || 'auto' }}
+      TAO_BUILD_LOCALE: ${{ github.event.inputs.build_locale || 'auto' }}
       RELEASE_REF: ${{ github.event.inputs.release_branch || 'develop' }}
       RELEASE_VERSION: ${{ github.event.inputs.release_version || '' }}
       BACKPORT: ${{ github.event.inputs.backport == 'true' }}
