@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2026-03-25 12:55\n"
+"PO-Revision-Date: 2026-07-09 10:45\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja\n"
@@ -96,10 +96,10 @@ msgid "Compressed"
 msgstr "圧縮"
 
 msgid "congruent"
-msgstr "おめでとうございます"
+msgstr "合同"
 
 msgid "contains as member"
-msgstr "にメンバーとして含まれています"
+msgstr "要素に含む"
 
 msgid "Correct"
 msgstr "正解"
@@ -114,7 +114,7 @@ msgid "Define correct responses"
 msgstr "正解の設定"
 
 msgid "Degree symbol"
-msgstr "学位記号"
+msgstr "度"
 
 msgid "Delete"
 msgstr "削除"
@@ -237,7 +237,7 @@ msgid "Level"
 msgstr "レベル"
 
 msgid "limit"
-msgstr "制限"
+msgstr "lim"
 
 msgid "ln"
 msgstr "ln"
@@ -392,19 +392,19 @@ msgid "subscript"
 msgstr "下付き文字"
 
 msgid "subset"
-msgstr "サブセット"
+msgstr "部分集合"
 
 msgid "sum"
 msgstr "sum"
 
 msgid "superset"
-msgstr "スーパーセット"
+msgstr "全体集合"
 
 msgid "Symbols"
-msgstr "シンボル"
+msgstr "記号"
 
 msgid "tangent"
-msgstr "tangent"
+msgstr "tan"
 
 msgid "The identifier of the choice. This identifier must not be used by any other response or item variable. An identifier is a string of characters that must start with a Letter or an underscore (\"_\") and contain only Letters, underscores, hyphens (\"-\"), period (\".\", a.k.a. full-stop), Digits, CombiningChars and Extenders."
 msgstr "レスポンス識別子：同じ識別子を，他のレスポンスやアイテム変数で使用できません。識別子は、文字またはアンダースコア(\"_\") で始まり、文字、アンダースコア、ハイフン (\"-\")、ピリオド (\".\")、10進数値（digit）、結合文字（CombiningChars）、エクステンダ（Extender）を含む文字列です。"
