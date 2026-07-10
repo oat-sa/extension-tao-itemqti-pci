@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2026-07-09 10:45\n"
+"PO-Revision-Date: 2026-07-10 07:30\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja\n"
@@ -431,7 +431,7 @@ msgid "triangle"
 msgstr "三角形"
 
 msgid "Trigonometry"
-msgstr "三角関数"
+msgstr "三角比・三角関数"
 
 msgid "type : "
 msgstr "タイプ: "
@@ -458,7 +458,7 @@ msgid "version : "
 msgstr "バージョン : "
 
 msgid "Vertical line, divide"
-msgstr "垂直方向の分割線"
+msgstr "割り切る（整除）"
 
 msgid "Warning"
 msgstr "警告"
@@ -477,4 +477,3 @@ msgstr "≦"
 
 msgid "≥"
 msgstr "≧"
-
