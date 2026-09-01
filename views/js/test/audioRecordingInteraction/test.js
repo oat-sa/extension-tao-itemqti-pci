@@ -701,6 +701,54 @@ define([
 
     /* */
 
+    QUnit.test('keeps record disabled during auto-start delay', function (assert) {
+        var ready = assert.async();
+        var $container = $('#' + fixtureContainerId);
+        var newItemData = _.cloneDeep(itemData);
+        var properties = newItemData.body.elements.interaction_portablecustominteraction_5a61fdb9cb6a7534654927.properties;
+
+        properties.autoStart = 'true';
+        properties.delayMinutes = '0';
+        properties.delaySeconds = '24';
+        properties.useMediaStimulus = '';
+
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            runner = qtiItemRunner('qti', newItemData)
+                .on('render', function () {
+                    var $record = $container.find('[data-identifier=\'record\']');
+                    var $stop = $container.find('[data-identifier=\'stop\']');
+                    var $play = $container.find('[data-identifier=\'play\']');
+
+                    assert.equal($container.find('.countdown-pie-container').length, 1, 'countdown is displayed');
+                    assert.ok($record.hasClass('disabled'), 'record is disabled when countdown starts');
+
+                    // _stateResolver has a 500ms fallback; the regression re-enabled Record after that
+                    setTimeout(function () {
+                        assert.ok($record.hasClass('disabled'), 'record stays disabled after state hydration');
+                        assert.ok($stop.hasClass('disabled'), 'stop stays disabled during countdown');
+                        assert.ok($play.hasClass('disabled'), 'play stays disabled during countdown');
+                        ready();
+                    }, 600);
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
+
+    /* */
+
     QUnit.test('destroys', function (assert) {
         var ready = assert.async();
         var $container = $('#' + fixtureContainerId);
