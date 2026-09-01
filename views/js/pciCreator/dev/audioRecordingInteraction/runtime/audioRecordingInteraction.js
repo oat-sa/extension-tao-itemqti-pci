@@ -902,11 +902,11 @@ define([
          */
         updateControls: function updateControls() {
             var self = this;
-            // dont't change controls state, waiting for delay callback
-            if (this._delayCallback || this.countdown && this.countdown.isDisplayed()) {
-                return;
-            }
             this._stateResolver.then(function () {
+                // don't change controls state, waiting for delay callback
+                if (self._delayCallback || (self.countdown && self.countdown.isDisplayed())) {
+                    return;
+                }
                 _.invokeMap(self.controls, 'updateState');
             });
         },
