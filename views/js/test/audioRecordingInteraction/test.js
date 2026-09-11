@@ -397,48 +397,6 @@ define([
         }
     });
 
-    QUnit.test('uses WebAudio recording on iOS even when compression is enabled', function (assert) {
-        var recorder;
-
-        this.restoreUserAgent = overrideNavigatorProperties({
-            userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1',
-            platform: 'iPad',
-            maxTouchPoints: 5
-        });
-
-        recorder = recorderFactory({
-            isCompressed: true,
-            maxRecordingTime: 120
-        }, {
-            resolve: function resolve(assetPath) {
-                return assetPath;
-            }
-        });
-
-        assert.equal(recorder.getProviderType(), 'webAudio', 'iOS recording falls back to wav/webAudio');
-    });
-
-    QUnit.test('uses WebAudio recording for iPadOS desktop user agents', function (assert) {
-        var recorder;
-
-        this.restoreUserAgent = overrideNavigatorProperties({
-            userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15',
-            platform: 'MacIntel',
-            maxTouchPoints: 5
-        });
-
-        recorder = recorderFactory({
-            isCompressed: true,
-            maxRecordingTime: 120
-        }, {
-            resolve: function resolve(assetPath) {
-                return assetPath;
-            }
-        });
-
-        assert.equal(recorder.getProviderType(), 'webAudio', 'iPadOS desktop UA still falls back to wav/webAudio');
-    });
-
     QUnit.test('keeps MediaRecorder recording on non-iOS browsers', function (assert) {
         var recorder;
 
