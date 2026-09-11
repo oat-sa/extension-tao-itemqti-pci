@@ -16,7 +16,7 @@ final class Version202609091130001465_qtiItemPci extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Update TAO Audio Recording PCI to version 0.15.5';
+        return 'Update TAO Audio Recording PCI: re-enable compressed audio on iOS/iPadOS devices';
     }
 
     public function up(Schema $schema): void
