@@ -302,7 +302,7 @@ $defaultGapWidth: 30;
                 }
             }
 
-            .mq-scaled {
+            .mq-scaled:not(.math-entry-input *) {
                 transform: none !important;
             }
         }
