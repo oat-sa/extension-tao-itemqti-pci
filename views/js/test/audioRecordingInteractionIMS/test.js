@@ -125,6 +125,27 @@ define([
                     }
                 },
                 disabled: 'false'
+            },
+            {
+                title: 'never disabled when unlimited (maxRecords=0)',
+                itemData: (function () {
+                    var newItemData = _.cloneDeep(itemData);
+                    newItemData.body.elements.interaction_imsportablecustominteraction_6259311e76730032931440.properties.maxRecords = '0';
+                    return newItemData;
+                })(),
+                state: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 5
+                    }
+                },
+                expected: {
+                    RESPONSE: {
+                        response: { base: null },
+                        recordsAttempts: 5
+                    }
+                },
+                disabled: 'false'
             }
         ])
         .test('recordsAttempts state behavior', function (data, assert) {
@@ -636,6 +657,56 @@ define([
                 return true;
             }
         });
+
+    /* */
+
+    QUnit.test('setSerializedState resolves state and updates controls', function (assert) {
+        var ready = assert.async();
+        var $container = $('#' + fixtureContainerId);
+        assert.equal($container.length, 1, 'the item container exists');
+        assert.equal($container.children().length, 0, 'the container has no children');
+
+        if (supportsMediaRecorder()) {
+            runner = qtiItemRunner('qti', itemData)
+                .on('render', function () {
+                    var interaction = this._item.getInteractions()[0];
+                    var pci = interaction.metaData.pci;
+
+                    // After render, _stateResolver should be a pending Promise
+                    assert.ok(pci._stateResolver instanceof Promise, '_stateResolver is a Promise');
+
+                    // Track whether the promise resolved
+                    var stateWasResolved = false;
+                    pci._stateResolver.then(function () {
+                        stateWasResolved = true;
+                    });
+
+                    // Calling setSerializedState triggers _resolveState(), which resolves _stateResolver
+                    pci.setSerializedState({
+                        response: { base: null },
+                        recordsAttempts: 1
+                    });
+
+                    // Flush microtasks/macrotasks before asserting
+                    setTimeout(function () {
+                        assert.ok(stateWasResolved, '_stateResolver was resolved after setSerializedState');
+                        assert.equal(pci._recordsAttempts, 1, '_recordsAttempts updated by setSerializedState');
+                        ready();
+                    }, 50);
+                })
+                .init()
+                .render($container);
+        }
+
+        function supportsMediaRecorder() {
+            if (!window.MediaRecorder) {
+                assert.ok(true, 'skipping test...');
+                ready();
+                return false;
+            }
+            return true;
+        }
+    });
 
     /* */
 
